@@ -8,11 +8,22 @@ export default defineConfig(({ mode }) => {
   
   return {
     plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src')
+      }
+    },
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react-router-dom',
+        'react-hook-form',
+        'react-i18next',
+        'framer-motion',
+        'lucide-react'
+      ]
+    },
   server: {
     hmr: {
       overlay: false
@@ -89,12 +100,20 @@ export default defineConfig(({ mode }) => {
     cssCodeSplit: true,
     reportCompressedSize: false, // Faster builds
     rollupOptions: {
+      external: [],
       output: {
         compact: true,
+        globals: {
+          'react': 'React',
+          'react-dom': 'ReactDOM'
+        },
         manualChunks(id) {
-          // Core vendor libraries
+          // Core vendor libraries - Fixed React chunking
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+            // Keep all React-related libraries together to prevent context issues
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom') || 
+                id.includes('react-hook-form') || id.includes('react-i18next') || id.includes('react-hot-toast') ||
+                id.includes('react-hotkeys-hook') || id.includes('react-markdown') || id.includes('react-syntax-highlighter')) {
               return 'vendor-react';
             }
             if (id.includes('lucide-react') || id.includes('framer-motion') || id.includes('clsx')) {
@@ -103,10 +122,10 @@ export default defineConfig(({ mode }) => {
             if (id.includes('@supabase/supabase-js')) {
               return 'vendor-supabase';
             }
-            if (id.includes('react-markdown') || id.includes('marked') || id.includes('dompurify')) {
+            if (id.includes('marked') || id.includes('dompurify')) {
               return 'vendor-markdown';
             }
-            if (id.includes('i18next') || id.includes('react-i18next')) {
+            if (id.includes('i18next')) {
               return 'vendor-i18n';
             }
             return 'vendor-misc';
