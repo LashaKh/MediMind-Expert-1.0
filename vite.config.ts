@@ -103,6 +103,8 @@ export default defineConfig(({ mode }) => {
       external: [],
       output: {
         compact: true,
+        format: 'es',
+        hoistTransitiveImports: false,
         globals: {
           'react': 'React',
           'react-dom': 'ReactDOM'
@@ -119,11 +121,9 @@ export default defineConfig(({ mode }) => {
                 id.includes('class-variance-authority') || id.includes('tailwind-merge') || id.includes('tailwindcss-animate') ||
                 id.includes('zustand') || id.includes('@hookform/resolvers') || id.includes('zod') ||
                 id.includes('html2canvas') || id.includes('date-fns') || id.includes('recharts') ||
-                id.includes('unist-util-visit') || id.includes('remark-gfm') || id.includes('dompurify')) {
+                id.includes('unist-util-visit') || id.includes('remark-gfm') || id.includes('dompurify') ||
+                id.includes('@supabase/supabase-js')) {
               return 'vendor-react';
-            }
-            if (id.includes('@supabase/supabase-js')) {
-              return 'vendor-supabase';
             }
             if (id.includes('marked')) {
               return 'vendor-markdown';
