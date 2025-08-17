@@ -108,25 +108,34 @@ export default defineConfig(({ mode }) => {
           'react-dom': 'ReactDOM'
         },
         manualChunks(id) {
-          // Core vendor libraries - Fixed React chunking
+          // Simplified chunking to prevent React context issues
           if (id.includes('node_modules')) {
-            // Keep all React-related libraries together to prevent context issues
+            // Keep ALL UI and React libraries together to prevent context issues
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom') || 
                 id.includes('react-hook-form') || id.includes('react-i18next') || id.includes('react-hot-toast') ||
-                id.includes('react-hotkeys-hook') || id.includes('react-markdown') || id.includes('react-syntax-highlighter')) {
+                id.includes('react-hotkeys-hook') || id.includes('react-markdown') || id.includes('react-syntax-highlighter') ||
+                id.includes('lucide-react') || id.includes('framer-motion') || id.includes('clsx') ||
+                id.includes('@headlessui/react') || id.includes('@heroicons/react') || id.includes('@radix-ui') ||
+                id.includes('class-variance-authority') || id.includes('tailwind-merge') || id.includes('tailwindcss-animate') ||
+                id.includes('zustand') || id.includes('@hookform/resolvers') || id.includes('zod') ||
+                id.includes('html2canvas') || id.includes('date-fns') || id.includes('recharts') ||
+                id.includes('unist-util-visit') || id.includes('remark-gfm') || id.includes('dompurify')) {
               return 'vendor-react';
-            }
-            if (id.includes('lucide-react') || id.includes('framer-motion') || id.includes('clsx')) {
-              return 'vendor-ui';
             }
             if (id.includes('@supabase/supabase-js')) {
               return 'vendor-supabase';
             }
-            if (id.includes('marked') || id.includes('dompurify')) {
+            if (id.includes('marked')) {
               return 'vendor-markdown';
             }
             if (id.includes('i18next')) {
               return 'vendor-i18n';
+            }
+            if (id.includes('axios') || id.includes('node-fetch') || id.includes('form-data')) {
+              return 'vendor-network';
+            }
+            if (id.includes('jspdf') || id.includes('pdfjs-dist') || id.includes('tesseract.js')) {
+              return 'vendor-pdf';
             }
             return 'vendor-misc';
           }
