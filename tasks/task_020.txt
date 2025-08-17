@@ -1,0 +1,123 @@
+# Task ID: 20
+# Title: Implement Personal Document Management UI
+# Status: done
+# Dependencies: 19
+# Priority: medium
+# Description: Create the interface for managing uploaded personal documents.
+# Details:
+Create DocumentList and DocumentItem components for displaying uploaded documents. Implement API function to retrieve personal documents from database. Create document filtering and search functionality. Implement document deletion functionality (if supported for MVP). Add status indicators for document processing. Create UI for displaying document details. Style components according to design system.
+
+# Test Strategy:
+Test document listing with various document states. Verify filtering and search functionality works correctly. Test document deletion if implemented. Ensure status indicators accurately reflect document states.
+
+# Subtasks:
+## 1. Create DocumentList and DocumentItem Components [done]
+### Dependencies: None
+### Description: Implement the basic structure for displaying uploaded documents with their metadata
+### Details:
+Implementation details:
+1. Create a DocumentList component that will serve as a container for displaying multiple DocumentItem components
+2. Implement the DocumentItem component to display basic document information (name, date uploaded, file type, size)
+3. Add placeholder status indicators (processing, completed, error) to DocumentItem
+4. Include basic click handlers for document selection
+5. Implement skeleton loading states for when documents are being fetched
+
+Testing approach:
+- Render DocumentList with mock document data
+- Verify DocumentItem displays correct metadata
+- Test different status states render correctly
+- Verify loading states work as expected
+
+## 2. Implement API Integration for Document Retrieval [done]
+### Dependencies: 20.1
+### Description: Create API functions to fetch personal documents from the database and integrate with the UI components
+### Details:
+Implementation details:
+1. Create an API service function to retrieve personal documents from the backend
+2. Implement proper error handling and loading states
+3. Add pagination support if the document list could be large
+4. Connect the API service to the DocumentList component
+5. Handle document data transformation to match the component's expected format
+6. Implement caching strategy for document data
+
+Testing approach:
+- Mock API responses and test successful data fetching
+- Test error handling scenarios
+- Verify pagination works correctly
+- Check that loading states are properly displayed during API calls
+
+## 3. Add Document Filtering and Search Functionality [done]
+### Dependencies: 20.1, 20.2
+### Description: Implement filtering and search capabilities for the document list
+### Details:
+Implementation details:
+1. Create a search input component for filtering documents by name
+2. Implement filter controls for document type, upload date, and status
+3. Add clear filter functionality
+4. Implement client-side filtering logic
+5. Update the DocumentList to reflect filtered results
+6. Add empty state display when no documents match filters
+
+Testing approach:
+- Test search functionality with various inputs
+- Verify filters work individually and in combination
+- Test edge cases (no results, special characters in search)
+- Check that the UI updates correctly when filters are applied or cleared
+
+## 4. Create Document Details View [done]
+### Dependencies: 20.1, 20.2
+### Description: Implement a detailed view for displaying complete document information when selected
+### Details:
+Implementation details:
+1. Create a DocumentDetails component to display comprehensive document information
+2. Implement a modal or side panel to show the details view
+3. Add document preview functionality if applicable
+4. Display document metadata (upload date, size, type, processing status)
+5. Show document version history if available
+6. Include navigation between document details when multiple documents are selected
+
+Testing approach:
+- Verify all document details are displayed correctly
+- Test document preview functionality
+- Check modal/panel open and close behavior
+- Test navigation between documents in details view
+
+## 5. Implement Document Actions (View and Delete) [done]
+### Dependencies: 20.2, 20.4
+### Description: Add functionality to perform actions on documents, including viewing and deleting
+### Details:
+Implementation details:
+1. Create action buttons for viewing and deleting documents
+2. Implement view document functionality to open/download the document
+3. Create a delete confirmation modal with appropriate warnings
+4. Implement API function for document deletion
+5. Add success/error notifications for actions
+6. Update the document list after successful deletion
+7. Handle permissions for actions based on document status
+
+Testing approach:
+- Test view document functionality works with different file types
+- Verify delete confirmation shows and functions correctly
+- Test API integration for document deletion
+- Check that document list updates after deletion
+- Verify error handling works for failed actions
+
+## 6. Apply UI/UX Styling and Responsive Design [done]
+### Dependencies: 20.1, 20.3, 20.4, 20.5
+### Description: Style all components according to the design system and ensure responsive behavior across devices
+### Details:
+Implementation details:
+1. Apply design system styles to all document management components
+2. Implement responsive layouts for mobile, tablet, and desktop views
+3. Add animations for state transitions (loading, hovering, selecting)
+4. Ensure accessibility compliance (keyboard navigation, screen reader support, proper contrast)
+5. Implement empty states and error states with appropriate visuals
+6. Add final polish with consistent spacing, typography, and color usage
+
+Testing approach:
+- Test responsive behavior across different screen sizes
+- Verify design system compliance
+- Check accessibility using automated tools and manual testing
+- Test keyboard navigation and screen reader compatibility
+- Verify all animations and transitions work smoothly
+

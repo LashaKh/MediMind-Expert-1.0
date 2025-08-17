@@ -1,0 +1,66 @@
+/* FORCE LIGHT MODE OVERRIDE - HIGHEST SPECIFICITY */
+
+/* Force all premium cards to have white backgrounds and dark text */
+.premium-card,
+.workspace-bg .premium-card,
+body .premium-card,
+html .premium-card {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid rgba(229, 231, 235, 0.5) !important;
+  color: #111827 !important;
+}
+
+/* Force all text in premium cards to be dark */
+.premium-card *,
+.premium-card h1,
+.premium-card h2,
+.premium-card h3,
+.premium-card h4,
+.premium-card h5,
+.premium-card h6,
+.premium-card div,
+.premium-card span,
+.premium-card p,
+.premium-card .text-lg,
+.premium-card .text-base,
+.premium-card .text-sm,
+.premium-card .text-xs,
+.premium-card .font-bold,
+.premium-card .font-semibold,
+.premium-card .text-2xl,
+.premium-card .text-3xl,
+.premium-card .text-4xl,
+.premium-card .text-5xl,
+.premium-card .text-white,
+.premium-card [class*="text-white"],
+.workspace-bg .premium-card *,
+body .premium-card *,
+html .premium-card * {
+  color: #111827 !important;
+}
+
+/* Override any metric displays that might be dark */
+.premium-card [class*="bg-gray-"],
+.premium-card [class*="bg-slate-"],
+.premium-card [class*="bg-zinc-"],
+.premium-card .bg-gray-50\\/80,
+.workspace-bg .premium-card [class*="bg-gray-"] {
+  background: rgba(248, 250, 252, 0.9) !important;
+  color: #111827 !important;
+}
+
+/* Ensure icons and buttons in cards are visible */
+.premium-card button,
+.premium-card .magnetic-btn {
+  background: linear-gradient(135deg, #3b82f6, #6366f1) !important;
+  color: #ffffff !important;
+}
+
+/* Force specific text color classes */
+.premium-card .text-gray-900,
+.premium-card .text-gray-800,
+.premium-card .text-gray-700,
+.premium-card .text-gray-600,
+.premium-card .text-gray-500 {
+  color: #111827 !important;
+}

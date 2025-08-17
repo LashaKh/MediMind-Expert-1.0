@@ -1,0 +1,11 @@
+# Task ID: 39
+# Title: Implement Translation for Surgical Risk Calculators
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: Translate STS and EuroSCORE II surgical risk calculators to Russian and Georgian.
+# Details:
+Translate all elements of the STS and EuroSCORE II calculators including patient demographics, procedure types, and risk categories. Implement surgical terminology specific to cardiac procedures. Ensure consistency with common translation elements. Follow the established key structure for both calculators.
+
+# Test Strategy:
+Verify completeness of all translation keys. Test calculator functionality with translated content. Validate surgical terminology with cardiac surgery professionals in target languages.

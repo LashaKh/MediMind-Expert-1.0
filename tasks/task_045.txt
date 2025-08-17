@@ -1,0 +1,11 @@
+# Task ID: 45
+# Title: Implement Translation for Pregnancy Dating and Risk Calculators
+# Status: pending
+# Dependencies: 11
+# Priority: medium
+# Description: Translate pregnancy dating and risk stratification tools to all three languages.
+# Details:
+Translate all elements of pregnancy dating and risk stratification tools. Implement calculator-specific obstetric terminology. Ensure consistency with common translation elements. Follow the established key structure for each calculator. Focus on pregnancy risk assessment terminology accuracy.
+
+# Test Strategy:
+Verify completeness of all translation keys. Test calculator functionality with translated content. Validate pregnancy risk terminology with OB/GYN professionals in target languages.

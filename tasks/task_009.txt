@@ -1,0 +1,85 @@
+# Task ID: 9
+# Title: Develop Specialty-Specific Workspace Routing
+# Status: done
+# Dependencies: 6, 7, 8
+# Priority: high
+# Description: Implement routing logic to direct users to their specialty-specific workspace after login.
+# Details:
+Create middleware or route guards to check user specialty and redirect accordingly. Implement specialty-specific dashboard pages for Cardiology and OB/GYN. Create context provider for specialty information. Ensure users cannot access workspaces of other specialties. Add visual indicators of current specialty in the UI. Implement loading states during specialty verification.
+
+# Test Strategy:
+Test routing with users of different specialties. Verify users cannot access other specialty workspaces. Test redirect behavior after login. Ensure loading states display correctly during transitions.
+
+# Subtasks:
+## 1. Create Specialty Context Provider [done]
+### Dependencies: None
+### Description: Implement a context provider to manage and share specialty information across the application
+### Details:
+1. Create a new context file (SpecialtyContext.js)
+2. Define the context with initial state for specialty information (null/loading initially)
+3. Implement the provider component with state management for specialty data
+4. Add methods to set/update specialty information
+5. Create a custom hook (useSpecialty) for easy context consumption
+6. Test the context by creating a simple component that consumes specialty information
+7. Document the API for the context provider
+
+## 2. Implement Authentication-Specialty Integration [done]
+### Dependencies: 9.1
+### Description: Connect user authentication with specialty information retrieval and storage
+### Details:
+1. Modify the authentication flow to fetch user specialty information after successful login
+2. Update the specialty context with the fetched information
+3. Implement persistence of specialty information (localStorage/sessionStorage)
+4. Handle specialty information retrieval errors
+5. Create a loading state during specialty information fetching
+6. Test specialty information retrieval with different user types
+7. Ensure specialty information is cleared on logout
+
+## 3. Create Specialty-Specific Dashboard Pages [done]
+### Dependencies: 9.1
+### Description: Develop distinct dashboard pages for Cardiology and OB/GYN specialties
+### Details:
+1. Create separate dashboard components for each specialty (CardiologyDashboard.js and ObGynDashboard.js)
+2. Implement specialty-specific UI layouts for each dashboard
+3. Add specialty-specific content, widgets, and functionality
+4. Ensure each dashboard displays appropriate specialty-specific data
+5. Implement error states for when specialty data isn't available
+6. Create reusable components that can be shared between specialty dashboards
+7. Test rendering of each dashboard with appropriate mock data
+
+## 4. Implement Specialty Route Guards [done]
+### Dependencies: 9.1, 9.2
+### Description: Create route protection to prevent unauthorized access to specialty-specific workspaces
+### Details:
+1. Create a SpecialtyGuard component/middleware for route protection
+2. Implement logic to check user's specialty against requested route
+3. Set up redirection logic for unauthorized access attempts
+4. Handle edge cases (no specialty info, loading states, etc.)
+5. Integrate guards with the router configuration
+6. Test route guards with different user specialties
+7. Implement appropriate error messages for unauthorized access attempts
+
+## 5. Implement Specialty Routing Logic [done]
+### Dependencies: 9.1, 9.2, 9.3, 9.4
+### Description: Develop the core routing logic to direct users to their appropriate specialty workspace
+### Details:
+1. Create a routing configuration that maps specialties to their respective dashboards
+2. Implement a router wrapper that handles specialty-based routing decisions
+3. Set up default routes and fallbacks for each specialty
+4. Implement redirect logic after login to route to the appropriate specialty dashboard
+5. Handle specialty changes during an active session
+6. Test routing with different user types and login scenarios
+7. Ensure proper handling of direct URL access to specialty-specific routes
+
+## 6. Add Specialty UI Indicators and Loading States [done]
+### Dependencies: 9.1, 9.2, 9.5
+### Description: Implement visual indicators of current specialty and loading states during specialty verification
+### Details:
+1. Create a specialty indicator component for the application header/navigation
+2. Implement visual styling differences based on active specialty
+3. Create specialty-specific themes or color schemes
+4. Develop loading indicators for specialty verification processes
+5. Implement skeleton screens for specialty-specific content during loading
+6. Add transitions between specialty workspaces
+7. Test UI indicators and loading states across different devices and screen sizes
+

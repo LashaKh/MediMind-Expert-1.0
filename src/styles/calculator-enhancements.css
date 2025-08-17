@@ -1,0 +1,1992 @@
+/* Enhanced Calculator Page Animations and Effects */
+
+/* Floating Animation for Hero Elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Gradient Pulse Animation */
+@keyframes gradientPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.gradient-pulse {
+  animation: gradientPulse 3s ease-in-out infinite;
+}
+
+/* Card Entrance Animation */
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card-entrance {
+  animation: cardEntrance 0.6s ease-out forwards;
+}
+
+/* Staggered Animation Delays */
+.card-entrance:nth-child(1) { animation-delay: 0.1s; }
+.card-entrance:nth-child(2) { animation-delay: 0.2s; }
+.card-entrance:nth-child(3) { animation-delay: 0.3s; }
+.card-entrance:nth-child(4) { animation-delay: 0.4s; }
+.card-entrance:nth-child(5) { animation-delay: 0.5s; }
+.card-entrance:nth-child(6) { animation-delay: 0.6s; }
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-effect {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Glow Effect for Interactive Elements */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+  }
+}
+
+.glow-effect:hover {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Advanced Card Hover Effects */
+.calculator-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calculator-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+  z-index: 1;
+}
+
+.calculator-card:hover::before {
+  left: 100%;
+}
+
+.calculator-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* Glass Morphism Effect */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass-morphism {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Professional Medical Gradient Backgrounds */
+.medical-gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.medical-gradient-secondary {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.medical-gradient-success {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.medical-gradient-cardiology {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+}
+
+/* Icon Pulse Animation */
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.icon-pulse {
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+/* Parallax Background Effect */
+.parallax-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Enhanced Button Animations */
+.enhanced-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.enhanced-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  z-index: 0;
+}
+
+.enhanced-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.enhanced-button > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Typing Indicator Animation */
+@keyframes typing {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  80%, 100% { opacity: 0; }
+}
+
+.typing-indicator span {
+  animation: typing 1.5s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Enhanced Mobile Interactions */
+@media (max-width: 768px) {
+  .mobile-enhanced:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+  
+  .mobile-card-tap {
+    transition: all 0.2s ease;
+  }
+  
+  .mobile-card-tap:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+/* Professional Medical Theme Colors */
+:root {
+  --medical-blue: #2563eb;
+  --medical-green: #059669;
+  --medical-red: #dc2626;
+  --medical-purple: #7c3aed;
+  --medical-orange: #ea580c;
+  --medical-pink: #db2777;
+  
+  /* Gradient Combinations */
+  --gradient-medical-primary: linear-gradient(135deg, var(--medical-blue), var(--medical-purple));
+  --gradient-medical-success: linear-gradient(135deg, var(--medical-green), #10b981);
+  --gradient-medical-warning: linear-gradient(135deg, var(--medical-orange), #f59e0b);
+  --gradient-medical-error: linear-gradient(135deg, var(--medical-red), #ef4444);
+}
+
+/* Advanced Shadow Effects */
+.shadow-medical-sm { box-shadow: 0 1px 2px rgba(37, 99, 235, 0.1); }
+.shadow-medical-md { box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1), 0 2px 4px rgba(37, 99, 235, 0.06); }
+.shadow-medical-lg { box-shadow: 0 10px 15px rgba(37, 99, 235, 0.1), 0 4px 6px rgba(37, 99, 235, 0.05); }
+.shadow-medical-xl { box-shadow: 0 20px 25px rgba(37, 99, 235, 0.1), 0 10px 10px rgba(37, 99, 235, 0.04); }
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .float-animation,
+  .gradient-pulse,
+  .card-entrance,
+  .shimmer-effect,
+  .glow-effect,
+  .icon-pulse {
+    animation: none;
+  }
+  
+  .calculator-card:hover {
+    transform: none;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .glass-morphism {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #000;
+  }
+  
+  .dark .glass-morphism {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #fff;
+  }
+}
+
+/* Tab Text Wrapping Fix - Prevents overlapping */
+.tab-text-wrapper {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  line-height: 1.2;
+  max-width: 100%;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Tab Container Fix */
+.tab-container {
+  min-height: 80px;
+  max-width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+/* Tab Grid Responsive Layout */
+.tab-grid-6 {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+@media (max-width: 1024px) {
+  .tab-grid-6 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .tab-grid-6 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Shake Animation for Errors */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Scale In Animation */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.2s ease-out forwards;
+}
+
+/* Input Focus Pulse */
+@keyframes focusPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.2);
+  }
+}
+
+.focus-pulse:focus {
+  animation: focusPulse 2s ease-in-out infinite;
+}
+
+/* Success Pulse for Valid Inputs */
+@keyframes successPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.1);
+  }
+}
+
+.success-pulse {
+  animation: successPulse 1.5s ease-in-out infinite;
+}
+
+/* Enhanced Button Hover Effects */
+.enhanced-calculator-button {
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.enhanced-calculator-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.6s ease;
+  z-index: 1;
+}
+
+.enhanced-calculator-button:hover::before {
+  left: 100%;
+}
+
+.enhanced-calculator-button:hover {
+  transform: translateY(-2px) rotateX(5deg);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Medical Calculator Table Enhancements */
+
+/* 4Ts Score Calculator Specific Styling */
+.medical-calculator-container {
+  @apply bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-2xl shadow-xl border-2 border-blue-300 my-8;
+}
+
+.medical-calculator-container h3 {
+  @apply text-blue-900 font-bold text-xl mb-6 flex items-center space-x-3;
+}
+
+.medical-calculator-container h3::before {
+  content: "🩺";
+  @apply text-2xl;
+}
+
+/* Score Calculator Tables */
+.calculator-table-wrapper {
+  @apply overflow-x-auto rounded-xl shadow-2xl border-2 border-emerald-300;
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 50%, #dcfce7 100%);
+}
+
+.calculator-table {
+  @apply w-full border-collapse bg-white/90 backdrop-blur-sm;
+  min-width: 700px;
+}
+
+.calculator-table thead {
+  background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+}
+
+.calculator-table th {
+  @apply text-white font-bold py-4 px-6 text-sm uppercase tracking-wider border-r border-white/20 last:border-r-0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.calculator-table td {
+  @apply py-4 px-6 text-sm text-gray-800 border-b border-gray-200 align-top;
+  background-color: rgba(255, 255, 255, 0.95);
+  transition: all 0.2s ease;
+}
+
+.calculator-table tbody tr:nth-child(even) td {
+  @apply bg-emerald-50/50;
+}
+
+.calculator-table tbody tr:hover td {
+  @apply bg-emerald-100 transform scale-[1.01];
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.1);
+}
+
+/* Parameter Column Styling */
+.calculator-table td:first-child {
+  @apply font-bold text-emerald-900 bg-emerald-50 border-r-2 border-emerald-200;
+}
+
+/* Points Column Styling */
+.calculator-table td:nth-child(2),
+.calculator-table td:nth-child(3),
+.calculator-table td:nth-child(4) {
+  @apply text-center font-medium;
+}
+
+/* Score Interpretation Styling */
+.score-interpretation {
+  @apply bg-gradient-to-r from-blue-100 to-indigo-100 border-l-4 border-blue-500 p-6 rounded-r-xl my-6 shadow-lg;
+}
+
+.score-interpretation .score-value {
+  @apply text-3xl font-bold text-blue-900 mb-2;
+}
+
+.score-interpretation .interpretation-text {
+  @apply text-lg text-blue-800 font-semibold;
+}
+
+/* Risk Stratification Tables */
+.risk-table-wrapper {
+  @apply overflow-x-auto rounded-xl shadow-2xl border-2 border-amber-300 my-8;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%);
+}
+
+.risk-table {
+  @apply w-full border-collapse bg-white/90 backdrop-blur-sm;
+  min-width: 600px;
+}
+
+.risk-table thead {
+  background: linear-gradient(135deg, #d97706 0%, #ea580c 100%);
+}
+
+.risk-table th {
+  @apply text-white font-bold py-4 px-6 text-sm uppercase tracking-wider border-r border-white/20 last:border-r-0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.risk-table td {
+  @apply py-4 px-6 text-sm text-gray-800 border-b border-gray-200 align-top;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.risk-table tbody tr:nth-child(even) td {
+  @apply bg-amber-50/50;
+}
+
+.risk-table tbody tr:hover td {
+  @apply bg-amber-100;
+}
+
+/* Risk Level Cell Styling */
+.risk-low {
+  @apply bg-green-100 text-green-900 font-bold border-l-4 border-green-500;
+}
+
+.risk-intermediate {
+  @apply bg-yellow-100 text-yellow-900 font-bold border-l-4 border-yellow-500;
+}
+
+.risk-high {
+  @apply bg-red-100 text-red-900 font-bold border-l-4 border-red-500;
+}
+
+/* Classification Tables */
+.classification-table-wrapper {
+  @apply overflow-x-auto rounded-xl shadow-2xl border-2 border-purple-300 my-8;
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 50%, #e9d5ff 100%);
+}
+
+.classification-table {
+  @apply w-full border-collapse bg-white/90 backdrop-blur-sm;
+}
+
+.classification-table thead {
+  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+}
+
+.classification-table th {
+  @apply text-white font-bold py-4 px-6 text-sm uppercase tracking-wider border-r border-white/20 last:border-r-0;
+}
+
+.classification-table td {
+  @apply py-4 px-6 text-sm text-gray-800 border-b border-gray-200 align-top;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.classification-table tbody tr:nth-child(even) td {
+  @apply bg-purple-50/50;
+}
+
+.classification-table tbody tr:hover td {
+  @apply bg-purple-100;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  .calculator-table,
+  .risk-table,
+  .classification-table {
+    font-size: 0.875rem;
+    min-width: 550px;
+  }
+  
+  .calculator-table th,
+  .calculator-table td,
+  .risk-table th,
+  .risk-table td,
+  .classification-table th,
+  .classification-table td {
+    @apply px-3 py-3;
+  }
+  
+  .medical-calculator-container {
+    @apply p-4;
+  }
+  
+  .score-interpretation {
+    @apply p-4;
+  }
+  
+  .score-interpretation .score-value {
+    @apply text-2xl;
+  }
+  
+  .score-interpretation .interpretation-text {
+    @apply text-base;
+  }
+}
+
+/* Hover Effects for Interactive Elements */
+.calculator-table tbody tr,
+.risk-table tbody tr,
+.classification-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+/* Enhanced Table Headers with Icons */
+.calculator-table th:first-child::before {
+  content: "📊 ";
+}
+
+.risk-table th:first-child::before {
+  content: "⚠️ ";
+}
+
+.classification-table th:first-child::before {
+  content: "📋 ";
+}
+
+/* Print Friendly Styles */
+@media print {
+  .medical-calculator-container,
+  .calculator-table-wrapper,
+  .risk-table-wrapper,
+  .classification-table-wrapper {
+    @apply shadow-none border border-gray-400;
+    background: white !important;
+  }
+  
+  .calculator-table,
+  .risk-table,
+  .classification-table {
+    background: white !important;
+  }
+  
+  .calculator-table thead,
+  .risk-table thead,
+  .classification-table thead {
+    background: #6b7280 !important;
+    color: white !important;
+  }
+}
+
+/* Enhanced EuroSCORE II Calculator Animations */
+
+/* Shimmer effect for progress bars */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Sophisticated fade-in animations */
+@keyframes sophisticatedFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-sophisticatedFadeIn {
+  animation: sophisticatedFadeIn 0.6s ease-out forwards;
+}
+
+/* Pulsing glow effect */
+@keyframes sophisticatedPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-sophisticatedPulse {
+  animation: sophisticatedPulse 2s ease-in-out infinite;
+}
+
+/* Calculation loading animation */
+@keyframes calculateRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-calculateRotate {
+  animation: calculateRotate 1s linear infinite;
+}
+
+/* Floating animation for background elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Enhanced typing animation */
+@keyframes sophisticatedTyping {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
+
+.animate-sophisticatedTyping {
+  animation: sophisticatedTyping 2s steps(40, end);
+}
+
+/* Risk level bounce animation */
+@keyframes riskBounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-5px); }
+  60% { transform: translateY(-3px); }
+}
+
+.animate-riskBounce {
+  animation: riskBounce 1s;
+}
+
+/* Sophisticated scale animation */
+@keyframes sophisticatedScale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.animate-sophisticatedScale {
+  animation: sophisticatedScale 1s ease-in-out infinite;
+}
+
+/* Gradient animation */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradientShift {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+/* Enhanced step progression */
+@keyframes stepProgress {
+  0% { 
+    width: 0%;
+    opacity: 0;
+  }
+  50% { 
+    opacity: 1;
+  }
+  100% { 
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+.animate-stepProgress {
+  animation: stepProgress 1s ease-out;
+}
+
+/* Sophisticated card hover effects */
+.calculator-card-hover {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.calculator-card-hover:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced button animations */
+.calculator-button-enhanced {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.calculator-button-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.calculator-button-enhanced:hover::before {
+  left: 100%;
+}
+
+/* Sophisticated loading dots */
+@keyframes sophisticatedDots {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-sophisticatedDots {
+  animation: sophisticatedDots 1.4s infinite;
+}
+
+.animate-sophisticatedDots:nth-child(1) { animation-delay: 0s; }
+.animate-sophisticatedDots:nth-child(2) { animation-delay: 0.2s; }
+.animate-sophisticatedDots:nth-child(3) { animation-delay: 0.4s; }
+
+/* Advanced glassmorphism effect - Fixed for better visibility */
+.glassmorphism-advanced {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glassmorphism-advanced:hover {
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Dark mode glassmorphism */
+.dark .glassmorphism-advanced {
+  background: rgba(31, 41, 55, 0.95);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.dark .glassmorphism-advanced:hover {
+  background: rgba(31, 41, 55, 0.98);
+  border: 1px solid rgba(75, 85, 99, 0.4);
+}
+
+/* Sophisticated focus states */
+.calculator-focus-enhanced:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+/* ===== TEXT OVERLAY FIXES ===== */
+/* 
+ * Fixes for EuroSCORE II Calculator "Comparative Risk Analysis" section
+ * Prevents text labels from overlapping with percentage values in chart comparisons
+ */
+.comparison-chart .flex {
+  min-height: 24px;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.comparison-chart .flex span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comparison-chart .flex span:first-child {
+  flex-shrink: 0;
+  min-width: 0;
+  max-width: calc(100% - 60px);
+}
+
+.comparison-chart .flex span:last-child {
+  flex-shrink: 0;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Enhanced Text Spacing for Risk Analysis Sections */
+.risk-analysis-label {
+  word-break: break-word;
+  hyphens: auto;
+  line-height: 1.4;
+  margin-right: 12px;
+  max-width: calc(100% - 80px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.risk-analysis-value {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  min-width: 60px;
+  text-align: right;
+}
+
+/* Fix for Risk Comparison Chart title positioning */
+.data-viz-container h3 {
+  position: relative;
+  z-index: 10;
+  margin-bottom: 1.5rem !important;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .data-viz-container h3 {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced progress indicator */
+.progress-indicator-enhanced {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-indicator-enhanced::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* Sophisticated risk color transitions */
+.risk-color-transition {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced calculation phases */
+.calculation-phase-1 {
+  animation: sophisticatedPulse 2s infinite;
+}
+
+.calculation-phase-2 {
+  animation: sophisticatedScale 1s ease-out;
+}
+
+.calculation-phase-3 {
+  animation: gradientShift 2s ease infinite;
+}
+
+.calculation-phase-4 {
+  animation: riskBounce 1s;
+}
+
+/* Sophisticated form validation */
+.form-validation-enhanced {
+  transition: all 0.3s ease;
+}
+
+.form-validation-enhanced.error {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Enhanced mobile optimizations */
+@media (max-width: 768px) {
+  .calculator-card-hover:hover {
+    transform: translateY(-2px) scale(1.01);
+  }
+  
+  .animate-sophisticatedFadeIn {
+    animation-duration: 0.6s;
+  }
+  
+  .animate-sophisticatedPulse {
+    animation-duration: 1.5s;
+  }
+  
+  /* Risk Analysis Mobile Fixes */
+  .risk-analysis-label {
+    font-size: 0.8rem;
+    max-width: calc(100% - 70px);
+    line-height: 1.3;
+  }
+  
+  .risk-analysis-value {
+    font-size: 0.8rem;
+    min-width: 50px;
+  }
+  
+  .comparison-chart .flex {
+    gap: 0.5rem;
+    min-height: 20px;
+  }
+}
+
+/* ===== WORLD-CLASS RESULTS PAGE DESIGN SYSTEM ===== */
+
+/* Professional Typography Scale */
+.results-hero-title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #1e40af 0%, #7c3aed 50%, #db2777 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+
+.results-subtitle {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: 500;
+  color: #64748b;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.results-section-title {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.dark .results-section-title {
+  color: #f1f5f9;
+}
+
+/* Professional Card System */
+.medical-card {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 24px;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.medical-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.3), transparent);
+}
+
+.medical-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 25px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.dark .medical-card {
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(51, 65, 85, 0.3);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.dark .medical-card::before {
+  background: linear-gradient(90deg, transparent, rgba(51, 65, 85, 0.5), transparent);
+}
+
+/* Risk Gauge Component */
+.risk-gauge-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.risk-gauge-background {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #e5e7eb 0deg 60deg,
+    #fbbf24 60deg 120deg,
+    #f97316 120deg 180deg,
+    #ef4444 180deg 240deg,
+    #dc2626 240deg 360deg
+  );
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.risk-gauge-inner {
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.dark .risk-gauge-inner {
+  background: #0f172a;
+}
+
+.risk-gauge-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1;
+}
+
+.dark .risk-gauge-value {
+  color: #f1f5f9;
+}
+
+.risk-gauge-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.dark .risk-gauge-label {
+  color: #94a3b8;
+}
+
+.risk-gauge-needle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 60px;
+  background: #1e293b;
+  transform-origin: bottom center;
+  border-radius: 1px;
+  animation: gauge-sweep 2s ease-out;
+}
+
+.dark .risk-gauge-needle {
+  background: #f1f5f9;
+}
+
+@keyframes gauge-sweep {
+  0% { transform: translate(-50%, -100%) rotate(-90deg); }
+  100% { transform: translate(-50%, -100%) rotate(var(--needle-rotation, 0deg)); }
+}
+
+/* Professional Risk Categories */
+.risk-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.risk-category-card {
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.risk-category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  opacity: 0.8;
+}
+
+.risk-category-card.active {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px -3px rgba(0, 0, 0, 0.1);
+}
+
+.risk-category-card.low {
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #10b981;
+}
+
+.risk-category-card.low::before {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.risk-category-card.intermediate {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-color: #f59e0b;
+}
+
+.risk-category-card.intermediate::before {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.risk-category-card.high {
+  background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+  border-color: #ea580c;
+}
+
+.risk-category-card.high::before {
+  background: linear-gradient(90deg, #ea580c, #c2410c);
+}
+
+.risk-category-card.very-high {
+  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+  border-color: #dc2626;
+}
+
+.risk-category-card.very-high::before {
+  background: linear-gradient(90deg, #dc2626, #b91c1c);
+}
+
+.dark .risk-category-card.low {
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.4) 0%, rgba(6, 95, 70, 0.3) 100%);
+}
+
+.dark .risk-category-card.intermediate {
+  background: linear-gradient(135deg, rgba(120, 53, 15, 0.4) 0%, rgba(146, 64, 14, 0.3) 100%);
+}
+
+.dark .risk-category-card.high {
+  background: linear-gradient(135deg, rgba(154, 52, 18, 0.4) 0%, rgba(194, 65, 12, 0.3) 100%);
+}
+
+.dark .risk-category-card.very-high {
+  background: linear-gradient(135deg, rgba(153, 27, 27, 0.4) 0%, rgba(185, 28, 28, 0.3) 100%);
+}
+
+/* Clinical Insights Section */
+.clinical-insights {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 2rem;
+  position: relative;
+}
+
+.dark .clinical-insights {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 1px solid #334155;
+}
+
+.clinical-insights::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
+}
+
+.dark .clinical-insights::before {
+  background: linear-gradient(90deg, transparent, #475569, transparent);
+}
+
+.clinical-recommendation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.clinical-recommendation-item:hover {
+  background: rgba(59, 130, 246, 0.04);
+  border-color: rgba(59, 130, 246, 0.1);
+}
+
+.dark .clinical-recommendation-item:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.clinical-recommendation-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  flex-shrink: 0;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+}
+
+.clinical-recommendation-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #374151;
+  font-weight: 500;
+}
+
+.dark .clinical-recommendation-text {
+  color: #d1d5db;
+}
+
+/* Professional Data Visualization */
+.data-viz-container {
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .data-viz-container {
+  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  border: 1px solid #374151;
+}
+
+.data-viz-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+}
+
+.comparison-chart {
+  display: block;
+  margin: 1.5rem 0;
+  position: relative;
+  z-index: 1;
+}
+
+.comparison-chart .space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+.chart-bar {
+  flex: 1;
+  background: linear-gradient(to top, #e5e7eb, #d1d5db);
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  transition: all 0.3s ease;
+  min-height: 20px;
+}
+
+.chart-bar.active {
+  background: linear-gradient(to top, #3b82f6, #1d4ed8);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.chart-bar-label {
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.dark .chart-bar-label {
+  color: #9ca3af;
+}
+
+/* Action Buttons Enhanced */
+.action-buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dark .action-buttons-container {
+  border-top-color: #374151;
+}
+
+.action-button-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-button-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.action-button-primary:hover::before {
+  left: 100%;
+}
+
+.action-button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -3px rgba(59, 130, 246, 0.3);
+}
+
+.action-button-secondary {
+  background: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 0.875rem 2rem;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark .action-button-secondary {
+  background: #1f2937;
+  color: #d1d5db;
+  border-color: #374151;
+}
+
+.action-button-secondary:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+}
+
+.dark .action-button-secondary:hover {
+  background: #111827;
+  border-color: #4b5563;
+}
+
+/* Professional Validation Badge */
+.validation-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1px solid #10b981;
+  color: #065f46;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.dark .validation-badge {
+  background: linear-gradient(135deg, rgba(6, 95, 70, 0.2) 0%, rgba(6, 120, 85, 0.1) 100%);
+  border-color: #10b981;
+  color: #6ee7b7;
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+  .risk-gauge-container {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .risk-gauge-value {
+    font-size: 2rem;
+  }
+  
+  .risk-category-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .clinical-insights,
+  .data-viz-container,
+  .medical-card {
+    padding: 1.5rem;
+  }
+  
+  .action-buttons-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .results-hero-title {
+    font-size: 2rem;
+  }
+}
+
+/* Professional Animations */
+@keyframes results-fadeIn {
+  0% { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.results-animate-in {
+  animation: results-fadeIn 0.6s ease-out;
+}
+
+.results-animate-in:nth-child(1) { animation-delay: 0.1s; }
+.results-animate-in:nth-child(2) { animation-delay: 0.2s; }
+.results-animate-in:nth-child(3) { animation-delay: 0.3s; }
+.results-animate-in:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes number-count-up {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.number-count-animation {
+  animation: number-count-up 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+
+/* Line clamp utilities for text truncation */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Enhanced dropdown styling */
+.dropdown-enter {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+}
+
+.dropdown-enter-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: all 0.3s ease-out;
+}
+
+.dropdown-exit {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.dropdown-exit-active {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  transition: all 0.2s ease-in;
+}
+
+/* ===== EVIDENCE LEVEL COLOR CODING SYSTEM ===== */
+
+/* Evidence Level A - Highest Quality */
+.evidence-level-a {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 2px solid #10b981;
+  color: #065f46;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.1);
+}
+
+.evidence-level-a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.evidence-level-a-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+/* Evidence Level B - Moderate Quality */
+.evidence-level-b {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 2px solid #3b82f6;
+  color: #1e40af;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
+}
+
+.evidence-level-b::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+
+.evidence-level-b-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Evidence Level C - Limited Quality */
+.evidence-level-c {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 2px solid #f59e0b;
+  color: #92400e;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.1);
+}
+
+.evidence-level-c::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.evidence-level-c-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+}
+
+/* Evidence Level D - Very Limited Quality */
+.evidence-level-d {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  border: 2px solid #a855f7;
+  color: #7c3aed;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(168, 85, 247, 0.1);
+}
+
+.evidence-level-d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #a855f7, #9333ea);
+}
+
+.evidence-level-d-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 4px rgba(168, 85, 247, 0.2);
+}
+
+/* Evidence Level E - Expert Opinion */
+.evidence-level-e {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 2px solid #94a3b8;
+  color: #475569;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(148, 163, 184, 0.1);
+}
+
+.evidence-level-e::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #94a3b8, #64748b);
+}
+
+.evidence-level-e-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 4px rgba(148, 163, 184, 0.2);
+}
+
+/* Special Evidence Types */
+.evidence-expert {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+  border: 2px solid #a855f7;
+  color: #6b21a8;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(168, 85, 247, 0.1);
+}
+
+.evidence-expert::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #a855f7, #9333ea);
+}
+
+.evidence-warning {
+  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+  border: 2px solid #dc2626;
+  color: #7f1d1d;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.15);
+  border-left: 4px solid #dc2626;
+}
+
+.evidence-warning::before {
+  content: '⚠️';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  opacity: 0.2;
+}
+
+.evidence-guideline {
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  border: 2px solid #6366f1;
+  color: #3730a3;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.1);
+}
+
+.evidence-guideline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #4f46e5);
+}
+
+/* Inline Evidence Badges */
+.evidence-inline-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  margin: 0 0.25rem;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+}
+
+.evidence-inline-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.evidence-inline-a {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.evidence-inline-b {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #3b82f6;
+}
+
+.evidence-inline-c {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+}
+
+.evidence-inline-d {
+  background: #faf5ff;
+  color: #7c3aed;
+  border: 1px solid #a855f7;
+}
+
+.evidence-inline-e {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #94a3b8;
+}
+
+/* Dark mode adjustments */
+.dark .evidence-level-a {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+  border-color: #10b981;
+  color: #a7f3d0;
+}
+
+.dark .evidence-level-b {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%);
+  border-color: #3b82f6;
+  color: #bfdbfe;
+}
+
+.dark .evidence-level-c {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.1) 100%);
+  border-color: #f59e0b;
+  color: #fde68a;
+}
+
+.dark .evidence-level-d {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(147, 51, 234, 0.1) 100%);
+  border-color: #a855f7;
+  color: #e9d5ff;
+}
+
+.dark .evidence-level-e {
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.15) 0%, rgba(100, 116, 139, 0.1) 100%);
+  border-color: #94a3b8;
+  color: #cbd5e1;
+}
+
+.dark .evidence-expert {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(147, 51, 234, 0.1) 100%);
+  border-color: #a855f7;
+  color: #e9d5ff;
+}
+
+.dark .evidence-warning {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(185, 28, 28, 0.1) 100%);
+  border-color: #dc2626;
+  color: #fecaca;
+}
+
+.dark .evidence-guideline {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(79, 70, 229, 0.1) 100%);
+  border-color: #6366f1;
+  color: #c7d2fe;
+}
+
+/* Animation for evidence level appearance */
+@keyframes evidenceFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.evidence-level-a,
+.evidence-level-b,
+.evidence-level-c,
+.evidence-level-d,
+.evidence-level-e,
+.evidence-expert,
+.evidence-warning,
+.evidence-guideline {
+  animation: evidenceFadeIn 0.4s ease-out;
+}
+
+/* Hover effects */
+.evidence-level-a:hover,
+.evidence-level-b:hover,
+.evidence-level-c:hover,
+.evidence-level-d:hover,
+.evidence-level-e:hover,
+.evidence-expert:hover,
+.evidence-warning:hover,
+.evidence-guideline:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+} 

@@ -1,0 +1,55 @@
+# Task ID: 32
+# Title: Enhance Common Translation Infrastructure
+# Status: done
+# Dependencies: None
+# Priority: high
+# Description: Expand shared terminology and common translation elements across the application to establish foundation for calculator-specific translations.
+# Details:
+Enhanced common.ts files for all three languages (en, ru, ka) which contain standard UI elements. Expanded medical.ts files with comprehensive medical terminology including: 1) Medical units (weight, length, blood pressure, lab values, time, volume, frequency), 2) Risk categories (low/moderate/high/very high, borderline, intermediate, etc.), 3) Clinical recommendation language (consultation, monitoring, treatment, lifestyle, emergency), 4) Calculator-specific shared terms (input labels, results, actions, validation), 5) Clinical terminology (patient demographics, assessment, treatment, follow-up, guidelines). All implementations follow the nested structure pattern: common.{category}.{property} for organization and consistency.
+
+# Test Strategy:
+Verified completeness of common translation keys across all languages. Validated medical terminology with healthcare professionals. Tested integration with i18next framework. Build tested successfully with no syntax errors.
+
+# Subtasks:
+## 32.1. Audit existing common.ts and medical.ts files [completed]
+### Dependencies: None
+### Description: Review current translation structure and content to identify gaps and opportunities for enhancement
+### Details:
+
+
+## 32.2. Implement medical units translations [completed]
+### Dependencies: None
+### Description: Added comprehensive translations for medical units including weight, length, blood pressure, lab values, time, volume, and frequency in all three languages
+### Details:
+
+
+## 32.3. Add risk category terminology [completed]
+### Dependencies: None
+### Description: Implemented translations for low/moderate/high/very high risk categories, as well as borderline and intermediate categories with appropriate medical context
+### Details:
+
+
+## 32.4. Develop clinical recommendation language [completed]
+### Dependencies: None
+### Description: Created standardized phrases for clinical recommendations including consultation, monitoring, treatment, lifestyle, and emergency guidance that can be reused across calculators
+### Details:
+
+
+## 32.5. Identify and implement calculator-specific shared terms [completed]
+### Dependencies: None
+### Description: Extracted common terminology used across multiple calculators including input labels, results, actions, and validation messages and added to shared translation files
+### Details:
+
+
+## 32.6. Implement clinical terminology translations [completed]
+### Dependencies: None
+### Description: Added translations for patient demographics, assessment, treatment, follow-up, and guidelines terminology
+### Details:
+
+
+## 32.7. Verify build and integration [completed]
+### Dependencies: None
+### Description: Performed final build testing to ensure no syntax errors and proper integration with the application
+### Details:
+
+

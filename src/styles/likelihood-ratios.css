@@ -1,0 +1,109 @@
+/* Likelihood Ratios Table Styling */
+
+/* Container for LR tables */
+.lr-table-container {
+  @apply overflow-x-auto my-6 bg-white rounded-lg shadow-sm;
+}
+
+/* LR table specific styling */
+.lr-table {
+  @apply w-full border-collapse;
+}
+
+/* LR table headers */
+.lr-table thead tr {
+  @apply border-b-2 border-gray-200;
+}
+
+.lr-table th {
+  @apply text-left py-3 px-4 font-semibold text-gray-900;
+}
+
+.lr-table th:first-child {
+  @apply w-1/2;
+}
+
+.lr-table th:nth-child(2) {
+  @apply w-1/4;
+}
+
+.lr-table th:last-child {
+  @apply w-1/4;
+}
+
+/* LR table body */
+.lr-table tbody tr {
+  @apply border-b border-gray-100 hover:bg-gray-50 transition-colors;
+}
+
+.lr-table td {
+  @apply py-3 px-4;
+}
+
+/* Finding column */
+.lr-table td:first-child {
+  @apply text-gray-800;
+}
+
+/* LR value column */
+.lr-table td:nth-child(2) {
+  @apply font-semibold text-gray-900;
+}
+
+/* Value/CI column with visual indicator */
+.lr-value-indicator {
+  @apply relative h-6 bg-gray-100 rounded-full overflow-hidden;
+}
+
+.lr-value-bar {
+  @apply absolute left-0 top-0 h-full rounded-full transition-all duration-500 ease-out;
+}
+
+/* Color coding for LR+ values */
+.lr-value-bar.lr-high {
+  @apply bg-green-500;
+}
+
+.lr-value-bar.lr-moderate {
+  @apply bg-yellow-500;
+}
+
+.lr-value-bar.lr-low {
+  @apply bg-orange-500;
+}
+
+.lr-value-bar.lr-minimal {
+  @apply bg-gray-400;
+}
+
+/* Confidence interval text */
+.lr-confidence-interval {
+  @apply text-gray-500 text-sm;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .lr-table {
+    font-size: 0.875rem;
+  }
+  
+  .lr-table th,
+  .lr-table td {
+    @apply px-2 py-2;
+  }
+  
+  .lr-value-indicator {
+    @apply h-5;
+  }
+}
+
+/* Animation for value bars */
+@keyframes lr-bar-grow {
+  from {
+    width: 0%;
+  }
+}
+
+.lr-value-bar {
+  animation: lr-bar-grow 0.8s ease-out;
+}

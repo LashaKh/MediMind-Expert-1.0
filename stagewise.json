@@ -1,0 +1,5 @@
+{
+  "appPort": 8888,
+  "framework": "react",
+  "buildTool": "netlify"
+}

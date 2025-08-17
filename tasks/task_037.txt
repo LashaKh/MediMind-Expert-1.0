@@ -1,0 +1,11 @@
+# Task ID: 37
+# Title: Implement Translation for Heart Failure Calculators
+# Status: pending
+# Dependencies: 4
+# Priority: high
+# Description: Translate the MAGGIC and GWTG-HF heart failure calculators to Russian and Georgian.
+# Details:
+Translate all elements of the MAGGIC and GWTG-HF calculators including patient characteristics, clinical parameters, and mortality predictions. Implement calculator-specific medical terminology for heart failure. Ensure consistency with common translation elements. Follow the established key structure for both calculators.
+
+# Test Strategy:
+Verify completeness of all translation keys. Test calculator functionality with translated content. Validate heart failure terminology with cardiology professionals in target languages.

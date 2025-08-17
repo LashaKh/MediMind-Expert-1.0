@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You're Offline - MediMind Expert</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            background: #f3f4f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon svg {
+            width: 40px;
+            height: 40px;
+            color: #6b7280;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+        
+        .features {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+        
+        .features h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .features li {
+            padding: 4px 0;
+            color: #6b7280;
+            font-size: 14px;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .features li::before {
+            content: '•';
+            color: #3b82f6;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .status {
+            margin-top: 24px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .status.online {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .status.offline {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .subtitle {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-12.728 12.728m0-12.728l12.728 12.728"></path>
+            </svg>
+        </div>
+        
+        <h1>You're Offline</h1>
+        <p class="subtitle">
+            No internet connection detected. You can still access previously loaded medical tools and calculators.
+        </p>
+        
+        <div class="features">
+            <h3>Available Offline:</h3>
+            <ul>
+                <li>Previously loaded medical calculators</li>
+                <li>Cached patient cases and notes</li>
+                <li>Offline medical reference data</li>
+                <li>Local calculation tools</li>
+            </ul>
+        </div>
+        
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="retryConnection()">
+                Try to Reconnect
+            </button>
+            <button class="btn btn-secondary" onclick="goBack()">
+                Go Back
+            </button>
+        </div>
+        
+        <div id="status" class="status">
+            <span id="status-text"></span>
+        </div>
+    </div>
+
+    <script>
+        // Check online status
+        function updateConnectionStatus() {
+            const status = document.getElementById('status');
+            const statusText = document.getElementById('status-text');
+            
+            if (navigator.onLine) {
+                status.className = 'status online';
+                status.style.display = 'block';
+                statusText.textContent = '✅ Connection restored! Redirecting...';
+                
+                // Redirect to main app after a short delay
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            } else {
+                status.className = 'status offline';
+                status.style.display = 'block';
+                statusText.textContent = '❌ Still offline. Please check your connection.';
+            }
+        }
+        
+        // Retry connection
+        function retryConnection() {
+            updateConnectionStatus();
+            
+            if (navigator.onLine) {
+                window.location.reload();
+            }
+        }
+        
+        // Go back
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
+        }
+        
+        // Listen for online/offline events
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        
+        // Initial status check
+        updateConnectionStatus();
+        
+        // Periodic connection check
+        setInterval(() => {
+            if (!navigator.onLine) {
+                // Try to make a simple request to check real connectivity
+                fetch('/ping', { 
+                    method: 'HEAD',
+                    cache: 'no-cache',
+                    signal: AbortSignal.timeout(5000)
+                })
+                .then(() => {
+                    // If successful and navigator.onLine is false, it might be a false negative
+                    if (!navigator.onLine) {
+                        // Force update the online status
+                        Object.defineProperty(navigator, 'onLine', {
+                            writable: true,
+                            value: true
+                        });
+                        updateConnectionStatus();
+                    }
+                })
+                .catch(() => {
+                    // Still offline
+                    console.log('Still offline');
+                });
+            }
+        }, 10000); // Check every 10 seconds
+    </script>
+</body>
+</html> 

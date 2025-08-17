@@ -1,0 +1,11 @@
+# Task ID: 44
+# Title: Implement Translation for Gynecological Health Calculators
+# Status: pending
+# Dependencies: 11
+# Priority: medium
+# Description: Translate gynecological health tools and reproductive endocrinology calculators to all three languages.
+# Details:
+Translate all elements of gynecological health tools and reproductive endocrinology calculators. Implement calculator-specific gynecological terminology. Ensure consistency with common translation elements. Follow the established key structure for each calculator. Focus on reproductive health terminology accuracy.
+
+# Test Strategy:
+Verify completeness of all translation keys. Test calculator functionality with translated content. Validate gynecological terminology with OB/GYN professionals in target languages.

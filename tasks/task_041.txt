@@ -1,0 +1,11 @@
+# Task ID: 41
+# Title: Implement Translation for AHA PREVENT Calculator
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: Translate the AHA PREVENT Calculator for expanded risk assessment to Russian and Georgian.
+# Details:
+Translate all elements of the AHA PREVENT Calculator including risk assessment parameters and kidney outcomes. Implement calculator-specific medical terminology. Ensure consistency with common translation elements. Follow the established key structure for the calculator.
+
+# Test Strategy:
+Verify completeness of all translation keys. Test calculator functionality with translated content. Validate terminology with cardiology professionals in target languages.

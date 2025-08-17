@@ -1,0 +1,121 @@
+# Task ID: 19
+# Title: Develop Personal Document Upload Functionality
+# Status: done
+# Dependencies: 4, 12
+# Priority: high
+# Description: Implement the feature for uploading personal documents to the knowledge base.
+# Details:
+Create PersonalKnowledgeBasePage with document upload interface. Implement FileUpload component with drag-and-drop functionality. Create Netlify Function for handling document uploads to OpenAI. Implement document processing and vector store creation/updating. Create database operations for storing document metadata. Add progress indicators and status updates for uploads. Implement error handling for failed uploads. Style components according to design system.
+
+# Test Strategy:
+Test document upload with various file types and sizes. Verify database operations correctly store metadata. Test error handling with simulated failures. Ensure progress indicators accurately reflect upload and processing status.
+
+# Subtasks:
+## 1. Create PersonalKnowledgeBasePage Component Structure [done]
+### Dependencies: None
+### Description: Create the basic structure for the PersonalKnowledgeBasePage component that will host the document upload interface
+### Details:
+1. Create a new file for PersonalKnowledgeBasePage component in the pages directory
+2. Set up the basic component structure with necessary imports
+3. Create a layout with sections for document list and upload interface
+4. Add placeholder components for document list and upload areas
+5. Connect the component to routing in the application
+6. Test that the page renders correctly and is accessible via navigation
+
+## 2. Implement FileUpload Component with Drag-and-Drop [done]
+### Dependencies: 19.1
+### Description: Create a reusable FileUpload component that supports drag-and-drop functionality for document uploads
+### Details:
+1. Create a new FileUpload component in the components directory
+2. Implement drag-and-drop zone using react-dropzone or similar library
+3. Add file selection via button click alternative
+4. Implement file type validation (PDF, DOCX, TXT, etc.)
+5. Add file size validation (limit to reasonable size)
+6. Create preview of selected files before upload
+7. Include remove option for selected files
+8. Test component with various file types and sizes
+9. Ensure accessibility features are implemented
+10. Reference existing ProfilePictureUpload component for consistent patterns
+
+## 3. Create Netlify Function for Document Upload [done]
+### Dependencies: 19.2
+### Description: Develop a serverless function to handle document uploads and initiate processing
+### Details:
+1. Create a new Netlify Function for handling document uploads
+2. Set up multipart form data parsing
+3. Implement file validation on the server side
+4. Set up temporary storage for uploaded files
+5. Configure authentication and authorization checks
+6. Create endpoint for file upload status checking
+7. Implement basic error handling
+8. Test the function with Postman or similar tool
+9. Add logging for debugging purposes
+
+## 4. Implement Document Processing Pipeline [done]
+### Dependencies: 19.3
+### Description: Create the backend logic to process uploaded documents and prepare them for vector storage
+### Details:
+1. Extend the upload function to process documents after upload
+2. Implement text extraction based on file type (PDF, DOCX, TXT)
+3. Set up document chunking for proper vector storage
+4. Implement metadata extraction (file name, date, type, etc.)
+5. Create unique identifiers for documents and chunks
+6. Set up connection to OpenAI embedding API
+7. Test processing with various document types
+8. Implement error handling for failed processing
+9. Add logging for the processing steps
+
+## 5. Integrate with Vector Store [done]
+### Dependencies: 19.4
+### Description: Connect the document processing pipeline to the vector database for storage and retrieval
+### Details:
+1. Set up connection to the vector database (Pinecone, Weaviate, or similar)
+2. Implement functions to store document embeddings in the vector store
+3. Create functions to update existing documents in the vector store
+4. Implement namespace/collection management for user-specific documents
+5. Add functions to query the vector store for relevant documents
+6. Integrate with existing Flowise AI infrastructure
+7. Test vector storage and retrieval functionality
+8. Implement error handling for vector store operations
+
+## 6. Create Database Operations for Document Metadata [done]
+### Dependencies: 19.5
+### Description: Implement Supabase database operations for storing and retrieving document metadata
+### Details:
+1. Design database schema for document metadata in Supabase
+2. Implement functions to store document metadata after successful processing
+3. Create functions to retrieve document metadata for display
+4. Add functions to update document metadata (rename, categorize, etc.)
+5. Implement delete operations for documents
+6. Set up proper relationships between users and their documents
+7. Test database operations for CRUD functionality
+8. Add error handling for database operations
+
+## 7. Implement Progress Tracking and Status Updates [done]
+### Dependencies: 19.3, 19.4, 19.5
+### Description: Add functionality to track and display upload and processing progress to users
+### Details:
+1. Implement progress tracking for file uploads
+2. Create progress indicators for document processing stages
+3. Set up WebSocket or polling for real-time status updates
+4. Design and implement UI components for progress display
+5. Add notifications for completed uploads and processing
+6. Implement error notifications for failed operations
+7. Create a document status dashboard in the PersonalKnowledgeBasePage
+8. Test progress tracking with various file sizes and network conditions
+
+## 8. Style Components and Implement Error Handling UI [done]
+### Dependencies: 19.1, 19.2, 19.6, 19.7
+### Description: Apply design system styling to all components and implement comprehensive error handling in the UI
+### Details:
+1. Apply design system styling to PersonalKnowledgeBasePage
+2. Style the FileUpload component according to design guidelines
+3. Create and style document list components
+4. Implement responsive design for all screen sizes
+5. Create error message components for various error scenarios
+6. Implement retry functionality for failed uploads
+7. Add helpful user guidance for error resolution
+8. Test UI across different browsers and devices
+9. Conduct accessibility testing
+10. Perform final integration testing of the complete document upload functionality
+

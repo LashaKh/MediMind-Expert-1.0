@@ -1,0 +1,11 @@
+# Task ID: 42
+# Title: Setup OB/GYN Translation Infrastructure
+# Status: pending
+# Dependencies: 3
+# Priority: high
+# Description: Create and organize OB/GYN-specific translation file structure for all three languages.
+# Details:
+Create obgyn.ts files within each language directory. Implement the structure defined in the technical architecture. Set up the base structure for all OB/GYN calculators. Include sections for calculator titles, descriptions, form fields, results, and recommendations. Ensure TypeScript strict mode compliance. Establish OB/GYN-specific common terminology.
+
+# Test Strategy:
+Verify file structure matches the technical architecture. Test TypeScript compilation. Validate integration with the i18next framework.

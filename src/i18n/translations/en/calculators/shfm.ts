@@ -1,0 +1,91 @@
+export default {
+  title: 'SHFM Risk Calculator',
+  subtitle: 'Seattle Heart Failure Model • Survival Prediction',
+  description: 'Comprehensive survival prediction model for heart failure patients incorporating demographics, clinical parameters, laboratory values, and therapy.',
+  
+  // Step labels
+  demographics_step: 'Demographics',
+  clinical_step: 'Clinical Data',
+  laboratory_step: 'Laboratory',
+  therapy_step: 'Therapy',
+  
+  // Demographics section
+  patient_demographics: 'Patient Demographics',
+  demographics_description: 'Basic patient characteristics and heart failure classification',
+  age_label: 'Age',
+  age_placeholder: 'Enter age in years',
+  gender_label: 'Gender',
+  gender_placeholder: 'Select gender',
+  gender_male: 'Male',
+  gender_female: 'Female',
+  lvef_label: 'Left Ventricular Ejection Fraction (LVEF)',
+  lvef_placeholder: 'Enter LVEF percentage',
+  nyha_class_label: 'NYHA Functional Class',
+  nyha_class_placeholder: 'Select NYHA class',
+  nyha_class_1: 'Class I - No limitation',
+  nyha_class_2: 'Class II - Slight limitation',
+  nyha_class_3: 'Class III - Marked limitation',
+  nyha_class_4: 'Class IV - Severe limitation',
+  ischemic_etiology_label: 'Ischemic Etiology',
+  
+  // Clinical parameters section
+  clinical_parameters: 'Clinical Parameters',
+  clinical_description: 'Vital signs and functional assessment',
+  systolic_bp_label: 'Systolic Blood Pressure',
+  systolic_bp_placeholder: 'Enter systolic BP',
+  peak_vo2_label: 'Peak VO2 (if available)',
+  peak_vo2_placeholder: '14.0',
+  
+  // Laboratory values section
+  laboratory_values: 'Laboratory Values',
+  laboratory_description: 'Key laboratory markers for risk assessment',
+  sodium_label: 'Serum Sodium',
+  sodium_placeholder: '140',
+  cholesterol_label: 'Total Cholesterol',
+  cholesterol_placeholder: '180',
+  hemoglobin_label: 'Hemoglobin',
+  hemoglobin_placeholder: '12.5',
+  lymphocyte_percent_label: 'Lymphocyte Percentage',
+  lymphocyte_percent_placeholder: '20',
+  uric_acid_label: 'Uric Acid',
+  uric_acid_placeholder: '7.0',
+  
+  // Therapy assessment section
+  therapy_assessment: 'Current Therapy Assessment',
+  therapy_description: 'Current medications and device therapy',
+  ace_inhibitor_label: 'ACE Inhibitor or ARB',
+  beta_blocker_label: 'Beta-blocker',
+  aldosterone_antagonist_label: 'Aldosterone Antagonist',
+  statin_label: 'Statin Therapy',
+  allopurinol_label: 'Allopurinol',
+  icd_label: 'Implantable Cardioverter Defibrillator (ICD)',
+  crt_label: 'Cardiac Resynchronization Therapy (CRT)',
+  
+  // Button labels
+  next_clinical_data: 'Next: Clinical Data',
+  next_laboratory_data: 'Next: Laboratory',
+  next_therapy_data: 'Next: Therapy',
+  calculate_button: 'Calculate SHFM Risk',
+  
+  // Validation messages
+  age_required: 'Age is required',
+  age_invalid: 'Age must be between 18 and 120 years',
+  gender_required: 'Gender is required',
+  lvef_required: 'LVEF is required',
+  lvef_invalid: 'LVEF must be between 5% and 80%',
+  nyha_class_required: 'NYHA class is required',
+  systolic_bp_required: 'Systolic blood pressure is required',
+  systolic_bp_invalid: 'Systolic BP must be between 60 and 250 mmHg',
+  peak_vo2_required: 'Peak VO2 is required',
+  peak_vo2_invalid: 'Peak VO2 must be between 5 and 50 mL/kg/min',
+  sodium_required: 'Serum sodium is required',
+  sodium_invalid: 'Sodium must be between 120 and 160 mEq/L',
+  cholesterol_required: 'Total cholesterol is required',
+  cholesterol_invalid: 'Cholesterol must be between 50 and 500 mg/dL',
+  hemoglobin_required: 'Hemoglobin is required',
+  hemoglobin_invalid: 'Hemoglobin must be between 5 and 20 g/dL',
+  lymphocyte_percent_required: 'Lymphocyte percentage is required',
+  lymphocyte_percent_invalid: 'Lymphocyte percentage must be between 1% and 50%',
+  uric_acid_required: 'Uric acid is required',
+  uric_acid_invalid: 'Uric acid must be between 2 and 20 mg/dL'
+};

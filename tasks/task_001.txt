@@ -1,0 +1,25 @@
+# Task ID: 1
+# Title: Initialize Next.js Project with Core Dependencies
+# Status: done
+# Dependencies: None
+# Priority: high
+# Description: Set up the Next.js project with Tailwind CSS, Headless UI, and configure the basic project structure.
+# Details:
+Create a new Next.js project using `create-next-app`. Install and configure Tailwind CSS with the project's style guide. Add Headless UI components. Set up ESLint and Prettier for code quality. Create the basic folder structure for pages, components, hooks, utils, and API functions. Initialize Git repository.
+
+# Test Strategy:
+Verify the project builds without errors. Confirm Tailwind CSS is working by testing a simple styled component. Ensure the development server runs correctly.
+
+# Subtasks:
+## 1. Install and Configure Prettier [done]
+### Dependencies: None
+### Description: Install Prettier and necessary ESLint integration plugins (e.g., eslint-config-prettier). Create a .prettierrc.js configuration file. Update ESLint config to integrate Prettier.
+### Details:
+
+
+## 2. Install and Configure Husky for Pre-commit Hooks [done]
+### Dependencies: None
+### Description: Install Husky. Configure pre-commit hooks to run linters (ESLint, Prettier) before commits.
+### Details:
+
+

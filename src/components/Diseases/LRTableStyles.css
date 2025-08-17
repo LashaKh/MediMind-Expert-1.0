@@ -1,0 +1,59 @@
+/* Likelihood Ratio Table Styles */
+
+/* Target tables that contain LR+ or LR- in headers */
+.markdown-content table:has(th:contains("LR+")),
+.markdown-content table:has(th:contains("LR-")) {
+  @apply w-full border-collapse bg-white rounded-lg;
+}
+
+/* Style the headers */
+.markdown-content table:has(th:contains("LR+")) thead tr,
+.markdown-content table:has(th:contains("LR-")) thead tr {
+  @apply border-b-2 border-gray-200;
+}
+
+.markdown-content table:has(th:contains("LR+")) th,
+.markdown-content table:has(th:contains("LR-")) th {
+  @apply text-left py-3 px-4 font-semibold text-gray-900;
+}
+
+/* Style the body rows */
+.markdown-content table:has(th:contains("LR+")) tbody tr,
+.markdown-content table:has(th:contains("LR-")) tbody tr {
+  @apply border-b border-gray-100 hover:bg-gray-50 transition-colors;
+}
+
+.markdown-content table:has(th:contains("LR+")) td,
+.markdown-content table:has(th:contains("LR-")) td {
+  @apply py-3 px-4;
+}
+
+/* Custom styling for LR value cells */
+.lr-value-cell {
+  @apply font-semibold text-gray-900;
+}
+
+/* Visual indicator bar */
+.lr-visual-bar {
+  @apply bg-gray-100 rounded-full h-6 w-full max-w-[200px];
+}
+
+.lr-visual-bar-fill {
+  @apply h-6 rounded-full transition-all duration-500 ease-out;
+}
+
+.lr-visual-bar-fill.lr-high {
+  @apply bg-green-500;
+}
+
+.lr-visual-bar-fill.lr-moderate {
+  @apply bg-yellow-500;
+}
+
+.lr-visual-bar-fill.lr-low {
+  @apply bg-orange-500;
+}
+
+.lr-visual-bar-fill.lr-minimal {
+  @apply bg-gray-400;
+}

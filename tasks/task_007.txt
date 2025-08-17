@@ -1,0 +1,126 @@
+# Task ID: 7
+# Title: Develop Specialty Selection During Onboarding
+# Status: done
+# Dependencies: 4, 6
+# Priority: high
+# Description: Create the onboarding flow that allows users to select their medical specialty after registration.
+# Details:
+Create OnboardingFlow component with steps indicator. Implement SpecialtySelection component with options for Cardiology and OB/GYN. Create AboutMeForm for collecting context information. Implement API function to update user profile with specialty and about_me_context. Ensure users cannot skip specialty selection. Create redirect logic to appropriate workspace after completion.
+
+# Test Strategy:
+Test the complete onboarding flow. Verify data is correctly saved to the database. Ensure users cannot access the application without completing specialty selection. Test the redirect logic to specialty-specific workspaces.
+
+# Subtasks:
+## 1. Create OnboardingFlow Component with Stepper UI [done]
+### Dependencies: None
+### Description: Develop the main container component for the onboarding process with a step indicator to show progress through the flow
+### Details:
+Implementation steps:
+1. Create a new OnboardingFlow.jsx component
+2. Implement a stepper UI component showing steps (Specialty Selection, About Me, Completion)
+3. Set up state management for tracking current step
+4. Create a layout with header, content area, and navigation buttons
+5. Implement next/back navigation logic between steps
+6. Add conditional rendering for different step content
+7. Style the component according to design guidelines
+
+Testing approach:
+- Verify stepper UI displays correctly
+- Test navigation between steps
+- Ensure responsive layout works on different screen sizes
+
+## 2. Implement SpecialtySelection Component [done]
+### Dependencies: 7.1
+### Description: Create the specialty selection screen with options for Cardiology and OB/GYN specialties
+### Details:
+Implementation steps:
+1. Create a new SpecialtySelection.jsx component
+2. Design and implement UI cards for each specialty option (Cardiology, OB/GYN)
+3. Add specialty icons and descriptions for each option
+4. Implement selection state management
+5. Add validation to ensure a specialty is selected
+6. Create visual feedback for selected specialty
+7. Implement error handling for required selection
+
+Testing approach:
+- Verify all specialty options render correctly
+- Test selection and deselection of specialties
+- Ensure validation prevents continuing without selection
+- Test accessibility of selection components
+
+## 3. Create AboutMeForm Component [done]
+### Dependencies: 7.1
+### Description: Develop a form to collect additional context information about the user
+### Details:
+Implementation steps:
+1. Create a new AboutMeForm.jsx component
+2. Implement form fields for collecting relevant information (years of experience, practice setting, etc.)
+3. Add form validation for required fields
+4. Implement state management for form data
+5. Create field-level error handling and feedback
+6. Design a clean and intuitive form layout
+7. Add help text/tooltips for clarity on what information to provide
+
+Testing approach:
+- Test form submission with valid and invalid data
+- Verify all validation rules work correctly
+- Test form reset functionality
+- Ensure form state persists if user navigates back from next step
+
+## 4. Update Database Schema and API Endpoints [done]
+### Dependencies: 7.2, 7.3
+### Description: Modify the database schema and create API endpoints to store user specialty and about_me information
+### Details:
+Implementation steps:
+1. Update user database schema to include specialty (string) and about_me_context (text) fields
+2. Create database migration scripts
+3. Implement API endpoint for updating user profile with specialty information
+4. Create API endpoint for updating about_me_context
+5. Add proper validation on the backend
+6. Implement error handling for API responses
+7. Create documentation for the new API endpoints
+
+Testing approach:
+- Test API endpoints with valid and invalid data
+- Verify database updates correctly
+- Test error handling for various scenarios
+- Ensure proper authentication/authorization checks
+
+## 5. Implement API Integration in Onboarding Components [done]
+### Dependencies: 7.2, 7.3, 7.4
+### Description: Connect the frontend components to the backend API for saving user specialty and context information
+### Details:
+Implementation steps:
+1. Create API service functions to call the backend endpoints
+2. Implement data submission in the OnboardingFlow component
+3. Add loading states during API calls
+4. Implement error handling for failed API requests
+5. Add success feedback after successful submission
+6. Create retry logic for failed submissions
+7. Implement data validation before submission
+
+Testing approach:
+- Test successful API integration
+- Verify error handling for network issues
+- Test loading states display correctly
+- Ensure proper error messages are shown to users
+
+## 6. Implement Routing Logic and Guards [done]
+### Dependencies: 7.1, 7.5
+### Description: Create routing logic to guide users through onboarding and redirect to appropriate workspace after completion
+### Details:
+Implementation steps:
+1. Create route guards to prevent skipping onboarding
+2. Implement redirect logic after onboarding completion
+3. Add specialty-based routing to direct users to appropriate workspace
+4. Create a service to check onboarding completion status
+5. Implement persistence of onboarding progress
+6. Add route for resuming incomplete onboarding
+7. Create a completion screen with transition to main application
+
+Testing approach:
+- Test route guards prevent unauthorized access
+- Verify redirects work correctly after completion
+- Test specialty-based routing logic
+- Ensure onboarding state persists across page refreshes
+

@@ -1,0 +1,253 @@
+# BOFU AI Article Editing System PRD
+
+## Overview
+BOFU AI currently generates articles and provides Google Doc links in the Generated Articles page. This PRD outlines the expansion to include a comprehensive article editing system where users can receive article content in markdown format and edit it using a robust, Notion-like editor with commenting and collaboration features accessible to both users and admins.
+
+The system will store article content in the `content_briefs` table's `article_content` field and provide a production-ready editing experience with real-time collaboration, commenting, image insertion, and all modern text editing features.
+
+## Core Features
+
+### 1. Article Content Storage & Retrieval
+- **Article Content Field**: Add `article_content` TEXT field to `content_briefs` table to store generated markdown content
+- **Dual Content Delivery**: Continue providing Google Doc links while also storing article content in database
+- **Content Synchronization**: Ensure article content in database matches generated Google Doc content
+- **Version Management**: Track article content versions and editing history
+
+### 2. Rich Text Article Editor
+- **Notion-like Interface**: Full-featured rich text editor with modern UI/UX patterns
+- **Markdown Support**: Native markdown input/output with live preview capabilities
+- **Text Formatting**: Bold, italic, underline, strikethrough, headers, lists, quotes, code blocks
+- **Advanced Features**: 
+  - Tables with editing capabilities
+  - Nested lists and indentation
+  - Link insertion and management
+  - Text alignment and spacing controls
+  - Undo/redo functionality with command history
+
+### 3. Image Management System
+- **Image Upload**: Direct image upload to articles with drag-and-drop support
+- **Image Optimization**: Automatic image compression and format optimization
+- **Image Insertion**: Insert images inline, as blocks, or in galleries
+- **Image Editing**: Basic image editing (crop, resize, filters) within the editor
+- **Storage Integration**: Integrate with Supabase storage for image hosting
+
+### 4. Commenting & Collaboration System
+- **Inline Comments**: Add comments to specific text selections or paragraphs
+- **Comment Threads**: Nested comment discussions with reply functionality
+- **Comment Status**: Mark comments as resolved, pending, or archived
+- **Comment Types**: Text comments, image attachments, suggestions, and approvals
+- **User Attribution**: Track comment authors with timestamps and user profiles
+
+### 5. Admin Dashboard Integration
+- **Admin Article Access**: Admins can view and edit any user's articles from admin dashboard
+- **Admin Editing Window**: Same editing interface available to admins with enhanced permissions
+- **Admin Comment System**: Admins can add priority comments and approval notes
+- **Bulk Management**: Admin tools for managing multiple articles, comments, and user content
+- **User Activity Tracking**: Monitor user editing patterns and collaboration metrics
+
+## User Experience
+
+### User Personas
+- **Content Creators**: Business users who generate and edit articles for their companies
+- **Collaborators**: Team members who review, comment, and suggest edits on articles
+- **Administrators**: Platform admins who oversee content quality and user management
+
+### Key User Flows
+
+#### Content Creator Flow
+1. Generate article through existing BOFU AI workflow
+2. Receive notification of completed article with both Google Doc link and in-app editing option
+3. Open article in built-in editor with markdown content pre-loaded
+4. Edit content using rich text features, add images, format text
+5. Collaborate with team members through commenting system
+6. Save changes with automatic version tracking
+7. Export or publish final article
+
+#### Admin Oversight Flow
+1. Access admin dashboard and view user articles list
+2. Select specific user and their articles for review
+3. Open article in admin editing mode with full editing capabilities
+4. Add admin comments, suggestions, or approval notes
+5. Track editing progress and collaboration metrics
+6. Manage content quality and user permissions
+
+### UI/UX Considerations
+- **Responsive Design**: Editor works seamlessly on desktop, tablet, and mobile devices
+- **Performance Optimization**: Fast loading and smooth editing experience even with large articles
+- **Accessibility**: Full keyboard navigation, screen reader support, and WCAG compliance
+- **Real-time Collaboration**: Live editing with multiple users and conflict resolution
+- **Auto-save**: Automatic content saving with visual indicators of save status
+
+## Technical Architecture
+
+### System Components
+- **Article Editor Component**: React-based rich text editor using TipTap or similar framework
+- **Comment System**: Real-time commenting infrastructure with WebSocket support
+- **Image Service**: Image upload, storage, and optimization service
+- **Version Control**: Article version management with diff tracking
+- **Collaboration Engine**: Real-time multi-user editing with operational transformation
+
+### Data Models
+
+#### Enhanced ContentBrief Interface
+```typescript
+interface ContentBrief {
+  // Existing fields...
+  article_content?: string; // NEW: Markdown content of generated article
+  article_version?: number; // NEW: Version tracking
+  last_edited_at?: string; // NEW: Last edit timestamp
+  last_edited_by?: string; // NEW: Last editor user ID
+  editing_status?: 'draft' | 'editing' | 'review' | 'final'; // NEW: Editing workflow status
+}
+```
+
+#### New Comment System
+```typescript
+interface ArticleComment {
+  id: string;
+  article_id: string;
+  user_id: string;
+  parent_comment_id?: string; // For threaded comments
+  content: string;
+  content_type: 'text' | 'image' | 'suggestion';
+  selection_start?: number; // Text selection for inline comments
+  selection_end?: number;
+  status: 'active' | 'resolved' | 'archived';
+  created_at: string;
+  updated_at: string;
+}
+```
+
+#### Image Attachment System
+```typescript
+interface ArticleImage {
+  id: string;
+  article_id: string;
+  storage_path: string;
+  filename: string;
+  alt_text?: string;
+  caption?: string;
+  position_data?: object; // Editor-specific positioning
+  created_at: string;
+}
+```
+
+### APIs and Integrations
+- **Supabase Database**: Extended schema for article content, comments, and images
+- **Supabase Storage**: Image and file storage with CDN delivery
+- **Real-time Subscriptions**: Live collaboration using Supabase real-time features
+- **Editor Framework**: TipTap or similar for rich text editing capabilities
+- **Image Processing**: Sharp or similar for image optimization
+
+### Infrastructure Requirements
+- **Database Updates**: Add new tables and columns to existing Supabase instance
+- **Storage Configuration**: Set up Supabase storage buckets for images and files
+- **Real-time Setup**: Configure Supabase real-time for live collaboration
+- **CDN Integration**: Image delivery optimization through Supabase CDN
+
+## Development Roadmap
+
+### Phase 1: Foundation (MVP)
+**Core Article Editing Infrastructure**
+- Add `article_content` field to `content_briefs` table
+- Create basic rich text editor component using TipTap
+- Implement article content loading and saving
+- Add basic text formatting features (bold, italic, headers, lists)
+- Integrate with existing Generated Articles page
+- Basic auto-save functionality
+
+### Phase 2: Enhanced Editing
+**Advanced Editor Features**
+- Complete rich text formatting toolbar
+- Markdown input/output support
+- Image upload and insertion capabilities
+- Tables and advanced formatting options
+- Undo/redo functionality
+- Editor performance optimization
+
+### Phase 3: Collaboration System
+**Comments and Multi-user Features**
+- Implement comment system database schema
+- Add inline commenting interface
+- Comment thread management
+- Real-time comment updates
+- Comment resolution and status tracking
+- User notification system for comments
+
+### Phase 4: Admin Integration
+**Admin Dashboard Features**
+- Admin article viewing interface
+- Admin editing capabilities
+- User article management tools
+- Admin comment system with elevated permissions
+- Bulk content management features
+- Analytics and usage tracking
+
+### Phase 5: Advanced Features
+**Production-ready Enhancements**
+- Real-time collaborative editing
+- Advanced image editing tools
+- Version history and diff viewing
+- Export functionality (PDF, Word, etc.)
+- Advanced search and filtering
+- Performance monitoring and optimization
+
+## Logical Dependency Chain
+
+### Foundation First (Critical Path)
+1. **Database Schema Updates** - Must be completed before any feature development
+2. **Basic Editor Component** - Core editing interface foundation
+3. **Content Loading/Saving** - Basic CRUD operations for article content
+4. **Integration with Existing UI** - Connect to Generated Articles page
+
+### Feature Development (Can be parallel)
+1. **Rich Text Features** - Build upon basic editor foundation
+2. **Image System** - Independent image upload and management
+3. **Comment Infrastructure** - Database and API for commenting system
+
+### Advanced Integration (Depends on foundation)
+1. **Real-time Features** - Requires both editor and comment systems
+2. **Admin Integration** - Requires complete editor and comment systems
+3. **Collaboration Features** - Requires all previous systems working together
+
+### Polish and Optimization (Final phase)
+1. **Performance Optimization** - Fine-tune all systems
+2. **Advanced Features** - Export, analytics, advanced editing tools
+3. **Mobile Optimization** - Responsive design refinements
+
+## Risks and Mitigations
+
+### Technical Challenges
+- **Editor Performance**: Large articles may cause performance issues
+  - *Mitigation*: Implement virtual scrolling and content lazy loading
+- **Real-time Collaboration**: Conflict resolution in multi-user editing
+  - *Mitigation*: Use operational transformation or CRDT for conflict resolution
+- **Image Storage Costs**: Large number of images could increase storage costs
+  - *Mitigation*: Implement image compression and usage monitoring
+
+### MVP Scope Management
+- **Feature Creep**: Notion-like features can be extensive
+  - *Mitigation*: Start with core editing features, add advanced features incrementally
+- **Integration Complexity**: Connecting with existing systems
+  - *Mitigation*: Maintain backward compatibility, gradual migration approach
+
+### Resource Constraints
+- **Development Time**: Rich text editors are complex to implement
+  - *Mitigation*: Use proven libraries like TipTap, focus on customization over building from scratch
+- **Testing Requirements**: Editing systems require extensive user testing
+  - *Mitigation*: Implement comprehensive test coverage, staged rollout approach
+
+## Appendix
+
+### Research Findings
+- **Current System Analysis**: BOFU AI uses content_briefs table with existing editing interface
+- **User Workflow**: Users currently receive Google Doc links, want in-app editing
+- **Admin Requirements**: Admins need oversight capabilities and editing permissions
+- **Technical Stack**: React, TypeScript, Supabase, TipTap editor already in use
+
+### Technical Specifications
+- **Editor Framework**: TipTap v2 with React integration
+- **Database**: Supabase PostgreSQL with real-time capabilities
+- **Storage**: Supabase Storage for images and files
+- **Authentication**: Existing Supabase auth system
+- **Styling**: Tailwind CSS for consistent UI/UX

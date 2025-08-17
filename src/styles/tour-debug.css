@@ -1,0 +1,189 @@
+/* Tour Debug Styles - Maximum visibility and bypass overrides */
+
+/* Portal Root Container */
+#tour-tooltip-portal,
+#tooltip-test-portal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 999999 !important;
+  overflow: visible !important;
+}
+
+/* Force visibility for debug tooltips */
+.tour-tooltip-debug,
+.tour-tooltip-debug * {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  clip: none !important;
+  clip-path: none !important;
+  overflow: visible !important;
+}
+
+/* Override any parent container restrictions */
+.tour-tooltip-debug {
+  position: fixed !important;
+  z-index: 999999 !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 3px solid #ff0000 !important;
+  border-radius: 12px !important;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.3) !important,
+    0 0 0 2px #ff0000 !important,
+    0 0 20px rgba(255, 0, 0, 0.3) !important;
+  max-width: min(90vw, 420px) !important;
+  min-width: min(320px, 85vw) !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  color: #000000 !important;
+}
+
+/* Debug animation */
+@keyframes debugTooltipPulse {
+  0%, 100% {
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.3),
+      0 0 0 2px #ff0000,
+      0 0 20px rgba(255, 0, 0, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.3),
+      0 0 0 4px #ff0000,
+      0 0 30px rgba(255, 0, 0, 0.5);
+    transform: scale(1.02);
+  }
+}
+
+.tour-tooltip-debug {
+  animation: debugTooltipPulse 2s ease-in-out infinite !important;
+}
+
+/* Dark mode debug version */
+.tour-tooltip-debug.dark,
+.tour-tooltip-debug[data-dark="true"] {
+  background: rgba(15, 23, 42, 0.98) !important;
+  color: #ffffff !important;
+  border: 3px solid #00ffff !important;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.5) !important,
+    0 0 0 2px #00ffff !important,
+    0 0 20px rgba(0, 255, 255, 0.3) !important;
+}
+
+/* Position test styles */
+.tooltip-position-test-item {
+  position: fixed !important;
+  z-index: 999999 !important;
+  opacity: 0.9 !important;
+  visibility: visible !important;
+  display: flex !important;
+  pointer-events: none !important;
+  font-family: system-ui, monospace !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 8px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+}
+
+/* Debug controls panel */
+.tour-debug-controls {
+  position: fixed !important;
+  top: 10px !important;
+  left: 10px !important;
+  z-index: 999998 !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  font-family: monospace !important;
+  font-size: 12px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  min-width: 200px !important;
+  pointer-events: auto !important;
+}
+
+/* Force button interactivity */
+.tour-debug-controls button,
+.tour-debug-controls input {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Override any CSS that might hide elements */
+body.tour-active,
+html.tour-active {
+  overflow: visible !important;
+}
+
+/* Ensure portal containers are not affected by parent overflow */
+body > #tour-tooltip-portal,
+body > #tooltip-test-portal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: visible !important;
+  clip: none !important;
+  clip-path: none !important;
+}
+
+/* Reset any transforms or positioning that might interfere */
+.tour-tooltip-debug {
+  transform-origin: top left !important;
+  will-change: auto !important;
+  contain: none !important;
+  isolation: auto !important;
+}
+
+/* Media queries for mobile debugging */
+@media (max-width: 768px) {
+  .tour-tooltip-debug {
+    max-width: 95vw !important;
+    min-width: 280px !important;
+    font-size: 14px !important;
+  }
+  
+  .tour-debug-controls {
+    max-width: calc(100vw - 20px) !important;
+    font-size: 11px !important;
+  }
+}
+
+/* High contrast mode for debugging */
+@media (prefers-contrast: high) {
+  .tour-tooltip-debug {
+    border-width: 4px !important;
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.5) !important,
+      0 0 0 4px #ff0000 !important,
+      0 0 40px rgba(255, 0, 0, 0.6) !important;
+  }
+}
+
+/* Force visibility in reduced motion mode */
+@media (prefers-reduced-motion: reduce) {
+  .tour-tooltip-debug {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+}

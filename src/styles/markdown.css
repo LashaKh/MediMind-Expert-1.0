@@ -1,0 +1,397 @@
+.markdown-content {
+  @apply text-gray-800 dark:text-gray-200 leading-relaxed;
+}
+
+/* Headings */
+.markdown-content h1 {
+  @apply text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4;
+}
+
+.markdown-content h2 {
+  @apply text-2xl font-semibold text-gray-900 dark:text-white mt-6 mb-4;
+}
+
+.markdown-content h3 {
+  @apply text-xl font-semibold text-gray-900 dark:text-white mt-5 mb-3;
+}
+
+/* Paragraphs and Lists */
+.markdown-content p {
+  @apply mb-4 text-base leading-7 text-gray-800 dark:text-gray-200;
+}
+
+.markdown-content ul {
+  @apply mb-4 ml-6 space-y-2;
+}
+
+.markdown-content li {
+  @apply relative pl-2;
+}
+
+.markdown-content ul > li::before {
+  @apply absolute left-[-1rem] text-primary dark:text-primary/80;
+  content: "•";
+}
+
+/* Blockquotes */
+.markdown-content blockquote {
+  @apply pl-4 border-l-4 border-primary/30 dark:border-primary/50 italic my-4 text-gray-700 dark:text-gray-300;
+}
+
+/* Code blocks */
+.markdown-content pre {
+  @apply bg-gray-100 dark:bg-gray-800 p-4 rounded-lg my-4 overflow-x-auto;
+}
+
+.markdown-content code {
+  @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+/* Tables */
+.markdown-content table {
+  @apply w-full my-6 border-collapse rounded-lg overflow-hidden shadow-lg;
+  border: 1px solid #e2e8f0;
+}
+
+.markdown-content th {
+  @apply bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 text-left font-semibold border-b;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.markdown-content td {
+  @apply px-4 py-3 border-b border-gray-100 align-top;
+  background-color: white;
+  transition: background-color 0.2s ease;
+}
+
+.markdown-content tbody tr:hover td {
+  @apply bg-blue-50;
+}
+
+.markdown-content tbody tr:nth-child(even) td {
+  @apply bg-gray-50;
+}
+
+.markdown-content tbody tr:nth-child(even):hover td {
+  @apply bg-blue-50;
+}
+
+/* Medical Calculator Tables - Special Styling */
+.markdown-content table:has(th:contains("Parameter")), 
+.markdown-content table:has(th:contains("Points")),
+.markdown-content table:has(th:contains("Score")) {
+  @apply my-8 shadow-xl border-2 border-blue-200;
+  border-radius: 12px;
+}
+
+.markdown-content table:has(th:contains("Parameter")) th:first-child,
+.markdown-content table:has(th:contains("Points")) th:first-child {
+  @apply bg-gradient-to-r from-emerald-600 to-teal-600;
+}
+
+.markdown-content table:has(th:contains("Parameter")) td:first-child,
+.markdown-content table:has(th:contains("Points")) td:first-child {
+  @apply font-semibold text-gray-900 bg-emerald-50;
+}
+
+/* Risk Stratification Tables */
+.markdown-content table:has(th:contains("Risk")), 
+.markdown-content table:has(th:contains("Stage")),
+.markdown-content table:has(th:contains("Classification")) {
+  @apply border-2 border-amber-200 shadow-xl;
+  border-radius: 12px;
+}
+
+.markdown-content table:has(th:contains("Risk")) th,
+.markdown-content table:has(th:contains("Stage")) th,
+.markdown-content table:has(th:contains("Classification")) th {
+  @apply bg-gradient-to-r from-amber-600 to-orange-600;
+}
+
+/* Clinical Guidelines Tables */
+.markdown-content table:has(th:contains("Guidance")), 
+.markdown-content table:has(th:contains("Recommendation")) {
+  @apply border-2 border-purple-200 shadow-xl;
+  border-radius: 12px;
+}
+
+.markdown-content table:has(th:contains("Guidance")) th,
+.markdown-content table:has(th:contains("Recommendation")) th {
+  @apply bg-gradient-to-r from-purple-600 to-indigo-600;
+}
+
+/* Table Container for Responsive Scrolling */
+.markdown-content table {
+  min-width: 600px;
+}
+
+.markdown-content .table-container {
+  @apply overflow-x-auto rounded-lg shadow-lg my-6;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Special formatting for score interpretation */
+.markdown-content p:has(strong:contains("Calculation Score")),
+.markdown-content p:has(strong:contains("Interpretation")) {
+  @apply bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 p-4 rounded-r-lg my-4 shadow-md;
+}
+
+.markdown-content p:has(strong:contains("Calculation Score")) strong,
+.markdown-content p:has(strong:contains("Interpretation")) strong {
+  @apply text-blue-800 bg-transparent px-0 py-0;
+}
+
+/* Enhanced Strong Text for Medical Terms */
+.markdown-content strong {
+  @apply font-semibold text-gray-900 bg-yellow-100 px-1 py-0.5 rounded;
+}
+
+/* Medical Evidence Levels - Enhanced */
+.markdown-content p:contains("(A)vidence Level:** (A)"),
+.markdown-content p:contains("(B)"),
+.markdown-content p:contains("(C)"),
+.markdown-content p:contains("(D)"),
+.markdown-content p:contains("(E)") {
+  @apply border-l-4 pl-4 py-2 my-3 rounded-r-lg;
+}
+
+.markdown-content p:contains("(A)vidence Level:** (A)") {
+  @apply border-emerald-500 bg-emerald-50;
+}
+
+.markdown-content p:contains("(B)") {
+  @apply border-blue-500 bg-blue-50;
+}
+
+.markdown-content p:contains("(C)") {
+  @apply border-amber-500 bg-amber-50;
+}
+
+.markdown-content p:contains("(D)") {
+  @apply border-red-500 bg-red-50;
+}
+
+.markdown-content p:contains("(E)") {
+  @apply border-purple-500 bg-purple-50;
+}
+
+/* Medical Section Headers */
+.markdown-content h3:contains("Score"),
+.markdown-content h3:contains("Calculator"),
+.markdown-content h3:contains("Classification") {
+  @apply text-blue-800 border-b-2 border-blue-200 pb-2 mb-4;
+}
+
+/* Responsive Tables */
+@media (max-width: 768px) {
+  .markdown-content table {
+    font-size: 0.875rem;
+    min-width: 500px;
+  }
+  
+  .markdown-content th,
+  .markdown-content td {
+    @apply px-2 py-2;
+  }
+}
+
+/* Links */
+.markdown-content a {
+  @apply text-primary hover:text-primary/90 underline;
+}
+
+/* Emphasis */
+.markdown-content em {
+  @apply italic;
+}
+
+/* Reset margins for inline markdown */
+.markdown-content.inline {
+  display: inline;
+}
+
+.markdown-content.inline p {
+  display: inline;
+  margin: 0;
+}
+
+.markdown-content.inline strong {
+  @apply font-semibold;
+}
+
+/* Adjust card content styling */
+.line-clamp-2 .markdown-content {
+  overflow: hidden;
+}
+
+.line-clamp-2 .markdown-content p {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Fix for markdown content inside key points and tags */
+span .markdown-content {
+  display: inline;
+}
+
+span .markdown-content p {
+  display: inline;
+  margin: 0;
+}
+
+/* Card-specific styling */
+.card-abstract .markdown-content strong,
+.card-abstract .markdown-content b {
+  @apply font-semibold;
+}
+
+/* Medical Markdown Renderer Specific Styles */
+.medical-markdown-content {
+  @apply text-gray-800 dark:text-gray-200;
+}
+
+/* Enhanced Medical Table Styling */
+.medical-markdown-content .table-container {
+  @apply rounded-xl overflow-hidden shadow-xl border-2 border-gray-200 dark:border-gray-700;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+}
+
+.medical-markdown-content table {
+  @apply w-full border-collapse;
+  border-spacing: 0;
+}
+
+.medical-markdown-content th {
+  @apply text-white font-bold text-sm uppercase tracking-wider px-6 py-4;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.medical-markdown-content td {
+  @apply px-6 py-4 text-sm border-b border-gray-100 dark:border-gray-700;
+  transition: all 0.2s ease;
+}
+
+.medical-markdown-content tbody tr:nth-child(even) {
+  @apply bg-gray-50/80 dark:bg-gray-800/50;
+}
+
+.medical-markdown-content tbody tr:hover {
+  @apply bg-blue-50 dark:bg-blue-900/20;
+  transform: translateX(2px);
+}
+
+/* Medical Section Cards */
+.medical-markdown-content h1,
+.medical-markdown-content h2 {
+  @apply flex items-center gap-3 font-bold;
+}
+
+.medical-markdown-content h3 {
+  @apply flex items-center gap-2 font-semibold;
+}
+
+/* Enhanced Medical Content Boxes */
+.medical-markdown-content [class*="bg-gradient-to-r"] {
+  @apply shadow-md hover:shadow-lg transition-all duration-300;
+  backdrop-filter: blur(10px);
+}
+
+/* Medical List Enhancements */
+.medical-markdown-content ul li {
+  @apply relative py-1;
+  transition: all 0.2s ease;
+}
+
+.medical-markdown-content ul li:hover {
+  @apply transform translate-x-1;
+}
+
+/* Medical Code Blocks */
+.medical-markdown-content code {
+  @apply font-mono text-xs;
+}
+
+.medical-markdown-content pre {
+  @apply rounded-xl shadow-lg border border-gray-200 dark:border-gray-700;
+}
+
+/* Medical Blockquotes */
+.medical-markdown-content blockquote {
+  @apply rounded-r-xl shadow-md;
+}
+
+/* Source Reference Links */
+.medical-markdown-content .inline-source-ref {
+  @apply inline-flex items-center justify-center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.medical-markdown-content .inline-source-ref:hover {
+  @apply transform scale-105 shadow-md;
+}
+
+/* Responsive Design for Medical Content */
+@media (max-width: 640px) {
+  .medical-markdown-content .table-container {
+    @apply mx-2;
+  }
+  
+  .medical-markdown-content th,
+  .medical-markdown-content td {
+    @apply px-3 py-2 text-xs;
+  }
+  
+  .medical-markdown-content [class*="bg-gradient-to-r"] {
+    @apply mx-2 px-3 py-2;
+  }
+}
+
+/* Animation Classes */
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.medical-markdown-content table {
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+.medical-markdown-content [class*="bg-gradient-to-r"] {
+  animation: slideInFromLeft 0.4s ease-out;
+}
+
+/* Print Styles for Medical Content */
+@media print {
+  .medical-markdown-content {
+    @apply text-black;
+  }
+  
+  .medical-markdown-content table {
+    @apply border border-black;
+  }
+  
+  .medical-markdown-content th {
+    @apply bg-gray-300 text-black;
+  }
+  
+  .medical-markdown-content [class*="bg-gradient-to-r"] {
+    @apply bg-gray-100 border border-gray-400;
+  }
+}

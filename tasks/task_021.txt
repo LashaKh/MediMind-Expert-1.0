@@ -1,0 +1,184 @@
+# Task ID: 21
+# Title: Integrate Personal Knowledge Base with AI Co-Pilot
+# Status: done
+# Dependencies: 13, 19, 20
+# Priority: high
+# Description: Modify the AI Co-Pilot to allow querying against the personal knowledge base.
+# Details:
+Update chat interface to include knowledge base selection (curated vs. personal). Modify API requests to Flowise to include personal knowledge base context. Create visual indicators for active knowledge base source. Implement toggle functionality between knowledge bases. Update source reference display for personal documents. Create guidance for users on how to effectively query their personal knowledge base.
+
+# Test Strategy:
+Test querying with both curated and personal knowledge bases. Verify correct API requests are made based on selected knowledge base. Test toggle functionality between knowledge bases. Ensure source references correctly display for personal documents.
+
+# Subtasks:
+## 1. Implement Knowledge Base Selection UI [done]
+### Dependencies: None
+### Description: Add UI elements to the chat interface that allow users to select between curated and personal knowledge bases
+### Details:
+Implementation details:
+1. Create a toggle switch or dropdown menu in the chat interface header to select between 'Curated KB' and 'Personal KB'
+2. Add appropriate styling to match the existing UI design
+3. Implement state management to track the currently selected knowledge base
+4. Add tooltips explaining the difference between knowledge base types
+5. Ensure the UI is responsive and works on mobile devices
+
+Testing approach:
+- Verify the toggle/dropdown renders correctly in all supported browsers
+- Test that the state updates correctly when switching between options
+- Confirm the UI is accessible (keyboard navigation, screen readers)
+
+## 2. Create Visual Indicators for Active Knowledge Base [done]
+### Dependencies: 21.1
+### Description: Implement visual cues that clearly indicate which knowledge base is currently active during chat interactions
+### Details:
+Implementation details:
+1. Design and implement a small icon or badge that appears next to the chat input when Personal KB is active
+2. Create a color-coded indicator in the chat header showing the active knowledge base
+3. Add a subtle background color change to the chat interface based on the active knowledge base
+4. Ensure the indicators are noticeable but not distracting
+5. Add animation for smooth transitions between states
+
+Testing approach:
+- Verify indicators update correctly when switching knowledge bases
+- Test with different color schemes and accessibility settings
+- Ensure indicators are visible on all supported screen sizes
+
+## 3. Modify API Request Handler for Personal Knowledge Base [done]
+### Dependencies: 21.1
+### Description: Update the API request handler to include personal knowledge base context when sending requests to Flowise
+### Details:
+Implementation details:
+1. Modify the existing API request function to check the selected knowledge base type
+2. Add logic to include personal knowledge base identifiers in the request payload when 'Personal KB' is selected
+3. Update the request parameters to include user-specific document references
+4. Implement error handling for cases where personal knowledge base is unavailable
+5. Add logging for debugging API interactions
+
+Testing approach:
+- Create unit tests for the modified API handler
+- Test with mock responses to simulate different scenarios
+- Verify correct parameters are sent based on knowledge base selection
+
+<info added on 2025-05-29T20:12:22.132Z>
+When integrating with OpenAI Vector Store:
+
+1. Add a database query function to retrieve the user's OpenAI Vector Store ID:
+```javascript
+async function getUserVectorStoreId(userId) {
+  const user = await db.users.findOne({ where: { id: userId } });
+  return user.openaiVectorStoreId;
+}
+```
+
+2. Modify the request payload structure to accommodate OpenAI Vector Store parameters:
+```javascript
+const vectorStoreId = await getUserVectorStoreId(userId);
+payload.vectorStore = {
+  type: 'openai',
+  id: vectorStoreId,
+  namespace: userId // Optional: for multi-tenant isolation
+};
+```
+
+3. Add configuration for OpenAI Vector Store API authentication:
+```javascript
+// Include OpenAI API credentials in the request headers
+headers['X-OpenAI-Key'] = process.env.OPENAI_API_KEY;
+```
+
+4. Implement fallback mechanism if Vector Store ID is missing:
+```javascript
+if (!vectorStoreId) {
+  logger.warn(`No Vector Store ID found for user ${userId}, falling back to default knowledge base`);
+  payload.useDefaultKnowledgeBase = true;
+}
+```
+
+5. Add telemetry to monitor Vector Store query performance:
+```javascript
+const startTime = performance.now();
+// After request completes
+logger.info(`Vector Store query completed in ${performance.now() - startTime}ms for user ${userId}`);
+```
+</info added on 2025-05-29T20:12:22.132Z>
+
+## 4. Implement Toggle Functionality Between Knowledge Bases [done]
+### Dependencies: 21.1, 21.2, 21.3
+### Description: Create the logic to seamlessly switch between knowledge bases during a chat session
+### Details:
+Implementation details:
+1. Implement an event handler for the knowledge base selection UI
+2. Create a function to update all necessary state when toggling between knowledge bases
+3. Add confirmation dialog when switching knowledge bases during an active conversation
+4. Ensure chat history is preserved when switching
+5. Reset relevant context variables when changing knowledge bases
+6. Update visual indicators when toggle occurs
+
+Testing approach:
+- Test switching between knowledge bases mid-conversation
+- Verify state is correctly maintained or reset as appropriate
+- Check that visual indicators update properly
+- Test edge cases like rapid switching between knowledge bases
+
+## 5. Update Source Reference Display for Personal Documents [done]
+### Dependencies: 21.3, 21.4
+### Description: Modify how source references are displayed in chat responses when using the personal knowledge base
+### Details:
+Implementation details:
+1. Create a new component for displaying personal document references
+2. Modify the existing source citation component to handle personal document metadata
+3. Add document title, upload date, and relevant page/section information to citations
+4. Implement collapsible source details for personal documents
+5. Add the ability to view document snippets directly in the chat interface
+6. Create visual distinction between personal and curated knowledge base citations
+
+Testing approach:
+- Test with various document types and metadata formats
+- Verify citations are accurate and clickable
+- Ensure document snippets display correctly
+- Test with long document titles and edge cases
+
+<info added on 2025-05-29T20:12:36.087Z>
+For OpenAI Vector Store integration:
+
+1. Extend the personal document reference component to support OpenAI Vector Store metadata fields:
+   - Add support for OpenAI File IDs in citation display
+   - Include Vector Store namespace information when available
+   - Implement proper escaping for Vector Store identifiers
+
+2. Create helper functions to:
+   - Extract document metadata from Vector Store response objects
+   - Map between internal document IDs and OpenAI File IDs
+   - Format Vector Store context scores for display
+
+3. Modify citation UI to:
+   - Display confidence scores from Vector Store retrievals
+   - Add visual indicators for Vector Store vs. local document sources
+   - Create tooltips showing full Vector Store context when hovering over citations
+
+4. Implement document linking:
+   - Generate direct links to original documents when available in Vector Store metadata
+   - Provide fallback to local document viewer when direct links aren't available
+   - Add copy-to-clipboard functionality for OpenAI File IDs
+
+5. Add Vector Store specific error handling for missing or malformed document references
+</info added on 2025-05-29T20:12:36.087Z>
+
+## 6. Create User Guidance for Personal Knowledge Base Queries [done]
+### Dependencies: 21.1, 21.3, 21.5
+### Description: Develop helpful guidance for users on how to effectively query their personal knowledge base
+### Details:
+Implementation details:
+1. Create an onboarding tooltip that appears when Personal KB is selected for the first time
+2. Develop a 'Tips for querying' help panel accessible from the chat interface
+3. Add example queries specific to personal knowledge base usage
+4. Implement contextual hints that appear based on user interaction patterns
+5. Create a dedicated help section for personal knowledge base in the documentation
+6. Add a subtle prompt in the chat input placeholder when Personal KB is active
+
+Testing approach:
+- Verify guidance appears at appropriate times
+- Test user comprehension with sample users
+- Ensure guidance doesn't interfere with normal chat usage
+- Test accessibility of all guidance elements
+

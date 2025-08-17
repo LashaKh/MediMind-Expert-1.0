@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Auth</title>
+</head>
+<body>
+    <h1>Debug Authentication</h1>
+    <div id="output"></div>
+    
+    <script type="module">
+        const SUPABASE_URL = 'https://kvsqtolsjggpyvdtdpss.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2c3F0b2xzamdncHl2ZHRkcHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgzNjk3NzAsImV4cCI6MjA2Mzk0NTc3MH0.GcjFaO69jmW_nuJU4S8mZJdgi7PyM5Z736vGKvnKCyE';
+        
+        import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2';
+        
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        const output = document.getElementById('output');
+        
+        async function testAuth() {
+            try {
+                output.innerHTML += '<p>Testing authentication...</p>';
+                
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: 'test@medimind.com',
+                    password: 'password123',
+                });
+                
+                if (error) {
+                    output.innerHTML += `<p style="color: red;">Error: ${error.message}</p>`;
+                    output.innerHTML += `<p style="color: red;">Status: ${error.status}</p>`;
+                } else {
+                    output.innerHTML += `<p style="color: green;">Success! User: ${data.user?.email}</p>`;
+                }
+            } catch (err) {
+                output.innerHTML += `<p style="color: red;">Exception: ${err.message}</p>`;
+            }
+        }
+        
+        testAuth();
+    </script>
+</body>
+</html>

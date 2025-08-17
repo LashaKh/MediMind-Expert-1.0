@@ -1,0 +1,25 @@
+# Task ID: 24
+# Title: Develop Cardiology Medical Forms Repository
+# Status: pending
+# Dependencies: 9
+# Priority: medium
+# Description: Implement the repository of downloadable medical forms for Cardiology.
+# Details:
+Create FormsPage component for Cardiology workspace. Implement FormList and FormItem components for displaying available forms. Add 1-2 common Cardiology forms as downloadable PDFs. Create form preview functionality. Implement form download functionality. Add descriptions and usage instructions for each form. Style components according to design system. Ensure mobile responsiveness for form listing and preview.
+
+# Test Strategy:
+Test form listing and display. Verify form preview functionality works correctly. Test form download on various devices. Ensure responsive design works on different screen sizes.
+
+# Subtasks:
+## 1. Design Cardiology Calculator Components [pending]
+### Dependencies: None
+### Description: Create reusable calculator components for cardiology-specific calculations
+### Details:
+
+
+## 2. Implement Cardiology Calculation Logic [pending]
+### Dependencies: None
+### Description: Develop the calculation logic for cardiology-specific medical calculators (e.g., ASCVD Risk Calculator, CHA₂DS₂-VASc Score)
+### Details:
+
+

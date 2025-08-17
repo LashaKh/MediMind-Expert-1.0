@@ -1,0 +1,11 @@
+# Task ID: 40
+# Title: Complete Atrial Fibrillation Suite Translation
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: Refine and complete translations for CHA2DS2-VASc, HAS-BLED, and CHADS2 calculators.
+# Details:
+Review and enhance existing translations for the Atrial Fibrillation suite. Ensure consistency with newly established terminology standards. Complete any missing translation elements. Standardize risk category descriptions and recommendations across all three calculators.
+
+# Test Strategy:
+Verify consistency with existing calculator translations. Test calculator functionality with refined translations. Validate atrial fibrillation terminology with cardiology professionals in target languages.

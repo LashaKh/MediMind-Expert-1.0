@@ -1,0 +1,61 @@
+# Task ID: 15
+# Title: Develop Case Creation Functionality
+# Status: done
+# Dependencies: 13, 14
+# Priority: high
+# Description: Implement the feature for creating and discussing anonymized patient cases.
+# Details:
+Create NewCaseButton and modal/page for case creation. Implement CaseForm component with text area for anonymized patient information. Create API function to send case context to Flowise API with Zep memory. Implement case context persistence in chat state. Add visual indicators for active case discussions. Create case listing functionality if multiple cases are supported. Implement case context reset functionality.
+
+# Test Strategy:
+Test complete case creation flow. Verify case context is correctly sent to Flowise API. Test case context persistence in chat state. Ensure visual indicators correctly show active case discussions.
+
+# Subtasks:
+## 1. Create NewCaseButton Component [done]
+### Dependencies: None
+### Description: Implement a button component that triggers the case creation workflow
+### Details:
+Create a NewCaseButton React component that will be displayed in the chat interface. The button should have appropriate styling to match the application's design system. When clicked, it should either open a modal or navigate to a case creation page based on the application's navigation pattern. Include hover states and appropriate accessibility attributes. Test the component rendering and click handler functionality.
+
+## 2. Implement Case Creation Modal/Page [done]
+### Dependencies: 15.1
+### Description: Build the container UI for the case creation workflow
+### Details:
+Create either a modal dialog or dedicated page for case creation based on the application architecture. If using a modal, ensure it has proper overlay, focus management, and dismissal behaviors. If using a page, implement proper navigation and routing. The container should have a clear title, description of purpose, and placeholder for the CaseForm component. Include cancel and submit buttons with appropriate handlers. Test modal/page rendering, opening/closing behavior, and form submission flow.
+
+## 3. Develop CaseForm Component with Patient Information Input [done]
+### Dependencies: 15.2
+### Description: Create a form component for inputting anonymized patient information
+### Details:
+Implement a CaseForm component with a text area for entering anonymized patient information. Include form validation to ensure sufficient information is provided while maintaining patient privacy. Add helper text explaining anonymization requirements. Include additional fields if needed (e.g., case title, category selection). Implement form state management using React hooks or form libraries. Test form validation, state management, and submission handling.
+
+## 4. Create API Function for Flowise Integration [done]
+### Dependencies: 15.3
+### Description: Develop the API functionality to send case context to Flowise with Zep memory
+### Details:
+Implement an API function that takes the case information from the form and sends it to the Flowise API with Zep memory integration. Handle authentication and error cases appropriately. Structure the API payload according to Flowise requirements, ensuring the case context is properly formatted. Create utility functions for any data transformation needed. Test the API function with mock data, verifying proper connection to Flowise and error handling.
+
+## 5. Implement Case Context Persistence in Chat State [done]
+### Dependencies: 15.4
+### Description: Ensure case information persists throughout the chat session
+### Details:
+Extend the existing ChatContext or state management to store and maintain case information throughout a chat session. Update the chat state when a new case is created. Create selectors or hooks to access the active case context from components. Ensure the case context is properly included in message history and new message generation. Test persistence across page refreshes if applicable and verify case context is properly maintained throughout conversations.
+
+## 6. Add Visual Indicators for Active Case Discussions [done]
+### Dependencies: 15.5
+### Description: Create UI elements to show when a case discussion is active
+### Details:
+Implement visual indicators in the chat interface that clearly show when a case discussion is active. This could include a persistent banner, sidebar element, or header component displaying the active case title/summary. Style the indicators to be noticeable but not intrusive. Consider adding a way to quickly view the full case details from this indicator. Test the visibility and functionality of these indicators in various chat states.
+
+## 7. Create Case Listing Functionality [done]
+### Dependencies: 15.5
+### Description: Implement the ability to view and select from multiple cases
+### Details:
+Build a case listing component that displays all available cases for the user. Implement filtering and sorting capabilities if needed. Each case in the list should show key information (title, creation date, etc.) and be selectable to switch the active case context. Consider pagination for larger numbers of cases. Add the ability to search through cases if appropriate. Test case listing display, selection functionality, and any filtering/sorting features implemented.
+
+## 8. Implement Case Context Reset Functionality [done]
+### Dependencies: 15.5, 15.6
+### Description: Create the ability to exit a case discussion and reset the chat context
+### Details:
+Add functionality to exit the current case discussion and reset the chat context. Implement a clear visual element (button or menu item) to trigger this action. Include a confirmation dialog to prevent accidental resets. Update the ChatContext and relevant state when a reset occurs. Ensure proper cleanup of any case-specific resources. Test the reset functionality to verify it properly clears case context and returns the chat to its default state.
+

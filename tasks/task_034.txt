@@ -1,0 +1,11 @@
+# Task ID: 34
+# Title: Refine Translation Key Pattern Structure
+# Status: done
+# Dependencies: 1, 2
+# Priority: high
+# Description: Optimize translation key structures based on successful patterns from TIMI/GRACE calculators.
+# Details:
+Analyze existing TIMI/GRACE calculator translations. Refine the nested translation key structure: calculators.{specialty}.{calculator_name}.{property}. Implement TypeScript interfaces for translation objects to ensure type safety. Establish conventions for validation messages: calculators.{specialty}.{calculator}.validation_{field}. Create documentation for the translation key patterns.
+
+# Test Strategy:
+Validate key structure consistency. Test TypeScript type checking. Verify backward compatibility with existing calculator translations.

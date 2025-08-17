@@ -1,0 +1,31 @@
+# Task ID: 17
+# Title: Create Source Reference Display
+# Status: done
+# Dependencies: 11, 13
+# Priority: medium
+# Description: Implement the UI for displaying source references from AI responses.
+# Details:
+Create SourceReference component for displaying citation information. Implement parsing logic for source references from Flowise API responses. Create expandable/collapsible UI for detailed source information. Add visual styling for source citations within AI messages. Implement linking to source documents if available. Create tooltips or modals for displaying full reference information.
+
+# Test Strategy:
+Test source reference display with various citation formats. Verify expandable/collapsible UI works correctly. Test parsing logic with different API response formats. Ensure visual styling is consistent with design system.
+
+# Subtasks:
+## 1. Create SourceReference Component [done]
+### Dependencies: None
+### Description: Develop the main SourceReferences component with expandable UI and source type indicators
+### Details:
+Implemented in SourceReferences.tsx with full functionality including hover previews, external links, and type-based styling
+
+## 2. Implement Source Parsing Logic [done]
+### Dependencies: None
+### Description: Create parsing logic to extract source references from Flowise API responses
+### Details:
+Implemented in useFlowiseChat.ts hook with automatic source mapping and formatting
+
+## 3. Enhance Source Reference Interactivity [done]
+### Dependencies: 17.1, 17.2
+### Description: Add click-to-highlight functionality between inline citations and source list
+### Details:
+Enhanced messageFormatter.ts to create interactive inline citations, updated SourceReferences.tsx with highlighting state, and added click handlers in MessageItem.tsx for bidirectional highlighting between response text and sources
+

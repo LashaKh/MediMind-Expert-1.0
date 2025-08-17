@@ -1,0 +1,261 @@
+# Task ID: 23
+# Title: Implement OB/GYN Medical Calculators
+# Status: pending
+# Dependencies: 9
+# Priority: medium
+# Description: Create a comprehensive specialty-specific calculator suite for Obstetrics/Gynecology, leveraging the established calculator framework from the Cardiology implementation.
+# Details:
+Implement a comprehensive OB/GYN Medical Calculator suite with 13 professional-grade calculators organized in six specialty categories: Pregnancy Dating, Antenatal Risk, Labor Management, Assessment, Gynecologic Oncology, and Reproductive Endocrinology. Reuse the established calculator component architecture with tabbed interfaces. Leverage the proven 100% validation methodology with medical accuracy standards. Integrate with existing AI chat system for clinical decision support and smart suggestions. Apply comprehensive form validation, error handling, and clinical decision pathways. Ensure mobile responsiveness and accessibility standards. Implement calculator-specific components following established patterns from the Cardiology implementation. All calculators must comply with evidence-based guidelines from ACOG (American College of Obstetricians and Gynecologists), SMFM (Society for Maternal-Fetal Medicine), ASCCP (American Society for Colposcopy and Cervical Pathology), SGO (Society of Gynecologic Oncology), ASRM (American Society for Reproductive Medicine), and NAMS (North American Menopause Society) with specific Practice Bulletins and Committee Opinions referenced.
+
+# Test Strategy:
+Apply the established testing framework with 100% validation success methodology. Test calculators with various input values, including edge cases. Verify calculation results against evidence-based guidelines from ACOG, SMFM, ASCCP, SGO, ASRM, and NAMS. Test form validation for invalid inputs. Ensure AI integration works correctly with contextual suggestions. Verify responsive design works on different screen sizes. Test accessibility compliance. Validate clinical decision pathways and result interpretation against established medical standards.
+
+# Subtasks:
+## 1. Define OB/GYN Calculator Requirements and Specifications [done]
+### Dependencies: None
+### Description: Document detailed requirements for all 13 OB/GYN calculators across the six specialty categories, including input parameters, calculation formulas, output formats, and clinical guidelines references.
+### Details:
+Create a comprehensive specification document that includes: 1) Calculator names and descriptions for each category (Pregnancy Dating, Antenatal Risk, Labor Management, Assessment, Gynecologic Oncology, and Reproductive Endocrinology), 2) Input parameters with validation rules and acceptable ranges, 3) Calculation formulas with mathematical expressions, 4) Output formats and clinical interpretations, 5) References to specific ACOG, SMFM, ASCCP, SGO, ASRM, and NAMS guidelines with practice bulletin numbers, 6) Edge cases and special considerations. Test by reviewing with clinical stakeholders to ensure completeness and accuracy.
+
+<info added on 2025-05-30T13:09:06.197Z>
+# Additional Implementation Details
+
+## Data Structure Recommendations
+- Create standardized JSON schema for each calculator type to ensure consistency
+- Implement versioning for calculator algorithms to support future updates
+- Design modular formula components that can be reused across calculators
+
+## Technical Integration Points
+- Develop API endpoints for each calculator following RESTful principles
+- Structure response objects to include: result, interpretation, confidence level, and reference citations
+- Implement caching strategy for frequently used calculators to improve performance
+
+## Clinical Validation Requirements
+- Include validation datasets for each calculator with expected outcomes
+- Document sensitivity and specificity metrics where applicable
+- Define clinical significance thresholds for each numerical output
+
+## UI/UX Considerations
+- Provide mockups for mobile-responsive layouts for each calculator
+- Include tooltip content for clinical terms and parameters
+- Design clear visualization components for risk stratification outputs
+
+## Testing Strategy
+- Create unit test suite covering edge cases and boundary conditions
+- Develop integration tests simulating clinical workflows
+- Implement automated regression testing for formula accuracy
+
+## Regulatory Considerations
+- Document which calculators require regulatory notices or disclaimers
+- Specify data retention policies for calculator inputs
+- Include audit trail requirements for high-risk calculators
+</info added on 2025-05-30T13:09:06.197Z>
+
+## 2. Set Up Base Calculator Framework and Data Models [done]
+### Dependencies: 23.1
+### Description: Establish the core calculator architecture by adapting the existing Cardiology framework, creating data models for OB/GYN calculators, and implementing the base calculation service.
+### Details:
+1) Review and analyze the existing Cardiology calculator architecture, 2) Create data models/interfaces for each OB/GYN calculator type with proper typing, 3) Implement a calculator registry service for OB/GYN specialty, 4) Set up the calculation service with abstract methods for different calculator types, 5) Create utility functions for common OB/GYN calculations (e.g., gestational age conversions), 6) Establish error handling patterns, 7) Set up unit testing framework for calculator logic. Test by writing unit tests for the base calculator service and verifying the data models with sample data.
+
+<info added on 2025-05-30T13:15:22.850Z>
+## Technical Implementation Details
+
+### Data Model Architecture
+- Implemented a hierarchical type system with `BaseCalculatorInput` and `BaseCalculatorOutput` as parent interfaces
+- Used TypeScript discriminated unions with `calculatorType` property for type-safe calculator identification
+- Added runtime type guards (e.g., `isEDDCalculatorInput()`) for validation during calculation processing
+- Implemented Zod schema validation for each calculator input to ensure data integrity
+
+### Calculation Service Internals
+- Added memoization for expensive calculations using `useMemo` pattern
+- Implemented date manipulation utilities with `date-fns` library for precise obstetric date calculations
+- Created specialized error types: `ValidationError`, `CalculationError`, and `ConfigurationError`
+- Added logging interceptors for calculation steps to aid debugging and future analytics
+
+### Medical Algorithm Implementation
+- Integrated ACOG 2023 guidelines for gestational age calculations
+- Implemented SMFM risk stratification algorithms for preeclampsia prediction
+- Added NICHD-compliant fetal growth percentile calculations
+- Created unit conversion utilities for US/metric measurements with configurable preferences
+
+### Testing Framework
+- Set up Jest testing environment with specialized date/time mocking utilities
+- Created test fixtures for all calculator types with edge case coverage
+- Implemented snapshot testing for calculation outputs
+- Added test coverage reporting with minimum 90% threshold requirement
+
+### Performance Considerations
+- Optimized calculation paths for mobile devices
+- Implemented lazy loading pattern for calculator-specific logic
+- Added calculation result caching strategy for frequently used calculators
+</info added on 2025-05-30T13:15:22.850Z>
+
+## 3. Implement Pregnancy Dating and Antenatal Risk Calculators [pending]
+### Dependencies: 23.2
+### Description: Develop the calculators for the Pregnancy Dating and Antenatal Risk categories, including gestational age calculators, due date estimators, and risk assessment tools.
+### Details:
+1) Implement gestational age calculator with multiple dating methods (LMP, ultrasound measurements), 2) Create EDD (estimated due date) calculator with adjustments for irregular cycles, 3) Develop preeclampsia risk calculator based on maternal factors, 4) Implement preterm birth risk assessment tool, 5) Create calculator for gestational diabetes risk scoring, 6) Set up validation rules for date inputs and measurement ranges, 7) Implement clinical interpretation of results based on ACOG guidelines. Test each calculator with various test cases including edge cases, and validate results against manual calculations and published examples.
+
+## 4. Implement Labor Management and Assessment Calculators [pending]
+### Dependencies: 23.2
+### Description: Develop the calculators for Labor Management and Assessment categories, including Bishop score, labor progression tools, and fetal assessment calculators.
+### Details:
+1) Implement Bishop Score calculator with all components (cervical dilation, effacement, etc.), 2) Create Friedman curve calculator for labor progression assessment, 3) Develop amniotic fluid index (AFI) calculator, 4) Implement fetal weight estimation calculator using multiple formulas, 5) Create calculator for contraction timing and frequency, 6) Implement TOLAC/VBAC success prediction calculator, 7) Add result interpretations with clinical recommendations based on SMFM guidelines. Test with clinical scenarios, comparing calculator outputs against expected values from medical literature and validating interpretation text against clinical guidelines.
+
+## 5. Implement Gynecologic Oncology and Reproductive Endocrinology Calculators [pending]
+### Dependencies: 23.2
+### Description: Develop the calculators for Gynecologic Oncology and Reproductive Endocrinology categories, including cancer risk assessment tools and fertility calculators.
+### Details:
+1) Implement ovarian cancer risk calculator based on BRCA status and family history, 2) Create endometrial cancer risk assessment tool, 3) Develop cervical cancer screening interval calculator based on ASCCP guidelines, 4) Implement ovarian reserve assessment calculator (AMH-based), 5) Create ovulation prediction calculator, 6) Implement PCOS diagnostic criteria calculator, 7) Develop menopause symptom severity index. Test with various clinical scenarios, validating against SGO, ASRM, and NAMS guidelines, and verify results match expected outcomes from evidence-based literature.
+
+## 6. Design and Implement UI Components for OB/GYN Calculators [pending]
+### Dependencies: 23.2, 23.3, 23.4, 23.5
+### Description: Create specialized UI components for OB/GYN calculators, including gestational age selectors, anatomical visualization components, and specialty-specific input controls.
+### Details:
+1) Design and implement gestational age input component with weeks/days selection, 2) Create date picker optimized for menstrual cycle and pregnancy dating, 3) Develop slider components for Bishop score elements, 4) Implement visualization components for fetal measurements, 5) Create specialized form components for risk factor selection, 6) Design result displays with clinical interpretation sections, 7) Implement mobile-responsive layouts for all components, 8) Ensure accessibility compliance for all UI elements. Test with usability testing on various devices, screen readers, and verify WCAG compliance.
+
+## 7. Implement Tabbed Interface and Navigation for Calculator Suite [pending]
+### Dependencies: 23.6
+### Description: Create the tabbed navigation interface for the OB/GYN calculator suite, organizing calculators by specialty categories with responsive design and state management.
+### Details:
+1) Implement main calculator container component with tabbed navigation, 2) Create category tabs for the six specialty areas, 3) Implement calculator selection within each category, 4) Add breadcrumb navigation for calculator history, 5) Create responsive layouts for desktop, tablet, and mobile views, 6) Implement state management for preserving calculator inputs across tab navigation, 7) Add search functionality for finding specific calculators, 8) Create calculator favorites or recent history feature. Test with various screen sizes, navigation paths, and verify state preservation when switching between calculators.
+
+## 8. Implement Validation System and Error Handling [pending]
+### Dependencies: 23.3, 23.4, 23.5, 23.6
+### Description: Develop comprehensive validation rules, error handling, and clinical alerts for all OB/GYN calculators, ensuring data integrity and providing meaningful feedback to users.
+### Details:
+1) Implement form validation for all calculator inputs with specific OB/GYN domain rules, 2) Create validation for date ranges specific to pregnancy (e.g., gestational age limits), 3) Implement cross-field validation for related measurements, 4) Add clinical alerts for out-of-range values or concerning results, 5) Create error message components with contextual help, 6) Implement input masking for specialized formats (dates, measurements), 7) Add warning systems for potentially incorrect combinations of inputs. Test with boundary testing, invalid input testing, and verify appropriate error messages are displayed for various error conditions.
+
+## 9. Integrate with AI Chat System for Clinical Decision Support [pending]
+### Dependencies: 23.3, 23.4, 23.5, 23.8
+### Description: Integrate the OB/GYN calculators with the existing AI chat system to provide clinical decision support, smart suggestions, and contextual explanations of calculator results.
+### Details:
+1) Create API endpoints for AI system to access calculator functions, 2) Implement contextual prompts based on calculator results, 3) Develop result interpretation templates for AI integration, 4) Create suggestion system for relevant calculators based on chat context, 5) Implement deep linking from chat to pre-populated calculators, 6) Add ability for AI to explain calculator methodologies and guidelines, 7) Create system for AI to recommend additional assessments based on calculator results. Test with integration testing, simulated chat scenarios, and verify accuracy of AI interpretations against clinical guidelines.
+
+## 10. Implement Comprehensive Testing and Clinical Validation [pending]
+### Dependencies: 23.3, 23.4, 23.5, 23.8, 23.9
+### Description: Develop and execute a comprehensive testing plan for all OB/GYN calculators, including unit tests, integration tests, and clinical validation against established medical standards.
+### Details:
+1) Create test cases for each calculator covering normal ranges, edge cases, and clinical scenarios, 2) Implement automated unit tests for all calculation functions, 3) Create integration tests for calculator components and UI, 4) Develop clinical validation test suite with real-world examples from literature, 5) Create comparison tests against established calculator implementations, 6) Implement performance testing for complex calculators, 7) Create documentation of validation methodology and results, 8) Set up continuous testing framework for regression prevention. Test by executing the full test suite, documenting accuracy rates, and having clinical stakeholders verify results against expected outcomes from ACOG, SMFM, ASCCP, SGO, ASRM, and NAMS guidelines.
+
+## 11. Individual Calculator Component Implementation [in-progress]
+### Dependencies: 23.2
+### Description: Implement React components for each OB/GYN calculator following the established patterns from the Cardiology calculator suite.
+### Details:
+Create individual React calculator components for all 13 OB/GYN calculators using the established framework. Each component should include: 1) Professional medical UI with tabbed interface (Calculator + About), 2) Form validation and error handling, 3) Multiple calculation methods where applicable, 4) Clinical interpretation and recommendations, 5) Evidence-based references and guidelines, 6) AI integration with calculator result sharing, 7) Professional medical styling with risk-based color coding, 8) Accessibility compliance and responsive design. Priority implementation order: EDD Calculator → Gestational Age → Preeclampsia Risk → Bishop Score → remaining calculators.
+
+<info added on 2025-05-30T13:24:05.098Z>
+## EDD Calculator Implementation Technical Details
+
+### Component Architecture
+- Implemented stateful React component with TypeScript interfaces for all calculation parameters
+- Used React hooks (useState, useEffect, useCallback) for efficient state management
+- Created custom validation hooks for medical-specific validation logic
+
+### Calculation Logic Implementation
+- **LMP Method**: Implemented Naegele's rule with adjustments for irregular cycles
+- **CRL Method**: Implemented Robinson-Fleming formula with precision to 0.1mm
+- **ART Method**: Added support for IVF, IUI, and FET with transfer day adjustments
+
+### UI/UX Enhancements
+- Implemented conditional form rendering with smooth transitions between calculation methods
+- Added tooltips for clinical guidance on input parameters
+- Created visual confidence indicators based on dating method reliability
+- Implemented date picker components with gestational age constraints
+
+### Medical Validation Logic
+- Added trimester-specific validation rules for ultrasound measurements
+- Implemented clinical range checking for CRL measurements (2-84mm)
+- Added validation for implausible gestational ages and future dates
+
+### Clinical Result Presentation
+- Structured results with primary EDD, confidence level, and alternative dates
+- Added clinical context section with trimester information and key milestones
+- Implemented due date range calculation with statistical confidence intervals
+
+### Code Quality & Performance
+- Optimized re-renders with useMemo and useCallback for calculation-heavy operations
+- Added comprehensive JSDoc documentation for medical calculation functions
+- Implemented unit tests for critical calculation functions with medical edge cases
+</info added on 2025-05-30T13:24:05.098Z>
+
+<info added on 2025-05-31T09:20:53.650Z>
+## Bishop Score Calculator Implementation Technical Details
+
+### Component Architecture
+- Implemented as a stateful functional component with TypeScript interfaces for cervical assessment parameters
+- Created specialized form controls for the 5 Bishop Score parameters (cervical dilation, effacement, station, consistency, position)
+- Used useReducer hook for complex state management of multiple related parameters
+- Implemented memoized selector functions to derive clinical interpretations from score
+
+### Scoring Logic Implementation
+- Built modular scoring functions for each parameter with medical validation
+- Implemented total score calculation with weighted parameter contribution
+- Added clinical threshold detection for induction success probability
+- Created specialized logic for nulliparous vs multiparous patient scoring differences
+
+### UI/UX Enhancements
+- Developed visual parameter selection interface with anatomical reference illustrations
+- Implemented interactive cervical dilation visualization with accurate measurements
+- Added dynamic color coding based on parameter favorability
+- Created animated score indicator with clinical interpretation
+
+### Medical Validation Logic
+- Implemented cross-parameter validation (e.g., station vs dilation consistency)
+- Added clinical edge case handling for modified Bishop scores
+- Implemented validation for implausible combinations of cervical parameters
+
+### Clinical Result Presentation
+- Structured results with total Bishop score, category breakdown, and success probability
+- Added clinical decision support section with induction recommendations
+- Implemented probability visualization for successful vaginal delivery
+- Added comparative interpretation for nulliparous vs multiparous patients
+
+### Code Quality & Performance
+- Created reusable Bishop Score parameter components for future calculators
+- Implemented comprehensive unit tests covering all parameter combinations
+- Added detailed clinical documentation for each scoring parameter
+</info added on 2025-05-31T09:20:53.650Z>
+
+<info added on 2025-05-31T09:25:54.088Z>
+<info added on 2025-06-02T14:15:32.459Z>
+## Apgar Score Calculator Implementation Technical Details
+
+### Component Architecture
+- Implemented interactive 5-parameter APGAR assessment grid (Appearance, Pulse, Grimace, Activity, Respiration)
+- Built stateful component with time-series capability for 1-minute, 5-minute, and 10-minute assessments
+- Created specialized scoring controls with visual clinical indicators for each parameter
+- Implemented score comparison visualization between time intervals
+
+### Scoring Logic Implementation
+- Developed parameter-specific scoring functions with pediatric clinical validation
+- Implemented total APGAR calculation with color-coded severity indicators
+- Added trend analysis for score progression across assessment intervals
+- Created specialized logic for preterm neonatal adjustments
+
+### UI/UX Enhancements
+- Designed intuitive APGAR mnemonic interface with clinical parameter descriptions
+- Implemented visual assessment guides with neonatal reference images
+- Added timer functionality for accurate interval scoring
+- Created animated transitions between assessment timepoints
+
+### Medical Validation Logic
+- Implemented cross-timepoint validation for implausible score improvements
+- Added clinical alerts for concerning scores requiring immediate intervention
+- Implemented validation for score deterioration patterns
+- Added specialized validation for extremely preterm neonates
+
+### Clinical Result Presentation
+- Structured results with total APGAR scores at each timepoint and clinical interpretation
+- Implemented severity classification with intervention recommendations
+- Added visual trend analysis with clinical significance indicators
+- Created exportable assessment summary for medical documentation
+
+### Code Quality & Performance
+- Developed reusable timepoint assessment components for future pediatric calculators
+- Implemented comprehensive unit tests for all scoring combinations and timepoints
+- Added detailed clinical documentation for scoring parameters with evidence-based references
+- Optimized rendering for rapid assessment during clinical scenarios
+</info added on 2025-06-02T14:15:32.459Z>
+</info added on 2025-05-31T09:25:54.088Z>
+

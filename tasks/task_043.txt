@@ -1,0 +1,11 @@
+# Task ID: 43
+# Title: Implement Translation for Prenatal and Labor Assessment Calculators
+# Status: pending
+# Dependencies: 11
+# Priority: high
+# Description: Translate prenatal screening and labor/delivery risk assessment calculators to all three languages.
+# Details:
+Translate all elements of prenatal screening calculators and labor/delivery risk assessments. Implement calculator-specific obstetric terminology. Ensure cultural adaptation of medical units and terminology. Follow the established key structure: calculators.obgyn.{calculator_name}.{property}. Focus on maternal health terminology accuracy.
+
+# Test Strategy:
+Verify completeness of all translation keys. Test calculator functionality with translated content. Validate obstetric terminology with OB/GYN professionals in target languages.

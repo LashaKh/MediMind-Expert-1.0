@@ -1,0 +1,11 @@
+# Task ID: 38
+# Title: Implement Translation for Remaining Cardiology Risk Calculators
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: Translate HCM Risk-SCD, DAPT, PRECISE-DAPT, and HCM-AF calculators to Russian and Georgian.
+# Details:
+Translate all elements of these risk calculators including clinical features, risk factors, patient data, and results sections. Implement calculator-specific medical terminology. Ensure consistency with established translation patterns. Follow the key structure for each calculator. Focus on medical accuracy for specialized cardiac conditions.
+
+# Test Strategy:
+Verify completeness of all translation keys. Test calculator functionality with translated content. Validate specialized cardiac terminology with cardiology professionals in target languages.

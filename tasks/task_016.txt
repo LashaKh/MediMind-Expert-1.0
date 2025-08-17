@@ -1,0 +1,25 @@
+# Task ID: 16
+# Title: Implement File and Image Upload in Chat
+# Status: done
+# Dependencies: 13, 14
+# Priority: medium
+# Description: Add functionality for uploading images and files within the chat interface.
+# Details:
+Create FileUploadButton component for the chat interface. Implement drag-and-drop functionality for file uploads. Create preview components for uploaded files and images. Implement API function to send files to Flowise API. Add progress indicators for uploads. Handle various file types and validate file sizes. Implement error handling for failed uploads. Create UI for displaying uploaded files in the chat history.
+
+# Test Strategy:
+Test file upload with various file types and sizes. Verify drag-and-drop functionality works correctly. Test preview components for different file types. Ensure error handling works for invalid files and failed uploads.
+
+# Subtasks:
+## 1. Create File Upload Component [done]
+### Dependencies: None
+### Description: Develop a reusable FileUploadButton component with drag-and-drop support for the chat interface
+### Details:
+
+
+## 2. Implement File Processing Service [done]
+### Dependencies: None
+### Description: Create a service to handle file uploads, including validation and sending to the Flowise API
+### Details:
+
+

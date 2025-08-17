@@ -1,0 +1,25 @@
+# Task ID: 18
+# Title: Implement Curated Knowledge Base UI
+# Status: done
+# Dependencies: 9, 13
+# Priority: medium
+# Description: Create the interface for displaying and accessing the curated knowledge base for each specialty.
+# Details:
+Create KnowledgeBasePage component for displaying available resources. Implement API function to retrieve knowledge base information from Flowise API. Create ResourceList and ResourceItem components for displaying books and guidelines. Implement filtering and search functionality for resources. Add version/update logs display if provided by API. Create UI for resource categorization. Style components according to design system.
+
+# Test Strategy:
+Test knowledge base UI with mock data. Verify filtering and search functionality works correctly. Test responsive design on different screen sizes. Ensure API integration correctly displays available resources.
+
+# Subtasks:
+## 1. Design Forms UI [done]
+### Dependencies: None
+### Description: Create a user interface for browsing and accessing medical forms
+### Details:
+
+
+## 2. Implement Form Storage and Retrieval [done]
+### Dependencies: None
+### Description: Set up the backend for storing and serving medical form templates
+### Details:
+
+

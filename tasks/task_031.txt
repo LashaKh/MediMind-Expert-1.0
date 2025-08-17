@@ -1,0 +1,112 @@
+# Task ID: 31
+# Title: Implement OpenAI Vector Store Document Upload System
+# Status: done
+# Dependencies: 19, 20, 21
+# Priority: high
+# Description: Replace the current document processing system with OpenAI Vector Store integration for personal knowledge base documents, enabling more efficient document storage, retrieval, and semantic search capabilities.
+# Details:
+This task involves creating a complete system for uploading, processing, and managing documents using OpenAI's Vector Store:
+
+1. Database Schema:
+   - Create tables for document metadata (title, description, file_type, created_at, updated_at)
+   - Add columns for OpenAI-specific data (file_id, vector_id, embedding_status)
+   - Implement relationships between documents and user accounts
+
+2. Edge Functions:
+   - Develop secure upload function that accepts documents (PDF, DOCX, TXT, etc.)
+   - Create processing function to send documents to OpenAI API
+   - Implement webhook handler for OpenAI processing status updates
+   - Build retrieval functions to fetch document content and metadata
+
+3. UI Components:
+   - Document upload interface with progress indicators
+   - Document management dashboard (list, filter, search, delete)
+   - Processing status visualization
+   - Document detail view with metadata editing capabilities
+
+4. Chat Integration:
+   - Modify chat interface to query relevant documents from Vector Store
+   - Implement document citation in chat responses
+   - Add UI elements to show which documents were referenced
+
+5. OpenAI Integration:
+   - Implement file upload to OpenAI API
+   - Store and manage OpenAI File IDs
+   - Handle vector embedding generation and storage
+   - Implement error handling and retry mechanisms
+
+Ensure the system handles large documents appropriately, implements proper error handling, and provides clear feedback to users throughout the document processing lifecycle.
+
+# Test Strategy:
+1. Unit Tests:
+   - Test database schema with sample document entries
+   - Verify edge functions handle various document types correctly
+   - Test error handling for invalid files and API failures
+   - Validate OpenAI API integration with mock responses
+
+2. Integration Tests:
+   - Upload various document types (PDF, DOCX, TXT) and verify processing
+   - Test complete flow from upload to availability in chat
+   - Verify webhook handling for processing status updates
+   - Test document deletion and updates
+
+3. UI/UX Testing:
+   - Verify upload progress indicators function correctly
+   - Test document management interface with various document states
+   - Ensure error messages are clear and helpful
+   - Validate responsive design on different devices
+
+4. Performance Testing:
+   - Measure upload and processing times for various document sizes
+   - Test system with multiple concurrent uploads
+   - Verify chat response times when querying documents
+
+5. Security Testing:
+   - Verify proper authentication for document access
+   - Test for potential injection vulnerabilities
+   - Ensure secure handling of API keys and credentials
+
+Acceptance Criteria:
+- Users can upload documents of supported types
+- Documents are successfully processed by OpenAI Vector Store
+- Documents can be managed (viewed, edited, deleted) through the UI
+- Chat system can reference and cite uploaded documents
+- System handles errors gracefully with clear user feedback
+
+# Subtasks:
+## 1. Create Database Schema for OpenAI Vector Store Integration [done]
+### Dependencies: None
+### Description: Create Supabase tables to store Vector Store metadata and document references
+### Details:
+
+
+## 2. Implement Supabase Edge Function for OpenAI Document Upload [done]
+### Dependencies: 31.1
+### Description: Create Edge Function that uploads documents to OpenAI and associates them with Vector Stores
+### Details:
+
+
+## 3. Create Vector Store Management System [done]
+### Dependencies: 31.1, 31.2
+### Description: Implement system to create and manage user-specific OpenAI Vector Stores
+### Details:
+
+
+## 4. Update Document Upload UI for OpenAI Integration [done]
+### Dependencies: 31.2, 31.3
+### Description: Modify existing document upload interface to work with OpenAI Vector Stores
+### Details:
+
+
+## 5. Integrate Personal Vector Stores with Chat System [done]
+### Dependencies: 31.3, 31.4
+### Description: Update chat system to query user's personal Vector Stores through Flowise
+### Details:
+
+
+## 6. Implement Document Management with OpenAI File System [done]
+### Dependencies: 31.4, 31.5
+### Description: Create comprehensive document management using OpenAI File IDs
+### Details:
+
+

@@ -1,0 +1,116 @@
+# Task ID: 13
+# Title: Integrate Flowise API for AI Co-Pilot
+# Status: done
+# Dependencies: 11, 12
+# Priority: high
+# Description: Implement the integration with the pre-existing Flowise API for the AI chat functionality.
+# Details:
+Create Netlify Function for proxying requests to Flowise API. Implement authentication and authorization for API access. Set up streaming response handling. Create utility functions for formatting requests to Flowise. Implement error handling for API failures. Create retry logic for transient errors. Set up context management for sending specialty and user information to Flowise.
+
+# Test Strategy:
+Test API integration with various query types. Verify streaming responses work correctly. Test error handling with simulated API failures. Ensure authentication works properly for API access.
+
+# Subtasks:
+## 1. Create Netlify Function for Flowise API Proxy [done]
+### Dependencies: None
+### Description: Set up a Netlify serverless function to proxy requests to the Flowise API, hiding API credentials from client-side code
+### Details:
+Implementation steps:
+1. Create a new Netlify function file in the functions directory (e.g., `flowise-proxy.js`)
+2. Set up environment variables for Flowise API URL and authentication keys
+3. Implement the handler function to forward requests to Flowise API
+4. Set up CORS headers to allow requests from the frontend
+5. Configure Netlify function in netlify.toml
+
+Testing approach:
+- Test the function locally using Netlify CLI
+- Verify basic request forwarding with simple test queries
+- Ensure proper error handling for connection issues
+
+## 2. Implement Authentication and Authorization for API Access [done]
+### Dependencies: 13.1
+### Description: Add authentication mechanisms to secure the Flowise API proxy and implement authorization to control access levels
+### Details:
+Implementation steps:
+1. Modify the proxy function to validate user authentication tokens
+2. Extract user information from authentication context
+3. Implement role-based access control for different API operations
+4. Add rate limiting to prevent abuse
+5. Set up secure handling of API keys
+
+Testing approach:
+- Test with valid and invalid authentication tokens
+- Verify unauthorized users cannot access protected endpoints
+- Test rate limiting functionality
+- Ensure proper error responses for authentication failures
+
+## 3. Set Up Streaming Response Handling [done]
+### Dependencies: 13.1
+### Description: Implement streaming response handling to process and display Flowise API responses in real-time
+### Details:
+Implementation steps:
+1. Modify the proxy function to support streaming responses
+2. Implement proper handling of chunked data from Flowise API
+3. Create a client-side utility to consume streaming responses
+4. Set up event listeners for processing stream chunks
+5. Implement proper stream termination and error handling
+
+Testing approach:
+- Test with long-running queries that produce multiple chunks
+- Verify proper display of partial responses as they arrive
+- Test stream termination and error scenarios
+- Measure performance and latency
+
+## 4. Create Utility Functions for Request Formatting [done]
+### Dependencies: 13.1, 13.2
+### Description: Develop utility functions to format requests to Flowise API with proper context and parameters
+### Details:
+Implementation steps:
+1. Create a utility module for Flowise API interaction
+2. Implement functions to format chat messages for Flowise API format
+3. Add context management to include user specialty and relevant information
+4. Create helpers for handling different query types
+5. Implement input validation and sanitization
+
+Testing approach:
+- Unit test each formatting function
+- Verify proper context inclusion in requests
+- Test with various input types and edge cases
+- Validate against Flowise API requirements
+
+## 5. Implement Error Handling and Retry Logic [done]
+### Dependencies: 13.1, 13.3, 13.4
+### Description: Add comprehensive error handling for API failures and implement retry logic for transient errors
+### Details:
+Implementation steps:
+1. Create error classification system for different types of API failures
+2. Implement exponential backoff retry mechanism for transient errors
+3. Add proper error logging and monitoring
+4. Create user-friendly error messages for different failure scenarios
+5. Implement circuit breaker pattern to prevent cascading failures
+
+Testing approach:
+- Simulate various API failure scenarios
+- Test retry behavior with mocked timeouts and errors
+- Verify proper error messages are displayed to users
+- Test circuit breaker functionality under high load
+
+## 6. Integrate with Existing ChatContext [done]
+### Dependencies: 13.2, 13.3, 13.4, 13.5
+### Description: Connect the Flowise API integration with the existing chat interface and context management
+### Details:
+Implementation steps:
+1. Update ChatContext provider to use the new Flowise API utilities
+2. Implement context management for chat history and user information
+3. Connect streaming responses to the chat UI components
+4. Add loading states and indicators during API calls
+5. Implement message persistence and retrieval
+6. Add specialty-specific context handling
+
+Testing approach:
+- End-to-end testing of complete chat flow
+- Verify proper context preservation between messages
+- Test UI updates with streaming responses
+- Validate error states and recovery in the UI
+- Test with different user specialties and contexts
+

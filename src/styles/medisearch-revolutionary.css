@@ -1,0 +1,572 @@
+/**
+ * MediSearch Revolutionary - World-Class Medical Interface
+ * Designed to impress the most sophisticated designers
+ * Perfect contrast, modern aesthetics, exceptional usability
+ */
+
+/* Import Modern Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Revolutionary CSS Variables */
+:root {
+  /* Perfect Color Palette */
+  --revolutionary-white: #ffffff;
+  --revolutionary-gray-50: #f8fafc;
+  --revolutionary-gray-100: #f1f5f9;
+  --revolutionary-gray-200: #e2e8f0;
+  --revolutionary-gray-300: #cbd5e1;
+  --revolutionary-gray-400: #94a3b8;
+  --revolutionary-gray-500: #64748b;
+  --revolutionary-gray-600: #475569;
+  --revolutionary-gray-700: #334155;
+  --revolutionary-gray-800: #1e293b;
+  --revolutionary-gray-900: #0f172a;
+  
+  /* Brand Colors */
+  --revolutionary-indigo-50: #eef2ff;
+  --revolutionary-indigo-100: #e0e7ff;
+  --revolutionary-indigo-500: #6366f1;
+  --revolutionary-indigo-600: #4f46e5;
+  --revolutionary-indigo-700: #4338ca;
+  --revolutionary-indigo-900: #312e81;
+  
+  --revolutionary-purple-500: #a855f7;
+  --revolutionary-purple-600: #9333ea;
+  
+  --revolutionary-blue-500: #3b82f6;
+  --revolutionary-blue-600: #2563eb;
+  
+  /* Status Colors */
+  --revolutionary-green-500: #22c55e;
+  --revolutionary-green-600: #16a34a;
+  --revolutionary-yellow-500: #eab308;
+  --revolutionary-red-500: #ef4444;
+  --revolutionary-red-600: #dc2626;
+  
+  /* Perfect Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  
+  /* Premium Animations */
+  --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Base Styles */
+.revolutionary-container {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  color: var(--revolutionary-gray-900);
+  background: var(--revolutionary-gray-50);
+  min-height: 100vh;
+  position: relative;
+}
+
+.revolutionary-container * {
+  box-sizing: border-box;
+}
+
+/* Revolutionary Background */
+.revolutionary-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Loading State */
+.revolutionary-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 1.125rem;
+  color: var(--revolutionary-gray-600);
+  background: var(--revolutionary-white);
+}
+
+/* Header Styles */
+.revolutionary-header {
+  position: relative;
+  z-index: 10;
+}
+
+/* Typography Enhancements */
+.revolutionary-container h1 {
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.revolutionary-container h2 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.revolutionary-container h3 {
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+/* Smooth Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes spin-smooth {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Search Interface Animations */
+.revolutionary-container .group:hover .absolute.inset-0 {
+  animation: pulse-gentle 2s ease-in-out infinite;
+}
+
+/* Button Hover Effects */
+.revolutionary-container button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s var(--ease-out-cubic);
+}
+
+.revolutionary-container button:hover {
+  transform: translateY(-1px);
+}
+
+.revolutionary-container button:active {
+  transform: translateY(0);
+}
+
+/* Focus States for Accessibility */
+.revolutionary-container *:focus {
+  outline: 2px solid var(--revolutionary-indigo-500);
+  outline-offset: 2px;
+  outline-style: solid;
+}
+
+.revolutionary-container button:focus,
+.revolutionary-container input:focus {
+  outline: 2px solid var(--revolutionary-indigo-500);
+  outline-offset: 2px;
+}
+
+/* Input Enhancements */
+.revolutionary-container input {
+  transition: all 0.2s var(--ease-out-cubic);
+}
+
+.revolutionary-container input:focus {
+  transform: scale(1.01);
+}
+
+/* Card Hover Effects */
+.revolutionary-container .group:hover {
+  transform: translateY(-4px);
+  transition: all 0.4s var(--ease-out-cubic);
+}
+
+/* Gradient Text Effects */
+.bg-gradient-to-r.from-gray-900.via-indigo-900.to-purple-900 {
+  background: linear-gradient(to right, var(--revolutionary-gray-900), var(--revolutionary-indigo-900), var(--revolutionary-purple-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Premium Badge Styles */
+.revolutionary-container .rounded-full {
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Improved Shadows */
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+.shadow-2xl {
+  box-shadow: var(--shadow-2xl);
+}
+
+/* Hover Shadow Enhancements */
+.hover\:shadow-xl:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+.hover\:shadow-2xl:hover {
+  box-shadow: var(--shadow-2xl);
+}
+
+/* Loading Animation Delays */
+.animation-delay-150 {
+  animation-delay: 150ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+/* Backdrop Blur Enhancements */
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
+}
+
+/* Custom Scrollbar */
+.revolutionary-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.revolutionary-container::-webkit-scrollbar-track {
+  background: var(--revolutionary-gray-100);
+}
+
+.revolutionary-container::-webkit-scrollbar-thumb {
+  background: var(--revolutionary-gray-300);
+  border-radius: 4px;
+}
+
+.revolutionary-container::-webkit-scrollbar-thumb:hover {
+  background: var(--revolutionary-gray-400);
+}
+
+/* Enhanced Link Styles */
+.revolutionary-container a {
+  position: relative;
+  transition: all 0.3s var(--ease-out-cubic);
+  text-decoration: none;
+}
+
+.revolutionary-container a:hover {
+  transform: translateY(-1px);
+}
+
+/* Smooth Page Transitions */
+.revolutionary-container > * {
+  animation: fadeInUp 0.6s var(--ease-out-cubic);
+}
+
+/* Result Card Enhancements */
+.revolutionary-container .space-y-8 > div {
+  animation: fadeInScale 0.5s var(--ease-out-cubic) forwards;
+  opacity: 0;
+}
+
+.revolutionary-container .space-y-8 > div:nth-child(1) { animation-delay: 0.1s; }
+.revolutionary-container .space-y-8 > div:nth-child(2) { animation-delay: 0.2s; }
+.revolutionary-container .space-y-8 > div:nth-child(3) { animation-delay: 0.3s; }
+
+/* Improved Gradient Buttons */
+.bg-gradient-to-r.from-indigo-600.via-purple-600.to-indigo-600 {
+  background: linear-gradient(to right, var(--revolutionary-indigo-600), var(--revolutionary-purple-600), var(--revolutionary-indigo-600));
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-gradient-to-r.from-indigo-600.via-purple-600.to-indigo-600::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s var(--ease-out-cubic);
+}
+
+.bg-gradient-to-r.from-indigo-600.via-purple-600.to-indigo-600:hover::before {
+  left: 100%;
+}
+
+/* Enhanced Border Styles */
+.border-gray-200\/50 {
+  border-color: rgba(226, 232, 240, 0.5);
+}
+
+/* Premium Loading Spinner */
+.animate-spin {
+  animation: spin-smooth 1s linear infinite;
+}
+
+/* Improved Text Contrast */
+.text-gray-900 {
+  color: var(--revolutionary-gray-900);
+}
+
+.text-gray-800 {
+  color: var(--revolutionary-gray-800);
+}
+
+.text-gray-700 {
+  color: var(--revolutionary-gray-700);
+}
+
+.text-gray-600 {
+  color: var(--revolutionary-gray-600);
+}
+
+.text-gray-500 {
+  color: var(--revolutionary-gray-500);
+}
+
+.text-gray-400 {
+  color: var(--revolutionary-gray-400);
+}
+
+/* Background Colors */
+.bg-white {
+  background-color: var(--revolutionary-white);
+}
+
+.bg-gray-50 {
+  background-color: var(--revolutionary-gray-50);
+}
+
+.bg-gray-100 {
+  background-color: var(--revolutionary-gray-100);
+}
+
+/* Hover State Improvements */
+.hover\:bg-gray-100:hover {
+  background-color: var(--revolutionary-gray-100);
+}
+
+.hover\:text-gray-600:hover {
+  color: var(--revolutionary-gray-600);
+}
+
+/* Brand Color Applications */
+.text-indigo-600 {
+  color: var(--revolutionary-indigo-600);
+}
+
+.text-indigo-900 {
+  color: var(--revolutionary-indigo-900);
+}
+
+.bg-indigo-50 {
+  background-color: var(--revolutionary-indigo-50);
+}
+
+.bg-indigo-600 {
+  background-color: var(--revolutionary-indigo-600);
+}
+
+/* Status Colors */
+.text-green-500 {
+  color: var(--revolutionary-green-500);
+}
+
+.text-blue-500 {
+  color: var(--revolutionary-blue-500);
+}
+
+.text-red-500 {
+  color: var(--revolutionary-red-500);
+}
+
+.text-yellow-500 {
+  color: var(--revolutionary-yellow-500);
+}
+
+.text-purple-500 {
+  color: var(--revolutionary-purple-500);
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 768px) {
+  .revolutionary-container {
+    font-size: 14px;
+  }
+  
+  .revolutionary-container h1 {
+    font-size: 2rem;
+  }
+  
+  .revolutionary-container h2 {
+    font-size: 1.5rem;
+  }
+  
+  .revolutionary-container h3 {
+    font-size: 1.25rem;
+  }
+  
+  .revolutionary-container .p-8 {
+    padding: 1.5rem;
+  }
+  
+  .revolutionary-container .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .revolutionary-container .gap-8 {
+    gap: 1rem;
+  }
+  
+  .revolutionary-container .text-xl {
+    font-size: 1.125rem;
+  }
+  
+  .revolutionary-container .text-2xl {
+    font-size: 1.25rem;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --revolutionary-gray-600: #000000;
+    --revolutionary-gray-700: #000000;
+    --revolutionary-gray-800: #000000;
+    --revolutionary-gray-900: #000000;
+  }
+  
+  .revolutionary-container .border {
+    border-width: 2px;
+  }
+  
+  .revolutionary-container .shadow-lg {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .revolutionary-container * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .revolutionary-container .group:hover {
+    transform: none;
+  }
+  
+  .revolutionary-container button:hover {
+    transform: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .revolutionary-container {
+    background: white;
+    color: black;
+  }
+  
+  .revolutionary-container .shadow-lg,
+  .revolutionary-container .shadow-xl,
+  .revolutionary-container .shadow-2xl {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .revolutionary-container .bg-gradient-to-r {
+    background: white !important;
+    color: black !important;
+    -webkit-text-fill-color: black !important;
+  }
+}
+
+/* Dark Mode Support (Future Enhancement) */
+@media (prefers-color-scheme: dark) {
+  .revolutionary-container {
+    /* Keep light theme for medical professional use */
+    /* Dark mode can be added as an optional toggle */
+  }
+}
+
+/* Premium Selection Styles */
+.revolutionary-container ::selection {
+  background-color: var(--revolutionary-indigo-100);
+  color: var(--revolutionary-indigo-900);
+}
+
+.revolutionary-container ::-moz-selection {
+  background-color: var(--revolutionary-indigo-100);
+  color: var(--revolutionary-indigo-900);
+}
+
+/* Enhanced Form Elements */
+.revolutionary-container input,
+.revolutionary-container textarea,
+.revolutionary-container select {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Improved Button States */
+.revolutionary-container button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.revolutionary-container button:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Final Polish */
+.revolutionary-container {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+} 

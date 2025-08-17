@@ -1,0 +1,91 @@
+export default {
+  title: 'Калькулятор риска SHFM',
+  subtitle: 'Сиэтлская модель сердечной недостаточности • Прогноз выживаемости',
+  description: 'Комплексная модель прогнозирования выживаемости для пациентов с сердечной недостаточностью, учитывающая демографические данные, клинические параметры, лабораторные значения и терапию.',
+  
+  // Step labels
+  demographics_step: 'Демография',
+  clinical_step: 'Клинические данные',
+  laboratory_step: 'Лаборатория',
+  therapy_step: 'Терапия',
+  
+  // Demographics section
+  patient_demographics: 'Демография пациента',
+  demographics_description: 'Основные характеристики пациента и классификация сердечной недостаточности',
+  age_label: 'Возраст',
+  age_placeholder: 'Введите возраст в годах',
+  gender_label: 'Пол',
+  gender_placeholder: 'Выберите пол',
+  gender_male: 'Мужской',
+  gender_female: 'Женский',
+  lvef_label: 'Фракция выброса левого желудочка (ФВ ЛЖ)',
+  lvef_placeholder: 'Введите процент ФВ ЛЖ',
+  nyha_class_label: 'Функциональный класс NYHA',
+  nyha_class_placeholder: 'Выберите класс NYHA',
+  nyha_class_1: 'Класс I - Без ограничений',
+  nyha_class_2: 'Класс II - Легкие ограничения',
+  nyha_class_3: 'Класс III - Выраженные ограничения',
+  nyha_class_4: 'Класс IV - Тяжелые ограничения',
+  ischemic_etiology_label: 'Ишемическая этиология',
+  
+  // Clinical parameters section
+  clinical_parameters: 'Клинические параметры',
+  clinical_description: 'Жизненные показатели и функциональная оценка',
+  systolic_bp_label: 'Систолическое артериальное давление',
+  systolic_bp_placeholder: 'Введите систолическое АД',
+  peak_vo2_label: 'Пиковое VO2 (если доступно)',
+  peak_vo2_placeholder: '14.0',
+  
+  // Laboratory values section
+  laboratory_values: 'Лабораторные показатели',
+  laboratory_description: 'Ключевые лабораторные маркеры для оценки риска',
+  sodium_label: 'Натрий сыворотки',
+  sodium_placeholder: '140',
+  cholesterol_label: 'Общий холестерин',
+  cholesterol_placeholder: '180',
+  hemoglobin_label: 'Гемоглобин',
+  hemoglobin_placeholder: '12.5',
+  lymphocyte_percent_label: 'Процент лимфоцитов',
+  lymphocyte_percent_placeholder: '20',
+  uric_acid_label: 'Мочевая кислота',
+  uric_acid_placeholder: '7.0',
+  
+  // Therapy assessment section
+  therapy_assessment: 'Оценка текущей терапии',
+  therapy_description: 'Текущие медикаменты и устройственная терапия',
+  ace_inhibitor_label: 'Ингибитор АПФ или БРА',
+  beta_blocker_label: 'Бета-блокатор',
+  aldosterone_antagonist_label: 'Антагонист альдостерона',
+  statin_label: 'Статинотерапия',
+  allopurinol_label: 'Аллопуринол',
+  icd_label: 'Имплантируемый кардиовертер-дефибриллятор (ИКД)',
+  crt_label: 'Сердечная ресинхронизирующая терапия (СРТ)',
+  
+  // Button labels
+  next_clinical_data: 'Далее: Клинические данные',
+  next_laboratory_data: 'Далее: Лаборатория',
+  next_therapy_data: 'Далее: Терапия',
+  calculate_button: 'Рассчитать риск SHFM',
+  
+  // Validation messages
+  age_required: 'Возраст обязателен',
+  age_invalid: 'Возраст должен быть от 18 до 120 лет',
+  gender_required: 'Пол обязателен',
+  lvef_required: 'ФВ ЛЖ обязательна',
+  lvef_invalid: 'ФВ ЛЖ должна быть от 5% до 80%',
+  nyha_class_required: 'Класс NYHA обязателен',
+  systolic_bp_required: 'Систолическое артериальное давление обязательно',
+  systolic_bp_invalid: 'Систолическое АД должно быть от 60 до 250 мм рт.ст.',
+  peak_vo2_required: 'Пиковое VO2 обязательно',
+  peak_vo2_invalid: 'Пиковое VO2 должно быть от 5 до 50 мл/кг/мин',
+  sodium_required: 'Натрий сыворотки обязателен',
+  sodium_invalid: 'Натрий должен быть от 120 до 160 мЭкв/л',
+  cholesterol_required: 'Общий холестерин обязателен',
+  cholesterol_invalid: 'Холестерин должен быть от 50 до 500 мг/дл',
+  hemoglobin_required: 'Гемоглобин обязателен',
+  hemoglobin_invalid: 'Гемоглобин должен быть от 5 до 20 г/дл',
+  lymphocyte_percent_required: 'Процент лимфоцитов обязателен',
+  lymphocyte_percent_invalid: 'Процент лимфоцитов должен быть от 1% до 50%',
+  uric_acid_required: 'Мочевая кислота обязательна',
+  uric_acid_invalid: 'Мочевая кислота должна быть от 2 до 20 мг/дл'
+};

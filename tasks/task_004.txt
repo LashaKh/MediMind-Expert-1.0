@@ -1,0 +1,25 @@
+# Task ID: 4
+# Title: Create Database Schema in Supabase
+# Status: done
+# Dependencies: 3
+# Priority: high
+# Description: Implement the database schema for users and personal knowledge base documents in Supabase.
+# Details:
+Create the Users table with fields: user_id (linked to auth.users), email, medical_specialty, about_me_context, personal_openai_vector_store_id. Create the PersonalKnowledgeBaseDocuments table with fields: id, user_id, openai_file_id, associated_openai_vector_store_id, file_name, file_type, file_size, status, error_message. Set up foreign key relationships. Implement Row Level Security (RLS) policies. Create necessary indexes for performance.
+
+# Test Strategy:
+Verify table creation with SQL queries. Test RLS policies by attempting to access data with different user contexts. Validate foreign key constraints work correctly. Test indexes with EXPLAIN queries.
+
+# Subtasks:
+## 1. Design Database Schema [done]
+### Dependencies: None
+### Description: Design the database schema for users and personal knowledge base documents
+### Details:
+
+
+## 2. Implement Users Table [done]
+### Dependencies: None
+### Description: Create the users table with necessary fields and Row Level Security (RLS) policies
+### Details:
+
+

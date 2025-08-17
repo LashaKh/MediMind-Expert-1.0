@@ -1,0 +1,39 @@
+# Pre-commit hooks for security and code quality
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-json
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: package-lock.json
+        
+  - repo: local
+    hooks:
+      - id: check-api-keys
+        name: Check for hardcoded API keys
+        entry: bash -c 'if grep -r "ak-[a-zA-Z0-9]" --include="*.js" --include="*.ts" --include="*.jsx" --include="*.tsx" --include="*.md" .; then echo "❌ Hardcoded API key detected!"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        
+      - id: check-tokens
+        name: Check for hardcoded tokens
+        entry: bash -c 'if grep -rE "(eyJ[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*)" --include="*.js" --include="*.ts" --include="*.jsx" --include="*.tsx" --include="*.md" .; then echo "❌ JWT token detected!"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        
+      - id: security-audit
+        name: NPM Security Audit
+        entry: npm audit --audit-level=moderate
+        language: system
+        pass_filenames: false
+        files: package-lock.json

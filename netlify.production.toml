@@ -1,0 +1,241 @@
+# Netlify Production Configuration for MediMind Expert
+# Enhanced production settings with medical-grade performance and security
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+  base = "/"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NODE_ENV = "production"
+  # Production optimization flags
+  NODE_OPTIONS = "--max-old-space-size=4096 --optimize-for-size"
+
+[functions]
+  directory = "functions"
+  node_bundler = "esbuild"
+  # Production function timeout optimization
+  timeout = 60
+
+# Production Function Configurations - Optimized for medical workflows
+
+[functions."search-orchestrator"]
+  timeout = 45
+  node_bundler = "esbuild"
+  external_node_modules = ["@supabase/supabase-js", "node-fetch", "jsonwebtoken"]
+  # High concurrency for medical search
+  reserved_concurrency = 10
+
+[functions."medical-news"]
+  timeout = 45
+  node_bundler = "esbuild"
+  external_node_modules = ["@supabase/supabase-js", "node-fetch", "jsonwebtoken"]
+  reserved_concurrency = 5
+
+[functions."news-collection"]
+  timeout = 300
+  node_bundler = "esbuild"
+  external_node_modules = ["@supabase/supabase-js", "node-fetch", "jsonwebtoken"]
+  # Scheduled collection for medical news
+  schedule = "0 6,18 * * *"
+  # Dedicated instance for background processing
+  reserved_concurrency = 2
+
+[functions."openai-assistant"]
+  timeout = 240
+  node_bundler = "esbuild"
+  # Enhanced memory for medical document processing
+  reserved_concurrency = 3
+
+[functions."uploadDocumentToOpenAI"]
+  timeout = 240
+  node_bundler = "esbuild"
+  external_node_modules = ["@supabase/supabase-js", "openai", "form-data"]
+  body_size_limit = "50mb"
+  reserved_concurrency = 2
+
+[functions."uploadDocumentToOpenAI".environment]
+  NODE_OPTIONS = "--max-old-space-size=2048 --gc-interval=100 --expose-gc"
+
+[functions."system-health"]
+  timeout = 15
+  node_bundler = "esbuild"
+  external_node_modules = ["@supabase/supabase-js", "node-fetch"]
+  # Quick health checks
+  reserved_concurrency = 1
+
+[functions."monitoring-dashboard"]
+  timeout = 45
+  node_bundler = "esbuild"
+  external_node_modules = ["@supabase/supabase-js", "jsonwebtoken"]
+  reserved_concurrency = 2
+
+# Production Development Configuration
+[dev]
+  framework = "vite"
+  targetPort = 5173
+  port = 8888
+  functionsTimeout = 240
+  functionsBodySizeLimit = "50mb"
+
+# Enhanced Security Headers for Medical Application
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Core security headers
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Enhanced permissions policy for medical apps
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()"
+    
+    # Strong transport security
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    
+    # Cross-origin policies
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "same-site"
+    
+    # Content Security Policy for medical data protection
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.openai.com https://search.brave.com https://api.exa.ai https://api.perplexity.ai; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.openai.com https://search.brave.com https://api.exa.ai https://api.perplexity.ai https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none';"
+    
+    # Medical data protection
+    X-Medical-Data-Protection = "enabled"
+    X-HIPAA-Compliant = "true"
+
+# API Security Headers with medical focus
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    X-Rate-Limit-Policy = "medical-professional"
+
+# Static Asset Caching for Performance
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Force HTTPS for medical data security
+[[redirects]]
+  from = "http://medimindexpert.netlify.app/*"
+  to = "https://medimindexpert.netlify.app/:splat"
+  status = 301
+  force = true
+
+# Custom domain HTTPS redirect (when configured)
+[[redirects]]
+  from = "http://www.medimindexpert.com/*"
+  to = "https://www.medimindexpert.com/:splat"
+  status = 301
+  force = true
+
+# API Routes - Production optimized order
+
+# Search API routes (highest priority for medical workflows)
+[[redirects]]
+  from = "/api/search/orchestrator"
+  to = "/.netlify/functions/search-orchestrator"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/search/*"
+  to = "/.netlify/functions/search-:splat"
+  status = 200
+  force = true
+
+# Medical News API routes
+[[redirects]]
+  from = "/api/medical-news/*"
+  to = "/.netlify/functions/medical-news"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/news/*"
+  to = "/.netlify/functions/news-:splat"
+  status = 200
+  force = true
+
+# AI Chat routes for medical consultations
+[[redirects]]
+  from = "/api/flowise/*"
+  to = "/.netlify/functions/flowise-:splat"
+  status = 200
+  force = true
+
+# Document processing for medical files
+[[redirects]]
+  from = "/api/openai-assistant"
+  to = "/.netlify/functions/openai-assistant"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/upload/*"
+  to = "/.netlify/functions/uploadDocumentToOpenAI"
+  status = 200
+  force = true
+
+# System monitoring and health
+[[redirects]]
+  from = "/api/system/*"
+  to = "/.netlify/functions/system-:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/monitoring/*"
+  to = "/.netlify/functions/monitoring-:splat"
+  status = 200
+  force = true
+
+# Handle CORS preflight for all API routes
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/cors-handler"
+  status = 200
+  force = true
+  conditions = {Methods = ["OPTIONS"]}
+
+# SPA routing - must be last
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Production Build Processing
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
+  quality = 85

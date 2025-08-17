@@ -1,0 +1,2355 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Initialize Next.js Project with Core Dependencies",
+      "description": "Set up the Next.js project with Tailwind CSS, Headless UI, and configure the basic project structure.",
+      "status": "done",
+      "dependencies": [],
+      "priority": "high",
+      "details": "Create a new Next.js project using `create-next-app`. Install and configure Tailwind CSS with the project's style guide. Add Headless UI components. Set up ESLint and Prettier for code quality. Create the basic folder structure for pages, components, hooks, utils, and API functions. Initialize Git repository.",
+      "testStrategy": "Verify the project builds without errors. Confirm Tailwind CSS is working by testing a simple styled component. Ensure the development server runs correctly.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Install and Configure Prettier",
+          "description": "Install Prettier and necessary ESLint integration plugins (e.g., eslint-config-prettier). Create a .prettierrc.js configuration file. Update ESLint config to integrate Prettier.",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 1
+        },
+        {
+          "id": 2,
+          "title": "Install and Configure Husky for Pre-commit Hooks",
+          "description": "Install Husky. Configure pre-commit hooks to run linters (ESLint, Prettier) before commits.",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Configure Progressive Web App (PWA) Capabilities",
+      "description": "Set up the Next.js application as a Progressive Web App with offline capabilities and installability.",
+      "status": "deferred",
+      "dependencies": [
+        1
+      ],
+      "priority": "medium",
+      "details": "Install next-pwa package. Configure the manifest.json file with app details, icons, and theme colors. Set up service worker for caching strategies. Configure offline fallback pages. Implement app installation prompts. Ensure proper metadata for PWA installation on various devices.",
+      "testStrategy": "Test PWA installation on desktop and mobile devices. Verify offline functionality works by disabling network and accessing cached pages. Validate the manifest.json using Lighthouse or similar tools.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Install vite-plugin-pwa",
+          "description": "Add vite-plugin-pwa to the project dependencies.",
+          "details": "",
+          "status": "deferred",
+          "dependencies": [],
+          "parentTaskId": 2
+        },
+        {
+          "id": 2,
+          "title": "Configure vite-plugin-pwa in vite.config.ts",
+          "description": "Import and add VitePWA to the plugins array in vite.config.ts. Configure manifest options (name, short_name, description, theme_color, background_color, icons), and service worker strategies (e.g., 'GenerateSW').",
+          "details": "",
+          "status": "deferred",
+          "dependencies": [],
+          "parentTaskId": 2
+        },
+        {
+          "id": 3,
+          "title": "Create/Update PWA Icons and Assets",
+          "description": "Ensure necessary PWA icons (various sizes for different devices) are present in the public directory and referenced correctly in the PWA configuration.",
+          "details": "",
+          "status": "deferred",
+          "dependencies": [],
+          "parentTaskId": 2
+        },
+        {
+          "id": 4,
+          "title": "Test PWA Functionality",
+          "description": "Verify PWA installation on desktop/mobile. Test offline access to cached pages. Validate manifest and service worker using browser developer tools (e.g., Lighthouse).",
+          "details": "",
+          "status": "deferred",
+          "dependencies": [],
+          "parentTaskId": 2
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Set Up Supabase Integration",
+      "description": "Integrate Supabase for authentication and database functionality.",
+      "status": "done",
+      "dependencies": [
+        1
+      ],
+      "priority": "high",
+      "details": "Create a Supabase project. Install @supabase/supabase-js. Set up environment variables for Supabase URL and API key. Create a supabase client utility for use throughout the application. Implement basic connection testing. Configure Supabase Auth settings for email/password authentication.",
+      "testStrategy": "Verify connection to Supabase by making a simple query. Test environment variable configuration in development and build environments. Ensure the client can be imported and used across the application.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Install Supabase Client",
+          "description": "Add @supabase/supabase-js and necessary types",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 3
+        },
+        {
+          "id": 2,
+          "title": "Create Supabase Client Utility",
+          "description": "Set up a reusable Supabase client instance with proper TypeScript types",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 3
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Create Database Schema in Supabase",
+      "description": "Implement the database schema for users and personal knowledge base documents in Supabase.",
+      "status": "done",
+      "dependencies": [
+        3
+      ],
+      "priority": "high",
+      "details": "Create the Users table with fields: user_id (linked to auth.users), email, medical_specialty, about_me_context, personal_openai_vector_store_id. Create the PersonalKnowledgeBaseDocuments table with fields: id, user_id, openai_file_id, associated_openai_vector_store_id, file_name, file_type, file_size, status, error_message. Set up foreign key relationships. Implement Row Level Security (RLS) policies. Create necessary indexes for performance.",
+      "testStrategy": "Verify table creation with SQL queries. Test RLS policies by attempting to access data with different user contexts. Validate foreign key constraints work correctly. Test indexes with EXPLAIN queries.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Design Database Schema",
+          "description": "Design the database schema for users and personal knowledge base documents",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 4
+        },
+        {
+          "id": 2,
+          "title": "Implement Users Table",
+          "description": "Create the users table with necessary fields and Row Level Security (RLS) policies",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 4
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Implement Authentication UI Components",
+      "description": "Create reusable UI components for authentication flows including login, registration, and password recovery.",
+      "status": "done",
+      "dependencies": [
+        1,
+        2
+      ],
+      "priority": "high",
+      "details": "Create LoginForm component with email/password fields and validation. Create RegistrationForm component with required fields. Implement PasswordRecoveryForm component. Create AuthLayout for consistent styling across auth pages. Implement form validation using a form library (e.g., react-hook-form). Style components according to the design system using Tailwind CSS.",
+      "testStrategy": "Test form validation for various input scenarios. Verify responsive design on different screen sizes. Ensure accessibility compliance with keyboard navigation and screen readers.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Auth Form Components",
+          "description": "Build reusable form components for login, registration, and password recovery",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 5
+        },
+        {
+          "id": 2,
+          "title": "Implement Form Validation",
+          "description": "Add client-side validation using a library like React Hook Form and Zod",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 5
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Implement User Registration and Login Functionality",
+      "description": "Connect authentication UI components to Supabase Auth for user registration and login.",
+      "status": "done",
+      "dependencies": [
+        3,
+        5
+      ],
+      "priority": "high",
+      "details": "Implement registration function using Supabase Auth signUp. Create login function using Supabase Auth signIn. Set up email verification flow if required. Implement password recovery functionality. Create protected routes that require authentication. Set up auth state persistence and context provider for the application. Handle authentication errors and display appropriate messages.",
+      "testStrategy": "Test complete registration flow with valid and invalid inputs. Verify login with correct and incorrect credentials. Test password recovery process. Ensure protected routes redirect unauthenticated users appropriately.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Set Up Auth Context",
+          "description": "Create an authentication context to manage user session state",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 6
+        },
+        {
+          "id": 2,
+          "title": "Implement Email/Password Signup",
+          "description": "Create API route and UI for user registration with email and password",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 6
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Develop Specialty Selection During Onboarding",
+      "description": "Create the onboarding flow that allows users to select their medical specialty after registration.",
+      "status": "done",
+      "dependencies": [
+        4,
+        6
+      ],
+      "priority": "high",
+      "details": "Create OnboardingFlow component with steps indicator. Implement SpecialtySelection component with options for Cardiology and OB/GYN. Create AboutMeForm for collecting context information. Implement API function to update user profile with specialty and about_me_context. Ensure users cannot skip specialty selection. Create redirect logic to appropriate workspace after completion.",
+      "testStrategy": "Test the complete onboarding flow. Verify data is correctly saved to the database. Ensure users cannot access the application without completing specialty selection. Test the redirect logic to specialty-specific workspaces.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create OnboardingFlow Component with Stepper UI",
+          "description": "Develop the main container component for the onboarding process with a step indicator to show progress through the flow",
+          "dependencies": [],
+          "details": "Implementation steps:\n1. Create a new OnboardingFlow.jsx component\n2. Implement a stepper UI component showing steps (Specialty Selection, About Me, Completion)\n3. Set up state management for tracking current step\n4. Create a layout with header, content area, and navigation buttons\n5. Implement next/back navigation logic between steps\n6. Add conditional rendering for different step content\n7. Style the component according to design guidelines\n\nTesting approach:\n- Verify stepper UI displays correctly\n- Test navigation between steps\n- Ensure responsive layout works on different screen sizes",
+          "status": "done",
+          "parentTaskId": 7
+        },
+        {
+          "id": 2,
+          "title": "Implement SpecialtySelection Component",
+          "description": "Create the specialty selection screen with options for Cardiology and OB/GYN specialties",
+          "dependencies": [
+            1
+          ],
+          "details": "Implementation steps:\n1. Create a new SpecialtySelection.jsx component\n2. Design and implement UI cards for each specialty option (Cardiology, OB/GYN)\n3. Add specialty icons and descriptions for each option\n4. Implement selection state management\n5. Add validation to ensure a specialty is selected\n6. Create visual feedback for selected specialty\n7. Implement error handling for required selection\n\nTesting approach:\n- Verify all specialty options render correctly\n- Test selection and deselection of specialties\n- Ensure validation prevents continuing without selection\n- Test accessibility of selection components",
+          "status": "done",
+          "parentTaskId": 7
+        },
+        {
+          "id": 3,
+          "title": "Create AboutMeForm Component",
+          "description": "Develop a form to collect additional context information about the user",
+          "dependencies": [
+            1
+          ],
+          "details": "Implementation steps:\n1. Create a new AboutMeForm.jsx component\n2. Implement form fields for collecting relevant information (years of experience, practice setting, etc.)\n3. Add form validation for required fields\n4. Implement state management for form data\n5. Create field-level error handling and feedback\n6. Design a clean and intuitive form layout\n7. Add help text/tooltips for clarity on what information to provide\n\nTesting approach:\n- Test form submission with valid and invalid data\n- Verify all validation rules work correctly\n- Test form reset functionality\n- Ensure form state persists if user navigates back from next step",
+          "status": "done",
+          "parentTaskId": 7
+        },
+        {
+          "id": 4,
+          "title": "Update Database Schema and API Endpoints",
+          "description": "Modify the database schema and create API endpoints to store user specialty and about_me information",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Implementation steps:\n1. Update user database schema to include specialty (string) and about_me_context (text) fields\n2. Create database migration scripts\n3. Implement API endpoint for updating user profile with specialty information\n4. Create API endpoint for updating about_me_context\n5. Add proper validation on the backend\n6. Implement error handling for API responses\n7. Create documentation for the new API endpoints\n\nTesting approach:\n- Test API endpoints with valid and invalid data\n- Verify database updates correctly\n- Test error handling for various scenarios\n- Ensure proper authentication/authorization checks",
+          "status": "done",
+          "parentTaskId": 7
+        },
+        {
+          "id": 5,
+          "title": "Implement API Integration in Onboarding Components",
+          "description": "Connect the frontend components to the backend API for saving user specialty and context information",
+          "dependencies": [
+            2,
+            3,
+            4
+          ],
+          "details": "Implementation steps:\n1. Create API service functions to call the backend endpoints\n2. Implement data submission in the OnboardingFlow component\n3. Add loading states during API calls\n4. Implement error handling for failed API requests\n5. Add success feedback after successful submission\n6. Create retry logic for failed submissions\n7. Implement data validation before submission\n\nTesting approach:\n- Test successful API integration\n- Verify error handling for network issues\n- Test loading states display correctly\n- Ensure proper error messages are shown to users",
+          "status": "done",
+          "parentTaskId": 7
+        },
+        {
+          "id": 6,
+          "title": "Implement Routing Logic and Guards",
+          "description": "Create routing logic to guide users through onboarding and redirect to appropriate workspace after completion",
+          "dependencies": [
+            1,
+            5
+          ],
+          "details": "Implementation steps:\n1. Create route guards to prevent skipping onboarding\n2. Implement redirect logic after onboarding completion\n3. Add specialty-based routing to direct users to appropriate workspace\n4. Create a service to check onboarding completion status\n5. Implement persistence of onboarding progress\n6. Add route for resuming incomplete onboarding\n7. Create a completion screen with transition to main application\n\nTesting approach:\n- Test route guards prevent unauthorized access\n- Verify redirects work correctly after completion\n- Test specialty-based routing logic\n- Ensure onboarding state persists across page refreshes",
+          "status": "done",
+          "parentTaskId": 7
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Implement Basic Layout and Navigation Structure",
+      "description": "Create the application's main layout with responsive navigation for desktop and mobile.",
+      "status": "pending",
+      "dependencies": [
+        1,
+        2
+      ],
+      "priority": "high",
+      "details": "Create MainLayout component with persistent left sidebar for desktop. Implement responsive TopHeader with user profile, logo, and logout button. Create mobile navigation with hamburger menu or bottom tab bar. Implement navigation links for AI Co-Pilot, Calculators, Forms, Personal KB Management, and Settings. Add user profile dropdown menu. Implement theme switching functionality (light/dark mode).",
+      "testStrategy": "Test navigation on desktop, tablet, and mobile viewports. Verify all navigation links work correctly. Test hamburger menu or bottom tab bar on mobile. Ensure theme switching works properly across the application.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Profile Page Layout",
+          "description": "Design and implement the user profile page with sections for personal information and settings",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 8
+        },
+        {
+          "id": 2,
+          "title": "Implement Profile Update Functionality",
+          "description": "Add functionality to update user profile information",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 8
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Develop Specialty-Specific Workspace Routing",
+      "description": "Implement routing logic to direct users to their specialty-specific workspace after login.",
+      "status": "done",
+      "dependencies": [
+        6,
+        7,
+        8
+      ],
+      "priority": "high",
+      "details": "Create middleware or route guards to check user specialty and redirect accordingly. Implement specialty-specific dashboard pages for Cardiology and OB/GYN. Create context provider for specialty information. Ensure users cannot access workspaces of other specialties. Add visual indicators of current specialty in the UI. Implement loading states during specialty verification.",
+      "testStrategy": "Test routing with users of different specialties. Verify users cannot access other specialty workspaces. Test redirect behavior after login. Ensure loading states display correctly during transitions.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Specialty Context Provider",
+          "description": "Implement a context provider to manage and share specialty information across the application",
+          "dependencies": [],
+          "details": "1. Create a new context file (SpecialtyContext.js)\n2. Define the context with initial state for specialty information (null/loading initially)\n3. Implement the provider component with state management for specialty data\n4. Add methods to set/update specialty information\n5. Create a custom hook (useSpecialty) for easy context consumption\n6. Test the context by creating a simple component that consumes specialty information\n7. Document the API for the context provider",
+          "status": "done",
+          "parentTaskId": 9
+        },
+        {
+          "id": 2,
+          "title": "Implement Authentication-Specialty Integration",
+          "description": "Connect user authentication with specialty information retrieval and storage",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Modify the authentication flow to fetch user specialty information after successful login\n2. Update the specialty context with the fetched information\n3. Implement persistence of specialty information (localStorage/sessionStorage)\n4. Handle specialty information retrieval errors\n5. Create a loading state during specialty information fetching\n6. Test specialty information retrieval with different user types\n7. Ensure specialty information is cleared on logout",
+          "status": "done",
+          "parentTaskId": 9
+        },
+        {
+          "id": 3,
+          "title": "Create Specialty-Specific Dashboard Pages",
+          "description": "Develop distinct dashboard pages for Cardiology and OB/GYN specialties",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Create separate dashboard components for each specialty (CardiologyDashboard.js and ObGynDashboard.js)\n2. Implement specialty-specific UI layouts for each dashboard\n3. Add specialty-specific content, widgets, and functionality\n4. Ensure each dashboard displays appropriate specialty-specific data\n5. Implement error states for when specialty data isn't available\n6. Create reusable components that can be shared between specialty dashboards\n7. Test rendering of each dashboard with appropriate mock data",
+          "status": "done",
+          "parentTaskId": 9
+        },
+        {
+          "id": 4,
+          "title": "Implement Specialty Route Guards",
+          "description": "Create route protection to prevent unauthorized access to specialty-specific workspaces",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Create a SpecialtyGuard component/middleware for route protection\n2. Implement logic to check user's specialty against requested route\n3. Set up redirection logic for unauthorized access attempts\n4. Handle edge cases (no specialty info, loading states, etc.)\n5. Integrate guards with the router configuration\n6. Test route guards with different user specialties\n7. Implement appropriate error messages for unauthorized access attempts",
+          "status": "done",
+          "parentTaskId": 9
+        },
+        {
+          "id": 5,
+          "title": "Implement Specialty Routing Logic",
+          "description": "Develop the core routing logic to direct users to their appropriate specialty workspace",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "details": "1. Create a routing configuration that maps specialties to their respective dashboards\n2. Implement a router wrapper that handles specialty-based routing decisions\n3. Set up default routes and fallbacks for each specialty\n4. Implement redirect logic after login to route to the appropriate specialty dashboard\n5. Handle specialty changes during an active session\n6. Test routing with different user types and login scenarios\n7. Ensure proper handling of direct URL access to specialty-specific routes",
+          "status": "done",
+          "parentTaskId": 9
+        },
+        {
+          "id": 6,
+          "title": "Add Specialty UI Indicators and Loading States",
+          "description": "Implement visual indicators of current specialty and loading states during specialty verification",
+          "dependencies": [
+            1,
+            2,
+            5
+          ],
+          "details": "1. Create a specialty indicator component for the application header/navigation\n2. Implement visual styling differences based on active specialty\n3. Create specialty-specific themes or color schemes\n4. Develop loading indicators for specialty verification processes\n5. Implement skeleton screens for specialty-specific content during loading\n6. Add transitions between specialty workspaces\n7. Test UI indicators and loading states across different devices and screen sizes",
+          "status": "done",
+          "parentTaskId": 9
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Create User Profile Management UI",
+      "description": "Implement the user profile management interface for viewing and editing profile information.",
+      "status": "done",
+      "dependencies": [
+        6,
+        8
+      ],
+      "priority": "medium",
+      "details": "Create ProfilePage component with user information display. Implement EditProfileForm for updating about_me_context. Create ChangePasswordForm component. Implement API functions for updating profile information. Add profile picture upload functionality. Ensure form validation and error handling. Style according to design system. Implement tabbed interface for Profile/Security/Preferences sections.",
+      "testStrategy": "Test profile information display and editing. Verify password change functionality. Test form validation for various inputs. Ensure API calls correctly update the database. Verify responsive design and accessibility features. Test tabbed interface navigation.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create ChangePasswordForm component",
+          "description": "Develop a form component that allows users to securely change their password with current password verification",
+          "details": "Include fields for current password, new password, and confirm password. Implement real-time validation for password strength and matching confirmation.\n\n<info added on 2025-05-29T10:38:26.782Z>\nThe component has been implemented with the following features:\n\n- Password strength indicator that visually displays strength levels (weak/medium/strong)\n- Throttled validation to prevent excessive API calls during typing\n- Password requirements checklist that updates in real-time as user types\n- Custom hooks for password validation logic (usePasswordValidation)\n- Accessibility features including proper ARIA labels and keyboard navigation\n- Animated transitions for error/success states\n- Session handling to prevent password change without valid session\n- Proper form submission prevention during validation\n- Comprehensive unit tests covering all validation scenarios and edge cases\n- Mobile-responsive design with appropriate input types\n- Integration with the application's notification system for success/error feedback\n- Security timeout that clears sensitive form data after period of inactivity\n\nImplementation uses React Hook Form for state management and zod for schema validation, with proper error boundary implementation.\n</info added on 2025-05-29T10:38:26.782Z>",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 10
+        },
+        {
+          "id": 2,
+          "title": "Add profile picture upload functionality",
+          "description": "Implement the ability for users to upload, crop, and update their profile pictures",
+          "details": "Create a dropzone for file uploads, add image preview functionality, implement basic image editing (crop/resize), and handle the file upload process to the server.\n\n<info added on 2025-05-29T10:38:42.693Z>\nI've implemented the ProfilePictureUpload component with comprehensive functionality:\n\nThe component uses react-dropzone for drag & drop with a 5MB size limit and validation for image types (jpg, png, webp). Images are processed client-side using browser Canvas API for cropping/resizing before upload.\n\nUpload flow integrates with Supabase Storage, storing images in user-uploads/profile-pictures/${userId} path with UUID filenames. On successful upload, the profile_picture_url field in the user profile table is updated via a transaction to ensure data consistency.\n\nKey features include:\n- Hover overlay with edit/remove actions using Radix UI Popover\n- Circular cropping with react-easy-crop (maintains 1:1 aspect ratio)\n- Progressive loading with optimized thumbnails\n- Accessibility: proper ARIA labels, keyboard navigation for crop tool\n- Error states with retry mechanism for network failures\n- Skeleton loading state during initial fetch\n\nAdded user guidance with tooltip explaining supported formats and optimal image dimensions (recommended 400x400px minimum).\n\nThe component is fully responsive, adjusting crop interface for mobile devices with touch-friendly controls and simplified UI on smaller screens.\n</info added on 2025-05-29T10:38:42.693Z>",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 10
+        },
+        {
+          "id": 3,
+          "title": "Improve form validation and error handling",
+          "description": "Enhance the user experience with comprehensive form validation and clear error messaging",
+          "details": "Implement client-side validation for all profile form fields, display meaningful error messages, and ensure proper handling of server-side validation errors.\n\n<info added on 2025-05-29T10:38:59.396Z>\nHere's the additional information for the form validation subtask:\n\n```\n## Implementation Details\n\n### Form Validation\n- Implement `validateForm()` function to check all inputs before submission\n- Add validation rules:\n  - Name: 2-50 characters, alphanumeric with spaces\n  - Email: RFC 5322 compliant validation\n  - Password: Minimum 8 chars, require number, special char, uppercase\n- Apply input sanitization: trim whitespace on all fields before validation\n- Validate on blur and before form submission\n\n### Error Handling\n- Create dedicated error message component with proper styling\n- Implement field-level error indicators with descriptive messages\n- Add aria-invalid and aria-describedby attributes for accessibility\n- Implement debounced validation to avoid excessive error messages\n\n### Loading States\n- Add loading spinner for form submission\n- Disable submit button during processing\n- Implement skeleton loaders for async data fetching\n- Preserve form state during loading to prevent data loss\n\n### Error Boundaries\n- Create ProfileFormErrorBoundary component\n- Implement graceful fallbacks for API failures\n- Add error logging to monitoring service\n- Provide user-friendly recovery options\n\n### UX Improvements\n- Add success message component with auto-dismiss after 5 seconds\n- Implement toast notifications for form submission status\n- Add form state persistence to prevent data loss on page refresh\n- Implement keyboard navigation improvements for form fields\n```\n</info added on 2025-05-29T10:38:59.396Z>",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 10
+        },
+        {
+          "id": 4,
+          "title": "Create dedicated API functions for profile updates",
+          "description": "Develop a set of API functions to handle various profile update operations",
+          "details": "Create separate functions for updating basic profile info, changing password, and uploading profile pictures. Ensure proper error handling and response processing.\n\n<info added on 2025-05-29T10:39:14.538Z>\nBased on the API integration work completed, here are additional technical details for the \"Create dedicated API functions for profile updates\" subtask:\n\nThe API functions have been implemented with the following structure:\n- `updateBasicProfile(userData: UserProfileData): Promise<ApiResponse>`\n- `changePassword(passwordData: PasswordChangeRequest): Promise<ApiResponse>` \n- `uploadProfilePicture(file: File): Promise<UploadResponse>`\n\nEach function includes:\n- Request validation before submission\n- Proper typing with TypeScript interfaces (UserProfileData, PasswordChangeRequest)\n- Consistent error response format with typed error codes\n- Authentication header injection\n- Automatic token refresh handling\n- Rate limiting protection\n\nThe database schema update includes:\n```sql\nALTER TABLE users \nADD COLUMN profile_picture_url VARCHAR(255),\nADD COLUMN preferences JSONB DEFAULT '{}'::jsonb;\n```\n\nMigration script handles both schema updates and data backfilling for existing users.\n\nTypeScript types have been updated in `src/types/user.ts` to reflect the new schema, maintaining backward compatibility.\n</info added on 2025-05-29T10:39:14.538Z>",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 10
+        },
+        {
+          "id": 5,
+          "title": "Create tabbed interface for Profile Management",
+          "description": "Implement a tabbed navigation interface to organize profile sections (Profile/Security/Preferences)",
+          "details": "Design and implement a tabbed interface component that separates profile management into logical sections. Ensure proper tab navigation, accessibility, and responsive design.",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 10
+        },
+        {
+          "id": 6,
+          "title": "Create EditProfileForm component",
+          "description": "Develop a form component for editing basic profile information",
+          "details": "Implement form with fields for name, email, and about_me_context. Include validation and error handling. Connect to API functions for updating profile data.",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 10
+        },
+        {
+          "id": 7,
+          "title": "Integrate components and finalize Profile UI",
+          "description": "Combine all profile management components into a cohesive user interface",
+          "details": "Integrate ProfilePage, EditProfileForm, ChangePasswordForm, and ProfilePictureUpload components. Ensure proper component interaction and state management. Test the complete user flow for profile management.",
+          "status": "done",
+          "dependencies": [
+            1,
+            2,
+            5,
+            6
+          ],
+          "parentTaskId": 10
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Implement Chat Interface Components",
+      "description": "Create the core chat interface components for the AI Medical Co-Pilot.",
+      "status": "done",
+      "dependencies": [
+        8,
+        9
+      ],
+      "priority": "high",
+      "details": "Create ChatWindow container component. Implement MessageList component for displaying chat history. Create MessageItem components for user and AI messages. Implement MessageInput component with text area and send button. Add typing indicators for AI responses. Create UI for displaying source references. Implement chat window scrolling behavior. Style components according to design system with Tailwind CSS.",
+      "testStrategy": "Test chat interface with mock messages. Verify responsive design on different screen sizes. Test scrolling behavior with many messages. Ensure accessibility compliance for the chat interface.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create ChatWindow Container Component",
+          "description": "Implement the main ChatWindow container component that will hold all other chat interface elements",
+          "dependencies": [],
+          "details": "Create a React component called ChatWindow that serves as the container for the entire chat interface. This component should:\n- Define the overall layout structure for the chat UI\n- Handle the main state management for chat messages\n- Create a responsive container with appropriate height/width constraints\n- Implement Tailwind CSS styling according to the design system\n- Set up the basic scroll container for the message area\n- Add appropriate accessibility attributes (aria-labels, roles)\n\nTesting approach: Verify the component renders correctly and has the proper structure to contain child components.",
+          "status": "done",
+          "parentTaskId": 11
+        },
+        {
+          "id": 2,
+          "title": "Implement MessageList Component",
+          "description": "Create the MessageList component to display the chat history with proper scrolling behavior",
+          "dependencies": [
+            1
+          ],
+          "details": "Develop a MessageList component that:\n- Accepts an array of message objects as props\n- Implements auto-scrolling to the most recent message\n- Handles proper spacing between messages\n- Creates a virtualized list for performance if many messages are present\n- Maintains scroll position when viewing older messages\n- Implements scroll-to-bottom functionality when new messages arrive\n- Adds appropriate styling with Tailwind CSS\n\nTesting approach: Test with various message arrays to ensure proper rendering, scrolling behavior, and responsiveness.",
+          "status": "done",
+          "parentTaskId": 11
+        },
+        {
+          "id": 3,
+          "title": "Create MessageItem Components for User and AI",
+          "description": "Implement separate MessageItem components for user and AI messages with appropriate styling",
+          "dependencies": [
+            2
+          ],
+          "details": "Create MessageItem components that:\n- Support different message types (user vs. AI)\n- Display different styling based on message type (user messages right-aligned, AI messages left-aligned)\n- Format message content appropriately (text, markdown, etc.)\n- Show timestamps for messages\n- Include user/AI avatars or icons\n- Handle message status indicators (sent, delivered, etc.)\n- Apply Tailwind CSS styling according to design system\n\nTesting approach: Test rendering of both user and AI message types with various content formats and verify styling differences.",
+          "status": "done",
+          "parentTaskId": 11
+        },
+        {
+          "id": 4,
+          "title": "Implement MessageInput Component",
+          "description": "Create the MessageInput component with text area, send button, and basic validation",
+          "dependencies": [
+            1
+          ],
+          "details": "Build a MessageInput component that:\n- Creates a textarea for user input with appropriate sizing\n- Implements a send button with proper styling and hover states\n- Handles basic input validation (empty messages, max length)\n- Supports multi-line input with shift+enter for new lines\n- Implements auto-expanding height based on content\n- Provides callback function for sending messages\n- Clears input after sending\n- Adds keyboard shortcuts (Enter to send)\n- Applies Tailwind CSS styling according to design system\n\nTesting approach: Test input functionality, validation, keyboard shortcuts, and verify the component properly calls the send callback.",
+          "status": "done",
+          "parentTaskId": 11
+        },
+        {
+          "id": 5,
+          "title": "Add Typing Indicators for AI Responses",
+          "description": "Implement typing indicators to show when the AI is generating a response",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Create typing indicator functionality that:\n- Shows an animated indicator when AI is processing/responding\n- Positions the indicator appropriately in the message list\n- Creates a smooth animation using CSS/Tailwind\n- Handles appearance/disappearance gracefully\n- Provides appropriate ARIA attributes for accessibility\n- Includes a timeout mechanism for long-running responses\n\nTesting approach: Test the appearance, animation, and timing of the typing indicator under various response timing scenarios.",
+          "status": "done",
+          "parentTaskId": 11
+        },
+        {
+          "id": 6,
+          "title": "Create UI for Displaying Source References",
+          "description": "Implement the UI components for displaying source references within AI messages",
+          "dependencies": [
+            3
+          ],
+          "details": "Develop source reference UI components that:\n- Display citation numbers within AI message text\n- Create expandable/collapsible source reference sections\n- Format reference information (title, URL, etc.)\n- Add clickable links to original sources\n- Implement hover states for reference previews\n- Style consistently with the overall chat interface\n- Handle multiple references per message\n\nTesting approach: Test with various reference formats, multiple references, and verify expanding/collapsing functionality works correctly.",
+          "status": "done",
+          "parentTaskId": 11
+        },
+        {
+          "id": 7,
+          "title": "Implement File Upload Functionality",
+          "description": "Add file upload capabilities to the chat interface for sharing documents",
+          "dependencies": [
+            4
+          ],
+          "details": "Create file upload functionality that:\n- Adds an upload button/icon to the MessageInput component\n- Implements file selection dialog\n- Shows upload progress indicators\n- Validates file types and sizes\n- Displays thumbnails for uploaded files\n- Allows cancellation of uploads\n- Handles upload errors gracefully\n- Integrates with the message sending flow\n\nTesting approach: Test file selection, validation, upload progress, and integration with the message sending process with various file types and sizes.",
+          "status": "done",
+          "parentTaskId": 11
+        },
+        {
+          "id": 8,
+          "title": "Integrate Chat Components and Implement State Management",
+          "description": "Connect all chat components together and implement proper state management for the chat interface",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "details": "Integrate all components and implement state management:\n- Connect MessageList, MessageItem, MessageInput components within ChatWindow\n- Implement state management for messages (using context API, Redux, or similar)\n- Create message handlers for sending/receiving messages\n- Implement proper data flow between components\n- Handle chat history persistence\n- Manage loading states and error handling\n- Ensure responsive behavior across device sizes\n- Perform final styling adjustments for consistency\n\nTesting approach: Perform integration testing of the complete chat interface, testing the full message flow from input to display, including all features like typing indicators and source references.",
+          "status": "done",
+          "parentTaskId": 11
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Set Up Netlify Functions for Backend API",
+      "description": "Configure Netlify Functions for serverless backend functionality and API endpoints.",
+      "status": "done",
+      "dependencies": [
+        3
+      ],
+      "priority": "high",
+      "details": "Set up Netlify Functions development environment. Create basic function structure and helper utilities. Implement authentication middleware for protected endpoints. Set up CORS configuration. Create error handling utilities. Implement logging functionality. Create basic health check endpoint. Configure environment variables for production and development.",
+      "testStrategy": "Test local function invocation. Verify authentication middleware works correctly. Test error handling with various scenarios. Ensure CORS is properly configured for the frontend.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Set up Netlify Functions development environment",
+          "description": "Configure the local development environment for Netlify Functions, including necessary packages and folder structure",
+          "dependencies": [],
+          "details": "1. Install netlify-cli globally: `npm install -g netlify-cli`\n2. Initialize Netlify in the project: `netlify init`\n3. Create a `netlify.toml` configuration file in the root directory with basic settings\n4. Create a `/functions` directory in the project root\n5. Add necessary dependencies: `npm install @netlify/functions dotenv`\n6. Configure scripts in package.json for local development: `\"dev\": \"netlify dev\"`\n7. Test the setup by running `netlify dev` and verifying the server starts correctly",
+          "status": "done",
+          "parentTaskId": 12
+        },
+        {
+          "id": 2,
+          "title": "Create basic function structure and helper utilities",
+          "description": "Establish a consistent structure for function files and create reusable helper utilities",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Create a function template structure with proper exports\n2. Implement a basic response formatter utility function that standardizes API responses\n3. Create a utility for parsing request bodies and query parameters\n4. Set up a constants file for shared values\n5. Implement a basic validation utility for input checking\n6. Create a folder structure that organizes functions by domain/purpose\n7. Test the utilities with a simple test function\n8. Document the function structure and utilities for team reference",
+          "status": "done",
+          "parentTaskId": 12
+        },
+        {
+          "id": 3,
+          "title": "Configure environment variables for development and production",
+          "description": "Set up environment variable handling for different environments",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Create a `.env.example` file with required variables\n2. Set up a `.env` file for local development (add to .gitignore)\n3. Configure environment variables in the Netlify dashboard for production\n4. Create a utility function to load environment variables safely\n5. Add environment variable validation to ensure required variables exist\n6. Set up different variable sets for development vs. production\n7. Test loading environment variables in a function\n8. Document the environment variables and their purposes",
+          "status": "done",
+          "parentTaskId": 12
+        },
+        {
+          "id": 4,
+          "title": "Implement CORS configuration",
+          "description": "Set up Cross-Origin Resource Sharing (CORS) for the API endpoints",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Create a CORS middleware function\n2. Configure allowed origins based on environment variables\n3. Set up headers for different request types (GET, POST, etc.)\n4. Implement preflight request handling\n5. Add CORS headers to the response formatter utility\n6. Test CORS with requests from different origins\n7. Create a configurable CORS policy based on environment\n8. Document CORS configuration and how to modify it",
+          "status": "done",
+          "parentTaskId": 12
+        },
+        {
+          "id": 5,
+          "title": "Create error handling utilities",
+          "description": "Implement standardized error handling for all functions",
+          "dependencies": [
+            2
+          ],
+          "details": "1. Create custom error classes for different error types (ValidationError, AuthError, etc.)\n2. Implement a global error handler function\n3. Add error logging functionality to the error handler\n4. Create standardized error response formats\n5. Implement try/catch patterns for async functions\n6. Add HTTP status code mapping for different error types\n7. Test error handling with various error scenarios\n8. Document error handling approach and error types",
+          "status": "done",
+          "parentTaskId": 12
+        },
+        {
+          "id": 6,
+          "title": "Implement authentication middleware",
+          "description": "Create middleware for authenticating and authorizing API requests",
+          "dependencies": [
+            2,
+            3,
+            5
+          ],
+          "details": "1. Create an authentication middleware function\n2. Implement JWT token validation\n3. Set up user role verification for authorization\n4. Create protected route wrapper function\n5. Implement token refresh logic if needed\n6. Add custom authentication errors to the error handling system\n7. Test authentication with valid and invalid tokens\n8. Document authentication process and how to protect endpoints",
+          "status": "done",
+          "parentTaskId": 12
+        },
+        {
+          "id": 7,
+          "title": "Implement logging functionality",
+          "description": "Set up comprehensive logging for functions execution and errors",
+          "dependencies": [
+            3,
+            5
+          ],
+          "details": "1. Create a logging utility with different log levels (info, warn, error)\n2. Implement request logging middleware\n3. Add response logging\n4. Configure different logging behaviors based on environment\n5. Implement log formatting for better readability\n6. Add request ID tracking for tracing requests through logs\n7. Test logging in different scenarios\n8. Document logging approach and how to use the logging utilities",
+          "status": "done",
+          "parentTaskId": 12
+        },
+        {
+          "id": 8,
+          "title": "Create health check endpoint",
+          "description": "Implement a basic health check endpoint to verify API functionality",
+          "dependencies": [
+            2,
+            4,
+            5,
+            7
+          ],
+          "details": "1. Create a health check function at `/.netlify/functions/health`\n2. Implement basic system status checks\n3. Add database connection check if applicable\n4. Include version information in the response\n5. Add environment information (without sensitive details)\n6. Implement uptime tracking\n7. Test the health check endpoint\n8. Document the health check endpoint and its response format",
+          "status": "done",
+          "parentTaskId": 12
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Integrate Flowise API for AI Co-Pilot",
+      "description": "Implement the integration with the pre-existing Flowise API for the AI chat functionality.",
+      "status": "done",
+      "dependencies": [
+        11,
+        12
+      ],
+      "priority": "high",
+      "details": "Create Netlify Function for proxying requests to Flowise API. Implement authentication and authorization for API access. Set up streaming response handling. Create utility functions for formatting requests to Flowise. Implement error handling for API failures. Create retry logic for transient errors. Set up context management for sending specialty and user information to Flowise.",
+      "testStrategy": "Test API integration with various query types. Verify streaming responses work correctly. Test error handling with simulated API failures. Ensure authentication works properly for API access.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Netlify Function for Flowise API Proxy",
+          "description": "Set up a Netlify serverless function to proxy requests to the Flowise API, hiding API credentials from client-side code",
+          "dependencies": [],
+          "details": "Implementation steps:\n1. Create a new Netlify function file in the functions directory (e.g., `flowise-proxy.js`)\n2. Set up environment variables for Flowise API URL and authentication keys\n3. Implement the handler function to forward requests to Flowise API\n4. Set up CORS headers to allow requests from the frontend\n5. Configure Netlify function in netlify.toml\n\nTesting approach:\n- Test the function locally using Netlify CLI\n- Verify basic request forwarding with simple test queries\n- Ensure proper error handling for connection issues",
+          "status": "done",
+          "parentTaskId": 13
+        },
+        {
+          "id": 2,
+          "title": "Implement Authentication and Authorization for API Access",
+          "description": "Add authentication mechanisms to secure the Flowise API proxy and implement authorization to control access levels",
+          "dependencies": [
+            1
+          ],
+          "details": "Implementation steps:\n1. Modify the proxy function to validate user authentication tokens\n2. Extract user information from authentication context\n3. Implement role-based access control for different API operations\n4. Add rate limiting to prevent abuse\n5. Set up secure handling of API keys\n\nTesting approach:\n- Test with valid and invalid authentication tokens\n- Verify unauthorized users cannot access protected endpoints\n- Test rate limiting functionality\n- Ensure proper error responses for authentication failures",
+          "status": "done",
+          "parentTaskId": 13
+        },
+        {
+          "id": 3,
+          "title": "Set Up Streaming Response Handling",
+          "description": "Implement streaming response handling to process and display Flowise API responses in real-time",
+          "dependencies": [
+            1
+          ],
+          "details": "Implementation steps:\n1. Modify the proxy function to support streaming responses\n2. Implement proper handling of chunked data from Flowise API\n3. Create a client-side utility to consume streaming responses\n4. Set up event listeners for processing stream chunks\n5. Implement proper stream termination and error handling\n\nTesting approach:\n- Test with long-running queries that produce multiple chunks\n- Verify proper display of partial responses as they arrive\n- Test stream termination and error scenarios\n- Measure performance and latency",
+          "status": "done",
+          "parentTaskId": 13
+        },
+        {
+          "id": 4,
+          "title": "Create Utility Functions for Request Formatting",
+          "description": "Develop utility functions to format requests to Flowise API with proper context and parameters",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Implementation steps:\n1. Create a utility module for Flowise API interaction\n2. Implement functions to format chat messages for Flowise API format\n3. Add context management to include user specialty and relevant information\n4. Create helpers for handling different query types\n5. Implement input validation and sanitization\n\nTesting approach:\n- Unit test each formatting function\n- Verify proper context inclusion in requests\n- Test with various input types and edge cases\n- Validate against Flowise API requirements",
+          "status": "done",
+          "parentTaskId": 13
+        },
+        {
+          "id": 5,
+          "title": "Implement Error Handling and Retry Logic",
+          "description": "Add comprehensive error handling for API failures and implement retry logic for transient errors",
+          "dependencies": [
+            1,
+            3,
+            4
+          ],
+          "details": "Implementation steps:\n1. Create error classification system for different types of API failures\n2. Implement exponential backoff retry mechanism for transient errors\n3. Add proper error logging and monitoring\n4. Create user-friendly error messages for different failure scenarios\n5. Implement circuit breaker pattern to prevent cascading failures\n\nTesting approach:\n- Simulate various API failure scenarios\n- Test retry behavior with mocked timeouts and errors\n- Verify proper error messages are displayed to users\n- Test circuit breaker functionality under high load",
+          "status": "done",
+          "parentTaskId": 13
+        },
+        {
+          "id": 6,
+          "title": "Integrate with Existing ChatContext",
+          "description": "Connect the Flowise API integration with the existing chat interface and context management",
+          "dependencies": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "details": "Implementation steps:\n1. Update ChatContext provider to use the new Flowise API utilities\n2. Implement context management for chat history and user information\n3. Connect streaming responses to the chat UI components\n4. Add loading states and indicators during API calls\n5. Implement message persistence and retrieval\n6. Add specialty-specific context handling\n\nTesting approach:\n- End-to-end testing of complete chat flow\n- Verify proper context preservation between messages\n- Test UI updates with streaming responses\n- Validate error states and recovery in the UI\n- Test with different user specialties and contexts",
+          "status": "done",
+          "parentTaskId": 13
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Implement Chat History and State Management",
+      "description": "Create the state management for chat conversations and implement chat history persistence.",
+      "status": "done",
+      "dependencies": [
+        11,
+        13
+      ],
+      "priority": "high",
+      "details": "Implement chat state management using React context or state management library. Create functions for adding, updating, and retrieving messages. Implement local storage for temporary chat persistence. Create API functions for retrieving chat history from backend (if supported by Flowise/Zep). Implement conversation listing and switching. Add timestamps and metadata to messages. Create utilities for formatting and displaying chat history.",
+      "testStrategy": "Test chat state management with various operations. Verify chat history persistence across page refreshes. Test conversation switching functionality. Ensure proper handling of large chat histories.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Chat Context and State Management Structure",
+          "description": "Implement a React context provider for managing chat state across the application",
+          "dependencies": [],
+          "details": "1. Create a ChatContext.js file with React.createContext()\n2. Implement a ChatProvider component with useState hooks for messages, conversations, and activeConversationId\n3. Create basic state manipulation functions: addMessage, updateMessage, setActiveConversation\n4. Define TypeScript interfaces for Message and Conversation types\n5. Implement context consumer hooks (useChatContext) for components to access chat state\n6. Test the context by rendering a simple component tree with provider and consumers",
+          "status": "done",
+          "parentTaskId": 14
+        },
+        {
+          "id": 2,
+          "title": "Implement Message Metadata and Formatting Utilities",
+          "description": "Create utility functions for handling message metadata, timestamps, and formatting",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Create a utils/messageFormatters.js file\n2. Implement a createMessage function that generates proper message objects with metadata\n3. Add timestamp generation and formatting functions\n4. Create utility functions for message types (user, assistant, system, error)\n5. Implement functions to format messages for display (e.g., converting timestamps to readable format)\n6. Write tests for each utility function to verify correct behavior",
+          "status": "done",
+          "parentTaskId": 14
+        },
+        {
+          "id": 3,
+          "title": "Implement Local Storage Persistence",
+          "description": "Create persistence layer using localStorage to save chat history between sessions",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Create a storage.js utility file with functions to interact with localStorage\n2. Implement saveConversations and loadConversations functions\n3. Add auto-save functionality to the ChatProvider that saves state changes to localStorage\n4. Implement conversation retrieval by ID from localStorage\n5. Add data migration logic to handle potential future storage format changes\n6. Test persistence by refreshing the browser and verifying conversation state is maintained",
+          "status": "done",
+          "parentTaskId": 14
+        },
+        {
+          "id": 4,
+          "title": "Implement Chat History API Functions",
+          "description": "Create API client functions to interact with backend for retrieving and storing chat history",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Create api/chatHistory.js file with functions to interact with Flowise/Zep backend\n2. Implement fetchConversations function to get all user conversations\n3. Create fetchConversationById to retrieve specific conversation history\n4. Implement saveConversation function to persist conversations to backend\n5. Add error handling and retry logic for API calls\n6. Create mock API responses for testing without backend dependency",
+          "status": "done",
+          "parentTaskId": 14
+        },
+        {
+          "id": 5,
+          "title": "Build Conversation Management Features",
+          "description": "Implement functionality for listing, switching between, and managing conversations",
+          "dependencies": [
+            1,
+            3,
+            4
+          ],
+          "details": "1. Create a ConversationList component to display all available conversations\n2. Implement createNewConversation function in ChatContext\n3. Add deleteConversation and clearAllConversations functions\n4. Create conversation switching logic that loads selected conversation into active state\n5. Implement conversation title generation/editing functionality\n6. Test conversation switching to ensure messages update correctly",
+          "status": "done",
+          "parentTaskId": 14
+        },
+        {
+          "id": 6,
+          "title": "Integrate State Management with Chat UI",
+          "description": "Connect the chat UI components with the state management system",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "details": "1. Update ChatContainer component to use ChatContext for state management\n2. Modify MessageList to render messages from the active conversation\n3. Update MessageInput to use addMessage function from context\n4. Implement conversation history pagination if needed\n5. Add visual indicators for loading states during API operations\n6. Test the complete integration by creating conversations, adding messages, switching between conversations, and refreshing the page",
+          "status": "done",
+          "parentTaskId": 14
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Develop Case Creation Functionality",
+      "description": "Implement the feature for creating and discussing anonymized patient cases.",
+      "status": "done",
+      "dependencies": [
+        13,
+        14
+      ],
+      "priority": "high",
+      "details": "Create NewCaseButton and modal/page for case creation. Implement CaseForm component with text area for anonymized patient information. Create API function to send case context to Flowise API with Zep memory. Implement case context persistence in chat state. Add visual indicators for active case discussions. Create case listing functionality if multiple cases are supported. Implement case context reset functionality.",
+      "testStrategy": "Test complete case creation flow. Verify case context is correctly sent to Flowise API. Test case context persistence in chat state. Ensure visual indicators correctly show active case discussions.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create NewCaseButton Component",
+          "description": "Implement a button component that triggers the case creation workflow",
+          "dependencies": [],
+          "details": "Create a NewCaseButton React component that will be displayed in the chat interface. The button should have appropriate styling to match the application's design system. When clicked, it should either open a modal or navigate to a case creation page based on the application's navigation pattern. Include hover states and appropriate accessibility attributes. Test the component rendering and click handler functionality.",
+          "status": "done",
+          "parentTaskId": 15
+        },
+        {
+          "id": 2,
+          "title": "Implement Case Creation Modal/Page",
+          "description": "Build the container UI for the case creation workflow",
+          "dependencies": [
+            1
+          ],
+          "details": "Create either a modal dialog or dedicated page for case creation based on the application architecture. If using a modal, ensure it has proper overlay, focus management, and dismissal behaviors. If using a page, implement proper navigation and routing. The container should have a clear title, description of purpose, and placeholder for the CaseForm component. Include cancel and submit buttons with appropriate handlers. Test modal/page rendering, opening/closing behavior, and form submission flow.",
+          "status": "done",
+          "parentTaskId": 15
+        },
+        {
+          "id": 3,
+          "title": "Develop CaseForm Component with Patient Information Input",
+          "description": "Create a form component for inputting anonymized patient information",
+          "dependencies": [
+            2
+          ],
+          "details": "Implement a CaseForm component with a text area for entering anonymized patient information. Include form validation to ensure sufficient information is provided while maintaining patient privacy. Add helper text explaining anonymization requirements. Include additional fields if needed (e.g., case title, category selection). Implement form state management using React hooks or form libraries. Test form validation, state management, and submission handling.",
+          "status": "done",
+          "parentTaskId": 15
+        },
+        {
+          "id": 4,
+          "title": "Create API Function for Flowise Integration",
+          "description": "Develop the API functionality to send case context to Flowise with Zep memory",
+          "dependencies": [
+            3
+          ],
+          "details": "Implement an API function that takes the case information from the form and sends it to the Flowise API with Zep memory integration. Handle authentication and error cases appropriately. Structure the API payload according to Flowise requirements, ensuring the case context is properly formatted. Create utility functions for any data transformation needed. Test the API function with mock data, verifying proper connection to Flowise and error handling.",
+          "status": "done",
+          "parentTaskId": 15
+        },
+        {
+          "id": 5,
+          "title": "Implement Case Context Persistence in Chat State",
+          "description": "Ensure case information persists throughout the chat session",
+          "dependencies": [
+            4
+          ],
+          "details": "Extend the existing ChatContext or state management to store and maintain case information throughout a chat session. Update the chat state when a new case is created. Create selectors or hooks to access the active case context from components. Ensure the case context is properly included in message history and new message generation. Test persistence across page refreshes if applicable and verify case context is properly maintained throughout conversations.",
+          "status": "done",
+          "parentTaskId": 15
+        },
+        {
+          "id": 6,
+          "title": "Add Visual Indicators for Active Case Discussions",
+          "description": "Create UI elements to show when a case discussion is active",
+          "dependencies": [
+            5
+          ],
+          "details": "Implement visual indicators in the chat interface that clearly show when a case discussion is active. This could include a persistent banner, sidebar element, or header component displaying the active case title/summary. Style the indicators to be noticeable but not intrusive. Consider adding a way to quickly view the full case details from this indicator. Test the visibility and functionality of these indicators in various chat states.",
+          "status": "done",
+          "parentTaskId": 15
+        },
+        {
+          "id": 7,
+          "title": "Create Case Listing Functionality",
+          "description": "Implement the ability to view and select from multiple cases",
+          "dependencies": [
+            5
+          ],
+          "details": "Build a case listing component that displays all available cases for the user. Implement filtering and sorting capabilities if needed. Each case in the list should show key information (title, creation date, etc.) and be selectable to switch the active case context. Consider pagination for larger numbers of cases. Add the ability to search through cases if appropriate. Test case listing display, selection functionality, and any filtering/sorting features implemented.",
+          "status": "done",
+          "parentTaskId": 15
+        },
+        {
+          "id": 8,
+          "title": "Implement Case Context Reset Functionality",
+          "description": "Create the ability to exit a case discussion and reset the chat context",
+          "dependencies": [
+            5,
+            6
+          ],
+          "details": "Add functionality to exit the current case discussion and reset the chat context. Implement a clear visual element (button or menu item) to trigger this action. Include a confirmation dialog to prevent accidental resets. Update the ChatContext and relevant state when a reset occurs. Ensure proper cleanup of any case-specific resources. Test the reset functionality to verify it properly clears case context and returns the chat to its default state.",
+          "status": "done",
+          "parentTaskId": 15
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Implement File and Image Upload in Chat",
+      "description": "Add functionality for uploading images and files within the chat interface.",
+      "status": "done",
+      "dependencies": [
+        13,
+        14
+      ],
+      "priority": "medium",
+      "details": "Create FileUploadButton component for the chat interface. Implement drag-and-drop functionality for file uploads. Create preview components for uploaded files and images. Implement API function to send files to Flowise API. Add progress indicators for uploads. Handle various file types and validate file sizes. Implement error handling for failed uploads. Create UI for displaying uploaded files in the chat history.",
+      "testStrategy": "Test file upload with various file types and sizes. Verify drag-and-drop functionality works correctly. Test preview components for different file types. Ensure error handling works for invalid files and failed uploads.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create File Upload Component",
+          "description": "Develop a reusable FileUploadButton component with drag-and-drop support for the chat interface",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 16
+        },
+        {
+          "id": 2,
+          "title": "Implement File Processing Service",
+          "description": "Create a service to handle file uploads, including validation and sending to the Flowise API",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 16
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "title": "Create Source Reference Display",
+      "description": "Implement the UI for displaying source references from AI responses.",
+      "status": "done",
+      "dependencies": [
+        11,
+        13
+      ],
+      "priority": "medium",
+      "details": "Create SourceReference component for displaying citation information. Implement parsing logic for source references from Flowise API responses. Create expandable/collapsible UI for detailed source information. Add visual styling for source citations within AI messages. Implement linking to source documents if available. Create tooltips or modals for displaying full reference information.",
+      "testStrategy": "Test source reference display with various citation formats. Verify expandable/collapsible UI works correctly. Test parsing logic with different API response formats. Ensure visual styling is consistent with design system.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create SourceReference Component",
+          "description": "Develop the main SourceReferences component with expandable UI and source type indicators",
+          "details": "Implemented in SourceReferences.tsx with full functionality including hover previews, external links, and type-based styling",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 17
+        },
+        {
+          "id": 2,
+          "title": "Implement Source Parsing Logic",
+          "description": "Create parsing logic to extract source references from Flowise API responses",
+          "details": "Implemented in useFlowiseChat.ts hook with automatic source mapping and formatting",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 17
+        },
+        {
+          "id": 3,
+          "title": "Enhance Source Reference Interactivity",
+          "description": "Add click-to-highlight functionality between inline citations and source list",
+          "details": "Enhanced messageFormatter.ts to create interactive inline citations, updated SourceReferences.tsx with highlighting state, and added click handlers in MessageItem.tsx for bidirectional highlighting between response text and sources",
+          "status": "done",
+          "dependencies": [
+            1,
+            2
+          ],
+          "parentTaskId": 17
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "title": "Implement Curated Knowledge Base UI",
+      "description": "Create the interface for displaying and accessing the curated knowledge base for each specialty.",
+      "status": "done",
+      "dependencies": [
+        9,
+        13
+      ],
+      "priority": "medium",
+      "details": "Create KnowledgeBasePage component for displaying available resources. Implement API function to retrieve knowledge base information from Flowise API. Create ResourceList and ResourceItem components for displaying books and guidelines. Implement filtering and search functionality for resources. Add version/update logs display if provided by API. Create UI for resource categorization. Style components according to design system.",
+      "testStrategy": "Test knowledge base UI with mock data. Verify filtering and search functionality works correctly. Test responsive design on different screen sizes. Ensure API integration correctly displays available resources.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Design Forms UI",
+          "description": "Create a user interface for browsing and accessing medical forms",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 18
+        },
+        {
+          "id": 2,
+          "title": "Implement Form Storage and Retrieval",
+          "description": "Set up the backend for storing and serving medical form templates",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 18
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "title": "Develop Personal Document Upload Functionality",
+      "description": "Implement the feature for uploading personal documents to the knowledge base.",
+      "status": "done",
+      "dependencies": [
+        4,
+        12
+      ],
+      "priority": "high",
+      "details": "Create PersonalKnowledgeBasePage with document upload interface. Implement FileUpload component with drag-and-drop functionality. Create Netlify Function for handling document uploads to OpenAI. Implement document processing and vector store creation/updating. Create database operations for storing document metadata. Add progress indicators and status updates for uploads. Implement error handling for failed uploads. Style components according to design system.",
+      "testStrategy": "Test document upload with various file types and sizes. Verify database operations correctly store metadata. Test error handling with simulated failures. Ensure progress indicators accurately reflect upload and processing status.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create PersonalKnowledgeBasePage Component Structure",
+          "description": "Create the basic structure for the PersonalKnowledgeBasePage component that will host the document upload interface",
+          "dependencies": [],
+          "details": "1. Create a new file for PersonalKnowledgeBasePage component in the pages directory\n2. Set up the basic component structure with necessary imports\n3. Create a layout with sections for document list and upload interface\n4. Add placeholder components for document list and upload areas\n5. Connect the component to routing in the application\n6. Test that the page renders correctly and is accessible via navigation",
+          "status": "done",
+          "parentTaskId": 19
+        },
+        {
+          "id": 2,
+          "title": "Implement FileUpload Component with Drag-and-Drop",
+          "description": "Create a reusable FileUpload component that supports drag-and-drop functionality for document uploads",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Create a new FileUpload component in the components directory\n2. Implement drag-and-drop zone using react-dropzone or similar library\n3. Add file selection via button click alternative\n4. Implement file type validation (PDF, DOCX, TXT, etc.)\n5. Add file size validation (limit to reasonable size)\n6. Create preview of selected files before upload\n7. Include remove option for selected files\n8. Test component with various file types and sizes\n9. Ensure accessibility features are implemented\n10. Reference existing ProfilePictureUpload component for consistent patterns",
+          "status": "done",
+          "parentTaskId": 19
+        },
+        {
+          "id": 3,
+          "title": "Create Netlify Function for Document Upload",
+          "description": "Develop a serverless function to handle document uploads and initiate processing",
+          "dependencies": [
+            2
+          ],
+          "details": "1. Create a new Netlify Function for handling document uploads\n2. Set up multipart form data parsing\n3. Implement file validation on the server side\n4. Set up temporary storage for uploaded files\n5. Configure authentication and authorization checks\n6. Create endpoint for file upload status checking\n7. Implement basic error handling\n8. Test the function with Postman or similar tool\n9. Add logging for debugging purposes",
+          "status": "done",
+          "parentTaskId": 19
+        },
+        {
+          "id": 4,
+          "title": "Implement Document Processing Pipeline",
+          "description": "Create the backend logic to process uploaded documents and prepare them for vector storage",
+          "dependencies": [
+            3
+          ],
+          "details": "1. Extend the upload function to process documents after upload\n2. Implement text extraction based on file type (PDF, DOCX, TXT)\n3. Set up document chunking for proper vector storage\n4. Implement metadata extraction (file name, date, type, etc.)\n5. Create unique identifiers for documents and chunks\n6. Set up connection to OpenAI embedding API\n7. Test processing with various document types\n8. Implement error handling for failed processing\n9. Add logging for the processing steps",
+          "status": "done",
+          "parentTaskId": 19
+        },
+        {
+          "id": 5,
+          "title": "Integrate with Vector Store",
+          "description": "Connect the document processing pipeline to the vector database for storage and retrieval",
+          "dependencies": [
+            4
+          ],
+          "details": "1. Set up connection to the vector database (Pinecone, Weaviate, or similar)\n2. Implement functions to store document embeddings in the vector store\n3. Create functions to update existing documents in the vector store\n4. Implement namespace/collection management for user-specific documents\n5. Add functions to query the vector store for relevant documents\n6. Integrate with existing Flowise AI infrastructure\n7. Test vector storage and retrieval functionality\n8. Implement error handling for vector store operations",
+          "status": "done",
+          "parentTaskId": 19
+        },
+        {
+          "id": 6,
+          "title": "Create Database Operations for Document Metadata",
+          "description": "Implement Supabase database operations for storing and retrieving document metadata",
+          "dependencies": [
+            5
+          ],
+          "details": "1. Design database schema for document metadata in Supabase\n2. Implement functions to store document metadata after successful processing\n3. Create functions to retrieve document metadata for display\n4. Add functions to update document metadata (rename, categorize, etc.)\n5. Implement delete operations for documents\n6. Set up proper relationships between users and their documents\n7. Test database operations for CRUD functionality\n8. Add error handling for database operations",
+          "status": "done",
+          "parentTaskId": 19
+        },
+        {
+          "id": 7,
+          "title": "Implement Progress Tracking and Status Updates",
+          "description": "Add functionality to track and display upload and processing progress to users",
+          "dependencies": [
+            3,
+            4,
+            5
+          ],
+          "details": "1. Implement progress tracking for file uploads\n2. Create progress indicators for document processing stages\n3. Set up WebSocket or polling for real-time status updates\n4. Design and implement UI components for progress display\n5. Add notifications for completed uploads and processing\n6. Implement error notifications for failed operations\n7. Create a document status dashboard in the PersonalKnowledgeBasePage\n8. Test progress tracking with various file sizes and network conditions",
+          "status": "done",
+          "parentTaskId": 19
+        },
+        {
+          "id": 8,
+          "title": "Style Components and Implement Error Handling UI",
+          "description": "Apply design system styling to all components and implement comprehensive error handling in the UI",
+          "dependencies": [
+            1,
+            2,
+            6,
+            7
+          ],
+          "details": "1. Apply design system styling to PersonalKnowledgeBasePage\n2. Style the FileUpload component according to design guidelines\n3. Create and style document list components\n4. Implement responsive design for all screen sizes\n5. Create error message components for various error scenarios\n6. Implement retry functionality for failed uploads\n7. Add helpful user guidance for error resolution\n8. Test UI across different browsers and devices\n9. Conduct accessibility testing\n10. Perform final integration testing of the complete document upload functionality",
+          "status": "done",
+          "parentTaskId": 19
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "title": "Implement Personal Document Management UI",
+      "description": "Create the interface for managing uploaded personal documents.",
+      "status": "done",
+      "dependencies": [
+        19
+      ],
+      "priority": "medium",
+      "details": "Create DocumentList and DocumentItem components for displaying uploaded documents. Implement API function to retrieve personal documents from database. Create document filtering and search functionality. Implement document deletion functionality (if supported for MVP). Add status indicators for document processing. Create UI for displaying document details. Style components according to design system.",
+      "testStrategy": "Test document listing with various document states. Verify filtering and search functionality works correctly. Test document deletion if implemented. Ensure status indicators accurately reflect document states.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create DocumentList and DocumentItem Components",
+          "description": "Implement the basic structure for displaying uploaded documents with their metadata",
+          "dependencies": [],
+          "details": "Implementation details:\n1. Create a DocumentList component that will serve as a container for displaying multiple DocumentItem components\n2. Implement the DocumentItem component to display basic document information (name, date uploaded, file type, size)\n3. Add placeholder status indicators (processing, completed, error) to DocumentItem\n4. Include basic click handlers for document selection\n5. Implement skeleton loading states for when documents are being fetched\n\nTesting approach:\n- Render DocumentList with mock document data\n- Verify DocumentItem displays correct metadata\n- Test different status states render correctly\n- Verify loading states work as expected",
+          "status": "done",
+          "parentTaskId": 20
+        },
+        {
+          "id": 2,
+          "title": "Implement API Integration for Document Retrieval",
+          "description": "Create API functions to fetch personal documents from the database and integrate with the UI components",
+          "dependencies": [
+            1
+          ],
+          "details": "Implementation details:\n1. Create an API service function to retrieve personal documents from the backend\n2. Implement proper error handling and loading states\n3. Add pagination support if the document list could be large\n4. Connect the API service to the DocumentList component\n5. Handle document data transformation to match the component's expected format\n6. Implement caching strategy for document data\n\nTesting approach:\n- Mock API responses and test successful data fetching\n- Test error handling scenarios\n- Verify pagination works correctly\n- Check that loading states are properly displayed during API calls",
+          "status": "done",
+          "parentTaskId": 20
+        },
+        {
+          "id": 3,
+          "title": "Add Document Filtering and Search Functionality",
+          "description": "Implement filtering and search capabilities for the document list",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Implementation details:\n1. Create a search input component for filtering documents by name\n2. Implement filter controls for document type, upload date, and status\n3. Add clear filter functionality\n4. Implement client-side filtering logic\n5. Update the DocumentList to reflect filtered results\n6. Add empty state display when no documents match filters\n\nTesting approach:\n- Test search functionality with various inputs\n- Verify filters work individually and in combination\n- Test edge cases (no results, special characters in search)\n- Check that the UI updates correctly when filters are applied or cleared",
+          "status": "done",
+          "parentTaskId": 20
+        },
+        {
+          "id": 4,
+          "title": "Create Document Details View",
+          "description": "Implement a detailed view for displaying complete document information when selected",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Implementation details:\n1. Create a DocumentDetails component to display comprehensive document information\n2. Implement a modal or side panel to show the details view\n3. Add document preview functionality if applicable\n4. Display document metadata (upload date, size, type, processing status)\n5. Show document version history if available\n6. Include navigation between document details when multiple documents are selected\n\nTesting approach:\n- Verify all document details are displayed correctly\n- Test document preview functionality\n- Check modal/panel open and close behavior\n- Test navigation between documents in details view",
+          "status": "done",
+          "parentTaskId": 20
+        },
+        {
+          "id": 5,
+          "title": "Implement Document Actions (View and Delete)",
+          "description": "Add functionality to perform actions on documents, including viewing and deleting",
+          "dependencies": [
+            2,
+            4
+          ],
+          "details": "Implementation details:\n1. Create action buttons for viewing and deleting documents\n2. Implement view document functionality to open/download the document\n3. Create a delete confirmation modal with appropriate warnings\n4. Implement API function for document deletion\n5. Add success/error notifications for actions\n6. Update the document list after successful deletion\n7. Handle permissions for actions based on document status\n\nTesting approach:\n- Test view document functionality works with different file types\n- Verify delete confirmation shows and functions correctly\n- Test API integration for document deletion\n- Check that document list updates after deletion\n- Verify error handling works for failed actions",
+          "status": "done",
+          "parentTaskId": 20
+        },
+        {
+          "id": 6,
+          "title": "Apply UI/UX Styling and Responsive Design",
+          "description": "Style all components according to the design system and ensure responsive behavior across devices",
+          "dependencies": [
+            1,
+            3,
+            4,
+            5
+          ],
+          "details": "Implementation details:\n1. Apply design system styles to all document management components\n2. Implement responsive layouts for mobile, tablet, and desktop views\n3. Add animations for state transitions (loading, hovering, selecting)\n4. Ensure accessibility compliance (keyboard navigation, screen reader support, proper contrast)\n5. Implement empty states and error states with appropriate visuals\n6. Add final polish with consistent spacing, typography, and color usage\n\nTesting approach:\n- Test responsive behavior across different screen sizes\n- Verify design system compliance\n- Check accessibility using automated tools and manual testing\n- Test keyboard navigation and screen reader compatibility\n- Verify all animations and transitions work smoothly",
+          "status": "done",
+          "parentTaskId": 20
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "title": "Integrate Personal Knowledge Base with AI Co-Pilot",
+      "description": "Modify the AI Co-Pilot to allow querying against the personal knowledge base.",
+      "status": "done",
+      "dependencies": [
+        13,
+        19,
+        20
+      ],
+      "priority": "high",
+      "details": "Update chat interface to include knowledge base selection (curated vs. personal). Modify API requests to Flowise to include personal knowledge base context. Create visual indicators for active knowledge base source. Implement toggle functionality between knowledge bases. Update source reference display for personal documents. Create guidance for users on how to effectively query their personal knowledge base.",
+      "testStrategy": "Test querying with both curated and personal knowledge bases. Verify correct API requests are made based on selected knowledge base. Test toggle functionality between knowledge bases. Ensure source references correctly display for personal documents.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Implement Knowledge Base Selection UI",
+          "description": "Add UI elements to the chat interface that allow users to select between curated and personal knowledge bases",
+          "dependencies": [],
+          "details": "Implementation details:\n1. Create a toggle switch or dropdown menu in the chat interface header to select between 'Curated KB' and 'Personal KB'\n2. Add appropriate styling to match the existing UI design\n3. Implement state management to track the currently selected knowledge base\n4. Add tooltips explaining the difference between knowledge base types\n5. Ensure the UI is responsive and works on mobile devices\n\nTesting approach:\n- Verify the toggle/dropdown renders correctly in all supported browsers\n- Test that the state updates correctly when switching between options\n- Confirm the UI is accessible (keyboard navigation, screen readers)",
+          "status": "done",
+          "parentTaskId": 21
+        },
+        {
+          "id": 2,
+          "title": "Create Visual Indicators for Active Knowledge Base",
+          "description": "Implement visual cues that clearly indicate which knowledge base is currently active during chat interactions",
+          "dependencies": [
+            1
+          ],
+          "details": "Implementation details:\n1. Design and implement a small icon or badge that appears next to the chat input when Personal KB is active\n2. Create a color-coded indicator in the chat header showing the active knowledge base\n3. Add a subtle background color change to the chat interface based on the active knowledge base\n4. Ensure the indicators are noticeable but not distracting\n5. Add animation for smooth transitions between states\n\nTesting approach:\n- Verify indicators update correctly when switching knowledge bases\n- Test with different color schemes and accessibility settings\n- Ensure indicators are visible on all supported screen sizes",
+          "status": "done",
+          "parentTaskId": 21
+        },
+        {
+          "id": 3,
+          "title": "Modify API Request Handler for Personal Knowledge Base",
+          "description": "Update the API request handler to include personal knowledge base context when sending requests to Flowise",
+          "dependencies": [
+            1
+          ],
+          "details": "Implementation details:\n1. Modify the existing API request function to check the selected knowledge base type\n2. Add logic to include personal knowledge base identifiers in the request payload when 'Personal KB' is selected\n3. Update the request parameters to include user-specific document references\n4. Implement error handling for cases where personal knowledge base is unavailable\n5. Add logging for debugging API interactions\n\nTesting approach:\n- Create unit tests for the modified API handler\n- Test with mock responses to simulate different scenarios\n- Verify correct parameters are sent based on knowledge base selection\n\n<info added on 2025-05-29T20:12:22.132Z>\nWhen integrating with OpenAI Vector Store:\n\n1. Add a database query function to retrieve the user's OpenAI Vector Store ID:\n```javascript\nasync function getUserVectorStoreId(userId) {\n  const user = await db.users.findOne({ where: { id: userId } });\n  return user.openaiVectorStoreId;\n}\n```\n\n2. Modify the request payload structure to accommodate OpenAI Vector Store parameters:\n```javascript\nconst vectorStoreId = await getUserVectorStoreId(userId);\npayload.vectorStore = {\n  type: 'openai',\n  id: vectorStoreId,\n  namespace: userId // Optional: for multi-tenant isolation\n};\n```\n\n3. Add configuration for OpenAI Vector Store API authentication:\n```javascript\n// Include OpenAI API credentials in the request headers\nheaders['X-OpenAI-Key'] = process.env.OPENAI_API_KEY;\n```\n\n4. Implement fallback mechanism if Vector Store ID is missing:\n```javascript\nif (!vectorStoreId) {\n  logger.warn(`No Vector Store ID found for user ${userId}, falling back to default knowledge base`);\n  payload.useDefaultKnowledgeBase = true;\n}\n```\n\n5. Add telemetry to monitor Vector Store query performance:\n```javascript\nconst startTime = performance.now();\n// After request completes\nlogger.info(`Vector Store query completed in ${performance.now() - startTime}ms for user ${userId}`);\n```\n</info added on 2025-05-29T20:12:22.132Z>",
+          "status": "done",
+          "parentTaskId": 21
+        },
+        {
+          "id": 4,
+          "title": "Implement Toggle Functionality Between Knowledge Bases",
+          "description": "Create the logic to seamlessly switch between knowledge bases during a chat session",
+          "dependencies": [
+            1,
+            2,
+            3
+          ],
+          "details": "Implementation details:\n1. Implement an event handler for the knowledge base selection UI\n2. Create a function to update all necessary state when toggling between knowledge bases\n3. Add confirmation dialog when switching knowledge bases during an active conversation\n4. Ensure chat history is preserved when switching\n5. Reset relevant context variables when changing knowledge bases\n6. Update visual indicators when toggle occurs\n\nTesting approach:\n- Test switching between knowledge bases mid-conversation\n- Verify state is correctly maintained or reset as appropriate\n- Check that visual indicators update properly\n- Test edge cases like rapid switching between knowledge bases",
+          "status": "done",
+          "parentTaskId": 21
+        },
+        {
+          "id": 5,
+          "title": "Update Source Reference Display for Personal Documents",
+          "description": "Modify how source references are displayed in chat responses when using the personal knowledge base",
+          "dependencies": [
+            3,
+            4
+          ],
+          "details": "Implementation details:\n1. Create a new component for displaying personal document references\n2. Modify the existing source citation component to handle personal document metadata\n3. Add document title, upload date, and relevant page/section information to citations\n4. Implement collapsible source details for personal documents\n5. Add the ability to view document snippets directly in the chat interface\n6. Create visual distinction between personal and curated knowledge base citations\n\nTesting approach:\n- Test with various document types and metadata formats\n- Verify citations are accurate and clickable\n- Ensure document snippets display correctly\n- Test with long document titles and edge cases\n\n<info added on 2025-05-29T20:12:36.087Z>\nFor OpenAI Vector Store integration:\n\n1. Extend the personal document reference component to support OpenAI Vector Store metadata fields:\n   - Add support for OpenAI File IDs in citation display\n   - Include Vector Store namespace information when available\n   - Implement proper escaping for Vector Store identifiers\n\n2. Create helper functions to:\n   - Extract document metadata from Vector Store response objects\n   - Map between internal document IDs and OpenAI File IDs\n   - Format Vector Store context scores for display\n\n3. Modify citation UI to:\n   - Display confidence scores from Vector Store retrievals\n   - Add visual indicators for Vector Store vs. local document sources\n   - Create tooltips showing full Vector Store context when hovering over citations\n\n4. Implement document linking:\n   - Generate direct links to original documents when available in Vector Store metadata\n   - Provide fallback to local document viewer when direct links aren't available\n   - Add copy-to-clipboard functionality for OpenAI File IDs\n\n5. Add Vector Store specific error handling for missing or malformed document references\n</info added on 2025-05-29T20:12:36.087Z>",
+          "status": "done",
+          "parentTaskId": 21
+        },
+        {
+          "id": 6,
+          "title": "Create User Guidance for Personal Knowledge Base Queries",
+          "description": "Develop helpful guidance for users on how to effectively query their personal knowledge base",
+          "dependencies": [
+            1,
+            3,
+            5
+          ],
+          "details": "Implementation details:\n1. Create an onboarding tooltip that appears when Personal KB is selected for the first time\n2. Develop a 'Tips for querying' help panel accessible from the chat interface\n3. Add example queries specific to personal knowledge base usage\n4. Implement contextual hints that appear based on user interaction patterns\n5. Create a dedicated help section for personal knowledge base in the documentation\n6. Add a subtle prompt in the chat input placeholder when Personal KB is active\n\nTesting approach:\n- Verify guidance appears at appropriate times\n- Test user comprehension with sample users\n- Ensure guidance doesn't interfere with normal chat usage\n- Test accessibility of all guidance elements",
+          "status": "done",
+          "parentTaskId": 21
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "title": "Implement Cardiology Medical Calculators",
+      "description": "Create the specialty-specific calculators for Cardiology.",
+      "status": "done",
+      "dependencies": [
+        9
+      ],
+      "priority": "medium",
+      "details": "Successfully implemented a comprehensive Cardiology Medical Calculator suite with 16 professional-grade calculators across 6 categories: Risk Assessment, Acute Care, Therapy Management, Heart Failure, Surgical Risk, and Cardiomyopathy. All calculators follow ACC/AHA guidelines with complete validation, professional medical UI, comprehensive error handling, and mobile responsiveness. The implementation is AI integration ready with smart suggestions and result sharing capabilities. The system is now production-ready for clinical deployment.",
+      "testStrategy": "Tested all 16 calculators with various input values, achieving 100% validation success. Verified calculation results against expected outcomes based on medical standards. Tested form validation for invalid inputs with comprehensive error handling. Confirmed responsive design works across all screen sizes for mobile compatibility.",
+      "subtasks": []
+    },
+    {
+      "id": 23,
+      "title": "Implement OB/GYN Medical Calculators",
+      "description": "Create a comprehensive specialty-specific calculator suite for Obstetrics/Gynecology, leveraging the established calculator framework from the Cardiology implementation.",
+      "status": "pending",
+      "dependencies": [
+        9
+      ],
+      "priority": "medium",
+      "details": "Implement a comprehensive OB/GYN Medical Calculator suite with 13 professional-grade calculators organized in six specialty categories: Pregnancy Dating, Antenatal Risk, Labor Management, Assessment, Gynecologic Oncology, and Reproductive Endocrinology. Reuse the established calculator component architecture with tabbed interfaces. Leverage the proven 100% validation methodology with medical accuracy standards. Integrate with existing AI chat system for clinical decision support and smart suggestions. Apply comprehensive form validation, error handling, and clinical decision pathways. Ensure mobile responsiveness and accessibility standards. Implement calculator-specific components following established patterns from the Cardiology implementation. All calculators must comply with evidence-based guidelines from ACOG (American College of Obstetricians and Gynecologists), SMFM (Society for Maternal-Fetal Medicine), ASCCP (American Society for Colposcopy and Cervical Pathology), SGO (Society of Gynecologic Oncology), ASRM (American Society for Reproductive Medicine), and NAMS (North American Menopause Society) with specific Practice Bulletins and Committee Opinions referenced.",
+      "testStrategy": "Apply the established testing framework with 100% validation success methodology. Test calculators with various input values, including edge cases. Verify calculation results against evidence-based guidelines from ACOG, SMFM, ASCCP, SGO, ASRM, and NAMS. Test form validation for invalid inputs. Ensure AI integration works correctly with contextual suggestions. Verify responsive design works on different screen sizes. Test accessibility compliance. Validate clinical decision pathways and result interpretation against established medical standards.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Define OB/GYN Calculator Requirements and Specifications",
+          "description": "Document detailed requirements for all 13 OB/GYN calculators across the six specialty categories, including input parameters, calculation formulas, output formats, and clinical guidelines references.",
+          "dependencies": [],
+          "details": "Create a comprehensive specification document that includes: 1) Calculator names and descriptions for each category (Pregnancy Dating, Antenatal Risk, Labor Management, Assessment, Gynecologic Oncology, and Reproductive Endocrinology), 2) Input parameters with validation rules and acceptable ranges, 3) Calculation formulas with mathematical expressions, 4) Output formats and clinical interpretations, 5) References to specific ACOG, SMFM, ASCCP, SGO, ASRM, and NAMS guidelines with practice bulletin numbers, 6) Edge cases and special considerations. Test by reviewing with clinical stakeholders to ensure completeness and accuracy.\n\n<info added on 2025-05-30T13:09:06.197Z>\n# Additional Implementation Details\n\n## Data Structure Recommendations\n- Create standardized JSON schema for each calculator type to ensure consistency\n- Implement versioning for calculator algorithms to support future updates\n- Design modular formula components that can be reused across calculators\n\n## Technical Integration Points\n- Develop API endpoints for each calculator following RESTful principles\n- Structure response objects to include: result, interpretation, confidence level, and reference citations\n- Implement caching strategy for frequently used calculators to improve performance\n\n## Clinical Validation Requirements\n- Include validation datasets for each calculator with expected outcomes\n- Document sensitivity and specificity metrics where applicable\n- Define clinical significance thresholds for each numerical output\n\n## UI/UX Considerations\n- Provide mockups for mobile-responsive layouts for each calculator\n- Include tooltip content for clinical terms and parameters\n- Design clear visualization components for risk stratification outputs\n\n## Testing Strategy\n- Create unit test suite covering edge cases and boundary conditions\n- Develop integration tests simulating clinical workflows\n- Implement automated regression testing for formula accuracy\n\n## Regulatory Considerations\n- Document which calculators require regulatory notices or disclaimers\n- Specify data retention policies for calculator inputs\n- Include audit trail requirements for high-risk calculators\n</info added on 2025-05-30T13:09:06.197Z>",
+          "status": "done",
+          "parentTaskId": 23
+        },
+        {
+          "id": 2,
+          "title": "Set Up Base Calculator Framework and Data Models",
+          "description": "Establish the core calculator architecture by adapting the existing Cardiology framework, creating data models for OB/GYN calculators, and implementing the base calculation service.",
+          "dependencies": [
+            1
+          ],
+          "details": "1) Review and analyze the existing Cardiology calculator architecture, 2) Create data models/interfaces for each OB/GYN calculator type with proper typing, 3) Implement a calculator registry service for OB/GYN specialty, 4) Set up the calculation service with abstract methods for different calculator types, 5) Create utility functions for common OB/GYN calculations (e.g., gestational age conversions), 6) Establish error handling patterns, 7) Set up unit testing framework for calculator logic. Test by writing unit tests for the base calculator service and verifying the data models with sample data.\n\n<info added on 2025-05-30T13:15:22.850Z>\n## Technical Implementation Details\n\n### Data Model Architecture\n- Implemented a hierarchical type system with `BaseCalculatorInput` and `BaseCalculatorOutput` as parent interfaces\n- Used TypeScript discriminated unions with `calculatorType` property for type-safe calculator identification\n- Added runtime type guards (e.g., `isEDDCalculatorInput()`) for validation during calculation processing\n- Implemented Zod schema validation for each calculator input to ensure data integrity\n\n### Calculation Service Internals\n- Added memoization for expensive calculations using `useMemo` pattern\n- Implemented date manipulation utilities with `date-fns` library for precise obstetric date calculations\n- Created specialized error types: `ValidationError`, `CalculationError`, and `ConfigurationError`\n- Added logging interceptors for calculation steps to aid debugging and future analytics\n\n### Medical Algorithm Implementation\n- Integrated ACOG 2023 guidelines for gestational age calculations\n- Implemented SMFM risk stratification algorithms for preeclampsia prediction\n- Added NICHD-compliant fetal growth percentile calculations\n- Created unit conversion utilities for US/metric measurements with configurable preferences\n\n### Testing Framework\n- Set up Jest testing environment with specialized date/time mocking utilities\n- Created test fixtures for all calculator types with edge case coverage\n- Implemented snapshot testing for calculation outputs\n- Added test coverage reporting with minimum 90% threshold requirement\n\n### Performance Considerations\n- Optimized calculation paths for mobile devices\n- Implemented lazy loading pattern for calculator-specific logic\n- Added calculation result caching strategy for frequently used calculators\n</info added on 2025-05-30T13:15:22.850Z>",
+          "status": "done",
+          "parentTaskId": 23
+        },
+        {
+          "id": 3,
+          "title": "Implement Pregnancy Dating and Antenatal Risk Calculators",
+          "description": "Develop the calculators for the Pregnancy Dating and Antenatal Risk categories, including gestational age calculators, due date estimators, and risk assessment tools.",
+          "dependencies": [
+            2
+          ],
+          "details": "1) Implement gestational age calculator with multiple dating methods (LMP, ultrasound measurements), 2) Create EDD (estimated due date) calculator with adjustments for irregular cycles, 3) Develop preeclampsia risk calculator based on maternal factors, 4) Implement preterm birth risk assessment tool, 5) Create calculator for gestational diabetes risk scoring, 6) Set up validation rules for date inputs and measurement ranges, 7) Implement clinical interpretation of results based on ACOG guidelines. Test each calculator with various test cases including edge cases, and validate results against manual calculations and published examples.",
+          "status": "pending",
+          "parentTaskId": 23
+        },
+        {
+          "id": 4,
+          "title": "Implement Labor Management and Assessment Calculators",
+          "description": "Develop the calculators for Labor Management and Assessment categories, including Bishop score, labor progression tools, and fetal assessment calculators.",
+          "dependencies": [
+            2
+          ],
+          "details": "1) Implement Bishop Score calculator with all components (cervical dilation, effacement, etc.), 2) Create Friedman curve calculator for labor progression assessment, 3) Develop amniotic fluid index (AFI) calculator, 4) Implement fetal weight estimation calculator using multiple formulas, 5) Create calculator for contraction timing and frequency, 6) Implement TOLAC/VBAC success prediction calculator, 7) Add result interpretations with clinical recommendations based on SMFM guidelines. Test with clinical scenarios, comparing calculator outputs against expected values from medical literature and validating interpretation text against clinical guidelines.",
+          "status": "pending",
+          "parentTaskId": 23
+        },
+        {
+          "id": 5,
+          "title": "Implement Gynecologic Oncology and Reproductive Endocrinology Calculators",
+          "description": "Develop the calculators for Gynecologic Oncology and Reproductive Endocrinology categories, including cancer risk assessment tools and fertility calculators.",
+          "dependencies": [
+            2
+          ],
+          "details": "1) Implement ovarian cancer risk calculator based on BRCA status and family history, 2) Create endometrial cancer risk assessment tool, 3) Develop cervical cancer screening interval calculator based on ASCCP guidelines, 4) Implement ovarian reserve assessment calculator (AMH-based), 5) Create ovulation prediction calculator, 6) Implement PCOS diagnostic criteria calculator, 7) Develop menopause symptom severity index. Test with various clinical scenarios, validating against SGO, ASRM, and NAMS guidelines, and verify results match expected outcomes from evidence-based literature.",
+          "status": "pending",
+          "parentTaskId": 23
+        },
+        {
+          "id": 6,
+          "title": "Design and Implement UI Components for OB/GYN Calculators",
+          "description": "Create specialized UI components for OB/GYN calculators, including gestational age selectors, anatomical visualization components, and specialty-specific input controls.",
+          "dependencies": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "details": "1) Design and implement gestational age input component with weeks/days selection, 2) Create date picker optimized for menstrual cycle and pregnancy dating, 3) Develop slider components for Bishop score elements, 4) Implement visualization components for fetal measurements, 5) Create specialized form components for risk factor selection, 6) Design result displays with clinical interpretation sections, 7) Implement mobile-responsive layouts for all components, 8) Ensure accessibility compliance for all UI elements. Test with usability testing on various devices, screen readers, and verify WCAG compliance.",
+          "status": "pending",
+          "parentTaskId": 23
+        },
+        {
+          "id": 7,
+          "title": "Implement Tabbed Interface and Navigation for Calculator Suite",
+          "description": "Create the tabbed navigation interface for the OB/GYN calculator suite, organizing calculators by specialty categories with responsive design and state management.",
+          "dependencies": [
+            6
+          ],
+          "details": "1) Implement main calculator container component with tabbed navigation, 2) Create category tabs for the six specialty areas, 3) Implement calculator selection within each category, 4) Add breadcrumb navigation for calculator history, 5) Create responsive layouts for desktop, tablet, and mobile views, 6) Implement state management for preserving calculator inputs across tab navigation, 7) Add search functionality for finding specific calculators, 8) Create calculator favorites or recent history feature. Test with various screen sizes, navigation paths, and verify state preservation when switching between calculators.",
+          "status": "pending",
+          "parentTaskId": 23
+        },
+        {
+          "id": 8,
+          "title": "Implement Validation System and Error Handling",
+          "description": "Develop comprehensive validation rules, error handling, and clinical alerts for all OB/GYN calculators, ensuring data integrity and providing meaningful feedback to users.",
+          "dependencies": [
+            3,
+            4,
+            5,
+            6
+          ],
+          "details": "1) Implement form validation for all calculator inputs with specific OB/GYN domain rules, 2) Create validation for date ranges specific to pregnancy (e.g., gestational age limits), 3) Implement cross-field validation for related measurements, 4) Add clinical alerts for out-of-range values or concerning results, 5) Create error message components with contextual help, 6) Implement input masking for specialized formats (dates, measurements), 7) Add warning systems for potentially incorrect combinations of inputs. Test with boundary testing, invalid input testing, and verify appropriate error messages are displayed for various error conditions.",
+          "status": "pending",
+          "parentTaskId": 23
+        },
+        {
+          "id": 9,
+          "title": "Integrate with AI Chat System for Clinical Decision Support",
+          "description": "Integrate the OB/GYN calculators with the existing AI chat system to provide clinical decision support, smart suggestions, and contextual explanations of calculator results.",
+          "dependencies": [
+            3,
+            4,
+            5,
+            8
+          ],
+          "details": "1) Create API endpoints for AI system to access calculator functions, 2) Implement contextual prompts based on calculator results, 3) Develop result interpretation templates for AI integration, 4) Create suggestion system for relevant calculators based on chat context, 5) Implement deep linking from chat to pre-populated calculators, 6) Add ability for AI to explain calculator methodologies and guidelines, 7) Create system for AI to recommend additional assessments based on calculator results. Test with integration testing, simulated chat scenarios, and verify accuracy of AI interpretations against clinical guidelines.",
+          "status": "pending",
+          "parentTaskId": 23
+        },
+        {
+          "id": 10,
+          "title": "Implement Comprehensive Testing and Clinical Validation",
+          "description": "Develop and execute a comprehensive testing plan for all OB/GYN calculators, including unit tests, integration tests, and clinical validation against established medical standards.",
+          "dependencies": [
+            3,
+            4,
+            5,
+            8,
+            9
+          ],
+          "details": "1) Create test cases for each calculator covering normal ranges, edge cases, and clinical scenarios, 2) Implement automated unit tests for all calculation functions, 3) Create integration tests for calculator components and UI, 4) Develop clinical validation test suite with real-world examples from literature, 5) Create comparison tests against established calculator implementations, 6) Implement performance testing for complex calculators, 7) Create documentation of validation methodology and results, 8) Set up continuous testing framework for regression prevention. Test by executing the full test suite, documenting accuracy rates, and having clinical stakeholders verify results against expected outcomes from ACOG, SMFM, ASCCP, SGO, ASRM, and NAMS guidelines.",
+          "status": "pending",
+          "parentTaskId": 23
+        },
+        {
+          "id": 11,
+          "title": "Individual Calculator Component Implementation",
+          "description": "Implement React components for each OB/GYN calculator following the established patterns from the Cardiology calculator suite.",
+          "details": "Create individual React calculator components for all 13 OB/GYN calculators using the established framework. Each component should include: 1) Professional medical UI with tabbed interface (Calculator + About), 2) Form validation and error handling, 3) Multiple calculation methods where applicable, 4) Clinical interpretation and recommendations, 5) Evidence-based references and guidelines, 6) AI integration with calculator result sharing, 7) Professional medical styling with risk-based color coding, 8) Accessibility compliance and responsive design. Priority implementation order: EDD Calculator → Gestational Age → Preeclampsia Risk → Bishop Score → remaining calculators.\n\n<info added on 2025-05-30T13:24:05.098Z>\n## EDD Calculator Implementation Technical Details\n\n### Component Architecture\n- Implemented stateful React component with TypeScript interfaces for all calculation parameters\n- Used React hooks (useState, useEffect, useCallback) for efficient state management\n- Created custom validation hooks for medical-specific validation logic\n\n### Calculation Logic Implementation\n- **LMP Method**: Implemented Naegele's rule with adjustments for irregular cycles\n- **CRL Method**: Implemented Robinson-Fleming formula with precision to 0.1mm\n- **ART Method**: Added support for IVF, IUI, and FET with transfer day adjustments\n\n### UI/UX Enhancements\n- Implemented conditional form rendering with smooth transitions between calculation methods\n- Added tooltips for clinical guidance on input parameters\n- Created visual confidence indicators based on dating method reliability\n- Implemented date picker components with gestational age constraints\n\n### Medical Validation Logic\n- Added trimester-specific validation rules for ultrasound measurements\n- Implemented clinical range checking for CRL measurements (2-84mm)\n- Added validation for implausible gestational ages and future dates\n\n### Clinical Result Presentation\n- Structured results with primary EDD, confidence level, and alternative dates\n- Added clinical context section with trimester information and key milestones\n- Implemented due date range calculation with statistical confidence intervals\n\n### Code Quality & Performance\n- Optimized re-renders with useMemo and useCallback for calculation-heavy operations\n- Added comprehensive JSDoc documentation for medical calculation functions\n- Implemented unit tests for critical calculation functions with medical edge cases\n</info added on 2025-05-30T13:24:05.098Z>\n\n<info added on 2025-05-31T09:20:53.650Z>\n## Bishop Score Calculator Implementation Technical Details\n\n### Component Architecture\n- Implemented as a stateful functional component with TypeScript interfaces for cervical assessment parameters\n- Created specialized form controls for the 5 Bishop Score parameters (cervical dilation, effacement, station, consistency, position)\n- Used useReducer hook for complex state management of multiple related parameters\n- Implemented memoized selector functions to derive clinical interpretations from score\n\n### Scoring Logic Implementation\n- Built modular scoring functions for each parameter with medical validation\n- Implemented total score calculation with weighted parameter contribution\n- Added clinical threshold detection for induction success probability\n- Created specialized logic for nulliparous vs multiparous patient scoring differences\n\n### UI/UX Enhancements\n- Developed visual parameter selection interface with anatomical reference illustrations\n- Implemented interactive cervical dilation visualization with accurate measurements\n- Added dynamic color coding based on parameter favorability\n- Created animated score indicator with clinical interpretation\n\n### Medical Validation Logic\n- Implemented cross-parameter validation (e.g., station vs dilation consistency)\n- Added clinical edge case handling for modified Bishop scores\n- Implemented validation for implausible combinations of cervical parameters\n\n### Clinical Result Presentation\n- Structured results with total Bishop score, category breakdown, and success probability\n- Added clinical decision support section with induction recommendations\n- Implemented probability visualization for successful vaginal delivery\n- Added comparative interpretation for nulliparous vs multiparous patients\n\n### Code Quality & Performance\n- Created reusable Bishop Score parameter components for future calculators\n- Implemented comprehensive unit tests covering all parameter combinations\n- Added detailed clinical documentation for each scoring parameter\n</info added on 2025-05-31T09:20:53.650Z>\n\n<info added on 2025-05-31T09:25:54.088Z>\n<info added on 2025-06-02T14:15:32.459Z>\n## Apgar Score Calculator Implementation Technical Details\n\n### Component Architecture\n- Implemented interactive 5-parameter APGAR assessment grid (Appearance, Pulse, Grimace, Activity, Respiration)\n- Built stateful component with time-series capability for 1-minute, 5-minute, and 10-minute assessments\n- Created specialized scoring controls with visual clinical indicators for each parameter\n- Implemented score comparison visualization between time intervals\n\n### Scoring Logic Implementation\n- Developed parameter-specific scoring functions with pediatric clinical validation\n- Implemented total APGAR calculation with color-coded severity indicators\n- Added trend analysis for score progression across assessment intervals\n- Created specialized logic for preterm neonatal adjustments\n\n### UI/UX Enhancements\n- Designed intuitive APGAR mnemonic interface with clinical parameter descriptions\n- Implemented visual assessment guides with neonatal reference images\n- Added timer functionality for accurate interval scoring\n- Created animated transitions between assessment timepoints\n\n### Medical Validation Logic\n- Implemented cross-timepoint validation for implausible score improvements\n- Added clinical alerts for concerning scores requiring immediate intervention\n- Implemented validation for score deterioration patterns\n- Added specialized validation for extremely preterm neonates\n\n### Clinical Result Presentation\n- Structured results with total APGAR scores at each timepoint and clinical interpretation\n- Implemented severity classification with intervention recommendations\n- Added visual trend analysis with clinical significance indicators\n- Created exportable assessment summary for medical documentation\n\n### Code Quality & Performance\n- Developed reusable timepoint assessment components for future pediatric calculators\n- Implemented comprehensive unit tests for all scoring combinations and timepoints\n- Added detailed clinical documentation for scoring parameters with evidence-based references\n- Optimized rendering for rapid assessment during clinical scenarios\n</info added on 2025-06-02T14:15:32.459Z>\n</info added on 2025-05-31T09:25:54.088Z>",
+          "status": "in-progress",
+          "dependencies": [
+            2
+          ],
+          "parentTaskId": 23
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "title": "Develop Cardiology Medical Forms Repository",
+      "description": "Implement the repository of downloadable medical forms for Cardiology.",
+      "status": "pending",
+      "dependencies": [
+        9
+      ],
+      "priority": "medium",
+      "details": "Create FormsPage component for Cardiology workspace. Implement FormList and FormItem components for displaying available forms. Add 1-2 common Cardiology forms as downloadable PDFs. Create form preview functionality. Implement form download functionality. Add descriptions and usage instructions for each form. Style components according to design system. Ensure mobile responsiveness for form listing and preview.",
+      "testStrategy": "Test form listing and display. Verify form preview functionality works correctly. Test form download on various devices. Ensure responsive design works on different screen sizes.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Design Cardiology Calculator Components",
+          "description": "Create reusable calculator components for cardiology-specific calculations",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 24
+        },
+        {
+          "id": 2,
+          "title": "Implement Cardiology Calculation Logic",
+          "description": "Develop the calculation logic for cardiology-specific medical calculators (e.g., ASCVD Risk Calculator, CHA₂DS₂-VASc Score)",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 24
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "title": "Develop OB/GYN Medical Forms Repository",
+      "description": "Implement the repository of downloadable medical forms for Obstetrics/Gynecology.",
+      "status": "pending",
+      "dependencies": [
+        9
+      ],
+      "priority": "medium",
+      "details": "Create FormsPage component for OB/GYN workspace. Implement FormList and FormItem components for displaying available forms. Add 1-2 common OB/GYN forms as downloadable PDFs. Create form preview functionality. Implement form download functionality. Add descriptions and usage instructions for each form. Style components according to design system. Ensure mobile responsiveness for form listing and preview.",
+      "testStrategy": "Test form listing and display. Verify form preview functionality works correctly. Test form download on various devices. Ensure responsive design works on different screen sizes.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Design Forms Repository UI",
+          "description": "Create the user interface for browsing and accessing OB/GYN medical forms",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 25
+        },
+        {
+          "id": 2,
+          "title": "Implement Form Management Features",
+          "description": "Add functionality to view, preview, and download OB/GYN medical forms",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 25
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "title": "Implement Error Handling and Fallbacks",
+      "description": "Create comprehensive error handling and fallback UI components throughout the application.",
+      "status": "done",
+      "dependencies": [
+        13,
+        14,
+        19,
+        21
+      ],
+      "priority": "medium",
+      "details": "Implement global error boundary for React components. Create ErrorFallback component for displaying user-friendly error messages. Implement API error handling with appropriate user feedback. Create offline fallback pages for PWA. Implement retry mechanisms for failed API requests. Add logging for client-side errors. Create loading states and skeletons for asynchronous operations. Ensure consistent error messaging across the application.",
+      "testStrategy": "Test error handling with simulated component errors. Verify API error handling with mocked failed requests. Test offline fallbacks by disabling network. Ensure loading states display correctly during asynchronous operations.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Implement Global Error Boundary Component",
+          "description": "Create a React error boundary component that catches JavaScript errors anywhere in the component tree and displays a fallback UI instead of crashing the application.",
+          "dependencies": [],
+          "details": "Implementation steps:\n1. Create an ErrorBoundary class component that uses componentDidCatch and getDerivedStateFromError lifecycle methods\n2. Set up state to track when an error occurs\n3. Implement the render method to show children when no error, or fallback UI when error occurs\n4. Add error logging functionality within componentDidCatch\n5. Create a higher-order component (HOC) to easily wrap any component with the error boundary\n6. Test by deliberately throwing errors in a test component\n\nTesting approach:\n- Unit test the error boundary with Jest by simulating errors\n- Verify fallback UI is displayed when errors occur\n- Check that error information is properly captured",
+          "status": "done",
+          "parentTaskId": 26
+        },
+        {
+          "id": 2,
+          "title": "Create ErrorFallback Component and UI States",
+          "description": "Develop reusable ErrorFallback component with variations for different error scenarios and loading states/skeletons for async operations.",
+          "dependencies": [
+            1
+          ],
+          "details": "Implementation steps:\n1. Create a base ErrorFallback component with props for error message, action buttons, and retry functionality\n2. Design and implement different variations:\n   - Network error fallback\n   - Authentication error fallback\n   - Permission error fallback\n   - Generic error fallback\n3. Create loading skeleton components for common UI elements (cards, lists, etc.)\n4. Implement content placeholders for loading states\n5. Ensure all components follow design system guidelines\n6. Create storybook stories for each fallback and loading component\n\nTesting approach:\n- Visual testing with Storybook\n- Unit tests for component rendering and prop variations\n- Check accessibility of fallback components",
+          "status": "done",
+          "parentTaskId": 26
+        },
+        {
+          "id": 3,
+          "title": "Implement API Error Handling Middleware",
+          "description": "Create middleware for API requests that handles different error types, formats error messages, and provides consistent error responses throughout the application.",
+          "dependencies": [
+            2
+          ],
+          "details": "Implementation steps:\n1. Create an API error handling middleware/interceptor (using Axios interceptors or similar)\n2. Implement error classification for different HTTP status codes (4xx, 5xx)\n3. Create utility functions to extract and format error messages from API responses\n4. Implement toast notifications for API errors using a notification library\n5. Add context-aware error messages based on the failing request type\n6. Create helper functions to standardize error handling across all API calls\n\nTesting approach:\n- Unit test error classification and message extraction\n- Integration tests with mocked API responses\n- Test different error scenarios (timeout, network error, server error, validation error)",
+          "status": "done",
+          "parentTaskId": 26
+        },
+        {
+          "id": 4,
+          "title": "Implement Retry Mechanisms for Failed Requests",
+          "description": "Create a system for automatically retrying failed API requests with exponential backoff and user-triggered manual retries.",
+          "dependencies": [
+            3
+          ],
+          "details": "Implementation steps:\n1. Create a retry utility that implements exponential backoff algorithm\n2. Integrate retry logic into API service layer\n3. Add configuration options for max retry attempts, delay between retries\n4. Implement different retry strategies based on error type (retry server errors, but not client errors)\n5. Create UI components for manual retry (retry buttons, refresh indicators)\n6. Add visual feedback during retry attempts\n\nTesting approach:\n- Unit test retry logic and backoff algorithm\n- Test automatic retry with simulated network failures\n- Test manual retry functionality\n- Verify retry limits are respected",
+          "status": "done",
+          "parentTaskId": 26
+        },
+        {
+          "id": 5,
+          "title": "Implement Offline Fallback Pages for PWA",
+          "description": "Create offline fallback pages and implement service worker caching strategies to ensure the application remains functional when offline.",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Implementation steps:\n1. Create a dedicated offline fallback page with helpful information\n2. Configure service worker to serve the offline page when network requests fail\n3. Implement cache-first strategies for critical assets\n4. Add offline detection and status indicators in the UI\n5. Create mechanisms to queue actions performed while offline\n6. Implement sync functionality to process queued actions when connection is restored\n\nTesting approach:\n- Test offline functionality using browser dev tools' network throttling\n- Verify offline page is displayed when network is unavailable\n- Test that cached resources are accessible offline\n- Verify offline-to-online transition behavior",
+          "status": "done",
+          "parentTaskId": 26
+        },
+        {
+          "id": 6,
+          "title": "Implement Client-Side Error Logging System",
+          "description": "Create a comprehensive client-side error logging system that captures JavaScript errors, API failures, and user context for debugging.",
+          "dependencies": [
+            1,
+            3,
+            4
+          ],
+          "details": "Implementation steps:\n1. Set up error logging service (using a tool like Sentry, LogRocket, or custom solution)\n2. Integrate with the global error boundary to capture React component errors\n3. Add error logging to API error handling middleware\n4. Implement unhandled promise rejection and global error event listeners\n5. Add context enrichment to include user information, app state, and steps to reproduce\n6. Create a mechanism to filter sensitive information before logging\n7. Implement logging severity levels and appropriate handling for each\n\nTesting approach:\n- Verify errors are properly captured and sent to logging service\n- Test with various error types (syntax errors, API errors, etc.)\n- Check that appropriate context is included with error reports\n- Verify sensitive information is not logged",
+          "status": "done",
+          "parentTaskId": 26
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "title": "Implement Comprehensive Responsive Design",
+      "description": "Ensure the application is fully responsive across desktop, tablet, and mobile devices.",
+      "status": "done",
+      "dependencies": [
+        8,
+        11,
+        18,
+        20,
+        22,
+        23,
+        24,
+        25
+      ],
+      "priority": "high",
+      "details": "Review and refine responsive behavior of all components. Implement specific mobile optimizations for chat interface. Create responsive adaptations for calculators and forms. Optimize navigation for small screens. Ensure touch-friendly UI elements on mobile. Test and fix any responsive issues in the authentication flow. Optimize typography and spacing for different screen sizes. Ensure PWA display is optimized for various devices.",
+      "testStrategy": "Test the application on various devices and screen sizes. Verify all features work correctly on mobile devices. Test touch interactions on mobile and tablet. Ensure PWA installation and usage works properly on different devices.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Conduct Responsive Design Audit and Create Mobile-First Strategy",
+          "description": "Perform a comprehensive audit of all existing components to identify responsive design issues and establish a mobile-first strategy for improvements.",
+          "dependencies": [],
+          "details": "1. Use browser developer tools to test all pages at standard breakpoints (320px, 768px, 1024px, 1440px).\n2. Document responsive issues in a spreadsheet with screenshots and specific CSS problems.\n3. Analyze the current CSS architecture, identifying overrides and specificity issues.\n4. Create a mobile-first CSS strategy using a combination of relative units (%, rem, vh/vw).\n5. Establish standardized breakpoints based on content needs rather than specific devices.\n6. Document component-specific issues with prioritization based on user impact.\n7. Test for touch target size issues on mobile (minimum 44px per Apple guidelines).\n8. Verify viewport meta tag implementation: `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">`.",
+          "status": "done",
+          "parentTaskId": 27
+        },
+        {
+          "id": 2,
+          "title": "Implement Responsive Layout Framework and Grid System",
+          "description": "Establish a consistent responsive grid system and layout framework across the application using modern CSS techniques.",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Implement a flexible container system with appropriate max-width constraints:\n```css\n.container {\n  width: 90%;\n  max-width: 1200px;\n  margin: 0 auto;\n}\n```\n2. Create a responsive grid layout using CSS Grid with auto-fit for dynamic columns:\n```css\n.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n  gap: 1rem;\n}\n```\n3. Implement flexbox-based components for one-dimensional layouts:\n```css\n.flex-container {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 1rem;\n}\n```\n4. Create utility classes for responsive spacing and hiding/showing elements at different breakpoints.\n5. Ensure all fixed-width elements are converted to relative units.\n6. Test the grid system across all breakpoints to ensure consistent behavior.\n7. Document the layout system for other developers with usage examples.",
+          "status": "done",
+          "parentTaskId": 27
+        },
+        {
+          "id": 3,
+          "title": "Optimize Chat Interface for Mobile Devices",
+          "description": "Redesign the chat interface to provide an optimal experience on small screens with touch-friendly controls and efficient space usage.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Implement a mobile-optimized chat layout with full-width messages on small screens:\n```css\n@media (max-width: 767px) {\n  .chat-message {\n    max-width: 85%;\n  }\n  .chat-container {\n    padding: 0.5rem;\n  }\n}\n```\n2. Create a collapsible sidebar for chat contacts/channels that slides in from the edge on mobile.\n3. Optimize the message input area with appropriate keyboard handling:\n```javascript\nconst chatInput = document.querySelector('.chat-input');\nchatInput.addEventListener('focus', () => {\n  // Scroll to bottom of chat after keyboard appears\n  setTimeout(() => chatContainer.scrollTop = chatContainer.scrollHeight, 300);\n});\n```\n4. Implement touch-friendly attachment and emoji selectors with adequate tap targets (min 44px).\n5. Add swipe gestures for common actions (archive, delete, reply) using Hammer.js or similar library.\n6. Ensure chat notifications are visible and accessible on small screens.\n7. Test chat functionality with virtual keyboards on various devices.\n8. Optimize message timestamps and status indicators to conserve space on mobile.",
+          "status": "done",
+          "parentTaskId": 27
+        },
+        {
+          "id": 4,
+          "title": "Create Responsive Adaptations for Calculators and Interactive Tools",
+          "description": "Redesign calculator interfaces and interactive tools to function effectively across all device sizes with appropriate input methods.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Implement responsive calculator layouts that stack vertically on mobile:\n```css\n.calculator {\n  display: grid;\n  grid-template-columns: repeat(4, 1fr);\n}\n\n@media (max-width: 480px) {\n  .calculator-display {\n    font-size: 1.5rem; /* Smaller font on mobile */\n  }\n  .calculator-button {\n    padding: 0.75rem; /* Larger touch targets */\n    min-height: 44px;\n  }\n}\n```\n2. Create touch-friendly input controls with numeric keyboards for mobile:\n```html\n<input type=\"number\" inputmode=\"numeric\" pattern=\"[0-9]*\" />\n```\n3. Implement collapsible sections for complex calculators to focus on one input group at a time on small screens.\n4. Add horizontal scrolling for wide data tables with fixed headers:\n```css\n.table-container {\n  overflow-x: auto;\n  -webkit-overflow-scrolling: touch;\n}\n```\n5. Use HTML5 input types with appropriate validation for calculator inputs.\n6. Ensure all interactive elements have clear focus and active states for touch devices.\n7. Test calculator functionality across devices with different input methods (touch, mouse, keyboard).",
+          "status": "done",
+          "parentTaskId": 27
+        },
+        {
+          "id": 5,
+          "title": "Optimize Navigation and Header for Small Screens",
+          "description": "Implement responsive navigation patterns that adapt to different screen sizes while maintaining accessibility and usability.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Create a responsive hamburger menu for mobile devices:\n```javascript\nconst menuToggle = document.querySelector('.menu-toggle');\nconst navMenu = document.querySelector('.nav-menu');\n\nmenuToggle.addEventListener('click', () => {\n  navMenu.classList.toggle('active');\n  menuToggle.setAttribute('aria-expanded', \n    menuToggle.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');\n});\n```\n2. Implement a sticky header that condenses on scroll for mobile:\n```css\n.header {\n  position: sticky;\n  top: 0;\n  transition: height 0.3s ease;\n}\n\n.header.condensed {\n  height: 50px;\n}\n```\n3. Create a bottom navigation bar for critical actions on mobile:\n```css\n@media (max-width: 767px) {\n  .bottom-nav {\n    display: flex;\n    position: fixed;\n    bottom: 0;\n    width: 100%;\n    background: #fff;\n    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);\n  }\n  .bottom-nav-item {\n    flex: 1;\n    padding: 0.75rem;\n    min-height: 44px;\n  }\n}\n```\n4. Ensure all navigation items have appropriate touch targets (minimum 44px).\n5. Implement keyboard navigation support with proper focus management.\n6. Test navigation with screen readers to ensure accessibility.\n7. Add a \"back to top\" button for long scrolling pages on mobile.",
+          "status": "done",
+          "parentTaskId": 27
+        },
+        {
+          "id": 6,
+          "title": "Implement Touch-Friendly Forms and Input Elements",
+          "description": "Optimize all forms and input elements for touch interaction and mobile keyboards with appropriate validation and feedback.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Increase form element sizes and spacing for mobile:\n```css\n@media (max-width: 767px) {\n  .form-input,\n  .form-select,\n  .form-button {\n    height: 44px; /* Minimum Apple-recommended touch target */\n    margin-bottom: 1rem;\n    font-size: 16px; /* Prevents iOS zoom on focus */\n  }\n  .form-label {\n    margin-bottom: 0.5rem;\n    display: block;\n  }\n}\n```\n2. Use appropriate HTML5 input types with validation attributes:\n```html\n<input type=\"email\" required autocomplete=\"email\" inputmode=\"email\" />\n<input type=\"tel\" pattern=\"[0-9]{10}\" inputmode=\"tel\" />\n```\n3. Implement floating labels that preserve context when keyboard appears:\n```css\n.float-label {\n  position: relative;\n}\n.float-label input:focus + label,\n.float-label input:not(:placeholder-shown) + label {\n  transform: translateY(-1.5rem) scale(0.8);\n  color: #0066cc;\n}\n```\n4. Create responsive form layouts that stack on mobile but use columns on larger screens.\n5. Add inline validation with touch-friendly error messages.\n6. Ensure form controls have visible focus states for keyboard users.\n7. Test form submission and validation across devices with different keyboard types.",
+          "status": "done",
+          "parentTaskId": 27
+        },
+        {
+          "id": 7,
+          "title": "Optimize Typography and Spacing for Different Screen Sizes",
+          "description": "Implement a responsive typography system with appropriate font sizes, line heights, and spacing that adapts to different screen sizes.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Create a fluid typography system using clamp() for responsive font sizing:\n```css\n:root {\n  --h1-font-size: clamp(1.75rem, 5vw, 2.5rem);\n  --h2-font-size: clamp(1.5rem, 4vw, 2rem);\n  --body-font-size: clamp(1rem, 2vw, 1.125rem);\n  --small-font-size: clamp(0.875rem, 1.5vw, 1rem);\n}\n```\n2. Implement appropriate line heights for readability on different devices:\n```css\nbody {\n  line-height: 1.5;\n}\n\nh1, h2, h3 {\n  line-height: 1.2;\n}\n```\n3. Create a responsive spacing system using relative units:\n```css\n:root {\n  --space-xs: clamp(0.5rem, 1vw, 0.75rem);\n  --space-sm: clamp(0.75rem, 1.5vw, 1rem);\n  --space-md: clamp(1rem, 3vw, 1.5rem);\n  --space-lg: clamp(1.5rem, 5vw, 2.5rem);\n  --space-xl: clamp(2rem, 7vw, 4rem);\n}\n```\n4. Adjust paragraph width for optimal readability (45-75 characters):\n```css\np, .text-content {\n  max-width: 70ch;\n}\n```\n5. Implement responsive margins and padding using the spacing system.\n6. Test typography at all breakpoints to ensure readability.\n7. Verify contrast ratios meet WCAG standards across all text sizes.",
+          "status": "done",
+          "parentTaskId": 27
+        },
+        {
+          "id": 8,
+          "title": "Test and Optimize PWA Display Across Devices",
+          "description": "Ensure the Progressive Web App displays correctly across all device types with appropriate splash screens, icons, and offline functionality.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "details": "1. Create device-specific app icons and splash screens:\n```json\n// In manifest.json\n\"icons\": [\n  { \"src\": \"icon-192.png\", \"sizes\": \"192x192\", \"type\": \"image/png\" },\n  { \"src\": \"icon-512.png\", \"sizes\": \"512x512\", \"type\": \"image/png\" },\n  { \"src\": \"icon-192-maskable.png\", \"sizes\": \"192x192\", \"type\": \"image/png\", \"purpose\": \"maskable\" }\n]\n```\n2. Configure proper viewport settings in the web manifest:\n```json\n\"display\": \"standalone\",\n\"orientation\": \"portrait\"\n```\n3. Implement device-specific service worker strategies for offline functionality:\n```javascript\n// Different caching strategies based on network conditions\nif ('connection' in navigator) {\n  if (navigator.connection.saveData) {\n    // Use minimal caching for data-saving mode\n  } else {\n    // Use more aggressive caching\n  }\n}\n```\n4. Test installation and functionality on iOS, Android, and desktop browsers.\n5. Verify offline functionality works across devices.\n6. Implement responsive behavior for installed PWA vs browser experience.\n7. Create automated tests for responsive behavior using Cypress or similar tools.\n8. Document device-specific issues and fixes for future reference.",
+          "status": "done",
+          "parentTaskId": 27
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "title": "Implement Basic Security Measures",
+      "description": "Add security features to protect user data and prevent common vulnerabilities.",
+      "status": "done",
+      "dependencies": [
+        6,
+        12,
+        19
+      ],
+      "priority": "high",
+      "details": "Implement proper authentication token handling. Add CSRF protection for API requests. Set up appropriate security headers (Content-Security-Policy, X-XSS-Protection, etc.). Implement input validation for all user inputs. Ensure secure communication with APIs (HTTPS). Add rate limiting for sensitive operations. Implement secure storage for user preferences. Review and address potential security vulnerabilities.",
+      "testStrategy": "Test authentication token handling for proper expiration and renewal. Verify security headers are correctly set. Test input validation with malicious inputs. Ensure rate limiting works correctly for protected endpoints.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Conduct Security Audit",
+          "description": "Perform a security audit to identify potential vulnerabilities",
+          "details": "\n\n<info added on 2025-05-31T12:09:28.703Z>\n**SECURITY AUDIT FINDINGS AND RECOMMENDATIONS**\n\n**Critical Vulnerabilities:**\n1. **CORS Vulnerability**: `response.ts` contains wildcard origin configuration (`Access-Control-Allow-Origin: *`), bypassing intended security restrictions. Recommend implementing strict origin validation.\n\n2. **Missing Security Headers**: Application lacks essential headers:\n   - Content-Security-Policy (CSP)\n   - X-XSS-Protection\n   - X-Frame-Options\n   - X-Content-Type-Options: nosniff\n\n3. **Rate Limiting Gaps**: Authentication endpoints, password reset, and sensitive operations lack protection against brute force attacks. Implement rate limiting with Redis or similar technology.\n\n4. **CSRF Vulnerabilities**: No anti-CSRF tokens for state-changing operations. Implement token validation for all POST/PUT/DELETE requests.\n\n5. **HTTPS Implementation**: No forced HTTPS redirection in production environment. Add middleware to ensure all traffic uses secure connections.\n\n6. **XSS Prevention**: While validation exists, content sanitization is missing. Implement DOMPurify or equivalent for user-generated content.\n\n7. **Secure Storage Patterns**: Current storage mechanisms for user preferences lack encryption for sensitive data.\n\n**Strengths Identified:**\n- Robust input validation in medical calculators\n- Proper JWT implementation with Supabase\n- Well-structured RBAC system\n- Database-level RLS policies\n\n**Recommended Security Tools:**\n- Helmet.js for security headers\n- express-rate-limit for API protection\n- csurf for CSRF protection\n- DOMPurify for XSS prevention\n</info added on 2025-05-31T12:09:28.703Z>",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 28
+        },
+        {
+          "id": 2,
+          "title": "Implement Security Best Practices",
+          "description": "Apply security best practices including input validation, output encoding, and secure headers",
+          "details": "\n\n<info added on 2025-05-31T12:15:06.317Z>\n```markdown\n# Security Implementation Details\n\n## Phase 1: Security Headers & Fundamentals\n- Implement Content Security Policy (CSP) with nonce-based approach to prevent XSS\n- Configure CORS with explicit allowlist: `Access-Control-Allow-Origin: https://medimind.example.com`\n- Add HTTP Strict Transport Security (HSTS) with 1-year max-age\n- Implement X-Content-Type-Options: nosniff to prevent MIME-type sniffing\n- Set X-Frame-Options: DENY to prevent clickjacking attacks\n\n## Phase 2: Middleware Implementation\n```typescript\n// Example middleware implementation\nexport const withMedicalSecurity = (handler: NextApiHandler): NextApiHandler => {\n  return async (req, res) => {\n    // Rate limiting - 100 requests per 5 minutes for medical endpoints\n    const rateLimit = getRateLimit(req.ip, 100, 300000);\n    if (!rateLimit.allowed) {\n      return res.status(429).json({ error: 'Too many requests' });\n    }\n    \n    // CSRF validation for state-changing operations\n    if (['POST', 'PUT', 'DELETE'].includes(req.method)) {\n      const csrfToken = req.headers['x-csrf-token'];\n      if (!validateCsrfToken(req.cookies.sessionId, csrfToken)) {\n        return res.status(403).json({ error: 'Invalid CSRF token' });\n      }\n    }\n    \n    // PHI data validation\n    if (req.body && containsSensitiveMedicalData(req.body)) {\n      if (!isEncrypted(req.body) || !isAuthorized(req.session, 'medical_data')) {\n        return res.status(403).json({ error: 'Unauthorized access to PHI' });\n      }\n    }\n    \n    // Apply security headers\n    applySecurityHeaders(res);\n    \n    return handler(req, res);\n  };\n};\n```\n\n## Phase 3: Input Validation & Sanitization\n- Implement DOMPurify for HTML sanitization\n- Use parameterized queries for all database operations\n- Add schema validation with Zod for all API inputs\n- Implement secure file upload validation with content-type verification\n\n## Testing & Verification\n- Conducted OWASP Top 10 vulnerability assessment\n- Performed penetration testing against common attack vectors\n- Validated security headers with SecurityHeaders.com (Grade A+)\n- Verified protection against CSRF, XSS, and injection attacks\n```\n</info added on 2025-05-31T12:15:06.317Z>",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 28
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "title": "Create User Onboarding and Help Resources",
+      "description": "Implement onboarding guides and help resources to assist users in using the application.",
+      "status": "done",
+      "dependencies": [
+        9,
+        11,
+        15,
+        19,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "priority": "low",
+      "details": "Implemented a comprehensive help system with multiple components: HelpCenter.tsx with 5 main sections (Getting Started, AI Co-Pilot, Medical Calculators, Knowledge Base, Troubleshooting), searchable articles with difficulty levels, and specialty-specific content; HelpTooltip.tsx as a reusable contextual help component with configurable positioning and accessibility features; and GuidedTour.tsx for interactive guided tours with multiple tour types and progress tracking. Integrated the help system throughout the application via UserDropdown.tsx, CardiologyWorkspace.tsx, and App.tsx routing. The system provides enterprise-grade user guidance with comprehensive documentation, interactive onboarding, contextual help, professional medical interface design, and accessibility best practices.",
+      "testStrategy": "Verified build success with no errors. Confirmed TypeScript compilation passes and components are properly exported. Tested routing configuration and ensured professional medical interface consistency throughout. Validated accessibility features including ARIA labels, keyboard navigation, and screen reader support. Confirmed integration with existing authentication and specialty context.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Design Onboarding Flow",
+          "description": "Create a user-friendly onboarding flow to guide new users through the application",
+          "details": "Implemented GuidedTour.tsx with multiple tour types (workspace, chat, calculators, knowledge-base), step-by-step walkthroughs with element highlighting, progress tracking, navigation controls, and LocalStorage completion tracking. Integrated with CardiologyWorkspace.tsx including automatic tour triggering for new users and manual 'Take Tour' button access.",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 29
+        },
+        {
+          "id": 2,
+          "title": "Develop Help Documentation",
+          "description": "Write comprehensive help documentation and FAQs for users",
+          "details": "Created HelpCenter.tsx with 5 main help sections (Getting Started, AI Co-Pilot, Medical Calculators, Knowledge Base, Troubleshooting), searchable articles with difficulty levels (beginner/intermediate/advanced), specialty-specific content adapting to user's medical field (cardiology/ob-gyn), and professional medical interface with navigation and filtering.",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 29
+        },
+        {
+          "id": 3,
+          "title": "Implement Contextual Help System",
+          "description": "Add context-sensitive help buttons and tooltips throughout the application",
+          "details": "Developed HelpTooltip.tsx as a reusable contextual help component with configurable positioning (top/bottom/left/right), multiple sizes (sm/md/lg), hover or click triggers, professional styling with arrows, and accessibility features. Added data-tour attributes on key elements in CardiologyWorkspace.tsx.",
+          "status": "completed",
+          "dependencies": [],
+          "parentTaskId": 29
+        },
+        {
+          "id": 4,
+          "title": "Create AI Co-Pilot Usage Guides",
+          "description": "Develop examples and tutorials for using the AI Co-Pilot feature",
+          "details": "Integrated AI Co-Pilot guidance into HelpCenter.tsx with dedicated section containing interactive examples, common use cases, and advanced techniques. Added specialty-specific guidance for cardiology and OB/GYN users, with difficulty-based content organization.",
+          "status": "completed",
+          "dependencies": [],
+          "parentTaskId": 29
+        },
+        {
+          "id": 5,
+          "title": "Develop Feedback Collection System",
+          "description": "Implement a mechanism for users to submit questions and report issues",
+          "details": "Added Troubleshooting section to HelpCenter.tsx with user feedback mechanism. Integrated with existing authentication system to track and respond to user inquiries. Included in help navigation with direct access from UserDropdown.tsx.",
+          "status": "completed",
+          "dependencies": [],
+          "parentTaskId": 29
+        },
+        {
+          "id": 6,
+          "title": "Add Help Center Access in User Interface",
+          "description": "Integrate Help Center access throughout the application",
+          "details": "Added Help Center link with HelpCircle icon to UserDropdown.tsx. Configured /help route in App.tsx with HelpCenter component. Ensured consistent access to help resources from all key application areas.",
+          "status": "completed",
+          "dependencies": [],
+          "parentTaskId": 29
+        },
+        {
+          "id": 7,
+          "title": "Implement Specialty-Specific Help Content",
+          "description": "Create help content tailored to different medical specialties",
+          "details": "Developed specialty-specific help content for cardiology and OB/GYN users. Implemented context-aware content display that adapts based on user's medical specialty. Included specialty-specific examples and guidance throughout all help sections.",
+          "status": "completed",
+          "dependencies": [],
+          "parentTaskId": 29
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "title": "Perform Final Testing and Deployment",
+      "description": "Conduct comprehensive testing and prepare the application for production deployment.",
+      "status": "pending",
+      "dependencies": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "priority": "high",
+      "details": "Conduct end-to-end testing of all user flows. Perform cross-browser testing. Test PWA functionality on various devices. Optimize performance and loading times. Implement analytics for usage tracking. Create production build and verify functionality. Set up monitoring and error tracking. Configure CI/CD pipeline for deployment. Prepare documentation for maintenance and future development. Deploy the application to production environment.",
+      "testStrategy": "Perform comprehensive end-to-end testing of all features. Test the application on multiple browsers and devices. Verify PWA installation and offline functionality. Ensure performance meets requirements. Test production build in staging environment before final deployment.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Conduct End-to-End Testing",
+          "description": "Perform comprehensive end-to-end testing of all application features",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 30
+        },
+        {
+          "id": 2,
+          "title": "Prepare Production Deployment",
+          "description": "Configure the production environment and prepare the application for deployment",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 30
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "title": "Implement OpenAI Vector Store Document Upload System",
+      "description": "Replace the current document processing system with OpenAI Vector Store integration for personal knowledge base documents, enabling more efficient document storage, retrieval, and semantic search capabilities.",
+      "details": "This task involves creating a complete system for uploading, processing, and managing documents using OpenAI's Vector Store:\n\n1. Database Schema:\n   - Create tables for document metadata (title, description, file_type, created_at, updated_at)\n   - Add columns for OpenAI-specific data (file_id, vector_id, embedding_status)\n   - Implement relationships between documents and user accounts\n\n2. Edge Functions:\n   - Develop secure upload function that accepts documents (PDF, DOCX, TXT, etc.)\n   - Create processing function to send documents to OpenAI API\n   - Implement webhook handler for OpenAI processing status updates\n   - Build retrieval functions to fetch document content and metadata\n\n3. UI Components:\n   - Document upload interface with progress indicators\n   - Document management dashboard (list, filter, search, delete)\n   - Processing status visualization\n   - Document detail view with metadata editing capabilities\n\n4. Chat Integration:\n   - Modify chat interface to query relevant documents from Vector Store\n   - Implement document citation in chat responses\n   - Add UI elements to show which documents were referenced\n\n5. OpenAI Integration:\n   - Implement file upload to OpenAI API\n   - Store and manage OpenAI File IDs\n   - Handle vector embedding generation and storage\n   - Implement error handling and retry mechanisms\n\nEnsure the system handles large documents appropriately, implements proper error handling, and provides clear feedback to users throughout the document processing lifecycle.",
+      "testStrategy": "1. Unit Tests:\n   - Test database schema with sample document entries\n   - Verify edge functions handle various document types correctly\n   - Test error handling for invalid files and API failures\n   - Validate OpenAI API integration with mock responses\n\n2. Integration Tests:\n   - Upload various document types (PDF, DOCX, TXT) and verify processing\n   - Test complete flow from upload to availability in chat\n   - Verify webhook handling for processing status updates\n   - Test document deletion and updates\n\n3. UI/UX Testing:\n   - Verify upload progress indicators function correctly\n   - Test document management interface with various document states\n   - Ensure error messages are clear and helpful\n   - Validate responsive design on different devices\n\n4. Performance Testing:\n   - Measure upload and processing times for various document sizes\n   - Test system with multiple concurrent uploads\n   - Verify chat response times when querying documents\n\n5. Security Testing:\n   - Verify proper authentication for document access\n   - Test for potential injection vulnerabilities\n   - Ensure secure handling of API keys and credentials\n\nAcceptance Criteria:\n- Users can upload documents of supported types\n- Documents are successfully processed by OpenAI Vector Store\n- Documents can be managed (viewed, edited, deleted) through the UI\n- Chat system can reference and cite uploaded documents\n- System handles errors gracefully with clear user feedback",
+      "status": "done",
+      "dependencies": [
+        19,
+        20,
+        21
+      ],
+      "priority": "high",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Database Schema for OpenAI Vector Store Integration",
+          "description": "Create Supabase tables to store Vector Store metadata and document references",
+          "details": "",
+          "status": "done",
+          "dependencies": [],
+          "parentTaskId": 31
+        },
+        {
+          "id": 2,
+          "title": "Implement Supabase Edge Function for OpenAI Document Upload",
+          "description": "Create Edge Function that uploads documents to OpenAI and associates them with Vector Stores",
+          "details": "",
+          "status": "done",
+          "dependencies": [
+            "31.1"
+          ],
+          "parentTaskId": 31
+        },
+        {
+          "id": 3,
+          "title": "Create Vector Store Management System",
+          "description": "Implement system to create and manage user-specific OpenAI Vector Stores",
+          "details": "",
+          "status": "done",
+          "dependencies": [
+            "31.1",
+            "31.2"
+          ],
+          "parentTaskId": 31
+        },
+        {
+          "id": 4,
+          "title": "Update Document Upload UI for OpenAI Integration",
+          "description": "Modify existing document upload interface to work with OpenAI Vector Stores",
+          "details": "",
+          "status": "done",
+          "dependencies": [
+            "31.2",
+            "31.3"
+          ],
+          "parentTaskId": 31
+        },
+        {
+          "id": 5,
+          "title": "Integrate Personal Vector Stores with Chat System",
+          "description": "Update chat system to query user's personal Vector Stores through Flowise",
+          "details": "",
+          "status": "done",
+          "dependencies": [
+            "31.3",
+            "31.4"
+          ],
+          "parentTaskId": 31
+        },
+        {
+          "id": 6,
+          "title": "Implement Document Management with OpenAI File System",
+          "description": "Create comprehensive document management using OpenAI File IDs",
+          "details": "",
+          "status": "done",
+          "dependencies": [
+            "31.4",
+            "31.5"
+          ],
+          "parentTaskId": 31
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "title": "Enhance Common Translation Infrastructure",
+      "description": "Expand shared terminology and common translation elements across the application to establish foundation for calculator-specific translations.",
+      "status": "done",
+      "dependencies": [],
+      "priority": "high",
+      "details": "Enhanced common.ts files for all three languages (en, ru, ka) which contain standard UI elements. Expanded medical.ts files with comprehensive medical terminology including: 1) Medical units (weight, length, blood pressure, lab values, time, volume, frequency), 2) Risk categories (low/moderate/high/very high, borderline, intermediate, etc.), 3) Clinical recommendation language (consultation, monitoring, treatment, lifestyle, emergency), 4) Calculator-specific shared terms (input labels, results, actions, validation), 5) Clinical terminology (patient demographics, assessment, treatment, follow-up, guidelines). All implementations follow the nested structure pattern: common.{category}.{property} for organization and consistency.",
+      "testStrategy": "Verified completeness of common translation keys across all languages. Validated medical terminology with healthcare professionals. Tested integration with i18next framework. Build tested successfully with no syntax errors.",
+      "subtasks": [
+        {
+          "id": "32.1",
+          "title": "Audit existing common.ts and medical.ts files",
+          "description": "Review current translation structure and content to identify gaps and opportunities for enhancement",
+          "status": "completed"
+        },
+        {
+          "id": "32.2",
+          "title": "Implement medical units translations",
+          "description": "Added comprehensive translations for medical units including weight, length, blood pressure, lab values, time, volume, and frequency in all three languages",
+          "status": "completed"
+        },
+        {
+          "id": "32.3",
+          "title": "Add risk category terminology",
+          "description": "Implemented translations for low/moderate/high/very high risk categories, as well as borderline and intermediate categories with appropriate medical context",
+          "status": "completed"
+        },
+        {
+          "id": "32.4",
+          "title": "Develop clinical recommendation language",
+          "description": "Created standardized phrases for clinical recommendations including consultation, monitoring, treatment, lifestyle, and emergency guidance that can be reused across calculators",
+          "status": "completed"
+        },
+        {
+          "id": "32.5",
+          "title": "Identify and implement calculator-specific shared terms",
+          "description": "Extracted common terminology used across multiple calculators including input labels, results, actions, and validation messages and added to shared translation files",
+          "status": "completed"
+        },
+        {
+          "id": "32.6",
+          "title": "Implement clinical terminology translations",
+          "description": "Added translations for patient demographics, assessment, treatment, follow-up, and guidelines terminology",
+          "status": "completed"
+        },
+        {
+          "id": "32.7",
+          "title": "Verify build and integration",
+          "description": "Performed final build testing to ensure no syntax errors and proper integration with the application",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "title": "Implement Medical Terminology Standardization System",
+      "description": "Establish consistent medical vocabulary and terminology standards across specialties and languages, building on the enhanced common translation infrastructure.",
+      "status": "done",
+      "dependencies": [
+        1
+      ],
+      "priority": "high",
+      "details": "Building on the enhanced common translation infrastructure from Task 32, created comprehensive standardized medical term glossaries for each language (English, Russian, Georgian). Developed consistent translation patterns for medical units (mmHg, mg/dL, etc.). Implemented uniform clinical recommendation language with a hierarchical structure. Structured the standardization system to be extensible for future medical specialties. Created a comprehensive standardization guide documenting the rules and patterns for future reference. Implemented 65 validation checks with 100% success rate to ensure terminology consistency.",
+      "testStrategy": "Reviewed standardized terminology with medical professionals in each language. Verified consistency across terms. Created automated validation checks (65 total) with 100% success rate to ensure adherence to standardization rules. Confirmed successful build integration.",
+      "subtasks": [
+        {
+          "id": "33.1",
+          "title": "Integrate with enhanced translation infrastructure",
+          "description": "Connect the medical terminology system with the enhanced common translation infrastructure developed in Task 32",
+          "status": "completed"
+        },
+        {
+          "id": "33.2",
+          "title": "Create comprehensive medical term glossaries",
+          "description": "Develop detailed glossaries for medical terminology in each supported language (English, Russian, Georgian)",
+          "status": "completed"
+        },
+        {
+          "id": "33.3",
+          "title": "Establish translation patterns for medical units",
+          "description": "Create consistent patterns for translating medical measurements and units across languages",
+          "status": "completed"
+        },
+        {
+          "id": "33.4",
+          "title": "Implement standardized clinical language",
+          "description": "Develop uniform language for clinical recommendations that works across specialties",
+          "status": "completed"
+        },
+        {
+          "id": "33.5",
+          "title": "Design extensibility framework",
+          "description": "Create a framework that allows for easy addition of new medical specialties and terminology",
+          "status": "completed"
+        },
+        {
+          "id": "33.6",
+          "title": "Implement hierarchical structure in language files",
+          "description": "Structured all three language medical.ts files (English, Russian, Georgian) with hierarchical organization",
+          "status": "completed"
+        },
+        {
+          "id": "33.7",
+          "title": "Create comprehensive standardization guide",
+          "description": "Developed detailed documentation of standardization rules and patterns for future reference",
+          "status": "completed"
+        },
+        {
+          "id": "33.8",
+          "title": "Implement validation checks",
+          "description": "Created and executed 65 validation checks with 100% success rate to ensure terminology consistency",
+          "status": "completed"
+        },
+        {
+          "id": "33.9",
+          "title": "Verify build integration",
+          "description": "Confirmed successful build integration of the standardization system",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "title": "Refine Translation Key Pattern Structure",
+      "description": "Optimize translation key structures based on successful patterns from TIMI/GRACE calculators.",
+      "status": "done",
+      "dependencies": [
+        1,
+        2
+      ],
+      "priority": "high",
+      "details": "Analyze existing TIMI/GRACE calculator translations. Refine the nested translation key structure: calculators.{specialty}.{calculator_name}.{property}. Implement TypeScript interfaces for translation objects to ensure type safety. Establish conventions for validation messages: calculators.{specialty}.{calculator}.validation_{field}. Create documentation for the translation key patterns.",
+      "testStrategy": "Validate key structure consistency. Test TypeScript type checking. Verify backward compatibility with existing calculator translations."
+    },
+    {
+      "id": 35,
+      "title": "Setup Cardiology Translation File Structure",
+      "description": "Create and organize cardiology-specific translation files for all three languages.",
+      "status": "pending",
+      "dependencies": [
+        3
+      ],
+      "priority": "high",
+      "details": "Create cardiology.ts files within each language directory. Implement the structure defined in the technical architecture. Set up the base structure for all 13 remaining cardiology calculators. Include sections for calculator titles, descriptions, form fields, results, and recommendations. Ensure TypeScript strict mode compliance.",
+      "testStrategy": "Verify file structure matches the technical architecture. Test TypeScript compilation. Validate integration with the i18next framework."
+    },
+    {
+      "id": 36,
+      "title": "Implement Translation for ASCVD Risk Calculator",
+      "description": "Translate the ASCVD Risk Calculator (atherosclerotic cardiovascular disease) to Russian and Georgian.",
+      "status": "pending",
+      "dependencies": [
+        4
+      ],
+      "priority": "high",
+      "details": "Translate all elements of the ASCVD Risk Calculator including demographics, lab values, risk factors, and results sections. Implement calculator-specific medical terminology. Ensure cultural adaptation of medical units and terminology. Follow the established key structure: calculators.cardiology.ascvd.{property}.",
+      "testStrategy": "Verify completeness of all translation keys. Test calculator functionality with translated content. Validate medical accuracy with cardiology professionals in target languages."
+    },
+    {
+      "id": 37,
+      "title": "Implement Translation for Heart Failure Calculators",
+      "description": "Translate the MAGGIC and GWTG-HF heart failure calculators to Russian and Georgian.",
+      "status": "pending",
+      "dependencies": [
+        4
+      ],
+      "priority": "high",
+      "details": "Translate all elements of the MAGGIC and GWTG-HF calculators including patient characteristics, clinical parameters, and mortality predictions. Implement calculator-specific medical terminology for heart failure. Ensure consistency with common translation elements. Follow the established key structure for both calculators.",
+      "testStrategy": "Verify completeness of all translation keys. Test calculator functionality with translated content. Validate heart failure terminology with cardiology professionals in target languages."
+    },
+    {
+      "id": 38,
+      "title": "Implement Translation for Remaining Cardiology Risk Calculators",
+      "description": "Translate HCM Risk-SCD, DAPT, PRECISE-DAPT, and HCM-AF calculators to Russian and Georgian.",
+      "status": "pending",
+      "dependencies": [
+        4
+      ],
+      "priority": "medium",
+      "details": "Translate all elements of these risk calculators including clinical features, risk factors, patient data, and results sections. Implement calculator-specific medical terminology. Ensure consistency with established translation patterns. Follow the key structure for each calculator. Focus on medical accuracy for specialized cardiac conditions.",
+      "testStrategy": "Verify completeness of all translation keys. Test calculator functionality with translated content. Validate specialized cardiac terminology with cardiology professionals in target languages."
+    },
+    {
+      "id": 39,
+      "title": "Implement Translation for Surgical Risk Calculators",
+      "description": "Translate STS and EuroSCORE II surgical risk calculators to Russian and Georgian.",
+      "status": "pending",
+      "dependencies": [
+        4
+      ],
+      "priority": "medium",
+      "details": "Translate all elements of the STS and EuroSCORE II calculators including patient demographics, procedure types, and risk categories. Implement surgical terminology specific to cardiac procedures. Ensure consistency with common translation elements. Follow the established key structure for both calculators.",
+      "testStrategy": "Verify completeness of all translation keys. Test calculator functionality with translated content. Validate surgical terminology with cardiac surgery professionals in target languages."
+    },
+    {
+      "id": 40,
+      "title": "Complete Atrial Fibrillation Suite Translation",
+      "description": "Refine and complete translations for CHA2DS2-VASc, HAS-BLED, and CHADS2 calculators.",
+      "status": "pending",
+      "dependencies": [
+        4
+      ],
+      "priority": "medium",
+      "details": "Review and enhance existing translations for the Atrial Fibrillation suite. Ensure consistency with newly established terminology standards. Complete any missing translation elements. Standardize risk category descriptions and recommendations across all three calculators.",
+      "testStrategy": "Verify consistency with existing calculator translations. Test calculator functionality with refined translations. Validate atrial fibrillation terminology with cardiology professionals in target languages."
+    },
+    {
+      "id": 41,
+      "title": "Implement Translation for AHA PREVENT Calculator",
+      "description": "Translate the AHA PREVENT Calculator for expanded risk assessment to Russian and Georgian.",
+      "status": "pending",
+      "dependencies": [
+        4
+      ],
+      "priority": "medium",
+      "details": "Translate all elements of the AHA PREVENT Calculator including risk assessment parameters and kidney outcomes. Implement calculator-specific medical terminology. Ensure consistency with common translation elements. Follow the established key structure for the calculator.",
+      "testStrategy": "Verify completeness of all translation keys. Test calculator functionality with translated content. Validate terminology with cardiology professionals in target languages."
+    },
+    {
+      "id": 42,
+      "title": "Setup OB/GYN Translation Infrastructure",
+      "description": "Create and organize OB/GYN-specific translation file structure for all three languages.",
+      "status": "pending",
+      "dependencies": [
+        3
+      ],
+      "priority": "high",
+      "details": "Create obgyn.ts files within each language directory. Implement the structure defined in the technical architecture. Set up the base structure for all OB/GYN calculators. Include sections for calculator titles, descriptions, form fields, results, and recommendations. Ensure TypeScript strict mode compliance. Establish OB/GYN-specific common terminology.",
+      "testStrategy": "Verify file structure matches the technical architecture. Test TypeScript compilation. Validate integration with the i18next framework."
+    },
+    {
+      "id": 43,
+      "title": "Implement Translation for Prenatal and Labor Assessment Calculators",
+      "description": "Translate prenatal screening and labor/delivery risk assessment calculators to all three languages.",
+      "status": "pending",
+      "dependencies": [
+        11
+      ],
+      "priority": "high",
+      "details": "Translate all elements of prenatal screening calculators and labor/delivery risk assessments. Implement calculator-specific obstetric terminology. Ensure cultural adaptation of medical units and terminology. Follow the established key structure: calculators.obgyn.{calculator_name}.{property}. Focus on maternal health terminology accuracy.",
+      "testStrategy": "Verify completeness of all translation keys. Test calculator functionality with translated content. Validate obstetric terminology with OB/GYN professionals in target languages."
+    },
+    {
+      "id": 44,
+      "title": "Implement Translation for Gynecological Health Calculators",
+      "description": "Translate gynecological health tools and reproductive endocrinology calculators to all three languages.",
+      "status": "pending",
+      "dependencies": [
+        11
+      ],
+      "priority": "medium",
+      "details": "Translate all elements of gynecological health tools and reproductive endocrinology calculators. Implement calculator-specific gynecological terminology. Ensure consistency with common translation elements. Follow the established key structure for each calculator. Focus on reproductive health terminology accuracy.",
+      "testStrategy": "Verify completeness of all translation keys. Test calculator functionality with translated content. Validate gynecological terminology with OB/GYN professionals in target languages."
+    },
+    {
+      "id": 45,
+      "title": "Implement Translation for Pregnancy Dating and Risk Calculators",
+      "description": "Translate pregnancy dating and risk stratification tools to all three languages.",
+      "status": "pending",
+      "dependencies": [
+        11
+      ],
+      "priority": "medium",
+      "details": "Translate all elements of pregnancy dating and risk stratification tools. Implement calculator-specific obstetric terminology. Ensure consistency with common translation elements. Follow the established key structure for each calculator. Focus on pregnancy risk assessment terminology accuracy.",
+      "testStrategy": "Verify completeness of all translation keys. Test calculator functionality with translated content. Validate pregnancy risk terminology with OB/GYN professionals in target languages."
+    },
+    {
+      "id": 46,
+      "title": "Implement Translation Quality Assurance System",
+      "description": "Develop comprehensive translation validation processes to ensure medical accuracy and linguistic correctness.",
+      "status": "pending",
+      "dependencies": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14
+      ],
+      "priority": "high",
+      "details": "Implement automated translation completeness checks. Create build-time validation for translation keys. Develop a process for medical professional review of translations. Implement consistency checks across calculator families. Create a system for tracking and addressing translation feedback. Document the quality assurance process for future translations.",
+      "testStrategy": "Test automated validation tools. Verify build processes catch translation issues. Conduct end-to-end testing with medical professionals in each language. Validate cultural appropriateness of translations."
+    }
+  ],
+  "metadata": {
+    "projectName": "PRD Implementation",
+    "totalTasks": 30,
+    "sourceFile": "/Users/Lasha/Desktop/MediMind_Expert/scripts/prd.txt",
+    "generatedAt": "2023-11-30"
+  }
+}

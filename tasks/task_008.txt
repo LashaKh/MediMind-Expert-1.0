@@ -1,0 +1,25 @@
+# Task ID: 8
+# Title: Implement Basic Layout and Navigation Structure
+# Status: pending
+# Dependencies: 1, 2
+# Priority: high
+# Description: Create the application's main layout with responsive navigation for desktop and mobile.
+# Details:
+Create MainLayout component with persistent left sidebar for desktop. Implement responsive TopHeader with user profile, logo, and logout button. Create mobile navigation with hamburger menu or bottom tab bar. Implement navigation links for AI Co-Pilot, Calculators, Forms, Personal KB Management, and Settings. Add user profile dropdown menu. Implement theme switching functionality (light/dark mode).
+
+# Test Strategy:
+Test navigation on desktop, tablet, and mobile viewports. Verify all navigation links work correctly. Test hamburger menu or bottom tab bar on mobile. Ensure theme switching works properly across the application.
+
+# Subtasks:
+## 1. Create Profile Page Layout [pending]
+### Dependencies: None
+### Description: Design and implement the user profile page with sections for personal information and settings
+### Details:
+
+
+## 2. Implement Profile Update Functionality [pending]
+### Dependencies: None
+### Description: Add functionality to update user profile information
+### Details:
+
+

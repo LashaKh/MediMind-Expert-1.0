@@ -1,0 +1,254 @@
+# MediMind Expert: Complete Calculator Translation System PRD
+
+## Overview
+This PRD outlines the systematic translation of all medical calculators in the MediMind Expert platform to support English, Russian, and Georgian languages. Building on the successful translation methodology established for TIMI, GRACE, and Atrial Fibrillation calculators, this project will complete the internationalization of 30+ professional medical calculators across Cardiology and OB/GYN specialties.
+
+**Problem Statement:** Medical professionals in Georgian and Russian-speaking regions need access to clinically validated calculators in their native languages to ensure accurate patient care and reduce medical errors from language barriers.
+
+**Target Users:** Medical professionals (cardiologists, obstetricians, gynecologists) practicing in multilingual environments, particularly in Georgia, Russia, and other regions where these languages are prevalent.
+
+**Value Proposition:** Complete medical calculator platform with 100% validated accuracy available in three languages, enabling seamless clinical decision-making across diverse healthcare environments.
+
+## Core Features
+
+### 1. Systematic Translation Framework
+**What it does:** Establishes consistent translation patterns for all medical calculators
+**Why it's important:** Ensures medical accuracy, consistency, and maintainability across languages
+**How it works:** 
+- Nested translation key structure: `calculators.{specialty}.{calculator_name}.{property}`
+- Common translation elements: `common.{shared_property}`
+- Specialty-specific organization: separate files for cardiology and obgyn
+- Medical terminology standardization across all calculators
+
+### 2. Cardiology Calculator Translation Suite
+**What it does:** Translates remaining 13 cardiology calculators to Russian and Georgian
+**Why it's important:** Completes the cardiology translation ecosystem for comprehensive cardiac care
+**How it works:**
+- ASCVD Risk Calculator (atherosclerotic cardiovascular disease)
+- HCM Risk-SCD Calculator (hypertrophic cardiomyopathy sudden cardiac death)
+- DAPT & PRECISE-DAPT Calculators (dual antiplatelet therapy)
+- Heart Failure Suite: MAGGIC, GWTG-HF
+- Surgical Risk Tools: STS, EuroSCORE II
+- AHA PREVENT Calculator
+- HCM-AF Calculator (atrial fibrillation risk)
+- Complete Atrial Fibrillation Suite: CHA2DS2-VASc, HAS-BLED, CHADS2
+
+### 3. OB/GYN Calculator Translation System
+**What it does:** Implements complete translation infrastructure for obstetrics and gynecology calculators
+**Why it's important:** Enables maternal and reproductive healthcare in native languages
+**How it works:**
+- Prenatal screening calculators
+- Labor and delivery risk assessments
+- Gynecological health tools
+- Reproductive endocrinology calculators
+- Pregnancy dating and risk stratification tools
+
+### 4. Medical Terminology Standardization
+**What it does:** Ensures consistent medical terminology across all calculators
+**Why it's important:** Maintains clinical accuracy and professional standards
+**How it works:**
+- Standardized medical term glossaries for each language
+- Consistent risk category translations (low/moderate/high risk)
+- Uniform clinical recommendation language
+- Validated medical unit translations (mmHg, mg/dL, etc.)
+
+### 5. Translation Quality Assurance
+**What it does:** Validates medical accuracy and linguistic correctness
+**Why it's important:** Ensures patient safety and clinical reliability
+**How it works:**
+- Medical terminology validation by healthcare professionals
+- Cultural adaptation for regional medical practices
+- Consistency checks across calculator families
+- Build verification for all translation updates
+
+## User Experience
+
+### User Personas
+1. **Georgian Cardiologist:** Needs validated cardiac risk calculators in Georgian for local patient care
+2. **Russian OB/GYN:** Requires comprehensive obstetric tools in Russian for maternal healthcare
+3. **Multilingual Medical Team:** Works across language boundaries and needs consistent terminology
+
+### Key User Flows
+1. **Calculator Discovery:** Browse specialty → select calculator → see translated interface
+2. **Clinical Calculation:** Input patient data → receive results → view recommendations (all in native language)
+3. **Result Interpretation:** Understand risk categories → apply clinical guidelines → make informed decisions
+
+### UI/UX Considerations
+- Consistent translation of form labels, placeholders, and validation messages
+- Cultural adaptation of medical units and terminology
+- Maintained clinical accuracy across language versions
+- Professional medical interface standards in all languages
+
+## Technical Architecture
+
+### System Components
+1. **Translation File Structure:**
+   ```
+   src/i18n/translations/{language}/
+   ├── calculators/
+   │   ├── cardiology.ts
+   │   ├── obgyn.ts
+   │   └── common.ts
+   └── common.ts
+   ```
+
+2. **Translation Key Patterns:**
+   - Main calculator list: `calculators.{calculator_id}.title/subtitle`
+   - Calculator internals: `calculators.{specialty}.{calculator}.{property}`
+   - Shared elements: `common.{property}`
+   - Validation messages: `calculators.{specialty}.{calculator}.validation_{field}`
+
+3. **Data Models:**
+   - Nested translation objects with TypeScript interfaces
+   - Calculator-specific translation schemas
+   - Common medical terminology dictionaries
+   - Validation message standardization
+
+### APIs and Integrations
+- i18next internationalization framework integration
+- React component translation hook usage: `useTranslation()`
+- Dynamic language switching capability
+- Translation key validation during build process
+
+### Infrastructure Requirements
+- Build-time translation validation
+- TypeScript strict mode compliance for translation objects
+- Automated translation completeness checks
+- Cultural locale support for number formatting
+
+## Development Roadmap
+
+### Phase 1: Foundation Enhancement (MVP)
+**Scope:** Complete remaining cardiology calculator translations
+**Deliverables:**
+- Russian translations for all 13 remaining cardiology calculators
+- Georgian translations for all 13 remaining cardiology calculators
+- Enhanced common translation infrastructure
+- Medical terminology standardization guide
+
+**Detailed Implementation:**
+1. ASCVD Risk Calculator translation (demographics, lab values, risk factors, results)
+2. HCM Risk-SCD Calculator translation (clinical features, risk factors, exclusions, results)
+3. DAPT Calculator translation (demographics, risk factors, procedure details, recommendations)
+4. PRECISE-DAPT Calculator translation (patient data, lab values, bleeding risk assessment)
+5. Heart Failure calculators: MAGGIC, GWTG-HF (patient characteristics, clinical parameters, mortality predictions)
+6. Surgical Risk calculators: STS, EuroSCORE II (patient demographics, procedure types, risk categories)
+7. AHA PREVENT Calculator translation (expanded risk assessment, kidney outcomes)
+8. HCM-AF Calculator translation (atrial fibrillation risk in hypertrophic cardiomyopathy)
+9. Complete Atrial Fibrillation suite refinement: CHA2DS2-VASc, HAS-BLED, CHADS2
+
+### Phase 2: OB/GYN Translation Infrastructure
+**Scope:** Establish complete OB/GYN calculator translation system
+**Deliverables:**
+- OB/GYN translation file structure creation
+- Obstetric and gynecologic terminology standardization
+- 14 OB/GYN calculator translations across all three languages
+- Specialty-specific medical unit translations
+
+**Detailed Implementation:**
+1. OB/GYN translation infrastructure setup
+2. Prenatal screening calculator translations
+3. Labor and delivery risk assessment translations
+4. Gynecological health tool translations
+5. Reproductive endocrinology calculator translations
+6. Pregnancy dating and risk stratification translations
+
+### Phase 3: Quality Assurance and Enhancement
+**Scope:** Comprehensive translation validation and optimization
+**Deliverables:**
+- Medical professional translation review
+- Cultural adaptation refinements
+- Translation consistency automation
+- Performance optimization for multilingual builds
+
+### Phase 4: Advanced Features
+**Scope:** Enhanced internationalization capabilities
+**Deliverables:**
+- Right-to-left language support preparation
+- Advanced cultural number formatting
+- Regional medical guideline adaptations
+- Translation management system integration
+
+## Logical Dependency Chain
+
+### Foundation First (Critical Path)
+1. **Common Translation Enhancement:** Expand shared terminology before calculator-specific work
+2. **Medical Terminology Standardization:** Establish consistent medical vocabulary across specialties
+3. **Translation Key Pattern Refinement:** Optimize key structures based on TIMI/GRACE success
+
+### Rapid Usability Achievement
+1. **High-Priority Cardiology Calculators:** Focus on most commonly used calculators (ASCVD, Heart Failure suite)
+2. **Visible Frontend Progress:** Complete calculator interface translations before backend optimizations
+3. **Specialty Completion:** Finish entire cardiology suite before starting OB/GYN
+
+### Atomic Feature Development
+1. **Calculator-by-Calculator Approach:** Each calculator is independently translatable and testable
+2. **Language-by-Language Completion:** Complete Russian translations before starting Georgian for each calculator
+3. **Section-by-Section Translation:** Demographics → Clinical Data → Results → Recommendations per calculator
+
+### Progressive Enhancement
+1. **Basic Translation:** Core functionality in target languages
+2. **Cultural Adaptation:** Regional medical practice considerations
+3. **Advanced Features:** Enhanced internationalization capabilities
+
+## Risks and Mitigations
+
+### Technical Challenges
+**Risk:** Translation key conflicts and inconsistencies
+**Mitigation:** Establish strict naming conventions and automated validation
+
+**Risk:** Build failures due to translation syntax errors
+**Mitigation:** TypeScript strict mode and comprehensive build testing
+
+**Risk:** Performance impact from large translation files
+**Mitigation:** Lazy loading and translation splitting strategies
+
+### Medical Accuracy Risks
+**Risk:** Incorrect medical terminology translations
+**Mitigation:** Medical professional review and validation process
+
+**Risk:** Cultural medical practice variations
+**Mitigation:** Regional healthcare professional consultation
+
+**Risk:** Unit conversion and formatting errors
+**Mitigation:** Standardized medical unit translation library
+
+### MVP Definition and Scope
+**Risk:** Feature scope creep during translation process
+**Mitigation:** Focus on established calculator functionality without feature additions
+
+**Risk:** Translation completeness validation
+**Mitigation:** Automated translation coverage reports and missing key detection
+
+### Resource Constraints
+**Risk:** Medical professional availability for translation review
+**Mitigation:** Phased review approach and community validation options
+
+**Risk:** Translation quality across three languages
+**Mitigation:** Native speaker validation and professional medical translation services
+
+## Appendix
+
+### Research Findings
+1. **Successful Translation Patterns:** TIMI and GRACE calculator translations demonstrate effective methodology
+2. **Key Structure Optimization:** Nested translation objects provide maintainable organization
+3. **Medical Terminology Requirements:** Professional medical language standards essential for clinical adoption
+
+### Technical Specifications
+1. **Translation File Format:** TypeScript objects with nested structure
+2. **Supported Languages:** English (en), Russian (ru), Georgian (ka)
+3. **Framework Integration:** i18next with React hooks
+4. **Build Requirements:** TypeScript strict mode compliance and translation validation
+
+### Success Metrics
+1. **Translation Completeness:** 100% translation coverage for all calculators
+2. **Medical Accuracy:** Professional medical validation for all translated terminology
+3. **Build Stability:** Zero translation-related build failures
+4. **User Adoption:** Increased usage in Russian and Georgian-speaking regions
+5. **Clinical Feedback:** Positive reception from healthcare professionals in target languages
+
+### Current Status Baseline
+- **Completed:** TIMI, GRACE, Atrial Fibrillation calculators (3/16 cardiology calculators)
+- **Established Infrastructure:** Translation key patterns, common terminology, build validation
+- **Proven Methodology:** Successful translation workflow demonstrated with acute care calculators
+- **Remaining Scope:** 13 cardiology calculators + complete OB/GYN suite (27+ total calculators) 
