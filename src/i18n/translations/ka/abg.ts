@@ -34,7 +34,7 @@ const abg = {
     },
     progressComplete: '{{percent}}% დასრულებულია',
     steps: {
-      upload: {
+      uploadStep: {
         label: 'ატვირთვა',
         description: 'აირჩიეთ აერგაზების ანგარიში'
       },
@@ -58,35 +58,7 @@ const abg = {
     completeTitle: 'ანალიზი დასრულდა!',
     error: 'დამუშავების შეცდომა',
     nextSteps: 'შემდეგი ნაბიჯები'
-  }
-  ,
-  upload: {
-    aria: {
-      dropzone: 'არტერიული სისხლის გაზების ანგარიშის ატვირთვა'
-    },
-    fileReady: 'ფაილი მზადაა ანალიზისთვის',
-    removeAria: 'ფაილის ამოღება',
-    progress: 'ატვირთვის პროგრესი',
-    progressSr: '{{percent}} პროცენტი ატვირთულია',
-    processing: {
-      title: 'სურათის დამუშავება…',
-      subtitle: 'AI ანალიზს ატარებს არტერიული სისხლის გაზების ანგარიშზე'
-    },
-    title: 'არტერიული სისხლის გაზების ანგარიშის ატვირთვა',
-    subtitle: 'გადმოათრიეთ სურათი აქ ან აირჩიეთ ფაილი',
-    drop: {
-      title: 'გადმოუშვით ატვირთვისთვის',
-      subtitle: 'გაათავისუფლეთ ატვირთვის დასაწყებად AI ანალიზისთვის'
-    },
-    chooseFile: 'ფაილის არჩევა',
-    takePhoto: 'ფოტოს გადაღება',
-    formats: 'JPEG, PNG, WebP • მაქს. {{size}}MB',
-    errors: {
-      invalidType: 'გთხოვთ, აირჩიოთ სწორი სურათის ფაილი ({{types}})',
-      maxSize: 'ფაილის ზომა უნდა იყოს {{size}}MB-ზე ნაკლები'
-    }
-  }
-  ,
+  },
   delete: {
     titleOne: 'წაშლა ABG შედეგის?',
     titleMany: 'წაშლა {{count}} ABG შედეგის?',
@@ -389,9 +361,27 @@ const abg = {
     viewHistory: 'ისტორია',
     title: 'სისხლის გაზების ანალიზი',
     subtitle: 'ატვირთეთ სისხლის გაზების ანგარიში მყისიერი AI ანალიზისთვის, დადასტურებული ინტერპრეტაციისა და ქმედების გეგმისთვის.'
-  }
-  ,
+  },
+
+  // Consolidated upload section (merged from three separate sections)
   upload: {
+    // File upload interface
+    title: 'არტერიული სისხლის გაზების ანგარიშის ატვირთვა',
+    subtitle: 'გადმოათრიეთ სურათი აქ ან აირჩიეთ ფაილი',
+    chooseFile: 'ფაილის არჩევა',
+    takePhoto: 'ფოტოს გადაღება',
+    formats: 'JPEG, PNG, WebP • მაქს. {{size}}MB',
+    fileReady: 'ფაილი მზადაა ანალიზისთვის',
+    progress: 'ატვირთვის პროგრესი',
+    progressSr: '{{percent}} პროცენტი ატვირთულია',
+    
+    // Drag and drop
+    drop: {
+      title: 'გადმოუშვით ატვირთვისთვის',
+      subtitle: 'გაათავისუფლეთ ატვირთვის დასაწყებად AI ანალიზისთვის'
+    },
+    
+    // Blood gas type selection
     type: {
       title: 'სისხლის გაზების ტიპი',
       subtitle: 'აირჩიეთ ანალიზის ტიპი'
@@ -400,13 +390,34 @@ const abg = {
       arterialDesc: 'ყველაზე სრულყოფილი ანალიზი',
       venousDesc: 'ალტერნატიული ანალიზის მეთოდი'
     },
+    
+    // Case context
     caseContext: {
       title: 'საქმის კონტექსტი (არასავალდებულო)',
       subtitle: 'დააკავშირეთ BG ანალიზი პაციენტის საქმესთან'
     },
-    takePhoto: 'ფოტო',
+    
+    // Processing
+    processing: {
+      title: 'სურათის დამუშავება…',
+      subtitle: 'AI ანალიზს ატარებს არტერიული სისხლის გაზების ანგარიშზე'
+    },
+    
+    // Actions
     actions: {
       startAIAnalysis: 'AI ანალიზის დაწყება'
+    },
+    
+    // Accessibility
+    aria: {
+      dropzone: 'არტერიული სისხლის გაზების ანგარიშის ატვირთვა',
+      removeFile: 'ფაილის ამოღება'
+    },
+    
+    // Errors
+    errors: {
+      invalidType: 'გთხოვთ, აირჩიოთ სწორი სურათის ფაილი ({{types}})',
+      maxSize: 'ფაილის ზომა უნდა იყოს {{size}}MB-ზე ნაკლები'
     }
   }
 };
