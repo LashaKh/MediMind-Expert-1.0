@@ -207,9 +207,9 @@ export default defineConfig(({ mode }) => {
             }
           }
           
-          // Context providers
+          // Context providers - keep with main to prevent initialization issues
           if (id.includes('src/contexts/')) {
-            return 'contexts';
+            return 'vendor-react';
           }
           
           // Translation files
@@ -231,9 +231,9 @@ export default defineConfig(({ mode }) => {
             return 'components';
           }
           
-          // Utilities and services
+          // Keep utilities with main bundle to prevent circular dependencies
           if (id.includes('src/lib/') || id.includes('src/utils/') || id.includes('src/services/')) {
-            return 'utils';
+            return 'vendor-react';
           }
         },
         assetFileNames: (assetInfo) => {
