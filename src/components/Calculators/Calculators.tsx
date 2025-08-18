@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { Calculator, Heart, Activity, Zap, Wrench, HeartHandshake, Dna, Shield, TestTube, Calendar, Sparkles, Award, ArrowRight, ChevronRight, Target, CheckCircle, Rocket, Play, Crown, Diamond } from 'lucide-react';
 
 // Custom CSS animations for ultra-modern effects
@@ -58,53 +58,53 @@ import { useSpecialty, MedicalSpecialty } from '../../stores/useAppStore';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Card, CardHeader, CardTitle, CardDescription } from '../ui/card';
 
-// Cardiology Calculator Imports
+// Lazy-loaded Cardiology Calculator Components
 // Phase 1: Core Risk Assessment  
-import { ASCVDCalculator } from './ASCVDCalculator';
-import { AtrialFibrillationCalculators } from './AtrialFibrillationCalculators';
+const ASCVDCalculator = React.lazy(() => import('./ASCVDCalculator').then(module => ({ default: module.ASCVDCalculator })));
+const AtrialFibrillationCalculators = React.lazy(() => import('./AtrialFibrillationCalculators').then(module => ({ default: module.AtrialFibrillationCalculators })));
 
 // Phase 2: Acute Coronary Syndrome
-import { TIMIRiskCalculator } from './TIMIRiskCalculator';
-import { GRACERiskCalculator } from './GRACERiskCalculator';
+const TIMIRiskCalculator = React.lazy(() => import('./TIMIRiskCalculator').then(module => ({ default: module.TIMIRiskCalculator })));
+const GRACERiskCalculator = React.lazy(() => import('./GRACERiskCalculator').then(module => ({ default: module.GRACERiskCalculator })));
 
 // Phase 3: Advanced Therapy Management
-import DAPTCalculator from './DAPTCalculator';
-import { PRECISEDAPTCalculator } from './PRECISEDAPTCalculator';
-import { PREVENTCalculator } from './PREVENTCalculator';
+const DAPTCalculator = React.lazy(() => import('./DAPTCalculator'));
+const PRECISEDAPTCalculator = React.lazy(() => import('./PRECISEDAPTCalculator').then(module => ({ default: module.PRECISEDAPTCalculator })));
+const PREVENTCalculator = React.lazy(() => import('./PREVENTCalculator').then(module => ({ default: module.PREVENTCalculator })));
 
 // Phase 4: Heart Failure Management
-import HeartFailureStagingCalculator from './HeartFailureStaging';
-import { GWTGHFCalculator } from './GWTGHFCalculator';
-import { MAGGICCalculator } from './MAGGICCalculator';
-import { SHFMCalculator } from './SHFMCalculator';
+const HeartFailureStagingCalculator = React.lazy(() => import('./HeartFailureStaging'));
+const GWTGHFCalculator = React.lazy(() => import('./GWTGHFCalculator').then(module => ({ default: module.GWTGHFCalculator })));
+const MAGGICCalculator = React.lazy(() => import('./MAGGICCalculator').then(module => ({ default: module.MAGGICCalculator })));
+const SHFMCalculator = React.lazy(() => import('./SHFMCalculator').then(module => ({ default: module.SHFMCalculator })));
 
 // Phase 5: Surgical Risk Assessment
-import { STSCalculator } from './STSCalculator';
-import { EuroSCOREIICalculator } from './EuroSCOREIICalculator';
+const STSCalculator = React.lazy(() => import('./STSCalculator').then(module => ({ default: module.STSCalculator })));
+const EuroSCOREIICalculator = React.lazy(() => import('./EuroSCOREIICalculator').then(module => ({ default: module.EuroSCOREIICalculator })));
 
 // Phase 6: Specialized Cardiomyopathy Assessment
-import { HCMRiskSCDCalculator } from './HCMRiskSCDCalculator';
-import { HCMAFRiskCalculator } from './HCMAFRiskCalculator';
+const HCMRiskSCDCalculator = React.lazy(() => import('./HCMRiskSCDCalculator').then(module => ({ default: module.HCMRiskSCDCalculator })));
+const HCMAFRiskCalculator = React.lazy(() => import('./HCMAFRiskCalculator').then(module => ({ default: module.HCMAFRiskCalculator })));
 
 // Additional Cardiology Calculators
-import HIT4TsCalculator from './HIT4TsCalculator'
-import { SIADHCalculator } from './SIADHCalculator';
+const HIT4TsCalculator = React.lazy(() => import('./HIT4TsCalculator'));
+const SIADHCalculator = React.lazy(() => import('./SIADHCalculator').then(module => ({ default: module.SIADHCalculator })));
 
-// OB/GYN Calculator Imports
-import { EDDCalculator } from './EDDCalculator';
-import { GestationalAgeCalculator } from './GestationalAgeCalculator';
-import BishopScoreCalculator from './BishopScoreCalculator';
-import { ApgarScoreCalculator } from './ApgarScoreCalculator';
-import PreeclampsiaRiskCalculator from './PreeclampsiaRiskCalculator';
-import PretermBirthRiskCalculator from './PretermBirthRiskCalculator';
-import GDMScreeningCalculator from './GDMScreeningCalculator';
-import VBACSuccessCalculator from './VBACSuccessCalculator';
-import PPHRiskCalculator from './PPHRiskCalculator';
-import CervicalCancerRiskCalculator from './CervicalCancerRiskCalculator';
-import OvarianCancerRiskCalculator from './OvarianCancerRiskCalculator';
-import EndometrialCancerRiskCalculator from './EndometrialCancerRiskCalculator';
-import OvarianReserveCalculator from './OvarianReserveCalculator';
-import MenopauseAssessmentCalculator from './MenopauseAssessmentCalculator';
+// Lazy-loaded OB/GYN Calculator Components
+const EDDCalculator = React.lazy(() => import('./EDDCalculator').then(module => ({ default: module.EDDCalculator })));
+const GestationalAgeCalculator = React.lazy(() => import('./GestationalAgeCalculator').then(module => ({ default: module.GestationalAgeCalculator })));
+const BishopScoreCalculator = React.lazy(() => import('./BishopScoreCalculator'));
+const ApgarScoreCalculator = React.lazy(() => import('./ApgarScoreCalculator').then(module => ({ default: module.ApgarScoreCalculator })));
+const PreeclampsiaRiskCalculator = React.lazy(() => import('./PreeclampsiaRiskCalculator'));
+const PretermBirthRiskCalculator = React.lazy(() => import('./PretermBirthRiskCalculator'));
+const GDMScreeningCalculator = React.lazy(() => import('./GDMScreeningCalculator'));
+const VBACSuccessCalculator = React.lazy(() => import('./VBACSuccessCalculator'));
+const PPHRiskCalculator = React.lazy(() => import('./PPHRiskCalculator'));
+const CervicalCancerRiskCalculator = React.lazy(() => import('./CervicalCancerRiskCalculator'));
+const OvarianCancerRiskCalculator = React.lazy(() => import('./OvarianCancerRiskCalculator'));
+const EndometrialCancerRiskCalculator = React.lazy(() => import('./EndometrialCancerRiskCalculator'));
+const OvarianReserveCalculator = React.lazy(() => import('./OvarianReserveCalculator'));
+const MenopauseAssessmentCalculator = React.lazy(() => import('./MenopauseAssessmentCalculator'));
 
 type CardiologyCalculatorType = 
   // Phase 1 - Core Risk Assessment
@@ -633,7 +633,38 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
         
         {/* Calculator content with mobile padding */}
         <div className={isMobile ? 'px-1' : ''}>
-          {renderCalculator()}
+          <Suspense fallback={
+            <div className="flex flex-col items-center justify-center py-16 px-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg rounded-2xl border border-white/25 dark:border-gray-700/25 shadow-xl">
+              {/* Loading animation */}
+              <div className="relative">
+                <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-violet-600 rounded-full animate-spin animation-delay-150"></div>
+              </div>
+              
+              {/* Loading text */}
+              <div className="mt-6 text-center space-y-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  Loading Calculator
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Preparing your clinical tool...
+                </p>
+              </div>
+              
+              {/* Progress indicators */}
+              <div className="mt-4 flex space-x-1">
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"
+                    style={{ animationDelay: `${i * 0.2}s` }}
+                  />
+                ))}
+              </div>
+            </div>
+          }>
+            {renderCalculator()}
+          </Suspense>
         </div>
       </div>
     );

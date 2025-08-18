@@ -1,4 +1,5 @@
-import { extractTextFromPdf, ProgressInfo } from './pdfTextExtractor';
+import { extractTextFromPdfLazy as extractTextFromPdf, isPdfFile } from './lazyPdfExtractor';
+import type { ProgressInfo } from './pdfTextExtractor';
 import { extractTextFromPdf as unifiedExtractFromPdf, OcrResult } from './unifiedOcrExtractor';
 import { CaseAttachment } from '../components/CaseManagement/CaseFileUpload';
 import { analyzeImageForText } from './unifiedOcrExtractor';

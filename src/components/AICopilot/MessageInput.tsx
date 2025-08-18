@@ -6,7 +6,7 @@ import { Attachment, CaseAttachmentData } from '../../types/chat';
 import { KnowledgeBaseType } from '../../types/chat';
 import { validateFileForFlowise, getUploadTypeDescription } from '../../utils/fileUpload';
 import { processFileForChatUpload, EnhancedAttachment, buildAttachmentTextContext } from '../../utils/chatFileProcessor';
-import { ProgressInfo } from '../../utils/pdfTextExtractor';
+import type { ProgressInfo } from '../../utils/pdfTextExtractor';
 import { DocumentSelector } from './DocumentSelector';
 import { SelectedDocumentsIndicator } from './SelectedDocumentsIndicator';
 

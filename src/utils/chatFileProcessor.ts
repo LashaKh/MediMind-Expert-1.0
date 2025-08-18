@@ -1,5 +1,6 @@
 import { Attachment, FlowiseUploadType } from '../types/chat';
-import { extractTextFromPdf, ProgressInfo } from './pdfTextExtractor';
+import { extractTextFromPdfLazy as extractTextFromPdf, isPdfFile } from './lazyPdfExtractor';
+import type { ProgressInfo } from './pdfTextExtractor';
 import { extractTextFromPdf as unifiedExtractFromPdf, OcrResult } from './unifiedOcrExtractor';
 import { validateFileForFlowise, getFlowiseUploadType } from './fileUpload';
 import { analyzeImageForText } from './unifiedOcrExtractor';

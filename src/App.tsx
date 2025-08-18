@@ -1,31 +1,40 @@
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MainLayout } from './components/Layout/MainLayout';
-import { SignIn } from './components/Auth/SignIn';
-import { SignUp } from './components/Auth/SignUp';
-import { PasswordRecoveryForm } from './components/Auth/PasswordRecoveryForm';
-import { ResetPasswordForm } from './components/Auth/ResetPasswordForm';
 import { ProtectedRoute } from './components/Auth/ProtectedRoute';
 import { SpecialtyGuard } from './components/Auth/SpecialtyGuard';
 import { RootRedirect } from './components/Auth/RootRedirect';
 import { AppInitializer } from './components/Auth/AppInitializer';
-import { OnboardingFlow } from './components/Onboarding/OnboardingFlow';
-import { CardiologyWorkspace } from './components/Workspaces/CardiologyWorkspace';
-import { ObGynWorkspace } from './components/Workspaces/ObGynWorkspace';
-import { AICopilot } from './components/AICopilot/AICopilot';
-import { Calculators } from './components/Calculators/Calculators';
-import { PremiumABGAnalysis, PremiumABGHistoryPage } from './components/ABG';
 
-import { KnowledgeBase } from './components/KnowledgeBase/KnowledgeBase';
-import { Profile } from './components/Profile/Profile';
-import { HelpCenter } from './components/Help/HelpCenter';
-import SimpleDiseasesIndex from './components/Diseases/SimpleDiseasesIndex';
-import SimpleDiseasePage from './components/Diseases/SimpleDiseasePage';
-import { ComingSoon } from './components/ui/ComingSoon';
-import { MediSearchPage } from './components/MediSearch/MediSearchPage';
-import { AnalyticsPage } from './pages/AnalyticsPage';
+// Lazy-loaded authentication components
+const SignIn = React.lazy(() => import('./components/Auth/SignIn').then(module => ({ default: module.SignIn })));
+const SignUp = React.lazy(() => import('./components/Auth/SignUp').then(module => ({ default: module.SignUp })));
+const PasswordRecoveryForm = React.lazy(() => import('./components/Auth/PasswordRecoveryForm').then(module => ({ default: module.PasswordRecoveryForm })));
+const ResetPasswordForm = React.lazy(() => import('./components/Auth/ResetPasswordForm').then(module => ({ default: module.ResetPasswordForm })));
 
+// Lazy-loaded main components
+const OnboardingFlow = React.lazy(() => import('./components/Onboarding/OnboardingFlow').then(module => ({ default: module.OnboardingFlow })));
+const CardiologyWorkspace = React.lazy(() => import('./components/Workspaces/CardiologyWorkspace').then(module => ({ default: module.CardiologyWorkspace })));
+const ObGynWorkspace = React.lazy(() => import('./components/Workspaces/ObGynWorkspace').then(module => ({ default: module.ObGynWorkspace })));
+const AICopilot = React.lazy(() => import('./components/AICopilot/AICopilot').then(module => ({ default: module.AICopilot })));
+const Calculators = React.lazy(() => import('./components/Calculators/Calculators').then(module => ({ default: module.Calculators })));
+const PremiumABGAnalysis = React.lazy(() => import('./components/ABG').then(module => ({ default: module.PremiumABGAnalysis })));
+const PremiumABGHistoryPage = React.lazy(() => import('./components/ABG').then(module => ({ default: module.PremiumABGHistoryPage })));
+
+// Lazy-loaded feature components
+const KnowledgeBase = React.lazy(() => import('./components/KnowledgeBase/KnowledgeBase').then(module => ({ default: module.KnowledgeBase })));
+const Profile = React.lazy(() => import('./components/Profile/Profile').then(module => ({ default: module.Profile })));
+const HelpCenter = React.lazy(() => import('./components/Help/HelpCenter').then(module => ({ default: module.HelpCenter })));
+const SimpleDiseasesIndex = React.lazy(() => import('./components/Diseases/SimpleDiseasesIndex'));
+const SimpleDiseasePage = React.lazy(() => import('./components/Diseases/SimpleDiseasePage'));
+const ComingSoon = React.lazy(() => import('./components/ui/ComingSoon').then(module => ({ default: module.ComingSoon })));
+const MediSearchPage = React.lazy(() => import('./components/MediSearch/MediSearchPage').then(module => ({ default: module.MediSearchPage })));
+const AnalyticsPage = React.lazy(() => import('./pages/AnalyticsPage').then(module => ({ default: module.AnalyticsPage })));
+
+// Components that need to stay eagerly loaded for core functionality
 import MarkdownFileLoader from './components/Diseases/MarkdownFileLoader';
 import { GlobalDocumentProgressTracker } from './components/ui/DocumentProgressTracker';
+import { RouteLoader } from './components/ui/RouteLoader';
 
 import { MedicalSpecialty } from './stores/useAppStore';
 
@@ -37,6 +46,7 @@ function App() {
     }}>
       <AppInitializer>
         <MainLayout>
+          <Suspense fallback={<RouteLoader />}>
                 <Routes>
                 {/* Public routes */}
                 <Route path="/signin" element={<SignIn />} />
@@ -127,6 +137,7 @@ function App() {
                   <Route path="/" element={<RootRedirect />} />
                 </Route>
               </Routes>
+          </Suspense>
               
               {/* Global Progress Tracker for Document Uploads */}
               <GlobalDocumentProgressTracker />
