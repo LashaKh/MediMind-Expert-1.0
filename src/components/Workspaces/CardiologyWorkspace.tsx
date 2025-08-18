@@ -393,86 +393,240 @@ export const CardiologyWorkspace: React.FC = () => {
       {/* Floating Particle System */}
       <ParticleSystem aria-hidden="true" />
 
-      {/* World-Class Premium Header */}
-      <div className="relative bg-white border-b border-gray-100 shadow-2xl overflow-hidden">
-        {/* Sophisticated Background Pattern */}
+      {/* Revolutionary Luxury Header - World-Class Design */}
+      <div className="relative bg-gradient-to-br from-slate-50/95 via-white to-gray-50/80 border-b border-gray-200/50 overflow-hidden backdrop-blur-3xl">
+        {/* Premium Multi-Layer Background System */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-red-50 via-rose-25 to-transparent opacity-60" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-50 via-indigo-25 to-transparent opacity-60" />
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-emerald-25 via-transparent to-blue-25 opacity-30 blur-3xl" />
+          {/* Sophisticated Gradient Mesh */}
+          <div className="absolute inset-0">
+            <div className="absolute top-0 right-0 w-[700px] h-[500px] bg-gradient-to-bl from-red-500/12 via-rose-400/8 to-pink-300/4 blur-3xl opacity-80" />
+            <div className="absolute bottom-0 left-0 w-[600px] h-[400px] bg-gradient-to-tr from-blue-500/8 via-indigo-400/6 to-cyan-300/4 blur-3xl opacity-70" />
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[900px] h-[300px] bg-gradient-to-r from-emerald-400/6 via-teal-300/4 to-blue-400/6 blur-3xl opacity-60" />
+            
+            {/* Premium Glass Layer */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/30 to-white/50 backdrop-blur-sm" />
+            
+            {/* Subtle Noise Texture */}
+            <div className="absolute inset-0 opacity-[0.025]" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.6'/%3E%3C/svg%3E")`,
+              mixBlendMode: 'multiply'
+            }} />
           </div>
           
-          {/* Elegant Grid Pattern */}
-          <div className="absolute inset-0 opacity-[0.015]">
-            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <pattern id="elegant-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1"/>
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#elegant-grid)" />
-            </svg>
+          {/* Ultra-Premium Grid System */}
+          <div className="absolute inset-0 opacity-[0.03]">
+            <div className="h-full w-full" style={{
+              backgroundImage: `
+                radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)
+              `,
+              backgroundSize: '60px 60px'
+            }} />
           </div>
         </div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 relative z-10">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between space-y-8 lg:space-y-0">
-            {/* Professional Brand Identity */}
-            <div className="flex items-center space-x-6 lg:space-x-8 w-full lg:w-auto">
-              {/* Clean Logo Design */}
-              <div className="flex-shrink-0">
-                <div className="w-18 h-18 lg:w-20 lg:h-20 rounded-2xl bg-gradient-to-br from-red-500 via-rose-500 to-red-600 shadow-md flex items-center justify-center">
-                  <Heart className="w-9 h-9 lg:w-10 lg:h-10 text-white" />
-                </div>
-              </div>
-              
-              {/* Clean Title Section */}
-              <div className="space-y-2 flex-1 min-w-0">
-                <div className="flex items-center space-x-3">
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900" style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: '700',
-                    letterSpacing: '-0.02em'
-                  }}>
-                    Cardiology
-                  </h1>
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-gray-600" style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: '300'
-                  }}>Workspace</h2>
-                  <div className="px-2 py-1 bg-red-500 rounded text-xs font-medium text-white">PRO</div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 relative z-10">
+          <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between space-y-6 lg:space-y-0">
+            {/* Revolutionary Brand Architecture */}
+            <div className="flex items-start space-x-6 lg:space-x-8 w-full lg:w-auto">
+              {/* Ultra-Premium Logo System */}
+              <div className="relative flex-shrink-0 group">
+                {/* Outer Glow Ring */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-red-500/15 via-rose-400/12 to-red-600/15 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-1000" />
+                
+                {/* Main Logo Container */}
+                <div className="relative w-24 h-24 lg:w-28 lg:h-28 rounded-3xl bg-gradient-to-br from-red-500 via-rose-500 to-red-600 shadow-2xl shadow-red-500/30 flex items-center justify-center backdrop-blur-sm border border-white/15 group-hover:scale-105 transition-all duration-700 transform-gpu">
+                  {/* Inner Glass Effect */}
+                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/25 via-white/10 to-transparent" />
+                  
+                  {/* Heart Icon */}
+                  <Heart className="w-12 h-12 lg:w-14 lg:h-14 text-white relative z-10 drop-shadow-lg" />
+                  
+                  {/* Sophisticated ECG Animation */}
+                  <div className="absolute inset-0 rounded-3xl overflow-hidden">
+                    <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 animate-pulse transition-opacity duration-1500" />
+                  </div>
+                  
+                  {/* Subtle Inner Shadow */}
+                  <div className="absolute inset-1 rounded-2xl shadow-inner shadow-black/10" />
                 </div>
                 
-                <div className="space-y-1 max-w-2xl">
-                  <p className="text-base sm:text-lg text-gray-700 font-medium">
+                {/* Premium Floating Ring */}
+                <div className="absolute inset-0 w-28 h-28 rounded-3xl border border-red-400/25 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" />
+                <div className="absolute -inset-1 w-30 h-30 rounded-3xl border border-red-300/15 opacity-0 group-hover:opacity-100 group-hover:scale-115 transition-all duration-1200 delay-100" />
+              </div>
+              
+              {/* Revolutionary Typography Architecture */}
+              <div className="space-y-5 flex-1 min-w-0">
+                {/* Hero Title System */}
+                <div className="space-y-2">
+                  <div className="flex items-end space-x-6">
+                    <h1 className="luxury-hero-title text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-[0.82] tracking-tight transform hover:scale-105 transition-all duration-700 cursor-default" style={{
+                      fontFamily: 'Inter, system-ui, sans-serif',
+                      fontWeight: '900',
+                      letterSpacing: '-0.05em',
+                      textShadow: '0 12px 24px rgba(0,0,0,0.15), 0 6px 12px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.05)',
+                      WebkitTextStroke: '0.5px rgba(0,0,0,0.08)',
+                      fontFeatureSettings: '"ss01" on, "ss02" on, "cv01" on, "cv02" on, "kern" on, "liga" on',
+                      textRendering: 'optimizeLegibility',
+                      WebkitFontSmoothing: 'antialiased',
+                      MozOsxFontSmoothing: 'grayscale'
+                    }}>
+                      Cardiology
+                    </h1>
+                    
+                    {/* Ultra-Premium Badge */}
+                    <div className="relative mb-3 group">
+                      <div className="absolute -inset-2 bg-gradient-to-r from-red-500/20 via-rose-500/15 to-red-600/20 rounded-2xl blur-lg opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="relative px-5 py-3 bg-gradient-to-r from-red-500 via-rose-500 to-red-600 rounded-2xl shadow-2xl shadow-red-500/25 border border-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-500">
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/20 via-white/10 to-transparent" />
+                        <span className="relative text-sm font-bold text-white tracking-wider" style={{
+                          fontFamily: 'Inter, system-ui, sans-serif',
+                          fontWeight: '700',
+                          letterSpacing: '0.08em',
+                          textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                          textTransform: 'uppercase'
+                        }}>Professional</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <h2 className="luxury-subtitle text-2xl sm:text-3xl lg:text-4xl font-extralight text-gray-600/90 tracking-wide" style={{
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontWeight: '200',
+                    letterSpacing: '0.03em',
+                    textShadow: '0 4px 8px rgba(0,0,0,0.04)',
+                    lineHeight: '1.1'
+                  }}>Workspace</h2>
+                </div>
+                
+                {/* Premium Description Architecture */}
+                <div className="space-y-2 max-w-4xl">
+                  <p className="luxury-primary-desc text-lg sm:text-xl lg:text-2xl text-gray-700 font-medium leading-tight" style={{
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontWeight: '500',
+                    letterSpacing: '-0.015em',
+                    lineHeight: '1.25',
+                    textShadow: '0 4px 8px rgba(0,0,0,0.06)'
+                  }}>
                     Advanced Cardiac Care Intelligence Platform
                   </p>
-                  <p className="text-sm sm:text-base text-gray-500">
+                  
+                  <p className="luxury-secondary-desc text-sm sm:text-base lg:text-lg text-gray-500/85 font-normal leading-relaxed" style={{
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontWeight: '400',
+                    letterSpacing: '0.01em',
+                    lineHeight: '1.6',
+                    textShadow: '0 2px 4px rgba(0,0,0,0.03)'
+                  }}>
                     AI-Powered Medical Excellence for Healthcare Professionals
                   </p>
                 </div>
                 
-                {/* Simple Status Section */}
-                <div className="space-y-2 mt-4">
-                  <div className="text-base text-gray-800">
-                    Welcome back, <span className="font-medium text-red-600">{profile?.full_name || 'Dr. Physician'}</span>
+                {/* Revolutionary User Status System */}
+                <div className="space-y-3 mt-5">
+                  {/* Premium Welcome Section */}
+                  <div className="flex items-center space-x-5">
+                    <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500/12 via-indigo-500/8 to-blue-600/12 backdrop-blur-sm border border-blue-200/40 flex items-center justify-center shadow-lg shadow-blue-500/10 group hover:scale-105 transition-all duration-500">
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/20 via-white/10 to-transparent" />
+                      <Stethoscope className="w-6 h-6 text-blue-600/90 relative z-10" />
+                    </div>
+                    <div className="space-y-1">
+                      <div className="luxury-welcome text-base sm:text-lg text-gray-800 font-medium" style={{
+                        fontFamily: 'Inter, system-ui, sans-serif',
+                        fontWeight: '500',
+                        letterSpacing: '-0.01em'
+                      }}>
+                        Welcome back, <span className="font-semibold bg-gradient-to-r from-red-600 via-rose-600 to-red-700 bg-clip-text text-transparent">{profile?.full_name || 'Dr. Physician'}</span>
+                      </div>
+                      <div className="text-sm text-gray-500/80 font-normal" style={{
+                        fontFamily: 'Inter, system-ui, sans-serif',
+                        letterSpacing: '0.01em'
+                      }}>
+                        Certified Cardiologist
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                    <span className="text-sm text-emerald-700">System Online</span>
+                  
+                  {/* Ultra-Premium Status Indicator */}
+                  <div className="inline-flex items-center space-x-3 px-5 py-3 bg-gradient-to-r from-emerald-50/90 via-teal-50/80 to-emerald-50/90 backdrop-blur-sm rounded-2xl border border-emerald-200/50 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/15 transition-all duration-500 group">
+                    <div className="relative">
+                      <div className="w-3 h-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full shadow-sm" />
+                      <div className="absolute inset-0 w-3 h-3 bg-emerald-400 rounded-full animate-ping opacity-70" />
+                      <div className="absolute -inset-1 w-5 h-5 bg-emerald-400/30 rounded-full animate-pulse opacity-50" />
+                    </div>
+                    <span className="text-sm font-medium text-emerald-700/90 tracking-wide" style={{
+                      fontFamily: 'Inter, system-ui, sans-serif',
+                      fontWeight: '500',
+                      letterSpacing: '0.015em'
+                    }}>All Systems Operational</span>
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600/90 group-hover:scale-110 transition-transform duration-300" />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Simple Time Display */}
-            <div className="text-right">
-              <div className="text-xl font-mono font-semibold text-gray-900">
-                {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </div>
-              <div className="text-xs text-gray-500 font-medium">
-                {currentTime.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
+            {/* Ultra-Premium Time Portal */}
+            <div className="relative group">
+              {/* Ambient Glow */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/10 via-indigo-500/8 to-purple-500/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-1000" />
+              
+              {/* Main Time Container */}
+              <div className="relative bg-gradient-to-br from-white/90 via-gray-50/80 to-white/70 backdrop-blur-xl rounded-3xl p-5 shadow-2xl shadow-gray-500/15 border border-white/50 group-hover:shadow-3xl group-hover:shadow-gray-500/20 transition-all duration-700 transform group-hover:scale-105">
+                {/* Glass Overlay */}
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/40 via-white/20 to-transparent" />
+                
+                {/* Inner Shadow */}
+                <div className="absolute inset-1 rounded-2xl shadow-inner shadow-gray-200/50" />
+                
+                {/* Content */}
+                <div className="relative z-10 text-right space-y-1">
+                  {/* Live Indicator */}
+                  <div className="flex items-center justify-end space-x-2 mb-2">
+                    <div className="relative">
+                      <div className="w-2 h-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full" />
+                      <div className="absolute inset-0 w-2 h-2 bg-emerald-400 rounded-full animate-ping opacity-75" />
+                    </div>
+                    <span className="text-xs font-medium text-emerald-700 tracking-wider uppercase" style={{
+                      fontFamily: 'Inter, system-ui, sans-serif',
+                      letterSpacing: '0.1em'
+                    }}>Live</span>
+                  </div>
+                  
+                  {/* Time Display */}
+                  <div className="luxury-time text-2xl font-bold text-gray-900 tracking-tight" style={{
+                    fontFamily: 'JetBrains Mono, SF Mono, Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace',
+                    fontWeight: '700',
+                    letterSpacing: '0.02em',
+                    fontFeatureSettings: '"tnum" on, "lnum" on, "ss01" on, "ss02" on',
+                    textShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                    lineHeight: '1'
+                  }}>
+                    {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </div>
+                  
+                  {/* Date Display */}
+                  <div className="luxury-date text-sm text-gray-600/80 font-medium tracking-wide" style={{
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontWeight: '500',
+                    letterSpacing: '0.03em',
+                    textShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                  }}>
+                    {currentTime.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
+                  </div>
+                  
+                  {/* Timezone */}
+                  <div className="text-xs text-gray-500/60 font-normal tracking-widest" style={{
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    letterSpacing: '0.1em'
+                  }}>
+                    {Intl.DateTimeFormat().resolvedOptions().timeZone.split('/').pop()?.toUpperCase()}
+                  </div>
+                </div>
+                
+                {/* Subtle Pattern Overlay */}
+                <div className="absolute inset-0 rounded-3xl opacity-[0.02]" style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='0.1'%3E%3Ccircle cx='3' cy='3' r='1'/%3E%3C/g%3E%3C/svg%3E")`
+                }} />
               </div>
             </div>
           </div>
@@ -493,12 +647,12 @@ export const CardiologyWorkspace: React.FC = () => {
                 textShadow: '0 1px 2px rgba(37, 99, 235, 0.1)'
               }}>CLINICAL INTELLIGENCE</span>
             </div>
-            <h2 className="premium-section-title text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 mb-8 tracking-tight transform hover:scale-105 transition-all duration-500" style={{
+            <h2 className="premium-section-title text-3xl sm:text-4xl lg:text-5xl font-light text-gray-800 mb-8 tracking-tight transform hover:scale-105 transition-all duration-500" style={{
               fontFamily: 'Inter, system-ui, sans-serif',
-              fontWeight: '900',
-              letterSpacing: '-0.02em',
-              textShadow: '0 4px 8px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.05)',
-              lineHeight: '1.1'
+              fontWeight: '300',
+              letterSpacing: '0.01em',
+              textShadow: '0 2px 4px rgba(0,0,0,0.05)',
+              lineHeight: '1.2'
             }}>
               Real-Time Analytics Dashboard
             </h2>

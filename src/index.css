@@ -1629,3 +1629,66 @@ html[data-font-loaded="true"] *::after {
   }
 }
 
+/* Premium Tour Button Advanced Animations */
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes tour-button-glow {
+  0%, 100% {
+    box-shadow: 
+      0 20px 40px -12px rgba(102, 126, 234, 0.4), 
+      0 8px 32px -8px rgba(118, 75, 162, 0.3), 
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 25px 50px -12px rgba(102, 126, 234, 0.6), 
+      0 12px 40px -8px rgba(118, 75, 162, 0.5), 
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      0 0 0 2px rgba(255, 255, 255, 0.3);
+  }
+}
+
+@keyframes tour-icon-dance {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(5deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(12deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(8deg) scale(1.05);
+  }
+}
+
+@keyframes tour-text-slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(2px);
+  }
+}
+
+/* Advanced mobile touch feedback */
+@keyframes mobile-touch-ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
