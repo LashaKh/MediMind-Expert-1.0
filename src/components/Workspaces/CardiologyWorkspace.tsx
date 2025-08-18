@@ -399,14 +399,14 @@ export const CardiologyWorkspace: React.FC = () => {
           </div>
         </div>
         
-        <div className="max-w-7xl mx-auto px-8 py-16 relative z-10">
-          <div className="flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 lg:py-16 relative z-10">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between space-y-6 lg:space-y-0">
             {/* Premium Brand Identity */}
-            <div className="flex items-center space-x-12">
+            <div className="flex items-center space-x-4 sm:space-x-6 lg:space-x-12 w-full lg:w-auto">
               {/* Revolutionary Logo Design */}
-              <div className="relative group">
-                <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-red-500 via-rose-500 to-pink-600 shadow-2xl flex items-center justify-center cursor-pointer transform hover:scale-110 hover:rotate-6 transition-all duration-700 relative overflow-hidden group">
-                  <Heart className="w-14 h-14 text-white relative z-10 transform group-hover:scale-110 transition-transform duration-500" />
+              <div className="relative group flex-shrink-0">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-red-500 via-rose-500 to-pink-600 shadow-xl sm:shadow-2xl flex items-center justify-center cursor-pointer transform hover:scale-110 hover:rotate-6 transition-all duration-700 relative overflow-hidden group">
+                  <Heart className="w-8 h-8 sm:w-10 sm:h-10 lg:w-14 lg:h-14 text-white relative z-10 transform group-hover:scale-110 transition-transform duration-500" />
                   
                   {/* Animated ECG Line */}
                   <div className="absolute inset-0 overflow-hidden rounded-3xl">
@@ -425,69 +425,69 @@ export const CardiologyWorkspace: React.FC = () => {
               </div>
               
               {/* Sophisticated Title Section */}
-              <div className="space-y-4">
-                <div className="flex items-center space-x-6">
-                  <div className="space-y-2">
-                    <h1 className="text-7xl font-black bg-gradient-to-r from-gray-900 via-red-800 to-gray-900 bg-clip-text text-transparent leading-none tracking-tight">
+              <div className="space-y-3 sm:space-y-4 flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                  <div className="space-y-1 sm:space-y-2">
+                    <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black bg-gradient-to-r from-gray-900 via-red-800 to-gray-900 bg-clip-text text-transparent leading-none tracking-tight">
                       Cardiology
                     </h1>
-                    <div className="flex items-center space-x-4">
-                      <h2 className="text-4xl font-bold text-gray-700 tracking-wide">Workspace</h2>
-                      <div className="px-4 py-2 bg-gradient-to-r from-red-500 to-rose-600 rounded-2xl shadow-lg transform hover:scale-105 transition-transform duration-300">
-                        <span className="text-sm font-bold text-white tracking-wider">PROFESSIONAL</span>
+                    <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                      <h2 className="text-xl sm:text-2xl lg:text-4xl font-bold text-gray-700 tracking-wide">Workspace</h2>
+                      <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-red-500 to-rose-600 rounded-xl sm:rounded-2xl shadow-lg transform hover:scale-105 transition-transform duration-300 self-start">
+                        <span className="text-xs sm:text-sm font-bold text-white tracking-wider">PROFESSIONAL</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 
-                <p className="text-2xl text-gray-600 font-medium leading-relaxed max-w-2xl">
+                <p className="text-base sm:text-lg lg:text-2xl text-gray-600 font-medium leading-relaxed max-w-full lg:max-w-2xl">
                   Advanced Cardiac Care Intelligence Platform
-                  <span className="block text-lg text-gray-500 mt-1 font-normal">
+                  <span className="block text-sm sm:text-base lg:text-lg text-gray-500 mt-1 font-normal">
                     AI-Powered Medical Excellence for Healthcare Professionals
                   </span>
                 </p>
                 
                 {/* Enhanced Status Section */}
-                <div className="flex items-center space-x-8 mt-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                      <Stethoscope className="w-6 h-6 text-white" />
+                <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 lg:space-x-8 mt-4 sm:mt-6">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg flex-shrink-0">
+                      <Stethoscope className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
-                    <div>
-                      <span className="text-xl text-gray-800 font-semibold">
+                    <div className="min-w-0">
+                      <span className="text-base sm:text-lg lg:text-xl text-gray-800 font-semibold block">
                         Welcome back, <span className="font-bold text-red-600 hover:text-red-700 transition-colors cursor-pointer">{profile?.full_name || 'Dr. Physician'}</span>
                       </span>
-                      <div className="text-sm text-gray-500 font-medium">Board-Certified Cardiologist</div>
+                      <div className="text-xs sm:text-sm text-gray-500 font-medium">Board-Certified Cardiologist</div>
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-3 px-6 py-4 bg-emerald-50 rounded-2xl border border-emerald-200 hover:bg-emerald-100 transition-colors duration-300 group cursor-pointer shadow-sm">
-                    <div className="w-4 h-4 bg-emerald-500 rounded-full relative">
+                  <div className="flex items-center space-x-2 sm:space-x-3 px-4 sm:px-6 py-3 sm:py-4 bg-emerald-50 rounded-xl sm:rounded-2xl border border-emerald-200 hover:bg-emerald-100 transition-colors duration-300 group cursor-pointer shadow-sm self-start">
+                    <div className="w-3 h-3 sm:w-4 sm:h-4 bg-emerald-500 rounded-full relative flex-shrink-0">
                       <div className="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-75" />
                     </div>
-                    <span className="text-sm font-bold text-emerald-800">{t('common.workspace.status.allSystemsOperational')}</span>
-                    <CheckCircle2 className="w-5 h-5 text-emerald-600 group-hover:scale-110 transition-transform duration-300" />
+                    <span className="text-xs sm:text-sm font-bold text-emerald-800 whitespace-nowrap">All Systems Operational</span>
+                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 group-hover:scale-110 transition-transform duration-300 flex-shrink-0" />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Premium Action Center */}
-            <div className="flex items-center space-x-6">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6 w-full lg:w-auto">
               {/* Interactive Tour Button */}
               <button
                 onClick={() => openTour('selector')}
-                className="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 hover:-rotate-1 transition-all duration-300 overflow-hidden focus:outline-none focus:ring-4 focus:ring-indigo-300"
+                className="group relative px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white font-bold rounded-xl sm:rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 hover:-rotate-1 transition-all duration-300 overflow-hidden focus:outline-none focus:ring-4 focus:ring-indigo-300 w-full sm:w-auto"
                 aria-label="Start interactive tour of cardiology workspace features"
                 type="button"
               >
                 {/* Animated Background */}
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-400 via-purple-500 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
-                <div className="relative z-10 flex items-center space-x-3">
-                  <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                  <span>Take Interactive Tour</span>
-                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                <div className="relative z-10 flex items-center justify-center space-x-2 sm:space-x-3">
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform duration-300" />
+                  <span className="text-sm sm:text-base">Take Interactive Tour</span>
+                  <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
                 </div>
                 
                 {/* Shine Effect */}
@@ -495,17 +495,17 @@ export const CardiologyWorkspace: React.FC = () => {
               </button>
               
               {/* Live Clock Widget */}
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 px-8 py-6 hover:shadow-xl transition-shadow duration-300 group cursor-pointer">
+              <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 hover:shadow-xl transition-shadow duration-300 group cursor-pointer w-full sm:w-auto">
                 <div className="text-center">
-                  <div className="flex items-center justify-center space-x-2 mb-3">
-                    <Clock className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
-                    <div className="text-sm font-semibold text-gray-500 group-hover:text-gray-700 transition-colors">Current Time</div>
+                  <div className="flex items-center justify-center space-x-1.5 sm:space-x-2 mb-2 sm:mb-3">
+                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                    <div className="text-xs sm:text-sm font-semibold text-gray-500 group-hover:text-gray-700 transition-colors">Current Time</div>
                   </div>
-                  <div className="text-3xl font-bold text-gray-900 group-hover:scale-105 transition-transform duration-300 font-mono">
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 group-hover:scale-105 transition-transform duration-300 font-mono">
                     {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </div>
-                  <div className="text-sm text-gray-400 mt-1 font-medium">
-                    {currentTime.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
+                  <div className="text-xs sm:text-sm text-gray-400 mt-1 font-medium">
+                    {currentTime.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
                   </div>
                 </div>
               </div>
