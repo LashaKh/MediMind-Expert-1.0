@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { DEFAULT_LANGUAGE } from './config';
-import { loadLanguageResources, LanguageCode } from './languageLoader';
+import { loadLanguageResources, preloadEssentialNamespaces, LanguageCode } from './languageLoader';
 
 // Helper function to get initial language
 const getInitialLanguage = (): LanguageCode => {
@@ -68,12 +68,22 @@ const initI18n = async () => {
   try {
     await loadLanguage(initialLanguage);
   } catch (error) {
-
+    console.error(`[i18n] Failed to load initial language ${initialLanguage}:`, error);
     if (initialLanguage !== DEFAULT_LANGUAGE) {
       await loadLanguage(DEFAULT_LANGUAGE as LanguageCode);
       await i18n.changeLanguage(DEFAULT_LANGUAGE);
     }
   }
+
+  // Background preload essential namespaces for other languages
+  setTimeout(() => {
+    const allLanguages: LanguageCode[] = ['en', 'ka', 'ru'];
+    allLanguages.forEach(lang => {
+      if (lang !== initialLanguage) {
+        preloadEssentialNamespaces(lang);
+      }
+    });
+  }, 2000); // Delay to avoid blocking initial load
 
   return i18n;
 };

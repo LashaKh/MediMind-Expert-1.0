@@ -145,7 +145,7 @@ body {
   /* Responsive typography */
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
   /* Prevent horizontal scrolling */
   overflow-x: hidden;
 }
@@ -1805,7 +1805,7 @@ aside[id="sidebar"] {
 
 /* Professional Medical Interface */
 .medical-interface {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
   letter-spacing: -0.01em;
 }
 
@@ -2099,7 +2099,7 @@ aside[id="sidebar"] {
 
 /* Professional Medical Interface */
 .medical-interface {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
   letter-spacing: -0.01em;
 }
 

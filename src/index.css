@@ -294,6 +294,61 @@
   }
 }
 
+/* Force Inter font consistently throughout the application */
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+  font-optical-sizing: auto;
+}
+
+html {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+  font-weight: 400;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  font-display: swap;
+}
+
+/* Force specific font weights to prevent thin appearance */
+.font-normal, 
+.font-regular {
+  font-weight: 400 !important;
+}
+
+.font-medium {
+  font-weight: 500 !important;
+}
+
+.font-semibold {
+  font-weight: 600 !important;
+}
+
+.font-bold {
+  font-weight: 700 !important;
+}
+
+.font-extrabold {
+  font-weight: 800 !important;
+}
+
+/* Ensure headings have proper weight */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+  font-weight: 600 !important;
+}
+
+/* Force buttons to use consistent fonts */
+button, input, select, textarea {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+}
+
+/* Override any potential React or component-specific font changes */
+div, span, p, a, li, td, th {
+  font-family: inherit !important;
+}
+
 @layer base {
   :root {
     /* Light theme - matching MediMind design */
