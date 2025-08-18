@@ -317,7 +317,14 @@
   status = 200
   force = true
 
-# Simple test endpoint
+# Basic test endpoint (no dependencies)
+[[redirects]]
+  from = "/api/test-basic"
+  to = "/.netlify/functions/test-basic"
+  status = 200
+  force = true
+
+# Simple test endpoint  
 [[redirects]]
   from = "/api/simple-test"
   to = "/.netlify/functions/simple-test"
