@@ -56,7 +56,8 @@ export default {
       press: 'Press',
       or: 'or',
       toNavigate: 'to navigate',
-      toClose: 'to close'
+      toClose: 'to close',
+      skip: 'Skip Tour'
     },
     selector: {
       title: 'Choose Your Learning Path',
@@ -140,6 +141,34 @@ export default {
           0: 'Evidence-Based Guidelines',
           1: 'Clinical Pathways',
           2: 'Disease Categories'
+        }
+      }
+    },
+    steps: {
+      'ai-copilot': {
+        'ai-interface': {
+          title: '💬 Chat Interface Overview',
+          content: '<p>This is your main communication hub with the AI. The interface is designed for <strong>medical professionals</strong> with intuitive controls and clinical-focused features.</p><p>🎯 <em>Notice the medical-specific UI elements and professional styling</em></p>'
+        },
+        'ai-message-input': {
+          title: '✍️ Advanced Message Input',
+          content: '<p>Type your medical questions here. The AI understands <strong>medical terminology</strong>, abbreviations, and clinical contexts. You can ask about symptoms, treatments, drug interactions, and more.</p><p>💡 <em>Try typing "chest pain differential diagnosis"</em></p>'
+        },
+        'ai-file-upload': {
+          title: '📎 Medical File Upload',
+          content: '<p>Upload medical files directly into the conversation. Supported formats include:</p><ul><li><strong>Medical Images</strong> (DICOM, PNG, JPG)</li><li><strong>Lab Results</strong> (PDF, CSV)</li><li><strong>ECGs and Reports</strong></li><li><strong>Clinical Documents</strong></li></ul><p>🔬 <em>AI can analyze and interpret these files in context</em></p>'
+        },
+        'ai-case-creation': {
+          title: '📋 Case Study Creation',
+          content: '<p>Create detailed patient case studies for <strong>research and documentation</strong>. Features include:</p><ul><li><strong>Anonymized patient information</strong></li><li><strong>Clinical complexity tracking</strong></li><li><strong>Case categorization and tagging</strong></li><li><strong>AI-enhanced case analysis</strong></li></ul><p>📚 <em>Build a comprehensive case library for learning and reference</em></p>'
+        },
+        'ai-case-management': {
+          title: '🗂️ Case Management System',
+          content: '<p>Your case studies integrate seamlessly with AI conversations:</p><ul><li><strong>Active case context</strong> in AI responses</li><li><strong>Case-specific recommendations</strong></li><li><strong>Progress tracking</strong> and follow-up</li><li><strong>Historical case analysis</strong></li></ul><p>🔗 <em>AI remembers case details and provides context-aware insights</em></p>'
+        },
+        'ai-complete': {
+          title: '🎉 AI Co-Pilot Mastery Complete!',
+          content: '<p>Excellent! You\'ve mastered the AI Medical Co-Pilot. You now know how to:</p><ul><li>Communicate with AI using medical terminology</li><li>Upload and analyze medical files</li><li>Create and manage patient case studies</li><li>Get AI-powered medical insights with case context</li><li>Leverage evidence-based recommendations</li></ul><p>🚀 <em>Ready to revolutionize your medical practice with comprehensive case management!</em></p>'
         }
       }
     }

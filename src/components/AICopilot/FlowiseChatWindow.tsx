@@ -7,6 +7,7 @@ import { useChat as useChatContext } from '../../contexts/ChatContext';
 import { useAppStore } from '../../stores/useAppStore';
 import { useFlowiseChat } from '../../hooks/chat/useFlowiseChat';
 import { useCalculatorIntegration } from '../../hooks/useCalculatorIntegration';
+import { useMobileOptimization, optimizeClasses, getOptimizedDelay } from '../../hooks/useMobileOptimization';
 import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
 import { listUserDocuments } from '../../lib/api/vectorStore';
 import { v4 as uuidv4 } from 'uuid';
@@ -43,6 +44,9 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   const { t } = useTranslation();
   const { profile } = useAuth();
   const location = useLocation();
+  
+  // Mobile optimization for GPU-intensive effects
+  const { shouldOptimize, animationClasses } = useMobileOptimization();
   
   // ABG Context from navigation state
   const [abgContext, setAbgContext] = useState<ABGResult | null>(null);
@@ -106,6 +110,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       startNewSession?: boolean;
     } | null;
     
+    let timeoutId: NodeJS.Timeout;
+    
     if (state?.abgContext) {
       console.log('ABG context received (passive loading):', state.abgContext);
       console.log('Setting curated knowledge base for ABG consultation');
@@ -128,7 +134,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       
       // Show visual feedback that context is loaded and ready
       setIsPulsing(true);
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         setIsPulsing(false);
         setIsContextLoading(false);
       }, 2000);
@@ -136,6 +142,13 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       // Clear the state to prevent re-applying on future navigation
       navigate(location.pathname, { replace: true, state: undefined });
     }
+    
+    // Cleanup timeout on unmount to prevent memory leaks
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [location, navigate, setKnowledgeBase, createNewConversation, setActiveConversation, profile]);
 
   // Check if we need to create a conversation when user sends first message
@@ -151,11 +164,11 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     return activeConversationId;
   }, [activeConversationId, createNewConversation, setActiveConversation, profile]);
 
-  // Enhanced animations and interactions
+  // Enhanced animations and interactions - Optimized frequency for performance
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
-    }, 60000); // Update every minute
+    }, 300000); // Update every 5 minutes (reduced from 1 minute for performance)
 
     return () => {
       clearInterval(timer);
@@ -213,12 +226,12 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     }
   }, [profile?.user_id, setPersonalDocumentCount]);
 
-  // Pulse effect for AI readiness
+  // Pulse effect for AI readiness - Optimized frequency and pattern for performance
   useEffect(() => {
     const pulseTimer = setInterval(() => {
       setIsPulsing(true);
       setTimeout(() => setIsPulsing(false), 2000);
-    }, 8000);
+    }, 30000); // Reduced from 8 seconds to 30 seconds for performance
 
     return () => clearInterval(pulseTimer);
   }, []);
@@ -677,13 +690,43 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     <div className={`h-full w-full flex flex-col relative overflow-hidden ${className}`}>
       {/* Revolutionary Background System */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Primary ambient gradient */}
-        <div className={`absolute inset-0 bg-gradient-to-br from-white via-slate-50/30 to-${specialtyConfig.accentColor}-50/20`} />
+        {/* Primary ambient gradient - Optimized for mobile */}
+        <div className={optimizeClasses(
+          `absolute inset-0 bg-gradient-to-br from-white via-slate-50/30 to-${specialtyConfig.accentColor}-50/20`,
+          `absolute inset-0 bg-gradient-to-br from-white/95 to-slate-50/40`,
+          shouldOptimize
+        )} />
         
-        {/* Dynamic floating orbs */}
-        <div className={`absolute top-0 left-0 w-96 h-96 bg-gradient-radial from-${specialtyConfig.glowColor}/8 via-${specialtyConfig.glowColor}/4 to-transparent rounded-full blur-3xl animate-float`} />
-        <div className={`absolute bottom-0 right-0 w-80 h-80 bg-gradient-radial from-blue-500/6 via-indigo-500/3 to-transparent rounded-full blur-3xl animate-float`} style={{ animationDelay: '-3s' }} />
-        <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-radial from-emerald-500/5 via-teal-500/2 to-transparent rounded-full blur-2xl animate-float`} style={{ animationDelay: '-6s' }} />
+        {/* Dynamic floating orbs - Optimized for mobile performance */}
+        {animationClasses.orbCount >= 1 && (
+          <div 
+            className={optimizeClasses(
+              `absolute top-0 left-0 w-96 h-96 bg-gradient-radial from-${specialtyConfig.glowColor}/8 via-${specialtyConfig.glowColor}/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
+              `absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-${specialtyConfig.glowColor}/4 to-transparent rounded-full ${animationClasses.blur}`,
+              shouldOptimize
+            )}
+          />
+        )}
+        {animationClasses.orbCount >= 2 && (
+          <div 
+            className={optimizeClasses(
+              `absolute bottom-0 right-0 w-80 h-80 bg-gradient-radial from-blue-500/6 via-indigo-500/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
+              `absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-br from-blue-500/3 to-transparent rounded-full ${animationClasses.blur}`,
+              shouldOptimize
+            )}
+            style={getOptimizedDelay('-3s', shouldOptimize)}
+          />
+        )}
+        {animationClasses.orbCount >= 3 && (
+          <div 
+            className={optimizeClasses(
+              `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-radial from-emerald-500/5 via-teal-500/2 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
+              `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-emerald-500/3 to-transparent rounded-full ${animationClasses.blur}`,
+              shouldOptimize
+            )}
+            style={getOptimizedDelay('-6s', shouldOptimize)}
+          />
+        )}
         
         {/* Luxury mesh gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/40 to-transparent" />
@@ -692,11 +735,18 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       {/* Mobile-Optimized Premium Header */}
       <div className="relative z-20" data-tour="chat-window">
         {/* Mobile-first glass morphism header container */}
-        <div className="relative backdrop-blur-3xl bg-gradient-to-r from-white/95 via-white/98 to-white/95 border-b border-gradient-to-r from-white/20 via-white/40 to-white/20 shadow-2xl shadow-slate-900/8">
+        <div className={`relative ${animationClasses.backdropBlur} bg-gradient-to-r from-white/95 via-white/98 to-white/95 border-b border-gradient-to-r from-white/20 via-white/40 to-white/20 shadow-2xl shadow-slate-900/8`}>
           {/* Simplified animated background for mobile performance */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className={`absolute -top-16 -left-16 w-32 h-32 bg-gradient-radial from-${specialtyConfig.glowColor}/8 via-${specialtyConfig.glowColor}/4 to-transparent rounded-full blur-3xl animate-float opacity-60`} />
-            <div className="absolute -top-12 -right-12 w-28 h-28 bg-gradient-radial from-indigo-500/6 via-blue-500/3 to-transparent rounded-full blur-2xl animate-float opacity-40" style={{ animationDelay: '-4s' }} />
+            {!shouldOptimize && (
+              <>
+                <div className={`absolute -top-16 -left-16 w-32 h-32 bg-gradient-radial from-${specialtyConfig.glowColor}/8 via-${specialtyConfig.glowColor}/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-60`} />
+                <div 
+                  className={`absolute -top-12 -right-12 w-28 h-28 bg-gradient-radial from-indigo-500/6 via-blue-500/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-40`}
+                  style={getOptimizedDelay('-4s', shouldOptimize)}
+                />
+              </>
+            )}
             {/* Subtle mesh overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
           </div>
@@ -716,7 +766,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     bg-gradient-to-br ${specialtyConfig.gradient}
                     shadow-lg sm:shadow-xl shadow-${specialtyConfig.glowColor}/20
                     transform transition-all duration-500 hover:scale-105 active:scale-95
-                    border border-white/30 backdrop-blur-xl
+                    border border-white/30 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
                     ${isPulsing ? 'animate-pulse' : ''}
                   `}>
                     {React.cloneElement(specialtyConfig.icon, { 
@@ -759,7 +809,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                       px-1.5 sm:px-2.5 py-0.5 rounded text-xs font-bold uppercase tracking-wider
                       bg-gradient-to-r from-${specialtyConfig.accentColor}-50/90 to-${specialtyConfig.accentColor}-100/90
                       text-${specialtyConfig.accentColor}-700 border border-${specialtyConfig.accentColor}-200/40
-                      backdrop-blur-sm shadow-sm whitespace-nowrap truncate max-w-[120px] sm:max-w-none
+                      ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)} shadow-sm whitespace-nowrap truncate max-w-[120px] sm:max-w-none
                     `}>
                       {profile?.medical_specialty === 'cardiology' ? 'Cardiology' : 
                        profile?.medical_specialty === 'obgyn' ? 'OB/GYN' : 'Medical AI'}
@@ -788,7 +838,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     onKnowledgeBaseChange={setKnowledgeBase}
                     personalDocumentCount={personalDocumentCount}
                     disabled={isLoading}
-                    className="min-w-[240px] lg:min-w-[280px] bg-white/95 backdrop-blur-2xl border-white/60 shadow-lg rounded-xl"
+                    className={`min-w-[240px] lg:min-w-[280px] bg-white/95 ${animationClasses.backdropBlur} border-white/60 shadow-lg rounded-xl`}
                   />
                 </div>
 
@@ -839,7 +889,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         onClick={() => setShowConversationList(true)}
                         className={`
                           group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
-                          bg-gradient-to-br from-white/90 to-slate-50/90 backdrop-blur-xl
+                          bg-gradient-to-br from-white/90 to-slate-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
                           border border-white/60 shadow-md shadow-slate-500/8
                           hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
                           transition-all duration-300
@@ -857,7 +907,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         onClick={() => setShowCaseListModal(true)}
                         className={`
                           group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
-                          bg-gradient-to-br from-violet-50/90 to-purple-50/90 backdrop-blur-xl
+                          bg-gradient-to-br from-violet-50/90 to-purple-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
                           border border-violet-200/50 shadow-md shadow-violet-500/8
                           hover:shadow-lg hover:shadow-violet-500/15 hover:scale-105 active:scale-95
                           transition-all duration-300
@@ -880,7 +930,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         disabled={isDisabled || !isConnected}
                         className={`
                           group relative min-h-[44px] min-w-[44px] sm:px-4 p-0 sm:p-2 rounded-lg font-medium text-sm
-                          bg-gradient-to-br from-slate-50/90 to-gray-50/90 backdrop-blur-xl
+                          bg-gradient-to-br from-slate-50/90 to-gray-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
                           border border-slate-200/50 text-slate-700 shadow-md shadow-slate-500/8
                           hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
@@ -900,7 +950,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           size="sm"
                           className={`
                             group relative min-h-[44px] px-4 rounded-lg font-medium text-sm
-                            bg-gradient-to-br from-slate-50/90 to-gray-50/90 backdrop-blur-xl
+                            bg-gradient-to-br from-slate-50/90 to-gray-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
                             border border-slate-200/50 text-slate-700 shadow-md shadow-slate-500/8
                             hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
                             disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
@@ -921,7 +971,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 onKnowledgeBaseChange={setKnowledgeBase}
                 personalDocumentCount={personalDocumentCount}
                 disabled={isLoading}
-                className="w-full bg-white/95 backdrop-blur-2xl border-white/60 shadow-lg rounded-lg min-h-[44px]"
+                className={`w-full bg-white/95 ${animationClasses.backdropBlur} border-white/60 shadow-lg rounded-lg min-h-[44px]`}
               />
             </div>
             
@@ -959,7 +1009,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       {/* ABG Context Banner - Prominent display when context is active */}
       {abgContext && (
         <div className="relative z-20 mx-4 -mb-2">
-          <div className="bg-gradient-to-r from-red-50 via-rose-50 to-red-50 border border-red-200/50 rounded-xl p-4 shadow-lg backdrop-blur-sm">
+          <div className={`bg-gradient-to-r from-red-50 via-rose-50 to-red-50 border border-red-200/50 rounded-xl p-4 shadow-lg ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)}`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -1012,9 +1062,9 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 <div className="relative mx-auto mb-8 mt-16 sm:mt-20 lg:mt-24">
                 <div className={`
                   w-24 h-24 rounded-3xl bg-gradient-to-br ${specialtyConfig.gradient}
-                  shadow-2xl shadow-${specialtyConfig.glowColor}/25 backdrop-blur-xl
+                  shadow-2xl shadow-${specialtyConfig.glowColor}/25 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
                   flex items-center justify-center relative
-                  ${isPulsing ? 'animate-pulse scale-110' : 'animate-float'}
+                  ${isPulsing ? 'animate-pulse scale-110' : optimizeClasses('animate-float', '', shouldOptimize)}
                   border border-white/20
                   transition-all duration-1000
                 `}>
@@ -1047,8 +1097,12 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                   className={`
                     group relative px-4 sm:px-6 py-3 rounded-xl sm:rounded-2xl font-medium text-sm
                     min-h-[44px] w-full sm:w-auto flex items-center justify-center
-                    bg-gradient-to-br from-${specialtyConfig.accentColor}-50/90 to-${specialtyConfig.accentColor}-100/90 
-                    backdrop-blur-xl border border-${specialtyConfig.accentColor}-200/50 
+                    ${optimizeClasses(
+                      `bg-gradient-to-br from-${specialtyConfig.accentColor}-50/90 to-${specialtyConfig.accentColor}-100/90`,
+                      `bg-gradient-to-br from-${specialtyConfig.accentColor}-50 to-${specialtyConfig.accentColor}-100`,
+                      shouldOptimize
+                    )}
+                    ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)} border border-${specialtyConfig.accentColor}-200/50 
                     text-${specialtyConfig.accentColor}-700 shadow-lg shadow-${specialtyConfig.accentColor}-500/10
                     hover:shadow-xl hover:shadow-${specialtyConfig.accentColor}-500/20 hover:scale-105 active:scale-95
                     transition-all duration-300 transform
@@ -1069,7 +1123,11 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                   className={`
                     group relative px-4 sm:px-6 py-3 rounded-xl sm:rounded-2xl font-medium text-sm
                     min-h-[44px] w-full sm:w-auto flex items-center justify-center
-                    bg-gradient-to-br from-slate-50/90 to-slate-100/90 backdrop-blur-xl
+                    ${optimizeClasses(
+                      'bg-gradient-to-br from-slate-50/90 to-slate-100/90',
+                      'bg-gradient-to-br from-slate-50 to-slate-100',
+                      shouldOptimize
+                    )} ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
                     border border-slate-200/60 text-slate-700 shadow-lg shadow-slate-500/8
                     hover:shadow-xl hover:shadow-slate-500/15 hover:scale-105 active:scale-95
                     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
@@ -1105,7 +1163,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       {error && (
         <div className="flex-shrink-0 mx-3 sm:mx-4 lg:mx-6 mb-3 sm:mb-4 relative">
         <div className={`
-            p-3 sm:p-4 lg:p-5 rounded-xl sm:rounded-2xl backdrop-blur-2xl
+            p-3 sm:p-4 lg:p-5 rounded-xl sm:rounded-2xl ${animationClasses.backdropBlur}
             bg-gradient-to-r from-red-50/90 via-rose-50/90 to-red-50/90
             border border-red-200/60 shadow-xl shadow-red-500/20
             relative overflow-hidden
@@ -1143,7 +1201,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
             confidence={suggestions.confidence}
             onCalculatorSelect={onCalculatorSelect}
             onDismiss={dismissSuggestions}
-            className="backdrop-blur-2xl bg-gradient-to-r from-white/95 to-white/90 border border-white/60 rounded-xl sm:rounded-2xl shadow-2xl shadow-slate-900/10"
+            className={`${animationClasses.backdropBlur} bg-gradient-to-r from-white/95 to-white/90 border border-white/60 rounded-xl sm:rounded-2xl shadow-2xl shadow-slate-900/10`}
           />
         </div>
       )}
@@ -1151,7 +1209,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       {/* Mobile-Optimized Input Area */}
       <div className="flex-shrink-0 relative z-20">
         {/* Mobile-first glass morphism container */}
-        <div className="relative backdrop-blur-3xl bg-gradient-to-t from-white/95 via-white/90 to-white/95 border-t border-white/60 shadow-2xl shadow-slate-900/10">
+        <div className={`relative ${animationClasses.backdropBlur} bg-gradient-to-t from-white/95 via-white/90 to-white/95 border-t border-white/60 shadow-2xl shadow-slate-900/10`}>
           {/* Performance-optimized ambient glow effect */}
           <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/30 to-transparent" />
           <div className="absolute -top-6 sm:-top-8 left-1/2 transform -translate-x-1/2 w-2/3 h-6 sm:h-8 bg-gradient-to-r from-transparent via-blue-400/10 to-transparent blur-2xl rounded-full" />
@@ -1257,7 +1315,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         }
         
         .animate-float {
-          animation: animate-float 6s ease-in-out infinite;
+          animation: animate-float 12s ease-in-out infinite;
         }
         
         .animate-spin-slow {
