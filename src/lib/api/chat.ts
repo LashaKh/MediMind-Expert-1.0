@@ -62,11 +62,12 @@ async function fetchAIResponseDirect(
     // Get Flowise configuration from Supabase Edge Function
     const authResponse = await retryWithBackoff(async () => {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const response = await fetch(`${supabaseUrl}/functions/v1/flowise-auth`, {
+      const response = await fetch(`${supabaseUrl}/functions/v1/flowise-chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
+          'Authorization': `Bearer ${session.access_token}`,
+          'X-Request-Type': 'auth'
         }
       });
 
