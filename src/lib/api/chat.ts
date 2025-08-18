@@ -61,12 +61,14 @@ async function fetchAIResponseDirect(
     
     // Get Flowise configuration from auth endpoint with retry logic
     const authResponse = await retryWithBackoff(async () => {
-      const response = await fetch('/api/flowise/auth', {
+      const response = await fetch('/api/flowise/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
-        }
+          'Authorization': `Bearer ${session.access_token}`,
+          'X-Request-Type': 'auth'  // Signal to function this is an auth request
+        },
+        body: JSON.stringify({ requestType: 'auth' })
       });
 
       if (!response.ok) {

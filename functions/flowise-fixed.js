@@ -212,8 +212,19 @@ async function sendToFlowise(message, user, conversationId, uploads, knowledgeBa
 exports.handler = async (event, context) => {
   const origin = event.headers.origin || event.headers.Origin;
   
+  console.log('🚀 flowise-fixed called:', {
+    path: event.path,
+    method: event.httpMethod,
+    hasAuthHeader: !!(event.headers['x-request-type']),
+    bodyPreview: event.body?.substring(0, 100)
+  });
+  
   // Handle auth requests (workaround for deployment issues)
-  if (event.path && event.path.includes('/auth')) {
+  const isAuthRequest = (event.path && event.path.includes('/auth')) || 
+                       (event.headers['x-request-type'] === 'auth') ||
+                       (event.body && event.body.includes('"requestType":"auth"'));
+  
+  if (isAuthRequest) {
     console.log('🔐 Auth request detected, handling directly');
     
     // Handle OPTIONS for CORS
