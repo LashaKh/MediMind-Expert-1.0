@@ -212,7 +212,123 @@ async function sendToFlowise(message, user, conversationId, uploads, knowledgeBa
 exports.handler = async (event, context) => {
   const origin = event.headers.origin || event.headers.Origin;
   
-  // SECURITY: Validate origin before processing
+  // Handle auth requests (workaround for deployment issues)
+  if (event.path && event.path.includes('/auth')) {
+    console.log('🔐 Auth request detected, handling directly');
+    
+    // Handle OPTIONS for CORS
+    if (event.httpMethod === 'OPTIONS') {
+      return {
+        statusCode: 200,
+        headers: getCorsHeaders(origin, DEFAULT_CORS_OPTIONS),
+        body: ''
+      };
+    }
+
+    // Only allow POST requests for auth
+    if (event.httpMethod !== 'POST') {
+      return {
+        statusCode: 405,
+        headers: {
+          'Content-Type': 'application/json',
+          'Allow': 'POST, OPTIONS',
+          ...getCorsHeaders(origin, DEFAULT_CORS_OPTIONS)
+        },
+        body: JSON.stringify({ error: 'Method not allowed' })
+      };
+    }
+
+    try {
+      // Check authentication
+      const authHeader = event.headers.authorization || event.headers.Authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return {
+          statusCode: 401,
+          headers: {
+            'Content-Type': 'application/json',
+            ...getCorsHeaders(origin, DEFAULT_CORS_OPTIONS)
+          },
+          body: JSON.stringify({ error: 'Authentication required' })
+        };
+      }
+
+      // Decode JWT token
+      const token = authHeader.replace('Bearer ', '');
+      const jwtPayload = decodeSupabaseJWT(token);
+      
+      if (!jwtPayload) {
+        return {
+          statusCode: 401,
+          headers: {
+            'Content-Type': 'application/json',
+            ...getCorsHeaders(origin, DEFAULT_CORS_OPTIONS)
+          },
+          body: JSON.stringify({ error: 'Invalid authentication token' })
+        };
+      }
+
+      // Check token expiration
+      if (jwtPayload.exp && Date.now() >= jwtPayload.exp * 1000) {
+        return {
+          statusCode: 401,
+          headers: {
+            'Content-Type': 'application/json',
+            ...getCorsHeaders(origin, DEFAULT_CORS_OPTIONS)
+          },
+          body: JSON.stringify({ error: 'Token expired' })
+        };
+      }
+
+      // Get user profile
+      const profile = await getUserProfile(jwtPayload.id);
+      const user = {
+        ...jwtPayload,
+        specialty: profile.specialty || jwtPayload.specialty,
+        role: profile.role || jwtPayload.role
+      };
+
+      // Get Flowise configuration
+      const flowiseConfig = getFlowiseConfig(user.specialty);
+      
+      // Get user's Vector Store ID
+      const vectorStoreId = await getUserVectorStoreId(user.id);
+
+      return {
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCorsHeaders(origin, DEFAULT_CORS_OPTIONS)
+        },
+        body: JSON.stringify({
+          success: true,
+          data: {
+            flowiseUrl: flowiseConfig.url,
+            specialty: flowiseConfig.specialty,
+            userId: user.id,
+            vectorStoreId: vectorStoreId,
+            openaiApiKey: process.env.OPENAI_API_KEY
+          }
+        })
+      };
+
+    } catch (error) {
+      console.error('❌ Auth handler error:', error);
+      
+      return {
+        statusCode: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCorsHeaders(origin, DEFAULT_CORS_OPTIONS)
+        },
+        body: JSON.stringify({ 
+          error: 'Internal server error',
+          details: error.message 
+        })
+      };
+    }
+  }
+  
+  // SECURITY: Validate origin before processing chat requests
   if (origin && !isOriginAllowed(origin, DEFAULT_CORS_OPTIONS.allowedOrigins)) {
     return {
       statusCode: 403,

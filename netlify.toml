@@ -187,7 +187,7 @@
 
 [[redirects]]
   from = "/api/flowise/auth"
-  to = "/.netlify/functions/flowise-auth"
+  to = "/.netlify/functions/flowise-fixed"
   status = 200
   force = true
 
