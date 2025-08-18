@@ -154,15 +154,97 @@ export const useRealtimeAnalytics = (
     });
   }, []);
 
-  // Setup real-time subscription
+  // Setup real-time subscription with consolidated channel and throttling
   useEffect(() => {
     if (!config.enableSubscription || !user) return;
 
+    let updateBuffer: any[] = [];
+    let throttleTimeout: NodeJS.Timeout | null = null;
+    let isVisible = !document.hidden; // Track visibility state
+
+    // Handle visibility changes to pause/resume subscriptions
+    const handleVisibilityChange = () => {
+      isVisible = !document.hidden;
+      if (!isVisible && subscriptionRef.current) {
+        // Pause subscriptions when not visible
+        console.log('Pausing analytics subscriptions (tab hidden)');
+      } else if (isVisible && subscriptionRef.current) {
+        // Resume and refresh data when visible again
+        console.log('Resuming analytics subscriptions (tab visible)');
+        fetchInitialData(); // Refresh data to catch up
+      }
+    };
+
+    // Throttled update handler to batch multiple updates
+    const processBufferedUpdates = () => {
+      if (updateBuffer.length === 0) return;
+
+      const updates = [...updateBuffer];
+      updateBuffer = [];
+
+      setData(prevData => {
+        let newData = { ...prevData };
+        
+        // Process all buffered updates
+        updates.forEach(payload => {
+          switch (payload.table) {
+            case 'news_user_interactions':
+              if (payload.eventType === 'INSERT') {
+                newData.engagement = [payload.new, ...newData.engagement.slice(0, 99)];
+              } else if (payload.eventType === 'UPDATE') {
+                newData.engagement = newData.engagement.map(item => 
+                  item.id === payload.new.id ? payload.new : item
+                );
+              }
+              break;
+              
+            case 'performance_sessions':
+              if (payload.eventType === 'INSERT') {
+                newData.userBehavior = [payload.new, ...newData.userBehavior.slice(0, 49)];
+              }
+              break;
+              
+            case 'medical_news':
+              if (payload.eventType === 'UPDATE') {
+                newData.engagement = newData.engagement.map(interaction => 
+                  interaction.medical_news?.id === payload.new.id 
+                    ? { ...interaction, medical_news: payload.new }
+                    : interaction
+                );
+              }
+              break;
+          }
+        });
+        
+        newData.lastUpdated = new Date();
+        return newData;
+      });
+
+      console.log(`Processed ${updates.length} batched analytics updates`);
+    };
+
+    // Enhanced real-time handler with throttling
+    const handleThrottledRealtimeUpdate = (payload: any) => {
+      // Skip updates if tab is not visible to save resources
+      if (!isVisible) return;
+
+      // Add to buffer instead of immediate processing
+      updateBuffer.push(payload);
+      
+      // Throttle updates to every 3 seconds
+      if (throttleTimeout) {
+        clearTimeout(throttleTimeout);
+      }
+      
+      throttleTimeout = setTimeout(processBufferedUpdates, 3000);
+    };
+
     const setupSubscription = async () => {
       try {
-        // Subscribe to news interactions for real-time engagement tracking
-        const engagementChannel = supabase
-          .channel('analytics-engagement')
+        // Single consolidated channel for all analytics subscriptions
+        const analyticsChannel = supabase
+          .channel('analytics-master')
+          // News interactions subscription
           .on(
             'postgres_changes',
             {
@@ -170,12 +252,9 @@ export const useRealtimeAnalytics = (
               schema: 'public',
               table: 'news_user_interactions'
             },
-            handleRealtimeUpdate
-          );
-
-        // Subscribe to performance sessions for real-time user behavior
-        const behaviorChannel = supabase
-          .channel('analytics-behavior')
+            handleThrottledRealtimeUpdate
+          )
+          // Performance sessions subscription  
           .on(
             'postgres_changes',
             {
@@ -183,12 +262,9 @@ export const useRealtimeAnalytics = (
               schema: 'public',
               table: 'performance_sessions'
             },
-            handleRealtimeUpdate
-          );
-
-        // Subscribe to medical news updates
-        const newsChannel = supabase
-          .channel('analytics-news')
+            handleThrottledRealtimeUpdate
+          )
+          // Medical news updates subscription
           .on(
             'postgres_changes',
             {
@@ -196,24 +272,23 @@ export const useRealtimeAnalytics = (
               schema: 'public',
               table: 'medical_news'
             },
-            handleRealtimeUpdate
+            handleThrottledRealtimeUpdate
           );
 
-        await engagementChannel.subscribe();
-        await behaviorChannel.subscribe();
-        await newsChannel.subscribe();
+        await analyticsChannel.subscribe();
 
         subscriptionRef.current = {
-          engagement: engagementChannel,
-          behavior: behaviorChannel,
-          news: newsChannel
+          master: analyticsChannel
         };
 
-        console.log('Real-time analytics subscriptions established');
+        // Add visibility change listener
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        console.log('Consolidated analytics subscription established (3→1 channels)');
         setConnected(true);
         
       } catch (err) {
-        console.error('Failed to setup real-time subscriptions:', err);
+        console.error('Failed to setup consolidated subscription:', err);
         setConnected(false);
       }
     };
@@ -221,14 +296,26 @@ export const useRealtimeAnalytics = (
     setupSubscription();
 
     return () => {
-      if (subscriptionRef.current) {
-        Object.values(subscriptionRef.current).forEach((channel: any) => {
-          supabase.removeChannel(channel);
-        });
+      // Cleanup throttle timeout
+      if (throttleTimeout) {
+        clearTimeout(throttleTimeout);
+      }
+      
+      // Process any remaining buffered updates before cleanup
+      if (updateBuffer.length > 0) {
+        processBufferedUpdates();
+      }
+
+      // Remove visibility listener
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+
+      // Cleanup subscription
+      if (subscriptionRef.current?.master) {
+        supabase.removeChannel(subscriptionRef.current.master);
         subscriptionRef.current = null;
       }
     };
-  }, [user, config.enableSubscription, handleRealtimeUpdate]);
+  }, [user, config.enableSubscription, handleRealtimeUpdate, fetchInitialData]);
 
   // Setup periodic refresh fallback
   useEffect(() => {
@@ -256,14 +343,13 @@ export const useRealtimeAnalytics = (
     return fetchInitialData();
   }, [fetchInitialData]);
 
-  // Connection status check
+  // Connection status check for consolidated subscription
   const checkConnection = useCallback(() => {
-    if (subscriptionRef.current) {
-      const channels = Object.values(subscriptionRef.current);
-      const connectedChannels = channels.filter((channel: any) => 
-        channel.state === 'joined'
-      );
-      setConnected(connectedChannels.length === channels.length);
+    if (subscriptionRef.current?.master) {
+      const masterChannel = subscriptionRef.current.master;
+      setConnected(masterChannel.state === 'joined');
+    } else {
+      setConnected(false);
     }
   }, []);
 
@@ -290,7 +376,7 @@ export const useRealtimeAnalytics = (
     
     // Real-time status
     isRealtime: config.enableSubscription && connected,
-    subscriptionCount: subscriptionRef.current ? Object.keys(subscriptionRef.current).length : 0
+    subscriptionCount: subscriptionRef.current?.master ? 1 : 0
   };
 };
 

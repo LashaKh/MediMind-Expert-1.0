@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowLeft, ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface TourTooltipPortalProps {
   targetElement: HTMLElement | null;
@@ -40,6 +41,7 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
   allowSkip = true,
   debugMode = true
 }) => {
+  const { t } = useTranslation();
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({});
   const [finalPosition, setFinalPosition] = useState<Position>('bottom');
@@ -398,7 +400,7 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
           zIndex: '999999 !important' as any,
           pointerEvents: 'none !important' as any
         }}>
-          🐛 DEBUG PORTAL - Step {currentStep + 1}/{totalSteps}
+          {t('tour.tooltip.debugPortalStep', { current: currentStep + 1, total: totalSteps })}
         </div>
       )}
 
@@ -424,7 +426,7 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
           zIndex: '999999 !important' as any,
           pointerEvents: 'auto !important' as any
         }}
-        aria-label="Close tour"
+        aria-label={t('tour.tooltip.closeTour', 'Close tour')}
       >
         ×
       </button>
@@ -481,7 +483,11 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
         marginBottom: '24px !important' as any,
         fontWeight: '600 !important' as any
       }}>
-        {Math.round(progress)}% Complete ({currentStep + 1} of {totalSteps})
+        {t('tour.tooltip.percentComplete', { 
+          percent: Math.round(progress), 
+          current: currentStep + 1, 
+          total: totalSteps 
+        })}
       </div>
 
       {/* Buttons */}
@@ -507,7 +513,7 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
                 pointerEvents: 'auto !important' as any
               }}
             >
-              ← Previous
+              {t('tour.tooltip.previous', '← Previous')}
             </button>
           )}
         </div>
@@ -531,7 +537,7 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
                 pointerEvents: 'auto !important' as any
               }}
             >
-              Skip Tour
+              {t('tour.tooltip.skip', 'Skip Tour')}
             </button>
           )}
           
@@ -551,7 +557,7 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
               pointerEvents: 'auto !important' as any
             }}
           >
-            {isLastStep ? '✓ Complete Tour' : 'Next Step →'}
+            {isLastStep ? t('tour.tooltip.completeTour', '✓ Complete Tour') : t('tour.tooltip.nextStep', 'Next Step →')}
           </button>
         </div>
       </div>
@@ -568,7 +574,7 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
           border: '1px solid #d1d5db !important' as any,
           fontFamily: 'monospace !important' as any
         }}>
-          <div><strong>🔍 Debug Info:</strong></div>
+          <div><strong>{t('tour.tooltip.debugInfo', '🔍 Debug Info:')}</strong></div>
           <div>Position: {finalPosition}</div>
           <div>Visible: {isVisible ? 'YES' : 'NO'}</div>
           <div>Target: {targetElement?.tagName || 'null'}</div>

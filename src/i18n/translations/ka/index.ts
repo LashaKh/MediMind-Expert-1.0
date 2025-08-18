@@ -56,7 +56,12 @@ export default {
       press: 'დააჭირეთ',
       or: 'ან',
       toNavigate: 'ნავიგაციისთვის',
-      toClose: 'დასახურად'
+      toClose: 'დასახურად',
+      swipeHint: 'გაასრიალეთ მარცხნივ/მარჯვნივ ნავიგაციისთვის',
+      debugPortalStep: 'DEBUG პორტალი - ნაბიჯი {{current}}/{{total}}',
+      closeTour: 'ტურის დახურვა',
+      percentComplete: '{{percent}}% დასრულებულია ({{current}}/{{total}})',
+      debugInfo: 'Debug ინფორმაცია:'
     },
     selector: {
       title: 'აირჩიეთ სასწავლო მიმართულება',

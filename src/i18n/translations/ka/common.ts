@@ -336,14 +336,6 @@ export const common = {
     }
   },
 
-  // Workspace status messages
-  workspace: {
-    status: {
-      allSystemsOperational: 'ყველა სისტემა მუშაობს',
-      emergencyReady: 'გადაუდებელი მზადყოფნა'
-    }
-  },
-  
   // Service Layer Error Messages
   serviceErrors: {
     // Authentication errors
@@ -430,7 +422,7 @@ export const common = {
     }
   },
 
-  // Workspace status messages (from hardcoded strings)
+  // Workspace status messages (merged from duplicates)
   workspace: {
     status: {
       systemOnline: 'სისტემა ონლაინ',

@@ -57,7 +57,12 @@ export default {
       or: 'or',
       toNavigate: 'to navigate',
       toClose: 'to close',
-      skip: 'Skip Tour'
+      skip: 'Skip Tour',
+      swipeHint: 'Swipe left/right to navigate',
+      debugPortalStep: 'DEBUG PORTAL - Step {{current}} of {{total}}',
+      closeTour: 'Close tour',
+      percentComplete: '{{percent}}% Complete ({{current}} of {{total}})',
+      debugInfo: 'Debug Info:'
     },
     selector: {
       title: 'Choose Your Learning Path',

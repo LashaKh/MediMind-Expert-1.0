@@ -304,15 +304,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
               {(!isCollapsed || isMobile) && (
                 <div className="flex flex-col min-w-0 flex-1">
                   <h2 className={`
-                    font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent truncate
+                    font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent truncate tracking-tight
                     ${isMobile && window.innerHeight < 500 ? 'text-sm' : 'text-lg'}
-                  `}>
+                  `}
+                  style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 700 }}>
                     {profile?.full_name || 'Professional'}
                   </h2>
                   <p className={`
-                    text-gray-500 dark:text-gray-400 font-medium truncate
+                    text-gray-500 dark:text-gray-400 font-medium truncate tracking-wide
                     ${isMobile && window.innerHeight < 500 ? 'text-xs' : 'text-xs'}
-                  `}>
+                  `}
+                  style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 500, letterSpacing: '0.025em' }}>
                     {profile?.medical_specialty || 'Medical Professional'}
                   </p>
                 </div>
@@ -437,14 +439,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                         {(!isCollapsed || isMobile) && (
                           <div className="flex-1 ml-3 min-w-0">
                             <h3 className={`
-                              font-semibold text-sm transition-all duration-300 truncate
+                              font-semibold text-sm transition-all duration-300 truncate tracking-tight
                               ${active 
                                 ? 'text-white drop-shadow-sm' 
                                 : isHovered
                                   ? 'text-white drop-shadow-sm'
                                   : 'text-black dark:text-gray-200'
                               }
-                            `}>
+                            `}
+                            style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 600 }}>
                               {item.label}
                             </h3>
                           </div>
@@ -493,13 +496,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                 <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30">
                   <div className="flex items-center space-x-2">
                     <Activity className="w-3 h-3 text-green-500" />
-                    <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                    <span className="text-xs font-medium text-gray-700 dark:text-gray-300 tracking-wide" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 500 }}>
                       {t('profile.systemStatus', 'System Status')}
                     </span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-xs text-green-600 dark:text-green-400 font-semibold">
+                    <span className="text-xs text-green-600 dark:text-green-400 font-semibold tracking-wide" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 600 }}>
                       {t('profile.online', 'Online')}
                     </span>
                   </div>
@@ -507,10 +510,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                 
                 {/* Compact Version Info */}
                 <div className="text-center">
-                  <div className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                  <div className="text-xs font-semibold text-gray-600 dark:text-gray-400 tracking-wide" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 600 }}>
                     {t('profile.mediMindExpert', 'MediMind Expert v2.0')}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-500">
+                  <div className="text-xs text-gray-500 dark:text-gray-500 tracking-wide" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 400 }}>
                     {t('profile.medicalAiAssistant', 'Medical AI Assistant')}
                   </div>
                 </div>

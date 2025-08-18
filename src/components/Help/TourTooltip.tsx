@@ -342,7 +342,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
           backdrop-filter: blur(20px) !important;
         ">
           <div style="background: rgba(255,255,255,0.2); color: white; padding: 8px; margin: -16px -16px 12px -16px; font-weight: 600; border-radius: 16px 16px 0 0; font-size: 12px; text-align: center;">
-            ✨ Medical Tour Guide - Step ${currentStep + 1}/${totalSteps}
+            ✨ ${t('tour.tooltip.title', 'Medical Tour Guide')} - ${t('tour.tooltip.stepCounter', { current: currentStep + 1, total: totalSteps })}
           </div>
           <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold;">${title}</h3>
           <div style="margin-bottom: 12px; line-height: 1.4; font-size: 13px;">${content}</div>

@@ -336,14 +336,6 @@ export const common = {
     }
   },
 
-  // Workspace status messages
-  workspace: {
-    status: {
-      allSystemsOperational: 'Все системы работают',
-      emergencyReady: 'Готовность к экстренным случаям'
-    }
-  },
-  
   // Service Layer Error Messages
   serviceErrors: {
     // Authentication errors
@@ -430,7 +422,7 @@ export const common = {
     }
   },
 
-  // Workspace status messages (from hardcoded strings)
+  // Workspace status messages (merged from duplicates)
   workspace: {
     status: {
       systemOnline: 'Система онлайн',

@@ -56,7 +56,12 @@ export default {
       press: 'Нажмите',
       or: 'или',
       toNavigate: 'для навигации',
-      toClose: 'для закрытия'
+      toClose: 'для закрытия',
+      swipeHint: 'Проведите влево/вправо для навигации',
+      debugPortalStep: 'DEBUG портал - Шаг {{current}} из {{total}}',
+      closeTour: 'Закрыть тур',
+      percentComplete: '{{percent}}% завершено ({{current}} из {{total}})',
+      debugInfo: 'Debug информация:'
     },
     selector: {
       title: 'Выберите траекторию обучения',
