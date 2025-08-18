@@ -353,17 +353,18 @@ ${messageText}`;
         delete requestBody.uploads;
       }
     } else {
-      // Use direct Flowise call for curated knowledge base (no timeout limits!)
-      logger.debug('🌊 Using direct Flowise call for curated knowledge base');
+      // Use Supabase Edge Function for curated knowledge base
+      logger.debug('🌊 Using Supabase Edge Function for curated knowledge base');
       
-      return await fetchAIResponseDirect(
-        messageText,
-        sessionId,
-        caseContext,
-        attachments,
-        knowledgeBaseType,
-        personalDocumentIds
-      );
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      apiEndpoint = `${supabaseUrl}/functions/v1/flowise-chat`;
+      
+      // Format request body for Supabase Edge Function
+      requestBody = {
+        message: messageText,
+        conversationId: sessionId,
+        caseContext: caseContext || null
+      };
     }
 
     logger.debug(`📡 Sending ${knowledgeBaseType || 'personal'} KB request to:`, apiEndpoint);
