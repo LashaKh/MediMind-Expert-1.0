@@ -121,7 +121,8 @@ exports.handler = async (event, context) => {
   
   console.log('Flowise auth endpoint called:', {
     method: event.httpMethod,
-    path: event.path
+    path: event.path,
+    timestamp: new Date().toISOString()
   });
 
   // Handle OPTIONS for CORS
@@ -130,6 +131,19 @@ exports.handler = async (event, context) => {
       statusCode: 200,
       headers: getCorsHeaders(origin),
       body: ''
+    };
+  }
+
+  // Only allow POST requests
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      headers: {
+        'Content-Type': 'application/json',
+        'Allow': 'POST, OPTIONS',
+        ...getCorsHeaders(origin)
+      },
+      body: JSON.stringify({ error: 'Method not allowed' })
     };
   }
 

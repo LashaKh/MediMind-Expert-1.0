@@ -8,6 +8,7 @@ import { convertAttachmentsToUploads } from '../../utils/fileUpload';
 import { buildAttachmentTextContext, convertEnhancedAttachmentsToUploads } from '../../utils/chatFileProcessor';
 import { buildEnhancedCaseContext } from '../../utils/caseAttachmentIntegration';
 import { logger } from '../logger';
+import { sessionManager } from '../auth/sessionManager';
 
 // Retry utility for handling rate limiting and transient errors
 async function retryWithBackoff<T>(
@@ -50,26 +51,37 @@ async function fetchAIResponseDirect(
     if (knowledgeBaseType === 'personal') {
       throw new APIError('Personal knowledge base should use OpenAI Assistant endpoint, not Flowise direct', 500);
     }
-    // Get authentication and Flowise config
-    const { data: { session } } = await supabase.auth.getSession();
+    // Get authentication and Flowise config using session manager
+    const session = await sessionManager.getValidSession();
     if (!session) {
       throw new APIError('Authentication required', 401);
     }
 
     logger.debug('Getting Flowise configuration...', undefined, { component: 'chat-api', action: 'getFlowiseConfig' });
     
-    // Get Flowise configuration from auth endpoint
-    const authResponse = await fetch('/api/flowise/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`
-      }
-    });
+    // Get Flowise configuration from auth endpoint with retry logic
+    const authResponse = await retryWithBackoff(async () => {
+      const response = await fetch('/api/flowise/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      });
 
-    if (!authResponse.ok) {
-      throw new APIError('Failed to get Flowise configuration', authResponse.status);
-    }
+      if (!response.ok) {
+        // Handle specific error cases
+        if (response.status === 404) {
+          throw new APIError('Flowise auth endpoint not found - deployment issue', 404);
+        }
+        if (response.status === 409) {
+          throw new APIError('Resource conflict during authentication', 409);
+        }
+        throw new APIError(`Failed to get Flowise configuration: ${response.status}`, response.status);
+      }
+
+      return response;
+    }, 2, 1000); // Max 2 retries with 1 second base delay
 
     const authData = await authResponse.json();
     const { flowiseUrl, specialty, userId, vectorStoreId, openaiApiKey } = authData.data;
@@ -265,33 +277,8 @@ ${messageText}`;
     // Note: Enhanced attachments with extracted text are already processed by MessageInput
     // The messageText already includes the extracted content via buildAttachmentTextContext
 
-    // Get the current user session for authentication
-    let { data: { session }, error: sessionError } = await supabase.auth.getSession();
-    
-    // Check if session exists and token is not expired
-    const isTokenExpired = session?.expires_at ? new Date(session.expires_at * 1000) <= new Date() : false;
-    
-    // If no session, session error, or token is expired, try to refresh
-    if (!session || sessionError || isTokenExpired) {
-      logger.debug('🔄 Session invalid, expired, or missing - attempting refresh...', {
-        hasSession: !!session,
-        hasError: !!sessionError,
-        isExpired: isTokenExpired,
-        expiresAt: session?.expires_at ? new Date(session.expires_at * 1000).toISOString() : 'N/A',
-        currentTime: new Date().toISOString()
-      });
-      
-      const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession();
-      
-      if (refreshError || !refreshedSession) {
-        logger.error('Failed to refresh session:', refreshError);
-        throw new APIError('Authentication required - please sign in again', 401);
-      }
-      
-      logger.debug('✅ Session refreshed successfully');
-      // Use the refreshed session
-      session = refreshedSession;
-    }
+    // Get the current user session for authentication using session manager
+    const session = await sessionManager.getValidSession();
     
     if (!session) {
       throw new APIError('Authentication required', 401);
@@ -380,23 +367,33 @@ ${messageText}`;
 
     logger.debug(`📡 Sending ${knowledgeBaseType || 'personal'} KB request to:`, apiEndpoint);
 
-    // Make the API request (for personal KB only now)
-    const response = await fetch(apiEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`
-      },
-      body: JSON.stringify(requestBody),
-    });
+    // Make the API request (for personal KB only now) with retry logic
+    const response = await retryWithBackoff(async () => {
+      const fetchResponse = await fetch(apiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify(requestBody),
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      throw new APIError(
-        errorData?.error || `HTTP error! status: ${response.status}`, 
-        response.status
-      );
-    }
+      if (!fetchResponse.ok) {
+        const errorData = await fetchResponse.json().catch(() => null);
+        
+        // Handle specific error cases
+        if (fetchResponse.status === 409) {
+          throw new APIError('Resource conflict - retrying...', 409);
+        }
+        
+        throw new APIError(
+          errorData?.error || `HTTP error! status: ${fetchResponse.status}`, 
+          fetchResponse.status
+        );
+      }
+
+      return fetchResponse;
+    }, 2, 1000); // Max 2 retries with 1 second base delay
 
     const data = await response.json();
     

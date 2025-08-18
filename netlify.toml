@@ -10,6 +10,11 @@
   directory = "functions"
   node_bundler = "esbuild"
 
+[functions."flowise-auth"]
+  timeout = 60
+  node_bundler = "esbuild"
+  external_node_modules = ["@supabase/supabase-js", "jsonwebtoken"]
+
 # Search function configurations
 [functions."search-orchestrator"]
   timeout = 60
@@ -293,6 +298,13 @@
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
     Cross-Origin-Embedder-Policy = "credentialless"
     Cross-Origin-Opener-Policy = "same-origin"
+
+# Health check endpoint
+[[redirects]]
+  from = "/api/health"
+  to = "/.netlify/functions/api-health"
+  status = 200
+  force = true
 
 # API Security Headers
 [[headers]]
