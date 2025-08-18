@@ -70,7 +70,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
 
   // State management
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState(state.initialTab || 'news');
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [showTrialFilters, setShowTrialFilters] = useState(false);
   const [showNewsFilters, setShowNewsFilters] = useState(false);
