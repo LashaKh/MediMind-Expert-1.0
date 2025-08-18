@@ -1,7 +1,8 @@
-const { createClient } = require('@supabase/supabase-js');
+import { Handler } from '@netlify/functions';
+import { createClient } from '@supabase/supabase-js';
 
 // Basic CORS headers
-function getCorsHeaders(origin) {
+function getCorsHeaders(origin?: string) {
   return {
     'Access-Control-Allow-Origin': origin || '*',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
@@ -20,12 +21,12 @@ const ENV_VARS = {
 
 // Initialize Supabase client
 const supabase = createClient(
-  ENV_VARS.SUPABASE_URL,
-  ENV_VARS.SUPABASE_SERVICE_ROLE_KEY
+  ENV_VARS.SUPABASE_URL!,
+  ENV_VARS.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 // Specialty-specific Flowise endpoints
-const FLOWISE_ENDPOINTS = {
+const FLOWISE_ENDPOINTS: Record<string, string> = {
   cardiology: ENV_VARS.FLOWISE_CARDIOLOGY_URL,
   'ob-gyn': ENV_VARS.FLOWISE_OBGYN_URL,
   'obgyn': ENV_VARS.FLOWISE_OBGYN_URL,
@@ -33,12 +34,12 @@ const FLOWISE_ENDPOINTS = {
 };
 
 // Simple JWT token decoder for Supabase tokens
-function decodeSupabaseJWT(token) {
+function decodeSupabaseJWT(token: string) {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
     
-    const payload = JSON.parse(atob(parts[1]));
+    const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
     return {
       id: payload.sub,
       email: payload.email,
@@ -55,7 +56,7 @@ function decodeSupabaseJWT(token) {
 }
 
 // Get user profile from database
-async function getUserProfile(userId) {
+async function getUserProfile(userId: string) {
   try {
     const possibleTables = ['profiles', 'users', 'user_profiles'];
     
@@ -86,9 +87,9 @@ async function getUserProfile(userId) {
 }
 
 // Get Flowise endpoint based on specialty
-function getFlowiseConfig(specialty) {
+function getFlowiseConfig(specialty?: string) {
   const normalizedSpecialty = specialty?.toLowerCase().replace(/[^a-z-]/g, '');
-  const url = FLOWISE_ENDPOINTS[normalizedSpecialty] || FLOWISE_ENDPOINTS.default;
+  const url = FLOWISE_ENDPOINTS[normalizedSpecialty || 'default'] || FLOWISE_ENDPOINTS.default;
   
   return {
     url,
@@ -97,7 +98,7 @@ function getFlowiseConfig(specialty) {
 }
 
 // Get user's Vector Store ID
-async function getUserVectorStoreId(userId) {
+async function getUserVectorStoreId(userId: string) {
   try {
     const { data, error } = await supabase
       .from('user_vector_stores')
@@ -116,7 +117,7 @@ async function getUserVectorStoreId(userId) {
   }
 }
 
-exports.handler = async (event, context) => {
+export const handler: Handler = async (event, context) => {
   const origin = event.headers.origin || event.headers.Origin;
   
   console.log('Flowise auth endpoint called:', {
@@ -237,7 +238,7 @@ exports.handler = async (event, context) => {
       },
       body: JSON.stringify({ 
         error: 'Internal server error',
-        details: error.message 
+        details: error instanceof Error ? error.message : 'Unknown error'
       })
     };
   }

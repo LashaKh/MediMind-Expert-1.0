@@ -306,6 +306,13 @@
   status = 200
   force = true
 
+# Test flowise auth endpoint
+[[redirects]]
+  from = "/api/test-flowise-auth"
+  to = "/.netlify/functions/test-flowise-auth"
+  status = 200
+  force = true
+
 # API Security Headers
 [[headers]]
   for = "/api/*"
