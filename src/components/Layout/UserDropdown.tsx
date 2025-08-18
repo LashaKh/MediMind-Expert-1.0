@@ -114,25 +114,13 @@ export const UserDropdown: React.FC = () => {
 
   if (!user) return null;
 
-  // Get position-specific styles with premium design
+  // Get position-specific styles with premium design - always right-aligned
   const getDropdownStyles = () => {
     const baseStyles = "absolute mt-3 rounded-2xl shadow-2xl border border-white/20 dark:border-gray-600/20 py-2 z-50 transition-all duration-500 ease-out";
-    const mobileStyles = "w-full max-w-sm";
-    const desktopStyles = "w-72";
+    const compactWidth = "w-56"; // Smaller, more compact width
     
-    // Use mobile width on small screens, desktop width on larger screens
-    const widthStyles = window.innerWidth < 640 ? mobileStyles : desktopStyles;
-    
-    switch (dropdownPosition) {
-      case 'bottom-left':
-        return `${baseStyles} ${widthStyles} left-0`;
-      case 'top-right':
-        return `${baseStyles} ${widthStyles} right-0 -mt-3 mb-3 bottom-full`;
-      case 'top-left':
-        return `${baseStyles} ${widthStyles} left-0 -mt-3 mb-3 bottom-full`;
-      default: // bottom-right
-        return `${baseStyles} ${widthStyles} right-0`;
-    }
+    // Always position from the right edge to prevent overflow
+    return `${baseStyles} ${compactWidth} right-0`;
   };
 
   return (
@@ -140,15 +128,16 @@ export const UserDropdown: React.FC = () => {
       <button
         ref={buttonRef}
         onClick={handleToggle}
-        className="relative group flex items-center space-x-3 px-4 py-3 rounded-2xl text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-500 ease-out border border-white/30 backdrop-blur-xl overflow-hidden min-h-[48px] touch-target-md"
+        className="relative group flex items-center gap-2 px-4 py-0 h-11 rounded-2xl text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-500 ease-out border border-white/20 backdrop-blur-xl overflow-hidden touch-target-md"
         style={{
-          background: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 25%, #3b82f6 50%, #2563eb 75%, #06b6d4 100%)',
+          background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.7) 0%, rgba(6, 182, 212, 0.8) 25%, rgba(59, 130, 246, 0.7) 50%, rgba(37, 99, 235, 0.8) 75%, rgba(6, 182, 212, 0.7) 100%)',
           backgroundSize: '300% 300%',
-          boxShadow: '0 12px 32px -8px rgba(59, 130, 246, 0.4), 0 4px 20px -4px rgba(6, 182, 212, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-          animation: 'gradient-shift 8s ease-in-out infinite'
+          boxShadow: '0 8px 25px -8px rgba(59, 130, 246, 0.25), 0 4px 15px -4px rgba(6, 182, 212, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+          animation: 'gradient-shift 6s ease-in-out infinite'
         }}
         aria-expanded={isOpen}
         aria-haspopup="true"
+        aria-label="Account Menu"
       >
         {/* Animated background layers */}
         <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
@@ -169,38 +158,57 @@ export const UserDropdown: React.FC = () => {
                animation: 'shimmer 2s ease-in-out infinite'
              }} />
         
-        <div className="relative z-10 flex items-center space-x-3">
-          {/* Enhanced avatar with premium design */}
-          <div className="relative w-10 h-10 rounded-2xl bg-white/25 backdrop-blur-sm text-white flex items-center justify-center text-lg font-bold shadow-lg group-hover:scale-110 transition-transform duration-300"
+        <div className="relative z-10 flex items-center gap-2">
+          {/* Menu icon with premium design */}
+          <div className="relative p-2 rounded-xl bg-white/25 backdrop-blur-sm group-hover:bg-white/35 transition-all duration-700 group-hover:rotate-12 group-hover:scale-110"
                style={{
-                 boxShadow: 'inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15)'
+                 boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1)'
                }}>
-            <span className="drop-shadow-lg">{getUserInitials()}</span>
-            {/* Avatar glow */}
-            <div className="absolute inset-0 rounded-2xl bg-white/30 opacity-0 group-hover:opacity-100 blur-sm transition-all duration-500" />
+            <svg 
+              className="w-5 h-5 drop-shadow-lg transition-all duration-500 group-hover:drop-shadow-xl" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+              strokeWidth={2.8}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+            </svg>
+            {/* Multi-layer icon glow */}
+            <div className="absolute inset-0 rounded-xl bg-white/50 opacity-0 group-hover:opacity-100 blur-sm transition-all duration-700" />
+            <div className="absolute inset-0 rounded-xl bg-blue-300/30 opacity-0 group-hover:opacity-100 blur-md transition-all duration-700 delay-100" />
           </div>
           
-          {/* Enhanced user info */}
-          <div className="hidden md:block text-left group-hover:translate-x-1 transition-transform duration-300">
-            <div className="text-sm font-bold text-white drop-shadow-sm"
-                 style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)' }}>
-              {profile?.full_name || user?.email}
-            </div>
-            <div className="text-xs text-white/80 drop-shadow-sm font-medium">
-              {profile?.medical_specialty || t('common.account')}
-            </div>
-          </div>
+          {/* Menu text */}
+          <span className="relative font-extrabold text-white drop-shadow-lg tracking-wide group-hover:translate-x-1 transition-all duration-500 ease-out text-sm"
+                style={{
+                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.2)'
+                }}>
+            Menu
+            {/* Enhanced text depth */}
+            <span className="absolute inset-0 text-black/30 blur-sm -z-10">Menu</span>
+            <span className="absolute inset-0 text-white/20 blur-lg -z-20">Menu</span>
+          </span>
           
-          {/* Enhanced chevron */}
-          <div className="relative p-1 rounded-xl bg-white/20 backdrop-blur-sm group-hover:bg-white/30 transition-all duration-300">
-            <ChevronDown className={`w-4 h-4 text-white drop-shadow-sm transition-all duration-300 ${
-              isOpen ? 'rotate-180 scale-110' : 'group-hover:scale-110'
-            }`} />
+          {/* Animated trailing elements */}
+          <div className="flex space-x-1">
+            <div className="w-2 h-2 rounded-full bg-white/70 opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-500 delay-200" />
+            <div className="w-1.5 h-1.5 rounded-full bg-white/50 opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-500 delay-400" />
+            <div className="w-1 h-1 rounded-full bg-white/30 opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-500 delay-600" />
           </div>
         </div>
         
-        {/* Pulse ring on hover */}
-        <div className="absolute inset-0 rounded-2xl border-2 border-white/40 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out" />
+        {/* Sophisticated pulse rings with staggered animation */}
+        <div className="absolute inset-0 rounded-2xl border-2 border-white/50 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-800 ease-out" />
+        <div className="absolute inset-0 rounded-2xl border-2 border-white/30 opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-1200 ease-out delay-200" />
+        <div className="absolute inset-0 rounded-2xl border border-white/20 opacity-0 group-hover:opacity-100 group-hover:scale-140 transition-all duration-1600 ease-out delay-400" />
+        
+        {/* Magical floating particles effect */}
+        <div className="absolute top-1 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-300"
+             style={{ animation: 'floating-particles 4s ease-in-out infinite 0.5s' }} />
+        <div className="absolute top-2 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-500"
+             style={{ animation: 'floating-particles 4s ease-in-out infinite 1s' }} />
+        <div className="absolute bottom-2 left-1/2 w-0.5 h-0.5 bg-white/30 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-700"
+             style={{ animation: 'floating-particles 4s ease-in-out infinite 1.5s' }} />
         
         {/* Floating particles */}
         <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-300"
@@ -216,39 +224,6 @@ export const UserDropdown: React.FC = () => {
                backdropFilter: 'blur(20px)',
                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)'
              }}>
-          {/* Enhanced User info section */}
-          <div className="relative px-6 py-4 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-900/20 dark:to-purple-900/20">
-            <div className="flex items-center space-x-4">
-              <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-lg font-bold shadow-xl"
-                   style={{
-                     boxShadow: 'inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 6px 20px rgba(79, 70, 229, 0.3)'
-                   }}>
-                <span className="drop-shadow-lg">{getUserInitials()}</span>
-                {/* Avatar decorative ring */}
-                <div className="absolute -inset-1 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl opacity-20 blur-sm animate-pulse" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-base font-bold text-gray-900 dark:text-gray-100 truncate bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  {profile?.full_name || user?.email}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-300 font-medium">
-                  {profile?.medical_specialty ? (
-                    <div className="flex items-center gap-2">
-                      <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span>{profile.medical_specialty} • {t('common.signedIn')}</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span>{t('common.signedIn')}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            {/* Decorative gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-t-2xl" />
-          </div>
 
           {/* Enhanced Menu items */}
           <div className="py-3">

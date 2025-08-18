@@ -66,7 +66,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
           fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm
           border-b border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out safe-top
           ${isScrolled ? 'shadow-lg' : 'shadow-md'}
-          ${isCondensed && isMobile ? 'h-12' : 'h-16'}
+          ${isCondensed && isMobile ? 'h-14' : 'h-20'}
         `}
         style={{
           backdropFilter: 'blur(12px)',
@@ -75,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
       >
         <div className={`
           flex items-center justify-between px-4 sm:px-6 lg:px-8 safe-left safe-right transition-all duration-300
-          ${isCondensed && isMobile ? 'h-12' : 'h-16'}
+          ${isCondensed && isMobile ? 'h-14 py-2' : 'h-20 py-5'}
         `}>
           {/* Left side: Logo and mobile menu button */}
           <div className="flex items-center space-x-2 sm:space-x-4">
@@ -154,13 +154,13 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
             {user && !isOnboardingPage && (
               <button
                 onClick={() => openTour('selector')}
-                className="hidden md:inline-flex items-center relative group px-6 py-3.5 rounded-3xl text-sm font-extrabold text-white shadow-2xl hover:shadow-3xl transform hover:scale-[1.03] transition-all duration-700 ease-out border border-white/30 backdrop-blur-2xl overflow-hidden"
+                className="hidden md:inline-flex items-center relative group px-4 py-0 h-11 rounded-2xl text-sm font-bold text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-500 ease-out border border-white/20 backdrop-blur-xl overflow-hidden"
                 aria-label="Start Premium Tour"
                 style={{
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 25%, #3b82f6 50%, #2563eb 75%, #06b6d4 100%)',
-                  backgroundSize: '400% 400%',
-                  boxShadow: '0 25px 50px -12px rgba(59, 130, 246, 0.5), 0 12px 40px -8px rgba(6, 182, 212, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-                  animation: 'gradient-shift 8s ease-in-out infinite'
+                  background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.7) 0%, rgba(6, 182, 212, 0.8) 25%, rgba(59, 130, 246, 0.7) 50%, rgba(37, 99, 235, 0.8) 75%, rgba(6, 182, 212, 0.7) 100%)',
+                  backgroundSize: '300% 300%',
+                  boxShadow: '0 8px 25px -8px rgba(59, 130, 246, 0.25), 0 4px 15px -4px rgba(6, 182, 212, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                  animation: 'gradient-shift 6s ease-in-out infinite'
                 }}
               >
                 {/* Dynamic animated background layers */}
@@ -252,13 +252,13 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
             {user && !isOnboardingPage && (
               <button
                 onClick={() => openTour('selector')}
-                className="md:hidden inline-flex items-center justify-center relative group p-4 rounded-3xl text-white shadow-2xl active:scale-95 transition-all duration-500 ease-out border border-white/30 backdrop-blur-2xl overflow-hidden touch-target"
+                className="md:hidden inline-flex items-center justify-center relative group p-0 h-11 w-11 rounded-2xl text-white shadow-lg active:scale-95 transition-all duration-300 ease-out border border-white/20 backdrop-blur-xl overflow-hidden touch-target"
                 aria-label="Start Premium Tour"
                 style={{
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 25%, #3b82f6 50%, #2563eb 75%, #06b6d4 100%)',
-                  backgroundSize: '400% 400%',
-                  boxShadow: '0 20px 40px -12px rgba(59, 130, 246, 0.5), 0 8px 32px -8px rgba(6, 182, 212, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-                  animation: 'gradient-shift 8s ease-in-out infinite'
+                  background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.7) 0%, rgba(6, 182, 212, 0.8) 25%, rgba(59, 130, 246, 0.7) 50%, rgba(37, 99, 235, 0.8) 75%, rgba(6, 182, 212, 0.7) 100%)',
+                  backgroundSize: '300% 300%',
+                  boxShadow: '0 8px 25px -8px rgba(59, 130, 246, 0.25), 0 4px 15px -4px rgba(6, 182, 212, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                  animation: 'gradient-shift 6s ease-in-out infinite'
                 }}
               >
                 {/* Dynamic animated background for mobile */}

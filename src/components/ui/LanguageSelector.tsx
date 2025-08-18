@@ -247,15 +247,15 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       <button
         onClick={() => setIsOpen(!isOpen)}
         disabled={isLoading}
-        className={`relative group flex items-center gap-2 px-4 py-2.5 rounded-2xl text-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-500 ease-out border border-white/30 backdrop-blur-xl overflow-hidden ${
+        className={`relative group flex items-center gap-2 px-4 py-0 h-11 rounded-2xl text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-500 ease-out border border-white/20 backdrop-blur-xl overflow-hidden ${
           isLoading 
             ? 'opacity-50 cursor-not-allowed' 
             : ''
         }`}
         style={{
-          background: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 25%, #3b82f6 50%, #2563eb 75%, #06b6d4 100%)',
+          background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.7) 0%, rgba(6, 182, 212, 0.8) 25%, rgba(59, 130, 246, 0.7) 50%, rgba(37, 99, 235, 0.8) 75%, rgba(6, 182, 212, 0.7) 100%)',
           backgroundSize: '300% 300%',
-          boxShadow: '0 15px 35px -10px rgba(59, 130, 246, 0.4), 0 6px 24px -6px rgba(6, 182, 212, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 8px 25px -8px rgba(59, 130, 246, 0.25), 0 4px 15px -4px rgba(6, 182, 212, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
           animation: 'gradient-shift 6s ease-in-out infinite'
         }}
         aria-label={t('profile.language')}
