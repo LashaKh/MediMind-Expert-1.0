@@ -269,24 +269,37 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
     setIsSubmitting(true);
     setUploadError(null);
+
+    // Store current values before clearing
+    const currentMessage = trimmedMessage;
+    const currentAttachments = [...attachments];
+
+    // Clear form immediately for better UX
+    setMessage('');
+    setAttachments([]);
+    
+    // Reset textarea height immediately
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = 'auto';
+    }
     
     const [, error] = await safeAsync(
       async () => {
         // Build enhanced message with extracted text content for AI (background)
-        const attachmentTextContext = buildAttachmentTextContext(attachments);
+        const attachmentTextContext = buildAttachmentTextContext(currentAttachments);
         
         // Create the actual message that will be sent to AI (includes extracted content)
-        let aiMessage = trimmedMessage;
+        let aiMessage = currentMessage;
         if (attachmentTextContext) {
-          if (trimmedMessage) {
-            aiMessage = `${trimmedMessage}${attachmentTextContext}`;
+          if (currentMessage) {
+            aiMessage = `${currentMessage}${attachmentTextContext}`;
           } else {
             aiMessage = `${t('chat.analyzeAttachedDocuments')}${attachmentTextContext}`;
           }
         }
         
         // Convert enhanced attachments to standard format for API
-        const standardAttachments: Attachment[] = attachments.map(att => ({
+        const standardAttachments: Attachment[] = currentAttachments.map(att => ({
           id: att.id,
           name: att.name,
           type: att.type,
@@ -299,19 +312,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         
         // Send both original message (for UI) and enhanced message (for AI)
         await onSendMessage(
-          trimmedMessage, // Original message for UI display
+          currentMessage, // Original message for UI display
           standardAttachments.length > 0 ? standardAttachments : undefined,
           aiMessage // Enhanced message with PDF content for AI
         );
-        
-        // Clear form after successful send
-        setMessage('');
-        setAttachments([]);
-        
-        // Reset textarea height
-        if (textAreaRef.current) {
-          textAreaRef.current.style.height = 'auto';
-        }
       },
       {
         context: 'send message with attachments',
@@ -322,10 +326,18 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
     if (error) {
       setUploadError(t('chat.messageSendFailed'));
+      // Restore the form state if there was an error
+      setMessage(currentMessage);
+      setAttachments(currentAttachments);
+      
+      // Restore textarea height
+      if (textAreaRef.current) {
+        adjustTextAreaHeight();
+      }
     }
     
     setIsSubmitting(false);
-  }, [message, attachments, disabled, isSubmitting, onSendMessage, t]);
+  }, [message, attachments, disabled, isSubmitting, onSendMessage, t, adjustTextAreaHeight]);
 
   // Handle key press events  
   const handleKeyPress = useCallback((e: KeyboardEvent<HTMLTextAreaElement>) => {
