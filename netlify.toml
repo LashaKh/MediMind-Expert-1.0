@@ -10,10 +10,10 @@
   directory = "functions"
   node_bundler = "esbuild"
 
-[functions."flowise-auth"]
+[functions."flowise-simple"]
   timeout = 60
   node_bundler = "esbuild"
-  external_node_modules = ["@supabase/supabase-js", "jsonwebtoken"]
+  external_node_modules = ["@supabase/supabase-js"]
 
 # Search function configurations
 [functions."search-orchestrator"]
@@ -181,13 +181,13 @@
 # Specific API routes first (order matters)
 [[redirects]]
   from = "/api/flowise/chat"
-  to = "/.netlify/functions/flowise-fixed"
+  to = "/.netlify/functions/flowise-simple"
   status = 200
   force = true
 
 [[redirects]]
   from = "/api/flowise/auth"
-  to = "/.netlify/functions/flowise-fixed"
+  to = "/.netlify/functions/flowise-simple"
   status = 200
   force = true
 
