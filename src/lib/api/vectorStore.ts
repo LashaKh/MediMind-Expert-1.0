@@ -127,7 +127,8 @@ export async function createVectorStore(
   const cacheKey = `createVectorStore-${userId}`;
 
   return makeRequestWithRetry(async () => {
-    const response = await fetch('/.netlify/functions/manageVectorStore', {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const response = await fetch(`${supabaseUrl}/functions/v1/manageVectorStore`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -163,7 +164,8 @@ export async function getUserVectorStore(): Promise<VectorStoreGetResponse> {
   const cacheKey = `getUserVectorStore-${userId}`;
 
   return makeRequestWithRetry(async () => {
-    const response = await fetch('/.netlify/functions/manageVectorStore', {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const response = await fetch(`${supabaseUrl}/functions/v1/manageVectorStore`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${session.access_token}`,
@@ -204,7 +206,8 @@ export async function deleteVectorStore(): Promise<VectorStoreDeleteResponse> {
       throw new VectorStoreError('Authentication required');
     }
 
-    const response = await fetch('/.netlify/functions/manageVectorStore', {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const response = await fetch(`${supabaseUrl}/functions/v1/manageVectorStore`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${session.access_token}`,
@@ -272,7 +275,8 @@ export async function uploadDocumentToVectorStore(
       fileSize: request.file.size
     };
 
-    const response = await fetch('/.netlify/functions/uploadDocumentToOpenAI-v2', {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const response = await fetch(`${supabaseUrl}/functions/v1/upload-document-to-openai`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${session.access_token}`,
@@ -485,8 +489,9 @@ export async function deleteUserDocument(
       throw new Error('Authentication required');
     }
 
-    // Call the Netlify function to delete from OpenAI and database
-    const response = await fetch('/.netlify/functions/deleteDocumentFromOpenAI', {
+    // Call the Supabase Edge Function to delete from OpenAI and database
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const response = await fetch(`${supabaseUrl}/functions/v1/delete-document-from-openai`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

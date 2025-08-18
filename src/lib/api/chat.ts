@@ -328,9 +328,10 @@ ${messageText}`;
     });
     
     if (isPersonalKB) {
-      // Route to OpenAI Assistants for personal knowledge base
-      apiEndpoint = '/api/openai-assistant';
-      logger.debug('🤖 Routing to OpenAI Assistants for personal knowledge base');
+      // Route to Supabase Edge Function for OpenAI Assistants for personal knowledge base
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      apiEndpoint = `${supabaseUrl}/functions/v1/openai-assistant`;
+      logger.debug('🤖 Routing to Supabase Edge Function for OpenAI Assistants (personal knowledge base)');
       
       // Format request body specifically for OpenAI Assistant endpoint
       requestBody = {
