@@ -1,4 +1,4 @@
-const { createClient } = require('@supabase/supabase-js');
+import { createClient } from '@supabase/supabase-js';
 
 // Simple CORS headers (no external dependencies)
 function getCorsHeaders(origin) {
@@ -92,7 +92,7 @@ function getFlowiseConfig(specialty) {
 }
 
 // Main handler
-exports.handler = async (event, context) => {
+export const handler = async (event, context) => {
   const origin = event.headers.origin || event.headers.Origin;
   
   console.log('🚀 Simple flowise function called:', {

@@ -1,4 +1,4 @@
-exports.handler = async (event, context) => {
+export const handler = async (event, context) => {
   console.log('Simple test function called:', {
     method: event.httpMethod,
     path: event.path,

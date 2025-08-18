@@ -10,7 +10,7 @@
   directory = "functions"
   node_bundler = "esbuild"
 
-[functions."flowise-simple"]
+[functions."flowise-simple.mjs"]
   timeout = 60
   node_bundler = "esbuild"
   external_node_modules = ["@supabase/supabase-js"]
@@ -137,6 +137,10 @@
 [functions."uploadDocumentToOpenAI-v2".environment]
   NODE_OPTIONS = "--max-old-space-size=512 --gc-interval=50"
 
+[functions."simple-test.mjs"]
+  timeout = 30
+  node_bundler = "esbuild"
+
 [dev]
   framework = "vite"
   targetPort = 5173
@@ -181,13 +185,13 @@
 # Specific API routes first (order matters)
 [[redirects]]
   from = "/api/flowise/chat"
-  to = "/.netlify/functions/flowise-simple"
+  to = "/.netlify/functions/flowise-simple.mjs"
   status = 200
   force = true
 
 [[redirects]]
   from = "/api/flowise/auth"
-  to = "/.netlify/functions/flowise-simple"
+  to = "/.netlify/functions/flowise-simple.mjs"
   status = 200
   force = true
 
@@ -316,7 +320,7 @@
 # Simple test endpoint
 [[redirects]]
   from = "/api/simple-test"
-  to = "/.netlify/functions/simple-test"
+  to = "/.netlify/functions/simple-test.mjs"
   status = 200
   force = true
 
