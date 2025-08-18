@@ -157,16 +157,16 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
                 className="hidden md:inline-flex items-center relative group px-6 py-3.5 rounded-3xl text-sm font-extrabold text-white shadow-2xl hover:shadow-3xl transform hover:scale-[1.03] transition-all duration-700 ease-out border border-white/30 backdrop-blur-2xl overflow-hidden"
                 aria-label="Start Premium Tour"
                 style={{
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #667eea 75%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 25%, #3b82f6 50%, #2563eb 75%, #06b6d4 100%)',
                   backgroundSize: '400% 400%',
-                  boxShadow: '0 25px 50px -12px rgba(102, 126, 234, 0.5), 0 12px 40px -8px rgba(118, 75, 162, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                  boxShadow: '0 25px 50px -12px rgba(59, 130, 246, 0.5), 0 12px 40px -8px rgba(6, 182, 212, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
                   animation: 'gradient-shift 8s ease-in-out infinite'
                 }}
               >
                 {/* Dynamic animated background layers */}
                 <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 ease-out"
                      style={{
-                       background: 'conic-gradient(from 0deg, #667eea, #764ba2, #f093fb, #ff6b9d, #c44569, #667eea)',
+                       background: 'conic-gradient(from 0deg, #3b82f6, #06b6d4, #3b82f6, #2563eb, #06b6d4, #3b82f6)',
                        backgroundSize: '300% 300%',
                        animation: 'gradient-shift 6s linear infinite'
                      }} />
@@ -255,16 +255,16 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
                 className="md:hidden inline-flex items-center justify-center relative group p-4 rounded-3xl text-white shadow-2xl active:scale-95 transition-all duration-500 ease-out border border-white/30 backdrop-blur-2xl overflow-hidden touch-target"
                 aria-label="Start Premium Tour"
                 style={{
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #667eea 75%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 25%, #3b82f6 50%, #2563eb 75%, #06b6d4 100%)',
                   backgroundSize: '400% 400%',
-                  boxShadow: '0 20px 40px -12px rgba(102, 126, 234, 0.5), 0 8px 32px -8px rgba(118, 75, 162, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                  boxShadow: '0 20px 40px -12px rgba(59, 130, 246, 0.5), 0 8px 32px -8px rgba(6, 182, 212, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
                   animation: 'gradient-shift 8s ease-in-out infinite'
                 }}
               >
                 {/* Dynamic animated background for mobile */}
                 <div className="absolute inset-0 rounded-3xl opacity-0 active:opacity-100 transition-opacity duration-600"
                      style={{
-                       background: 'conic-gradient(from 180deg, #f093fb, #ff6b9d, #c44569, #667eea, #764ba2)',
+                       background: 'conic-gradient(from 180deg, #06b6d4, #3b82f6, #2563eb, #06b6d4, #3b82f6)',
                        backgroundSize: '300% 300%',
                        animation: 'gradient-shift 4s linear infinite'
                      }} />
