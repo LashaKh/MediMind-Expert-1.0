@@ -1,0 +1,275 @@
+/* Premium Typography System - Production Ready Design */
+
+/* Import premium fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
+
+/* Font feature settings for professional typography */
+:root {
+  --font-inter: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  
+  /* Premium text shadows */
+  --text-shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --text-shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --text-shadow-strong: 0 4px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+  --text-shadow-hero: 0 6px 12px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.15);
+  
+  /* Advanced letter spacing */
+  --letter-spacing-tight: -0.05em;
+  --letter-spacing-normal: -0.01em;
+  --letter-spacing-wide: 0.01em;
+  --letter-spacing-wider: 0.02em;
+  --letter-spacing-widest: 0.15em;
+}
+
+/* Premium Hero Title */
+.premium-hero-title {
+  font-family: var(--font-inter);
+  font-optical-sizing: auto;
+  font-feature-settings: 
+    "ss01" on, /* Stylistic Set 1 */
+    "ss02" on, /* Stylistic Set 2 */
+    "cv01" on, /* Character Variant 1 */
+    "cv02" on, /* Character Variant 2 */
+    "kern" on, /* Kerning */
+    "liga" on; /* Ligatures */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variation-settings: "wght" 900;
+}
+
+/* Premium Subtitle */
+.premium-subtitle {
+  font-family: var(--font-inter);
+  font-feature-settings: 
+    "ss01" on,
+    "kern" on,
+    "liga" on;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variation-settings: "wght" 300;
+}
+
+/* Premium Description Text */
+.premium-description {
+  font-family: var(--font-inter);
+  font-feature-settings: 
+    "kern" on,
+    "liga" on,
+    "onum" on; /* Old-style numerals */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Premium Section Titles */
+.premium-section-title {
+  font-family: var(--font-inter);
+  font-feature-settings: 
+    "ss01" on,
+    "kern" on,
+    "liga" on;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variation-settings: "wght" 900;
+  transform-origin: center;
+}
+
+/* Premium Card Typography */
+.premium-card-title {
+  font-family: var(--font-inter);
+  font-feature-settings: 
+    "ss01" on,
+    "kern" on,
+    "liga" on;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variation-settings: "wght" 900;
+}
+
+.premium-card-subtitle {
+  font-family: var(--font-inter);
+  font-feature-settings: 
+    "kern" on,
+    "liga" on;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variation-settings: "wght" 600;
+}
+
+.premium-card-description {
+  font-family: var(--font-inter);
+  font-feature-settings: 
+    "kern" on,
+    "liga" on,
+    "onum" on;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variation-settings: "wght" 400;
+}
+
+/* Premium Metrics Typography */
+.premium-metric-value {
+  font-family: var(--font-inter);
+  font-feature-settings: 
+    "tnum" on, /* Tabular numerals */
+    "lnum" on, /* Lining numerals */
+    "kern" on,
+    "liga" on;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variation-settings: "wght" 900;
+}
+
+.premium-metric-label {
+  font-family: var(--font-inter);
+  font-feature-settings: 
+    "kern" on,
+    "liga" on;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variation-settings: "wght" 500;
+}
+
+/* Premium Monospace */
+.premium-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: 
+    "ss01" on,
+    "ss02" on,
+    "zero" on, /* Slashed zero */
+    "tnum" on,
+    "lnum" on;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Advanced Text Effects */
+.text-gradient-premium {
+  background: linear-gradient(135deg, #1f2937 0%, #dc2626 25%, #1f2937 50%, #dc2626 75%, #1f2937 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 8s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Premium Hover Effects */
+.premium-hover-scale {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-hover-scale:hover {
+  transform: scale(1.05) translateZ(0);
+  text-shadow: var(--text-shadow-strong);
+}
+
+/* Responsive Typography Scaling */
+@media (max-width: 640px) {
+  .premium-hero-title {
+    font-size: clamp(2rem, 8vw, 4rem);
+    line-height: 0.9;
+  }
+  
+  .premium-section-title {
+    font-size: clamp(1.875rem, 6vw, 3rem);
+    line-height: 1.1;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .premium-hero-title {
+    font-size: clamp(3rem, 10vw, 6rem);
+    line-height: 0.85;
+  }
+  
+  .premium-section-title {
+    font-size: clamp(2.25rem, 8vw, 4rem);
+    line-height: 1.1;
+  }
+}
+
+@media (min-width: 1025px) {
+  .premium-hero-title {
+    font-size: clamp(4rem, 12vw, 8rem);
+    line-height: 0.85;
+  }
+  
+  .premium-section-title {
+    font-size: clamp(3rem, 10vw, 5rem);
+    line-height: 1.1;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .premium-hero-title,
+  .premium-section-title {
+    text-shadow: 
+      0 4px 8px rgba(0, 0, 0, 0.3),
+      0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .premium-hero-title,
+  .premium-section-title,
+  .premium-card-title {
+    -webkit-text-fill-color: currentColor !important;
+    background: none !important;
+    text-shadow: none !important;
+    color: black !important;
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .premium-hover-scale {
+    transition: none;
+  }
+  
+  .premium-hover-scale:hover {
+    transform: none;
+  }
+  
+  .text-gradient-premium {
+    animation: none;
+    background-position: 0% 50%;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .premium-hero-title,
+  .premium-section-title {
+    -webkit-text-fill-color: currentColor;
+    background: none;
+    text-shadow: none;
+    font-weight: 900;
+  }
+}
+
+/* Focus States for Accessibility */
+.premium-hero-title:focus,
+.premium-section-title:focus,
+.premium-card-title:focus {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}

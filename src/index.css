@@ -48,6 +48,107 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ====== PREMIUM DESIGN FONT SYSTEM - AFTER TAILWIND ====== */
+/* SOPHISTICATED TYPOGRAPHY OVERRIDES - NO MORE THIN FONTS */
+
+@layer base {
+  /* PREMIUM BASE TYPOGRAPHY - DESIGN-QUALITY DEFAULTS */
+  * {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+    font-weight: 500 !important; /* NO MORE 400 WEIGHTS */
+    font-optical-sizing: auto !important;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'ss02' !important;
+    font-variant-ligatures: contextual !important;
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    letter-spacing: -0.005em !important;
+  }
+  
+  html, body {
+    font-weight: 500 !important;
+    line-height: 1.6 !important;
+    letter-spacing: -0.01em !important;
+  }
+  
+  /* PREMIUM HEADING HIERARCHY */
+  h1, .text-4xl, .text-5xl, .text-6xl {
+    font-weight: 700 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.2 !important;
+  }
+  
+  h2, h3, .text-2xl, .text-3xl {
+    font-weight: 650 !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.3 !important;
+  }
+  
+  h4, h5, h6, .text-xl, .text-lg {
+    font-weight: 600 !important;
+    letter-spacing: -0.015em !important;
+    line-height: 1.4 !important;
+  }
+}
+
+@layer components {
+  /* SOPHISTICATED UI ELEMENTS */
+  .btn, button, [role="button"] {
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11' !important;
+  }
+  
+  .font-normal, .text-sm, .text-base {
+    font-weight: 500 !important; /* Upgrade from 400 */
+  }
+  
+  .font-medium {
+    font-weight: 550 !important; /* Upgrade from 500 */
+  }
+  
+  .font-semibold {
+    font-weight: 650 !important; /* Upgrade from 600 */
+  }
+  
+  .font-bold {
+    font-weight: 700 !important;
+  }
+  
+  /* PREMIUM NAVIGATION */
+  nav, .nav, [role="navigation"] {
+    font-weight: 550 !important;
+    letter-spacing: -0.01em !important;
+  }
+  
+  /* INPUT ELEMENTS */
+  input, select, textarea {
+    font-weight: 500 !important;
+    letter-spacing: -0.005em !important;
+  }
+}
+
+@layer utilities {
+  /* PREMIUM TYPOGRAPHY UTILITIES */
+  .text-sophisticated {
+    font-weight: 550 !important;
+    letter-spacing: -0.01em !important;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01' !important;
+  }
+  
+  .text-premium {
+    font-weight: 600 !important;
+    letter-spacing: -0.015em !important;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'ss02' !important;
+  }
+  
+  .text-luxury {
+    font-weight: 650 !important;
+    letter-spacing: -0.02em !important;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'ss02' !important;
+  }
+}
+
 /* FORCE DARK CARDS - MUST BE AFTER TAILWIND TO OVERRIDE */
 .premium-card {
   background: #1f2937 !important;
@@ -294,59 +395,163 @@
   }
 }
 
-/* Force Inter font consistently throughout the application */
-* {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-  font-optical-sizing: auto;
-}
-
+/* NUCLEAR FONT OVERRIDE - APPLIED AT EVERY CSS LAYER */
+/* CSS Containment to prevent style leakage */
 html {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+  contain: style;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-  font-weight: 400;
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-  font-display: swap;
+  contain: style;
 }
 
-/* Force specific font weights to prevent thin appearance */
-.font-normal, 
-.font-regular {
+/* Layer 1: Universal selector with highest specificity */
+*,
+*::before,
+*::after,
+*:not(svg):not(use):not(g):not(path):not(circle):not(ellipse):not(line):not(rect):not(polyline):not(polygon) {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+  font-optical-sizing: auto !important;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11' !important;
+  contain: style;
+}
+
+/* Layer 2: HTML and body with override */
+html,
+html *,
+body,
+body * {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
   font-weight: 400 !important;
 }
 
-.font-medium {
+/* Layer 3: All possible React component containers */
+#root,
+#root *,
+#modal-root,
+#modal-root *,
+div,
+div *,
+span,
+span *,
+section,
+section *,
+main,
+main *,
+nav,
+nav *,
+header,
+header *,
+footer,
+footer *,
+article,
+article *,
+aside,
+aside * {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+}
+
+/* Layer 4: All form elements */
+input,
+input *,
+button,
+button *,
+select,
+select *,
+textarea,
+textarea *,
+label,
+label *,
+form,
+form * {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+}
+
+/* Layer 5: All text elements with maximum specificity */
+h1, h1 *,
+h2, h2 *,
+h3, h3 *,
+h4, h4 *,
+h5, h5 *,
+h6, h6 *,
+p, p *,
+a, a *,
+li, li *,
+td, td *,
+th, th *,
+.text-lg,
+.text-xl,
+.text-2xl,
+.text-3xl,
+.text-4xl {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+}
+
+/* Layer 6: Font weight specificity with class selectors */
+.font-normal,
+[class*="font-normal"],
+[class*="font-regular"] {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+  font-weight: 400 !important;
+}
+
+.font-medium,
+[class*="font-medium"] {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
   font-weight: 500 !important;
 }
 
-.font-semibold {
+.font-semibold,
+[class*="font-semibold"] {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
   font-weight: 600 !important;
 }
 
-.font-bold {
+.font-bold,
+[class*="font-bold"] {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
   font-weight: 700 !important;
 }
 
-.font-extrabold {
-  font-weight: 800 !important;
-}
-
-/* Ensure headings have proper weight */
-h1, h2, h3, h4, h5, h6 {
+/* Layer 7: Tailwind and component library overrides */
+.text-sm,
+.text-base,
+.text-lg,
+.text-xl,
+.text-2xl,
+.text-3xl,
+.text-4xl,
+[class*="text-"],
+[class*="font-"],
+[class*="leading-"] {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-  font-weight: 600 !important;
 }
 
-/* Force buttons to use consistent fonts */
-button, input, select, textarea {
+/* Layer 8: React component and CSS-in-JS overrides */
+[style*="font-family"],
+[data-testid],
+[data-id],
+[data-component],
+[role="button"],
+[role="link"],
+[role="heading"] {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
 }
 
-/* Override any potential React or component-specific font changes */
-div, span, p, a, li, td, th {
-  font-family: inherit !important;
+/* Layer 9: Framer Motion and animation library overrides */
+[data-framer-name],
+[data-motion-component],
+[class*="motion"],
+[class*="animate-"],
+[class*="transition-"] {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+}
+
+/* Layer 10: ULTIMATE NUCLEAR OVERRIDE - USE WITH EXTREME PREJUDICE */
+html[data-font-loaded="true"] *,
+html[data-font-loaded="true"] *::before,
+html[data-font-loaded="true"] *::after {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
 }
 
 @layer base {

@@ -8,6 +8,7 @@ import { useAuth } from '../../stores/useAppStore';
 import { useTheme } from '../../hooks/useTheme';
 import { useTour } from '../../stores/useAppStore';
 import { PremiumTour } from '../Help/PremiumTour';
+import { useFontGuard } from '../../hooks/useFontGuard';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -19,6 +20,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const { user } = useAuth();
   const { isTourOpen, tourType, closeTour } = useTour();
   const location = useLocation();
+  
+  // ACTIVATE FONT GUARDIAN IN MAIN LAYOUT
+  useFontGuard();
   
   // Check if we're on the onboarding page
   const isOnboardingPage = location.pathname === '/onboarding';
