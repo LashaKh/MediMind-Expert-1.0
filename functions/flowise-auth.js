@@ -1,8 +1,7 @@
-import { Handler } from '@netlify/functions';
-import { createClient } from '@supabase/supabase-js';
+const { createClient } = require('@supabase/supabase-js');
 
 // Basic CORS headers
-function getCorsHeaders(origin?: string) {
+function getCorsHeaders(origin) {
   return {
     'Access-Control-Allow-Origin': origin || '*',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
@@ -19,14 +18,29 @@ const ENV_VARS = {
   FLOWISE_OBGYN_URL: process.env.FLOWISE_OBGYN_URL || "https://flowise-2-0.onrender.com/api/v1/prediction/57a1285c-971d-48d4-9519-feb7494afe8b"
 };
 
+// Log environment check
+console.log('Environment check:', {
+  hasSupabaseUrl: !!ENV_VARS.SUPABASE_URL,
+  hasServiceKey: !!ENV_VARS.SUPABASE_SERVICE_ROLE_KEY,
+  hasFlowiseCardio: !!ENV_VARS.FLOWISE_CARDIOLOGY_URL,
+  hasFlowiseObgyn: !!ENV_VARS.FLOWISE_OBGYN_URL
+});
+
 // Initialize Supabase client
-const supabase = createClient(
-  ENV_VARS.SUPABASE_URL!,
-  ENV_VARS.SUPABASE_SERVICE_ROLE_KEY!
-);
+let supabase;
+try {
+  if (ENV_VARS.SUPABASE_URL && ENV_VARS.SUPABASE_SERVICE_ROLE_KEY) {
+    supabase = createClient(ENV_VARS.SUPABASE_URL, ENV_VARS.SUPABASE_SERVICE_ROLE_KEY);
+    console.log('Supabase client initialized successfully');
+  } else {
+    console.error('Missing Supabase environment variables');
+  }
+} catch (error) {
+  console.error('Failed to initialize Supabase client:', error);
+}
 
 // Specialty-specific Flowise endpoints
-const FLOWISE_ENDPOINTS: Record<string, string> = {
+const FLOWISE_ENDPOINTS = {
   cardiology: ENV_VARS.FLOWISE_CARDIOLOGY_URL,
   'ob-gyn': ENV_VARS.FLOWISE_OBGYN_URL,
   'obgyn': ENV_VARS.FLOWISE_OBGYN_URL,
@@ -34,11 +48,12 @@ const FLOWISE_ENDPOINTS: Record<string, string> = {
 };
 
 // Simple JWT token decoder for Supabase tokens
-function decodeSupabaseJWT(token: string) {
+function decodeSupabaseJWT(token) {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
     
+    // Use Buffer for Node.js environment
     const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
     return {
       id: payload.sub,
@@ -56,7 +71,12 @@ function decodeSupabaseJWT(token: string) {
 }
 
 // Get user profile from database
-async function getUserProfile(userId: string) {
+async function getUserProfile(userId) {
+  if (!supabase) {
+    console.error('Supabase client not initialized');
+    return {};
+  }
+
   try {
     const possibleTables = ['profiles', 'users', 'user_profiles'];
     
@@ -87,9 +107,9 @@ async function getUserProfile(userId: string) {
 }
 
 // Get Flowise endpoint based on specialty
-function getFlowiseConfig(specialty?: string) {
+function getFlowiseConfig(specialty) {
   const normalizedSpecialty = specialty?.toLowerCase().replace(/[^a-z-]/g, '');
-  const url = FLOWISE_ENDPOINTS[normalizedSpecialty || 'default'] || FLOWISE_ENDPOINTS.default;
+  const url = FLOWISE_ENDPOINTS[normalizedSpecialty] || FLOWISE_ENDPOINTS.default;
   
   return {
     url,
@@ -98,7 +118,12 @@ function getFlowiseConfig(specialty?: string) {
 }
 
 // Get user's Vector Store ID
-async function getUserVectorStoreId(userId: string) {
+async function getUserVectorStoreId(userId) {
+  if (!supabase) {
+    console.error('Supabase client not initialized');
+    return null;
+  }
+
   try {
     const { data, error } = await supabase
       .from('user_vector_stores')
@@ -117,13 +142,14 @@ async function getUserVectorStoreId(userId: string) {
   }
 }
 
-export const handler: Handler = async (event, context) => {
+exports.handler = async (event, context) => {
   const origin = event.headers.origin || event.headers.Origin;
   
-  console.log('Flowise auth endpoint called:', {
+  console.log('🚀 Flowise auth endpoint called:', {
     method: event.httpMethod,
     path: event.path,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    hasSupabase: !!supabase
   });
 
   // Handle OPTIONS for CORS
@@ -149,6 +175,22 @@ export const handler: Handler = async (event, context) => {
   }
 
   try {
+    // Check if Supabase is initialized
+    if (!supabase) {
+      console.error('❌ Supabase client not initialized');
+      return {
+        statusCode: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCorsHeaders(origin)
+        },
+        body: JSON.stringify({ 
+          error: 'Service configuration error',
+          details: 'Database connection not available'
+        })
+      };
+    }
+
     // Check authentication
     const authHeader = event.headers.authorization || event.headers.Authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -197,7 +239,7 @@ export const handler: Handler = async (event, context) => {
       role: profile.role || jwtPayload.role
     };
 
-    console.log('Authenticated user for Flowise config:', {
+    console.log('✅ Authenticated user for Flowise config:', {
       id: user.id,
       email: user.email,
       specialty: user.specialty
@@ -228,7 +270,7 @@ export const handler: Handler = async (event, context) => {
     };
 
   } catch (error) {
-    console.error('Flowise auth handler error:', error);
+    console.error('❌ Flowise auth handler error:', error);
     
     return {
       statusCode: 500,
@@ -238,7 +280,7 @@ export const handler: Handler = async (event, context) => {
       },
       body: JSON.stringify({ 
         error: 'Internal server error',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error.message 
       })
     };
   }

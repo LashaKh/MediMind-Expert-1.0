@@ -313,6 +313,13 @@
   status = 200
   force = true
 
+# Simple test endpoint
+[[redirects]]
+  from = "/api/simple-test"
+  to = "/.netlify/functions/simple-test"
+  status = 200
+  force = true
+
 # API Security Headers
 [[headers]]
   for = "/api/*"
