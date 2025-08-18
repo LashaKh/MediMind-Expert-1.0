@@ -702,16 +702,16 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
           </div>
 
           {/* Mobile-optimized header content */}
-            <div className="relative px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-6" data-tour="ai-copilot">
+            <div className="relative px-3 sm:px-6 lg:px-8 py-2.5 sm:py-4 lg:py-6" data-tour="ai-copilot">
             {/* Main header row */}
             <div className="flex items-center justify-between">
               
               {/* Mobile-optimized brand identity */}
-              <div className="flex items-center space-x-3 sm:space-x-4 lg:space-x-6">
+              <div className="flex items-center space-x-2 sm:space-x-4 lg:space-x-6 flex-1 min-w-0">
                 {/* Mobile-optimized AI avatar with 44px touch target */}
-                <div className="relative group cursor-pointer">
+                <div className="relative group cursor-pointer flex-shrink-0">
                   <div className={`
-                    relative p-2.5 sm:p-3 lg:p-4 rounded-xl sm:rounded-2xl
+                    relative p-2 sm:p-3 lg:p-4 rounded-xl sm:rounded-2xl
                     min-w-[44px] min-h-[44px] flex items-center justify-center
                     bg-gradient-to-br ${specialtyConfig.gradient}
                     shadow-lg sm:shadow-xl shadow-${specialtyConfig.glowColor}/20
@@ -746,24 +746,25 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 </div>
 
                 {/* Mobile-first responsive typography */}
-                <div className="space-y-1 flex-1 min-w-0">
+                <div className="flex-1 min-w-0 space-y-1">
                   <h1 className={`
-                    text-lg sm:text-xl lg:text-2xl font-black tracking-tight
+                    text-base sm:text-xl lg:text-2xl font-black tracking-tight
                     bg-gradient-to-r ${specialtyConfig.gradient} bg-clip-text text-transparent
                     drop-shadow-sm truncate
                   `}>
                     MediMind AI
                   </h1>
-                  <div className="flex items-center space-x-2 sm:space-x-3 flex-wrap">
+                  <div className="flex items-center space-x-1.5 sm:space-x-3">
                     <span className={`
-                      px-2 sm:px-2.5 py-0.5 rounded-md sm:rounded-lg text-xs font-bold uppercase tracking-wider
+                      px-1.5 sm:px-2.5 py-0.5 rounded text-xs font-bold uppercase tracking-wider
                       bg-gradient-to-r from-${specialtyConfig.accentColor}-50/90 to-${specialtyConfig.accentColor}-100/90
                       text-${specialtyConfig.accentColor}-700 border border-${specialtyConfig.accentColor}-200/40
-                      backdrop-blur-sm shadow-sm whitespace-nowrap
+                      backdrop-blur-sm shadow-sm whitespace-nowrap truncate max-w-[120px] sm:max-w-none
                     `}>
-                      {specialtyConfig.title}
+                      {profile?.medical_specialty === 'cardiology' ? 'Cardiology' : 
+                       profile?.medical_specialty === 'obgyn' ? 'OB/GYN' : 'Medical AI'}
                     </span>
-                    <div className="flex items-center space-x-1.5 hidden sm:flex">
+                    <div className="flex items-center space-x-1 hidden sm:flex">
                       <div className={`
                         w-1.5 h-1.5 rounded-full
                         ${isConnected ? 'bg-emerald-500 shadow-emerald-500/40' : 'bg-rose-500 shadow-rose-500/40'}
@@ -778,7 +779,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
               </div>
 
               {/* Mobile-optimized control center */}
-              <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-5">
+              <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
                 
                 {/* Responsive knowledge base selector */}
                 <div className="hidden lg:block" data-tour="knowledge-base">
@@ -791,26 +792,28 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                   />
                 </div>
 
-                {/* Case management section */}
+                {/* Case management section - Mobile optimized */}
                 {activeCase && (
-                  <HeaderCaseIndicator
-                    activeCase={activeCase}
-                    onViewCase={handleViewCase}
-                    onResetCase={handleResetCase}
-                  />
+                  <div className="hidden sm:block">
+                    <HeaderCaseIndicator
+                      activeCase={activeCase}
+                      onViewCase={handleViewCase}
+                      onResetCase={handleResetCase}
+                    />
+                  </div>
                 )}
                 
-                {/* ABG Context Indicator */}
+                {/* ABG Context Indicator - Mobile optimized */}
                 {abgContext && (
-                  <div className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-red-50 to-rose-50 rounded-xl border border-red-200/40 shadow-sm">
-                    <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-rose-600 rounded-lg flex items-center justify-center">
-                      <TestTube2 className="h-4 w-4 text-white" />
+                  <div className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 bg-gradient-to-r from-red-50 to-rose-50 rounded-lg sm:rounded-xl border border-red-200/40 shadow-sm">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-red-500 to-rose-600 rounded-md sm:rounded-lg flex items-center justify-center">
+                      <TestTube2 className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                     </div>
-                    <div className="hidden sm:flex flex-col min-w-0">
+                    <div className="hidden md:flex flex-col min-w-0">
                       <span className="text-sm font-medium text-red-900 truncate">{t('chat.abg.active', 'ABG Analysis Active')}</span>
                       <span className="text-xs text-red-600 truncate">{abgContext.type}</span>
                     </div>
-                    <Badge variant="secondary" className="text-xs bg-red-100 text-red-800 border-red-200">
+                    <Badge variant="secondary" className="text-xs bg-red-100 text-red-800 border-red-200 hidden sm:inline-flex">
                       Context
                     </Badge>
                     <Button
@@ -825,11 +828,9 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 )}
                 
                 {!activeCase && (
-                  <div className="flex items-center space-x-1 sm:space-x-2">
-                    
-
+                  <div className="flex items-center space-x-1">
                     {/* Mobile-optimized primary actions group */}
-                    <div className="flex items-center space-x-1 sm:space-x-1.5">
+                    <div className="flex items-center space-x-1">
                       
                       {/* Mobile-optimized History button */}
                       <Button
@@ -837,7 +838,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         size="sm"
                         onClick={() => setShowConversationList(true)}
                         className={`
-                          group relative min-h-[44px] min-w-[44px] p-0 rounded-xl
+                          group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
                           bg-gradient-to-br from-white/90 to-slate-50/90 backdrop-blur-xl
                           border border-white/60 shadow-md shadow-slate-500/8
                           hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
@@ -845,8 +846,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         `}
                         title={t('chat.conversationHistory', 'Conversation History')}
                       >
-                        <History className="w-5 h-5 sm:w-4.5 sm:h-4.5 text-slate-600 group-hover:text-slate-800 transition-colors duration-200" />
-                        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-slate-500/0 to-slate-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <History className="w-4 h-4 text-slate-600 group-hover:text-slate-800 transition-colors duration-200" />
+                        <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-slate-500/0 to-slate-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </Button>
 
                       {/* Mobile-optimized Cases button with badge */}
@@ -855,7 +856,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         size="sm"
                         onClick={() => setShowCaseListModal(true)}
                         className={`
-                          group relative min-h-[44px] min-w-[44px] p-0 rounded-xl
+                          group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
                           bg-gradient-to-br from-violet-50/90 to-purple-50/90 backdrop-blur-xl
                           border border-violet-200/50 shadow-md shadow-violet-500/8
                           hover:shadow-lg hover:shadow-violet-500/15 hover:scale-105 active:scale-95
@@ -863,22 +864,22 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         `}
                         title={`${t('chat.patientCases', 'Patient Cases')}: ${conversations.filter(c => c.caseId === activeCase?.id).length}`}
                       >
-                        <FileText className="w-5 h-5 sm:w-4.5 sm:h-4.5 text-violet-600 group-hover:text-violet-800 transition-colors duration-200" />
+                        <FileText className="w-4 h-4 text-violet-600 group-hover:text-violet-800 transition-colors duration-200" />
                         {conversations.filter(c => c.caseId === activeCase?.id).length > 0 && (
-                          <div className="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 min-w-[18px] h-4.5 px-1 rounded-full bg-gradient-to-r from-violet-500 to-purple-600 text-white text-xs font-bold flex items-center justify-center shadow-md shadow-violet-500/30">
+                          <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-violet-500 to-purple-600 text-white text-xs font-bold flex items-center justify-center shadow-md shadow-violet-500/30">
                             {conversations.filter(c => c.caseId === activeCase?.id).length > 9 ? '9+' : conversations.filter(c => c.caseId === activeCase?.id).length}
                           </div>
                         )}
                       </Button>
 
-                      {/* Mobile-optimized New chat button */}
+                      {/* Mobile-optimized New chat button - Show only icon on mobile */}
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={handleNewConversation}
                         disabled={isDisabled || !isConnected}
                         className={`
-                          group relative min-h-[44px] px-2 sm:px-4 rounded-xl font-medium text-sm
+                          group relative min-h-[44px] min-w-[44px] sm:px-4 p-0 sm:p-2 rounded-lg font-medium text-sm
                           bg-gradient-to-br from-slate-50/90 to-gray-50/90 backdrop-blur-xl
                           border border-slate-200/50 text-slate-700 shadow-md shadow-slate-500/8
                           hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
@@ -886,25 +887,27 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           transition-all duration-300
                         `}
                       >
-                        <Plus className="w-4 h-4 mr-0 sm:mr-1.5 group-hover:rotate-90 transition-transform duration-300" />
+                        <Plus className="w-4 h-4 sm:mr-1.5 group-hover:rotate-90 transition-transform duration-300" />
                         <span className="hidden sm:inline">{t('chat.newChat')}</span>
                       </Button>
 
-                      {/* Mobile-optimized New case button */}
-                      <NewCaseButton
-                        onClick={() => setShowCaseModal(true)}
-                        disabled={isDisabled || !isConnected}
-                        variant="ghost"
-                        size="sm"
-                        className={`
-                          group relative min-h-[44px] px-2 sm:px-4 rounded-xl font-medium text-sm
-                          bg-gradient-to-br from-slate-50/90 to-gray-50/90 backdrop-blur-xl
-                          border border-slate-200/50 text-slate-700 shadow-md shadow-slate-500/8
-                          hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
-                          disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                          transition-all duration-300
-                        `}
-                      />
+                      {/* Mobile-optimized New case button - Only show on larger screens */}
+                      <div className="hidden sm:block">
+                        <NewCaseButton
+                          onClick={() => setShowCaseModal(true)}
+                          disabled={isDisabled || !isConnected}
+                          variant="ghost"
+                          size="sm"
+                          className={`
+                            group relative min-h-[44px] px-4 rounded-lg font-medium text-sm
+                            bg-gradient-to-br from-slate-50/90 to-gray-50/90 backdrop-blur-xl
+                            border border-slate-200/50 text-slate-700 shadow-md shadow-slate-500/8
+                            hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
+                            disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                            transition-all duration-300
+                          `}
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
@@ -912,15 +915,26 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
             </div>
 
             {/* Mobile-optimized knowledge base selector */}
-            <div className="lg:hidden mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/30">
+            <div className="lg:hidden mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-white/30">
               <KnowledgeBaseSelector
                 selectedKnowledgeBase={knowledgeBase}
                 onKnowledgeBaseChange={setKnowledgeBase}
                 personalDocumentCount={personalDocumentCount}
                 disabled={isLoading}
-                className="w-full bg-white/95 backdrop-blur-2xl border-white/60 shadow-lg rounded-xl min-h-[44px]"
+                className="w-full bg-white/95 backdrop-blur-2xl border-white/60 shadow-lg rounded-lg min-h-[44px]"
               />
             </div>
+            
+            {/* Mobile-only case management section */}
+            {activeCase && (
+              <div className="sm:hidden mt-2 pt-2 border-t border-white/30">
+                <HeaderCaseIndicator
+                  activeCase={activeCase}
+                  onViewCase={handleViewCase}
+                  onResetCase={handleResetCase}
+                />
+              </div>
+            )}
           </div>
 
           {/* Refined progress indicator */}
