@@ -373,31 +373,53 @@ ${messageText}`;
 
     // Make the API request (for personal KB only now) with retry logic
     const response = await retryWithBackoff(async () => {
-      const fetchResponse = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
-        },
-        body: JSON.stringify(requestBody),
-      });
+      // Create AbortController for timeout handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        logger.warn('Request timeout - aborting fetch request');
+        controller.abort();
+      }, 180000); // 3 minutes timeout (same as Edge Function production timeout)
 
-      if (!fetchResponse.ok) {
-        const errorData = await fetchResponse.json().catch(() => null);
+      try {
+        logger.debug('🚀 Starting fetch request to Edge Function');
+        const fetchResponse = await fetch(apiEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`
+          },
+          body: JSON.stringify(requestBody),
+          signal: controller.signal
+        });
         
-        // Handle specific error cases
-        if (fetchResponse.status === 409) {
-          throw new APIError('Resource conflict - retrying...', 409);
+        clearTimeout(timeoutId);
+        logger.debug('✅ Fetch request completed', { status: fetchResponse.status });
+        return fetchResponse;
+        
+      } catch (error) {
+        clearTimeout(timeoutId);
+        if (error.name === 'AbortError') {
+          logger.error('❌ Request was aborted due to timeout');
+          throw new APIError('Request timeout after 3 minutes. The query may be too complex.', 408);
         }
-        
-        throw new APIError(
-          errorData?.error || `HTTP error! status: ${fetchResponse.status}`, 
-          fetchResponse.status
-        );
+        logger.error('❌ Fetch error:', error);
+        throw error;
       }
-
-      return fetchResponse;
     }, 2, 1000); // Max 2 retries with 1 second base delay
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+        
+      // Handle specific error cases
+      if (response.status === 409) {
+        throw new APIError('Resource conflict - retrying...', 409);
+      }
+      
+      throw new APIError(
+        errorData?.error || `HTTP error! status: ${response.status}`, 
+        response.status
+      );
+    }
 
     const data = await response.json();
     
