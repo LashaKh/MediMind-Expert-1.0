@@ -117,25 +117,12 @@
   node_bundler = "esbuild"
   external_node_modules = ["@supabase/supabase-js", "openai", "jsonwebtoken"]
 
-[functions."openai-assistant"]
-  timeout = 300
-
-[functions."uploadDocumentToOpenAI"]
-  timeout = 300
-  node_bundler = "esbuild"
-  external_node_modules = ["@supabase/supabase-js", "openai", "form-data"]
-  body_size_limit = "100mb"
-  
-[functions."uploadDocumentToOpenAI".environment]
-  NODE_OPTIONS = "--max-old-space-size=1024 --gc-interval=50 --expose-gc"
-
-[functions."uploadDocumentToOpenAI-v2"]
-  timeout = 300
-  node_bundler = "esbuild"
-  external_node_modules = ["@supabase/supabase-js", "openai"]
-  
-[functions."uploadDocumentToOpenAI-v2".environment]
-  NODE_OPTIONS = "--max-old-space-size=512 --gc-interval=50"
+# Personal KB functions migrated to Supabase Edge Functions:
+# - openai-assistant → supabase/functions/openai-assistant  
+# - uploadDocumentToOpenAI → supabase/functions/upload-document-to-openai
+# - uploadDocumentToOpenAI-v2 → supabase/functions/upload-document-to-openai
+# - manageVectorStore → supabase/functions/manageVectorStore
+# - deleteDocumentFromOpenAI → supabase/functions/delete-document-from-openai
 
 [functions."simple-test"]
   timeout = 30
@@ -210,11 +197,8 @@
   conditions = {Methods = ["OPTIONS"]}
 
 
-[[redirects]]
-  from = "/api/openai-assistant"
-  to = "/.netlify/functions/openai-assistant"
-  status = 200
-  force = true
+# Personal KB API redirects removed - functions migrated to Supabase Edge Functions
+# - /api/openai-assistant → now handled by frontend routing to Supabase Edge Functions
 
 [[redirects]]
   from = "/api/test-openai-auth"
