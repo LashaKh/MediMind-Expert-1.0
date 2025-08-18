@@ -122,13 +122,13 @@ export default defineConfig(({ mode }) => {
             if (id.includes('i18next') && !id.includes('react-i18next')) {
               return 'vendor-i18n';
             }
-            // Everything else goes to vendor-react for complete consolidation
-            return 'vendor-react';
+            // Everything else goes into main bundle - no separate vendor chunk
+            return undefined;
           }
           
-          // Calculator components - keep these separate as they're lazy loaded
+          // Calculator components - only keep specialty-specific ones separate
           if (id.includes('src/components/Calculators/')) {
-            // Cardiology calculators
+            // Cardiology calculators - keep these separate as they're specialty-specific
             if (
               id.includes('ASCVDCalculator') ||
               id.includes('AtrialFibrillationCalculators') ||
@@ -159,7 +159,7 @@ export default defineConfig(({ mode }) => {
               return 'calculators-cardiology-3';
             }
             
-            // OB/GYN calculators
+            // OB/GYN calculators - keep these separate as they're specialty-specific
             if (
               id.includes('EDDCalculator') ||
               id.includes('GestationalAgeCalculator') ||
@@ -187,8 +187,8 @@ export default defineConfig(({ mode }) => {
               return 'calculators-obgyn-3';
             }
             
-            // Calculator main component and shared utilities
-            return 'calculators-main';
+            // Calculator main component and shared utilities - put in main bundle
+            return undefined;
           }
           
           // Translation files - keep separate as they're language-specific
@@ -196,8 +196,8 @@ export default defineConfig(({ mode }) => {
             return 'translations';
           }
           
-          // EVERYTHING ELSE goes to vendor-react to prevent ALL circular dependencies
-          return 'vendor-react';
+          // EVERYTHING ELSE goes to main bundle (index.js) - no separate chunks
+          return undefined;
         },
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.');
