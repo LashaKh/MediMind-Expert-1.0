@@ -191,9 +191,13 @@ export default defineConfig(({ mode }) => {
             return undefined;
           }
           
-          // Translation files - keep separate as they're language-specific
+          // Translation files - split by language for better caching
           if (id.includes('src/i18n/')) {
-            return 'translations';
+            if (id.includes('/en/')) return 'translations-en';
+            if (id.includes('/ka/')) return 'translations-ka';  
+            if (id.includes('/ru/')) return 'translations-ru';
+            // Core i18n files (config, loader)
+            return 'translations-core';
           }
           
           // EVERYTHING ELSE goes to main bundle (index.js) - no separate chunks
@@ -214,6 +218,9 @@ export default defineConfig(({ mode }) => {
           // Organize chunks by type for better caching
           if (chunkInfo.name.includes('calculators')) {
             return `assets/calculators/[name].[hash].js`;
+          }
+          if (chunkInfo.name.includes('translations')) {
+            return `assets/i18n/[name].[hash].js`;
           }
           if (chunkInfo.name.includes('vendor')) {
             return `assets/vendor/[name].[hash].js`;

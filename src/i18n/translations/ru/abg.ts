@@ -34,7 +34,7 @@ const abg = {
     },
     progressComplete: '{{percent}}% выполнено',
     steps: {
-      upload: {
+      uploadStep: {
         label: 'Загрузка',
         description: 'Выберите отчёт газов крови'
       },
@@ -57,35 +57,7 @@ const abg = {
     },
     completeTitle: 'Анализ завершён!',
     error: 'Ошибка обработки'
-  }
-  ,
-  upload: {
-    aria: {
-      dropzone: 'Загрузить отчёт газов крови'
-    },
-    fileReady: 'Файл готов к анализу',
-    removeAria: 'Удалить файл',
-    progress: 'Прогресс загрузки',
-    progressSr: '{{percent}} процентов загружено',
-    processing: {
-      title: 'Обработка изображения…',
-      subtitle: 'ИИ анализирует отчёт газов крови'
-    },
-    title: 'Загрузка отчёта газов крови',
-    subtitle: 'Перетащите изображение сюда или выберите файл',
-    drop: {
-      title: 'Отпустите для загрузки',
-      subtitle: 'Отпустите для загрузки и анализа ИИ'
-    },
-    chooseFile: 'Выбрать файл',
-    takePhoto: 'Сделать фото',
-    formats: 'JPEG, PNG, WebP • до {{size}}MB',
-    errors: {
-      invalidType: 'Пожалуйста, выберите корректный файл изображения ({{types}})',
-      maxSize: 'Размер файла должен быть меньше {{size}}MB'
-    }
-  }
-  ,
+  },
   delete: {
     titleOne: 'Удалить результат ABG?',
     titleMany: 'Удалить {{count}} результатов ABG?',
@@ -388,9 +360,27 @@ const abg = {
     viewHistory: 'История',
     title: 'Анализ газов крови',
     subtitle: 'Загрузите отчёт газов крови для мгновенного анализа ИИ, проверенной интерпретации и плана действий.'
-  }
-  ,
+  },
+
+  // Consolidated upload section (merged from three separate sections)
   upload: {
+    // File upload interface
+    title: 'Загрузка отчёта газов крови',
+    subtitle: 'Перетащите изображение сюда или выберите файл',
+    chooseFile: 'Выбрать файл',
+    takePhoto: 'Сделать фото',
+    formats: 'JPEG, PNG, WebP • до {{size}}MB',
+    fileReady: 'Файл готов к анализу',
+    progress: 'Прогресс загрузки',
+    progressSr: '{{percent}} процентов загружено',
+    
+    // Drag and drop
+    drop: {
+      title: 'Отпустите для загрузки',
+      subtitle: 'Отпустите для загрузки и анализа ИИ'
+    },
+    
+    // Blood gas type selection
     type: {
       title: 'Тип анализа газов крови',
       subtitle: 'Выберите тип анализа'
@@ -399,13 +389,34 @@ const abg = {
       arterialDesc: 'Наиболее полный анализ',
       venousDesc: 'Альтернативный метод анализа'
     },
+    
+    // Case context
     caseContext: {
       title: 'Контекст случая (необязательно)',
       subtitle: 'Свяжите анализ с клиническим случаем'
     },
-    takePhoto: 'Сделать фото',
+    
+    // Processing
+    processing: {
+      title: 'Обработка изображения…',
+      subtitle: 'ИИ анализирует отчёт газов крови'
+    },
+    
+    // Actions
     actions: {
       startAIAnalysis: 'Начать AI-анализ'
+    },
+    
+    // Accessibility
+    aria: {
+      dropzone: 'Загрузить отчёт газов крови',
+      removeFile: 'Удалить файл'
+    },
+    
+    // Errors
+    errors: {
+      invalidType: 'Пожалуйста, выберите корректный файл изображения ({{types}})',
+      maxSize: 'Размер файла должен быть меньше {{size}}MB'
     }
   }
 };
