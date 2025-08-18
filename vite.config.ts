@@ -110,37 +110,23 @@ export default defineConfig(({ mode }) => {
           'react-dom': 'ReactDOM'
         },
         manualChunks(id) {
-          // Simplified chunking to prevent React context issues
+          // Ultra-aggressive consolidation to eliminate ALL initialization errors
           if (id.includes('node_modules')) {
-            // Keep ALL UI and React libraries together to prevent context issues
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom') || 
-                id.includes('react-hook-form') || id.includes('react-i18next') || id.includes('react-hot-toast') ||
-                id.includes('react-hotkeys-hook') || id.includes('react-markdown') || id.includes('react-syntax-highlighter') ||
-                id.includes('lucide-react') || id.includes('framer-motion') || id.includes('clsx') ||
-                id.includes('@headlessui/react') || id.includes('@heroicons/react') || id.includes('@radix-ui') ||
-                id.includes('class-variance-authority') || id.includes('tailwind-merge') || id.includes('tailwindcss-animate') ||
-                id.includes('zustand') || id.includes('@hookform/resolvers') || id.includes('zod') ||
-                id.includes('html2canvas') || id.includes('date-fns') || id.includes('recharts') ||
-                id.includes('unist-util-visit') || id.includes('remark-gfm') || id.includes('dompurify') ||
-                id.includes('@supabase/supabase-js')) {
-              return 'vendor-react';
+            // Only keep truly separate vendor chunks for large, independent libraries
+            if (id.includes('jspdf') || id.includes('pdfjs-dist') || id.includes('tesseract.js')) {
+              return 'vendor-pdf';
             }
             if (id.includes('marked')) {
               return 'vendor-markdown';
             }
-            if (id.includes('i18next')) {
+            if (id.includes('i18next') && !id.includes('react-i18next')) {
               return 'vendor-i18n';
             }
-            if (id.includes('axios') || id.includes('node-fetch') || id.includes('form-data')) {
-              return 'vendor-network';
-            }
-            if (id.includes('jspdf') || id.includes('pdfjs-dist') || id.includes('tesseract.js')) {
-              return 'vendor-pdf';
-            }
-            return 'vendor-misc';
+            // Everything else goes to vendor-react for complete consolidation
+            return 'vendor-react';
           }
           
-          // Calculator components - split by medical specialty
+          // Calculator components - keep these separate as they're lazy loaded
           if (id.includes('src/components/Calculators/')) {
             // Cardiology calculators
             if (
@@ -202,40 +188,16 @@ export default defineConfig(({ mode }) => {
             }
             
             // Calculator main component and shared utilities
-            if (id.includes('Calculators.tsx') || id.includes('calculator-ui')) {
-              return 'calculators-main';
-            }
+            return 'calculators-main';
           }
           
-          // Context providers - keep with main to prevent initialization issues
-          if (id.includes('src/contexts/')) {
-            return 'vendor-react';
-          }
-          
-          // Translation files
+          // Translation files - keep separate as they're language-specific
           if (id.includes('src/i18n/')) {
             return 'translations';
           }
           
-          // Other components - consolidate to prevent circular dependencies
-          if (id.includes('src/components/')) {
-            if (id.includes('AICopilot/')) {
-              return 'ai-copilot';
-            }
-            if (id.includes('KnowledgeBase/')) {
-              return 'knowledge-base';
-            }
-            if (id.includes('PodcastStudio/')) {
-              return 'podcast-studio';
-            }
-            // Keep core components with vendor-react to prevent initialization issues
-            return 'vendor-react';
-          }
-          
-          // Keep utilities with main bundle to prevent circular dependencies
-          if (id.includes('src/lib/') || id.includes('src/utils/') || id.includes('src/services/')) {
-            return 'vendor-react';
-          }
+          // EVERYTHING ELSE goes to vendor-react to prevent ALL circular dependencies
+          return 'vendor-react';
         },
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.');
