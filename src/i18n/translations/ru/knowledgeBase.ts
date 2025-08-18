@@ -28,7 +28,7 @@ export const knowledgeBase = {
   sourcesCount: '2.5М+ источников',
   badgeReady: 'Готово',
   badgeEmpty: 'Пусто',
-  personalCount: '{count} документ(ов)',
+  personalCount: '{{count}} документ(ов)',
   uploadToEnable: 'Загрузите для активации',
   aiVerified: 'Проверено ИИ',
   selectionInfluenceNotice: 'Выбор базы знаний влияет на точность и глубину ответов ИИ',

@@ -28,7 +28,7 @@ export const knowledgeBase = {
   sourcesCount: '2.5მლნ+ წყარო',
   badgeReady: 'მზადაა',
   badgeEmpty: 'ცარიელია',
-  personalCount: '{count} დოკუმენტი',
+  personalCount: '{{count}} დოკუმენტი',
   uploadToEnable: 'ატვირთეთ გასააქტიურებლად',
   aiVerified: 'AI დამოწმება',
   selectionInfluenceNotice: 'ცოდნის ბაზის არჩევანი გავლენას ახდენს AI პასუხების სიზუსტესა და სიღრმეზე',

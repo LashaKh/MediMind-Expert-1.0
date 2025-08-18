@@ -28,7 +28,7 @@ export const knowledgeBase = {
   sourcesCount: '2.5M+ sources',
   badgeReady: 'Ready',
   badgeEmpty: 'Empty',
-  personalCount: '{count} documents',
+  personalCount: '{{count}} documents',
   uploadToEnable: 'Upload to enable',
   aiVerified: 'AI Verified',
   selectionInfluenceNotice: 'Knowledge base selection influences AI response accuracy and information depth',

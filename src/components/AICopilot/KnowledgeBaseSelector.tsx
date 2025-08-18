@@ -23,11 +23,6 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
 }) => {
   const { t } = useTranslation();
   
-  // Debug logging to check translation
-  console.log('KnowledgeBaseSelector:', {
-    personalDocumentCount,
-    translationResult: personalDocumentCount > 0 ? t('knowledgeBase.personalCount', { count: personalDocumentCount }) : 'N/A'
-  });
 
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<KnowledgeBaseType | null>(null);
@@ -88,9 +83,7 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
         hover: 'hover:from-emerald-500/20 hover:to-teal-500/20'
       },
       badge: personalDocumentCount > 0 ? t('knowledgeBase.badgeReady') : t('knowledgeBase.badgeEmpty'),
-      count: personalDocumentCount > 0 
-        ? t('knowledgeBase.personalCount', { count: personalDocumentCount })
-        : t('knowledgeBase.uploadToEnable')
+      count: t('knowledgeBase.personalCount', { count: personalDocumentCount || 0 })
     }
   ];
 
