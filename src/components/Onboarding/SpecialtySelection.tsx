@@ -3,11 +3,13 @@ import { useTranslation } from '../../hooks/useTranslation';
 
 interface SpecialtySelectionProps {
   onSelect: (specialty: 'cardiology' | 'ob-gyn') => void;
+  onSkip?: () => void;
   selectedSpecialty: 'cardiology' | 'ob-gyn' | null;
 }
 
 export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
   onSelect,
+  onSkip,
   selectedSpecialty
 }) => {
   const { t } = useTranslation();
@@ -526,6 +528,18 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
               <span>{t('common.hipaaCompliant')}</span>
             </div>
           </div>
+          
+          {/* Skip for now option */}
+          {onSkip && (
+            <div className="mt-6 md:mt-8">
+              <button
+                onClick={onSkip}
+                className="mx-auto block px-6 py-3 text-sm font-medium text-slate-500 hover:text-slate-700 border border-slate-300 hover:border-slate-400 rounded-lg bg-white/80 hover:bg-white/90 backdrop-blur-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-opacity-50"
+              >
+                Skip for now - I'll choose later
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

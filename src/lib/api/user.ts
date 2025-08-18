@@ -14,17 +14,34 @@ export const updateUserProfile = async (
   userId: string, 
   updates: UpdateUserProfileData
 ): Promise<void> => {
-  const { error } = await supabase
-    .from('users')
-    .update({
-      ...updates,
-      updated_at: new Date().toISOString()
-    })
-    .eq('user_id', userId);
+  try {
+    // First, check if user exists
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('user_id')
+      .eq('user_id', userId)
+      .single();
 
-  if (error) {
+    if (!existingUser) {
+      throw new Error('User profile not found');
+    }
 
-    throw new Error(`Failed to update profile: ${error.message}`);
+    // Perform the update
+    const { error } = await supabase
+      .from('users')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString()
+      })
+      .eq('user_id', userId);
+
+    if (error) {
+      console.error('Update profile error:', error);
+      throw new Error(`Failed to update profile: ${error.message}`);
+    }
+  } catch (err) {
+    console.error('UpdateUserProfile error:', err);
+    throw err;
   }
 };
 
@@ -32,18 +49,29 @@ export const updateUserProfile = async (
  * Get user profile by user ID
  */
 export const getUserProfile = async (userId: string) => {
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('user_id', userId)
-    .single();
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('user_id', userId)
+      .single();
 
-  if (error) {
+    if (error) {
+      console.error('Get user profile error:', error);
+      
+      // Handle specific error codes
+      if (error.code === 'PGRST116') {
+        throw new Error('User profile not found');
+      }
+      
+      throw new Error(`Failed to fetch profile: ${error.message}`);
+    }
 
-    throw new Error(`Failed to fetch profile: ${error.message}`);
+    return data;
+  } catch (err) {
+    console.error('getUserProfile error:', err);
+    throw err;
   }
-
-  return data;
 };
 
 /**

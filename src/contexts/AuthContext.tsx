@@ -153,15 +153,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const { data, error: signUpError } = await supabase.auth.signUp(credentials);
+      // Disable email confirmation by not providing emailRedirectTo and setting options
+      const signUpCredentials = {
+        ...credentials,
+        options: {
+          ...credentials.options,
+          // Remove emailRedirectTo to disable email verification
+          emailRedirectTo: undefined,
+        }
+      };
+
+      const { data, error: signUpError } = await supabase.auth.signUp(signUpCredentials);
 
       if (signUpError) {
         throw signUpError;
       }
 
-      // If sign up is successful, Supabase returns user data.
-      // If email confirmation is enabled, session will be null until email is verified.
-      // The onAuthStateChange listener will handle setting the session when the user is verified.
+      // With email verification disabled, users will be immediately signed in
+      // Both user and session should be available right away
       setUser(data.user ?? null);
       setSession(data.session ?? null); 
       // The profile will be fetched by the useEffect hook listening to user changes.

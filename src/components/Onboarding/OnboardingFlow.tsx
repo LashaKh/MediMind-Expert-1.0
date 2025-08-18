@@ -53,50 +53,80 @@ export const OnboardingFlow: React.FC = () => {
   };
 
   const handleComplete = async (finalData: OnboardingData) => {
-    if (!user || !finalData.specialty) return;
+    if (!user) return;
 
     setIsLoading(true);
     setError('');
     
-    const [result, errorResult] = await safeAsync(
-      async () => {
-        // Map UI specialty values to database values
-        const dbSpecialty = finalData.specialty === 'ob-gyn' ? 'obstetrics_gynecology' : finalData.specialty!
+    try {
+      // Store onboarding data in localStorage as backup
+      const onboardingComplete = {
+        userId: user.id,
+        specialty: finalData.specialty,
+        aboutMe: finalData.aboutMe,
+        completedAt: new Date().toISOString()
+      };
+      localStorage.setItem('medimind_onboarding', JSON.stringify(onboardingComplete));
+      
+      // Try to update the database in the background, but don't block navigation
+      if (finalData.specialty || finalData.aboutMe) {
+        const updateData: any = {};
         
-        await updateUserProfile(user.id, {
-          medical_specialty: dbSpecialty,
-          about_me_context: finalData.aboutMe
-        });
-
-        // Refresh the profile to get the updated data
-        await refreshProfile();
-
-        // Map to MedicalSpecialty enum and get the correct route
-        const medicalSpecialty = dbSpecialty === 'obstetrics_gynecology' ? MedicalSpecialty.OBGYN : MedicalSpecialty.CARDIOLOGY;
-        const specialtyRoute = getSpecialtyRoute(medicalSpecialty);
+        if (finalData.specialty) {
+          const dbSpecialty = finalData.specialty === 'ob-gyn' ? 'obstetrics_gynecology' : finalData.specialty;
+          updateData.medical_specialty = dbSpecialty;
+        }
         
-        return { specialtyRoute };
-      },
-      {
-        context: 'onboarding completion',
-        severity: ErrorSeverity.HIGH,
-        showToast: true
+        if (finalData.aboutMe) {
+          updateData.about_me_context = finalData.aboutMe;
+        }
+        
+        // Update in background - don't await
+        updateUserProfile(user.id, updateData)
+          .then(() => {
+            console.log('Profile updated successfully');
+            // Refresh profile in background
+            refreshProfile().catch(console.warn);
+          })
+          .catch((error) => {
+            console.warn('Background profile update failed:', error);
+            // Could show a non-blocking toast here in the future
+          });
       }
-    );
 
-    if (errorResult) {
-      setError(errorResult.message || 'An error occurred while completing onboarding');
+      // Navigate immediately without waiting for database operations
+      let targetRoute;
+      if (finalData.specialty) {
+        const dbSpecialty = finalData.specialty === 'ob-gyn' ? 'obstetrics_gynecology' : finalData.specialty;
+        const medicalSpecialty = dbSpecialty === 'obstetrics_gynecology' ? MedicalSpecialty.OBGYN : MedicalSpecialty.CARDIOLOGY;
+        targetRoute = getSpecialtyRoute(medicalSpecialty);
+      } else {
+        targetRoute = '/workspace';
+      }
+      
+      // Navigate immediately
+      navigate(targetRoute, { replace: true });
       setIsLoading(false);
-      return;
+      
+    } catch (error) {
+      console.error('Onboarding completion error:', error);
+      setError('Something went wrong. Proceeding to workspace...');
+      
+      // Even if there's an error, still navigate to workspace after a short delay
+      setTimeout(() => {
+        navigate('/workspace', { replace: true });
+        setIsLoading(false);
+      }, 1000);
     }
-
-    // Redirect to specialty-specific workspace
-    navigate(result.specialtyRoute, { replace: true });
-    setIsLoading(false);
   };
 
   const handleSkipAboutMe = () => {
     handleComplete(onboardingData);
+  };
+
+  const handleSkipSpecialty = () => {
+    // Skip specialty selection and go directly to workspace
+    handleComplete({ ...onboardingData, specialty: null });
   };
 
   if (isLoading) {
@@ -177,6 +207,7 @@ export const OnboardingFlow: React.FC = () => {
           {currentStep === 0 && (
             <SpecialtySelection 
               onSelect={handleSpecialtySelect}
+              onSkip={handleSkipSpecialty}
               selectedSpecialty={onboardingData.specialty}
             />
           )}
