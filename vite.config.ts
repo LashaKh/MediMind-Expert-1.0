@@ -217,7 +217,7 @@ export default defineConfig(({ mode }) => {
             return 'translations';
           }
           
-          // Other components
+          // Other components - consolidate to prevent circular dependencies
           if (id.includes('src/components/')) {
             if (id.includes('AICopilot/')) {
               return 'ai-copilot';
@@ -228,7 +228,8 @@ export default defineConfig(({ mode }) => {
             if (id.includes('PodcastStudio/')) {
               return 'podcast-studio';
             }
-            return 'components';
+            // Keep core components with vendor-react to prevent initialization issues
+            return 'vendor-react';
           }
           
           // Keep utilities with main bundle to prevent circular dependencies
