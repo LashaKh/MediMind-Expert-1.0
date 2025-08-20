@@ -40,6 +40,7 @@
     "health:check": "curl -f https://medimindexpert.netlify.app/api/system/health || echo 'Health check failed'"
   },
   "dependencies": {
+    "@elevenlabs/elevenlabs-js": "^2.0.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.0.1",
@@ -50,6 +51,7 @@
     "axios": "^1.8.4",
     "base64-arraybuffer": "^1.0.2",
     "class-variance-authority": "^0.7.1",
+    "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "date-fns": "^3.3.1",
@@ -66,7 +68,6 @@
     "marked": "^12.0.2",
     "node-fetch": "^3.3.2",
     "openai": "^5.5.1",
-    "@elevenlabs/elevenlabs-js": "^2.0.0",
     "pdfjs-dist": "^5.3.93",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
