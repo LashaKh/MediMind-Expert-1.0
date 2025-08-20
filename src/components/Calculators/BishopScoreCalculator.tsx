@@ -149,7 +149,6 @@ const BishopScoreCalculatorComponent: React.FC = () => {
       default: return 'bg-gray-50 border-gray-200 text-gray-800';
     }
   }, []);
-  };
 
   return (
     <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'calculator' | 'about')} className="w-full">

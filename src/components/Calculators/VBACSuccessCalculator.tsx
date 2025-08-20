@@ -150,8 +150,6 @@ const VBACSuccessCalculatorComponent: React.FC = () => {
     if (percentage >= 50) return 'text-yellow-600';
     return 'text-red-600';
   }, []);
-    return 'text-red-600';
-  };
 
   const getSuccessIcon = (percentage: number) => {
     if (percentage >= 70) return <CheckCircle className="w-5 h-5 text-green-600" />;
