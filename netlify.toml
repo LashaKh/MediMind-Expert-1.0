@@ -1,12 +1,12 @@
 [build]
-  command = "npm run build:fresh"
+  command = "npm run build:netlify"
   publish = "dist"
   base = "/"
 
 [build.environment]
   NODE_VERSION = "20.18.0"
-  NPM_FLAGS = "--no-optional"
-  NODE_ENV = "production"
+  NPM_FLAGS = "--no-optional --no-fund --no-audit"
+  CI = "true"
 
 [functions]
   directory = "functions"
