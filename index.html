@@ -105,10 +105,14 @@
       const isMobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
       if (isMobile) {
-        console.log('Mobile device detected - using system fonts for optimal performance');
+        console.log('📱 Mobile device: System fonts for performance');
       } else {
-        console.log('Desktop device detected - Inter fonts will load progressively');
+        console.log('🖥️ Desktop device: Inter fonts loading');
       }
+      
+      // CRITICAL: Prevent vendor chunk React access races
+      window.__REACT_LOADING_GUARD__ = true;
+      console.log('🛡️ React loading guard activated');
     </script>
   </head>
   <body>

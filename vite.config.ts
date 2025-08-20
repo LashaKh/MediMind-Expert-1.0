@@ -105,10 +105,11 @@ export default defineConfig(({ mode }) => {
         compact: true,
         format: 'es',
         hoistTransitiveImports: false,
-        globals: {
-          'react': 'React',
-          'react-dom': 'ReactDOM'
-        },
+        // CRITICAL FIX: Remove globals config that causes React externalization conflict
+        // globals: {
+        //   'react': 'React',
+        //   'react-dom': 'ReactDOM'
+        // },
         manualChunks(id) {
           // Mobile Performance Optimization: Enhanced chunking strategy
           if (id.includes('node_modules')) {
@@ -123,10 +124,12 @@ export default defineConfig(({ mode }) => {
               return 'vendor-markdown';
             }
             
-            // Core libraries for instant loading - keep in main bundle
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') ||
-                id.includes('@headlessui') || id.includes('@heroicons') || id.includes('framer-motion')) {
-              return undefined; // Main bundle for instant navigation
+            // CRITICAL: Core React libraries MUST stay in main bundle to prevent SECRET_INTERNALS error
+            if (id.includes('react/') || id.includes('react-dom/') || 
+                id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') ||
+                id.includes('react-router') || id.includes('@headlessui') || 
+                id.includes('@heroicons') || id.includes('framer-motion')) {
+              return undefined; // Main bundle - prevents module loading race conditions
             }
             
             // i18n - separate for language-specific loading (keep this optimization)
