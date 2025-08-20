@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Calculator, Info, AlertTriangle, CheckCircle, Baby, Star, User, Activity, BarChart3, Stethoscope, Award, Shield, Clock, Target, Zap, Monitor, Microscope } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -26,7 +26,7 @@ interface FormData {
   fFN: boolean;
 }
 
-export const PretermBirthRiskCalculator: React.FC = () => {
+const PretermBirthRiskCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('calculator');
   const [formData, setFormData] = useState<FormData>({
@@ -45,7 +45,7 @@ export const PretermBirthRiskCalculator: React.FC = () => {
   const [isCalculating, setIsCalculating] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     // Gestational age validation
@@ -80,9 +80,9 @@ export const PretermBirthRiskCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (!validateForm()) return;
 
     setIsCalculating(true);
@@ -119,9 +119,9 @@ export const PretermBirthRiskCalculator: React.FC = () => {
         setIsCalculating(false);
       }
     }, 1800); // Professional OB/GYN preterm birth calculation simulation
-  };
+  }, [validateForm, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       gestationalAge: '',
       previousPretermBirth: false,
@@ -136,13 +136,13 @@ export const PretermBirthRiskCalculator: React.FC = () => {
     setErrors({});
     setIsCalculating(false);
     setCurrentStep(1);
-  };
+  }, []);
 
-  const formatRiskPercentage = (value: number): string => {
+  const formatRiskPercentage = useMemo(() => (value: number): string => {
     return `${value.toFixed(1)}%`;
-  };
+  }, []);
 
-  const getConfidenceColor = (category: string) => {
+  const getConfidenceColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low': return 'text-green-600 bg-green-50 border-green-200';
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
@@ -150,9 +150,9 @@ export const PretermBirthRiskCalculator: React.FC = () => {
       case 'very-high': return 'text-red-600 bg-red-50 border-red-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  };
+  }, []);
 
-  const getRiskBgColor = (category: string) => {
+  const getRiskBgColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low': return 'bg-green-50 border-green-200 text-green-800';
       case 'moderate': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
@@ -160,7 +160,7 @@ export const PretermBirthRiskCalculator: React.FC = () => {
       case 'very-high': return 'bg-red-50 border-red-200 text-red-800';
       default: return 'bg-gray-50 border-gray-200 text-gray-800';
     }
-  };
+  }, []);
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -637,5 +637,8 @@ export const PretermBirthRiskCalculator: React.FC = () => {
     </Tabs>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const PretermBirthRiskCalculator = React.memo(PretermBirthRiskCalculatorComponent);
 
 export default PretermBirthRiskCalculator; 

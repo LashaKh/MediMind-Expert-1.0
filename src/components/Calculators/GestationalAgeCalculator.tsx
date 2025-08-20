@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Calendar, Baby, AlertTriangle, Info, CheckCircle, Clock, Star, User, Activity, BarChart3, Stethoscope, Award, Shield, Target, Calculator, ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -24,7 +24,7 @@ interface FormData {
   currentDate: string;
 }
 
-export const GestationalAgeCalculator: React.FC = () => {
+const GestationalAgeCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('calculator');
   const [formData, setFormData] = useState<FormData>({
@@ -41,23 +41,23 @@ export const GestationalAgeCalculator: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [calculationMethod, setCalculationMethod] = useState<'lmp' | 'ultrasound' | 'edd'>('lmp');
 
-  // Helper function to parse gestational age string into weeks and days
-  const parseGestationalAge = (gestationalAge: string): { weeks: number; days: number } => {
+  // Memoized helper function to parse gestational age string into weeks and days
+  const parseGestationalAge = useMemo(() => (gestationalAge: string): { weeks: number; days: number } => {
     const match = gestationalAge.match(/(\d+)w\s*(\d+)d/);
     if (match) {
       return { weeks: parseInt(match[1]), days: parseInt(match[2]) };
     }
     return { weeks: 0, days: 0 };
-  };
+  }, []);
 
-  const handleInputChange = (field: keyof FormData, value: string) => {
+  const handleInputChange = useCallback((field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (Object.keys(errors).length > 0) {
       setErrors({});
     }
-  };
+  }, [errors]);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     // Reference date validation
@@ -103,9 +103,9 @@ export const GestationalAgeCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (!validateForm()) return;
 
     setIsCalculating(true);
@@ -137,9 +137,9 @@ export const GestationalAgeCalculator: React.FC = () => {
         setIsCalculating(false);
       }
     }, 1900); // Professional OB/GYN GA calculation simulation
-  };
+  }, [validateForm, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       referenceDate: new Date().toISOString().split('T')[0],
       lmpDate: '',
@@ -152,9 +152,9 @@ export const GestationalAgeCalculator: React.FC = () => {
     setIsCalculating(false);
     setCurrentStep(1);
     setCalculationMethod('lmp');
-  };
+  }, []);
 
-  const formatDate = (dateString: string): string => {
+  const formatDate = useMemo(() => (dateString: string): string => {
     try {
       const date = new Date(dateString);
       return date.toLocaleDateString('en-US', {
@@ -166,16 +166,16 @@ export const GestationalAgeCalculator: React.FC = () => {
     } catch {
       return dateString;
     }
-  };
+  }, []);
 
-  const getConfidenceColor = (confidence: string) => {
+  const getConfidenceColor = useMemo(() => (confidence: string) => {
     switch (confidence) {
       case 'high': return 'text-green-600 bg-green-50 border-green-200';
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'low': return 'text-red-600 bg-red-50 border-red-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  };
+  }, []);
 
   const getRiskBgColor = (category: string) => {
     switch (category) {
@@ -794,4 +794,9 @@ export const GestationalAgeCalculator: React.FC = () => {
       </TabsContent>
     </Tabs>
   );
-}; 
+};
+
+// Memoized component to prevent unnecessary re-renders
+export const GestationalAgeCalculator = React.memo(GestationalAgeCalculatorComponent);
+
+export default GestationalAgeCalculator; 

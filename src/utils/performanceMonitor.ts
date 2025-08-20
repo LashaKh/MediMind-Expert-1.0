@@ -18,10 +18,20 @@ interface CalculatorLoadMetrics {
   timestamp: number;
 }
 
+interface RenderMetrics {
+  componentName: string;
+  renderCount: number;
+  lastRenderTime: number;
+  averageRenderTime: number;
+  renderTimes: number[];
+}
+
 class PerformanceMonitor {
   private metrics: Map<string, PerformanceMetric> = new Map();
   private calculatorMetrics: CalculatorLoadMetrics[] = [];
-  private isEnabled: boolean = process.env.NODE_ENV === 'development';
+  private renderMetrics: Map<string, RenderMetrics> = new Map();
+  private isEnabled: boolean = process.env.NODE_ENV === 'development' || 
+                              localStorage.getItem('enable-performance-monitoring') === 'true';
 
   /**
    * Start timing a performance metric
@@ -87,6 +97,44 @@ class PerformanceMonitor {
   }
 
   /**
+   * Track component render performance
+   */
+  trackRender(componentName: string, renderTime?: number): void {
+    if (!this.isEnabled) return;
+    
+    const time = renderTime || performance.now();
+    const existing = this.renderMetrics.get(componentName) || {
+      componentName,
+      renderCount: 0,
+      lastRenderTime: 0,
+      averageRenderTime: 0,
+      renderTimes: []
+    };
+
+    existing.renderCount++;
+    existing.lastRenderTime = time;
+    existing.renderTimes.push(time);
+    
+    // Keep only last 50 render times for memory efficiency
+    if (existing.renderTimes.length > 50) {
+      existing.renderTimes.shift();
+    }
+    
+    existing.averageRenderTime = existing.renderTimes.reduce((sum, time) => sum + time, 0) / existing.renderTimes.length;
+    
+    this.renderMetrics.set(componentName, existing);
+    
+    // Log excessive re-renders (>10 renders in a short time span)
+    if (existing.renderCount > 10 && existing.renderTimes.length >= 10) {
+      const recentRenders = existing.renderTimes.slice(-10);
+      const timespan = recentRenders[recentRenders.length - 1] - recentRenders[0];
+      if (timespan < 5000) { // 10 renders in less than 5 seconds
+        console.warn(`🔄 Excessive re-renders detected: ${componentName} rendered ${existing.renderCount} times (${recentRenders.length} in last ${(timespan/1000).toFixed(1)}s)`);
+      }
+    }
+  }
+
+  /**
    * Get performance summary
    */
   getPerformanceSummary(): {
@@ -121,19 +169,53 @@ class PerformanceMonitor {
   }
 
   /**
+   * Get render performance report
+   */
+  getRenderReport(): RenderMetrics[] {
+    return Array.from(this.renderMetrics.values()).sort((a, b) => b.renderCount - a.renderCount);
+  }
+
+  /**
    * Log performance summary to console
    */
   logPerformanceSummary(): void {
     if (!this.isEnabled) return;
     
     const summary = this.getPerformanceSummary();
+    const renderReport = this.getRenderReport();
     
-    console.group('📊 Calculator Performance Summary');
+    console.group('📊 Mobile Performance Optimization - Phase 3 Results');
     
-    if (summary.fastestCalculator) {
+    // Calculator loading performance
+    if (summary.totalCalculatorsLoaded > 0) {
+      console.log(`⚡ Calculator Loading Performance:`);
+      console.log(`- Average load time: ${summary.averageLoadTime.toFixed(2)}ms`);
+      console.log(`- Cache hit rate: ${summary.cacheHitRate.toFixed(1)}%`);
+      console.log(`- Total calculators loaded: ${summary.totalCalculatorsLoaded}`);
     }
     
-    if (summary.slowestCalculator) {
+    // Re-render performance
+    if (renderReport.length > 0) {
+      console.log(`🔄 Component Re-render Analysis:`);
+      const totalRenders = renderReport.reduce((sum, metric) => sum + metric.renderCount, 0);
+      const excessiveRerenders = renderReport.filter(metric => metric.renderCount > 20);
+      
+      console.log(`- Total renders tracked: ${totalRenders}`);
+      console.log(`- Components monitored: ${renderReport.length}`);
+      console.log(`- Components with >20 renders: ${excessiveRerenders.length}`);
+      
+      if (excessiveRerenders.length > 0) {
+        console.warn('⚠️ Components needing optimization:');
+        excessiveRerenders.forEach(metric => {
+          console.warn(`  - ${metric.componentName}: ${metric.renderCount} renders`);
+        });
+      }
+      
+      // Show performance improvement results
+      const wellOptimized = renderReport.filter(metric => metric.renderCount <= 10);
+      if (wellOptimized.length > 0) {
+        console.log(`✅ Well-optimized components: ${wellOptimized.length}`);
+      }
     }
     
     console.groupEnd();
@@ -198,4 +280,13 @@ export const useCalculatorPerformanceTracking = () => {
   }, []);
 
   return { trackLoad, showSummary };
+};
+
+// Hook for tracking component re-renders in Phase 3 optimization
+export const useRenderTracking = (componentName: string) => {
+  if (process.env.NODE_ENV === 'development') {
+    React.useEffect(() => {
+      performanceMonitor.trackRender(componentName);
+    });
+  }
 };

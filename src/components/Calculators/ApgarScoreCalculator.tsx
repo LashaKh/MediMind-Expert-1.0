@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Heart, Baby, AlertTriangle, Info, CheckCircle, Clock, User, Activity, Target, Stethoscope, Award, Shield, Sparkles, AlertCircle, RefreshCw, ArrowRight, ArrowLeft, Zap } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -27,7 +27,7 @@ interface FormData {
   timepoint: '1-min' | '5-min' | '10-min';
 }
 
-export const ApgarScoreCalculator: React.FC = () => {
+const ApgarScoreCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'calculator' | 'about'>('calculator');
   const [formData, setFormData] = useState<FormData>({
@@ -44,7 +44,7 @@ export const ApgarScoreCalculator: React.FC = () => {
   const [isCalculating, setIsCalculating] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.heartRate) {
@@ -69,9 +69,9 @@ export const ApgarScoreCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (!validateForm()) return;
 
     setIsCalculating(true);
@@ -112,9 +112,9 @@ export const ApgarScoreCalculator: React.FC = () => {
       
       setIsCalculating(false);
     }, 1500);
-  };
+  }, [validateForm, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       heartRate: '',
       respiratoryEffort: '',
@@ -127,22 +127,22 @@ export const ApgarScoreCalculator: React.FC = () => {
     setErrors({});
     setIsCalculating(false);
     setCurrentStep(1);
-  };
+  }, []);
 
-  const getScoreColor = (score: number) => {
+  const getScoreColor = useMemo(() => (score: number) => {
     if (score <= 3) return 'text-red-600 bg-red-50 border-red-200';
     if (score <= 6) return 'text-yellow-600 bg-yellow-50 border-yellow-200';
     return 'text-green-600 bg-green-50 border-green-200';
-  };
+  }, []);
 
-  const getAssessmentColor = (assessment: string) => {
+  const getAssessmentColor = useMemo(() => (assessment: string) => {
     switch (assessment) {
       case 'severely-depressed': return 'text-red-600 bg-red-50 border-red-200';
       case 'moderately-depressed': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'excellent': return 'text-green-600 bg-green-50 border-green-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  };
+  }, []);
 
   return (
     <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'calculator' | 'about')} className="w-full">
@@ -563,4 +563,9 @@ export const ApgarScoreCalculator: React.FC = () => {
       </TabsContent>
     </Tabs>
   );
-}; 
+};
+
+// Memoized component to prevent unnecessary re-renders
+export const ApgarScoreCalculator = React.memo(ApgarScoreCalculatorComponent);
+
+export default ApgarScoreCalculator; 

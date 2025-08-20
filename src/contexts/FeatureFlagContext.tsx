@@ -3,7 +3,7 @@
  * Enables A/B testing and feature toggling for medical content
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useMemo } from 'react';
 import { useAuth } from '../stores/useAppStore';
 
 interface FeatureFlag {
@@ -160,7 +160,7 @@ export const FeatureFlagProvider: React.FC<FeatureFlagProviderProps> = ({ childr
   };
 
   // Fetch feature flags and A/B tests
-  const fetchFeatureFlags = async () => {
+  const fetchFeatureFlags = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -288,7 +288,7 @@ export const FeatureFlagProvider: React.FC<FeatureFlagProviderProps> = ({ childr
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Initialize user context and fetch flags
   useEffect(() => {
@@ -303,32 +303,32 @@ export const FeatureFlagProvider: React.FC<FeatureFlagProviderProps> = ({ childr
     fetchFeatureFlags();
   }, [user]);
 
-  // Feature flag functions
-  const isFeatureEnabled = (flagName: string): boolean => {
+  // Memoized feature flag functions to prevent unnecessary re-renders
+  const isFeatureEnabled = useCallback((flagName: string): boolean => {
     const flag = flags[flagName];
     if (!flag) return false;
     return shouldShowFeature(flag);
-  };
+  }, [flags, userSegment, userHash, user]);
 
-  const getFeatureConfig = (flagName: string): any => {
+  const getFeatureConfig = useCallback((flagName: string): any => {
     const flag = flags[flagName];
     if (!flag || !shouldShowFeature(flag)) return null;
     return flag.metadata || {};
-  };
+  }, [flags, userSegment, userHash, user]);
 
-  // A/B testing functions
-  const getTestVariant = (testName: string): ABTestVariant | null => {
+  // Memoized A/B testing functions
+  const getTestVariant = useCallback((testName: string): ABTestVariant | null => {
     const test = abTests[testName];
     if (!test) return null;
     return getVariantForUser(test);
-  };
+  }, [abTests, userSegment, userHash, user]);
 
-  const isInTestGroup = (testName: string, variantName: string): boolean => {
+  const isInTestGroup = useCallback((testName: string, variantName: string): boolean => {
     const variant = getTestVariant(testName);
     return variant?.name === variantName;
-  };
+  }, [getTestVariant]);
 
-  const trackTestEvent = async (testName: string, eventType: string, metadata?: any) => {
+  const trackTestEvent = useCallback(async (testName: string, eventType: string, metadata?: any) => {
     const variant = getTestVariant(testName);
     if (!variant || !user) return;
 
@@ -362,9 +362,10 @@ export const FeatureFlagProvider: React.FC<FeatureFlagProviderProps> = ({ childr
     } catch (err) {
       console.error('Failed to track A/B test event:', err);
     }
-  };
+  }, [getTestVariant, user, userSegment]);
 
-  const contextValue: FeatureFlagContextType = {
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue: FeatureFlagContextType = useMemo(() => ({
     flags,
     isFeatureEnabled,
     getFeatureConfig,
@@ -377,7 +378,20 @@ export const FeatureFlagProvider: React.FC<FeatureFlagProviderProps> = ({ childr
     loading,
     error,
     refreshFlags: fetchFeatureFlags
-  };
+  }), [
+    flags,
+    isFeatureEnabled,
+    getFeatureConfig,
+    abTests,
+    getTestVariant,
+    isInTestGroup,
+    trackTestEvent,
+    userSegment,
+    userHash,
+    loading,
+    error,
+    fetchFeatureFlags
+  ]);
 
   return (
     <FeatureFlagContext.Provider value={contextValue}>

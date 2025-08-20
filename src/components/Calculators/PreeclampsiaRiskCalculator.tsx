@@ -145,9 +145,9 @@ export const PreeclampsiaRiskCalculator: React.FC = () => {
         setIsCalculating(false);
       }
     }, 2000); // Professional OB/GYN preeclampsia calculation simulation
-  };
+  }, [validateForm, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       maternalAge: '',
       nulliparity: false,
@@ -166,13 +166,13 @@ export const PreeclampsiaRiskCalculator: React.FC = () => {
     setErrors({});
     setIsCalculating(false);
     setCurrentStep(1);
-  };
+  }, []);
 
-  const formatRiskPercentage = (value: number): string => {
+  const formatRiskPercentage = useMemo(() => (value: number): string => {
     return `${value.toFixed(1)}%`;
-  };
+  }, []);
 
-  const getConfidenceColor = (category: string) => {
+  const getConfidenceColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low': return 'text-green-600 bg-green-50 border-green-200';
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
@@ -180,9 +180,9 @@ export const PreeclampsiaRiskCalculator: React.FC = () => {
       case 'very-high': return 'text-red-600 bg-red-50 border-red-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  };
+  }, []);
 
-  const getRiskBgColor = (category: string) => {
+  const getRiskBgColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low': return 'bg-green-50 border-green-200 text-green-800';
       case 'moderate': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
@@ -190,7 +190,7 @@ export const PreeclampsiaRiskCalculator: React.FC = () => {
       case 'very-high': return 'bg-red-50 border-red-200 text-red-800';
       default: return 'bg-gray-50 border-gray-200 text-gray-800';
     }
-  };
+  }, []);
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -722,5 +722,8 @@ export const PreeclampsiaRiskCalculator: React.FC = () => {
     </Tabs>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const PreeclampsiaRiskCalculator = React.memo(PreeclampsiaRiskCalculatorComponent);
 
 export default PreeclampsiaRiskCalculator; 

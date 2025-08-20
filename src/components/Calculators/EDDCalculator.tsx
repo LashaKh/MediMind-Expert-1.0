@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Calendar, Baby, AlertTriangle, Info, CheckCircle, Star, User, Activity, BarChart3, Stethoscope, Award, Shield, Clock, Target, Calculator } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Tooltip } from '../ui/tooltip';
@@ -26,7 +26,7 @@ interface FormData {
   cycleDays: string;
 }
 
-export const EDDCalculator: React.FC = () => {
+const EDDCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('calculator');
   const [formData, setFormData] = useState<FormData>({
@@ -42,7 +42,7 @@ export const EDDCalculator: React.FC = () => {
   const [isCalculating, setIsCalculating] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     // At least one dating method must be provided
@@ -93,9 +93,9 @@ export const EDDCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (!validateForm()) return;
 
     setIsCalculating(true);
@@ -129,9 +129,9 @@ export const EDDCalculator: React.FC = () => {
         setIsCalculating(false);
       }
     }, 1800); // Professional OB/GYN calculation simulation
-  };
+  }, [formData, validateForm, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       lmpDate: '',
       firstTrimesterCRL: '',
@@ -143,9 +143,43 @@ export const EDDCalculator: React.FC = () => {
     setErrors({});
     setIsCalculating(false);
     setCurrentStep(1);
-  };
+  }, []);
 
-  const formatDate = (dateString: string): string => {
+  // Memoized step navigation handlers
+  const handleNextStep = useCallback(() => {
+    setCurrentStep(prev => prev + 1);
+  }, []);
+
+  const handlePrevStep = useCallback(() => {
+    setCurrentStep(prev => prev - 1);
+  }, []);
+
+  // Memoized form field update handlers
+  const handleLmpDateChange = useCallback((value: string) => {
+    setFormData(prev => ({ ...prev, lmpDate: value }));
+  }, []);
+
+  const handleCRLChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, firstTrimesterCRL: e.target.value }));
+  }, []);
+
+  const handleArtTransferDateChange = useCallback((value: string) => {
+    setFormData(prev => ({ ...prev, artTransferDate: value }));
+  }, []);
+
+  const handleArtDaysToTransferChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData(prev => ({ ...prev, artDaysToTransfer: e.target.value }));
+  }, []);
+
+  const handleCycleDaysChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, cycleDays: e.target.value }));
+  }, []);
+
+  const handleBackToModify = useCallback(() => {
+    setResult(null);
+  }, []);
+
+  const formatDate = useMemo(() => (dateString: string): string => {
     try {
       const date = new Date(dateString);
       return date.toLocaleDateString('en-US', {
@@ -157,25 +191,25 @@ export const EDDCalculator: React.FC = () => {
     } catch {
       return dateString;
     }
-  };
+  }, []);
 
-  const getConfidenceColor = (confidence: string) => {
+  const getConfidenceColor = useMemo(() => (confidence: string) => {
     switch (confidence) {
       case 'high': return 'text-green-600 bg-green-50 border-green-200';
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'low': return 'text-red-600 bg-red-50 border-red-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
-  };
+  }, []);
 
-  const getRiskBgColor = (category: string) => {
+  const getRiskBgColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'high': return 'bg-green-50 border-green-200 text-green-800';
       case 'moderate': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
       case 'low': return 'bg-red-50 border-red-200 text-red-800';
       default: return 'bg-gray-50 border-gray-200 text-gray-800';
     }
-  };
+  }, []);
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -274,7 +308,7 @@ export const EDDCalculator: React.FC = () => {
                           <DatePicker
                             label={t('calculators.edd.lmp_date_label')}
                             value={formData.lmpDate}
-                            onChange={(value) => setFormData({ ...formData, lmpDate: value })}
+                            onChange={handleLmpDateChange}
                             placeholder={t('calculators.edd.lmp_date_label') + '...'}
                             error={errors.lmpDate}
                             helpText={t('calculators.edd.lmp_date_help')}
@@ -286,7 +320,7 @@ export const EDDCalculator: React.FC = () => {
                           <CalculatorInput
                             label={t('calculators.edd.cycle_days_label')}
                             value={formData.cycleDays}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, cycleDays: e.target.value })}
+                            onChange={handleCycleDaysChange}
                             type="number"
                             placeholder="28"
                             min={21}
@@ -311,7 +345,7 @@ export const EDDCalculator: React.FC = () => {
                         <CalculatorInput
                           label={t('calculators.edd.first_trimester_crl_label')}
                           value={formData.firstTrimesterCRL}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, firstTrimesterCRL: e.target.value })}
+                          onChange={handleCRLChange}
                           type="number"
                           placeholder="45"
                           min={15}
@@ -338,7 +372,7 @@ export const EDDCalculator: React.FC = () => {
                           <DatePicker
                             label={t('calculators.edd.art_transfer_date_label')}
                             value={formData.artTransferDate}
-                            onChange={(value) => setFormData({ ...formData, artTransferDate: value })}
+                            onChange={handleArtTransferDateChange}
                             placeholder={t('calculators.edd.art_transfer_date_label') + '...'}
                             error={errors.artTransferDate}
                             helpText={t('calculators.edd.art_transfer_date_help')}
@@ -350,7 +384,7 @@ export const EDDCalculator: React.FC = () => {
                           <CalculatorSelect
                             label={t('calculators.edd.art_days_to_transfer_label')}
                             value={formData.artDaysToTransfer}
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, artDaysToTransfer: e.target.value })}
+                            onChange={handleArtDaysToTransferChange}
                             options={[
                               { value: '', label: t('calculators.edd.art_days_to_transfer_label') + '...' },
                               { value: '3', label: t('calculators.edd.day_3_cleavage') },
@@ -375,7 +409,7 @@ export const EDDCalculator: React.FC = () => {
 
                     <div className="flex justify-end">
                       <CalculatorButton
-                        onClick={() => setCurrentStep(2)}
+                        onClick={handleNextStep}
                         disabled={!formData.lmpDate && !formData.firstTrimesterCRL && !formData.artTransferDate}
                         className="enhanced-calculator-button"
                       >
@@ -470,7 +504,7 @@ export const EDDCalculator: React.FC = () => {
 
                     <div className="flex justify-between">
                       <CalculatorButton
-                        onClick={() => setCurrentStep(1)}
+                        onClick={handlePrevStep}
                         variant="outline"
                       >
                         {t('calculators.edd.back')}
@@ -573,7 +607,7 @@ export const EDDCalculator: React.FC = () => {
                     {t('calculators.edd.new_assessment')}
                   </CalculatorButton>
                   <CalculatorButton
-                    onClick={() => setResult(null)}
+                    onClick={handleBackToModify}
                     variant="secondary"
                     size="lg"
                   >
@@ -793,4 +827,7 @@ export const EDDCalculator: React.FC = () => {
       </TabsContent>
     </Tabs>
   );
-}; 
+};
+
+// Memoized component with shallow prop comparison
+export const EDDCalculator = React.memo(EDDCalculatorComponent); 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { 
   Droplets, 
   Calculator, 
@@ -52,7 +52,7 @@ interface HIT4TsResult {
   riskCategory: 'low' | 'intermediate' | 'high';
 }
 
-const HIT4TsCalculator: React.FC = () => {
+const HIT4TsCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   
   const [formData, setFormData] = useState<FormData>({
@@ -167,7 +167,7 @@ const HIT4TsCalculator: React.FC = () => {
     }
   ];
 
-  const calculateScore = (): HIT4TsResult => {
+  const calculateScore = useCallback((): HIT4TsResult => {
     const totalScore = Object.values(selectedOptions).reduce((sum, points) => sum + points, 0);
     
     let risk: string;
@@ -217,9 +217,9 @@ const HIT4TsCalculator: React.FC = () => {
       interpretation,
       recommendations
     };
-  };
+  }, [selectedOptions]);
 
-  const handleOptionSelect = (parameterName: string, points: number) => {
+  const handleOptionSelect = useCallback((parameterName: string, points: number) => {
     setSelectedOptions(prev => ({
       ...prev,
       [parameterName]: points
@@ -230,9 +230,9 @@ const HIT4TsCalculator: React.FC = () => {
       ...prev,
       [parameterName]: points.toString()
     }));
-  };
+  }, []);
 
-  const handleCalculate = async (event?: React.MouseEvent) => {
+  const handleCalculate = useCallback(async (event?: React.MouseEvent) => {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -258,9 +258,9 @@ const HIT4TsCalculator: React.FC = () => {
         }
       }, 100);
     }, 1000);
-  };
+  }, [calculateScore]);
 
-  const resetCalculator = () => {
+  const resetCalculator = useCallback(() => {
     setFormData({
       thrombocytopenia: '',
       timing: '',
@@ -270,15 +270,15 @@ const HIT4TsCalculator: React.FC = () => {
     setSelectedOptions({});
     setResult(null);
     setShowResult(false);
-  };
+  }, []);
 
-  const isFormValid = () => {
+  const isFormValid = useMemo(() => {
     return Object.keys(selectedOptions).length === 4;
-  };
+  }, [selectedOptions]);
 
-  const getCurrentScore = () => {
+  const getCurrentScore = useMemo(() => {
     return Object.values(selectedOptions).reduce((sum, points) => sum + points, 0);
-  };
+  }, [selectedOptions]);
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -606,6 +606,9 @@ const HIT4TsCalculator: React.FC = () => {
     </div>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const HIT4TsCalculator = React.memo(HIT4TsCalculatorComponent);
 
 export default HIT4TsCalculator; 
 

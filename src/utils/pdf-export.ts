@@ -1,9 +1,6 @@
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-
 /**
- * PDF Export Utilities
- * Provides functionality to export markdown content to PDF
+ * PDF Export Utilities with Dynamic Loading
+ * Provides functionality to export markdown content to PDF with lazy loading for mobile performance
  */
 
 interface PDFExportOptions {
@@ -13,11 +10,17 @@ interface PDFExportOptions {
 }
 
 /**
- * Export markdown content to PDF
+ * Export markdown content to PDF with dynamic loading
  * @param options - PDF export options
  */
 export const exportToPDF = async (options: PDFExportOptions): Promise<void> => {
   const { title, content, filename = 'document.pdf' } = options;
+  
+  // Dynamic import for mobile performance optimization
+  const [{ default: jsPDF }] = await Promise.all([
+    import('jspdf'),
+    import('jspdf-autotable') // Side-effect import for autoTable plugin
+  ]);
   
   // Initialize jsPDF
   const pdf = new jsPDF({

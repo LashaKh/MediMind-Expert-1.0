@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Shield, AlertTriangle, Info, CheckCircle, Star, User, FileText, Activity, Clock, Target, Calculator, TrendingUp, Stethoscope, Award, ArrowRight, Users, Calendar, AlertCircle, Microscope, Dna, Heart } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Tooltip } from '../ui/tooltip';
@@ -35,7 +35,7 @@ interface Errors {
   cytologyResult?: string;
 }
 
-const CervicalCancerRiskCalculator: React.FC = () => {
+const CervicalCancerRiskCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
   
@@ -63,19 +63,19 @@ const CervicalCancerRiskCalculator: React.FC = () => {
     setShowResult(false);
   }, [currentLanguage]);
 
-  const handleInputChange = (field: keyof FormData, value: string | boolean) => {
+  const handleInputChange = useCallback((field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear errors when user starts typing
     if (errors[field as keyof Errors]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
-  };
+  }, [errors]);
 
-  const validateStep = (currentStep: number): boolean => {
+  const validateStep = useCallback((currentStep: number): boolean => {
     const newErrors: Errors = {};
 
     if (currentStep === 1) {
-    if (!formData.age) {
+      if (!formData.age) {
         newErrors.age = t('calculators.obgyn.cervical_cancer_risk.demographics.patient_age.required_error');
       } else if (Number(formData.age) < 18 || Number(formData.age) > 100) {
         newErrors.age = t('calculators.obgyn.cervical_cancer_risk.demographics.patient_age.validation_error');
@@ -84,19 +84,19 @@ const CervicalCancerRiskCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (validateStep(step)) {
       setStep(step + 1);
     }
-  };
+  }, [validateStep, step]);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     setStep(step - 1);
-  };
+  }, [step]);
 
-  const handleCalculate = async () => {
+  const handleCalculate = useCallback(async () => {
     if (!validateStep(1)) return;
 
     setIsLoading(true);
@@ -151,9 +151,9 @@ const CervicalCancerRiskCalculator: React.FC = () => {
     }
 
     setIsLoading(false);
-  };
+  }, [validateStep, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       hpvStatus: 'unknown',
@@ -167,9 +167,9 @@ const CervicalCancerRiskCalculator: React.FC = () => {
     setResult(null);
     setStep(1);
     setShowResult(false);
-  };
+  }, []);
 
-  const getRiskColor = (level: string) => {
+  const getRiskColor = useMemo(() => (level: string) => {
     switch (level) {
       case 'low':
         return 'bg-green-50 border-green-200 text-green-800';
@@ -182,9 +182,9 @@ const CervicalCancerRiskCalculator: React.FC = () => {
       default:
         return 'bg-gray-50 border-gray-200 text-gray-800';
     }
-  };
+  }, []);
 
-  const getRiskIcon = (level: string) => {
+  const getRiskIcon = useMemo(() => (level: string) => {
     switch (level) {
       case 'low':
         return <CheckCircle className="w-6 h-6 text-green-600" />;
@@ -197,9 +197,9 @@ const CervicalCancerRiskCalculator: React.FC = () => {
       default:
         return <Info className="w-6 h-6 text-gray-600" />;
     }
-  };
+  }, []);
 
-  const getStepIcon = (stepNumber: number) => {
+  const getStepIcon = useMemo(() => (stepNumber: number) => {
     switch (stepNumber) {
       case 1:
         return <User className="w-5 h-5" />;
@@ -210,7 +210,7 @@ const CervicalCancerRiskCalculator: React.FC = () => {
       default:
         return <Calculator className="w-5 h-5" />;
     }
-  };
+  }, []);
 
   return (
     <CalculatorContainer
@@ -759,5 +759,8 @@ const CervicalCancerRiskCalculator: React.FC = () => {
     </CalculatorContainer>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const CervicalCancerRiskCalculator = React.memo(CervicalCancerRiskCalculatorComponent);
 
 export default CervicalCancerRiskCalculator; 

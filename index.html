@@ -7,201 +7,109 @@
     <title>MediMind - AI Medical Assistant</title>
     <meta name="description" content="MediMind - Your advanced AI medical assistant for enhanced clinical decision-making" />
     <meta name="theme-color" content="#1a365d" />
+    
+    <!-- Mobile-Optimized Font Loading with Block Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- ULTIMATE FONT PROTECTION SYSTEM -->
-    <script>
-      // STEP 1: BLOCK ALL RENDERING UNTIL FONTS LOADED
-      const INTER_FONT_FAMILY = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif";
-      
-      // Hide body until fonts are ready
-      document.documentElement.style.visibility = 'hidden';
-      
-      // Load fonts synchronously - PREMIUM DESIGN WEIGHTS
-      const fontFaces = [
-        new FontFace('Inter', 'url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2)', { weight: '500', style: 'normal' }),
-        new FontFace('Inter', 'url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hiA.woff2)', { weight: '600', style: 'normal' }),
-        new FontFace('Inter', 'url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuDyfAZ9hiA.woff2)', { weight: '700', style: 'normal' }),
-        new FontFace('Inter', 'url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuBqYAZ9hiA.woff2)', { weight: '800', style: 'normal' })
-      ];
-      
-      Promise.all(fontFaces.map(font => font.load())).then(function(fonts) {
-        fonts.forEach(font => document.fonts.add(font));
-        
-        // STEP 2: FONT GUARDIAN - PREVENT ANY FONT CHANGES
-        function lockFonts() {
-          const allElements = document.querySelectorAll('*');
-          allElements.forEach(el => {
-            el.style.fontFamily = INTER_FONT_FAMILY;
-          });
-        }
-        
-        // STEP 3: MUTATION OBSERVER - WATCH FOR DOM CHANGES
-        const fontGuardian = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList') {
-              mutation.addedNodes.forEach(function(node) {
-                if (node.nodeType === 1) { // Element node
-                  node.style.fontFamily = INTER_FONT_FAMILY;
-                  const children = node.querySelectorAll('*');
-                  children.forEach(child => {
-                    child.style.fontFamily = INTER_FONT_FAMILY;
-                  });
-                }
-              });
-            }
-            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-              if (mutation.target.style.fontFamily && !mutation.target.style.fontFamily.includes('Inter')) {
-                mutation.target.style.fontFamily = INTER_FONT_FAMILY;
-              }
-            }
-          });
-        });
-        
-        // STEP 4: START MONITORING EVERYTHING
-        fontGuardian.observe(document.body, {
-          childList: true,
-          subtree: true,
-          attributes: true,
-          attributeFilter: ['style', 'class']
-        });
-        
-        // STEP 5: PERIODIC FONT ENFORCEMENT (every 100ms)
-        setInterval(lockFonts, 100);
-        
-        // STEP 6: SHOW THE PAGE
-        document.documentElement.style.visibility = 'visible';
-        console.log('FONT GUARDIAN ACTIVE - Inter fonts locked');
-        
-      }).catch(function(error) {
-        console.log('Font loading failed, showing with fallbacks:', error);
-        document.documentElement.style.visibility = 'visible';
-      });
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=block" rel="stylesheet">
     
     <style>
-      /* PREMIUM DESIGN FONT SYSTEM - SOPHISTICATED TYPOGRAPHY */
+      /* Mobile-first font system - Progressive enhancement */
+      :root {
+        --font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        --font-inter: 'Inter', var(--font-system);
+      }
+      
+      /* Base font settings - Inter first with system fallback */
       * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-optical-sizing: auto !important;
-        font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'ss02' !important;
-        font-variant-ligatures: contextual !important;
-        text-rendering: optimizeLegibility !important;
-        -webkit-font-smoothing: antialiased !important;
-        -moz-osx-font-smoothing: grayscale !important;
+        font-family: var(--font-inter);
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       
-      html {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 500 !important;
-      }
-      
+      /* Prevent font switching flashes */
       body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 500 !important;
-        font-optical-sizing: auto !important;
-        line-height: 1.6 !important;
-        letter-spacing: -0.01em !important;
+        font-family: var(--font-inter);
+        font-display: block;
       }
       
-      /* PREMIUM HEADINGS - DESIGN HIERARCHY */
-      h1, .text-4xl, .text-3xl, .text-2xl, .text-xl {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 700 !important;
-        letter-spacing: -0.025em !important;
-        line-height: 1.2 !important;
+      /* Desktop enhancement - Inter fonts on larger screens */
+      @media (min-width: 769px) and (display-mode: standalone), (min-width: 769px) {
+        * {
+          font-family: var(--font-inter);
+        }
       }
       
-      h2, h3, h4, h5, h6,
-      .font-semibold,
-      [class*="font-semibold"] {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 650 !important;
-        letter-spacing: -0.015em !important;
+      /* Font weights and styles */
+      body {
+        font-family: inherit;
+        font-weight: 400;
+        line-height: 1.6;
+        letter-spacing: -0.01em;
       }
       
-      .font-medium,
-      [class*="font-medium"] {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 550 !important;
-        letter-spacing: -0.005em !important;
+      h1, h2, h3, h4, h5, h6 {
+        font-family: inherit;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
       }
       
-      .font-bold,
-      [class*="font-bold"] {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 700 !important;
-        letter-spacing: -0.02em !important;
+      .font-medium {
+        font-weight: 500;
       }
       
-      .font-normal,
-      [class*="font-normal"] {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 500 !important;
-        letter-spacing: -0.005em !important;
+      .font-semibold {
+        font-weight: 600;
       }
       
-      /* PREMIUM UI ELEMENTS */
+      .font-bold {
+        font-weight: 700;
+      }
+      
       button, .btn, [role="button"] {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 600 !important;
-        letter-spacing: -0.01em !important;
+        font-family: inherit;
+        font-weight: 500;
+        letter-spacing: -0.01em;
       }
       
       input, select, textarea {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 500 !important;
-        letter-spacing: -0.005em !important;
+        font-family: inherit;
+        font-weight: 400;
+        letter-spacing: -0.005em;
       }
       
-      /* SOPHISTICATED TEXT ELEMENTS */
-      div, span, p, a, li, td, th {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 500 !important;
-        letter-spacing: -0.005em !important;
+      /* Remove complex font features on mobile for performance */
+      @media (max-width: 768px) {
+        * {
+          font-feature-settings: normal;
+          font-variant-ligatures: none;
+          font-optical-sizing: none;
+        }
       }
       
-      /* NAVIGATION & MENU ITEMS */
-      nav, .nav, [role="navigation"] {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
-        font-weight: 550 !important;
-        letter-spacing: -0.01em !important;
-      }
-      
-      /* PREMIUM FONT FACE DECLARATIONS - DESIGN-QUALITY WEIGHTS */
-      @font-face {
-        font-family: 'Inter';
-        src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2') format('woff2');
-        font-weight: 500;
-        font-style: normal;
-        font-display: block;
-      }
-      
-      @font-face {
-        font-family: 'Inter';
-        src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hiA.woff2') format('woff2');
-        font-weight: 600;
-        font-style: normal;
-        font-display: block;
-      }
-      
-      @font-face {
-        font-family: 'Inter';
-        src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuDyfAZ9hiA.woff2') format('woff2');
-        font-weight: 700;
-        font-style: normal;
-        font-display: block;
-      }
-      
-      @font-face {
-        font-family: 'Inter';
-        src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuBqYAZ9hiA.woff2') format('woff2');
-        font-weight: 800;
-        font-style: normal;
-        font-display: block;
+      /* Enhanced typography on desktop */
+      @media (min-width: 769px) {
+        * {
+          font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+          font-variant-ligatures: contextual;
+          font-optical-sizing: auto;
+        }
       }
     </style>
+    
+    <!-- Mobile-optimized initialization -->
+    <script>
+      // Simple mobile detection and font optimization
+      const isMobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        console.log('Mobile device detected - using system fonts for optimal performance');
+      } else {
+        console.log('Desktop device detected - Inter fonts will load progressively');
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

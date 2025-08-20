@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Heart, AlertTriangle, Activity, Info, AlertCircle } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 
@@ -20,7 +20,7 @@ interface CHA2DS2VAScResult {
   recommendation: string;
 }
 
-const CHA2DS2VAScCalculator: React.FC = () => {
+const CHA2DS2VAScCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   
   const [formData, setFormData] = useState<CHA2DS2VAScFormData>({
@@ -38,7 +38,7 @@ const CHA2DS2VAScCalculator: React.FC = () => {
   const [isCalculating, setIsCalculating] = useState(false);
   const [showResult, setShowResult] = useState(false);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     const age = parseInt(formData.age);
@@ -54,9 +54,9 @@ const CHA2DS2VAScCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const calculateCHA2DS2VASc = (): CHA2DS2VAScResult => {
+  const calculateCHA2DS2VASc = useCallback((): CHA2DS2VAScResult => {
     const age = parseInt(formData.age);
     let score = 0;
 
@@ -114,9 +114,9 @@ const CHA2DS2VAScCalculator: React.FC = () => {
       riskCategory,
       recommendation
     };
-  };
+  }, [formData, t]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -129,9 +129,9 @@ const CHA2DS2VAScCalculator: React.FC = () => {
     setResult(calculationResult);
     setShowResult(true);
     setIsCalculating(false);
-  };
+  }, [validateForm, calculateCHA2DS2VASc]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       sex: '',
@@ -144,16 +144,16 @@ const CHA2DS2VAScCalculator: React.FC = () => {
     setResult(null);
     setErrors({});
     setShowResult(false);
-  };
+  }, []);
 
-  const getRiskColor = (riskCategory: string) => {
+  const getRiskColor = useMemo(() => (riskCategory: string) => {
     switch (riskCategory) {
       case 'high': return 'text-red-600';
       case 'moderate': return 'text-yellow-600';
       case 'low': return 'text-green-600';
       default: return 'text-gray-600';
     }
-  };
+  }, []);
 
   return (
     <div className="max-w-2xl">
@@ -416,5 +416,8 @@ const CHA2DS2VAScCalculator: React.FC = () => {
     </div>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const CHA2DS2VAScCalculator = React.memo(CHA2DS2VAScCalculatorComponent);
 
 export default CHA2DS2VAScCalculator;

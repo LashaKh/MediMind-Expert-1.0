@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Calculator, Info, Heart, AlertTriangle, Activity, TrendingUp, Star, Brain, User, BarChart3, Stethoscope, Award, Shield, Zap, AlertCircle, CheckCircle, FileText, Clock, Target } from 'lucide-react';
 import { 
   CalculatorContainer, 
@@ -43,7 +43,7 @@ interface HCMAFResult {
   exclusionReasons: string[];
 }
 
-export const HCMAFRiskCalculator: React.FC = () => {
+const HCMAFRiskCalculatorComponent: React.FC = () => {
   const [activeTab, setActiveTab] = useState('calculator');
   const [formData, setFormData] = useState<HCMAFFormData>({
     age: '',
@@ -66,7 +66,7 @@ export const HCMAFRiskCalculator: React.FC = () => {
 
   const { t } = useTranslation();
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     const age = parseInt(formData.age);
@@ -107,9 +107,9 @@ export const HCMAFRiskCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const calculateHCMAFRisk = (): HCMAFResult => {
+  const calculateHCMAFRisk = useCallback((): HCMAFResult => {
     // Check for exclusions first
     const exclusionReasons: string[] = [];
     
@@ -227,9 +227,9 @@ export const HCMAFRiskCalculator: React.FC = () => {
       monitoringGuidance,
       exclusionReasons: []
     };
-  };
+  }, [formData, t]);
 
-  const getRecommendations = (
+  const getRecommendations = useCallback((
     riskCategory: string,
     twoYearRisk: number,
     data: HCMAFFormData
@@ -269,9 +269,9 @@ export const HCMAFRiskCalculator: React.FC = () => {
         t('calculators.hcm_af_risk.recommendation_high_7')
       ];
     }
-  };
+  }, [t]);
 
-  const getMonitoringGuidance = (riskCategory: string, laSize: number): string[] => {
+  const getMonitoringGuidance = useCallback((riskCategory: string, laSize: number): string[] => {
     const baseMonitoring = [
       t('calculators.hcm_af_risk.monitoring_base_1'),
       t('calculators.hcm_af_risk.monitoring_base_2')
@@ -300,9 +300,9 @@ export const HCMAFRiskCalculator: React.FC = () => {
         t('calculators.hcm_af_risk.monitoring_high_5')
       ];
     }
-  };
+  }, [t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (!validateForm()) return;
     
     setIsCalculating(true);
@@ -313,9 +313,9 @@ export const HCMAFRiskCalculator: React.FC = () => {
       setResult(calculatedResult);
       setIsCalculating(false);
     }, 1800);
-  };
+  }, [validateForm, calculateHCMAFRisk]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       gender: '',
@@ -333,25 +333,25 @@ export const HCMAFRiskCalculator: React.FC = () => {
     setErrors({});
     setIsCalculating(false);
     setCurrentStep(1);
-  };
+  }, []);
 
-  const getRiskColor = (category: string) => {
+  const getRiskColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low': return 'text-green-600';
       case 'intermediate': return 'text-yellow-600';
       case 'high': return 'text-red-600';
       default: return 'text-gray-600';
     }
-  };
+  }, []);
 
-  const getRiskBgColor = (category: string) => {
+  const getRiskBgColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low': return 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800';
       case 'intermediate': return 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800';
       case 'high': return 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800';
       default: return 'bg-gray-50 border-gray-200 dark:bg-gray-900/20 dark:border-gray-800';
     }
-  };
+  }, []);
 
   return (
     <CalculatorContainer
@@ -933,4 +933,7 @@ export const HCMAFRiskCalculator: React.FC = () => {
       </div>
     </CalculatorContainer>
   );
-}; 
+};
+
+// Memoized component to prevent unnecessary re-renders
+export const HCMAFRiskCalculator = React.memo(HCMAFRiskCalculatorComponent);

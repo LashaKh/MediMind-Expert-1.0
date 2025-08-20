@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, useRef } from 'react';
+import React, { useState, useEffect, Fragment, useRef, useCallback, useMemo } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { 
   Heart, Info, TrendingUp, Calculator, User, BarChart3, Activity, 
@@ -46,7 +46,7 @@ interface MortalityResult {
   scoreBreakdown?: string[];
 }
 
-export const MAGGICCalculator: React.FC = () => {
+const MAGGICCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   
   const [formData, setFormData] = useState<MAGGICData>({
@@ -204,7 +204,7 @@ export const MAGGICCalculator: React.FC = () => {
     }, targetStep !== currentStep ? 300 : 100); // Longer delay if step changed
   };
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     const age = parseInt(formData.age);
@@ -263,9 +263,9 @@ export const MAGGICCalculator: React.FC = () => {
     }
     
     return true;
-  };
+  }, [formData, t]);
 
-  const calculateMAGGIC = (): MortalityResult => {
+  const calculateMAGGIC = useCallback((): MortalityResult => {
     // Parse all string values to numbers
     const age = parseInt(formData.age);
     const lvef = parseInt(formData.lv_ejection_fraction);
@@ -634,9 +634,9 @@ export const MAGGICCalculator: React.FC = () => {
       recommendations,
       scoreBreakdown
     };
-  };
+  }, [formData]);
 
-  const getRecommendations = (risk: string, data: MAGGICData): string[] => {
+  const getRecommendations = useMemo(() => (risk: string, data: MAGGICData): string[] => {
     const recommendations: string[] = [];
 
     if (risk === 'High' || risk === 'Very High') {
@@ -667,9 +667,9 @@ export const MAGGICCalculator: React.FC = () => {
     }
 
     return recommendations;
-  };
+  }, []);
 
-  const getRiskColor = (risk: string): string => {
+  const getRiskColor = useMemo(() => (risk: string): string => {
     switch (risk) {
       case 'Low':
         return 'border-green-300 bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200';
@@ -682,9 +682,9 @@ export const MAGGICCalculator: React.FC = () => {
       default:
         return 'border-gray-300 bg-gray-50 dark:bg-gray-900/20 text-gray-800 dark:text-gray-200';
     }
-  };
+  }, []);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (!validateForm()) return;
     
     setIsCalculating(true);
@@ -698,9 +698,9 @@ export const MAGGICCalculator: React.FC = () => {
       setIsCalculating(false);
       setTimeout(() => setShowInsights(true), 1000);
     }, 1800);
-  };
+  }, [validateForm, calculateMAGGIC]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       gender: '',
@@ -725,11 +725,11 @@ export const MAGGICCalculator: React.FC = () => {
     setShowInsights(false);
     setCompletedFields(new Set());
     setTotalProgress(0);
-  };
+  }, []);
 
   // Enhanced field tracking
-  const handleFieldChange = (fieldName: string, value: string | number | boolean) => {
-    setFormData({ ...formData, [fieldName]: value });
+  const handleFieldChange = useCallback((fieldName: string, value: string | number | boolean) => {
+    setFormData(prev => ({ ...prev, [fieldName]: value }));
     if (value && value !== '' && value !== 0) {
       setCompletedFields(prev => new Set([...prev, fieldName]));
     } else {
@@ -739,7 +739,7 @@ export const MAGGICCalculator: React.FC = () => {
         return newSet;
       });
     }
-  };
+  }, []);
 
   return (
     <CalculatorContainer
@@ -2884,3 +2884,6 @@ export const MAGGICCalculator: React.FC = () => {
     </CalculatorContainer>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const MAGGICCalculator = React.memo(MAGGICCalculatorComponent);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { AlertTriangle, Clock, Shield } from 'lucide-react';
 import { 
@@ -13,7 +13,7 @@ import { GRACE2Validator, type GRACEFormData } from '../../utils/grace2Validator
 
 
 
-export const GRACERiskCalculator: React.FC = () => {
+const GRACERiskCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   
   const [formData, setFormData] = useState<GRACEFormData>({
@@ -33,7 +33,7 @@ export const GRACERiskCalculator: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showResult, setShowResult] = useState(false);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     const age = parseInt(formData.age);
@@ -66,9 +66,9 @@ export const GRACERiskCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const calculateGRACEScore = (): GRACEResult => {
+  const calculateGRACEScore = useCallback((): GRACEResult => {
     const validator = new GRACE2Validator();
     
     const patientData = {
@@ -107,9 +107,9 @@ export const GRACERiskCalculator: React.FC = () => {
                            'Elective timing'
       }
     };
-  };
+  }, [formData]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (validateForm()) {
     setIsCalculating(true);
     
@@ -120,9 +120,9 @@ export const GRACERiskCalculator: React.FC = () => {
       setIsCalculating(false);
       }, 1500);
     }
-  };
+  }, [validateForm, calculateGRACEScore]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       heartRate: '',
@@ -137,18 +137,18 @@ export const GRACERiskCalculator: React.FC = () => {
     setErrors({});
     setCurrentStep(1);
     setShowResult(false);
-  };
+  }, []);
 
-  const getInterpretation = (category: string, oneYearRisk: number, inHospitalRisk: number) => {
+  const getInterpretation = useMemo(() => (category: string, oneYearRisk: number, inHospitalRisk: number) => {
     if (category === 'high') {
       return `High-risk patient requiring urgent intervention. In-hospital mortality risk ${inHospitalRisk}%, 1-year risk ${oneYearRisk}%.`;
     } else if (category === 'intermediate') {
       return `Intermediate-risk patient. Early invasive strategy recommended. In-hospital mortality risk ${inHospitalRisk}%, 1-year risk ${oneYearRisk}%.`;
     }
     return `Low-risk patient. Conservative management appropriate. In-hospital mortality risk ${inHospitalRisk}%, 1-year risk ${oneYearRisk}%.`;
-  };
+  }, []);
 
-  const getUrgencyInfo = (urgency: string) => {
+  const getUrgencyInfo = useMemo(() => (urgency: string) => {
     switch (urgency) {
       case 'high':
         return { color: 'text-red-600', bg: 'bg-red-50', icon: AlertTriangle };
@@ -157,9 +157,9 @@ export const GRACERiskCalculator: React.FC = () => {
       default:
         return { color: 'text-green-600', bg: 'bg-green-50', icon: Shield };
     }
-  };
+  }, []);
 
-  const getKillipDescription = (killip: number) => {
+  const getKillipDescription = useMemo(() => (killip: number) => {
     const descriptions = [
       t('calculators.cardiology.grace.killip_class_1'),
       t('calculators.cardiology.grace.killip_class_2'), 
@@ -167,7 +167,7 @@ export const GRACERiskCalculator: React.FC = () => {
       t('calculators.cardiology.grace.killip_class_4')
     ];
     return descriptions[killip - 1];
-  };
+  }, [t]);
 
   return (
     <div style={{ transform: 'scale(0.8)', transformOrigin: 'top' }}>
@@ -213,3 +213,8 @@ export const GRACERiskCalculator: React.FC = () => {
     </div>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const GRACERiskCalculator = React.memo(GRACERiskCalculatorComponent);
+
+export default GRACERiskCalculator;

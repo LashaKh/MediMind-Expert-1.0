@@ -7,7 +7,7 @@ import { RootRedirect } from './components/Auth/RootRedirect';
 import { AppInitializer } from './components/Auth/AppInitializer';
 
 // INSTANT LOADING - DIRECT IMPORTS FOR MAIN NAVIGATION COMPONENTS
-// Core workspace components (main navigation) - NO lazy loading for instant response
+// Critical navigation components - NO lazy loading for instant response
 import { CardiologyWorkspace } from './components/Workspaces/CardiologyWorkspace';
 import { ObGynWorkspace } from './components/Workspaces/ObGynWorkspace';
 import { AICopilot } from './components/AICopilot/AICopilot';

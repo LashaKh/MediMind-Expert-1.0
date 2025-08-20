@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Calculator, Info, AlertTriangle, CheckCircle, TrendingUp, Heart, User, Activity, Baby, Target, Stethoscope, Award, Shield, Clock, Zap, XCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -26,7 +26,7 @@ interface FormData {
   estimatedFetalWeight: string;
 }
 
-const VBACSuccessCalculator: React.FC = () => {
+const VBACSuccessCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'calculator' | 'about'>('calculator');
   const [formData, setFormData] = useState<FormData>({
@@ -45,7 +45,7 @@ const VBACSuccessCalculator: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showResults, setShowResults] = useState(false);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.maternalAge) {
@@ -91,9 +91,9 @@ const VBACSuccessCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleCalculate = async () => {
+  const handleCalculate = useCallback(async () => {
     if (!validateForm()) return;
     
     setIsCalculating(true);
@@ -127,9 +127,9 @@ const VBACSuccessCalculator: React.FC = () => {
     }
 
     setIsCalculating(false);
-  };
+  }, [validateForm, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       maternalAge: '',
       bmi: '',
@@ -143,11 +143,13 @@ const VBACSuccessCalculator: React.FC = () => {
     setResult(null);
     setShowResults(false);
     setCurrentStep(1);
-  };
+  }, []);
 
-  const getSuccessColor = (percentage: number) => {
+  const getSuccessColor = useMemo(() => (percentage: number) => {
     if (percentage >= 70) return 'text-green-600';
     if (percentage >= 50) return 'text-yellow-600';
+    return 'text-red-600';
+  }, []);
     return 'text-red-600';
   };
 
@@ -586,5 +588,8 @@ const VBACSuccessCalculator: React.FC = () => {
     </Tabs>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const VBACSuccessCalculator = React.memo(VBACSuccessCalculatorComponent);
 
 export default VBACSuccessCalculator; 

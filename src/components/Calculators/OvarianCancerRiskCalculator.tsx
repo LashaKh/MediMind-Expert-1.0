@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../stores/useAppStore';
 import { Shield, AlertTriangle, Info, CheckCircle, Star, User, FileText, Activity, Clock, Target, Calculator, TrendingUp, Stethoscope, Award, ArrowRight, Users, Calendar, AlertCircle, Microscope, Dna, Heart, FlaskConical, Baby, Zap } from 'lucide-react';
@@ -37,7 +37,7 @@ interface Errors {
   oralContraceptiveUse?: string;
 }
 
-const OvarianCancerRiskCalculator: React.FC = () => {
+const OvarianCancerRiskCalculatorComponent: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { currentLanguage } = useLanguage();
 
@@ -75,15 +75,15 @@ const OvarianCancerRiskCalculator: React.FC = () => {
     setErrors({});
   }, [currentLanguage]);
 
-  const handleInputChange = (field: keyof FormData, value: string | boolean) => {
+  const handleInputChange = useCallback((field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear errors when user starts typing
     if (errors[field as keyof Errors]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
-  };
+  }, [errors]);
 
-  const validateStep = (currentStep: number): boolean => {
+  const validateStep = useCallback((currentStep: number): boolean => {
     const newErrors: Errors = {};
 
     if (currentStep === 1) {
@@ -108,19 +108,19 @@ const OvarianCancerRiskCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (validateStep(step)) {
       setStep(step + 1);
     }
-  };
+  }, [validateStep, step]);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     setStep(step - 1);
-  };
+  }, [step]);
 
-  const handleCalculate = async () => {
+  const handleCalculate = useCallback(async () => {
     if (!validateStep(1)) return;
 
     setIsLoading(true);
@@ -177,9 +177,9 @@ const OvarianCancerRiskCalculator: React.FC = () => {
     }
 
     setIsLoading(false);
-  };
+  }, [validateStep, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       familyHistory: 'none',
@@ -195,9 +195,9 @@ const OvarianCancerRiskCalculator: React.FC = () => {
     setResult(null);
     setStep(1);
     setShowResult(false);
-  };
+  }, []);
 
-  const getRiskColor = (level: string) => {
+  const getRiskColor = useMemo(() => (level: string) => {
     switch (level) {
       case 'low':
         return 'bg-green-50 border-green-200 text-green-800';
@@ -210,9 +210,9 @@ const OvarianCancerRiskCalculator: React.FC = () => {
       default:
         return 'bg-gray-50 border-gray-200 text-gray-800';
     }
-  };
+  }, []);
 
-  const getRiskIcon = (level: string) => {
+  const getRiskIcon = useMemo(() => (level: string) => {
     switch (level) {
       case 'low':
         return <CheckCircle className="w-6 h-6 text-green-600" />;
@@ -225,9 +225,9 @@ const OvarianCancerRiskCalculator: React.FC = () => {
       default:
         return <Info className="w-6 h-6 text-gray-600" />;
     }
-  };
+  }, []);
 
-  const getStepIcon = (stepNumber: number) => {
+  const getStepIcon = useMemo(() => (stepNumber: number) => {
     switch (stepNumber) {
       case 1:
         return <User className="w-5 h-5" />;
@@ -238,7 +238,7 @@ const OvarianCancerRiskCalculator: React.FC = () => {
       default:
         return <Calculator className="w-5 h-5" />;
     }
-  };
+  }, []);
 
   return (
     <CalculatorContainer
@@ -844,5 +844,8 @@ const OvarianCancerRiskCalculator: React.FC = () => {
     </CalculatorContainer>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const OvarianCancerRiskCalculator = React.memo(OvarianCancerRiskCalculatorComponent);
 
 export default OvarianCancerRiskCalculator; 

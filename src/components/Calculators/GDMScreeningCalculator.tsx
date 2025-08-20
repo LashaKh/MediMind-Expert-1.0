@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Calculator, Info, AlertTriangle, CheckCircle, TestTube, Calendar, Star, User, Activity, BarChart3, Stethoscope, Award, Shield, Clock, Target, Heart, Zap } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -25,7 +25,7 @@ interface FormData {
   pcos: boolean;
 }
 
-const GDMScreeningCalculator: React.FC = () => {
+const GDMScreeningCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'calculator' | 'about'>('calculator');
   const [formData, setFormData] = useState<FormData>({
@@ -44,7 +44,7 @@ const GDMScreeningCalculator: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showAllRecommendations, setShowAllRecommendations] = useState(false);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.maternalAge) {
@@ -67,9 +67,9 @@ const GDMScreeningCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (!validateForm()) return;
 
     setIsCalculating(true);
@@ -105,9 +105,9 @@ const GDMScreeningCalculator: React.FC = () => {
         setIsCalculating(false);
       }
     }, 2200); // Professional OB/GYN GDM screening calculation simulation
-  };
+  }, [validateForm, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       maternalAge: '',
       bmi: '',
@@ -122,9 +122,9 @@ const GDMScreeningCalculator: React.FC = () => {
     setIsCalculating(false);
     setCurrentStep(1);
     setShowAllRecommendations(false);
-  };
+  }, []);
 
-  const getRiskColor = (category: string) => {
+  const getRiskColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low': return 'text-green-700 bg-green-50 border-green-200';
       case 'moderate': return 'text-yellow-700 bg-yellow-50 border-yellow-200';
@@ -132,9 +132,9 @@ const GDMScreeningCalculator: React.FC = () => {
       case 'very-high': return 'text-red-700 bg-red-50 border-red-200';
       default: return 'text-gray-700 bg-gray-50 border-gray-200';
     }
-  };
+  }, []);
 
-  const getRiskBgColor = (category: string) => {
+  const getRiskBgColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low': return 'bg-green-50 border-green-200 text-green-800';
       case 'moderate': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
@@ -142,11 +142,11 @@ const GDMScreeningCalculator: React.FC = () => {
       case 'very-high': return 'bg-red-50 border-red-200 text-red-800';
       default: return 'bg-gray-50 border-gray-200 text-gray-800';
     }
-  };
+  }, []);
 
-  const formatRiskPercentage = (value: number): string => {
+  const formatRiskPercentage = useMemo(() => (value: number): string => {
     return `${value.toFixed(1)}%`;
-  };
+  }, []);
 
   return (
     <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'calculator' | 'about')} className="w-full">
@@ -649,4 +649,7 @@ const GDMScreeningCalculator: React.FC = () => {
   );
 };
 
-export default GDMScreeningCalculator; 
+// Memoized component to prevent unnecessary re-renders
+export const GDMScreeningCalculator = React.memo(GDMScreeningCalculatorComponent);
+
+export default GDMScreeningCalculator;

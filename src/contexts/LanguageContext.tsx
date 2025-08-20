@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { Language } from '../types/i18n';
 import { DEFAULT_LANGUAGE } from '../i18n/config';
@@ -93,14 +93,17 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return () => clearTimeout(timer);
   }, [currentLanguage, handlePreloadLanguage]);
 
+  // Memoize the context value to prevent unnecessary re-renders
+  const value = useMemo(() => ({
+    currentLanguage, 
+    setLanguage, 
+    isLoading, 
+    error,
+    preloadLanguage: handlePreloadLanguage
+  }), [currentLanguage, setLanguage, isLoading, error, handlePreloadLanguage]);
+
   return (
-    <LanguageContext.Provider value={{ 
-      currentLanguage, 
-      setLanguage, 
-      isLoading, 
-      error,
-      preloadLanguage: handlePreloadLanguage
-    }}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );

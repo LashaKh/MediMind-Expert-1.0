@@ -3,7 +3,7 @@
  * Medical news list with grid/list view toggle and infinite scroll
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Squares2X2Icon,
@@ -33,7 +33,7 @@ interface NewsListProps {
   likedArticles?: Set<string>;
 }
 
-export const NewsList: React.FC<NewsListProps> = ({
+const NewsListComponent: React.FC<NewsListProps> = ({
   articles,
   isLoading,
   error,
@@ -51,6 +51,16 @@ export const NewsList: React.FC<NewsListProps> = ({
   const [loadingMore, setLoadingMore] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Virtual scrolling state
+  const [scrollTop, setScrollTop] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(600);
+  
+  // Virtual scrolling configuration
+  const itemHeight = viewMode === 'grid' ? 350 : 120; // Approximate height for each item
+  const overscan = 3; // Render extra items for smooth scrolling
+  const itemsPerRow = viewMode === 'grid' ? 3 : 1; // Grid shows 3 columns, list shows 1
 
   // Infinite scroll implementation
   useEffect(() => {
@@ -104,6 +114,79 @@ export const NewsList: React.FC<NewsListProps> = ({
   const handleArticleLike = useCallback((article: MedicalNewsArticle) => {
     onArticleInteraction?.(article, 'like');
   }, [onArticleInteraction]);
+
+  // Memoized view mode toggle handler
+  const handleViewModeToggle = useCallback((mode: 'grid' | 'list') => {
+    setViewMode(mode);
+  }, []);
+
+  // Virtual scrolling calculations
+  const virtualScrollData = useMemo(() => {
+    if (articles.length === 0) return { visibleItems: [], totalHeight: 0, offsetY: 0 };
+
+    const totalRows = Math.ceil(articles.length / itemsPerRow);
+    const totalHeight = totalRows * itemHeight;
+    
+    // Calculate visible range
+    const startRow = Math.floor(scrollTop / itemHeight);
+    const endRow = Math.min(
+      totalRows - 1,
+      Math.ceil((scrollTop + containerHeight) / itemHeight)
+    );
+    
+    const visibleStartRow = Math.max(0, startRow - overscan);
+    const visibleEndRow = Math.min(totalRows - 1, endRow + overscan);
+    
+    const visibleItems = [];
+    for (let row = visibleStartRow; row <= visibleEndRow; row++) {
+      const startIdx = row * itemsPerRow;
+      const endIdx = Math.min(startIdx + itemsPerRow - 1, articles.length - 1);
+      
+      for (let idx = startIdx; idx <= endIdx; idx++) {
+        if (articles[idx]) {
+          visibleItems.push({
+            index: idx,
+            article: articles[idx],
+            style: {
+              position: 'absolute' as const,
+              top: Math.floor(idx / itemsPerRow) * itemHeight,
+              left: viewMode === 'grid' ? `${(idx % itemsPerRow) * (100 / itemsPerRow)}%` : '0',
+              width: viewMode === 'grid' ? `${100 / itemsPerRow}%` : '100%',
+              height: itemHeight
+            }
+          });
+        }
+      }
+    }
+    
+    return {
+      visibleItems,
+      totalHeight,
+      offsetY: visibleStartRow * itemHeight
+    };
+  }, [articles, scrollTop, containerHeight, itemHeight, itemsPerRow, overscan, viewMode]);
+
+  // Handle scroll events for virtual scrolling
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    const scrollTop = e.currentTarget.scrollTop;
+    setScrollTop(scrollTop);
+  }, []);
+
+  // Update container height on resize
+  useEffect(() => {
+    const updateContainerHeight = () => {
+      if (containerRef.current) {
+        setContainerHeight(containerRef.current.clientHeight);
+      }
+    };
+
+    updateContainerHeight();
+    window.addEventListener('resize', updateContainerHeight);
+    
+    return () => {
+      window.removeEventListener('resize', updateContainerHeight);
+    };
+  }, []);
 
   // Loading state
   if (isLoading && articles.length === 0) {
@@ -236,7 +319,7 @@ export const NewsList: React.FC<NewsListProps> = ({
             <Button
             variant={viewMode === 'grid' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('grid')}
+            onClick={() => handleViewModeToggle('grid')}
             className="gap-2"
           >
             <Squares2X2Icon className="w-4 h-4" />
@@ -245,7 +328,7 @@ export const NewsList: React.FC<NewsListProps> = ({
             <Button
             variant={viewMode === 'list' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('list')}
+            onClick={() => handleViewModeToggle('list')}
             className="gap-2"
           >
             <ListBulletIcon className="w-4 h-4" />
@@ -267,28 +350,33 @@ export const NewsList: React.FC<NewsListProps> = ({
         </div>
       </div>
 
-      {/* News Grid/List */}
-      <div className={cn(
-        "transition-all duration-300",
-        viewMode === 'grid' 
-          ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          : "space-y-4"
-      )}>
-        {articles.map((article, index) => (
-          <NewsCard
-            key={article.id}
-            article={article}
-            viewMode={viewMode}
-            isBookmarked={bookmarkedArticles.has(article.id)}
-            isLiked={likedArticles.has(article.id)}
-            onShare={handleArticleShare}
-            onBookmark={handleArticleBookmark}
-            onLike={handleArticleLike}
-            onInteraction={handleArticleClick}
-            className="animate-fade-in"
-            style={{ animationDelay: `${index * 50}ms` }}
-          />
-        ))}
+      {/* Virtual Scrolling News Container */}
+      <div 
+        ref={containerRef}
+        className="relative overflow-auto"
+        style={{ height: '70vh' }}
+        onScroll={handleScroll}
+      >
+        <div 
+          className="relative"
+          style={{ height: virtualScrollData.totalHeight }}
+        >
+          {virtualScrollData.visibleItems.map(({ index, article, style }) => (
+            <div key={article.id} style={style} className="px-3">
+              <NewsCard
+                article={article}
+                viewMode={viewMode}
+                isBookmarked={bookmarkedArticles.has(article.id)}
+                isLiked={likedArticles.has(article.id)}
+                onShare={handleArticleShare}
+                onBookmark={handleArticleBookmark}
+                onLike={handleArticleLike}
+                onInteraction={handleArticleClick}
+                className="h-full animate-fade-in"
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Load More Section */}
@@ -329,5 +417,23 @@ export const NewsList: React.FC<NewsListProps> = ({
     </div>
   );
 };
+
+// Memoized component with custom prop comparison to prevent unnecessary re-renders
+export const NewsList = React.memo(NewsListComponent, (prevProps, nextProps) => {
+  // Custom comparison for optimal performance
+  return (
+    prevProps.articles.length === nextProps.articles.length &&
+    prevProps.isLoading === nextProps.isLoading &&
+    prevProps.error === nextProps.error &&
+    prevProps.hasMore === nextProps.hasMore &&
+    prevProps.totalCount === nextProps.totalCount &&
+    prevProps.bookmarkedArticles === nextProps.bookmarkedArticles &&
+    prevProps.likedArticles === nextProps.likedArticles &&
+    // Only re-render if the first few articles have actually changed
+    prevProps.articles.slice(0, 10).every((article, index) => 
+      article.id === nextProps.articles[index]?.id
+    )
+  );
+});
 
 export default NewsList;

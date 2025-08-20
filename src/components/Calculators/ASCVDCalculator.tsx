@@ -36,7 +36,7 @@ interface ASCVDResult {
   validationMessage?: string;
 }
 
-export const ASCVDCalculator: React.FC = () => {
+const ASCVDCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
 
   const [formData, setFormData] = useState<ASCVDFormData>({
@@ -403,7 +403,7 @@ export const ASCVDCalculator: React.FC = () => {
     };
   };
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (!validateForm()) return;
 
     setIsCalculating(true);
@@ -415,9 +415,9 @@ export const ASCVDCalculator: React.FC = () => {
       setShowResult(true);
       setIsCalculating(false);
     }, 1500);
-  };
+  }, [formData, t]); // Dependencies include formData and t since they're used in validateForm and calculateASCVDRisk
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       sex: '',
@@ -433,9 +433,63 @@ export const ASCVDCalculator: React.FC = () => {
     setErrors({});
     setCurrentStep(1);
     setShowResult(false);
-  };
+  }, []);
 
-  const getInterpretation = (category: string, risk: number) => {
+  // Memoized step navigation handlers
+  const handleNextStep = useCallback(() => {
+    setCurrentStep(prev => prev + 1);
+  }, []);
+
+  const handlePrevStep = useCallback(() => {
+    setCurrentStep(prev => prev - 1);
+  }, []);
+
+  const handleBackToModify = useCallback(() => {
+    setShowResult(false);
+  }, []);
+
+  // Memoized form field update handlers
+  const handleAgeChange = useCallback((value: string) => {
+    setFormData(prev => ({ ...prev, age: value }));
+    validateField('age', value);
+  }, [validateField]);
+
+  const handleSexChange = useCallback((value: 'male' | 'female') => {
+    setFormData(prev => ({ ...prev, sex: value }));
+  }, []);
+
+  const handleRaceChange = useCallback((value: 'white' | 'african-american' | 'other') => {
+    setFormData(prev => ({ ...prev, race: value }));
+  }, []);
+
+  const handleTotalCholesterolChange = useCallback((value: string) => {
+    setFormData(prev => ({ ...prev, totalCholesterol: value }));
+    validateField('totalCholesterol', value);
+  }, [validateField]);
+
+  const handleHdlCholesterolChange = useCallback((value: string) => {
+    setFormData(prev => ({ ...prev, hdlCholesterol: value }));
+    validateField('hdlCholesterol', value);
+  }, [validateField]);
+
+  const handleSystolicBPChange = useCallback((value: string) => {
+    setFormData(prev => ({ ...prev, systolicBP: value }));
+    validateField('systolicBP', value);
+  }, [validateField]);
+
+  const handleHtnMedsChange = useCallback((checked: boolean) => {
+    setFormData(prev => ({ ...prev, onHtnMeds: checked }));
+  }, []);
+
+  const handleDiabetesChange = useCallback((checked: boolean) => {
+    setFormData(prev => ({ ...prev, diabetes: checked }));
+  }, []);
+
+  const handleSmokerChange = useCallback((checked: boolean) => {
+    setFormData(prev => ({ ...prev, smoker: checked }));
+  }, []);
+
+  const getInterpretation = useMemo(() => (category: string, risk: number) => {
     switch (category) {
       case 'low':
         return t('calculators.cardiology.ascvd.interpretation_low');
@@ -448,14 +502,14 @@ export const ASCVDCalculator: React.FC = () => {
       default:
         return '';
     }
-  };
+  }, [t]);
 
-  const getRiskLevel = (category: string): 'low' | 'borderline' | 'intermediate' | 'high' => {
+  const getRiskLevel = useCallback((category: string): 'low' | 'borderline' | 'intermediate' | 'high' => {
     return category as 'low' | 'borderline' | 'intermediate' | 'high';
-  };
+  }, []);
 
-  // Helper functions for stunning design
-  const getRiskColor = (category: string) => {
+  // Memoized helper functions for styling
+  const getRiskColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low':
         return 'text-emerald-600 dark:text-emerald-400';
@@ -468,9 +522,9 @@ export const ASCVDCalculator: React.FC = () => {
       default:
         return 'text-gray-600 dark:text-gray-400';
     }
-  };
+  }, []);
 
-  const getRiskBgColor = (category: string) => {
+  const getRiskBgColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low':
         return 'from-emerald-500/10 via-emerald-400/5 to-green-500/10 border-emerald-200/50 dark:border-emerald-400/30';
@@ -483,9 +537,9 @@ export const ASCVDCalculator: React.FC = () => {
       default:
         return 'from-gray-500/10 via-gray-400/5 to-gray-500/10 border-gray-200/50 dark:border-gray-400/30';
     }
-  };
+  }, []);
 
-  const getProgressColor = (category: string) => {
+  const getProgressColor = useMemo(() => (category: string) => {
     switch (category) {
       case 'low':
         return '#10b981';
@@ -498,7 +552,7 @@ export const ASCVDCalculator: React.FC = () => {
       default:
         return '#6b7280';
     }
-  };
+  }, []);
 
   return (
     <CalculatorContainer
@@ -560,10 +614,7 @@ export const ASCVDCalculator: React.FC = () => {
                   <CalculatorInput
                     label={t('calculators.cardiology.ascvd.age_label')}
                     value={formData.age}
-                    onChange={(value) => {
-                      setFormData({ ...formData, age: value });
-                      validateField('age', value);
-                    }}
+                    onChange={handleAgeChange}
                     error={errors.age}
                     icon={User}
                     type="number"
@@ -577,7 +628,7 @@ export const ASCVDCalculator: React.FC = () => {
                   <CalculatorSelect
                     label={t('calculators.cardiology.ascvd.sex_label')}
                     value={formData.sex}
-                    onChange={(value) => setFormData({ ...formData, sex: value as 'male' | 'female' })}
+                    onChange={handleSexChange}
                     error={errors.sex}
                     helpText="Biological sex assigned at birth"
                     icon={Dna}
@@ -592,7 +643,7 @@ export const ASCVDCalculator: React.FC = () => {
                   <CalculatorSelect
                     label={t('calculators.cardiology.ascvd.race_label')}
                     value={formData.race}
-                    onChange={(value) => setFormData({ ...formData, race: value as 'white' | 'african-american' | 'other' })}
+                    onChange={handleRaceChange}
                     error={errors.race}
                     helpText="Race is used in the Pooled Cohort Equations for accurate risk estimation"
                     icon={Target}
@@ -608,7 +659,7 @@ export const ASCVDCalculator: React.FC = () => {
 
                 <div className="flex justify-end">
                   <CalculatorButton
-                    onClick={() => setCurrentStep(2)}
+                    onClick={handleNextStep}
                     disabled={!formData.age || !formData.sex || !formData.race}
                     className="enhanced-calculator-button"
                   >
@@ -632,10 +683,7 @@ export const ASCVDCalculator: React.FC = () => {
                   <CalculatorInput
                     label={t('calculators.cardiology.ascvd.total_cholesterol_label')}
                     value={formData.totalCholesterol}
-                    onChange={(value) => {
-                      setFormData({ ...formData, totalCholesterol: value });
-                      validateField('totalCholesterol', value);
-                    }}
+                    onChange={handleTotalCholesterolChange}
                     error={errors.totalCholesterol}
                     icon={Droplet}
                     type="number"
@@ -649,10 +697,7 @@ export const ASCVDCalculator: React.FC = () => {
                   <CalculatorInput
                     label={t('calculators.cardiology.ascvd.hdl_cholesterol_label')}
                     value={formData.hdlCholesterol}
-                    onChange={(value) => {
-                      setFormData({ ...formData, hdlCholesterol: value });
-                      validateField('hdlCholesterol', value);
-                    }}
+                    onChange={handleHdlCholesterolChange}
                     error={errors.hdlCholesterol}
                     icon={Shield}
                     type="number"
@@ -666,10 +711,7 @@ export const ASCVDCalculator: React.FC = () => {
                   <CalculatorInput
                     label={t('calculators.cardiology.ascvd.systolic_bp_label')}
                     value={formData.systolicBP}
-                    onChange={(value) => {
-                      setFormData({ ...formData, systolicBP: value });
-                      validateField('systolicBP', value);
-                    }}
+                    onChange={handleSystolicBPChange}
                     error={errors.systolicBP}
                     icon={Stethoscope}
                     type="number"
@@ -683,13 +725,13 @@ export const ASCVDCalculator: React.FC = () => {
 
                 <div className="flex justify-between">
                   <CalculatorButton
-                    onClick={() => setCurrentStep(1)}
+                    onClick={handlePrevStep}
                     variant="outline"
                   >
                     {t('calculators.common.back')}
                   </CalculatorButton>
                   <CalculatorButton
-                    onClick={() => setCurrentStep(3)}
+                    onClick={handleNextStep}
                     disabled={!formData.totalCholesterol || !formData.hdlCholesterol || !formData.systolicBP}
                     className="enhanced-calculator-button"
                   >
@@ -713,7 +755,7 @@ export const ASCVDCalculator: React.FC = () => {
                   <CalculatorCheckbox
                     label={t('calculators.cardiology.ascvd.on_htn_meds_label')}
                     checked={formData.onHtnMeds}
-                    onChange={(checked) => setFormData({ ...formData, onHtnMeds: checked })}
+                    onChange={handleHtnMedsChange}
                     description="Currently taking blood pressure medications"
                     icon={Pill}
                   />
@@ -721,7 +763,7 @@ export const ASCVDCalculator: React.FC = () => {
                   <CalculatorCheckbox
                     label={t('calculators.cardiology.ascvd.diabetes_label')}
                     checked={formData.diabetes}
-                    onChange={(checked) => setFormData({ ...formData, diabetes: checked })}
+                    onChange={handleDiabetesChange}
                     description="Type 1 or Type 2 diabetes diagnosis"
                     icon={Activity}
                   />
@@ -729,7 +771,7 @@ export const ASCVDCalculator: React.FC = () => {
                   <CalculatorCheckbox
                     label={t('calculators.cardiology.ascvd.smoker_label')}
                     checked={formData.smoker}
-                    onChange={(checked) => setFormData({ ...formData, smoker: checked })}
+                    onChange={handleSmokerChange}
                     description="Current cigarette smoking (any amount)"
                     icon={Cigarette}
                   />
@@ -737,7 +779,7 @@ export const ASCVDCalculator: React.FC = () => {
 
                 <div className="flex justify-between">
                   <CalculatorButton
-                    onClick={() => setCurrentStep(2)}
+                    onClick={handlePrevStep}
                     variant="outline"
                   >
                     {t('calculators.common.back')}
@@ -1046,7 +1088,7 @@ export const ASCVDCalculator: React.FC = () => {
                   {t('calculators.common.new_calculation')}
                 </CalculatorButton>
                 <CalculatorButton
-                  onClick={() => setShowResult(false)}
+                  onClick={handleBackToModify}
                   variant="secondary"
                   size="lg"
                 >
@@ -1071,4 +1113,7 @@ export const ASCVDCalculator: React.FC = () => {
       </div>
     </CalculatorContainer>
   );
-}; 
+};
+
+// Memoized component with shallow prop comparison
+export const ASCVDCalculator = React.memo(ASCVDCalculatorComponent); 

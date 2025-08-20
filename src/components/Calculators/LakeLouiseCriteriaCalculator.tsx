@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -33,7 +33,7 @@ interface LakeLouiseResult {
   riskLevel: 'low' | 'intermediate' | 'high';
 }
 
-const LakeLouiseCriteriaCalculator: React.FC = () => {
+const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [data, setData] = useState<LakeLouiseData>({
     t2WeightedSignal: null,
@@ -71,7 +71,7 @@ const LakeLouiseCriteriaCalculator: React.FC = () => {
     },
   ];
 
-  const calculateScore = (formData: LakeLouiseData): LakeLouiseResult => {
+  const calculateScore = useCallback((formData: LakeLouiseData): LakeLouiseResult => {
     const score = Object.values(formData).reduce((sum, value) => sum + (value ? 1 : 0), 0);
     
     let interpretation: string;
@@ -102,9 +102,9 @@ const LakeLouiseCriteriaCalculator: React.FC = () => {
     }
 
     return { score, interpretation, recommendation, riskLevel };
-  };
+  }, []);
 
-  const handleInputChange = (key: keyof LakeLouiseData, value: boolean) => {
+  const handleInputChange = useCallback((key: keyof LakeLouiseData, value: boolean) => {
     const newData = { ...data, [key]: value };
     setData(newData);
     
@@ -120,9 +120,9 @@ const LakeLouiseCriteriaCalculator: React.FC = () => {
     } else {
       setAnimationPhase('idle');
     }
-  };
+  }, [data, calculateScore]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (Object.values(data).some(val => val === null)) {
       // Add shake animation for incomplete form
       setAnimationPhase('error');
@@ -135,9 +135,9 @@ const LakeLouiseCriteriaCalculator: React.FC = () => {
       setResult(calculateScore(data));
       setAnimationPhase('complete');
     }, 800);
-  };
+  }, [data, calculateScore]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setAnimationPhase('reset');
     setTimeout(() => {
       setData({
@@ -148,9 +148,9 @@ const LakeLouiseCriteriaCalculator: React.FC = () => {
       setResult(null);
       setAnimationPhase('idle');
     }, 300);
-  };
+  }, []);
 
-  const getRiskConfig = (riskLevel: string) => {
+  const getRiskConfig = useMemo(() => (riskLevel: string) => {
     switch (riskLevel) {
       case 'low': 
         return {
@@ -189,10 +189,10 @@ const LakeLouiseCriteriaCalculator: React.FC = () => {
           badge: 'bg-gray-100 text-gray-800 border-gray-300'
         };
     }
-  };
+  }, []);
 
-  const allFieldsFilled = Object.values(data).every(val => val !== null);
-  const currentScore = Object.values(data).reduce((sum, value) => sum + (value ? 1 : 0), 0);
+  const allFieldsFilled = useMemo(() => Object.values(data).every(val => val !== null), [data]);
+  const currentScore = useMemo(() => Object.values(data).reduce((sum, value) => sum + (value ? 1 : 0), 0), [data]);
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
@@ -535,4 +535,7 @@ const LakeLouiseCriteriaCalculator: React.FC = () => {
   );
 };
 
-export default LakeLouiseCriteriaCalculator; 
+// Memoized component to prevent unnecessary re-renders
+export const LakeLouiseCriteriaCalculator = React.memo(LakeLouiseCriteriaCalculatorComponent);
+
+export default LakeLouiseCriteriaCalculator;

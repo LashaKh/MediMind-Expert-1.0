@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Calculator, Info, AlertTriangle, CheckCircle, Target, Star, User, Activity, BarChart3, Stethoscope, Award, Shield, Clock, Baby, Zap } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -24,7 +24,7 @@ interface FormData {
   fetalStation: string;
 }
 
-const BishopScoreCalculator: React.FC = () => {
+const BishopScoreCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'calculator' | 'about'>('calculator');
   const [formData, setFormData] = useState<FormData>({
@@ -49,7 +49,7 @@ const BishopScoreCalculator: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     // Check all required fields
@@ -90,9 +90,9 @@ const BishopScoreCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (validateForm()) {
       const [result, error] = safe(() => {
         return calculateBishopScore({
@@ -117,9 +117,9 @@ const BishopScoreCalculator: React.FC = () => {
         setErrors({});
       }
     }
-  };
+  }, [validateForm, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       cervicalDilation: '',
       cervicalEffacement: '',
@@ -131,16 +131,16 @@ const BishopScoreCalculator: React.FC = () => {
     setErrors({});
     setIsCalculating(false);
     setCurrentStep(1);
-  };
+  }, []);
 
-  const getScoreColor = (score: number) => {
+  const getScoreColor = useMemo(() => (score: number) => {
     if (score <= 3) return 'text-red-600 bg-red-50 border-red-200';
     if (score <= 6) return 'text-yellow-600 bg-yellow-50 border-yellow-200';
     if (score <= 8) return 'text-green-600 bg-green-50 border-green-200';
     return 'text-blue-600 bg-blue-50 border-blue-200';
-  };
+  }, []);
 
-  const getSuccessBgColor = (success: string) => {
+  const getSuccessBgColor = useMemo(() => (success: string) => {
     switch (success) {
       case 'unlikely': return 'bg-red-50 border-red-200 text-red-800';
       case 'possible': return 'bg-orange-50 border-orange-200 text-orange-800';
@@ -148,6 +148,7 @@ const BishopScoreCalculator: React.FC = () => {
       case 'very-likely': return 'bg-blue-50 border-blue-200 text-blue-800';
       default: return 'bg-gray-50 border-gray-200 text-gray-800';
     }
+  }, []);
   };
 
   return (
@@ -727,5 +728,8 @@ const BishopScoreCalculator: React.FC = () => {
     </Tabs>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const BishopScoreCalculator = React.memo(BishopScoreCalculatorComponent);
 
 export default BishopScoreCalculator; 

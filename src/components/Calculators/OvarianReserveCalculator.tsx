@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calculator, Info, AlertTriangle, CheckCircle, Baby, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
@@ -20,20 +20,20 @@ interface FormData {
   inhibinB: string;
 }
 
-const OvarianReserveCalculator: React.FC = () => {
+const OvarianReserveCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   
   // Helper function to access nested translations
-  const getOvarianText = (key: string, options?: { returnObjects?: boolean }): string => {
+  const getOvarianText = useCallback((key: string, options?: { returnObjects?: boolean }): string => {
     const result = t(`calculators.ObGyn.ovarianReserveCalculator.${key}`, options);
     return typeof result === 'string' ? result : key;
-  };
+  }, [t]);
   
   // Helper function to get array translations
-  const getOvarianArray = (key: string): string[] => {
+  const getOvarianArray = useCallback((key: string): string[] => {
     const result = t(`calculators.ObGyn.ovarianReserveCalculator.${key}`, { returnObjects: true });
     return Array.isArray(result) ? result : [];
-  };
+  }, [t]);
   
   const [activeTab, setActiveTab] = useState<'calculator' | 'about'>('calculator');
   const [formData, setFormData] = useState<FormData>({
@@ -49,11 +49,11 @@ const OvarianReserveCalculator: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
 
-  const handleInputChange = (field: keyof FormData, value: string) => {
+  const handleInputChange = useCallback((field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  }, []);
 
-  const handleCalculate = async () => {
+  const handleCalculate = useCallback(async () => {
     setIsLoading(true);
     setErrors([]);
     setResult(null);
@@ -122,9 +122,9 @@ const OvarianReserveCalculator: React.FC = () => {
     }
     
     setIsLoading(false);
-  };
+  }, [formData, getOvarianText, getOvarianArray]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       amh: '',
@@ -135,25 +135,25 @@ const OvarianReserveCalculator: React.FC = () => {
     });
     setResult(null);
     setErrors([]);
-  };
+  }, []);
 
-  const getReserveColor = (level: string) => {
+  const getReserveColor = useMemo(() => (level: string) => {
     switch (level) {
       case 'low': return 'text-red-600';
       case 'normal': return 'text-green-600';
       case 'high': return 'text-blue-600';
       default: return 'text-gray-600';
     }
-  };
+  }, []);
 
-  const getReserveIcon = (level: string) => {
+  const getReserveIcon = useMemo(() => (level: string) => {
     switch (level) {
       case 'low': return '⬇️';
       case 'normal': return '✅';
       case 'high': return '⬆️';
       default: return '❓';
     }
-  };
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -434,5 +434,8 @@ const OvarianReserveCalculator: React.FC = () => {
     </div>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const OvarianReserveCalculator = React.memo(OvarianReserveCalculatorComponent);
 
 export default OvarianReserveCalculator; 

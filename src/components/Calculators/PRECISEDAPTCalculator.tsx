@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Calculator, Info, AlertTriangle, Clock, Shield, TrendingDown, TrendingUp, Droplets, Activity, User, FileText, Target, Stethoscope, Award, BarChart3, Brain, Heart, Thermometer, Zap, CheckCircle2 } from 'lucide-react';
 import { 
@@ -34,7 +34,7 @@ interface PRECISEDAPTResult {
   };
 }
 
-export const PRECISEDAPTCalculator: React.FC = () => {
+const PRECISEDAPTCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState<PRECISEDAPTFormData>({
     age: '',
@@ -115,7 +115,7 @@ export const PRECISEDAPTCalculator: React.FC = () => {
     }
   };
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.age || parseInt(formData.age) < 18) {
@@ -153,9 +153,9 @@ export const PRECISEDAPTCalculator: React.FC = () => {
     }
     
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const generateRiskFactors = (age: number, creatinine: number, hemoglobin: number, whiteBloodCount: number, previousBleed: boolean): string[] => {
+  const generateRiskFactors = useCallback((age: number, creatinine: number, hemoglobin: number, whiteBloodCount: number, previousBleed: boolean): string[] => {
     const riskFactors: string[] = [];
 
     // Age factors
@@ -196,9 +196,9 @@ export const PRECISEDAPTCalculator: React.FC = () => {
     }
 
     return riskFactors;
-  };
+  }, [t]);
 
-  const calculatePRECISEDAPTScore = (): PRECISEDAPTResult => {
+  const calculatePRECISEDAPTScore = useCallback((): PRECISEDAPTResult => {
     const age = parseInt(formData.age);
     const creatinine = parseFloat(formData.creatinine);
     const hemoglobin = parseFloat(formData.hemoglobin);
@@ -298,9 +298,9 @@ export const PRECISEDAPTCalculator: React.FC = () => {
         safeDuration
       }
     };
-  };
+  }, [formData, generateRiskFactors, t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (validateForm()) {
       setIsCalculating(true);
       setTimeout(() => {
@@ -310,9 +310,9 @@ export const PRECISEDAPTCalculator: React.FC = () => {
         setIsCalculating(false);
       }, 1500);
     }
-  };
+  }, [validateForm, calculatePRECISEDAPTScore]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       creatinine: '',
@@ -324,9 +324,9 @@ export const PRECISEDAPTCalculator: React.FC = () => {
     setResult(null);
     setShowResult(false);
     setCurrentStep(1);
-  };
+  }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     const age = parseInt(formData.age);
     const creatinine = parseFloat(formData.creatinine);
     const hemoglobin = parseFloat(formData.hemoglobin);
@@ -354,21 +354,21 @@ export const PRECISEDAPTCalculator: React.FC = () => {
 
     setErrors({});
     setCurrentStep(2);
-  };
+  }, [formData, t]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     setCurrentStep(1);
-  };
+  }, []);
 
-  const getInterpretation = (risk: 'low' | 'intermediate' | 'high', riskPercentage: number) => {
+  const getInterpretation = useMemo(() => (risk: 'low' | 'intermediate' | 'high', riskPercentage: number) => {
     return t(`calculators.cardiology.precise_dapt.interpretation_${risk}`, { risk: riskPercentage.toString() });
-  };
+  }, [t]);
 
-  const getRiskLevel = (risk: string): 'low' | 'borderline' | 'intermediate' | 'high' => {
+  const getRiskLevel = useMemo(() => (risk: string): 'low' | 'borderline' | 'intermediate' | 'high' => {
     return risk as 'low' | 'borderline' | 'intermediate' | 'high';
-  };
+  }, []);
 
-  const getBleedingInfo = (risk: string) => {
+  const getBleedingInfo = useMemo(() => (risk: string) => {
     switch (risk) {
       case 'low':
         return { color: 'text-green-600 dark:text-green-400', bgColor: 'bg-green-50 dark:bg-green-900/20', borderColor: 'border-green-200 dark:border-green-800' };
@@ -379,7 +379,7 @@ export const PRECISEDAPTCalculator: React.FC = () => {
       default:
         return { color: 'text-gray-600 dark:text-gray-400', bgColor: 'bg-gray-50 dark:bg-gray-900/20', borderColor: 'border-gray-200 dark:border-gray-800' };
     }
-  };
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -690,4 +690,7 @@ export const PRECISEDAPTCalculator: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};
+
+// Memoized component to prevent unnecessary re-renders
+export const PRECISEDAPTCalculator = React.memo(PRECISEDAPTCalculatorComponent);

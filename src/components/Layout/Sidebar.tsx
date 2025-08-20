@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useAuth } from '../../stores/useAppStore';
+import { useMobileOptimization, getGPUSafeClasses } from '../../hooks/useMobileOptimization';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
   const { t } = useTranslation();
   const location = useLocation();
   const { profile } = useAuth();
+  const { shouldOptimize, animationClasses } = useMobileOptimization();
   const sidebarRef = useRef<HTMLElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const firstNavItemRef = useRef<HTMLAnchorElement>(null);
@@ -250,29 +252,35 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         {/* Glassmorphism Background with Animated Gradient */}
         <div className={`
           absolute inset-0 
-          bg-gradient-to-br from-white/95 via-white/90 to-white/95 
-          dark:from-gray-900/95 dark:via-gray-900/90 dark:to-gray-900/95
-          backdrop-blur-xl backdrop-saturate-150
+          ${getGPUSafeClasses(
+            'bg-gradient-to-br from-white/95 via-white/90 to-white/95 dark:from-gray-900/95 dark:via-gray-900/90 dark:to-gray-900/95 backdrop-blur-xl backdrop-saturate-150',
+            animationClasses.gradients,
+            shouldOptimize
+          )}
           border-r border-white/20 dark:border-gray-700/50
-          shadow-2xl shadow-black/5 dark:shadow-black/20
+          ${shouldOptimize ? 'shadow-lg' : 'shadow-2xl shadow-black/5 dark:shadow-black/20'}
           transition-all duration-700
         `}>
-          {/* Animated gradient overlay */}
-          <div className={`
-            absolute inset-0 opacity-50
-            bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-cyan-500/10
-            dark:from-blue-400/10 dark:via-purple-400/5 dark:to-cyan-400/10
-            animate-pulse-glow
-          `} />
+          {/* Animated gradient overlay - desktop only */}
+          {!shouldOptimize && (
+            <div className={`
+              absolute inset-0 opacity-50
+              bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-cyan-500/10
+              dark:from-blue-400/10 dark:via-purple-400/5 dark:to-cyan-400/10
+              animate-pulse-glow
+            `} />
+          )}
           
-          {/* Noise texture for premium feel */}
-          <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSBiYXNlRnJlcXVlbmN5PSIwLjkiIG51bU9jdGF2ZXM9IjEiIHJlc3VsdD0ibm9pc2UiLz48ZmVDb21wb3NpdGUgaW49Im5vaXNlIiBpbjI9IlNvdXJjZUdyYXBoaWMiIG9wZXJhdG9yPSJtdWx0aXBseSIvPjwvZmlsdGVyPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjI1Ii8+PC9zdmc+')] bg-repeat" />
+          {/* Noise texture for premium feel - desktop only */}
+          {!shouldOptimize && (
+            <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSBiYXNlRnJlcXVlbmN5PSIwLjkiIG51bU9jdGF2ZXM9IjEiIHJlc3VsdD0ibm9pc2UiLz48ZmVDb21wb3NpdGUgaW49Im5vaXNlIiBpbjI9IlNvdXJjZUdyYXBoaWMiIG9wZXJhdG9yPSJtdWx0aXBseSIvPjwvZmlsdGVyPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjI1Ii8+PC9zdmc+')] bg-repeat" />
+          )}
         </div>
 
         <div className="relative z-10 flex flex-col h-full">
           {/* Enhanced Header - Simplified without logo duplication */}
           <div className={`
-            flex items-center justify-between p-4 border-b border-white/10 dark:border-gray-700/30
+            flex items-center justify-between pt-6 pb-4 px-4 border-b border-white/10 dark:border-gray-700/30
             ${isCollapsed && !isMobile ? 'px-2' : 'px-6'}
             transition-all duration-300
           `}>
@@ -394,10 +402,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                         relative overflow-hidden rounded-xl transition-all duration-300
                         ${isCollapsed && !isMobile ? 'w-12 h-12 mx-auto' : 'w-full h-11'}
                         ${active 
-                          ? `bg-gradient-to-r ${item.color} shadow-lg ${item.shadowColor} transform scale-[1.02]`
-                          : `bg-gray-100/80 dark:bg-gray-800/80 hover:shadow-md hover:transform hover:scale-[1.01] border border-gray-300/60 dark:border-gray-600/60 hover:border-white/20 dark:hover:border-white/10`
+                          ? `bg-gradient-to-r ${item.color} shadow-lg ${item.shadowColor} ${shouldOptimize ? '' : 'transform scale-[1.02]'}`
+                          : `bg-gray-100/80 dark:bg-gray-800/80 hover:shadow-md ${shouldOptimize ? '' : 'hover:transform hover:scale-[1.01]'} border border-gray-300/60 dark:border-gray-600/60 hover:border-white/20 dark:hover:border-white/10`
                         }
-                        backdrop-blur-sm
+                        ${shouldOptimize ? '' : 'backdrop-blur-sm'}
                       `}
                       style={!active && isHovered ? {
                         background: getGradientColors(item.color),

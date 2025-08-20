@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Calculator, Info, Zap, AlertTriangle, Clock, Activity, Heart, User, FileText, AlertCircle, Target, Stethoscope, Pill, Award, TrendingUp, BarChart3, Shield, ArrowRight, ArrowLeft, CheckCircle, HelpCircle } from 'lucide-react';
 import { 
@@ -33,7 +33,7 @@ interface TIMIResult {
   recommendations: string[];
 }
 
-export const TIMIRiskCalculator: React.FC = () => {
+const TIMIRiskCalculatorComponent: React.FC = () => {
   const { t, currentLanguage } = useTranslation();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<TIMIFormData>({
@@ -48,7 +48,7 @@ export const TIMIRiskCalculator: React.FC = () => {
   const [result, setResult] = useState<TIMIResult | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const validateStep = (): boolean => {
+  const validateStep = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (step === 1) {
@@ -67,9 +67,9 @@ export const TIMIRiskCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [step, formData, t]);
 
-  const calculateTIMI = (): TIMIResult => {
+  const calculateTIMI = useCallback((): TIMIResult => {
     let score = 0;
 
     // Age ≥65 years = 1 point
@@ -139,26 +139,26 @@ export const TIMIRiskCalculator: React.FC = () => {
       urgency,
       recommendations
     };
-  };
+  }, [formData, t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (validateStep()) {
       const result = calculateTIMI();
       setResult(result);
       setStep(2);
     }
-  };
+  }, [validateStep, calculateTIMI]);
 
-  const handleNextStep = () => {
+  const handleNextStep = useCallback(() => {
     if (validateStep()) setStep(step + 1);
-  };
+  }, [validateStep, step]);
 
-  const handlePrevStep = () => {
+  const handlePrevStep = useCallback(() => {
     setStep(step - 1);
     setErrors({});
-  };
+  }, [step]);
 
-  const resetCalculator = () => {
+  const resetCalculator = useCallback(() => {
     setFormData({
       age: '',
       coronaryRiskFactors: '',
@@ -171,21 +171,22 @@ export const TIMIRiskCalculator: React.FC = () => {
     setErrors({});
     setStep(1);
     setResult(null);
-  };
+  }, []);
 
-  const getRiskLevel = (category: string): 'low' | 'intermediate' | 'high' => {
+  // Memoized helper functions
+  const getRiskLevel = useCallback((category: string): 'low' | 'intermediate' | 'high' => {
     switch (category) {
       case 'high': return 'high';
       case 'intermediate': return 'intermediate';
       default: return 'low';
     }
-  };
+  }, []);
 
-  const getInterpretation = (category: string, score: number, risk: number) => {
+  const getInterpretation = useMemo(() => (category: string, score: number, risk: number) => {
     return t(`calculators.cardiology.timi.interpretation_${category}`).replace('{risk}', risk.toFixed(1));
-  };
+  }, [t]);
 
-  const getUrgencyInfo = (urgency: string) => {
+  const getUrgencyInfo = useMemo(() => (urgency: string) => {
     switch (urgency) {
       case 'routine':
         return { icon: Clock, color: 'green', label: t('calculators.cardiology.timi.routine_management') };
@@ -196,7 +197,7 @@ export const TIMIRiskCalculator: React.FC = () => {
       default:
         return { icon: Clock, color: 'gray', label: '' };
     }
-  };
+  }, [t]);
 
   if (result) {
   return (
@@ -822,4 +823,7 @@ export const TIMIRiskCalculator: React.FC = () => {
       </div>
     </CalculatorContainer>
   );
-}; 
+};
+
+// Memoized component with shallow prop comparison
+export const TIMIRiskCalculator = React.memo(TIMIRiskCalculatorComponent); 

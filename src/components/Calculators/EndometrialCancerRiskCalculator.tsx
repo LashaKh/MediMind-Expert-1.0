@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Shield, AlertTriangle, Info, CheckCircle, Star, User, FileText, Activity, Clock, Target, Calculator, TrendingUp, Stethoscope, Award, ArrowRight, Users, Calendar, AlertCircle, Scale, Pill, Heart, FlaskConical, Baby, Zap, Microscope } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Tooltip } from '../ui/tooltip';
@@ -35,7 +35,7 @@ interface Errors {
   bmi?: string;
 }
 
-const EndometrialCancerRiskCalculator: React.FC = () => {
+const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   
   const [formData, setFormData] = useState<FormData>({
@@ -57,25 +57,25 @@ const EndometrialCancerRiskCalculator: React.FC = () => {
   const [showResult, setShowResult] = useState(false);
   const [activeTab, setActiveTab] = useState<'calculator' | 'about'>('calculator');
 
-  const handleInputChange = (field: keyof FormData, value: string | boolean) => {
+  const handleInputChange = useCallback((field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear errors when user starts typing
     if (errors[field as keyof Errors]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
-  };
+  }, [errors]);
 
-  const validateStep = (currentStep: number): boolean => {
+  const validateStep = useCallback((currentStep: number): boolean => {
     const newErrors: Errors = {};
 
     if (currentStep === 1) {
-    if (!formData.age) {
+      if (!formData.age) {
         newErrors.age = t('calculators.obgyn.endometrial_cancer_risk.age_error');
       } else if (Number(formData.age) < 18 || Number(formData.age) > 100) {
         newErrors.age = t('calculators.obgyn.endometrial_cancer_risk.age_error');
-    }
+      }
 
-    if (!formData.bmi) {
+      if (!formData.bmi) {
         newErrors.bmi = t('calculators.obgyn.endometrial_cancer_risk.bmi_error');
       } else if (Number(formData.bmi) < 15 || Number(formData.bmi) > 60) {
         newErrors.bmi = t('calculators.obgyn.endometrial_cancer_risk.bmi_error');
@@ -84,19 +84,19 @@ const EndometrialCancerRiskCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (validateStep(step)) {
       setStep(step + 1);
     }
-  };
+  }, [validateStep, step]);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     setStep(step - 1);
-  };
+  }, [step]);
 
-  const handleCalculate = async () => {
+  const handleCalculate = useCallback(async () => {
     if (!validateStep(1)) return;
 
     setIsLoading(true);
@@ -154,9 +154,9 @@ const EndometrialCancerRiskCalculator: React.FC = () => {
     }
     
     setIsLoading(false);
-  };
+  }, [validateStep, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       bmi: '',
@@ -172,9 +172,9 @@ const EndometrialCancerRiskCalculator: React.FC = () => {
     setResult(null);
     setStep(1);
     setShowResult(false);
-  };
+  }, []);
 
-  const getRiskColor = (level: string) => {
+  const getRiskColor = useMemo(() => (level: string) => {
     switch (level) {
       case 'low':
         return 'bg-green-50 border-green-200 text-green-800';
@@ -187,9 +187,9 @@ const EndometrialCancerRiskCalculator: React.FC = () => {
       default:
         return 'bg-gray-50 border-gray-200 text-gray-800';
     }
-  };
+  }, []);
 
-  const getRiskIcon = (level: string) => {
+  const getRiskIcon = useMemo(() => (level: string) => {
     switch (level) {
       case 'low':
         return <CheckCircle className="w-6 h-6 text-green-600" />;
@@ -202,9 +202,9 @@ const EndometrialCancerRiskCalculator: React.FC = () => {
       default:
         return <Info className="w-6 h-6 text-gray-600" />;
     }
-  };
+  }, []);
 
-  const getStepIcon = (stepNumber: number) => {
+  const getStepIcon = useMemo(() => (stepNumber: number) => {
     switch (stepNumber) {
       case 1:
         return <User className="w-5 h-5" />;
@@ -215,7 +215,7 @@ const EndometrialCancerRiskCalculator: React.FC = () => {
       default:
         return <Calculator className="w-5 h-5" />;
     }
-  };
+  }, []);
 
   return (
     <CalculatorContainer
@@ -247,7 +247,7 @@ const EndometrialCancerRiskCalculator: React.FC = () => {
             </div>
             
             <div className="flex items-center gap-4">
-              {[1, 2, 3].map((I) => (
+              {[1, 2, 3].map((i) => (
                 <div key={i} className="flex items-center">
                   <div className={`
                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors
@@ -256,7 +256,7 @@ const EndometrialCancerRiskCalculator: React.FC = () => {
                       : 'bg-white border-purple-300 text-purple-400'
                     }
                   `}>
-                    {getStepIcon(I)}
+                    {getStepIcon(i)}
                   </div>
                   {i < 3 && (
                     <div className={`
@@ -851,5 +851,8 @@ const EndometrialCancerRiskCalculator: React.FC = () => {
     </CalculatorContainer>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const EndometrialCancerRiskCalculator = React.memo(EndometrialCancerRiskCalculatorComponent);
 
 export default EndometrialCancerRiskCalculator; 

@@ -161,17 +161,41 @@ export const useRealtimeAnalytics = (
     let updateBuffer: any[] = [];
     let throttleTimeout: NodeJS.Timeout | null = null;
     let isVisible = !document.hidden; // Track visibility state
+    const isMobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Network-aware subscription control for mobile
+    const isSlowConnection = isMobile && (
+      (navigator as any)?.connection?.effectiveType === 'slow-2g' ||
+      (navigator as any)?.connection?.effectiveType === '2g' ||
+      (navigator as any)?.connection?.effectiveType === '3g'
+    );
 
-    // Handle visibility changes to pause/resume subscriptions
+    // Enhanced visibility changes with mobile optimization
     const handleVisibilityChange = () => {
+      const wasVisible = isVisible;
       isVisible = !document.hidden;
+      
       if (!isVisible && subscriptionRef.current) {
         // Pause subscriptions when not visible
         console.log('Pausing analytics subscriptions (tab hidden)');
-      } else if (isVisible && subscriptionRef.current) {
-        // Resume and refresh data when visible again
+        
+        // On mobile, also clear the update buffer to save memory
+        if (isMobile) {
+          updateBuffer = [];
+          if (throttleTimeout) {
+            clearTimeout(throttleTimeout);
+            throttleTimeout = null;
+          }
+        }
+      } else if (isVisible && subscriptionRef.current && !wasVisible) {
+        // Resume with mobile-aware refresh strategy
         console.log('Resuming analytics subscriptions (tab visible)');
-        fetchInitialData(); // Refresh data to catch up
+        
+        // On mobile with slow connection, use longer delay before refresh
+        const refreshDelay = (isMobile && isSlowConnection) ? 2000 : 500;
+        setTimeout(() => {
+          fetchInitialData(); // Refresh data to catch up
+        }, refreshDelay);
       }
     };
 
@@ -223,20 +247,31 @@ export const useRealtimeAnalytics = (
       console.log(`Processed ${updates.length} batched analytics updates`);
     };
 
-    // Enhanced real-time handler with throttling
+    // Enhanced real-time handler with mobile-aware throttling
     const handleThrottledRealtimeUpdate = (payload: any) => {
       // Skip updates if tab is not visible to save resources
       if (!isVisible) return;
+      
+      // On mobile with slow connection, limit update frequency further
+      if (isMobile && isSlowConnection && updateBuffer.length > 5) {
+        // Drop older updates to prevent buffer overflow on slow connections
+        updateBuffer = updateBuffer.slice(-3);
+      }
 
       // Add to buffer instead of immediate processing
       updateBuffer.push(payload);
       
-      // Throttle updates to every 3 seconds
+      // Adaptive throttling based on device and connection
+      let throttleDelay = 3000; // Default desktop
+      if (isMobile) {
+        throttleDelay = isSlowConnection ? 20000 : 15000; // 20s on slow connections, 15s on normal mobile
+      }
+      
       if (throttleTimeout) {
         clearTimeout(throttleTimeout);
       }
       
-      throttleTimeout = setTimeout(processBufferedUpdates, 3000);
+      throttleTimeout = setTimeout(processBufferedUpdates, throttleDelay);
     };
 
     const setupSubscription = async () => {

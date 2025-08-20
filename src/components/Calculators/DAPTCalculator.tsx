@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Calculator, Info, Heart, AlertTriangle, Clock, TrendingUp, Pill, Activity, User, FileText, Target, Stethoscope, Award, BarChart3, Shield, Droplets, Zap, Brain, TimerIcon, CheckCircle2, UserCheck, BookOpen, ExternalLink, MessageCircle, Lightbulb } from 'lucide-react';
 import { 
@@ -37,7 +37,7 @@ interface DAPTResult {
   };
 }
 
-export default function DAPTCalculator() {
+function DAPTCalculatorComponent() {
   const { t } = useTranslation();
   
   const [formData, setFormData] = useState<DAPTFormData>({
@@ -58,7 +58,7 @@ export default function DAPTCalculator() {
   const [currentStep, setCurrentStep] = useState(1);
   const [showResult, setShowResult] = useState(false);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     const age = parseInt(formData.age);
@@ -77,9 +77,9 @@ export default function DAPTCalculator() {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const calculateDAPTScore = (): DAPTResult => {
+  const calculateDAPTScore = useCallback((): DAPTResult => {
     const age = parseInt(formData.age);
     const stentDiameter = parseFloat(formData.stentDiameter);
     let score = 0;
@@ -219,9 +219,9 @@ export default function DAPTCalculator() {
         netClinicalBenefit
       }
     };
-  };
+  }, [formData, t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (validateForm()) {
       setIsCalculating(true);
       
@@ -232,9 +232,9 @@ export default function DAPTCalculator() {
         setIsCalculating(false);
       }, 1500);
     }
-  };
+  }, [validateForm, calculateDAPTScore]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       cigaretteSmoking: false,
@@ -250,9 +250,9 @@ export default function DAPTCalculator() {
     setErrors({});
     setCurrentStep(1);
     setShowResult(false);
-  };
+  }, []);
 
-  const getInterpretation = (category: string, score: number) => {
+  const getInterpretation = useMemo(() => (category: string, score: number) => {
     if (score >= 2) {
       return t('calculators.cardiology.dapt.interpretation_high', { score });
     } else if (score >= 1) {
@@ -260,13 +260,13 @@ export default function DAPTCalculator() {
     } else {
       return t('calculators.cardiology.dapt.interpretation_low', { score });
     }
-  };
+  }, [t]);
 
-  const getRiskLevel = (category: string): 'low' | 'borderline' | 'intermediate' | 'high' => {
+  const getRiskLevel = useMemo(() => (category: string): 'low' | 'borderline' | 'intermediate' | 'high' => {
     return category === 'low' ? 'low' : category === 'intermediate' ? 'intermediate' : 'high';
-  };
+  }, []);
 
-  const getBenefitInfo = (benefit: string) => {
+  const getBenefitInfo = useMemo(() => (benefit: string) => {
     switch (benefit) {
       case 'favorable':
         return { icon: Shield, label: t('calculators.cardiology.dapt.favorable_benefit'), color: 'green', description: t('calculators.cardiology.dapt.benefits_outweigh_risks') };
@@ -277,7 +277,7 @@ export default function DAPTCalculator() {
       default:
         return { icon: Brain, label: t('calculators.cardiology.dapt.assessment_required'), color: 'gray', description: t('calculators.cardiology.dapt.clinical_evaluation_needed') };
     }
-  };
+  }, [t]);
 
   return (
     <CalculatorContainer
@@ -926,4 +926,9 @@ export default function DAPTCalculator() {
       </div>
     </CalculatorContainer>
   );
-} 
+}
+
+// Memoized component to prevent unnecessary re-renders
+export const DAPTCalculator = React.memo(DAPTCalculatorComponent);
+
+export default DAPTCalculator; 

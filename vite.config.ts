@@ -96,8 +96,8 @@ export default defineConfig(({ mode }) => {
     sourcemap: false,
     target: 'esnext',
     chunkSizeWarningLimit: 1000, // Reduced for better performance monitoring
-    // Performance optimizations
-    cssCodeSplit: true,
+    // Performance optimizations - disable CSS splitting to prevent font flashes
+    cssCodeSplit: false,
     reportCompressedSize: false, // Faster builds
     rollupOptions: {
       external: [],
@@ -110,21 +110,46 @@ export default defineConfig(({ mode }) => {
           'react-dom': 'ReactDOM'
         },
         manualChunks(id) {
-          // Ultra-aggressive consolidation to eliminate ALL initialization errors
+          // Mobile Performance Optimization: Enhanced chunking strategy
           if (id.includes('node_modules')) {
-            // Only keep truly separate vendor chunks for large, independent libraries
-            if (id.includes('jspdf') || id.includes('pdfjs-dist') || id.includes('tesseract.js')) {
-              return 'vendor-pdf';
+            // Heavy libraries that are now dynamically loaded - separate chunks
+            if (id.includes('jspdf') || id.includes('html2canvas')) {
+              return 'vendor-pdf-export';
+            }
+            if (id.includes('tesseract.js') || id.includes('pdfjs-dist')) {
+              return 'vendor-ocr';
             }
             if (id.includes('marked')) {
               return 'vendor-markdown';
             }
-            if (id.includes('i18next') && !id.includes('react-i18next')) {
+            
+            // Core libraries for instant loading - keep in main bundle
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') ||
+                id.includes('@headlessui') || id.includes('@heroicons') || id.includes('framer-motion')) {
+              return undefined; // Main bundle for instant navigation
+            }
+            
+            // i18n - separate for language-specific loading (keep this optimization)
+            if (id.includes('i18next') || id.includes('react-i18next')) {
               return 'vendor-i18n';
             }
-            // Everything else goes into main bundle - no separate vendor chunk
-            return undefined;
+            
+            // Database - can remain separate as it loads after auth
+            if (id.includes('@supabase') || id.includes('supabase')) {
+              return 'vendor-database';
+            }
+            
+            // Form libraries - used primarily in calculators
+            if (id.includes('react-hook-form') || id.includes('@hookform')) {
+              return 'vendor-forms';
+            }
+            
+            // Everything else goes into general vendor chunk
+            return 'vendor-core';
           }
+          
+          // Keep navigation components in main bundle for instant loading
+          // Only heavy libraries remain as separate chunks
           
           // Calculator components - only keep specialty-specific ones separate
           if (id.includes('src/components/Calculators/')) {
@@ -215,12 +240,15 @@ export default defineConfig(({ mode }) => {
           return `assets/[name].[hash][extname]`;
         },
         chunkFileNames: (chunkInfo) => {
-          // Organize chunks by type for better caching
+          // Mobile Performance Optimization: Enhanced chunk organization
           if (chunkInfo.name.includes('calculators')) {
             return `assets/calculators/[name].[hash].js`;
           }
           if (chunkInfo.name.includes('translations')) {
             return `assets/i18n/[name].[hash].js`;
+          }
+          if (chunkInfo.name.includes('vendor-pdf') || chunkInfo.name.includes('vendor-ocr')) {
+            return `assets/heavy/[name].[hash].js`; // Heavy libraries that are lazy loaded
           }
           if (chunkInfo.name.includes('vendor')) {
             return `assets/vendor/[name].[hash].js`;

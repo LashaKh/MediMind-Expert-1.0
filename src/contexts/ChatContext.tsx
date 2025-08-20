@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, ReactNode, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useReducer, ReactNode, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Message, ChatState, Conversation, PatientCase, CaseContext, KnowledgeBaseType, ConversationType } from '../types/chat';
 import { v4 as uuidv4 } from 'uuid';
 import { checkUserVectorStore, getUserDocumentStats } from '../lib/api/vectorStore';
@@ -1246,7 +1246,8 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
     }
   }, []);
 
-  const value: ChatContextType = {
+  // Memoize the context value to prevent unnecessary re-renders
+  const value: ChatContextType = useMemo(() => ({
     state,
     addMessage,
     updateMessage,
@@ -1300,7 +1301,34 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
         dispatch({ type: 'SET_SELECTED_DOCUMENTS', payload: allDocumentIds });
       }
     },
-  };
+  }), [
+    state,
+    addMessage,
+    updateMessage,
+    setTyping,
+    setLoading,
+    setError,
+    clearMessages,
+    setMessages,
+    createNewConversation,
+    setActiveConversation,
+    updateConversation,
+    deleteConversation,
+    loadConversations,
+    saveConversationsToStorage,
+    getConversationSummaries,
+    createCase,
+    setActiveCase,
+    updateCase,
+    deleteCase,
+    getCaseHistory,
+    resetCaseContext,
+    saveCasesToStorage,
+    loadCases,
+    clearCachedData,
+    saveFlowiseConversationMetadata,
+    incrementFlowiseMessageCount
+  ]);
 
   return (
     <ChatContext.Provider value={value}>

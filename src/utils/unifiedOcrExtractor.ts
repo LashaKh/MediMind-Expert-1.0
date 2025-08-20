@@ -1,5 +1,4 @@
-import { createWorker, Worker } from 'tesseract.js';
-import * as pdfjsLib from 'pdfjs-dist';
+// Mobile Performance Optimization: Dynamic imports for heavy OCR libraries
 import { extractTextFromImageWithGemini } from './geminiVisionExtractor';
 
 // Unified interfaces
@@ -31,14 +30,20 @@ export interface ProgressInfo {
   message: string;
 }
 
+// Types for dynamic imports
+type TesseractModule = typeof import('tesseract.js');
+type PdfjsModule = typeof import('pdfjs-dist');
+
 // Unified OCR worker management
-let unifiedOcrWorker: Worker | null = null;
-let textDetectionWorker: Worker | null = null;
+let unifiedOcrWorker: any = null; // Changed from Worker to any due to dynamic import
+let textDetectionWorker: any = null;
 
 /**
- * Configure PDF.js worker with local-first strategy
+ * Configure PDF.js worker with local-first strategy (lazy loaded)
  */
-function configurePdfWorker(): void {
+async function configurePdfWorker(): Promise<PdfjsModule> {
+  const pdfjsLib = await import('pdfjs-dist');
+  
   if (typeof window !== 'undefined') {
     try {
       const timestamp = Date.now();
@@ -46,17 +51,22 @@ function configurePdfWorker(): void {
       pdfjsLib.GlobalWorkerOptions.workerSrc = localWorkerUrl;
       pdfjsLib.GlobalWorkerOptions.disableWorker = false;
     } catch (error) {
-
+      // Fallback handling
     }
   }
+  
+  return pdfjsLib;
 }
 
 /**
- * Get or create a full-featured OCR worker
+ * Get or create a full-featured OCR worker with dynamic loading
  */
-async function getOcrWorker(): Promise<Worker> {
+async function getOcrWorker(): Promise<any> {
   if (!unifiedOcrWorker) {
     try {
+      // Dynamic import of Tesseract.js for mobile performance
+      const { createWorker } = await import('tesseract.js');
+      
       unifiedOcrWorker = await createWorker(['kat', 'eng', 'rus'], 1, {
         logger: (m) => {
           if (m.status === 'recognizing text') {
@@ -83,11 +93,14 @@ async function getOcrWorker(): Promise<Worker> {
 }
 
 /**
- * Get or create a lightweight text detection worker
+ * Get or create a lightweight text detection worker with dynamic loading
  */
-async function getTextDetectionWorker(): Promise<Worker> {
+async function getTextDetectionWorker(): Promise<any> {
   if (!textDetectionWorker) {
     try {
+      // Dynamic import of Tesseract.js for mobile performance
+      const { createWorker } = await import('tesseract.js');
+      
       textDetectionWorker = await createWorker();
       await textDetectionWorker.loadLanguage('eng');
       await textDetectionWorker.initialize('eng');
@@ -216,7 +229,8 @@ export async function extractTextFromPdf(
   const startTime = Date.now();
   
   try {
-    configurePdfWorker();
+    // Dynamic import of PDF.js for mobile performance
+    const pdfjsLib = await configurePdfWorker();
     
     onProgress?.({ current: 0, total: 100, message: 'Loading PDF...' });
     

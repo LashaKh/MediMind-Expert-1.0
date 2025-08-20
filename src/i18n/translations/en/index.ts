@@ -149,6 +149,22 @@ export default {
         }
       }
     },
+    calculators: {
+      hero: {
+        title: 'Medical Calculator Excellence',
+        subtitle: 'World-class evidence-based calculators with 100% validation and clinical accuracy'
+      },
+      stats: {
+        validated: '100% Validated',
+        clinical: 'Clinical Grade',
+        evidence: 'Evidence-Based',
+        fast: 'Lightning Fast'
+      },
+      categories: {
+        title: 'Calculator Categories',
+        description: 'Choose your specialty to access clinical tools'
+      }
+    },
     steps: {
       'ai-copilot': {
         'ai-interface': {

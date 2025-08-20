@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Calculator, Info, AlertTriangle, CheckCircle, Shield, Thermometer } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -20,7 +20,7 @@ interface FormData {
   estradiol: string;
 }
 
-const MenopauseAssessmentCalculator: React.FC = () => {
+const MenopauseAssessmentCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'calculator' | 'about'>('calculator');
   const [formData, setFormData] = useState<FormData>({
@@ -40,14 +40,14 @@ const MenopauseAssessmentCalculator: React.FC = () => {
   const [errors, setErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleInputChange = (field: keyof FormData, value: string | boolean) => {
+  const handleInputChange = useCallback((field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors.length > 0) {
       setErrors([]);
     }
-  };
+  }, [errors.length]);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: string[] = [];
 
     if (!formData.age) {
@@ -74,9 +74,9 @@ const MenopauseAssessmentCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return newErrors.length === 0;
-  };
+  }, [formData, t]);
 
-  const handleCalculate = async () => {
+  const handleCalculate = useCallback(async () => {
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -110,9 +110,9 @@ const MenopauseAssessmentCalculator: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [validateForm, formData, t]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       age: '',
       lastMenstrualPeriod: '',
@@ -127,25 +127,25 @@ const MenopauseAssessmentCalculator: React.FC = () => {
     });
     setResult(null);
     setErrors([]);
-  };
+  }, []);
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = useMemo(() => (status: string) => {
     switch (status) {
       case 'premenopausal': return 'text-blue-700 bg-blue-50 border-blue-200';
       case 'perimenopausal': return 'text-orange-700 bg-orange-50 border-orange-200';
       case 'postmenopausal': return 'text-purple-700 bg-purple-50 border-purple-200';
       default: return 'text-gray-700 bg-gray-50 border-gray-200';
     }
-  };
+  }, []);
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = useMemo(() => (status: string) => {
     switch (status) {
       case 'premenopausal': return <CheckCircle className="w-5 h-5 text-blue-600" />;
       case 'perimenopausal': return <AlertTriangle className="w-5 h-5 text-orange-600" />;
       case 'postmenopausal': return <Info className="w-5 h-5 text-purple-600" />;
       default: return <Info className="w-5 h-5 text-gray-600" />;
     }
-  };
+  }, []);
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
@@ -535,5 +535,8 @@ const MenopauseAssessmentCalculator: React.FC = () => {
     </div>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+export const MenopauseAssessmentCalculator = React.memo(MenopauseAssessmentCalculatorComponent);
 
 export default MenopauseAssessmentCalculator; 

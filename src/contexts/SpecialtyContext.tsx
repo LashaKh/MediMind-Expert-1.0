@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode, useCallback, useMemo } from 'react';
 import { useAuth } from './AuthContext';
 import { logger } from '../lib/logger';
 
@@ -114,8 +114,8 @@ export const SpecialtyProvider: React.FC<SpecialtyProviderProps> = ({ children }
     }
   };
 
-  // Clear specialty data
-  const clearSpecialty = () => {
+  // Memoized clear specialty function
+  const clearSpecialty = useCallback(() => {
     setSpecialtyState(null);
     setIsSpecialtyVerified(false);
     setError(null);
@@ -128,17 +128,17 @@ export const SpecialtyProvider: React.FC<SpecialtyProviderProps> = ({ children }
     } catch (e) {
       logger.warn('Failed to clear specialty from storage', e, { component: 'SpecialtyContext', action: 'clearSpecialty' });
     }
-  };
+  }, []);
 
-  // Refresh specialty from current profile
-  const refreshSpecialty = async (): Promise<void> => {
+  // Memoized refresh specialty function
+  const refreshSpecialty = useCallback(async (): Promise<void> => {
     if (profile) {
       updateSpecialtyFromProfile(profile.medical_specialty);
     }
-  };
+  }, [profile]);
 
-  // Set specialty manually (for testing or special cases)
-  const setSpecialty = (newSpecialty: MedicalSpecialty) => {
+  // Memoized set specialty function
+  const setSpecialty = useCallback((newSpecialty: MedicalSpecialty) => {
     setSpecialtyState(newSpecialty);
     setIsSpecialtyVerified(true);
     setError(null);
@@ -150,7 +150,7 @@ export const SpecialtyProvider: React.FC<SpecialtyProviderProps> = ({ children }
     } catch (e) {
       logger.warn('Failed to persist specialty to storage', e, { component: 'SpecialtyContext', action: 'persistToStorage' });
     }
-  };
+  }, []);
 
   // Set initial loading state based on auth loading
   useEffect(() => {
@@ -159,7 +159,8 @@ export const SpecialtyProvider: React.FC<SpecialtyProviderProps> = ({ children }
     }
   }, [authLoading, profile, user]);
 
-  const value: SpecialtyContextType = {
+  // Memoized context value to prevent unnecessary re-renders
+  const value: SpecialtyContextType = useMemo(() => ({
     specialty,
     isLoading: isLoading || authLoading,
     error,
@@ -167,7 +168,7 @@ export const SpecialtyProvider: React.FC<SpecialtyProviderProps> = ({ children }
     clearSpecialty,
     refreshSpecialty,
     setSpecialty,
-  };
+  }), [specialty, isLoading, authLoading, error, isSpecialtyVerified, clearSpecialty, refreshSpecialty, setSpecialty]);
 
   return (
     <SpecialtyContext.Provider value={value}>

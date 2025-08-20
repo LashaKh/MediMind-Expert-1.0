@@ -1,11 +1,7 @@
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import html2canvas from 'html2canvas';
-import { marked } from 'marked';
-
 /**
- * Enhanced PDF Export with sophisticated medical formatting
- * Includes all advanced graphics and medical-grade styling from the original
+ * Enhanced PDF Export with Dynamic Loading and Medical Formatting
+ * Mobile-optimized with lazy loading of heavy dependencies
+ * Includes all advanced graphics and medical-grade styling
  */
 
 interface EnhancedPDFExportOptions {
@@ -18,9 +14,23 @@ interface EnhancedPDFExportOptions {
 
 /**
  * Enhanced PDF export with medical graphics and advanced formatting
+ * Mobile-optimized with dynamic loading of heavy dependencies
  */
 export const enhancedExportToPDF = async (options: EnhancedPDFExportOptions): Promise<void> => {
   const { title, content, filename, includeGraphics = true, medicalMode = true } = options;
+  
+  // Dynamic imports for mobile performance optimization
+  // Load jsPDF, autotable, html2canvas, and marked only when needed
+  const [
+    { default: jsPDF },
+    { default: html2canvas },
+    { marked }
+  ] = await Promise.all([
+    import('jspdf'),
+    import('html2canvas'),
+    import('marked'),
+    import('jspdf-autotable') // Side-effect import for autoTable plugin
+  ]);
   
   const pdf = new jsPDF({
     orientation: 'portrait',
