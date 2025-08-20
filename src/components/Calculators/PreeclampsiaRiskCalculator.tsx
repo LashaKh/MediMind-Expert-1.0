@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Calculator, Info, AlertTriangle, CheckCircle, Star, User, Activity, BarChart3, Stethoscope, Award, Shield, Clock, Target, Heart, Zap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -30,7 +30,7 @@ interface FormData {
   pappA: string;
 }
 
-export const PreeclampsiaRiskCalculator: React.FC = () => {
+const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('calculator');
   const [formData, setFormData] = useState<FormData>({
@@ -62,7 +62,7 @@ export const PreeclampsiaRiskCalculator: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     // Maternal age validation
@@ -102,9 +102,9 @@ export const PreeclampsiaRiskCalculator: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData, t]);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     if (!validateForm()) return;
 
     setIsCalculating(true);
