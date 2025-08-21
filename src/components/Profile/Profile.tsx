@@ -444,34 +444,6 @@ export const Profile: React.FC = () => {
                   </div>
                 </MedicalFormSection>
 
-                {/* Enhanced Quick Actions */}
-                <MedicalFormSection
-                  title="Quick Actions"
-                  subtitle="Access your professional tools and insights"
-                  icon={<Sparkles className="w-6 h-6" />}
-                  delay={600}
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <MedicalButton
-                      variant="secondary"
-                      size="lg"
-                      icon={<TrendingUp className="w-5 h-5" />}
-                      className="justify-start"
-                      delay={700}
-                    >
-                      View Analytics
-                    </MedicalButton>
-                    <MedicalButton
-                      variant="secondary"
-                      size="lg"
-                      icon={<Award className="w-5 h-5" />}
-                      className="justify-start"
-                      delay={800}
-                    >
-                      Achievements
-                    </MedicalButton>
-                  </div>
-                </MedicalFormSection>
               </div>
             )}
 

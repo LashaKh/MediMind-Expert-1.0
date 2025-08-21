@@ -225,12 +225,6 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
                     <span className="absolute inset-0 text-white/20 blur-lg -z-20">Start Tour</span>
                   </span>
                   
-                  {/* Animated trailing elements */}
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 rounded-full bg-white/70 opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-500 delay-200" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/50 opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-500 delay-400" />
-                    <div className="w-1 h-1 rounded-full bg-white/30 opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-500 delay-600" />
-                  </div>
                 </div>
                 
                 {/* Sophisticated pulse rings with staggered animation */}

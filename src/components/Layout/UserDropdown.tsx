@@ -128,7 +128,7 @@ export const UserDropdown: React.FC = () => {
       <button
         ref={buttonRef}
         onClick={handleToggle}
-        className="relative group flex items-center gap-2 px-4 py-0 h-11 rounded-2xl text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-500 ease-out border border-white/20 backdrop-blur-xl overflow-hidden touch-target-md"
+        className="relative group flex items-center gap-2 px-4 py-0 h-11 rounded-2xl text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-500 ease-out border border-white/20 backdrop-blur-xl overflow-hidden"
         style={{
           background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.7) 0%, rgba(6, 182, 212, 0.8) 25%, rgba(59, 130, 246, 0.7) 50%, rgba(37, 99, 235, 0.8) 75%, rgba(6, 182, 212, 0.7) 100%)',
           backgroundSize: '300% 300%',
@@ -189,12 +189,6 @@ export const UserDropdown: React.FC = () => {
             <span className="absolute inset-0 text-white/20 blur-lg -z-20">Menu</span>
           </span>
           
-          {/* Animated trailing elements */}
-          <div className="flex space-x-1">
-            <div className="w-2 h-2 rounded-full bg-white/70 opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-500 delay-200" />
-            <div className="w-1.5 h-1.5 rounded-full bg-white/50 opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-500 delay-400" />
-            <div className="w-1 h-1 rounded-full bg-white/30 opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-500 delay-600" />
-          </div>
         </div>
         
         {/* Sophisticated pulse rings with staggered animation */}

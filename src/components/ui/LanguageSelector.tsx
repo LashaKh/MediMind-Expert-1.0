@@ -295,10 +295,8 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             {currentLang.code.toUpperCase()}
           </span>
           
-          {isLoading ? (
+          {isLoading && (
             <div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" />
-          ) : (
-            <div className="w-1.5 h-1.5 rounded-full bg-white/70 opacity-0 group-hover:opacity-100 animate-pulse transition-all duration-500 delay-200" />
           )}
         </div>
         

@@ -19,6 +19,8 @@ export default defineConfig(({ mode }) => {
         'react-dom',
         'react-router-dom',
         'react-hook-form',
+        '@hookform/resolvers/zod',
+        'zod',
         'react-i18next',
         'framer-motion',
         'lucide-react'
@@ -112,7 +114,7 @@ export default defineConfig(({ mode }) => {
             'vendor-markdown': ['marked'],
             'vendor-i18n': ['i18next', 'react-i18next'],
             'vendor-database': ['@supabase/supabase-js'],
-            'vendor-forms': ['react-hook-form'],
+            'vendor-forms': ['react-hook-form', '@hookform/resolvers/zod', 'zod'],
             // Keep other utilities together
             'vendor-utils': [
               'lodash',

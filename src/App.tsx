@@ -20,8 +20,9 @@ import { Profile } from './components/Profile/Profile';
 import { HelpCenter } from './components/Help/HelpCenter';
 import { ComingSoon } from './components/ui/ComingSoon';
 
-// Keep lazy loading ONLY for auth components and less frequently used pages
-const SignIn = React.lazy(() => import('./components/Auth/SignIn').then(module => ({ default: module.SignIn })));
+// Import SignIn directly to avoid loading issues
+import { SignIn } from './components/Auth/SignIn';
+// Keep lazy loading for SignUp
 const SignUp = React.lazy(() => import('./components/Auth/SignUp').then(module => ({ default: module.SignUp })));
 const PasswordRecoveryForm = React.lazy(() => import('./components/Auth/PasswordRecoveryForm').then(module => ({ default: module.PasswordRecoveryForm })));
 const ResetPasswordForm = React.lazy(() => import('./components/Auth/ResetPasswordForm').then(module => ({ default: module.ResetPasswordForm })));
@@ -48,12 +49,8 @@ function App() {
       <AppInitializer>
         <MainLayout>
           <Routes>
-            {/* Auth routes - KEEP lazy loading for auth components */}
-            <Route path="/signin" element={
-              <Suspense fallback={<RouteLoader pageName="Sign In" />}>
-                <SignIn />
-              </Suspense>
-            } />
+            {/* Auth routes - SignIn loaded directly to avoid loading issues */}
+            <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={
               <Suspense fallback={<RouteLoader pageName="Sign Up" />}>
                 <SignUp />
