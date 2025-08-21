@@ -620,24 +620,25 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
 
       // Add Flowise conversations
       if (flowiseConversations && flowiseConversations.length > 0) {
-        const curatedConversations = flowiseConversations.map((conv: any) => ({
-          id: conv.session_id,
-          title: conv.conversation_title || `Curated KB - ${new Date(conv.created_at).toLocaleDateString()}`,
-          messages: [], // Messages are not stored locally for Flowise
-          createdAt: new Date(conv.created_at),
-          updatedAt: new Date(conv.updated_at),
-          type: 'general' as const,
-          knowledgeBaseType: conv.knowledge_base_type || 'curated',
-          specialty: conv.specialty,
-          caseId: conv.case_id,
-          metadata: {
-            messageCount: conv.message_count || 0,
-            lastActivity: new Date(conv.updated_at),
-            sessionId: conv.session_id,
-            backend: 'flowise',
-            lastMessagePreview: conv.last_message_preview
-          }
-        }));
+        const curatedConversations = flowiseConversations
+          .map((conv: any) => ({
+            id: conv.session_id,
+            title: conv.conversation_title || `Curated KB - ${new Date(conv.created_at).toLocaleDateString()}`,
+            messages: [], // Messages are not stored locally for Flowise
+            createdAt: new Date(conv.created_at),
+            updatedAt: new Date(conv.updated_at),
+            type: 'general' as const,
+            knowledgeBaseType: conv.knowledge_base_type || 'curated',
+            specialty: conv.specialty,
+            caseId: conv.case_id,
+            metadata: {
+              messageCount: conv.message_count || 0,
+              lastActivity: new Date(conv.updated_at),
+              sessionId: conv.session_id,
+              backend: 'flowise',
+              lastMessagePreview: conv.last_message_preview
+            }
+          }));
         conversations.push(...curatedConversations);
       }
 
@@ -787,9 +788,10 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
   // Note: saveConversationsToStorage is intentionally NOT in the dependency array
   // to prevent infinite loops when the callback reference changes
   useEffect(() => {
-    // Only save conversations that have at least one message
-    const conversationsWithMessages = state.conversations.filter(conv => conv.messages.length > 0);
-    if (conversationsWithMessages.length > 0) {
+    // Only trigger save if we have conversations with messages
+    // saveConversationsToStorage already filters out empty conversations
+    const hasConversationsWithMessages = state.conversations.some(conv => conv.messages.length > 0);
+    if (hasConversationsWithMessages) {
       saveConversationsToStorage();
     }
   }, [state.conversations]); // Only react to conversation changes, not callback changes

@@ -693,7 +693,8 @@ export const useAppStore = create<AppStore>()(
               .select('thread_id')
               .eq('conversation_id', conversationId)
               .eq('user_id', user.id)
-              .single();
+              .maybeSingle(); // Use maybeSingle instead of single to handle no results
+
 
             if (!threadError && threadData) {
               // This is an OpenAI conversation - load messages from OpenAI
@@ -748,7 +749,8 @@ export const useAppStore = create<AppStore>()(
               .select('*')
               .eq('session_id', conversationId)
               .eq('user_id', user.id)
-              .single();
+              .maybeSingle(); // Use maybeSingle instead of single to handle no results
+
 
             if (!flowiseError && flowiseData) {
 
@@ -779,8 +781,15 @@ export const useAppStore = create<AppStore>()(
               return;
             }
 
-          } catch (error) {
+            // If we get here, neither OpenAI thread nor Flowise conversation was found
+            console.warn('Conversation not found in either openai_threads or flowise_conversations:', {
+              conversationId,
+              threadError: threadError?.message,
+              flowiseError: flowiseError?.message
+            });
 
+          } catch (error) {
+            console.error('Error loading messages for conversation:', error, { conversationId });
           }
         },
 

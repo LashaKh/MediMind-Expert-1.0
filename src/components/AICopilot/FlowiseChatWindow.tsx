@@ -258,8 +258,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     onMessageReceived: (message: Message) => {
       addMessage(message);
       // Save Flowise message to database for persistence
-      if (activeConversationId && knowledgeBase === 'curated') {
-        saveFlowiseMessage(activeConversationId, message);
+      if (sessionId && knowledgeBase === 'curated') {
+        saveFlowiseMessage(sessionId, message);
       }
     },
     onError: (error: string) => {
@@ -329,7 +329,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       timestamp: new Date(),
       attachments,
       metadata: {
-        sessionId: activeConversationId,
+        sessionId: sessionId,
         knowledgeBase: knowledgeBase,
         caseId: activeCase?.id,
         abgContext: abgContext ? { id: abgContext.id, type: abgContext.type } : undefined
@@ -339,8 +339,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     addMessage(userMessage);
     
     // Save user message to database for Flowise conversations
-    if (activeConversationId && knowledgeBase === 'curated') {
-      saveFlowiseMessage(activeConversationId, userMessage);
+    if (sessionId && knowledgeBase === 'curated') {
+      saveFlowiseMessage(sessionId, userMessage);
     }
     
     setChatLoading(true);
@@ -416,7 +416,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       timestamp: new Date(),
       attachments: messageAttachments,
       metadata: {
-        sessionId: activeConversationId,
+        sessionId: sessionId,
         knowledgeBase: knowledgeBase,
         caseId: activeCase?.id
       }

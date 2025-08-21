@@ -611,7 +611,15 @@ export default {
     totalMessages: 'всего сообщений',
     tryAdjustingSearchOrFilters: 'Попробуйте изменить поиск или фильтры',
     deleteConfirmation: 'Вы уверены, что хотите удалить этот разговор? Это действие нельзя отменить.',
-    delete: 'Удалить'
+    delete: 'Удалить',
+    caseStudies: 'Клинические случаи',
+    loadMessages: 'Загрузить сообщения',
+    manageSubtitle: 'Просматривайте, ищите и организуйте всю историю ваших разговоров',
+    all: 'Все',
+    noMatchesFound: 'Совпадений не найдено',
+    startNewConversationHint: 'Начните новый разговор, чтобы создать историю чата',
+    createFirstConversation: 'Создайте свой первый разговор',
+    caseStudy: 'Клинический случай'
   },
 
   // Settings

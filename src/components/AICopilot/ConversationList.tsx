@@ -65,7 +65,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     title: conv.title,
     type: conv.type,
     lastMessage: conv.messages?.[conv.messages.length - 1]?.content || undefined,
-    updatedAt: conv.updatedAt || conv.createdAt,
+    updatedAt: new Date(conv.updatedAt || conv.createdAt),
     messageCount: conv.metadata?.messageCount || conv.messages?.length || 0,
     specialty: conv.specialty,
     caseId: conv.caseId
@@ -90,9 +90,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
           return b.messageCount - a.messageCount;
         case 'date':
         default:
-          const dateA = a.updatedAt instanceof Date ? a.updatedAt : new Date(a.updatedAt);
-          const dateB = b.updatedAt instanceof Date ? b.updatedAt : new Date(b.updatedAt);
-          return dateB.getTime() - dateA.getTime();
+          return b.updatedAt.getTime() - a.updatedAt.getTime();
       }
     });
 

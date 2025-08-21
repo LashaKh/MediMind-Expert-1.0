@@ -315,7 +315,15 @@ export default {
     totalMessages: 'total messages',
     tryAdjustingSearchOrFilters: 'Try adjusting your search or filters',
     deleteConfirmation: 'Are you sure you want to delete this conversation? This action cannot be undone.',
-    delete: 'Delete'
+    delete: 'Delete',
+    caseStudies: 'Case Studies',
+    loadMessages: 'Load messages',
+    manageSubtitle: 'View, search, and organize all your conversation history',
+    all: 'All',
+    noMatchesFound: 'No matches found',
+    startNewConversationHint: 'Start a new conversation to begin your chat history',
+    createFirstConversation: 'Create your first conversation',
+    caseStudy: 'Case Study'
   },
   
   // Profile management

@@ -499,7 +499,15 @@ export default {
     totalMessages: 'სულ შეტყობინებები',
     tryAdjustingSearchOrFilters: 'სცადეთ ძებნის ან ფილტრების შეცვლა',
     deleteConfirmation: 'დარწმუნებული ხართ, რომ გსურთ ამ საუბრის წაშლა? ეს მოქმედება ვერ გაუქმდება.',
-    delete: 'წაშლა'
+    delete: 'წაშლა',
+    caseStudies: 'კლინიკური შემთხვევები',
+    loadMessages: 'შეტყობინებების ჩატვირთვა',
+    manageSubtitle: 'იხილეთ, ძებნა და დააწესრიგეთ თქვენი საუბრების ისტორია',
+    all: 'ყველა',
+    noMatchesFound: 'დამთხვევები ვერ მოიძებნა',
+    startNewConversationHint: 'დაიწყეთ ახალი საუბარი თქვენი ჩატის ისტორიის შესაქმნელად',
+    createFirstConversation: 'შექმენით თქვენი პირველი საუბარი',
+    caseStudy: 'კლინიკური შემთხვევა'
   },
   
   // Onboarding process
