@@ -88,18 +88,34 @@ async function storeInteraction(
   userInfo: { userId: string | null; ipAddress: string | null; userAgent: string | null; }
 ): Promise<string> {
   try {
+    // Validate environment variables
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('Missing required environment variables: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+    }
+
+    logInfo('Storing interaction', { 
+      newsId: interaction.newsId, 
+      type: interaction.interactionType,
+      hasUserId: !!userInfo.userId 
+    });
+
     const interactionData = {
       user_id: userInfo.userId,
       news_id: interaction.newsId,
       interaction_type: interaction.interactionType,
-      interaction_value: interaction.interactionValue,
-      interaction_metadata: interaction.interactionMetadata,
-      session_id: interaction.sessionId,
+      interaction_value: interaction.interactionValue || null,
+      interaction_metadata: interaction.interactionMetadata || null,
+      session_id: interaction.sessionId || null,
       ip_address: userInfo.ipAddress,
       user_agent: userInfo.userAgent,
-      referrer_url: interaction.referrerUrl
+      referrer_url: interaction.referrerUrl || null
     };
     
+    logInfo('Making Supabase insert request', { 
+      url: `${SUPABASE_URL}/rest/v1/news_user_interactions`,
+      hasAuth: !!SUPABASE_SERVICE_ROLE_KEY
+    });
+
     const response = await fetch(`${SUPABASE_URL}/rest/v1/news_user_interactions`, {
       method: 'POST',
       headers: {
@@ -111,19 +127,38 @@ async function storeInteraction(
       body: JSON.stringify(interactionData)
     });
     
+    logInfo('Supabase insert response', { 
+      status: response.status,
+      statusText: response.statusText
+    });
+    
     if (!response.ok) {
       const errorText = await response.text();
+      logError('Database insert failed', { 
+        status: response.status, 
+        statusText: response.statusText,
+        errorBody: errorText 
+      });
       throw new Error(`Database insert failed: ${response.status} - ${errorText}`);
     }
     
     const insertedInteraction = await response.json();
-    const interactionId = insertedInteraction[0]?.id;
+    logInfo('Insert response data', { 
+      responseType: Array.isArray(insertedInteraction) ? 'array' : typeof insertedInteraction,
+      responseLength: Array.isArray(insertedInteraction) ? insertedInteraction.length : 'n/a'
+    });
+    
+    // Handle both array and single object responses
+    const interactionId = Array.isArray(insertedInteraction) 
+      ? insertedInteraction[0]?.id 
+      : insertedInteraction?.id;
     
     if (!interactionId) {
+      logError('No interaction ID returned', { insertedInteraction });
       throw new Error('No interaction ID returned from database');
     }
     
-    logInfo('Interaction stored', {
+    logInfo('Interaction stored successfully', {
       interactionId,
       newsId: interaction.newsId,
       interactionType: interaction.interactionType,
@@ -134,7 +169,7 @@ async function storeInteraction(
     return interactionId;
     
   } catch (error) {
-    logError('Failed to store interaction', { error, interaction, userInfo });
+    logError('Failed to store interaction', { error: error instanceof Error ? error.message : error, interaction, userInfo });
     throw error;
   }
 }
@@ -242,78 +277,114 @@ async function validateNewsExists(newsId: string): Promise<boolean> {
 // Get bookmarked news for user
 async function getBookmarkedNews(userId: string): Promise<any[]> {
   try {
+    logInfo('Fetching bookmarked news', { userId });
+
+    // Validate environment variables
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('Missing required environment variables');
+    }
+    
     // First get the user's bookmark interactions
-    const interactionsResponse = await fetch(
-      `${SUPABASE_URL}/rest/v1/news_user_interactions?user_id=eq.${userId}&interaction_type=eq.bookmark&select=news_id,created_at`, 
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-          'apikey': SUPABASE_SERVICE_ROLE_KEY!
-        }
+    const interactionsUrl = `${SUPABASE_URL}/rest/v1/news_user_interactions?user_id=eq.${userId}&interaction_type=eq.bookmark&select=news_id,created_at`;
+    
+    logInfo('Fetching bookmark interactions', { url: interactionsUrl });
+
+    const interactionsResponse = await fetch(interactionsUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+        'apikey': SUPABASE_SERVICE_ROLE_KEY!
       }
-    );
+    });
+    
+    logInfo('Interactions response', { 
+      status: interactionsResponse.status,
+      statusText: interactionsResponse.statusText
+    });
     
     if (!interactionsResponse.ok) {
-      throw new Error(`Failed to fetch bookmark interactions: ${interactionsResponse.status}`);
+      const errorText = await interactionsResponse.text();
+      logError('Failed to fetch bookmark interactions', { 
+        status: interactionsResponse.status,
+        statusText: interactionsResponse.statusText,
+        errorBody: errorText
+      });
+      throw new Error(`Failed to fetch bookmark interactions: ${interactionsResponse.status} - ${errorText}`);
     }
     
     const interactions = await interactionsResponse.json();
+    logInfo('Bookmark interactions retrieved', { count: interactions.length });
     
     if (interactions.length === 0) {
+      logInfo('No bookmarked articles found for user', { userId });
       return [];
     }
     
     // Get the news articles for these bookmarks
     const newsIds = interactions.map((interaction: any) => interaction.news_id);
     const newsIdsFilter = newsIds.map((id: string) => `id.eq.${id}`).join(',');
+    const newsUrl = `${SUPABASE_URL}/rest/v1/medical_news?or=(${newsIdsFilter})&processing_status=eq.processed&order=published_date.desc`;
     
-    const newsResponse = await fetch(
-      `${SUPABASE_URL}/rest/v1/medical_news?or=(${newsIdsFilter})&processing_status=eq.processed&order=published_date.desc`,
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-          'apikey': SUPABASE_SERVICE_ROLE_KEY!
-        }
+    logInfo('Fetching bookmarked articles', { 
+      newsIds: newsIds.length,
+      url: newsUrl
+    });
+    
+    const newsResponse = await fetch(newsUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+        'apikey': SUPABASE_SERVICE_ROLE_KEY!
       }
-    );
+    });
+    
+    logInfo('News articles response', { 
+      status: newsResponse.status,
+      statusText: newsResponse.statusText
+    });
     
     if (!newsResponse.ok) {
-      throw new Error(`Failed to fetch bookmarked news: ${newsResponse.status}`);
+      const errorText = await newsResponse.text();
+      logError('Failed to fetch bookmarked news', { 
+        status: newsResponse.status,
+        statusText: newsResponse.statusText,
+        errorBody: errorText
+      });
+      throw new Error(`Failed to fetch bookmarked news: ${newsResponse.status} - ${errorText}`);
     }
     
     const newsArticles = await newsResponse.json();
+    logInfo('Bookmarked articles retrieved', { count: newsArticles.length });
     
     // Transform database fields to match TypeScript interface and add bookmark timestamp
     const bookmarkedArticles = newsArticles.map((article: any) => {
       const interaction = interactions.find((int: any) => int.news_id === article.id);
       return {
-        id: article.id,
-        title: article.title,
-        summary: article.summary,
-        sourceUrl: article.source_url,
-        sourceName: article.source_name,
-        category: article.category,
-        specialty: article.specialty,
-        publishedDate: article.published_date,
-        createdAt: article.created_at,
-        clickCount: article.click_count,
-        engagementScore: article.engagement_score,
-        keywords: article.keywords,
-        authorName: article.author_name,
-        authorAffiliation: article.author_affiliation,
-        publicationName: article.publication_name,
-        relevanceScore: article.relevance_score,
-        credibilityScore: article.credibility_score,
-        contentType: article.content_type,
-        evidenceLevel: article.evidence_level,
-        processingStatus: article.processing_status,
+        id: article.id || '',
+        title: article.title || '',
+        summary: article.summary || '',
+        sourceUrl: article.source_url || '',
+        sourceName: article.source_name || '',
+        category: article.category || '',
+        specialty: article.specialty || '',
+        publishedDate: article.published_date || article.created_at,
+        createdAt: article.created_at || '',
+        clickCount: article.click_count || 0,
+        engagementScore: article.engagement_score || 0,
+        keywords: article.keywords || [],
+        authorName: article.author_name || null,
+        authorAffiliation: article.author_affiliation || null,
+        publicationName: article.publication_name || null,
+        relevanceScore: article.relevance_score || 0,
+        credibilityScore: article.credibility_score || 0,
+        contentType: article.content_type || '',
+        evidenceLevel: article.evidence_level || null,
+        processingStatus: article.processing_status || 'processed',
         bookmarkedAt: interaction?.created_at
       };
     });
     
-    logInfo('Retrieved bookmarked news', {
+    logInfo('Retrieved bookmarked news successfully', {
       userId,
       count: bookmarkedArticles.length
     });
@@ -321,7 +392,7 @@ async function getBookmarkedNews(userId: string): Promise<any[]> {
     return bookmarkedArticles;
     
   } catch (error) {
-    logError('Error fetching bookmarked news', { error, userId });
+    logError('Error fetching bookmarked news', { error: error instanceof Error ? error.message : error, userId });
     throw error;
   }
 }
@@ -484,36 +555,29 @@ const baseHandler = async (event: HandlerEvent): Promise<HandlerResponse> => {
   }
 };
 
-// Apply dynamic rate limiting based on interaction type
+// Apply rate limiting with proper error handling
+const newsInteractionRateLimit = createRateLimit('search', 100, 60); // 100 requests per minute
 const handler = async (event: HandlerEvent): Promise<HandlerResponse> => {
   try {
-    const body = JSON.parse(event.body || '{}');
-    const interactionType = body.interactionType;
+    logInfo('News interaction request received', { 
+      method: event.httpMethod,
+      hasBody: !!event.body,
+      hasAuth: !!(event.headers.authorization || event.headers.Authorization)
+    });
     
-    // Get appropriate rate limit config based on interaction type
-    let rateLimitType = 'search'; // Default
-    
-    switch (interactionType) {
-      case 'click':
-        rateLimitType = 'search'; // More permissive for clicks
-        break;
-      case 'read_time':
-      case 'share':
-      case 'bookmark':
-      case 'like':
-      case 'save_later':
-        rateLimitType = 'upload'; // More restrictive for engagement actions
-        break;
-      default:
-        rateLimitType = 'search';
+    // Validate environment variables early
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      logError('Missing environment variables', { 
+        hasUrl: !!SUPABASE_URL,
+        hasKey: !!SUPABASE_SERVICE_ROLE_KEY
+      });
+      return createErrorResponse('Server configuration error', 500);
     }
     
-    const rateLimitedHandler = createRateLimit(rateLimitType);
-    return rateLimitedHandler(baseHandler)(event);
+    return await newsInteractionRateLimit(baseHandler)(event);
   } catch (error) {
-    // If we can't parse the body, use default rate limiting
-    const defaultRateLimitedHandler = createRateLimit('search');
-    return defaultRateLimitedHandler(baseHandler)(event);
+    logError('Handler error', { error: error instanceof Error ? error.message : error });
+    return createErrorResponse('Internal server error', 500);
   }
 };
 

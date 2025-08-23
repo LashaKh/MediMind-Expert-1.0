@@ -119,8 +119,8 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
     { id: 'papers', label: t('search.tabs.papers', 'Research Papers'), icon: DocumentTextIcon, count: state.results.filter((r: SearchResult) => r.contentType !== 'clinical-trial').length },
     { id: 'trials', label: t('search.tabs.trials', 'Clinical Trials'), icon: ClipboardDocumentListIcon, count: state.results.filter((r: SearchResult) => r.contentType === 'clinical-trial').length },
     { id: 'guidelines', label: t('search.tabs.guidelines', 'Guidelines'), icon: DocumentTextIcon, count: 0 },
-    { id: 'news', label: t('news.title', 'Medical News'), icon: NewspaperIcon, count: newsState.articles.length },
-    { id: 'trending', label: t('news.trending.title', 'Trending Now'), icon: FireIcon, count: newsState.trendingArticles.length }
+    { id: 'news', label: t('news.title', 'Medical News'), icon: NewspaperIcon, count: newsState.articles?.length || 0 },
+    { id: 'trending', label: t('news.trending.title', 'Trending Now'), icon: FireIcon, count: newsState.trendingArticles?.length || 0 }
   ];
 
   // Effects

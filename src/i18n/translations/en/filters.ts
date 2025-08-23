@@ -108,6 +108,24 @@ export const filters = {
   },
 
   clearAll: 'Clear All Filters',
+  
+  // Missing filter translations
+  preview: {
+    results: 'Preview Results',
+    previewShort: 'Preview'
+  },
+  changesNotApplied: 'Changes not yet applied',
+  save: 'Save Filters',
+  categories: {
+    all: 'All Filters',
+    specialty: 'Medical Specialties',
+    content: 'Content Types',
+    quality: 'Quality & Authority',
+    audience: 'Audience',
+    recent: 'Recent',
+    access: 'Access'
+  },
+  active: 'filters active',
 
   // Quick Filters
   quickFilters: {

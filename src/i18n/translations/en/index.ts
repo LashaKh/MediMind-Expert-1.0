@@ -10,7 +10,7 @@ import knowledgeBase from './knowledgeBase';
 import { podcast } from './podcast';
 import search from './search';
 import news from './news';
-import filters from './filters';
+import { filters } from './filters';
 import abg from './abg';
 
 export default {

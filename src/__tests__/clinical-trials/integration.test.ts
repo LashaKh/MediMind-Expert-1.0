@@ -58,7 +58,7 @@ describe('Clinical Trials Integration', () => {
       const result = await orchestrator.search(query);
       
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/.netlify/functions/search-clinicaltrials'),
+        expect.stringContaining('/functions/v1/search-clinicaltrials'),
         expect.any(Object)
       );
     });

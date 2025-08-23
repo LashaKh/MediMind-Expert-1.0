@@ -132,30 +132,38 @@ export function useNewsInteraction(options: UseNewsInteractionOptions = {}) {
       sortOrder: filters.sortOrder || 'desc'
     });
 
-    console.log('🌐 [loadNews] API URL:', `/.netlify/functions/medical-news?${queryParams}`);
+    console.log('🌐 [loadNews] Using Supabase Edge Function for medical news');
 
     const [response, error] = await safeAsync(async () => {
-      const res = await fetch(`/.netlify/functions/medical-news?${queryParams}`, {
-        headers: {
-          'Authorization': `Bearer ${session?.access_token}`,
-          'Content-Type': 'application/json',
-        },
+      // Use Supabase Edge Function
+      const { supabase } = await import('../lib/supabase');
+      const { data, error } = await supabase.functions.invoke('medical-news', {
+        body: {
+          specialty: filters.specialty || specialty?.toLowerCase() || 'cardiology',
+          category: filters.category?.join(','),
+          dateRange: filters.recency || 'week',
+          limit: pageSize,
+          offset: append ? state.articles.length : 0,
+          keywords: filters.search ? [filters.search] : undefined,
+          minRelevanceScore: filters.minRelevanceScore || 0.5
+        }
       });
 
-      console.log('📡 [loadNews] API Response Status:', res.status, res.statusText);
-
-      if (!res.ok) {
-        throw new Error(`Failed to fetch news: ${res.status} ${res.statusText}`);
+      if (error) {
+        throw new Error(`Failed to fetch news: ${error.message}`);
       }
 
-      const jsonResponse = await res.json();
-      console.log('📊 [loadNews] Raw API Response:', jsonResponse);
+      console.log('📊 [loadNews] Supabase Response:', data);
       
       // Handle wrapped response structure
-      const actualData = jsonResponse.data || jsonResponse;
+      const actualData = data?.data || data;
       console.log('📋 [loadNews] Processed Data:', actualData);
       
-      return actualData as NewsResponse;
+      return {
+        articles: actualData.results || [],
+        totalCount: actualData.totalCount || 0,
+        trendingTopics: actualData.trendingTopics || []
+      } as NewsResponse;
     }, {
       context: 'fetching medical news articles',
       severity: ErrorSeverity.MEDIUM,
@@ -164,21 +172,21 @@ export function useNewsInteraction(options: UseNewsInteractionOptions = {}) {
 
     if (error) {
       dispatch({ type: 'SET_ERROR', payload: error.userMessage || 'Failed to load news' });
-    } else {
-      const hasMore = response.articles.length === pageSize && 
-                     (response.totalCount > (append ? state.articles.length + response.articles.length : response.articles.length));
+    } else if (response) {
+      const hasMore = (response.articles?.length || 0) === pageSize && 
+                     ((response.totalCount || 0) > (append ? state.articles.length + (response.articles?.length || 0) : (response.articles?.length || 0)));
 
       if (append) {
         dispatch({ 
           type: 'APPEND_ARTICLES', 
-          payload: { articles: response.articles, hasMore } 
+          payload: { articles: response.articles || [], hasMore } 
         });
       } else {
         dispatch({ 
           type: 'SET_ARTICLES', 
           payload: { 
-            articles: response.articles, 
-            totalCount: response.totalCount, 
+            articles: response.articles || [], 
+            totalCount: response.totalCount || 0, 
             hasMore 
           } 
         });
@@ -191,20 +199,23 @@ export function useNewsInteraction(options: UseNewsInteractionOptions = {}) {
     if (!user) return;
 
     const [response, error] = await safeAsync(async () => {
-      const res = await fetch(`/.netlify/functions/medical-news/trending?specialty=${specialty?.toLowerCase() || 'cardiology'}&timeframe=${timeframe}`, {
-        headers: {
-          'Authorization': `Bearer ${session?.access_token}`,
-          'Content-Type': 'application/json',
-        },
+      // Use Supabase Edge Function for trending topics
+      const { supabase } = await import('../lib/supabase');
+      const { data, error } = await supabase.functions.invoke('medical-news', {
+        body: {
+          specialty: specialty?.toLowerCase() || 'cardiology',
+          dateRange: timeframe === '24h' ? 'today' : timeframe === '7d' ? 'week' : 'month',
+          limit: 10
+        }
       });
 
-      if (!res.ok) {
-        throw new Error(`Failed to fetch trending news: ${res.status} ${res.statusText}`);
+      if (error) {
+        throw new Error(`Failed to fetch trending news: ${error.message}`);
       }
 
-      const jsonResponse = await res.json();
+      console.log('📊 [loadTrending] Supabase Response:', data);
       // Handle wrapped response structure
-      const actualData = jsonResponse.data || jsonResponse;
+      const actualData = data?.data || data;
       return actualData as TrendingResponse;
     }, {
       context: 'fetching trending medical news',
@@ -212,8 +223,8 @@ export function useNewsInteraction(options: UseNewsInteractionOptions = {}) {
       showToast: false,
     });
 
-    if (!error) {
-      dispatch({ type: 'SET_TRENDING', payload: response.trending });
+    if (!error && response) {
+      dispatch({ type: 'SET_TRENDING', payload: response.trending || [] });
     }
   }, [user?.id, specialty, session?.access_token]);
 
@@ -227,19 +238,20 @@ export function useNewsInteraction(options: UseNewsInteractionOptions = {}) {
     if (!user) return;
 
     await safeAsync(async () => {
-      await fetch('/.netlify/functions/news-interaction', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${session?.access_token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Use Supabase Edge Function for news interaction tracking
+      const { supabase } = await import('../lib/supabase');
+      const { error } = await supabase.functions.invoke('news-interaction', {
+        body: {
           newsId: article.id,
           interactionType,
           interactionValue: value,
           interactionMetadata: metadata,
-        }),
+        }
       });
+
+      if (error) {
+        throw new Error(`Failed to track interaction: ${error.message}`);
+      }
     }, {
       context: 'tracking news interaction',
       severity: ErrorSeverity.LOW,

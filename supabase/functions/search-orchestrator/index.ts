@@ -1,16 +1,24 @@
 /**
- * Search Orchestrator
+ * Search Orchestrator - Supabase Edge Function
  * Coordinates multiple search providers with intelligent fallback and result aggregation
+ * Migrated from Netlify Functions to Supabase Edge Functions
  */
 
-import { HandlerEvent, HandlerResponse } from '@netlify/functions';
-import { withAuth } from './utils/auth';
-import { createSuccessResponse, createErrorResponse } from './utils/response';
-import { parseRequest } from './utils/request';
-import { logInfo, logError } from './utils/logger';
-import { searchRateLimit } from './utils/rateLimit';
-// Note: Import path will need to be adjusted for deployment
-// For local development, this should work with proper TypeScript configuration
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+}
+
+// Environment variables
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+
+// Initialize Supabase client
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 interface SearchProvider {
   name: 'brave' | 'exa' | 'perplexity';
@@ -99,7 +107,7 @@ const CACHE_CONFIG = {
   enableMedicalClassification: true
 };
 
-// In-memory cache store (for demo - in production use Redis or similar)
+// In-memory cache store (Edge Functions are stateless, consider using Supabase for persistent cache)
 const searchCache = new Map<string, {
   data: OrchestrationResult;
   timestamp: number;
@@ -107,10 +115,52 @@ const searchCache = new Map<string, {
   accessCount: number;
 }>();
 
+// JWT decoder for authentication
+function decodeSupabaseJWT(token: string) {
+  try {
+    const parts = token.split('.')
+    if (parts.length !== 3) return null
+    
+    const payload = JSON.parse(atob(parts[1]))
+    return {
+      id: payload.sub,
+      email: payload.email,
+      role: payload.app_metadata?.role || payload.user_metadata?.role,
+      specialty: payload.app_metadata?.specialty || payload.user_metadata?.specialty,
+      exp: payload.exp
+    }
+  } catch (error) {
+    console.error('JWT decode error:', error)
+    return null
+  }
+}
+
+// Get user profile from database
+async function getUserProfile(userId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('medical_specialty, role, specialty')
+      .eq('id', userId)
+      .single()
+
+    if (!error && data) {
+      return {
+        specialty: data?.medical_specialty || data?.specialty,
+        role: data?.role
+      }
+    }
+    return {}
+  } catch (error) {
+    console.error('Error getting user profile:', error)
+    return {}
+  }
+}
+
 function generateCacheKey(query: string, filters: SearchRequest['filters']): string {
   const normalizedQuery = query.toLowerCase().trim();
   const filterString = JSON.stringify(filters || {});
-  return `search:${Buffer.from(`${normalizedQuery}:${filterString}`).toString('base64')}`;
+  return `search:${btoa(`${normalizedQuery}:${filterString}`)}`;
 }
 
 function getCachedResult(cacheKey: string): OrchestrationResult | null {
@@ -131,7 +181,7 @@ function getCachedResult(cacheKey: string): OrchestrationResult | null {
   // Update access count for cache analytics
   cached.accessCount++;
   
-  logInfo('Cache hit', {
+  console.log('Cache hit', {
     cacheKey,
     accessCount: cached.accessCount,
     age: now - cached.timestamp
@@ -162,7 +212,7 @@ function setCachedResult(
     accessCount: 1
   });
   
-  logInfo('Result cached', {
+  console.log('Result cached', {
     cacheKey,
     resultCount: result.results.length,
     ttl
@@ -181,7 +231,7 @@ function clearExpiredCache(): void {
   }
   
   if (clearedCount > 0) {
-    logInfo('Cache cleanup', { clearedCount, remainingCount: searchCache.size });
+    console.log('Cache cleanup', { clearedCount, remainingCount: searchCache.size });
   }
 }
 
@@ -192,7 +242,7 @@ async function enhanceResultsWithClassification(results: SearchResult[], query: 
   
   // For now, return results as-is until classification is properly integrated
   // In production, this would include the full medical classification logic
-  logInfo('Medical classification enhancement', { 
+  console.log('Medical classification enhancement', { 
     resultCount: results.length,
     query: query.substring(0, 50)
   });
@@ -202,9 +252,7 @@ async function enhanceResultsWithClassification(results: SearchResult[], query: 
     // Placeholder classification data
     evidenceLevel: 'research_paper',
     specialty: 'general',
-    contentType: 'research_paper',
-    classificationConfidence: 0.8,
-    classificationReasoning: 'Basic medical content classification'
+    contentType: 'research_paper'
   }));
 }
 
@@ -252,14 +300,9 @@ async function storeSearchInDatabase(
 ): Promise<void> {
   try {
     // Store in search_history for analytics
-    const historyResponse = await fetch(`${process.env.SUPABASE_URL}/rest/v1/search_history`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
-        'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY!
-      },
-      body: JSON.stringify({
+    const { error: historyError } = await supabase
+      .from('search_history')
+      .insert({
         user_id: userId,
         query: query.substring(0, 500), // Truncate long queries
         providers_used: result.providers.filter(p => p.success).map(p => p.provider),
@@ -267,21 +310,15 @@ async function storeSearchInDatabase(
         search_time_ms: result.totalSearchTime,
         filters_applied: {},
         cache_hit: result.cacheHit || false
-      })
-    });
+      });
 
     // Store in search_result_cache for future use
     if (result.results.length > 0 && !result.cacheHit) {
-      const cacheResponse = await fetch(`${process.env.SUPABASE_URL}/rest/v1/search_result_cache`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
-          'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY!
-        },
-        body: JSON.stringify({
+      const { error: cacheError } = await supabase
+        .from('search_result_cache')
+        .insert({
           cache_key: cacheKey,
-          query_hash: Buffer.from(query).toString('base64'),
+          query_hash: btoa(query),
           results: result.results.slice(0, 20), // Store top 20 results
           providers_used: result.providers.filter(p => p.success).map(p => p.provider),
           search_metadata: {
@@ -290,25 +327,24 @@ async function storeSearchInDatabase(
             totalSearchTime: result.totalSearchTime
           },
           expires_at: new Date(Date.now() + determineCacheTTL(query, {})).toISOString()
-        })
-      });
+        });
       
-      if (!cacheResponse.ok) {
-        logError('Failed to cache results in database', {
-          status: cacheResponse.status,
+      if (cacheError) {
+        console.error('Failed to cache results in database', {
+          error: cacheError,
           cacheKey
         });
       }
     }
 
-    if (!historyResponse.ok) {
-      logError('Failed to store search history', {
-        status: historyResponse.status,
+    if (historyError) {
+      console.error('Failed to store search history', {
+        error: historyError,
         userId
       });
     }
   } catch (error) {
-    logError('Database storage error', {
+    console.error('Database storage error', {
       userId,
       error: error instanceof Error ? error.message : 'Unknown error'
     });
@@ -326,10 +362,11 @@ async function callSearchProvider(
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), provider.timeout);
 
-    const response = await fetch(`${baseUrl}/.netlify/functions/search-${provider.name}`, {
+    const response = await fetch(`${baseUrl}/functions/v1/search-${provider.name}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
       },
       body: JSON.stringify({
         q: request.q,
@@ -380,7 +417,7 @@ async function executeParallelSearch(
   enabledProviders: SearchProvider[],
   baseUrl: string
 ): Promise<ProviderResponse[]> {
-  logInfo('Executing parallel search', {
+  console.log('Executing parallel search', {
     providers: enabledProviders.map(p => p.name),
     query: request.q.substring(0, 100)
   });
@@ -397,7 +434,7 @@ async function executeSequentialSearch(
   enabledProviders: SearchProvider[],
   baseUrl: string
 ): Promise<ProviderResponse[]> {
-  logInfo('Executing sequential search', {
+  console.log('Executing sequential search', {
     providers: enabledProviders.map(p => p.name),
     query: request.q.substring(0, 100)
   });
@@ -410,7 +447,7 @@ async function executeSequentialSearch(
     
     // If we got good results, we might stop early for performance
     if (response.success && response.results.length >= 5) {
-      logInfo('Sequential search early termination', {
+      console.log('Sequential search early termination', {
         provider: provider.name,
         resultCount: response.results.length
       });
@@ -522,18 +559,65 @@ function applyFilters(results: SearchResult[], filters: SearchRequest['filters']
   return filteredResults.slice(offset, offset + limit);
 }
 
-const baseHandler = withAuth(async (event: HandlerEvent, user) => {
+serve(async (req) => {
+  // Handle CORS
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
   try {
-    const { method } = parseRequest(event);
-    
-    if (method !== 'POST') {
-      return createErrorResponse('Method not allowed', 405);
+    console.log('🔍 Search Orchestrator Edge Function called')
+
+    // Check authentication
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Authentication required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
 
-    const request: SearchRequest = JSON.parse(event.body || '{}');
+    // Decode JWT token
+    const token = authHeader.replace('Bearer ', '')
+    const jwtPayload = decodeSupabaseJWT(token)
+    
+    if (!jwtPayload) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Check token expiration
+    if (jwtPayload.exp && Date.now() >= jwtPayload.exp * 1000) {
+      return new Response(
+        JSON.stringify({ error: 'Token expired' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    if (req.method !== 'POST') {
+      return new Response(
+        JSON.stringify({ error: 'Method not allowed' }),
+        { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const request: SearchRequest = await req.json();
     
     if (!request.q || typeof request.q !== 'string') {
-      return createErrorResponse('Search query is required', 400);
+      return new Response(
+        JSON.stringify({ error: 'Search query is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Get user profile
+    const profile = await getUserProfile(jwtPayload.id)
+    const user = {
+      ...jwtPayload,
+      specialty: profile.specialty || jwtPayload.specialty,
+      role: profile.role || jwtPayload.role
     }
 
     // Clear expired cache entries periodically
@@ -545,17 +629,20 @@ const baseHandler = withAuth(async (event: HandlerEvent, user) => {
     // Check cache first
     const cachedResult = getCachedResult(cacheKey);
     if (cachedResult) {
-      logInfo('Search Orchestrator Cache Hit', {
+      console.log('Search Orchestrator Cache Hit', {
         userId: user.id,
         query: request.q.substring(0, 100),
         cacheKey,
         resultCount: cachedResult.results.length
       });
       
-      return createSuccessResponse(cachedResult);
+      return new Response(
+        JSON.stringify({ success: true, data: cachedResult }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    logInfo('Search Orchestrator Request', {
+    console.log('Search Orchestrator Request', {
       userId: user.id,
       query: request.q.substring(0, 100),
       providers: request.providers,
@@ -577,11 +664,14 @@ const baseHandler = withAuth(async (event: HandlerEvent, user) => {
     enabledProviders.sort((a, b) => a.priority - b.priority);
 
     if (enabledProviders.length === 0) {
-      return createErrorResponse('No search providers available', 503);
+      return new Response(
+        JSON.stringify({ error: 'No search providers available' }),
+        { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
 
     // Get base URL for internal function calls
-    const baseUrl = `https://${event.headers.host}`;
+    const baseUrl = SUPABASE_URL;
 
     const overallStartTime = Date.now();
 
@@ -649,7 +739,7 @@ const baseHandler = withAuth(async (event: HandlerEvent, user) => {
     // Store search in database for analytics and caching
     await storeSearchInDatabase(user.id, request.q, result, cacheKey);
 
-    logInfo('Search Orchestrator Success', {
+    console.log('Search Orchestrator Success', {
       userId: user.id,
       resultCount: finalResults.length,
       providersUsed: responses.filter(r => r.success).map(r => r.provider),
@@ -659,20 +749,20 @@ const baseHandler = withAuth(async (event: HandlerEvent, user) => {
       cached: finalResults.length > 0
     });
 
-    return createSuccessResponse(result);
+    return new Response(
+      JSON.stringify({ success: true, data: result }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
 
   } catch (error) {
-    logError('Search Orchestrator Error', {
-      userId: user?.id,
-      error: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined
-    });
+    console.error('Search Orchestrator Error:', error)
 
-    return createErrorResponse('Search orchestration failed', 500);
+    return new Response(
+      JSON.stringify({ 
+        error: 'Search orchestration failed',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
   }
-});
-
-// Apply rate limiting to the handler
-const handler = searchRateLimit(baseHandler);
-
-export { handler };
+})

@@ -124,7 +124,6 @@ export interface ClinicalTrialsResponse {
 
 export class ClinicalTrialsService {
   private static instance: ClinicalTrialsService;
-  private baseUrl = '/.netlify/functions/search-clinicaltrials';
   
   private constructor() {}
   
@@ -136,27 +135,39 @@ export class ClinicalTrialsService {
   }
 
   /**
-   * Search for clinical trials based on query and filters
+   * Search for clinical trials based on query and filters using Supabase Edge Function
    */
   async searchTrials(request: ClinicalTrialsRequest): Promise<ClinicalTrialsResponse> {
     try {
-      const response = await fetch(this.baseUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(request)
+      // Use Supabase Edge Function
+      const { supabase } = await import('../lib/supabase');
+      const { data, error } = await supabase.functions.invoke('search-clinicaltrials', {
+        body: {
+          q: request.query,
+          filters: request.filters,
+          pageSize: request.pageSize,
+          pageToken: request.pageToken
+        }
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || `Search failed: ${response.status}`);
+      if (error) {
+        throw new Error(error.message || 'Clinical trials search failed');
       }
 
-      return await response.json();
+      const result = data?.data || data;
+      return {
+        studies: result.results || [],
+        totalCount: result.totalCount || 0,
+        nextPageToken: result.nextPageToken,
+        searchMetadata: {
+          query: request.query,
+          filters: request.filters,
+          timestamp: new Date().toISOString(),
+          totalResults: result.totalCount || 0,
+          hasMoreResults: !!result.nextPageToken
+        }
+      };
     } catch (error) {
-
       throw error;
     }
   }

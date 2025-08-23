@@ -146,30 +146,8 @@
 
 # Podcast functionality migrated to Supabase Edge Functions
 
-# Search API routes (must be first for proper routing)
-[[redirects]]
-  from = "/api/search/orchestrator"
-  to = "/.netlify/functions/search-orchestrator"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/search/brave"
-  to = "/.netlify/functions/search-brave"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/search/exa"
-  to = "/.netlify/functions/search-exa"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/search/perplexity"
-  to = "/.netlify/functions/search-perplexity"
-  status = 200
-  force = true
+# Search functionality migrated to Supabase Edge Functions
+# Old search API routes removed - now using Supabase functions
 
 # Specific API routes first (order matters)
 [[redirects]]

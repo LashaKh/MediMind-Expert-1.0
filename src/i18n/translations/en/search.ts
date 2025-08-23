@@ -386,7 +386,10 @@ export const search = {
   },
 
   // News Filters
-  newsFilters: 'News Filters'
+  newsFilters: 'News Filters',
+  
+  // Missing search translations
+  selectProvidersPlaceholder: 'Select search providers below to start searching...'
 };
 
 export default search;

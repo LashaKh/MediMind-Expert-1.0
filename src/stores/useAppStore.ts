@@ -700,25 +700,20 @@ export const useAppStore = create<AppStore>()(
               // This is an OpenAI conversation - load messages from OpenAI
 
               // Call the OpenAI assistant function to get messages
-              const response = await fetch('/.netlify/functions/openai-assistant', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${user.access_token || ''}`
-                },
-                body: JSON.stringify({
+              const { data: response, error: fnError } = await supabase.functions.invoke('openai-assistant', {
+                body: {
                   message: '__GET_MESSAGES__', // Special flag to indicate we want to retrieve messages
                   conversationId: conversationId,
                   threadId: threadData.thread_id
-                })
+                }
               });
 
-              if (!response.ok) {
-
+              if (fnError || !response) {
+                console.error('Failed to load OpenAI messages:', fnError);
                 return;
               }
 
-              const data = await response.json();
+              const data = response.data || response;
 
               // Update the conversation with the loaded messages
               const messages = data.messages || [];

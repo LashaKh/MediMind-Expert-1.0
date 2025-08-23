@@ -148,18 +148,8 @@
 
 # API Routes - Production optimized order
 
-# Search API routes (highest priority for medical workflows)
-[[redirects]]
-  from = "/api/search/orchestrator"
-  to = "/.netlify/functions/search-orchestrator"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/search/*"
-  to = "/.netlify/functions/search-:splat"
-  status = 200
-  force = true
+# Search functionality migrated to Supabase Edge Functions
+# Old search API routes removed - now using Supabase functions
 
 # Medical News API routes
 [[redirects]]

@@ -268,17 +268,11 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     }
   };
 
-  // Filter out hardcoded sources section from AI response
+  // Filter out hardcoded sources section from AI response, but preserve markdown sources for proper rendering
   const cleanContent = content.replace(
-    /## Sources\s*\n[\s\S]*?(?=\n## |$)/g, ''
-  ).replace(
-    /Sources\s*\n[\s\S]*?(?=\n[A-Z]|$)/g, ''
-  ).replace(
     /^\s*•\s*Internal KB.*?\n/gm, ''
   ).replace(
     /^\s*•\s*PerplexityMD.*?\n/gm, ''
-  ).replace(
-    /^\s*•\s*ESC\/ACCF\/AHA\/WHF.*?\n/gm, ''
   ).trim();
 
   return (

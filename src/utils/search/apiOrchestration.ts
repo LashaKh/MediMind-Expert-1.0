@@ -246,7 +246,7 @@ export class SearchOrchestrator {
   }
 
   /**
-   * Sequential search with fallback using simple search endpoint
+   * Sequential search with fallback using Supabase search orchestrator
    */
   async search(query: SearchQuery): Promise<AggregatedSearchResponse> {
     const startTime = Date.now();
@@ -258,34 +258,41 @@ export class SearchOrchestrator {
     }
     
     try {
-      const response = await fetch('/.netlify/functions/simple-search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({
+      // Use Supabase Edge Function for search orchestration
+      const { supabase } = await import('../../lib/supabase');
+      const { data, error } = await supabase.functions.invoke('search-orchestrator', {
+        body: {
           q: query.query,
-          limit: query.limit || 10
-        })
+          providers: query.providers || ['brave'], // Default to Brave
+          parallel: false, // Sequential search
+          aggregateResults: true,
+          filters: {
+            specialty: query.specialty,
+            evidenceLevel: query.evidenceLevel,
+            contentType: query.contentType,
+            recency: query.recency,
+            limit: query.limit || 10
+          }
+        }
       });
 
-      if (!response.ok) {
-        throw new Error(`Simple search error: ${response.status} ${response.statusText}`);
+      if (error) {
+        throw new Error(`Search orchestrator error: ${error.message}`);
       }
 
-      const response_data = await response.json();
-      const data = response_data.data || response_data; // Handle wrapped response
+      const result = data?.data || data; // Handle wrapped response
       
       return {
-        results: this.transformOrchestratorResults(data.results || []),
-        totalCount: data.totalCount || 0,
+        results: this.transformOrchestratorResults(result.results || []),
+        totalCount: result.aggregatedCount || 0,
         searchTime: Date.now() - startTime,
-        providers: [data.provider || 'brave'],
+        providers: result.providers?.filter((p: any) => p.success).map((p: any) => p.provider) || ['brave'],
         query: query.query,
-        successfulProviders: 1,
-        failedProviders: []
+        successfulProviders: result.providers?.filter((p: any) => p.success).length || 1,
+        failedProviders: result.providers?.filter((p: any) => !p.success).map((p: any) => ({
+          provider: p.provider,
+          error: p.error || 'Unknown error'
+        })) || []
       };
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : 'Search failed');
@@ -908,237 +915,128 @@ export class SearchOrchestrator {
   }
 
   /**
-   * Call Brave Search API
+   * Call Brave Search API via Supabase Edge Function
    */
   private async callBraveAPI(query: SearchQuery, signal?: AbortSignal): Promise<SearchResponse> {
     const startTime = Date.now();
     const searchQuery = this.buildMedicalQuery(query);
 
-    // Get authentication token
-    const authStartTime = Date.now();
-    const { data: { session } } = await import('../../lib/supabase').then(m => m.supabase.auth.getSession());
-    const authTime = Date.now() - authStartTime;
-    
-    if (!session) {
-      throw new Error('Authentication required for search');
-    }
-
-    // Use Netlify Functions for both development and production
-    const endpoint = '/.netlify/functions/search-brave';
-    
-    const body = {
-      q: searchQuery,
-      filters: {
-        limit: query.limit || 10,
-        language: 'en',
-        country: 'US',
-        safesearch: 'moderate',
-        recency: query.recency
-      }
-    };
-
-    const requestStartTime = Date.now();
-    let response: Response;
-    
     try {
-      response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify(body),
-        signal
+      // Use Supabase Edge Function
+      const { supabase } = await import('../../lib/supabase');
+      const { data, error } = await supabase.functions.invoke('search-brave', {
+        body: {
+          q: searchQuery,
+          filters: {
+            limit: query.limit || 10,
+            recency: query.recency
+          }
+        }
       });
-    } catch (fetchError) {
-      const requestTime = Date.now() - requestStartTime;
-      console.error(`🌐 [BRAVE] Network request failed:`, {
-        requestTime: `${requestTime}ms`,
-        error: fetchError instanceof Error ? fetchError.message : String(fetchError),
-        errorType: fetchError instanceof Error ? fetchError.constructor.name : typeof fetchError
-      });
-      throw fetchError;
-    }
-    
-    const requestTime = Date.now() - requestStartTime;
 
-    if (!response.ok) {
-      let errorDetails: any = {};
-      try {
-        const errorText = await response.text();
-        errorDetails = {
-          responseBody: errorText.substring(0, 500), // First 500 chars
-          bodyLength: errorText.length
-        };
-      } catch (parseError) {
-        errorDetails.parseError = parseError instanceof Error ? parseError.message : String(parseError);
+      if (error) {
+        throw new Error(`Brave Search error: ${error.message}`);
       }
 
-      throw new Error(`Brave API error: ${response.status} ${response.statusText}`);
+      const searchData = data?.data || data;
+      const transformedResults = this.transformBraveResults(searchData.results || []);
+      
+      return {
+        results: transformedResults,
+        totalCount: searchData.totalCount || 0,
+        searchTime: Date.now() - startTime,
+        provider: 'brave',
+        query: searchQuery,
+        status: 'success'
+      };
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : 'Brave search failed');
     }
-
-    const parseStartTime = Date.now();
-    let data: any;
-    
-    try {
-      data = await response.json();
-    } catch (parseError) {
-      const parseTime = Date.now() - parseStartTime;
-      throw new Error(`Failed to parse Brave API response: ${parseError instanceof Error ? parseError.message : 'Unknown error'}`);
-    }
-    
-    const parseTime = Date.now() - parseStartTime;
-    const totalTime = Date.now() - startTime;
-    
-    // The response is wrapped in a success response structure
-    const searchData = data.data || data;
-    
-    const transformedResults = this.transformBraveResults(searchData.results || []);
-    
-    return {
-      results: transformedResults,
-      totalCount: searchData.totalCount || 0,
-      searchTime: totalTime,
-      provider: 'brave',
-      query: searchQuery,
-      status: 'success'
-    };
   }
 
   /**
-   * Call Exa AI API
+   * Call Exa AI API via Supabase Edge Function
    */
   private async callExaAPI(query: SearchQuery, signal?: AbortSignal): Promise<SearchResponse> {
     const startTime = Date.now();
     const searchQuery = this.buildMedicalQuery(query);
     
-    // Get authentication token
-    const { data: { session } } = await import('../../lib/supabase').then(m => m.supabase.auth.getSession());
-    if (!session) {
-      throw new Error('Authentication required for search');
+    try {
+      // Use Supabase Edge Function
+      const { supabase } = await import('../../lib/supabase');
+      const { data, error } = await supabase.functions.invoke('search-exa', {
+        body: {
+          q: searchQuery,
+          filters: {
+            limit: query.limit || 10,
+            recency: query.recency
+          }
+        }
+      });
+
+      if (error) {
+        throw new Error(`Exa Search error: ${error.message}`);
+      }
+
+      const searchData = data?.data || data;
+      
+      return {
+        results: this.transformExaResults(searchData.results || []),
+        totalCount: searchData.totalCount || searchData.results?.length || 0,
+        searchTime: Date.now() - startTime,
+        provider: 'exa',
+        query: searchQuery,
+        status: 'success'
+      };
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : 'Exa search failed');
     }
-    
-    // Use Netlify Functions for both development and production
-    const endpoint = '/.netlify/functions/search-exa';
-
-    const body = {
-      query: searchQuery,
-      num_results: query.limit || 10,
-      include_text: true,
-      include_domains: [
-        'pubmed.ncbi.nlm.nih.gov',
-        'nejm.org',
-        'jamanetwork.com',
-        'thelancet.com',
-        'nature.com',
-        'bmj.com',
-        'acc.org',
-        'heart.org',
-        'acog.org'
-      ],
-      start_crawl_date: query.recency === 'last-year' ? new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString() : undefined
-    };
-
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify(body),
-      signal
-    });
-
-    if (!response.ok) {
-      throw new Error(`Exa API error: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    
-    // The response is wrapped in a success response structure
-    const searchData = data.data || data;
-    
-    return {
-      results: this.transformExaResults(searchData.results || []),
-      totalCount: searchData.totalCount || searchData.results?.length || 0,
-      searchTime: Date.now() - startTime,
-      provider: 'exa',
-      query: searchQuery,
-      status: 'success'
-    };
   }
 
   /**
-   * Call Perplexity AI API
+   * Call Perplexity AI API via Supabase Edge Function
    */
   private async callPerplexityAPI(query: SearchQuery, signal?: AbortSignal): Promise<SearchResponse> {
     const startTime = Date.now();
     const searchQuery = this.buildMedicalQuery(query);
     
-    // Get authentication token
-    const { data: { session } } = await import('../../lib/supabase').then(m => m.supabase.auth.getSession());
-    if (!session) {
-      throw new Error('Authentication required for search');
-    }
-    
-    // Use Netlify Functions for both development and production
-    const endpoint = '/.netlify/functions/search-perplexity';
+    try {
+      // Use Supabase Edge Function
+      const { supabase } = await import('../../lib/supabase');
+      const { data, error } = await supabase.functions.invoke('search-perplexity', {
+        body: {
+          q: searchQuery,
+          filters: {
+            recency: query.recency,
+            limit: query.limit || 10
+          },
+          model: "llama-3.1-sonar-small-128k-online"
+        }
+      });
 
-    const body = {
-      q: searchQuery,
-      filters: {
-        model: "sonar-pro",
-        maxTokens: 1000,
-        temperature: 0.2,
-        returnCitations: true,
-        searchDomainFilter: [
-          "pubmed.ncbi.nlm.nih.gov",
-          "cochrane.org",
-          "nejm.org",
-          "jamanetwork.com",
-          "thelancet.com",
-          "bmj.com"
-        ]
+      if (error) {
+        throw new Error(`Perplexity Search error: ${error.message}`);
       }
-    };
 
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify(body),
-      signal
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-
-      throw new Error(`Perplexity API error: ${response.status} ${response.statusText} - ${errorText}`);
+      // Handle both direct results and nested data structure
+      const searchData = data?.data || data;
+      const results = searchData.results || [];
+      const totalCount = searchData.totalCount || results.length;
+      
+      return {
+        results,
+        totalCount,
+        searchTime: Date.now() - startTime,
+        provider: 'perplexity',
+        query: searchQuery,
+        status: 'success',
+        summary: searchData.summary,
+        evidenceLevel: searchData.evidenceLevel,
+        keyFindings: searchData.keyFindings
+      };
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : 'Perplexity search failed');
     }
-
-    const data = await response.json();
-    
-    // Handle both direct results and nested data structure
-    const results = data.results || data.data?.results || [];
-    const totalCount = data.totalCount || data.data?.totalCount || results.length;
-    
-    // The backend already returns properly formatted results
-    return {
-      results,
-      totalCount,
-      searchTime: Date.now() - startTime,
-      provider: 'perplexity',
-      query: searchQuery,
-      status: 'success',
-      summary: data.summary || data.data?.summary,
-      evidenceLevel: data.evidenceLevel || data.data?.evidenceLevel,
-      keyFindings: data.keyFindings || data.data?.keyFindings
-    };
   }
 
   /**
@@ -1180,50 +1078,43 @@ export class SearchOrchestrator {
   }
 
   /**
-   * Call ClinicalTrials.gov API
+   * Call ClinicalTrials.gov API via Supabase Edge Function
    */
   private async callClinicalTrialsAPI(query: SearchQuery, signal?: AbortSignal): Promise<SearchResponse> {
     const startTime = Date.now();
     
     try {
-      const response = await fetch('/.netlify/functions/search-clinicaltrials', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          query: query.query,
+      // Use Supabase Edge Function
+      const { supabase } = await import('../../lib/supabase');
+      const { data, error } = await supabase.functions.invoke('search-clinicaltrials', {
+        body: {
+          q: query.query,
           filters: query.trialFilters || {
-            recruitmentStatus: ['recruiting', 'active'],
-            ...(query.specialty && { 
-              phase: this.mapSpecialtyToPhases(query.specialty) 
-            })
+            recency: query.recency,
+            limit: query.limit || 20
           },
-          pageSize: query.limit || 20
-        }),
-        signal
+          condition: query.specialty,
+          phase: query.trialFilters?.phase || this.mapSpecialtyToPhases(query.specialty || ''),
+          status: query.trialFilters?.recruitmentStatus?.[0] || 'RECRUITING'
+        }
       });
 
-      if (!response.ok) {
-        throw new Error(`ClinicalTrials API error: ${response.status} ${response.statusText}`);
+      if (error) {
+        throw new Error(`Clinical Trials Search error: ${error.message}`);
       }
 
-      const data = await response.json();
+      const searchData = data?.data || data;
       
       return {
-        results: this.transformClinicalTrialsResults(data.studies || [], query.query),
-        totalCount: data.totalCount || data.studies?.length || 0,
+        results: this.transformClinicalTrialsResults(searchData.results || [], query.query),
+        totalCount: searchData.totalCount || searchData.results?.length || 0,
         searchTime: Date.now() - startTime,
         provider: 'clinicaltrials',
         query: query.query,
         status: 'success'
       };
     } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        throw new Error('Clinical trials search timed out');
-      }
-      throw error;
+      throw new Error(error instanceof Error ? error.message : 'Clinical trials search failed');
     }
   }
 

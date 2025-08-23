@@ -326,6 +326,7 @@ export const common = {
   clinicallyValidated: 'Clinically Validated',
   hipaaCompliant: 'HIPAA Compliant',
   signedIn: 'Signed In',
+  unsavedChanges: 'Unsaved changes',
   // UI Components
   calculator: 'Calculator',
   results: 'Results',
