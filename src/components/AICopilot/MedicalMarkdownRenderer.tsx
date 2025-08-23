@@ -268,12 +268,43 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     }
   };
 
-  // Filter out hardcoded sources section from AI response, but preserve markdown sources for proper rendering
-  const cleanContent = content.replace(
-    /^\s*•\s*Internal KB.*?\n/gm, ''
-  ).replace(
-    /^\s*•\s*PerplexityMD.*?\n/gm, ''
-  ).trim();
+  // Filter out sources section from AI response since we use SourceReferences component instead
+  const cleanContent = (() => {
+    // Split content by lines to work with line-by-line processing
+    const lines = content.split('\n');
+    const cleanLines = [];
+    let inSourcesSection = false;
+    
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i];
+      
+      // Check if this line starts a sources section
+      if (/^#{1,6}\s*Sources?\s*$/i.test(line.trim()) || /^Sources?\s*$/i.test(line.trim())) {
+        inSourcesSection = true;
+        continue; // Skip this line
+      }
+      
+      // If we're in sources section, skip all lines
+      if (inSourcesSection) {
+        continue;
+      }
+      
+      // Skip internal system references
+      if (/^\s*•\s*(Internal KB|PerplexityMD)/i.test(line)) {
+        continue;
+      }
+      
+      // Convert bullet points (•) to proper markdown format
+      if (/^\s*•\s/.test(line)) {
+        line = line.replace(/^\s*•\s/, '- ');
+      }
+      
+      // Keep all other lines
+      cleanLines.push(line);
+    }
+    
+    return cleanLines.join('\n').trim();
+  })();
 
   return (
     <div 
