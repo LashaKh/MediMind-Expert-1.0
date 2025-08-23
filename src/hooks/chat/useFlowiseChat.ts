@@ -94,17 +94,52 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
         timestamp: new Date(),
         sources: (response.sources || []).map((source: any) => {
           // Debug log to understand the source structure
+          console.log('🔍 SOURCE DEBUG:', {
+            fullSource: source,
+            keys: Object.keys(source),
+            title: source.title,
+            name: source.name,
+            excerpt: source.excerpt,
+            content: source.content,
+            pageContent: source.pageContent,
+            text: source.text,
+            metadata: source.metadata
+          });
+          
+          // Try to extract text content from various possible fields, prioritizing pageContent
+          let extractedText = '';
+          
+          // Check each possible field for text content, but skip if it's "undefined..." or similar
+          const checkAndExtract = (value: any) => {
+            if (!value) return '';
+            const str = String(value);
+            if (str === 'undefined...' || str === 'undefined' || str === 'null' || str.trim() === '') {
+              return '';
+            }
+            return str;
+          };
+          
+          // PRIORITIZE pageContent from vector store sources
+          extractedText = checkAndExtract(source.pageContent) ||
+                         checkAndExtract(source.metadata?.pageContent) ||
+                         checkAndExtract(source.content) ||
+                         checkAndExtract(source.text) ||
+                         checkAndExtract(source.excerpt) ||
+                         checkAndExtract(source.metadata?.text) ||
+                         checkAndExtract(source.metadata?.content) ||
+                         (typeof source === 'string' ? checkAndExtract(source) : '');
+          
+          // Truncate if too long
+          if (extractedText && extractedText.length > 500) {
+            extractedText = extractedText.substring(0, 500) + '...';
+          }
           
           return {
             id: uuidv4(),
-            title: source.title || source.name || source.metadata?.title || 'Medical Source',
+            title: source.title || source.name || source.metadata?.title || source.metadata?.source || 'Medical Source',
             url: source.url || source.metadata?.url,
             type: source.type || source.metadata?.type || 'document',
-            excerpt: source.excerpt || 
-                    source.content?.substring(0, 200) + '...' ||
-                    source.pageContent?.substring(0, 200) + '...' ||
-                    source.text?.substring(0, 200) + '...' ||
-                    'No excerpt available'
+            excerpt: extractedText || 'No text content available'
           } as SourceReference;
         })
       };

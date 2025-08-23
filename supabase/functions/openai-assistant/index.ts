@@ -253,28 +253,64 @@ serve(async (req) => {
         
         if (messageContent.type === 'text') {
           let responseText = messageContent.text.value;
-          let sources: string[] = [];
+          let sources: any[] = [];
 
-          // Extract file citations if any
+          // Extract file citations and text content if any
           if (messageContent.text.annotations && messageContent.text.annotations.length > 0) {
-            const fileIds = new Set<string>();
+            const fileIdToAnnotation = new Map();
             
             for (const annotation of messageContent.text.annotations) {
               if (annotation.type === 'file_citation' && annotation.file_citation?.file_id) {
-                fileIds.add(annotation.file_citation.file_id);
+                const fileId = annotation.file_citation.file_id;
+                if (!fileIdToAnnotation.has(fileId)) {
+                  fileIdToAnnotation.set(fileId, []);
+                }
+                fileIdToAnnotation.get(fileId).push(annotation);
               }
             }
 
-            // Get document names for the cited files
-            if (fileIds.size > 0) {
+            // Get document information for the cited files
+            if (fileIdToAnnotation.size > 0) {
               const { data: documents } = await supabase
                 .from('user_documents')
                 .select('title, openai_file_id')
                 .eq('user_id', user.id)
-                .in('openai_file_id', Array.from(fileIds));
+                .in('openai_file_id', Array.from(fileIdToAnnotation.keys()));
 
               if (documents) {
-                sources = documents.map(doc => doc.title);
+                for (const doc of documents) {
+                  const annotations = fileIdToAnnotation.get(doc.openai_file_id);
+                  
+                  // Extract text content from citations
+                  let textContent = '';
+                  for (const annotation of annotations) {
+                    if (annotation.text) {
+                      textContent += annotation.text + ' ';
+                    } else if (annotation.file_citation?.quote) {
+                      textContent += annotation.file_citation.quote + ' ';
+                    }
+                  }
+
+                  // If no text content from annotations, try to get it from the file citation text
+                  if (!textContent.trim() && annotations.length > 0) {
+                    const startIndex = annotations[0].start_index || 0;
+                    const endIndex = annotations[0].end_index || startIndex + 200;
+                    if (startIndex < endIndex && endIndex <= responseText.length) {
+                      textContent = responseText.substring(startIndex, Math.min(endIndex, startIndex + 500));
+                    }
+                  }
+
+                  sources.push({
+                    title: doc.title,
+                    type: 'personal',
+                    pageContent: textContent.trim() || `Content from ${doc.title}`,
+                    metadata: {
+                      source: doc.title,
+                      file_id: doc.openai_file_id,
+                      type: 'personal'
+                    }
+                  });
+                }
               }
             }
           }

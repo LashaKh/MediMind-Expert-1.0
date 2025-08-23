@@ -6,7 +6,7 @@
 import { HandlerEvent, HandlerResponse } from '@netlify/functions';
 
 const SUPABASE_URL = 'https://kvsqtolsjggpyvdtdpss.supabase.co';
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2c3F0b2xzamdncHl2ZHRkcHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgzNjk3NzAsImV4cCI6MjA2Mzk0NTc3MH0.TzpELLyYhBSfJ6d4QpHEPZDKQZqrW65xbVwON1MIafo';
 
 export const handler = async (event: HandlerEvent): Promise<HandlerResponse> => {
   try {
