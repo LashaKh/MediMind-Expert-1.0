@@ -12,7 +12,9 @@ import {
   Hash,
   Tag,
   TrendingUp,
-  User
+  User,
+  Eye,
+  X
 } from 'lucide-react';
 import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
 import { SourceReference } from '../../types/chat';
@@ -97,6 +99,7 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const [hoveredSource, setHoveredSource] = useState<string | null>(null);
+  const [selectedSource, setSelectedSource] = useState<SourceReference | null>(null);
 
   if (!sources || sources.length === 0) {
     return null;
@@ -154,19 +157,34 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
 
                 {/* Source content */}
                 <div className="flex-1 min-w-0">
-                  {source.url ? (
-                    <a
-                      href={source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 dark:text-blue-400 hover:underline flex items-center space-x-1 group"
-                    >
-                      <span className="truncate">{source.title}</span>
-                      <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-                    </a>
-                  ) : (
-                    <span className="text-gray-600 dark:text-gray-300 block truncate">{source.title}</span>
-                  )}
+                  <div className="flex items-center space-x-2">
+                    {source.url ? (
+                      <a
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 dark:text-blue-400 hover:underline flex items-center space-x-1 group flex-1"
+                      >
+                        <span className="truncate">{source.title || 'Medical Source'}</span>
+                        <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                      </a>
+                    ) : (
+                      <span className="text-gray-600 dark:text-gray-300 block truncate flex-1">
+                        {source.title || 'Medical Source'}
+                      </span>
+                    )}
+                    
+                    {/* View text chunk button for vector store sources */}
+                    {(source.excerpt || source.type === 'personal') && (
+                      <button
+                        onClick={() => setSelectedSource(source)}
+                        className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                        title="View text chunk"
+                      >
+                        <Eye className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
 
                   {/* Source type indicator and confidence score */}
                   <div className="flex items-center justify-between text-xs mt-0.5">
@@ -305,6 +323,78 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
       {!isExpanded && hasMoreSources && (
         <div className="mt-2 text-xs text-gray-400 dark:text-gray-500">
           {sources.length - maxInitialDisplay} more source{sources.length - maxInitialDisplay !== 1 ? 's' : ''} available
+        </div>
+      )}
+
+      {/* Text chunk modal */}
+      {selectedSource && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-hidden shadow-xl">
+            {/* Modal header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-600">
+              <div className="flex items-center space-x-2">
+                <Database className="w-4 h-4 text-blue-500" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {selectedSource.title || 'Medical Source'}
+                </h3>
+              </div>
+              <button
+                onClick={() => setSelectedSource(null)}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            {/* Modal content */}
+            <div className="p-4 overflow-y-auto max-h-[60vh]">
+              {/* Source metadata */}
+              {(selectedSource.documentMetadata || selectedSource.openaiFileId || selectedSource.confidenceScore) && (
+                <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm">
+                  <div className="grid grid-cols-2 gap-2">
+                    {selectedSource.confidenceScore && (
+                      <div className="flex items-center space-x-1">
+                        <TrendingUp className="w-3 h-3 text-green-500" />
+                        <span className="text-gray-600 dark:text-gray-300">
+                          Confidence: {Math.round(selectedSource.confidenceScore * 100)}%
+                        </span>
+                      </div>
+                    )}
+                    {selectedSource.documentMetadata?.pageNumber && (
+                      <div className="flex items-center space-x-1">
+                        <FileText className="w-3 h-3 text-blue-500" />
+                        <span className="text-gray-600 dark:text-gray-300">
+                          Page {selectedSource.documentMetadata.pageNumber}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              
+              {/* Text content */}
+              <div className="prose prose-sm dark:prose-invert max-w-none">
+                <div className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+                  {selectedSource.excerpt || 'No text content available for this source.'}
+                </div>
+              </div>
+              
+              {/* URL if available */}
+              {selectedSource.url && (
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+                  <a
+                    href={selectedSource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span>View original source</span>
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>

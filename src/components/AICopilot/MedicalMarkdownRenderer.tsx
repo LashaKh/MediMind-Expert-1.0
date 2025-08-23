@@ -268,12 +268,13 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     }
   };
 
-  // Filter out sources section from AI response since we use SourceReferences component instead
-  const cleanContent = (() => {
-    // Split content by lines to work with line-by-line processing
+  // Extract sources from AI response content and filter them out
+  const { cleanContent, extractedSources } = (() => {
     const lines = content.split('\n');
     const cleanLines = [];
+    const sources = [];
     let inSourcesSection = false;
+    let sourceCounter = 1;
     
     for (let i = 0; i < lines.length; i++) {
       let line = lines[i];
@@ -284,13 +285,45 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
         continue; // Skip this line
       }
       
-      // If we're in sources section, skip all lines
+      // If we're in sources section, extract sources
       if (inSourcesSection) {
-        continue;
-      }
-      
-      // Skip internal system references
-      if (/^\s*•\s*(Internal KB|PerplexityMD)/i.test(line)) {
+        // Extract source information from markdown list items
+        const sourceMatch = line.match(/^\s*[-•*]\s*(.+)$/);
+        if (sourceMatch) {
+          const sourceText = sourceMatch[1];
+          
+          // Skip internal system references
+          if (/^(Internal KB|PerplexityMD)/i.test(sourceText)) {
+            continue;
+          }
+          
+          // Extract URL if present
+          const urlMatch = sourceText.match(/\[.*?\]\((https?:\/\/[^\)]+)\)/);
+          const url = urlMatch ? urlMatch[1] : undefined;
+          
+          // Clean title by removing markdown links
+          const title = sourceText.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').trim();
+          
+          // Determine source type based on content
+          let type: 'guideline' | 'research' | 'document' | 'textbook' | 'personal' = 'research';
+          if (/guideline|ACCF|AHA|ESC/i.test(title)) {
+            type = 'guideline';
+          } else if (/textbook|book/i.test(title)) {
+            type = 'textbook';
+          } else if (/PerplexityMD/i.test(title)) {
+            type = 'document';
+          }
+          
+          sources.push({
+            id: `extracted-source-${sourceCounter}`,
+            title: title,
+            url: url,
+            type: type,
+            excerpt: sourceText.length > 200 ? sourceText.substring(0, 200) + '...' : sourceText
+          });
+          
+          sourceCounter++;
+        }
         continue;
       }
       
@@ -303,8 +336,19 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
       cleanLines.push(line);
     }
     
-    return cleanLines.join('\n').trim();
+    return { 
+      cleanContent: cleanLines.join('\n').trim(),
+      extractedSources: sources
+    };
   })();
+
+  // Notify parent component about extracted sources if there's a callback
+  React.useEffect(() => {
+    if (extractedSources.length > 0 && typeof window !== 'undefined') {
+      // Store extracted sources globally so MessageItem can access them
+      (window as any).extractedSources = extractedSources;
+    }
+  }, [extractedSources]);
 
   return (
     <div 

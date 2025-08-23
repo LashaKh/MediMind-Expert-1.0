@@ -63,11 +63,29 @@ export const UserMessageItem: React.FC<MessageItemProps> = ({ message, className
 
 export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className = '' }) => {
   const [highlightedSource, setHighlightedSource] = useState<number | null>(null);
+  const [extractedSources, setExtractedSources] = useState<any[]>([]);
 
   // Handle clicks on inline source references
   const handleSourceClick = (sourceNumber: number) => {
     setHighlightedSource(highlightedSource === sourceNumber ? null : sourceNumber);
   };
+
+  // Check for extracted sources from MedicalMarkdownRenderer
+  React.useEffect(() => {
+    const checkExtractedSources = () => {
+      if (typeof window !== 'undefined' && (window as any).extractedSources) {
+        setExtractedSources((window as any).extractedSources);
+        // Clear the global variable after using it
+        (window as any).extractedSources = null;
+      }
+    };
+
+    // Check immediately and after a small delay to ensure MedicalMarkdownRenderer has run
+    checkExtractedSources();
+    const timeout = setTimeout(checkExtractedSources, 100);
+    
+    return () => clearTimeout(timeout);
+  }, [message.content]);
 
   return (
     <div className={`flex justify-start group ${className}`}>
@@ -87,18 +105,24 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
               onSourceClick={handleSourceClick}
             />
             
-            {/* Source references */}
-            {message.sources && message.sources.length > 0 && (
-              <div className="mt-4 pt-3 border-t border-gray-200/50">
-                <SourceReferences 
-                  sources={message.sources}
-                  maxInitialDisplay={2}
-                  showExcerpts={true}
-                  highlightedSourceNumber={highlightedSource}
-                  onSourceHighlight={setHighlightedSource}
-                />
-              </div>
-            )}
+            {/* Source references - merge vector store sources with extracted markdown sources */}
+            {(() => {
+              const vectorSources = message.sources || [];
+              const markdownSources = extractedSources || [];
+              const allSources = [...vectorSources, ...markdownSources];
+              
+              return allSources.length > 0 && (
+                <div className="mt-4 pt-3 border-t border-gray-200/50">
+                  <SourceReferences 
+                    sources={allSources}
+                    maxInitialDisplay={3}
+                    showExcerpts={true}
+                    highlightedSourceNumber={highlightedSource}
+                    onSourceHighlight={setHighlightedSource}
+                  />
+                </div>
+              );
+            })()}
             
             {/* Attachments */}
             {message.attachments && message.attachments.length > 0 && (

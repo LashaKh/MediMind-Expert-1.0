@@ -48,6 +48,13 @@
   node_bundler = "esbuild"
   external_node_modules = ["@supabase/supabase-js", "node-fetch"]
 
+# News collection scheduler - runs twice daily
+[functions."news-scheduler"]
+  timeout = 60
+  node_bundler = "esbuild"
+  external_node_modules = ["node-fetch"]
+  schedule = "0 6,18 * * *"  # 6 AM and 6 PM UTC daily
+
 [functions."monitoring-dashboard"]
   timeout = 60
   node_bundler = "esbuild"

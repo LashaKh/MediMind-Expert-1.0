@@ -1,0 +1,21 @@
+name: Medical News Collection
+
+on:
+  schedule:
+    # Run twice daily: 6 AM and 6 PM UTC
+    - cron: '0 6,18 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  collect-news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger News Collection
+        run: |
+          curl -X POST "${{ secrets.SUPABASE_URL }}/functions/v1/news-collection" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"force": true}' \
+            --fail-with-body
+        env:
+          SUPABASE_URL: https://kvsqtolsjggpyvdtdpss.supabase.co
