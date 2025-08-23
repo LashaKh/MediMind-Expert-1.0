@@ -27,6 +27,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   // Check if we're on the onboarding page
   const isOnboardingPage = location.pathname === '/onboarding';
   
+  // Check if we're on the AI Copilot page
+  const isAICopilotPage = location.pathname === '/ai-copilot';
+  
   // Initialize theme - this will force light mode
   useTheme();
 
@@ -132,8 +135,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Bottom Navigation for mobile - only for authenticated users and not on onboarding */}
       {user && !isOnboardingPage && <BottomNavigation />}
       
-      {/* Footer - hide on mobile when user is authenticated (bottom nav takes its place) */}
-      <div className={user && isMobile ? 'hidden' : 'block'}>
+      {/* Footer - hide on mobile when user is authenticated (bottom nav takes its place), and hide on AI Copilot page */}
+      <div className={(user && isMobile) || isAICopilotPage ? 'hidden' : 'block'}>
         <Footer />
       </div>
       

@@ -89,7 +89,7 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
 
   return (
     <div className={`flex justify-start group ${className}`}>
-      <div className="flex items-start space-x-3 max-w-2xl lg:max-w-3xl">
+      <div className="flex items-start space-x-3 w-full max-w-4xl">
         {/* Enhanced AI avatar */}
         <div className="relative flex-shrink-0">
           <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl flex items-center justify-center">
@@ -97,8 +97,8 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
           </div>
         </div>
         
-        <div className="relative">
-          <div className="bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-xl text-gray-900 rounded-2xl rounded-bl-md px-6 py-4 shadow-lg border border-white/30 hover:shadow-xl transition-all duration-300 hover:border-white/50">
+        <div className="relative flex-1 w-full">
+          <div className="bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-xl text-gray-900 rounded-2xl rounded-bl-md px-6 py-4 shadow-lg border border-white/30 hover:shadow-xl transition-all duration-300 hover:border-white/50 w-full">
             <MedicalMarkdownRenderer 
               content={message.content}
               className="text-sm leading-relaxed"

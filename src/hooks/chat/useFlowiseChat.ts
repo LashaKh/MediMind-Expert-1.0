@@ -93,31 +93,29 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
         type: 'ai',
         timestamp: new Date(),
         sources: (response.sources || []).map((source: any) => {
-          // Debug log to understand the source structure
-          console.log('🔍 SOURCE DEBUG:', {
-            fullSource: source,
-            keys: Object.keys(source),
-            title: source.title,
-            name: source.name,
-            excerpt: source.excerpt,
-            content: source.content,
-            pageContent: source.pageContent,
-            text: source.text,
-            metadata: source.metadata
-          });
-          
-          // Try to extract text content from various possible fields, prioritizing pageContent
-          let extractedText = '';
-          
           // Check each possible field for text content, but skip if it's "undefined..." or similar
           const checkAndExtract = (value: any) => {
             if (!value) return '';
             const str = String(value);
-            if (str === 'undefined...' || str === 'undefined' || str === 'null' || str.trim() === '') {
+            
+            // More comprehensive filtering for invalid values
+            if (
+              str === 'undefined...' || 
+              str === 'undefined' || 
+              str === 'null' || 
+              str.startsWith('undefined') ||
+              str.includes('undefined') ||
+              str.trim() === '' ||
+              str === '[object Object]' ||
+              str.length < 3  // Very short strings are likely not useful content
+            ) {
               return '';
             }
-            return str;
+            return str.trim();
           };
+
+          // Try to extract text content from various possible fields, prioritizing pageContent
+          let extractedText = '';
           
           // PRIORITIZE pageContent from vector store sources
           extractedText = checkAndExtract(source.pageContent) ||
@@ -129,17 +127,23 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
                          checkAndExtract(source.metadata?.content) ||
                          (typeof source === 'string' ? checkAndExtract(source) : '');
           
-          // Truncate if too long
-          if (extractedText && extractedText.length > 500) {
-            extractedText = extractedText.substring(0, 500) + '...';
+          // Don't truncate for modal viewing - let users see full content
+          // Only truncate for preview if text is extremely long
+          if (extractedText && extractedText.length > 5000) {
+            extractedText = extractedText.substring(0, 5000) + '...';
           }
           
+          // Final fallback check to ensure we never show undefined text
+          const finalExcerpt = extractedText && extractedText !== 'undefined...' && extractedText !== 'undefined' 
+            ? extractedText 
+            : 'No text content available';
+
           return {
             id: uuidv4(),
             title: source.title || source.name || source.metadata?.title || source.metadata?.source || 'Medical Source',
             url: source.url || source.metadata?.url,
             type: source.type || source.metadata?.type || 'document',
-            excerpt: extractedText || 'No text content available'
+            excerpt: finalExcerpt
           } as SourceReference;
         })
       };
