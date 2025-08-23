@@ -501,25 +501,6 @@ export const CardiologyWorkspace: React.FC = () => {
                 
                 {/* Premium Description Architecture */}
                 <div className="space-y-2 max-w-4xl">
-                  <p className="luxury-primary-desc text-lg sm:text-xl lg:text-2xl text-gray-700 font-medium leading-tight" style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: '500',
-                    letterSpacing: '-0.015em',
-                    lineHeight: '1.25',
-                    textShadow: '0 4px 8px rgba(0,0,0,0.06)'
-                  }}>
-                    Advanced Cardiac Care Intelligence Platform
-                  </p>
-                  
-                  <p className="luxury-secondary-desc text-sm sm:text-base lg:text-lg text-gray-500/85 font-normal leading-relaxed" style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: '400',
-                    letterSpacing: '0.01em',
-                    lineHeight: '1.6',
-                    textShadow: '0 2px 4px rgba(0,0,0,0.03)'
-                  }}>
-                    AI-Powered Medical Excellence for Healthcare Professionals
-                  </p>
                 </div>
                 
                 {/* Revolutionary User Status System */}
@@ -635,238 +616,6 @@ export const CardiologyWorkspace: React.FC = () => {
 
       {/* Main Content */}
       <main id="main-content" className="max-w-7xl mx-auto px-8 py-16 bg-white" tabIndex="-1">
-        {/* Clinical Intelligence Dashboard */}
-        <div className="mb-20">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl px-6 py-3 mb-6">
-              <BarChart3 className="w-6 h-6 text-blue-600" />
-              <span className="text-sm font-bold text-blue-800 tracking-[0.15em] uppercase" style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontWeight: '700',
-                letterSpacing: '0.15em',
-                textShadow: '0 1px 2px rgba(37, 99, 235, 0.1)'
-              }}>CLINICAL INTELLIGENCE</span>
-            </div>
-            <h2 className="premium-section-title text-3xl sm:text-4xl lg:text-5xl font-light text-gray-800 mb-8 tracking-tight transform hover:scale-105 transition-all duration-500" style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontWeight: '300',
-              letterSpacing: '0.01em',
-              textShadow: '0 2px 4px rgba(0,0,0,0.05)',
-              lineHeight: '1.2'
-            }}>
-              Real-Time Analytics Dashboard
-            </h2>
-            <p className="text-xl sm:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light" style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontWeight: '300',
-              letterSpacing: '0.01em',
-              lineHeight: '1.6'
-            }}>
-              Advanced performance metrics and clinical insights powered by AI for evidence-based cardiology excellence
-            </p>
-          </div>
-          
-          {/* Premium Analytics Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {analyticsData.map((stat, index) => {
-              const IconComponent = stat.icon;
-              return (
-                <div
-                  key={stat.label}
-                  className={`group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl border border-gray-100 p-8 transform hover:scale-105 hover:-rotate-1 transition-all duration-500 cursor-pointer animate-delay-${index * 100}`}
-                >
-                  {/* Background Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
-                  
-                  {/* Top Section with Icon and Trend */}
-                  <div className="relative z-10 flex items-start justify-between mb-6">
-                    <div className="relative">
-                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 via-rose-500 to-red-600 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                        <IconComponent className="w-8 h-8 text-white transform group-hover:scale-110 transition-transform duration-300" />
-                        
-                        {/* Pulse Effect */}
-                        <div className="absolute inset-0 rounded-2xl bg-red-400 opacity-0 group-hover:opacity-30 animate-ping transition-opacity duration-300" />
-                      </div>
-                    </div>
-                    
-                    {/* Trend Indicator */}
-                    <div className="flex items-center space-x-2 px-3 py-2 bg-emerald-50 rounded-xl border border-emerald-200 group-hover:bg-emerald-100 transition-colors duration-300">
-                      <TrendingUp className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform duration-300" />
-                      <span className="text-sm font-bold text-emerald-700" style={{
-                        fontFamily: 'Inter, system-ui, sans-serif',
-                        fontWeight: '700',
-                        letterSpacing: '0.02em',
-                        textShadow: '0 1px 2px rgba(5, 150, 105, 0.1)'
-                      }}>{stat.trend}</span>
-                    </div>
-                  </div>
-                  
-                  {/* Main Statistics */}
-                  <div className="relative z-10 space-y-4">
-                    <div className="premium-metric-value text-6xl font-black text-gray-900 group-hover:text-red-600 transition-colors duration-300 tracking-tight" style={{
-                      fontFamily: 'Inter, system-ui, sans-serif',
-                      fontWeight: '900',
-                      letterSpacing: '-0.02em',
-                      textShadow: '0 4px 8px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1)',
-                      fontFeatureSettings: '"tnum" on, "lnum" on'
-                    }}>
-                      {stat.value}
-                    </div>
-                    <div className="premium-metric-label text-xl font-semibold text-gray-600 group-hover:text-gray-700 transition-colors duration-300" style={{
-                      fontFamily: 'Inter, system-ui, sans-serif',
-                      fontWeight: '600',
-                      letterSpacing: '0.01em',
-                      lineHeight: '1.3'
-                    }}>
-                      {stat.label}
-                    </div>
-                    
-                    {/* Progress Bar */}
-                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-red-500 via-rose-500 to-red-600 rounded-full transition-all duration-1000 ease-out transform group-hover:scale-x-110" 
-                           style={{ width: '100%' }} />
-                    </div>
-                    
-                    {/* Additional Insights */}
-                    <div className="flex items-center justify-between text-sm text-gray-500 group-hover:text-gray-600 transition-colors duration-300">
-                      <span className="font-medium">Last 24h</span>
-                      <span className="flex items-center space-x-1">
-                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                        <span className="font-semibold">Live</span>
-                      </span>
-                    </div>
-                  </div>
-                  
-                  {/* Hover Effect Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none" />
-                </div>
-              );
-            })}
-          </div>
-          
-          {/* Additional Dashboard Insights */}
-          <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* System Performance */}
-            <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                  <Activity className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="premium-card-title text-2xl font-bold text-gray-900" style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: '700',
-                    letterSpacing: '-0.01em',
-                    textShadow: '0 2px 4px rgba(0,0,0,0.08)'
-                  }}>System Performance</h3>
-                  <p className="text-base text-gray-500" style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: '400',
-                    letterSpacing: '0.01em'
-                  }}>Real-time monitoring</p>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-base font-medium text-gray-600" style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: '500',
-                    letterSpacing: '0.01em'
-                  }}>Response Time</span>
-                  <span className="text-base font-bold text-green-600" style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: '700',
-                    letterSpacing: '0.01em',
-                    textShadow: '0 1px 2px rgba(34, 197, 94, 0.1)'
-                  }}>&lt;200ms</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full" style={{ width: '95%' }} />
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-base font-medium text-gray-600" style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: '500',
-                    letterSpacing: '0.01em'
-                  }}>Uptime</span>
-                  <span className="text-base font-bold text-green-600" style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: '700',
-                    letterSpacing: '0.01em',
-                    textShadow: '0 1px 2px rgba(34, 197, 94, 0.1)'
-                  }}>99.9%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full" style={{ width: '99%' }} />
-                </div>
-              </div>
-            </div>
-            
-            {/* AI Intelligence */}
-            <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
-                  <Brain className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">AI Intelligence</h3>
-                  <p className="text-sm text-gray-500">Machine learning insights</p>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Accuracy Rate</span>
-                  <span className="text-sm font-bold text-blue-600">98.7%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style={{ width: '98%' }} />
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Learning Rate</span>
-                  <span className="text-sm font-bold text-blue-600">+15%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style={{ width: '85%' }} />
-                </div>
-              </div>
-            </div>
-            
-            {/* Quality Metrics */}
-            <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">Quality Assurance</h3>
-                  <p className="text-sm text-gray-500">Clinical excellence</p>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Compliance</span>
-                  <span className="text-sm font-bold text-emerald-600">100%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-gradient-to-r from-emerald-500 to-green-500 h-2 rounded-full" style={{ width: '100%' }} />
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Validation</span>
-                  <span className="text-sm font-bold text-emerald-600">Certified</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-gradient-to-r from-emerald-500 to-green-500 h-2 rounded-full" style={{ width: '100%' }} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Revolutionary Medical Tools Suite */}
         <div className="mb-20">
@@ -1274,15 +1023,15 @@ export const CardiologyWorkspace: React.FC = () => {
         </div>
 
         {/* Achievement Banner */}
-        <div className="premium-card bg-gradient-to-r from-emerald-500/10 via-blue-500/10 to-purple-500/10 border-emerald-200/50 p-8">
+        <div className="bg-white/98 backdrop-blur-[24px] saturate-[120%] border border-gray-200/50 rounded-[28px] shadow-lg hover:shadow-xl transition-all duration-500 bg-gradient-to-r from-emerald-500/10 via-blue-500/10 to-purple-500/10 border-emerald-200/50 p-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
               <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-3xl flex items-center justify-center shadow-elevated">
                 <Award className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h4 className="text-2xl font-bold text-gray-900 mb-1">Production Excellence Achieved</h4>
-                <p className="text-gray-600">100% calculator validation • Mobile-first design • AI-powered intelligence</p>
+                <h4 className="text-2xl font-bold text-black mb-1" style={{ color: '#000000 !important', WebkitTextFillColor: '#000000 !important' }}>Production Excellence Achieved</h4>
+                <p className="text-gray-900" style={{ color: '#000000 !important', WebkitTextFillColor: '#000000 !important' }}>100% calculator validation • Mobile-first design • AI-powered intelligence</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">

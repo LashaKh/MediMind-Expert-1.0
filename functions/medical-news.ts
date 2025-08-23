@@ -359,65 +359,57 @@ async function getMedicalNews(filters: NewsFilters): Promise<NewsResponse> {
   const startTime = Date.now();
   
   try {
+    logInfo('Starting medical news fetch', { filters });
+    
     // Check cache first
     const cacheKey = generateCacheKey('news', filters);
     const cachedResult = getCachedResult(cacheKey);
     
     if (cachedResult) {
+      logInfo('Returning cached result', { cacheKey });
       return {
         ...cachedResult,
         responseTime: Date.now() - startTime
       };
     }
+
+    // Validate environment variables
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('Missing required environment variables: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+    }
     
-    // Build query with parameters
-    const { query, params } = buildNewsQuery(filters);
-    
-    // Convert to Supabase REST API call
+    // Build a simpler, more robust query
     let supabaseQuery = `${SUPABASE_URL}/rest/v1/medical_news?select=*&processing_status=eq.processed`;
     
-    // Add filters to URL
+    // Add basic filters
     if (filters.specialty) {
       supabaseQuery += `&specialty=eq.${encodeURIComponent(filters.specialty)}`;
     }
     
-    if (filters.category && filters.category.length > 0) {
-      supabaseQuery += `&category=in.(${filters.category.map(c => encodeURIComponent(c)).join(',')})`;
-    }
-    
-    if (filters.evidenceLevel && filters.evidenceLevel.length > 0) {
-      supabaseQuery += `&evidence_level=in.(${filters.evidenceLevel.map(e => encodeURIComponent(e)).join(',')})`;
-    }
-    
-    if (filters.contentType && filters.contentType.length > 0) {
-      supabaseQuery += `&content_type=in.(${filters.contentType.map(t => encodeURIComponent(t)).join(',')})`;
-    }
-    
-    if (filters.minCredibilityScore !== undefined) {
-      supabaseQuery += `&credibility_score=gte.${filters.minCredibilityScore}`;
-    }
-    
-    if (filters.minRelevanceScore !== undefined) {
-      supabaseQuery += `&relevance_score=gte.${filters.minRelevanceScore}`;
-    }
-    
-    // Add sorting
-    const sortBy = filters.sortBy || 'engagement';
+    // Add sorting - use created_at as fallback if engagement_score doesn't exist
+    const sortBy = filters.sortBy || 'date';
     const sortOrder = filters.sortOrder || 'desc';
     
     const sortColumns: Record<string, string> = {
       engagement: 'engagement_score',
-      date: 'published_date',
+      date: 'created_at',
       relevance: 'relevance_score',
       credibility: 'credibility_score'
     };
     
-    const sortColumn = sortColumns[sortBy] || 'engagement_score';
-    supabaseQuery += `&order=${sortColumn}.${sortOrder},published_date.desc`;
+    const sortColumn = sortColumns[sortBy] || 'created_at';
+    supabaseQuery += `&order=${sortColumn}.${sortOrder}`;
     
     // Add pagination
     const limit = Math.min(filters.limit || 12, 50);
     const offset = filters.offset || 0;
+    
+    logInfo('Making Supabase request', { 
+      url: supabaseQuery,
+      limit,
+      offset,
+      hasAuthHeader: !!SUPABASE_SERVICE_ROLE_KEY
+    });
     
     const response = await fetch(supabaseQuery, {
       method: 'GET',
@@ -429,15 +421,28 @@ async function getMedicalNews(filters: NewsFilters): Promise<NewsResponse> {
       }
     });
     
+    logInfo('Supabase response received', { 
+      status: response.status,
+      statusText: response.statusText,
+      headers: Object.fromEntries(response.headers.entries())
+    });
+    
     if (!response.ok) {
-      throw new Error(`Database query failed: ${response.status}`);
+      const errorBody = await response.text();
+      logError('Supabase request failed', { 
+        status: response.status,
+        statusText: response.statusText,
+        body: errorBody 
+      });
+      throw new Error(`Database query failed: ${response.status} ${response.statusText} - ${errorBody}`);
     }
     
     const articles = await response.json();
+    logInfo('Articles fetched from database', { count: articles.length });
     
     // Get total count from response headers
     const contentRange = response.headers.get('content-range');
-    let totalCount = 0;
+    let totalCount = articles.length;
     if (contentRange) {
       const match = contentRange.match(/\/(\d+)$/);
       if (match) {
@@ -445,28 +450,28 @@ async function getMedicalNews(filters: NewsFilters): Promise<NewsResponse> {
       }
     }
     
-    // Transform the response to match our interface
+    // Transform the response with safe property access
     const transformedArticles: NewsArticle[] = articles.map((article: any) => ({
-      id: article.id,
-      title: article.title,
-      summary: article.summary,
-      sourceUrl: article.source_url,
-      sourceName: article.source_name,
-      category: article.category,
-      specialty: article.specialty,
-      publishedDate: article.published_date,
-      createdAt: article.created_at,
-      clickCount: article.click_count,
-      engagementScore: article.engagement_score,
-      keywords: article.keywords,
-      authorName: article.author_name,
-      authorAffiliation: article.author_affiliation,
-      publicationName: article.publication_name,
-      relevanceScore: article.relevance_score,
-      credibilityScore: article.credibility_score,
-      contentType: article.content_type,
-      evidenceLevel: article.evidence_level,
-      processingStatus: article.processing_status
+      id: article.id || '',
+      title: article.title || '',
+      summary: article.summary || '',
+      sourceUrl: article.source_url || '',
+      sourceName: article.source_name || '',
+      category: article.category || '',
+      specialty: article.specialty || '',
+      publishedDate: article.published_date || article.created_at,
+      createdAt: article.created_at || '',
+      clickCount: article.click_count || 0,
+      engagementScore: article.engagement_score || 0,
+      keywords: article.keywords || [],
+      authorName: article.author_name || null,
+      authorAffiliation: article.author_affiliation || null,
+      publicationName: article.publication_name || null,
+      relevanceScore: article.relevance_score || 0,
+      credibilityScore: article.credibility_score || 0,
+      contentType: article.content_type || '',
+      evidenceLevel: article.evidence_level || null,
+      processingStatus: article.processing_status || 'processed'
     }));
     
     const result: NewsResponse = {
@@ -481,7 +486,7 @@ async function getMedicalNews(filters: NewsFilters): Promise<NewsResponse> {
     // Cache the result
     setCachedResult(cacheKey, result, CACHE_CONFIG.defaultTTL);
     
-    logInfo('Medical news retrieved', {
+    logInfo('Medical news retrieved successfully', {
       articleCount: transformedArticles.length,
       totalCount,
       filters,
@@ -491,7 +496,7 @@ async function getMedicalNews(filters: NewsFilters): Promise<NewsResponse> {
     return result;
     
   } catch (error) {
-    logError('Failed to get medical news', { error, filters });
+    logError('Failed to get medical news', { error: error instanceof Error ? error.message : error, filters });
     throw error;
   }
 }
@@ -501,25 +506,30 @@ async function getTrendingNews(specialty?: string, timeframe: string = '24h'): P
   const startTime = Date.now();
   
   try {
+    logInfo('Starting trending news fetch', { specialty, timeframe });
+    
     const cacheKey = generateCacheKey('trending', { specialty, timeframe });
     const cachedResult = getCachedResult(cacheKey);
     
     if (cachedResult) {
+      logInfo('Returning cached trending result', { cacheKey });
       return {
         ...cachedResult,
         responseTime: Date.now() - startTime
       };
     }
     
-    // Use the trending view we created in the migration
-    let query = `${SUPABASE_URL}/rest/v1/trending_medical_news?select=*`;
+    // Fallback to regular medical_news table if trending view doesn't exist
+    let query = `${SUPABASE_URL}/rest/v1/medical_news?select=*&processing_status=eq.processed`;
     
     if (specialty) {
       query += `&specialty=eq.${encodeURIComponent(specialty)}`;
     }
     
-    // Limit to top 20 trending articles
-    query += `&order=engagement_score.desc,recent_interactions.desc&limit=20`;
+    // Order by engagement score and recent date for trending
+    query += `&order=engagement_score.desc,created_at.desc&limit=20`;
+    
+    logInfo('Making trending request', { url: query });
     
     const response = await fetch(query, {
       method: 'GET',
@@ -529,33 +539,42 @@ async function getTrendingNews(specialty?: string, timeframe: string = '24h'): P
       }
     });
     
+    logInfo('Trending response received', { status: response.status });
+    
     if (!response.ok) {
-      throw new Error(`Trending query failed: ${response.status}`);
+      const errorBody = await response.text();
+      logError('Trending query failed', { 
+        status: response.status,
+        statusText: response.statusText,
+        body: errorBody 
+      });
+      throw new Error(`Trending query failed: ${response.status} ${response.statusText} - ${errorBody}`);
     }
     
     const trendingData = await response.json();
+    logInfo('Trending articles fetched', { count: trendingData.length });
     
     const trending: NewsArticle[] = trendingData.map((article: any) => ({
-      id: article.id,
-      title: article.title,
-      summary: article.summary,
-      sourceUrl: article.source_url,
-      sourceName: article.source_name,
-      category: article.category,
-      specialty: article.specialty,
-      publishedDate: article.published_date,
-      createdAt: article.created_at,
-      clickCount: article.click_count,
-      engagementScore: article.engagement_score,
-      keywords: article.keywords,
-      authorName: article.author_name,
-      authorAffiliation: article.author_affiliation,
-      publicationName: article.publication_name,
-      relevanceScore: article.relevance_score,
-      credibilityScore: article.credibility_score,
-      contentType: article.content_type,
-      evidenceLevel: article.evidence_level,
-      processingStatus: article.processing_status
+      id: article.id || '',
+      title: article.title || '',
+      summary: article.summary || '',
+      sourceUrl: article.source_url || '',
+      sourceName: article.source_name || '',
+      category: article.category || '',
+      specialty: article.specialty || '',
+      publishedDate: article.published_date || article.created_at,
+      createdAt: article.created_at || '',
+      clickCount: article.click_count || 0,
+      engagementScore: article.engagement_score || 0,
+      keywords: article.keywords || [],
+      authorName: article.author_name || null,
+      authorAffiliation: article.author_affiliation || null,
+      publicationName: article.publication_name || null,
+      relevanceScore: article.relevance_score || 0,
+      credibilityScore: article.credibility_score || 0,
+      contentType: article.content_type || '',
+      evidenceLevel: article.evidence_level || null,
+      processingStatus: article.processing_status || 'processed'
     }));
     
     const result: TrendingResponse = {
@@ -569,7 +588,7 @@ async function getTrendingNews(specialty?: string, timeframe: string = '24h'): P
     // Cache trending results with shorter TTL
     setCachedResult(cacheKey, result, CACHE_CONFIG.trendingTTL);
     
-    logInfo('Trending news retrieved', {
+    logInfo('Trending news retrieved successfully', {
       count: trending.length,
       specialty,
       timeframe,
@@ -579,7 +598,7 @@ async function getTrendingNews(specialty?: string, timeframe: string = '24h'): P
     return result;
     
   } catch (error) {
-    logError('Failed to get trending news', { error, specialty, timeframe });
+    logError('Failed to get trending news', { error: error instanceof Error ? error.message : error, specialty, timeframe });
     throw error;
   }
 }
@@ -681,7 +700,15 @@ const baseHandler = async (event: HandlerEvent): Promise<HandlerResponse> => {
       return createErrorResponse('Method not allowed', 405);
     }
     
-    const params = new URLSearchParams(event.queryStringParameters || {});
+    const queryParams = event.queryStringParameters || {};
+    const params = new URLSearchParams();
+    
+    // Convert query parameters to URLSearchParams
+    Object.entries(queryParams).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        params.set(key, value);
+      }
+    });
     
     // Parse filters from query parameters
     const filters: NewsFilters = {

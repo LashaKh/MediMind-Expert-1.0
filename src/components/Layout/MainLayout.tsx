@@ -90,7 +90,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Header with safe area support */}
       <Header onMenuToggle={handleMenuToggle} isOnboardingPage={isOnboardingPage} />
       
-      <div className="flex flex-1 layout-container pt-16">
+      <div className="flex flex-1 layout-container pt-20">
         {/* Sidebar - only show for authenticated users and not on onboarding */}
         {user && !isOnboardingPage && (
           <Sidebar 
@@ -118,8 +118,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             ${user && isMobile ? 'pb-16' : ''}
           `}
           style={{
-            height: 'calc(100vh - 64px)', // Full height minus header
-            minHeight: 'calc(100vh - 64px)'
+            height: 'calc(100vh - 80px)', // Full height minus header
+            minHeight: 'calc(100vh - 80px)'
           }}
         >
           {/* Complete gap elimination - zero margin/padding wrapper */}

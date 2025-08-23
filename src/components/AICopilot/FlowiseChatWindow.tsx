@@ -752,7 +752,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
           </div>
 
           {/* Mobile-optimized header content */}
-            <div className="relative px-3 sm:px-6 lg:px-8 py-2.5 sm:py-4 lg:py-6" data-tour="ai-copilot">
+            <div className="relative px-3 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4" data-tour="ai-copilot">
             {/* Main header row */}
             <div className="flex items-center justify-between">
               
@@ -831,7 +831,18 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
               {/* Mobile-optimized control center */}
               <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
                 
-                {/* Responsive knowledge base selector */}
+                {/* Mobile-first knowledge base selector - now integrated in top section */}
+                <div className="lg:hidden" data-tour="knowledge-base">
+                  <KnowledgeBaseSelector
+                    selectedKnowledgeBase={knowledgeBase}
+                    onKnowledgeBaseChange={setKnowledgeBase}
+                    personalDocumentCount={personalDocumentCount}
+                    disabled={isLoading}
+                    className="w-auto"
+                  />
+                </div>
+
+                {/* Desktop knowledge base selector */}
                 <div className="hidden lg:block" data-tour="knowledge-base">
                   <KnowledgeBaseSelector
                     selectedKnowledgeBase={knowledgeBase}
@@ -882,13 +893,33 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     {/* Mobile-optimized primary actions group */}
                     <div className="flex items-center space-x-1">
                       
+                      {/* Mobile-optimized New chat button */}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleNewConversation}
+                        disabled={isDisabled || !isConnected}
+                        className={`
+                          group relative min-h-[44px] min-w-[44px] sm:px-4 p-0 sm:p-2 rounded-xl font-medium text-sm
+                          bg-gradient-to-br from-slate-50/90 to-gray-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
+                          border border-slate-200/50 text-slate-700 shadow-md shadow-slate-500/8
+                          hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
+                          disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                          transition-all duration-300
+                        `}
+                        title={t('chat.newChat')}
+                      >
+                        <Plus className="w-4 h-4 sm:mr-1.5 group-hover:rotate-90 transition-transform duration-300" />
+                        <span className="hidden sm:inline">{t('chat.newChat')}</span>
+                      </Button>
+
                       {/* Mobile-optimized History button */}
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowConversationList(true)}
                         className={`
-                          group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
+                          group relative min-h-[44px] min-w-[44px] p-0 rounded-xl
                           bg-gradient-to-br from-white/90 to-slate-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
                           border border-white/60 shadow-md shadow-slate-500/8
                           hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
@@ -897,7 +928,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         title={t('chat.conversationHistory', 'Conversation History')}
                       >
                         <History className="w-4 h-4 text-slate-600 group-hover:text-slate-800 transition-colors duration-200" />
-                        <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-slate-500/0 to-slate-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-slate-500/0 to-slate-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </Button>
 
                       {/* Mobile-optimized Cases button with badge */}
@@ -906,7 +937,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         size="sm"
                         onClick={() => setShowCaseListModal(true)}
                         className={`
-                          group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
+                          group relative min-h-[44px] min-w-[44px] p-0 rounded-xl
                           bg-gradient-to-br from-violet-50/90 to-purple-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
                           border border-violet-200/50 shadow-md shadow-violet-500/8
                           hover:shadow-lg hover:shadow-violet-500/15 hover:scale-105 active:scale-95
@@ -922,25 +953,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         )}
                       </Button>
 
-                      {/* Mobile-optimized New chat button - Show only icon on mobile */}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={handleNewConversation}
-                        disabled={isDisabled || !isConnected}
-                        className={`
-                          group relative min-h-[44px] min-w-[44px] sm:px-4 p-0 sm:p-2 rounded-lg font-medium text-sm
-                          bg-gradient-to-br from-slate-50/90 to-gray-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
-                          border border-slate-200/50 text-slate-700 shadow-md shadow-slate-500/8
-                          hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
-                          disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                          transition-all duration-300
-                        `}
-                      >
-                        <Plus className="w-4 h-4 sm:mr-1.5 group-hover:rotate-90 transition-transform duration-300" />
-                        <span className="hidden sm:inline">{t('chat.newChat')}</span>
-                      </Button>
-
                       {/* Mobile-optimized New case button - Only show on larger screens */}
                       <div className="hidden sm:block">
                         <NewCaseButton
@@ -949,7 +961,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           variant="ghost"
                           size="sm"
                           className={`
-                            group relative min-h-[44px] px-4 rounded-lg font-medium text-sm
+                            group relative min-h-[44px] px-4 rounded-xl font-medium text-sm
                             bg-gradient-to-br from-slate-50/90 to-gray-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
                             border border-slate-200/50 text-slate-700 shadow-md shadow-slate-500/8
                             hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
@@ -964,20 +976,10 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
               </div>
             </div>
 
-            {/* Mobile-optimized knowledge base selector */}
-            <div className="lg:hidden mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-white/30">
-              <KnowledgeBaseSelector
-                selectedKnowledgeBase={knowledgeBase}
-                onKnowledgeBaseChange={setKnowledgeBase}
-                personalDocumentCount={personalDocumentCount}
-                disabled={isLoading}
-                className={`w-full bg-white/95 ${animationClasses.backdropBlur} border-white/60 shadow-lg rounded-lg min-h-[44px]`}
-              />
-            </div>
             
             {/* Mobile-only case management section */}
             {activeCase && (
-              <div className="sm:hidden mt-2 pt-2 border-t border-white/30">
+              <div className="sm:hidden mt-1.5 pt-1.5 border-t border-white/30">
                 <HeaderCaseIndicator
                   activeCase={activeCase}
                   onViewCase={handleViewCase}
@@ -1008,8 +1010,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
       {/* ABG Context Banner - Prominent display when context is active */}
       {abgContext && (
-        <div className="relative z-20 mx-4 -mb-2">
-          <div className={`bg-gradient-to-r from-red-50 via-rose-50 to-red-50 border border-red-200/50 rounded-xl p-4 shadow-lg ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)}`}>
+        <div className="relative z-20 mx-3 sm:mx-4 -mb-1">
+          <div className={`bg-gradient-to-r from-red-50 via-rose-50 to-red-50 border border-red-200/50 rounded-xl p-3 sm:p-4 shadow-lg ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)}`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -1051,15 +1053,15 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       )}
 
       {/* Mobile-Optimized Chat Area */}
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative z-10 mt-12 sm:mt-16 lg:mt-20">
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative z-10">
         {/* Mobile-Enhanced Messages Display */}
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
           {messages.length === 0 ? (
             // Mobile-optimized Empty State - Fixed white space issue
-            <div className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 lg:pt-16 pb-4 sm:pb-6 lg:pb-8 relative">
+            <div className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 pt-4 sm:pt-8 lg:pt-12 pb-4 sm:pb-6 lg:pb-8 relative">
               <div className="max-w-lg w-full mx-auto flex flex-col items-center justify-start min-h-0">
                 {/* Sophisticated floating orb */}
-                <div className="relative mx-auto mb-8 mt-16 sm:mt-20 lg:mt-24">
+                <div className="relative mx-auto mb-8 mt-8 sm:mt-12 lg:mt-16">
                 <div className={`
                   w-24 h-24 rounded-3xl bg-gradient-to-br ${specialtyConfig.gradient}
                   shadow-2xl shadow-${specialtyConfig.glowColor}/25 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}

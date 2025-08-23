@@ -23,6 +23,20 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
 }) => {
   const { t } = useTranslation();
   
+  // Check if we should show compact mobile version
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
 
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<KnowledgeBaseType | null>(null);
@@ -102,81 +116,124 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
 
   return (
     <div className={`relative z-[100] ${className}`} ref={dropdownRef}>
-      {/* Premium Selector Button */}
+      {/* Premium Selector Button - Mobile optimized */}
       <Button
         variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
         disabled={disabled}
         className={`
-          group relative h-10 sm:h-11 px-4 sm:px-5 rounded-xl
-          bg-gradient-to-r from-white/95 to-slate-50/95 border border-slate-200/60
-          shadow-md backdrop-blur-xl
-          hover:shadow-lg hover:border-slate-300/60
-          transition-all duration-200 ease-out
-          ${isOpen ? 'shadow-lg border-blue-200/60' : ''}
+          group relative transition-all duration-200 ease-out
+          ${isMobile 
+            ? `h-11 w-11 p-0 rounded-xl bg-gradient-to-br from-white/90 to-slate-50/90 
+               border border-slate-200/60 shadow-md backdrop-blur-xl
+               hover:shadow-lg hover:border-slate-300/60 hover:scale-105 active:scale-95
+               ${isOpen ? 'shadow-lg border-blue-200/60 scale-105' : ''}` 
+            : `h-11 px-5 rounded-xl bg-gradient-to-r from-white/95 to-slate-50/95 
+               border border-slate-200/60 shadow-md backdrop-blur-xl
+               hover:shadow-lg hover:border-slate-300/60
+               ${isOpen ? 'shadow-lg border-blue-200/60' : ''}`
+          }
           ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
           focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-2
         `}
         ref={buttonRef}
+        title={isMobile ? `${selectedOption?.label} - ${selectedOption?.badge}` : undefined}
       >
         {/* Sophisticated Background Effect */}
         <div className={`
-          absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300
+          absolute inset-0 ${isMobile ? 'rounded-xl' : 'rounded-2xl'} opacity-0 transition-opacity duration-300
           bg-gradient-to-r ${selectedOption?.color.bg}
           ${isOpen ? 'opacity-100' : 'group-hover:opacity-60'}
         `} />
         
-        <div className="relative flex items-center space-x-4 min-w-0">
-          {/* Enhanced Icon Container */}
-          <div className={`
-            relative p-2.5 rounded-xl
-            bg-gradient-to-br ${selectedOption?.color.bg}
-            border ${selectedOption?.color.border}
-            shadow-md transition-all duration-300
-            ${isOpen ? 'scale-110 rotate-6 shadow-lg' : 'group-hover:scale-105 group-hover:rotate-3'}
-          `}>
-            <SelectedIcon className={`w-5 h-5 ${selectedOption?.color.text} relative z-10 transition-transform duration-300`} />
-            <div className={`
-              absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300
-              bg-gradient-to-br ${selectedOption?.color.gradient}
-              ${isOpen ? 'opacity-25' : 'group-hover:opacity-15'}
-            `} />
+        {isMobile ? (
+          // Mobile: Icon-only button with status indicator
+          <div className="relative flex items-center justify-center">
+            <SelectedIcon className={`w-5 h-5 ${selectedOption?.color.text} relative z-10 transition-transform duration-300 ${isOpen ? 'scale-110' : 'group-hover:scale-105'}`} />
             
-            {/* Premium shine effect */}
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/40 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
-
-          {/* Refined Label and Status */}
-          <div className="flex flex-col min-w-0 flex-1">
-            <div className="flex items-center space-x-3 mb-0.5">
-              <span className="text-sm font-bold text-slate-700 truncate">
-                {selectedOption?.label}
-              </span>
+            {/* Status indicator dot */}
+            <div className="absolute -top-1 -right-1">
               <div className={`
-                px-2.5 py-1 rounded-full text-xs font-bold shadow-sm
+                w-3 h-3 rounded-full border-2 border-white shadow-sm
                 ${selectedOption?.type === 'curated' 
-                  ? 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 border border-blue-200/50' 
+                  ? 'bg-blue-500' 
                   : personalDocumentCount > 0
-                    ? 'bg-gradient-to-r from-emerald-100 to-emerald-50 text-emerald-700 border border-emerald-200/50'
-                    : 'bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 border border-amber-200/50'
+                    ? 'bg-emerald-500'
+                    : 'bg-amber-500'
                 }
               `}>
-                {selectedOption?.badge}
+                <div className={`
+                  absolute inset-0 rounded-full animate-ping opacity-20
+                  ${selectedOption?.type === 'curated' 
+                    ? 'bg-blue-400' 
+                    : personalDocumentCount > 0
+                      ? 'bg-emerald-400'
+                      : 'bg-amber-400'
+                  }
+                `} />
               </div>
             </div>
-            <span className="text-xs text-slate-500 font-medium truncate">
-              {selectedOption?.count}
-            </span>
-          </div>
 
-          {/* Enhanced Dropdown Arrow */}
-          <div className="flex-shrink-0">
+            {/* Dropdown indicator for mobile */}
             <ChevronDown className={`
-              w-4 h-4 transition-all duration-300
-              ${isOpen ? 'rotate-180 text-blue-600 scale-110' : 'text-slate-500 group-hover:text-slate-700'}
+              absolute -bottom-1 -right-1 w-3 h-3 transition-all duration-300
+              ${isOpen ? 'rotate-180 text-blue-600 scale-110' : 'text-slate-400'}
             `} />
           </div>
-        </div>
+        ) : (
+          // Desktop: Full button layout
+          <div className="relative flex items-center space-x-4 min-w-0">
+            {/* Enhanced Icon Container */}
+            <div className={`
+              relative p-2.5 rounded-xl
+              bg-gradient-to-br ${selectedOption?.color.bg}
+              border ${selectedOption?.color.border}
+              shadow-md transition-all duration-300
+              ${isOpen ? 'scale-110 rotate-6 shadow-lg' : 'group-hover:scale-105 group-hover:rotate-3'}
+            `}>
+              <SelectedIcon className={`w-5 h-5 ${selectedOption?.color.text} relative z-10 transition-transform duration-300`} />
+              <div className={`
+                absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300
+                bg-gradient-to-br ${selectedOption?.color.gradient}
+                ${isOpen ? 'opacity-25' : 'group-hover:opacity-15'}
+              `} />
+              
+              {/* Premium shine effect */}
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/40 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
+
+            {/* Desktop Label and Status */}
+            <div className="flex flex-col min-w-0 flex-1">
+              <div className="flex items-center space-x-3 mb-0.5">
+                <span className="text-sm font-bold text-slate-700 truncate">
+                  {selectedOption?.label}
+                </span>
+                <div className={`
+                  px-2.5 py-1 rounded-full text-xs font-bold shadow-sm
+                  ${selectedOption?.type === 'curated' 
+                    ? 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 border border-blue-200/50' 
+                    : personalDocumentCount > 0
+                      ? 'bg-gradient-to-r from-emerald-100 to-emerald-50 text-emerald-700 border border-emerald-200/50'
+                      : 'bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 border border-amber-200/50'
+                  }
+                `}>
+                  {selectedOption?.badge}
+                </div>
+              </div>
+              <span className="text-xs text-slate-500 font-medium truncate">
+                {selectedOption?.count}
+              </span>
+            </div>
+
+            {/* Enhanced Dropdown Arrow */}
+            <div className="flex-shrink-0">
+              <ChevronDown className={`
+                w-4 h-4 transition-all duration-300
+                ${isOpen ? 'rotate-180 text-blue-600 scale-110' : 'text-slate-500 group-hover:text-slate-700'}
+              `} />
+            </div>
+          </div>
+        )}
       </Button>
 
       {/* Premium Dropdown Menu - Rendered via Portal */}
@@ -184,7 +241,7 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
         <>
           {/* Enhanced Backdrop Overlay */}
           <div 
-            className="fixed inset-0 z-[9998] bg-slate-900/20 backdrop-blur-sm"
+            className="fixed inset-0 z-[9998] bg-black/30 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           />
           
@@ -192,20 +249,20 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
             ref={dropdownRef}
             className={`
               fixed z-[9999]
-              backdrop-blur-3xl bg-white/98 border border-slate-200/60
-              rounded-3xl shadow-2xl shadow-slate-900/10 p-3
+              backdrop-blur-xl bg-white/95 sm:bg-white/98 border border-slate-200/60
+              rounded-2xl sm:rounded-3xl shadow-2xl shadow-slate-900/15 p-2 sm:p-3
               animate-in slide-in-from-top-4 zoom-in-95 duration-300
             `}
             style={{
               top: `${dropdownPosition.top}px`,
               left: `${dropdownPosition.left}px`,
-              width: `${Math.max(dropdownPosition.width, 360)}px`,
+              width: `${Math.max(dropdownPosition.width, window.innerWidth < 640 ? 280 : 360)}px`,
               maxWidth: '90vw'
             }}
           >
-            {/* Sophisticated Background Effects */}
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/3 via-indigo-500/2 to-purple-500/3" />
-            <div className="absolute inset-0 rounded-3xl bg-gradient-conic from-slate-100/50 via-white/30 to-slate-100/50 opacity-40" />
+            {/* Mobile-optimized Background Effects */}
+            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-500/5 via-indigo-500/3 to-purple-500/5" />
+            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-conic from-slate-100/60 via-white/40 to-slate-100/60 opacity-60 sm:opacity-40" />
             
             {knowledgeBaseOptions.map((option, index) => {
               const Icon = option.icon;
@@ -217,7 +274,7 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                 <div
                   key={option.type}
                   className={`
-                    relative p-5 rounded-2xl cursor-pointer mb-2 last:mb-0
+                    relative p-3 sm:p-5 rounded-xl sm:rounded-2xl cursor-pointer mb-1.5 sm:mb-2 last:mb-0
                     transition-all duration-300 ease-out
                     ${isDisabled 
                       ? 'opacity-50 cursor-not-allowed' 
@@ -235,29 +292,29 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                   onMouseLeave={() => setHoveredOption(null)}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  {/* Premium Selection Indicator */}
+                  {/* Mobile-optimized Selection Indicator */}
                   {isSelected && (
-                    <div className="absolute top-3 right-3">
+                    <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
                       <div className={`
-                        p-1.5 rounded-full bg-gradient-to-r ${option.color.gradient}
+                        p-1 sm:p-1.5 rounded-full bg-gradient-to-r ${option.color.gradient}
                         shadow-lg shadow-${option.color.text.split('-')[1]}-500/30
                         animate-in zoom-in-50 duration-300
                       `}>
-                        <CheckCircle className="w-4 h-4 text-white" />
+                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                       </div>
                     </div>
                   )}
 
-                  <div className="flex items-start space-x-5">
-                    {/* Enhanced Icon */}
+                  <div className="flex items-start space-x-3 sm:space-x-5">
+                    {/* Mobile-optimized Icon */}
                     <div className={`
-                      relative p-4 rounded-2xl
+                      relative p-2 sm:p-4 rounded-lg sm:rounded-2xl
                       bg-gradient-to-br ${option.color.bg}
                       border-2 ${option.color.border}
                       shadow-lg transition-all duration-300
                       ${isHovered && !isDisabled ? 'scale-110 rotate-6 shadow-xl' : 'shadow-md'}
                     `}>
-                      <Icon className={`w-6 h-6 ${option.color.text} relative z-10 transition-transform duration-300`} />
+                      <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${option.color.text} relative z-10 transition-transform duration-300`} />
                       {isDisabled && (
                         <div className="absolute inset-0 rounded-2xl bg-slate-500/30 flex items-center justify-center backdrop-blur-sm">
                           <Lock className="w-4 h-4 text-slate-600" />
@@ -268,14 +325,14 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                       <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/40 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
 
-                    {/* Enhanced Content */}
+                    {/* Mobile-optimized Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <h4 className={`text-base font-bold ${option.color.text}`}>
+                      <div className="flex items-center space-x-2 sm:space-x-3 mb-1 sm:mb-2">
+                        <h4 className={`text-sm sm:text-base font-bold ${option.color.text}`}>
                           {option.label}
                         </h4>
                         <div className={`
-                          px-3 py-1 rounded-full text-xs font-bold shadow-sm border
+                          px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-bold shadow-sm border
                           ${option.type === 'curated' 
                             ? 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 border-blue-200/60' 
                             : personalDocumentCount > 0
@@ -287,7 +344,7 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                         </div>
                       </div>
                       
-                      <p className="text-sm text-slate-600 leading-relaxed mb-3 font-medium">
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-2 sm:mb-3 font-medium">
                         {option.description}
                       </p>
                       
@@ -321,11 +378,11 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
               );
             })}
 
-            {/* Premium Footer Info */}
-            <div className="mt-3 p-4 rounded-2xl bg-gradient-to-r from-slate-50/80 to-white/80 border border-slate-200/40 backdrop-blur-sm">
-              <div className="flex items-center space-x-3 text-sm text-slate-600">
+            {/* Mobile-optimized Footer Info */}
+            <div className="mt-2 sm:mt-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-slate-50/80 to-white/80 border border-slate-200/40 backdrop-blur-sm">
+              <div className="flex items-center space-x-2 sm:space-x-3 text-xs sm:text-sm text-slate-600">
                 <div className="flex-shrink-0">
-                  <Info className="w-4 h-4" />
+                  <Info className="w-3 h-3 sm:w-4 sm:h-4" />
                 </div>
                 <span className="font-medium">
                   {t('knowledgeBase.selectionInfluenceNotice')}
