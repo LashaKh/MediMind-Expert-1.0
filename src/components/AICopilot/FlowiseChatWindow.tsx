@@ -22,6 +22,7 @@ import { HeaderCaseIndicator } from './HeaderCaseIndicator';
 import { CaseListModal } from './CaseListModal';
 import { CalculatorSuggestions } from './CalculatorSuggestions';
 import { CaseContextProvider } from './CaseContextProvider';
+import { ClinicalDashboard } from './ClinicalDashboard';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Message, PatientCase, Attachment } from '../../types/chat';
@@ -150,6 +151,29 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       }
     };
   }, [location, navigate, setKnowledgeBase, createNewConversation, setActiveConversation, profile]);
+
+  // Handle knowledge base changes with automatic new chat
+  const handleKnowledgeBaseChange = useCallback((newKnowledgeBase: 'personal' | 'curated') => {
+    // Only start new chat if there are existing messages and KB is actually changing
+    if (messages.length > 0 && newKnowledgeBase !== knowledgeBase) {
+      // Start a new conversation to avoid mixing contexts
+      const newConversationId = createNewConversation(
+        'Chat', 
+        profile?.medical_specialty as 'cardiology' | 'obgyn'
+      );
+      
+      // Set the new conversation as active
+      setActiveConversation(newConversationId);
+      
+      // Clear current messages for the new context
+      clearMessages();
+      
+      console.log(`Knowledge base changed from ${knowledgeBase} to ${newKnowledgeBase}, started new conversation: ${newConversationId}`);
+    }
+    
+    // Update the knowledge base
+    setKnowledgeBase(newKnowledgeBase);
+  }, [knowledgeBase, messages.length, createNewConversation, setActiveConversation, profile, clearMessages, setKnowledgeBase]);
 
   // Check if we need to create a conversation when user sends first message
   const ensureConversationExists = useCallback(() => {
@@ -753,11 +777,11 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
           {/* Mobile-optimized header content */}
             <div className="relative px-3 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4" data-tour="ai-copilot">
-            {/* Main header row */}
-            <div className="flex items-center justify-between">
+            {/* Main header row - Redesigned for better UX distribution */}
+            <div className="flex items-center justify-between gap-4">
               
-              {/* Mobile-optimized brand identity */}
-              <div className="flex items-center space-x-2 sm:space-x-4 lg:space-x-6 flex-1 min-w-0">
+              {/* Left: Brand Identity */}
+              <div className="flex items-center space-x-2 sm:space-x-4 min-w-0">
                 {/* Mobile-optimized AI avatar with 44px touch target */}
                 <div className="relative group cursor-pointer flex-shrink-0">
                   <div className={`
@@ -828,28 +852,27 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 </div>
               </div>
 
-              {/* Mobile-optimized control center */}
-              <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
-                
-                {/* Mobile-first knowledge base selector - now integrated in top section */}
+              {/* Center: Knowledge Base Selector - Better UX positioning */}
+              <div className="hidden lg:flex flex-1 justify-center max-w-md mx-4" data-tour="knowledge-base">
+                <KnowledgeBaseSelector
+                  selectedKnowledgeBase={knowledgeBase}
+                  onKnowledgeBaseChange={handleKnowledgeBaseChange}
+                  personalDocumentCount={personalDocumentCount}
+                  disabled={isLoading}
+                  className={`w-full bg-white/95 ${animationClasses.backdropBlur} border-white/60 shadow-lg rounded-xl`}
+                />
+              </div>
+
+              {/* Right: Action Buttons Group */}
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                {/* Mobile knowledge base - compact version */}
                 <div className="lg:hidden" data-tour="knowledge-base">
                   <KnowledgeBaseSelector
                     selectedKnowledgeBase={knowledgeBase}
-                    onKnowledgeBaseChange={setKnowledgeBase}
+                    onKnowledgeBaseChange={handleKnowledgeBaseChange}
                     personalDocumentCount={personalDocumentCount}
                     disabled={isLoading}
                     className="w-auto"
-                  />
-                </div>
-
-                {/* Desktop knowledge base selector */}
-                <div className="hidden lg:block" data-tour="knowledge-base">
-                  <KnowledgeBaseSelector
-                    selectedKnowledgeBase={knowledgeBase}
-                    onKnowledgeBaseChange={setKnowledgeBase}
-                    personalDocumentCount={personalDocumentCount}
-                    disabled={isLoading}
-                    className={`min-w-[240px] lg:min-w-[280px] bg-white/95 ${animationClasses.backdropBlur} border-white/60 shadow-lg rounded-xl`}
                   />
                 </div>
 
@@ -889,9 +912,9 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 )}
                 
                 {!activeCase && (
-                  <div className="flex items-center space-x-1">
-                    {/* Mobile-optimized primary actions group */}
-                    <div className="flex items-center space-x-1">
+                  <>
+                    {/* Primary Chat Actions Group */}
+                    <div className="flex items-center space-x-1 bg-white/40 backdrop-blur-sm rounded-xl p-1 border border-white/60 shadow-sm">
                       
                       {/* Mobile-optimized New chat button */}
                       <Button
@@ -900,12 +923,12 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         onClick={handleNewConversation}
                         disabled={isDisabled || !isConnected}
                         className={`
-                          group relative min-h-[44px] min-w-[44px] sm:px-4 p-0 sm:p-2 rounded-xl font-medium text-sm
-                          bg-gradient-to-br from-slate-50/90 to-gray-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
-                          border border-slate-200/50 text-slate-700 shadow-md shadow-slate-500/8
-                          hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
+                          group relative min-h-[44px] min-w-[44px] sm:px-4 p-0 sm:p-2 rounded-lg font-medium text-sm
+                          bg-white/80 hover:bg-white/90 text-slate-700
+                          border border-transparent hover:border-slate-200/60
+                          hover:shadow-md hover:scale-105 active:scale-95
                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                          transition-all duration-300
+                          transition-all duration-200
                         `}
                         title={t('chat.newChat')}
                       >
@@ -919,11 +942,11 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         size="sm"
                         onClick={() => setShowConversationList(true)}
                         className={`
-                          group relative min-h-[44px] min-w-[44px] p-0 rounded-xl
-                          bg-gradient-to-br from-white/90 to-slate-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
-                          border border-white/60 shadow-md shadow-slate-500/8
-                          hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
-                          transition-all duration-300
+                          group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
+                          bg-white/80 hover:bg-white/90
+                          border border-transparent hover:border-slate-200/60
+                          hover:shadow-md hover:scale-105 active:scale-95
+                          transition-all duration-200
                         `}
                         title={t('chat.conversationHistory', 'Conversation History')}
                       >
@@ -931,17 +954,21 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-slate-500/0 to-slate-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </Button>
 
+                    </div>
+
+                    {/* Case Management Actions Group */}
+                    <div className="flex items-center space-x-1 bg-violet-50/40 backdrop-blur-sm rounded-xl p-1 border border-violet-200/60 shadow-sm">
                       {/* Mobile-optimized Cases button with badge */}
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowCaseListModal(true)}
                         className={`
-                          group relative min-h-[44px] min-w-[44px] p-0 rounded-xl
-                          bg-gradient-to-br from-violet-50/90 to-purple-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
-                          border border-violet-200/50 shadow-md shadow-violet-500/8
-                          hover:shadow-lg hover:shadow-violet-500/15 hover:scale-105 active:scale-95
-                          transition-all duration-300
+                          group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
+                          bg-white/80 hover:bg-violet-50/80
+                          border border-transparent hover:border-violet-200/60
+                          hover:shadow-md hover:scale-105 active:scale-95
+                          transition-all duration-200
                         `}
                         title={`${t('chat.patientCases', 'Patient Cases')}: ${conversations.filter(c => c.caseId === activeCase?.id).length}`}
                       >
@@ -961,17 +988,17 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           variant="ghost"
                           size="sm"
                           className={`
-                            group relative min-h-[44px] px-4 rounded-xl font-medium text-sm
-                            bg-gradient-to-br from-slate-50/90 to-gray-50/90 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
-                            border border-slate-200/50 text-slate-700 shadow-md shadow-slate-500/8
-                            hover:shadow-lg hover:shadow-slate-500/15 hover:scale-105 active:scale-95
+                            group relative min-h-[44px] px-4 rounded-lg font-medium text-sm
+                            bg-white/80 hover:bg-violet-50/80 text-violet-700
+                            border border-transparent hover:border-violet-200/60
+                            hover:shadow-md hover:scale-105 active:scale-95
                             disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                            transition-all duration-300
+                            transition-all duration-200
                           `}
                         />
                       </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
             </div>
@@ -1057,96 +1084,13 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         {/* Mobile-Enhanced Messages Display */}
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
           {messages.length === 0 ? (
-            // Mobile-optimized Empty State - Fixed white space issue
-            <div className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 pt-4 sm:pt-8 lg:pt-12 pb-4 sm:pb-6 lg:pb-8 relative">
-              <div className="max-w-lg w-full mx-auto flex flex-col items-center justify-start min-h-0">
-                {/* Sophisticated floating orb */}
-                <div className="relative mx-auto mb-8 mt-8 sm:mt-12 lg:mt-16">
-                <div className={`
-                  w-24 h-24 rounded-3xl bg-gradient-to-br ${specialtyConfig.gradient}
-                  shadow-2xl shadow-${specialtyConfig.glowColor}/25 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
-                  flex items-center justify-center relative
-                  ${isPulsing ? 'animate-pulse scale-110' : optimizeClasses('animate-float', '', shouldOptimize)}
-                  border border-white/20
-                  transition-all duration-1000
-                `}>
-                  {React.cloneElement(specialtyConfig.icon, { 
-                    className: "w-12 h-12 text-white drop-shadow-sm" 
-                  })}
-                  
-                  {/* Refined holographic overlay */}
-                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/25 via-white/10 to-transparent" />
-                  
-                  {/* Elegant ambient glow */}
-                  <div className="absolute inset-0 rounded-3xl animate-ping opacity-15">
-                    <div className={`w-full h-full rounded-3xl bg-gradient-to-br ${specialtyConfig.gradient} blur-2xl`} />
-                  </div>
-                </div>
-              </div>
-
-                {/* Clean, minimal text */}
-                <div className="text-center mb-8">
-                  <h2 className="text-xl font-semibold text-slate-700 mb-2">
-                    {t('common.medicalAssistant')}
-                  </h2>
-                </div>
-
-                {/* Mobile-optimized action buttons */}
-                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
-                {/* Mobile-optimized Medical Calculators Button */}
-                <button
-                  onClick={() => navigate('/calculators')}
-                  className={`
-                    group relative px-4 sm:px-6 py-3 rounded-xl sm:rounded-2xl font-medium text-sm
-                    min-h-[44px] w-full sm:w-auto flex items-center justify-center
-                    ${optimizeClasses(
-                      `bg-gradient-to-br from-${specialtyConfig.accentColor}-50/90 to-${specialtyConfig.accentColor}-100/90`,
-                      `bg-gradient-to-br from-${specialtyConfig.accentColor}-50 to-${specialtyConfig.accentColor}-100`,
-                      shouldOptimize
-                    )}
-                    ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)} border border-${specialtyConfig.accentColor}-200/50 
-                    text-${specialtyConfig.accentColor}-700 shadow-lg shadow-${specialtyConfig.accentColor}-500/10
-                    hover:shadow-xl hover:shadow-${specialtyConfig.accentColor}-500/20 hover:scale-105 active:scale-95
-                    transition-all duration-300 transform
-                  `}
-                >
-                  <div className="flex items-center space-x-2">
-                    <Calculator className="w-4 h-4" />
-                    <span>{t('navigation.calculators', 'Medical Calculators')}</span>
-                  </div>
-                  <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </button>
-
-                {/* Mobile-optimized Create Case Study Button */}
-                <button
-                  onClick={() => setShowCaseModal(true)}
-                  disabled={isDisabled || !isConnected}
-                  data-tour="case-creation-button"
-                  className={`
-                    group relative px-4 sm:px-6 py-3 rounded-xl sm:rounded-2xl font-medium text-sm
-                    min-h-[44px] w-full sm:w-auto flex items-center justify-center
-                    ${optimizeClasses(
-                      'bg-gradient-to-br from-slate-50/90 to-slate-100/90',
-                      'bg-gradient-to-br from-slate-50 to-slate-100',
-                      shouldOptimize
-                    )} ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
-                    border border-slate-200/60 text-slate-700 shadow-lg shadow-slate-500/8
-                    hover:shadow-xl hover:shadow-slate-500/15 hover:scale-105 active:scale-95
-                    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                    transition-all duration-300 transform
-                  `}
-                >
-                  <div className="flex items-center space-x-2">
-                    <FileText className="w-4 h-4" />
-                    <span>{t('chat.createCaseStudy', 'Create Case Study')}</span>
-                  </div>
-                  <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </button>
-                </div>
-              </div>
-
-              {/* Refined ambient decoration - moved to bottom of container */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-1/3 h-16 bg-gradient-to-t from-transparent via-slate-50/30 to-transparent blur-2xl rounded-full" />
+            // Clinical Dashboard - Professional medical workflow interface
+            <div className="flex-1 overflow-y-auto">
+              <ClinicalDashboard 
+                recentCases={caseHistory}
+                onCreateCase={() => setShowCaseModal(true)}
+                specialtyConfig={specialtyConfig}
+              />
             </div>
           ) : (
             // Mobile-enhanced Messages with optimized styling

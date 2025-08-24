@@ -41,6 +41,7 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<KnowledgeBaseType | null>(null);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0, show: false });
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -73,6 +74,8 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
       type: 'curated' as KnowledgeBaseType,
       label: t('knowledgeBase.curatedKnowledge'),
       description: t('knowledgeBase.curatedKnowledgeDesc'),
+      tooltipTitle: t('knowledgeBase.curatedTooltipTitle', 'Medical Knowledge Base'),
+      tooltipDesc: t('knowledgeBase.curatedTooltipDesc', 'AI will answer using established cardiology knowledge from medical experts and trusted sources.'),
       icon: Globe,
       color: {
         gradient: 'from-blue-500 to-indigo-600',
@@ -88,6 +91,8 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
       type: 'personal' as KnowledgeBaseType,
       label: t('knowledgeBase.personalLibrary'),
       description: t('knowledgeBase.personalLibraryDesc'),
+      tooltipTitle: t('knowledgeBase.personalTooltipTitle', 'Your Documents'),
+      tooltipDesc: t('knowledgeBase.personalTooltipDesc', 'AI will answer using information from your uploaded documents and personal files.'),
       icon: User,
       color: {
         gradient: 'from-emerald-500 to-teal-600',
@@ -105,295 +110,223 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
   const SelectedIcon = selectedOption?.icon || Globe;
 
   const handleSelect = (type: KnowledgeBaseType) => {
-
     if (type === 'personal' && personalDocumentCount === 0) {
-
       return;
     }
     onKnowledgeBaseChange(type);
     setIsOpen(false);
   };
 
-  return (
-    <div className={`relative z-[100] ${className}`} ref={dropdownRef}>
-      {/* Premium Selector Button - Mobile optimized */}
-      <Button
-        variant="ghost"
-        onClick={() => setIsOpen(!isOpen)}
-        disabled={disabled}
-        className={`
-          group relative transition-all duration-200 ease-out
-          ${isMobile 
-            ? `h-11 w-11 p-0 rounded-xl bg-gradient-to-br from-white/90 to-slate-50/90 
-               border border-slate-200/60 shadow-md backdrop-blur-xl
-               hover:shadow-lg hover:border-slate-300/60 hover:scale-105 active:scale-95
-               ${isOpen ? 'shadow-lg border-blue-200/60 scale-105' : ''}` 
-            : `h-11 px-5 rounded-xl bg-gradient-to-r from-white/95 to-slate-50/95 
-               border border-slate-200/60 shadow-md backdrop-blur-xl
-               hover:shadow-lg hover:border-slate-300/60
-               ${isOpen ? 'shadow-lg border-blue-200/60' : ''}`
-          }
-          ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-          focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-2
-        `}
-        ref={buttonRef}
-        title={isMobile ? `${selectedOption?.label} - ${selectedOption?.badge}` : undefined}
-      >
-        {/* Sophisticated Background Effect */}
-        <div className={`
-          absolute inset-0 ${isMobile ? 'rounded-xl' : 'rounded-2xl'} opacity-0 transition-opacity duration-300
-          bg-gradient-to-r ${selectedOption?.color.bg}
-          ${isOpen ? 'opacity-100' : 'group-hover:opacity-60'}
-        `} />
-        
-        {isMobile ? (
-          // Mobile: Icon-only button with status indicator
-          <div className="relative flex items-center justify-center">
-            <SelectedIcon className={`w-5 h-5 ${selectedOption?.color.text} relative z-10 transition-transform duration-300 ${isOpen ? 'scale-110' : 'group-hover:scale-105'}`} />
-            
-            {/* Status indicator dot */}
-            <div className="absolute -top-1 -right-1">
-              <div className={`
-                w-3 h-3 rounded-full border-2 border-white shadow-sm
-                ${selectedOption?.type === 'curated' 
-                  ? 'bg-blue-500' 
-                  : personalDocumentCount > 0
-                    ? 'bg-emerald-500'
-                    : 'bg-amber-500'
+  // Handle tooltip positioning on hover
+  const handleMouseEnter = (event: React.MouseEvent, option: KnowledgeBaseType) => {
+    if (isMobile) return; // No tooltips on mobile
+    
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const tooltipWidth = 320; // Estimated tooltip width
+    
+    let left = rect.left + (rect.width / 2) - (tooltipWidth / 2);
+    
+    // Keep tooltip within viewport
+    if (left < 10) left = 10;
+    if (left + tooltipWidth > viewportWidth - 10) left = viewportWidth - tooltipWidth - 10;
+    
+    setTooltipPosition({
+      top: rect.bottom + 12,
+      left: left,
+      show: true
+    });
+    setHoveredOption(option);
+  };
+
+  const handleMouseLeave = () => {
+    setTooltipPosition(prev => ({ ...prev, show: false }));
+    setHoveredOption(null);
+  };
+
+  // Use tabs instead of dropdown for better UX
+  if (isMobile) {
+    return (
+      <div className={`flex bg-white/90 backdrop-blur-xl rounded-xl shadow-md border border-slate-200/60 overflow-hidden ${className}`}>
+        {knowledgeBaseOptions.map((option) => {
+          const Icon = option.icon;
+          const isSelected = option.type === selectedKnowledgeBase;
+          const isDisabled = option.type === 'personal' && personalDocumentCount === 0;
+          
+          return (
+            <button
+              key={option.type}
+              onClick={() => !isDisabled && onKnowledgeBaseChange(option.type)}
+              disabled={disabled || isDisabled}
+              className={`
+                group relative flex-1 min-h-[56px] px-3 py-3 transition-all duration-200
+                ${isSelected 
+                  ? `bg-gradient-to-br ${option.color.bg} ${option.color.border} border-2` 
+                  : 'border-2 border-transparent hover:bg-white/60'
                 }
-              `}>
+                ${disabled || isDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-95'}
+                focus:outline-none focus:ring-2 focus:ring-blue-500/20
+              `}
+              title={`${option.label} - ${option.badge}`}
+            >
+              <div className="flex flex-col items-center space-y-1">
+                <Icon className={`w-5 h-5 ${isSelected ? option.color.text : 'text-slate-600'} transition-colors duration-200`} />
+                {isSelected && (
+                  <div className="w-2 h-2 rounded-full bg-current opacity-60" />
+                )}
+              </div>
+              
+              {/* Status indicator */}
+              <div className="absolute -top-1 -right-1">
                 <div className={`
-                  absolute inset-0 rounded-full animate-ping opacity-20
-                  ${selectedOption?.type === 'curated' 
-                    ? 'bg-blue-400' 
+                  w-3 h-3 rounded-full border-2 border-white shadow-sm
+                  ${option.type === 'curated' 
+                    ? 'bg-blue-500' 
                     : personalDocumentCount > 0
-                      ? 'bg-emerald-400'
-                      : 'bg-amber-400'
+                      ? 'bg-emerald-500'
+                      : 'bg-amber-500'
                   }
                 `} />
               </div>
-            </div>
-
-            {/* Dropdown indicator for mobile */}
-            <ChevronDown className={`
-              absolute -bottom-1 -right-1 w-3 h-3 transition-all duration-300
-              ${isOpen ? 'rotate-180 text-blue-600 scale-110' : 'text-slate-400'}
-            `} />
-          </div>
-        ) : (
-          // Desktop: Full button layout
-          <div className="relative flex items-center space-x-4 min-w-0">
-            {/* Enhanced Icon Container */}
-            <div className={`
-              relative p-2.5 rounded-xl
-              bg-gradient-to-br ${selectedOption?.color.bg}
-              border ${selectedOption?.color.border}
-              shadow-md transition-all duration-300
-              ${isOpen ? 'scale-110 rotate-6 shadow-lg' : 'group-hover:scale-105 group-hover:rotate-3'}
-            `}>
-              <SelectedIcon className={`w-5 h-5 ${selectedOption?.color.text} relative z-10 transition-transform duration-300`} />
-              <div className={`
-                absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300
-                bg-gradient-to-br ${selectedOption?.color.gradient}
-                ${isOpen ? 'opacity-25' : 'group-hover:opacity-15'}
-              `} />
-              
-              {/* Premium shine effect */}
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/40 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-
-            {/* Desktop Label and Status */}
-            <div className="flex flex-col min-w-0 flex-1">
-              <div className="flex items-center space-x-3 mb-0.5">
-                <span className="text-sm font-bold text-slate-700 truncate">
-                  {selectedOption?.label}
-                </span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+  
+  return (
+    <div className={`relative z-[100] ${className}`} ref={dropdownRef}>
+      {/* Desktop: Clear tab-style selector */}
+      <div className="flex bg-white/95 backdrop-blur-xl rounded-xl shadow-md border border-slate-200/60 overflow-hidden">
+        {knowledgeBaseOptions.map((option) => {
+          const Icon = option.icon;
+          const isSelected = option.type === selectedKnowledgeBase;
+          const isDisabled = option.type === 'personal' && personalDocumentCount === 0;
+          
+          return (
+            <button
+              key={option.type}
+              onClick={() => !isDisabled && onKnowledgeBaseChange(option.type)}
+              onMouseEnter={(e) => handleMouseEnter(e, option.type)}
+              onMouseLeave={handleMouseLeave}
+              disabled={disabled || isDisabled}
+              className={`
+                group relative flex-1 min-h-[56px] px-6 py-4 transition-all duration-200
+                ${isSelected 
+                  ? `bg-gradient-to-br ${option.color.bg} border-b-4 ${option.color.border}` 
+                  : 'border-b-4 border-transparent hover:bg-white/60 hover:border-b-slate-200'
+                }
+                ${disabled || isDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-95'}
+                focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-inset
+              `}
+            >
+              <div className="flex items-center space-x-4">
+                {/* Icon */}
                 <div className={`
-                  px-2.5 py-1 rounded-full text-xs font-bold shadow-sm
-                  ${selectedOption?.type === 'curated' 
-                    ? 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 border border-blue-200/50' 
-                    : personalDocumentCount > 0
-                      ? 'bg-gradient-to-r from-emerald-100 to-emerald-50 text-emerald-700 border border-emerald-200/50'
-                      : 'bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 border border-amber-200/50'
+                  p-2.5 rounded-xl transition-all duration-300
+                  ${isSelected 
+                    ? `bg-gradient-to-br ${option.color.bg} border ${option.color.border} shadow-md` 
+                    : 'bg-slate-100 border border-slate-200'
                   }
                 `}>
-                  {selectedOption?.badge}
+                  <Icon className={`w-5 h-5 ${isSelected ? option.color.text : 'text-slate-600'} transition-colors duration-200`} />
+                </div>
+                
+                {/* Content */}
+                <div className="flex flex-col items-start min-w-0">
+                  <div className="flex items-center space-x-3">
+                    <span className={`text-sm font-bold ${isSelected ? option.color.text : 'text-slate-700'} transition-colors duration-200`}>
+                      {option.label}
+                    </span>
+                    <div className={`
+                      px-2.5 py-1 rounded-full text-xs font-bold shadow-sm border
+                      ${isSelected 
+                        ? `bg-gradient-to-r ${option.color.gradient.replace('from-', 'from-').replace('to-', '/20 to-')} text-white border-white/20`
+                        : 'bg-slate-100 text-slate-600 border-slate-200'
+                      }
+                    `}>
+                      {option.badge}
+                    </div>
+                  </div>
+                  <span className="text-xs text-slate-500 font-medium mt-1">
+                    {option.count}
+                  </span>
                 </div>
               </div>
-              <span className="text-xs text-slate-500 font-medium truncate">
-                {selectedOption?.count}
-              </span>
-            </div>
+              
+              {/* Active indicator */}
+              {isSelected && (
+                <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${option.color.gradient} opacity-5 pointer-events-none`} />
+              )}
+            </button>
+          );
+        })}
+      </div>
 
-            {/* Enhanced Dropdown Arrow */}
-            <div className="flex-shrink-0">
-              <ChevronDown className={`
-                w-4 h-4 transition-all duration-300
-                ${isOpen ? 'rotate-180 text-blue-600 scale-110' : 'text-slate-500 group-hover:text-slate-700'}
-              `} />
+      {/* Beautiful Tooltip */}
+      {tooltipPosition.show && hoveredOption && !isMobile && createPortal(
+        <div
+          className="fixed z-[200] pointer-events-none animate-in fade-in-0 zoom-in-95 duration-200"
+          style={{
+            top: tooltipPosition.top,
+            left: tooltipPosition.left,
+            width: '320px'
+          }}
+        >
+          <div className="relative">
+            {/* Arrow */}
+            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+              <div className="w-4 h-4 rotate-45 bg-white border-l border-t border-slate-200/60"></div>
             </div>
-          </div>
-        )}
-      </Button>
-
-      {/* Premium Dropdown Menu - Rendered via Portal */}
-      {isOpen && createPortal(
-        <>
-          {/* Enhanced Backdrop Overlay */}
-          <div 
-            className="fixed inset-0 z-[9998] bg-black/30 backdrop-blur-sm"
-            onClick={() => setIsOpen(false)}
-          />
-          
-          <div 
-            ref={dropdownRef}
-            className={`
-              fixed z-[9999]
-              backdrop-blur-xl bg-white/95 sm:bg-white/98 border border-slate-200/60
-              rounded-2xl sm:rounded-3xl shadow-2xl shadow-slate-900/15 p-2 sm:p-3
-              animate-in slide-in-from-top-4 zoom-in-95 duration-300
-            `}
-            style={{
-              top: `${dropdownPosition.top}px`,
-              left: `${dropdownPosition.left}px`,
-              width: `${Math.max(dropdownPosition.width, window.innerWidth < 640 ? 280 : 360)}px`,
-              maxWidth: '90vw'
-            }}
-          >
-            {/* Mobile-optimized Background Effects */}
-            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-500/5 via-indigo-500/3 to-purple-500/5" />
-            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-conic from-slate-100/60 via-white/40 to-slate-100/60 opacity-60 sm:opacity-40" />
             
-            {knowledgeBaseOptions.map((option, index) => {
-              const Icon = option.icon;
-              const isSelected = option.type === selectedKnowledgeBase;
-              const isDisabled = option.type === 'personal' && personalDocumentCount === 0;
-              const isHovered = hoveredOption === option.type;
-
-              return (
-                <div
-                  key={option.type}
-                  className={`
-                    relative p-3 sm:p-5 rounded-xl sm:rounded-2xl cursor-pointer mb-1.5 sm:mb-2 last:mb-0
-                    transition-all duration-300 ease-out
-                    ${isDisabled 
-                      ? 'opacity-50 cursor-not-allowed' 
-                      : 'hover:scale-[1.02] hover:-translate-y-0.5'
-                    }
-                    ${isSelected 
-                      ? `bg-gradient-to-r ${option.color.bg} border-2 ${option.color.border} shadow-lg shadow-${option.color.text.split('-')[1]}-500/20` 
-                      : isHovered && !isDisabled
-                        ? `bg-gradient-to-r ${option.color.hover} border-2 ${option.color.border} shadow-md`
-                        : 'border-2 border-transparent hover:border-slate-200/60 bg-gradient-to-r from-slate-50/50 to-white/50'
-                    }
-                  `}
-                  onClick={() => !isDisabled && handleSelect(option.type)}
-                  onMouseEnter={() => setHoveredOption(option.type)}
-                  onMouseLeave={() => setHoveredOption(null)}
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  {/* Mobile-optimized Selection Indicator */}
-                  {isSelected && (
-                    <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
-                      <div className={`
-                        p-1 sm:p-1.5 rounded-full bg-gradient-to-r ${option.color.gradient}
-                        shadow-lg shadow-${option.color.text.split('-')[1]}-500/30
-                        animate-in zoom-in-50 duration-300
-                      `}>
-                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+            {/* Tooltip Card */}
+            <div className="bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/60 shadow-2xl shadow-slate-900/20 p-6">
+              {(() => {
+                const option = knowledgeBaseOptions.find(opt => opt.type === hoveredOption);
+                if (!option) return null;
+                
+                const Icon = option.icon;
+                
+                return (
+                  <div className="space-y-4">
+                    {/* Header */}
+                    <div className="flex items-center space-x-3">
+                      <div className={`p-3 rounded-xl bg-gradient-to-br ${option.color.gradient} shadow-md`}>
+                        <Icon className="w-6 h-6 text-white" />
                       </div>
-                    </div>
-                  )}
-
-                  <div className="flex items-start space-x-3 sm:space-x-5">
-                    {/* Mobile-optimized Icon */}
-                    <div className={`
-                      relative p-2 sm:p-4 rounded-lg sm:rounded-2xl
-                      bg-gradient-to-br ${option.color.bg}
-                      border-2 ${option.color.border}
-                      shadow-lg transition-all duration-300
-                      ${isHovered && !isDisabled ? 'scale-110 rotate-6 shadow-xl' : 'shadow-md'}
-                    `}>
-                      <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${option.color.text} relative z-10 transition-transform duration-300`} />
-                      {isDisabled && (
-                        <div className="absolute inset-0 rounded-2xl bg-slate-500/30 flex items-center justify-center backdrop-blur-sm">
-                          <Lock className="w-4 h-4 text-slate-600" />
-                        </div>
-                      )}
-                      
-                      {/* Premium shine effect */}
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/40 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-
-                    {/* Mobile-optimized Content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 sm:space-x-3 mb-1 sm:mb-2">
-                        <h4 className={`text-sm sm:text-base font-bold ${option.color.text}`}>
-                          {option.label}
-                        </h4>
+                      <div>
+                        <h3 className="font-bold text-slate-900 text-lg">
+                          {option.tooltipTitle}
+                        </h3>
                         <div className={`
-                          px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-bold shadow-sm border
-                          ${option.type === 'curated' 
-                            ? 'bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 border-blue-200/60' 
-                            : personalDocumentCount > 0
-                              ? 'bg-gradient-to-r from-emerald-100 to-emerald-50 text-emerald-700 border-emerald-200/60'
-                              : 'bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 border-amber-200/60'
-                          }
+                          inline-flex px-3 py-1 rounded-full text-xs font-bold
+                          bg-gradient-to-r ${option.color.gradient} text-white shadow-sm
                         `}>
                           {option.badge}
                         </div>
                       </div>
-                      
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-2 sm:mb-3 font-medium">
-                        {option.description}
+                    </div>
+                    
+                    {/* Description */}
+                    <div className="text-sm text-slate-600 leading-relaxed">
+                      {option.tooltipDesc}
+                    </div>
+                    
+                    {/* Footer */}
+                    <div className="pt-2 border-t border-slate-100">
+                      <p className="text-xs text-slate-500 font-medium">
+                        {option.count}
                       </p>
-                      
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-2">
-                          <Database className="w-4 h-4 text-slate-400" />
-                          <span className="text-sm text-slate-600 font-semibold">
-                            {option.count}
-                          </span>
-                        </div>
-                        {option.type === 'curated' && (
-                          <>
-                            <div className="w-1 h-1 bg-slate-300 rounded-full" />
-                            <div className="flex items-center space-x-2">
-                              <Sparkles className="w-4 h-4 text-blue-500" />
-                              <span className="text-sm text-blue-600 font-semibold">{t('knowledgeBase.aiVerified')}</span>
-                            </div>
-                          </>
-                        )}
-                      </div>
                     </div>
                   </div>
-
-                  {/* Sophisticated Hover Effect */}
-                  <div className={`
-                    absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300
-                    bg-gradient-to-br ${option.color.gradient}
-                    ${isHovered && !isDisabled ? 'opacity-5' : ''}
-                  `} />
-                </div>
-              );
-            })}
-
-            {/* Mobile-optimized Footer Info */}
-            <div className="mt-2 sm:mt-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-slate-50/80 to-white/80 border border-slate-200/40 backdrop-blur-sm">
-              <div className="flex items-center space-x-2 sm:space-x-3 text-xs sm:text-sm text-slate-600">
-                <div className="flex-shrink-0">
-                  <Info className="w-3 h-3 sm:w-4 sm:h-4" />
-                </div>
-                <span className="font-medium">
-                  {t('knowledgeBase.selectionInfluenceNotice')}
-                </span>
-              </div>
+                );
+              })()}
             </div>
           </div>
-        </>,
+        </div>,
         document.body
       )}
-
     </div>
   );
 }; 

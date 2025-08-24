@@ -104,15 +104,49 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     }
   }, [isMobile]);
 
-  // Handle focus - scroll to input on mobile
+  // Handle focus - enhanced mobile keyboard interaction
   const handleFocus = useCallback(() => {
-    if (isMobile && textAreaRef.current) {
+    if (isMobile && textAreaRef.current && containerRef.current) {
+      // Immediately scroll to ensure input is visible
+      textAreaRef.current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'end',
+        inline: 'nearest'
+      });
+      
+      // Additional keyboard-specific adjustments
       setTimeout(() => {
-        textAreaRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center' 
-        });
+        if (window.visualViewport && textAreaRef.current) {
+          const viewportHeight = window.visualViewport.height;
+          const windowHeight = window.innerHeight;
+          const keyboardHeight = windowHeight - viewportHeight;
+          
+          if (keyboardHeight > 100) {
+            // Keyboard is open, ensure input stays in view
+            textAreaRef.current.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center'
+            });
+            
+            // Update container padding for keyboard
+            if (containerRef.current) {
+              containerRef.current.style.paddingBottom = `${Math.max(keyboardHeight - 20, 0)}px`;
+            }
+          }
+        }
       }, 300); // Wait for keyboard animation
+    }
+  }, [isMobile]);
+
+  // Handle blur - clean up mobile keyboard adjustments
+  const handleBlur = useCallback(() => {
+    if (isMobile && containerRef.current) {
+      // Remove keyboard padding when input loses focus
+      setTimeout(() => {
+        if (containerRef.current) {
+          containerRef.current.style.paddingBottom = '';
+        }
+      }, 300); // Wait for keyboard to hide
     }
   }, [isMobile]);
 
@@ -590,6 +624,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               onChange={handleMessageChange}
               onKeyDown={handleKeyPress}
               onFocus={handleFocus}
+              onBlur={handleBlur}
               placeholder={placeholder || t('chat.typeMessage')}
               disabled={disabled}
               maxLength={maxLength}

@@ -128,5 +128,25 @@ export default {
   patientCases: 'Patient Cases',
   connectionIssue: 'Connection Issue',
   conversationHistory: 'Conversation History',
-  createCaseStudy: 'Create Case Study'
+  createCaseStudy: 'Create Case Study',
+  // Clinical Dashboard translations
+  dashboard: {
+    welcomeBack: 'Welcome back,',
+    subtitle: 'How can I assist with your',
+    quickConsult: 'Quick Consult',
+    quickConsultDesc: 'Ask AI about symptoms or treatments',
+    newCase: 'New Case Study',
+    newCaseDesc: 'Document and analyze a patient case',
+    bgConsult: 'BG Analysis',
+    bgConsultDesc: 'Upload and analyze blood gas',
+    ecgConsult: 'ECG Analysis',
+    ecgConsultDesc: 'Upload and analyze ECG images',
+    popularCalculators: 'Popular Calculators',
+    viewAll: 'View All',
+    recentCases: 'Recent Cases',
+    gettingStarted: 'Getting Started',
+    createFirstCase: 'Create Your First Case',
+    createFirstCaseDesc: 'Document patient cases to get AI-powered insights and build your clinical knowledge base.',
+    createCase: 'Create Case Study'
+  }
 }; 

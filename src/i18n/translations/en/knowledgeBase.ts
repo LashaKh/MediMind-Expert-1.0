@@ -33,6 +33,12 @@ export const knowledgeBase = {
   aiVerified: 'AI Verified',
   selectionInfluenceNotice: 'Knowledge base selection influences AI response accuracy and information depth',
   
+  // Tooltip content
+  curatedTooltipTitle: 'Medical Knowledge Base',
+  curatedTooltipDesc: 'AI will answer using established cardiology knowledge from medical experts and trusted sources.',
+  personalTooltipTitle: 'Your Documents',
+  personalTooltipDesc: 'AI will answer using information from your uploaded documents and personal files.',
+  
   // Document management
   documents: {
     totalDocuments: 'Total Documents',
