@@ -60,14 +60,15 @@
   node_bundler = "esbuild"
   external_node_modules = ["@supabase/supabase-js", "jsonwebtoken"]
 
-[functions."news-collection"]
-  timeout = 300
-  node_bundler = "esbuild"
-  external_node_modules = ["@supabase/supabase-js", "node-fetch", "jsonwebtoken"]
-  schedule = "0 6,18 * * *"
-  
-  [functions."news-collection".environment]
-    FORCE_COLLECTION = "true"
+# DISABLED: news-collection Netlify function - using news-scheduler instead
+# [functions."news-collection"]
+#   timeout = 300
+#   node_bundler = "esbuild"
+#   external_node_modules = ["@supabase/supabase-js", "node-fetch", "jsonwebtoken"]
+#   schedule = "0 6,18 * * *"
+#   
+#   [functions."news-collection".environment]
+#     FORCE_COLLECTION = "true"
 
 [functions."medical-news"]
   timeout = 60

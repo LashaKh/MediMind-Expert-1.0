@@ -1,10 +1,12 @@
-name: Medical News Collection
+# DISABLED: Duplicate scheduling - Netlify scheduler is handling news collection
+# To re-enable, uncomment the 'on:' section below
+name: Medical News Collection (DISABLED)
 
-on:
-  schedule:
-    # Run twice daily: 6 AM and 6 PM UTC
-    - cron: '0 6,18 * * *'
-  workflow_dispatch: # Allow manual trigger
+# on:
+#   schedule:
+#     # Run twice daily: 6 AM and 6 PM UTC
+#     - cron: '0 6,18 * * *'
+#   workflow_dispatch: # Allow manual trigger
 
 jobs:
   collect-news:
@@ -12,7 +14,7 @@ jobs:
     steps:
       - name: Trigger News Collection
         run: |
-          curl -X POST "${{ secrets.SUPABASE_URL }}/functions/v1/news-collection" \
+          curl -X POST "$SUPABASE_URL/functions/v1/news-collection" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Content-Type: application/json" \
             -d '{"force": true}' \
