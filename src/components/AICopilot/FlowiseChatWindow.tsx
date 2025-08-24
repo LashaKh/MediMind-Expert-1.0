@@ -18,6 +18,7 @@ import { KnowledgeBaseSelector } from './KnowledgeBaseSelector';
 import { usePersonalKBPlaceholder } from './PersonalKBGuidance';
 import { NewCaseButton } from './NewCaseButton';
 import { CaseCreationModal } from './CaseCreationModal';
+import { EnhancedTooltip } from '../ui/EnhancedTooltip';
 import { HeaderCaseIndicator } from './HeaderCaseIndicator';
 import { CaseListModal } from './CaseListModal';
 import { CalculatorSuggestions } from './CalculatorSuggestions';
@@ -937,48 +938,64 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                       </Button>
 
                       {/* Mobile-optimized History button */}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setShowConversationList(true)}
-                        className={`
-                          group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
-                          bg-white/80 hover:bg-white/90
-                          border border-transparent hover:border-slate-200/60
-                          hover:shadow-md hover:scale-105 active:scale-95
-                          transition-all duration-200
-                        `}
-                        title={t('chat.conversationHistory', 'Conversation History')}
+                      <EnhancedTooltip
+                        title="Chat History"
+                        description="View and manage all your previous AI conversations."
+                        icon={History}
+                        gradient="from-emerald-500 to-teal-600"
+                        badge="Browse"
                       >
-                        <History className="w-4 h-4 text-slate-600 group-hover:text-slate-800 transition-colors duration-200" />
-                        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-slate-500/0 to-slate-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowConversationList(true)}
+                          className={`
+                            group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
+                            bg-white/80 hover:bg-white/90
+                            border border-transparent hover:border-slate-200/60
+                            hover:shadow-md hover:scale-105 active:scale-95
+                            transition-all duration-200
+                          `}
+                          title={t('chat.conversationHistory', 'Conversation History')}
+                        >
+                          <History className="w-4 h-4 text-slate-600 group-hover:text-slate-800 transition-colors duration-200" />
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-slate-500/0 to-slate-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        </Button>
+                      </EnhancedTooltip>
 
                     </div>
 
                     {/* Case Management Actions Group */}
                     <div className="flex items-center space-x-1 bg-violet-50/40 backdrop-blur-sm rounded-xl p-1 border border-violet-200/60 shadow-sm">
                       {/* Mobile-optimized Cases button with badge */}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setShowCaseListModal(true)}
-                        className={`
-                          group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
-                          bg-white/80 hover:bg-violet-50/80
-                          border border-transparent hover:border-violet-200/60
-                          hover:shadow-md hover:scale-105 active:scale-95
-                          transition-all duration-200
-                        `}
-                        title={`${t('chat.patientCases', 'Patient Cases')}: ${conversations.filter(c => c.caseId === activeCase?.id).length}`}
+                      <EnhancedTooltip
+                        title="My Cases"
+                        description="View and switch between your saved clinical cases."
+                        icon={FileText}
+                        gradient="from-violet-500 to-purple-600"
+                        badge="Switch Cases"
                       >
-                        <FileText className="w-4 h-4 text-violet-600 group-hover:text-violet-800 transition-colors duration-200" />
-                        {conversations.filter(c => c.caseId === activeCase?.id).length > 0 && (
-                          <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-violet-500 to-purple-600 text-white text-xs font-bold flex items-center justify-center shadow-md shadow-violet-500/30">
-                            {conversations.filter(c => c.caseId === activeCase?.id).length > 9 ? '9+' : conversations.filter(c => c.caseId === activeCase?.id).length}
-                          </div>
-                        )}
-                      </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowCaseListModal(true)}
+                          className={`
+                            group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
+                            bg-white/80 hover:bg-violet-50/80
+                            border border-transparent hover:border-violet-200/60
+                            hover:shadow-md hover:scale-105 active:scale-95
+                            transition-all duration-200
+                          `}
+                          title={`${t('chat.patientCases', 'Patient Cases')}: ${caseHistory.length}`}
+                        >
+                          <FileText className="w-4 h-4 text-violet-600 group-hover:text-violet-800 transition-colors duration-200" />
+                          {caseHistory.length > 0 && (
+                            <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-violet-500 to-purple-600 text-white text-xs font-bold flex items-center justify-center shadow-md shadow-violet-500/30">
+                              {caseHistory.length > 9 ? '9+' : caseHistory.length}
+                            </div>
+                          )}
+                        </Button>
+                      </EnhancedTooltip>
 
                       {/* Mobile-optimized New case button - Only show on larger screens */}
                       <div className="hidden sm:block">

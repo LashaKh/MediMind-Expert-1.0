@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Header } from './Header';
-import { Footer } from './Footer';
 import { Sidebar } from './Sidebar';
 import { BottomNavigation } from './BottomNavigation';
 import { useAuth } from '../../stores/useAppStore';
@@ -135,10 +134,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Bottom Navigation for mobile - only for authenticated users and not on onboarding */}
       {user && !isOnboardingPage && <BottomNavigation />}
       
-      {/* Footer - hide on mobile when user is authenticated (bottom nav takes its place), and hide on AI Copilot page */}
-      <div className={(user && isMobile) || isAICopilotPage ? 'hidden' : 'block'}>
-        <Footer />
-      </div>
+      {/* Footer - completely removed */}
       
       {/* Bottom safe area spacer */}
       <div className="safe-bottom bg-background" />
