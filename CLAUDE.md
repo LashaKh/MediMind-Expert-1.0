@@ -26,12 +26,13 @@ MediMind Expert is a comprehensive medical AI co-pilot platform for healthcare p
 - **Project ID**: `kvsqtolsjggpyvdtdpss`
 - **Project URL**: `https://kvsqtolsjggpyvdtdpss.supabase.co`
 
-**Use for**: All database operations, user profiles, content briefs, medical data, Edge Functions deployment
+**Use for**: All database operations, user profiles,  medical data, Edge Functions deployment
 
 ### Playwright MCP (Browser Testing & Error Analysis)
 **Primary Tools for Browser Testing and Debugging**:
 
 #### Navigation & Setup
+my local host is lunched here :  http://localhost:8888  so navigate to this page 
 - `mcp__playwright__browser_navigate` - Navigate to application URLs for testing
 - `mcp__playwright__browser_resize` - Test responsive design at different viewport sizes
 - `mcp__playwright__browser_install` - Install browser if not available

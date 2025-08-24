@@ -12,6 +12,7 @@ import search from './search';
 import news from './news';
 import { filters } from './filters';
 import abg from './abg';
+import tts from './tts';
 
 export default {
   common: {
@@ -34,6 +35,7 @@ export default {
   news,
   filters,
   abg,
+  tts,
   
   // Tour/i18n for tour tooltips and selector
   tour: {

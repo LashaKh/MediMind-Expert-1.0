@@ -25,11 +25,13 @@ export const navigation = {
   aiCoPilot: 'AI Assistant',
   mediSearch: 'Medi Search & News',
   podcastStudio: 'Podcast Studio',
+  georgianTTS: 'Georgian TTS Test',
   
   // Navigation descriptions
   aiCoPilotDesc: 'AI medical assistant and intelligent consultation',
   mediSearchDesc: 'Search medical literature, journals, clinical research & medical news',
   podcastStudioDesc: 'Create AI-generated medical podcasts from your documents',
+  georgianTTSDesc: 'Test Georgian speech recognition with Enagramm.com API',
   calculatorsDesc: 'Professional medical calculators and risk assessment',
   knowledgeBaseDesc: 'Knowledge base and medical literature',
   profileDesc: 'Manage your account and preferences',

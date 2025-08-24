@@ -10,6 +10,7 @@ import {
   User,
   Database,
   Mic,
+  Mic2,
   Search,
   BarChart3,
   TestTube2

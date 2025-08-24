@@ -19,6 +19,7 @@ import { MediSearchPage } from './components/MediSearch/MediSearchPage';
 import { Profile } from './components/Profile/Profile';
 import { HelpCenter } from './components/Help/HelpCenter';
 import { ComingSoon } from './components/ui/ComingSoon';
+import { TTSTestPage } from './components/TTSTest/TTSTestPage';
 
 // Import SignIn directly to avoid loading issues
 import { SignIn } from './components/Auth/SignIn';
@@ -122,6 +123,7 @@ function App() {
               <Route path="/knowledge-base" element={<KnowledgeBase />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/help" element={<HelpCenter />} />
+              <Route path="/tts-test" element={<TTSTestPage />} />
               
               <Route path="/podcast-studio" element={
                 <ComingSoon 

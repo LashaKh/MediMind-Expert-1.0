@@ -27,6 +27,8 @@ export default defineConfig(({ mode }) => {
       ]
     },
     server: {
+      // Enable HTTPS only when explicitly requested via environment variable
+      https: process.env.HTTPS === 'true' ? true : false,
       hmr: {
         overlay: false
       },
@@ -35,13 +37,14 @@ export default defineConfig(({ mode }) => {
       fs: {
         allow: ['..']
       },
-      // Add headers for PDF worker and cache control
+      // Add headers for PDF worker, cache control, and permissions policy
       headers: {
         'Cross-Origin-Embedder-Policy': 'credentialless',
         'Cross-Origin-Opener-Policy': 'same-origin',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Pragma': 'no-cache',
-        'Expires': '0'
+        'Expires': '0',
+        'Permissions-Policy': 'microphone=*, camera=*, geolocation=*'
       },
       proxy: {
         '/api/brave': {
