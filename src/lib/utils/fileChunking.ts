@@ -1,9 +1,12 @@
 /**
  * File Chunking Utilities for Large File Uploads
  * 
- * This module handles splitting large files into smaller chunks for upload
- * to work around Supabase free tier 50MB upload limits.
+ * This module handles splitting large files into smaller chunks for upload.
+ * For PDFs, uses page-based chunking to create valid PDF files.
+ * For other files, uses binary chunking.
  */
+
+import { shouldUsePageBasedChunking, splitPDFIntoPageChunks, PDFPageChunk } from './pdfPageChunking';
 
 export interface FileChunk {
   chunkIndex: number;
@@ -26,13 +29,26 @@ export interface ChunkUploadProgress {
   totalBytes: number;
 }
 
-// 45MB chunk size (safely under Supabase 50MB limit)
-const CHUNK_SIZE = 45 * 1024 * 1024; // 45MB - Larger chunks for better efficiency
+// 25MB chunk size - balanced for performance and reliability
+const CHUNK_SIZE = 25 * 1024 * 1024; // 25MB - Balanced chunk size
 
 /**
- * Split a file into chunks for upload
+ * Split a file into chunks for upload - routes to appropriate chunking method
  */
-export function splitFileIntoChunks(file: File): FileChunk[] {
+export async function splitFileIntoChunks(file: File): Promise<FileChunk[] | PDFPageChunk[]> {
+  if (shouldUsePageBasedChunking(file)) {
+    console.log('📄 Using page-based chunking for PDF file');
+    return await splitPDFIntoPageChunks(file);
+  } else {
+    console.log('🔧 Using binary chunking for file');
+    return splitFileIntoBinaryChunks(file);
+  }
+}
+
+/**
+ * Split a file into binary chunks for upload (legacy method for non-PDFs)
+ */
+export function splitFileIntoBinaryChunks(file: File): FileChunk[] {
   const chunks: FileChunk[] = [];
   const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
   
@@ -57,10 +73,10 @@ export function splitFileIntoChunks(file: File): FileChunk[] {
 }
 
 /**
- * Check if file needs chunking (over 45MB to be safe)
+ * Check if file needs chunking (over 25MB to be safe)
  */
 export function shouldChunkFile(file: File): boolean {
-  const CHUNKING_THRESHOLD = 45 * 1024 * 1024; // 45MB threshold
+  const CHUNKING_THRESHOLD = 25 * 1024 * 1024; // 25MB threshold - matches chunk size
   return file.size > CHUNKING_THRESHOLD;
 }
 

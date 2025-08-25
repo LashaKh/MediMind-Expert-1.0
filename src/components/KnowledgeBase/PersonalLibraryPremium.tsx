@@ -48,10 +48,10 @@ import {
   ChevronRight as ChevronRightIcon,
   ArrowUpDown,
   MoreHorizontal,
+  Activity,
   FilterX,
   Infinity,
   Gauge,
-  Activity,
   Command,
   MousePointer,
   Cpu,
@@ -80,7 +80,8 @@ import { AdvancedSearch } from './AdvancedSearch';
 import { 
   listUserDocuments, 
   deleteUserDocument,
-  getUserDocument
+  getUserDocument,
+  monitorVectorStoreStatus
 } from '../../lib/api/vectorStore';
 import { 
   DocumentListParams,
@@ -120,31 +121,169 @@ interface DocumentGroup {
 }
 
 // Utility function to group documents
+// Helper function to calculate string similarity (Levenshtein distance based)
+const calculateSimilarity = (str1: string, str2: string): number => {
+  const longer = str1.length > str2.length ? str1 : str2;
+  const shorter = str1.length > str2.length ? str2 : str1;
+  
+  if (longer.length === 0) return 1.0;
+  
+  const editDistance = levenshteinDistance(longer, shorter);
+  return (longer.length - editDistance) / longer.length;
+};
+
+const levenshteinDistance = (str1: string, str2: string): number => {
+  const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+  
+  for (let i = 0; i <= str1.length; i += 1) {
+    matrix[0][i] = i;
+  }
+  
+  for (let j = 0; j <= str2.length; j += 1) {
+    matrix[j][0] = j;
+  }
+  
+  for (let j = 1; j <= str2.length; j += 1) {
+    for (let i = 1; i <= str1.length; i += 1) {
+      if (str1[i - 1] === str2[j - 1]) {
+        matrix[j][i] = matrix[j - 1][i - 1];
+      } else {
+        matrix[j][i] = Math.min(
+          matrix[j - 1][i - 1] + 1, // substitution
+          matrix[j][i - 1] + 1,     // insertion
+          matrix[j - 1][i] + 1,     // deletion
+        );
+      }
+    }
+  }
+  
+  return matrix[str2.length][str1.length];
+};
+
+// Helper function to extract clean base title from any chunk title format
+const extractCleanBaseTitle = (title: string): string => {
+  // Remove all possible chunk suffixes
+  let cleanTitle = title;
+  
+  // Remove binary chunk suffix: " - Part X/Y"
+  cleanTitle = cleanTitle.replace(/ - Part \d+\/\d+$/, '');
+  
+  // Remove PDF page chunk suffix: " - Pages X-Y (Z/Total)"  
+  cleanTitle = cleanTitle.replace(/ - Pages \d+-\d+ \(\d+\/\d+\)$/, '');
+  
+  // Remove any trailing ellipsis and standardize
+  cleanTitle = cleanTitle.replace(/\.\.\.$/, '');
+  
+  // Trim whitespace
+  cleanTitle = cleanTitle.trim();
+  
+  return cleanTitle;
+};
+
+// Helper function to find the best matching group key for a document
+const findDocumentGroupKey = (doc: DocumentWithMetadata, existingGroupKeys: string[]): string | null => {
+  const cleanTitle = extractCleanBaseTitle(doc.title);
+  const SIMILARITY_THRESHOLD = 0.85; // 85% similarity required
+  
+  let bestMatch: string | null = null;
+  let bestSimilarity = 0;
+  
+  // Check against all existing group keys
+  for (const groupKey of existingGroupKeys) {
+    const similarity = calculateSimilarity(cleanTitle, groupKey);
+    console.log(`🔍 Similarity check: "${cleanTitle}" vs "${groupKey}" = ${similarity.toFixed(3)}`);
+    
+    if (similarity > bestSimilarity && similarity >= SIMILARITY_THRESHOLD) {
+      bestSimilarity = similarity;
+      bestMatch = groupKey;
+    }
+  }
+  
+  if (bestMatch) {
+    console.log(`✅ Found matching group: "${bestMatch}" (similarity: ${bestSimilarity.toFixed(3)})`);
+  }
+  
+  return bestMatch;
+};
+
+// Enhanced robust grouping algorithm
 const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
-  console.log('🔍 PREMIUM GROUPING DEBUG: Starting to group documents:', documents.length);
+  console.log('🔍 PREMIUM GROUPING DEBUG: Starting robust grouping for', documents.length, 'documents');
   
   const chunkedGroups = new Map<string, DocumentWithMetadata[]>();
   const regularDocuments: DocumentWithMetadata[] = [];
 
-  // Separate chunked and regular documents
+  // First pass: separate chunked and regular documents
   documents.forEach(doc => {
-    console.log('📄 Checking document:', doc.title, 'Tags:', doc.tags);
     const isChunked = doc.tags?.includes('chunked-document');
-    console.log('🧩 Is chunked?', isChunked);
-    
-    if (isChunked) {
-      // Extract base title by removing " - Part X/Y"
-      const baseTitle = doc.title.replace(/ - Part \d+\/\d+$/, '');
-      console.log('📝 Base title extracted:', baseTitle);
-      
-      if (!chunkedGroups.has(baseTitle)) {
-        chunkedGroups.set(baseTitle, []);
-      }
-      chunkedGroups.get(baseTitle)!.push(doc);
-      console.log('✅ Added to chunked group:', baseTitle);
-    } else {
+    if (!isChunked) {
       regularDocuments.push(doc);
-      console.log('📋 Added to regular documents');
+      return;
+    }
+
+    // For chunked documents, use multiple strategies to find the group key
+    let groupKey = findDocumentGroupKey(doc, Array.from(chunkedGroups.keys()));
+    
+    if (!groupKey) {
+      // Create new group key using the cleanest possible base title
+      groupKey = extractCleanBaseTitle(doc.title);
+    }
+    
+    console.log(`📝 Document "${doc.title}" → Group key: "${groupKey}"`);
+    
+    if (!chunkedGroups.has(groupKey)) {
+      chunkedGroups.set(groupKey, []);
+    }
+    chunkedGroups.get(groupKey)!.push(doc);
+  });
+
+  // Second pass: Group documents with similar upload times that might belong together
+  // This handles cases where titles are too different due to truncation
+  const groupedChunkedDocs = new Set<string>();
+  chunkedGroups.forEach((docs) => {
+    docs.forEach(doc => groupedChunkedDocs.add(doc.id));
+  });
+
+  // Find ungrouped chunked documents and try to group them by upload time + partial title similarity
+  documents.forEach(doc => {
+    const isChunked = doc.tags?.includes('chunked-document');
+    if (isChunked && !groupedChunkedDocs.has(doc.id)) {
+      console.log(`🔄 Trying to group orphaned document: ${doc.title}`);
+      
+      // Look for documents uploaded within 10 minutes of each other with some title similarity
+      const uploadTime = new Date(doc.created_at).getTime();
+      const TIME_WINDOW = 10 * 60 * 1000; // 10 minutes
+      
+      let bestGroupKey: string | null = null;
+      let bestSimilarity = 0;
+      
+      chunkedGroups.forEach((groupDocs, groupKey) => {
+        const groupUploadTimes = groupDocs.map(d => new Date(d.created_at).getTime());
+        const avgGroupUploadTime = groupUploadTimes.reduce((a, b) => a + b, 0) / groupUploadTimes.length;
+        
+        if (Math.abs(uploadTime - avgGroupUploadTime) <= TIME_WINDOW) {
+          const cleanTitle = extractCleanBaseTitle(doc.title);
+          const similarity = calculateSimilarity(cleanTitle, groupKey);
+          
+          console.log(`⏰ Time-based check: "${doc.title}" vs group "${groupKey}" - time diff: ${Math.abs(uploadTime - avgGroupUploadTime)}ms, similarity: ${similarity.toFixed(3)}`);
+          
+          if (similarity > bestSimilarity && similarity >= 0.6) { // Lower threshold for time-based grouping
+            bestSimilarity = similarity;
+            bestGroupKey = groupKey;
+          }
+        }
+      });
+      
+      if (bestGroupKey) {
+        console.log(`🕐 Time-based grouping: Adding "${doc.title}" to group "${bestGroupKey}"`);
+        chunkedGroups.get(bestGroupKey)!.push(doc);
+        groupedChunkedDocs.add(doc.id);
+      } else {
+        // Create a new group for this orphaned document
+        const newGroupKey = extractCleanBaseTitle(doc.title);
+        console.log(`🆕 Creating new group for orphaned document: "${newGroupKey}"`);
+        chunkedGroups.set(newGroupKey, [doc]);
+      }
     }
   });
 
@@ -162,16 +301,30 @@ const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
 
   // Add chunked document groups
   chunkedGroups.forEach((chunks, baseTitle) => {
-    // Sort chunks by part number
+    // Sort chunks by part number (handle both formats)
     chunks.sort((a, b) => {
-      const aPartMatch = a.title.match(/Part (\d+)\/\d+$/);
-      const bPartMatch = b.title.match(/Part (\d+)\/\d+$/);
+      // Try binary chunk format first: "Part X/Y"
+      let aPartMatch = a.title.match(/Part (\d+)\/\d+$/);
+      let bPartMatch = b.title.match(/Part (\d+)\/\d+$/);
+      
+      // If not found, try PDF page chunk format: "Pages X-Y (Z/Total)"
+      if (!aPartMatch) {
+        aPartMatch = a.title.match(/Pages \d+-\d+ \((\d+)\/\d+\)$/);
+      }
+      if (!bPartMatch) {
+        bPartMatch = b.title.match(/Pages \d+-\d+ \((\d+)\/\d+\)$/);
+      }
+      
       const aPart = aPartMatch ? parseInt(aPartMatch[1]) : 0;
       const bPart = bPartMatch ? parseInt(bPartMatch[1]) : 0;
       return aPart - bPart;
     });
 
-    const totalPartsMatch = chunks[0]?.title.match(/Part \d+\/(\d+)$/);
+    // Extract total parts from either format
+    let totalPartsMatch = chunks[0]?.title.match(/Part \d+\/(\d+)$/);
+    if (!totalPartsMatch) {
+      totalPartsMatch = chunks[0]?.title.match(/Pages \d+-\d+ \(\d+\/(\d+)\)$/);
+    }
     const totalParts = totalPartsMatch ? parseInt(totalPartsMatch[1]) : chunks.length;
 
     groups.push({
@@ -297,9 +450,10 @@ const ChunkedDocumentCard: React.FC<{
   onToggle: () => void;
   onView: (document: DocumentWithMetadata) => void;
   onDelete: (documentId: string, title: string) => void;
+  onDeleteAll?: (documentIds: string[], title: string) => void;
   onSelect: (id: string) => void;
   index: number;
-}> = ({ group, viewMode, displayDensity, isExpanded, selectedDocuments, onToggle, onView, onDelete, onSelect, index }) => {
+}> = ({ group, viewMode, displayDensity, isExpanded, selectedDocuments, onToggle, onView, onDelete, onDeleteAll, onSelect, index }) => {
   const prefersReducedMotion = useReducedMotion();
   
   const cardVariants = {
@@ -465,6 +619,15 @@ const ChunkedDocumentCard: React.FC<{
           >
             View Document
           </button>
+          {onDeleteAll && (
+            <button
+              onClick={() => onDeleteAll(group.documents.map(doc => doc.id), group.baseTitle)}
+              className="p-2 text-gray-400 hover:text-red-600 transition-colors border border-gray-300 dark:border-gray-600 rounded-lg hover:border-red-300 dark:hover:border-red-600"
+              title="Delete all parts"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          )}
           <button
             onClick={onToggle}
             className="p-2 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-300 dark:hover:border-blue-600"
@@ -845,6 +1008,8 @@ export const PersonalLibraryPremium: React.FC = () => {
   const [showSortOptions, setShowSortOptions] = useState(false);
   const [showViewOptions, setShowViewOptions] = useState(false);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+  const [isMonitoring, setIsMonitoring] = useState(false);
+  const [monitoringStatus, setMonitoringStatus] = useState<string>('');
   
   // Command palette
   const { isOpen: isCommandPaletteOpen, openCommandPalette, closeCommandPalette } = useCommandPalette();
@@ -1132,6 +1297,41 @@ export const PersonalLibraryPremium: React.FC = () => {
     }
   };
 
+  const handleDeleteAllDocuments = async (documentIds: string[], title: string) => {
+    const confirmMessage = `Are you sure you want to delete all ${documentIds.length} parts of "${title}"? This action cannot be undone.`;
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    const [results, deleteError] = await safeAsync(async () => {
+      // Delete all documents in parallel
+      const deletePromises = documentIds.map(documentId => 
+        deleteUserDocument({ documentId, deleteFromOpenAI: true })
+      );
+      return await Promise.all(deletePromises);
+    }, {
+      context: `deleting all ${documentIds.length} parts of "${title}"`,
+      severity: ErrorSeverity.HIGH,
+      showToast: true
+    });
+
+    if (deleteError) {
+      setError(deleteError.userMessage || 'Failed to delete all document parts');
+      return;
+    }
+
+    try {
+      console.log(`✅ All ${documentIds.length} parts deleted successfully for:`, title);
+      
+      // Refresh the documents list
+      await loadDocuments();
+      
+    } catch (error) {
+      console.error('❌ Delete all documents error:', error);
+      setError('Failed to delete all document parts');
+    }
+  };
+
   const handleViewDocument = async (document: DocumentWithMetadata) => {
     setSelectedDocument(document);
   };
@@ -1142,6 +1342,39 @@ export const PersonalLibraryPremium: React.FC = () => {
 
   const handleRefresh = () => {
     loadDocuments();
+  };
+
+  // Monitor Vector Store processing status
+  const handleMonitorStatus = async () => {
+    if (!user) return;
+
+    setIsMonitoring(true);
+    setMonitoringStatus('Checking file processing status...');
+
+    try {
+      const result = await monitorVectorStoreStatus({ 
+        checkAll: false, // Only check recent uploads
+        hoursBack: 24 
+      });
+
+      const { summary } = result;
+      if (summary.updated > 0) {
+        setMonitoringStatus(`✅ Updated ${summary.updated} documents. ${summary.failed} failed, ${summary.completed} completed`);
+        // Reload documents to show updated statuses
+        await loadDocuments();
+      } else {
+        setMonitoringStatus(`✅ All ${summary.total} documents are in sync`);
+      }
+
+      // Clear status after 5 seconds
+      setTimeout(() => setMonitoringStatus(''), 5000);
+    } catch (error) {
+      console.error('Monitoring failed:', error);
+      setMonitoringStatus('❌ Failed to check file status');
+      setTimeout(() => setMonitoringStatus(''), 5000);
+    } finally {
+      setIsMonitoring(false);
+    }
   };
 
   // Command palette commands
@@ -1381,6 +1614,16 @@ export const PersonalLibraryPremium: React.FC = () => {
               >
                 <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
                 <span>Refresh</span>
+              </button>
+
+              <button
+                onClick={handleMonitorStatus}
+                disabled={isMonitoring}
+                className="px-4 py-3 rounded-xl border border-blue-300 dark:border-blue-600 bg-blue-50 dark:bg-blue-900 hover:bg-blue-100 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-200 transition-all duration-200 flex items-center space-x-2"
+                title="Check OpenAI processing status for uploaded files"
+              >
+                <Activity className={`w-5 h-5 ${isMonitoring ? 'animate-pulse' : ''}`} />
+                <span>{isMonitoring ? 'Checking...' : 'Monitor'}</span>
               </button>
             </div>
 
@@ -1629,6 +1872,20 @@ export const PersonalLibraryPremium: React.FC = () => {
           </motion.div>
         )}
 
+        {monitoringStatus && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 flex items-center space-x-3"
+          >
+            <Activity className="w-5 h-5 text-blue-500 flex-shrink-0" />
+            <div>
+              <h3 className="font-medium text-blue-800 dark:text-blue-200">File Processing Status</h3>
+              <p className="text-sm text-blue-600 dark:text-blue-300">{monitoringStatus}</p>
+            </div>
+          </motion.div>
+        )}
+
         {/* Loading State */}
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
@@ -1728,6 +1985,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                       onToggle={() => toggleGroup(group.id)}
                       onView={handleViewDocument}
                       onDelete={handleDeleteDocument}
+                      onDeleteAll={handleDeleteAllDocuments}
                       onSelect={handleDocumentSelect}
                       index={index}
                     />
@@ -1762,6 +2020,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                       onToggle={() => toggleGroup(group.id)}
                       onView={handleViewDocument}
                       onDelete={handleDeleteDocument}
+                      onDeleteAll={handleDeleteAllDocuments}
                       onSelect={handleDocumentSelect}
                       index={index}
                     />

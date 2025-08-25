@@ -37,6 +37,46 @@ const clearCacheFor = (keyPattern: string) => {
 // Rate limiting helper with exponential backoff
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Vector Store Status Monitoring
+export async function monitorVectorStoreStatus(options: {
+  documentId?: string;
+  checkAll?: boolean;
+  hoursBack?: number;
+} = {}): Promise<{
+  success: boolean;
+  message: string;
+  results: Array<{
+    documentId: string;
+    title: string;
+    currentStatus: string;
+    actualStatus: string;
+    shouldUpdate: boolean;
+    errorDetails?: string;
+  }>;
+  summary: {
+    total: number;
+    updated: number;
+    failed: number;
+    completed: number;
+    inProgress: number;
+  };
+}> {
+  const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/monitor-vector-store-status`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+    },
+    body: JSON.stringify(options),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to monitor vector store status: ${response.statusText}`);
+  }
+
+  return await response.json();
+}
+
 async function makeRequestWithRetry<T>(
   requestFn: () => Promise<T>,
   cacheKey?: string,
@@ -431,13 +471,15 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
       formatFileSize 
     } = await import('../utils/fileChunking');
 
-    // Split file into chunks
-    const chunks = splitFileIntoChunks(request.file);
+    // Split file into chunks (async for PDF page-based chunking)
+    const chunks = await splitFileIntoChunks(request.file);
     const sessionId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     console.log(`🧩 File split into ${chunks.length} chunks:`, {
       originalSize: formatFileSize(request.file.size),
-      chunkSize: formatFileSize(chunks[0].chunkSize),
+      chunkInfo: 'chunkSize' in chunks[0] ? 
+        `Binary chunks (${formatFileSize(chunks[0].chunkSize)})` :
+        `PDF pages (${chunks[0].startPage}-${chunks[0].endPage})`,
       totalChunks: chunks.length
     });
 
@@ -481,9 +523,15 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
         try {
           console.log(`🔄 Uploading chunk ${i + 1}/${chunks.length}, attempt ${retryAttempts + 1}/${maxRetries}...`);
           
+          // Get the appropriate data based on chunk type
+          const chunkData = 'chunkData' in chunk ? chunk.chunkData : chunk.pdfBytes;
+          const fileName = 'chunkData' in chunk ? 
+            `${chunk.originalFileName}-chunk-${chunk.chunkIndex}` :
+            `${chunk.originalFileName.replace('.pdf', '')}-pages-${chunk.startPage}-${chunk.endPage}.pdf`;
+          
           const uploadResult = await supabase.storage
             .from('user-uploads')
-            .upload(chunkPath, chunk.chunkData, {
+            .upload(`${chunkPath}/${fileName}`, chunkData, {
               cacheControl: '3600',
               upsert: false
             });
@@ -551,23 +599,41 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
     
     console.log('✅ Fresh session obtained, processing chunks individually...');
 
+    // Calculate maximum possible suffix length to ensure consistent base title truncation
+    const maxTitleLength = 200; // Database constraint limit
+    const maxSuffixLength = Math.max(
+      ...chunks.map((chunk, idx) => {
+        const suffix = 'startPage' in chunk ? 
+          ` - Pages ${chunk.startPage}-${chunk.endPage} (${idx + 1}/${uploadedChunks.length})` :
+          ` - Part ${idx + 1}/${uploadedChunks.length}`;
+        return suffix.length;
+      })
+    );
+    const maxBaseLength = maxTitleLength - maxSuffixLength;
+    
+    // Create consistent base title (same for all chunks)
+    let baseTitle = request.title;
+    if (baseTitle.length > maxBaseLength) {
+      baseTitle = baseTitle.substring(0, maxBaseLength - 3) + '...';
+    }
+
     for (let i = 0; i < uploadedChunks.length; i++) {
       const chunkPath = uploadedChunks[i];
       console.log(`📄 Processing chunk ${i + 1}/${uploadedChunks.length} as separate document...`);
       
-      // Create chunk-specific title (truncate if too long for database)
-      const maxTitleLength = 200; // Database constraint limit
-      const partSuffix = ` - Part ${i + 1}/${uploadedChunks.length}`;
-      const maxBaseLength = maxTitleLength - partSuffix.length;
+      // Different title format for PDF page chunks vs binary chunks
+      const chunk = chunks[i];
+      const partSuffix = 'startPage' in chunk ? 
+        ` - Pages ${chunk.startPage}-${chunk.endPage} (${i + 1}/${uploadedChunks.length})` :
+        ` - Part ${i + 1}/${uploadedChunks.length}`;
       
-      let baseTitle = request.title;
-      if (baseTitle.length > maxBaseLength) {
-        baseTitle = baseTitle.substring(0, maxBaseLength - 3) + '...';
-      }
       
       const chunkTitle = `${baseTitle}${partSuffix}`;
       console.log(`📝 Generated chunk title (${chunkTitle.length} chars): ${chunkTitle}`);
       
+      // Calculate file size based on chunk type (PDF page chunk vs binary chunk)
+      const chunkFileSize = 'chunkSize' in chunk ? chunk.chunkSize : chunk.pdfBytes.length;
+
       const chunkRequest = {
         supabaseFilePath: chunkPath,
         vectorStoreId: request.vectorStoreId,
@@ -577,14 +643,21 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
         tags: [...(request.tags || []), 'chunked-document', `part-${i + 1}-of-${uploadedChunks.length}`],
         fileName: `${request.file.name.replace(/\.([^.]+)$/, `-part${i + 1}.$1`)}`,
         fileType: request.file.type,
-        fileSize: chunks[i].chunkSize
+        fileSize: chunkFileSize
       };
 
       try {
+        // Refresh session before each chunk to prevent JWT expiration
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        if (!currentSession) {
+          console.warn(`⚠️ Chunk ${i + 1} failed: Session expired`);
+          continue;
+        }
+
         const response = await fetch(`${supabaseUrl}/functions/v1/upload-document-to-openai`, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${freshSession.access_token}`,
+            'Authorization': `Bearer ${currentSession.access_token}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(chunkRequest),
