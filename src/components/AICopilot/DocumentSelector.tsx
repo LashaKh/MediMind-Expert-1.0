@@ -185,7 +185,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
             transform: 'scale(1)',
             animation: 'modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
           }}
-          onClick={(E) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           {/* Premium Header with Glass Effect */}
           <div className="relative overflow-hidden">

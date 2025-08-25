@@ -166,7 +166,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             <div className="flex items-center space-x-2">
               {selectedDate && !disabled && (
                 <button
-                  onClick={(E) => {
+                  onClick={(e) => {
                     e.stopPropagation();
                     handleClear();
                   }}
