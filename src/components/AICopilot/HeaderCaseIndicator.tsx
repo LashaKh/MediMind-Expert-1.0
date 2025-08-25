@@ -136,7 +136,7 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
             <Button
               variant="ghost"
               size="sm"
-              onClick={(E) => {
+              onClick={(e) => {
                 e.stopPropagation();
                 onResetCase();
               }}
@@ -236,7 +236,7 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={(E) => {
+                    onClick={(e) => {
                       e.stopPropagation();
                       onViewCase();
                       setIsExpanded(false);
