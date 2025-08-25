@@ -562,7 +562,7 @@ ${profile?.medical_specialty === 'cardiology' ? `   - Try the **ASCVD Risk Calcu
 - Refer to calculator help text
 
 ### Can't Upload Documents?
-- Check file size (max 50MB for PDFs)
+- Check file size (max 500MB for PDFs)
 - Ensure file is in supported format (PDF, DOC, TXT)
 - Try uploading one file at a time
 - Verify internet connection stability
@@ -1185,7 +1185,7 @@ References/
 
 ### Upload Problems
 **File Won't Upload:**
-- Check file size (max 50MB for PDFs)
+- Check file size (max 500MB for PDFs)
 - Verify file format compatibility
 - Ensure stable internet connection
 - Try uploading one file at a time
@@ -1782,7 +1782,7 @@ Analysis Request: "Provide quantitative assessment including:
 4. **Verify successful upload** before proceeding with analysis requests
 
 **Error Prevention:**
-- Check file size limits (50MB for PDFs, 25MB for images)
+- Check file size limits (500MB for PDFs, 25MB for other documents)
 - Verify supported file formats before uploading
 - Ensure stable internet connection for large files
 - Upload one file at a time if experiencing issues
@@ -2407,7 +2407,7 @@ Build your personal medical knowledge base with relevant literature and document
 - Educational content
 
 ### File Formats
-- PDF documents (up to 50MB)
+- PDF documents (up to 500MB for comprehensive medical texts)
 - Word documents (.doc, .docx up to 25MB)
 - Text files (.txt, .md up to 10MB)
 

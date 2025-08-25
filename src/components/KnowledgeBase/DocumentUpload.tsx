@@ -26,6 +26,7 @@ import {
 import { uploadDocumentToVectorStore, initializeUserVectorStore } from '../../lib/api/vectorStore';
 import { useDocumentProgress } from '../../hooks/useDocumentProgress';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ChunkedUploadProgress } from '../ui/ChunkedUploadProgress';
 
 // Enhanced types with better categorization
 type DocumentCategory = 'research-papers' | 'clinical-guidelines' | 'case-studies' | 'medical-images' | 'lab-results' | 'patient-education' | 'protocols' | 'reference-materials' | 'personal-notes' | 'other';
@@ -64,6 +65,15 @@ interface UploadedFile {
   retryCount?: number;
   canRetry?: boolean;
   uploadProgress?: number;
+  isChunked?: boolean;
+  chunkProgress?: {
+    currentChunk: number;
+    totalChunks: number;
+    chunkProgress: number;
+  };
+  uploadStatus?: 'preparing' | 'chunking' | 'uploading' | 'reassembling' | 'processing' | 'complete' | 'error';
+  estimatedTime?: string;
+  uploadSpeed?: string;
 }
 
 interface DocumentUploadProps {
@@ -76,7 +86,7 @@ interface DocumentUploadProps {
 export const DocumentUpload: React.FC<DocumentUploadProps> = ({
   onClose,
   onUploadSuccess,
-  maxFileSize = 50, // Maximum file size in MB - matches backend limit
+  maxFileSize = 500, // Maximum file size in MB for PDFs - matches backend limit
   maxFiles = 10
 }) => {
   const { t } = useTranslation();
@@ -252,18 +262,35 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       };
     }
 
-    // Add warnings for different file sizes
-    if (file.size > 50 * 1024 * 1024) {
-      return {
-        isValid: false,
-        error: `File size (${formatFileSize(file.size)}) exceeds maximum allowed size (50MB). Please try a smaller file.`
-      };
+    // Add warnings for different file sizes with PDF-specific handling
+    if (file.type === 'application/pdf') {
+      // PDF files can be up to 500MB
+      if (file.size > 300 * 1024 * 1024) {
+        return {
+          isValid: true,
+          warning: 'Very large PDF (>300MB) - processing may take 10-15 minutes. Ensure stable internet connection.'
+        };
+      }
+      if (file.size > 100 * 1024 * 1024) {
+        return {
+          isValid: true,
+          warning: 'Large PDF (>100MB) - upload and processing may take several minutes.'
+        };
+      }
+    } else {
+      // Non-PDF files have smaller limits
+      if (file.size > 25 * 1024 * 1024) {
+        return {
+          isValid: false,
+          error: `File size (${formatFileSize(file.size)}) exceeds maximum allowed size (25MB for non-PDF files). Please try a smaller file.`
+        };
+      }
     }
     
-    if (file.size > 25 * 1024 * 1024) {
+    if (file.size > 25 * 1024 * 1024 && file.type !== 'application/pdf') {
       return {
         isValid: true,
-        warning: 'Very large file (>25MB) - upload may take several minutes and could fail. Consider splitting into smaller files.'
+        warning: 'Large file (>25MB) - upload may take several minutes and could fail. Consider splitting into smaller files.'
       };
     }
     
@@ -294,6 +321,11 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       
       if (validation.isValid) {
         const fileId = crypto.randomUUID();
+        
+        // Check if file will need chunking
+        const CHUNKING_THRESHOLD = 45 * 1024 * 1024; // 45MB
+        const isLargeFile = file.size > CHUNKING_THRESHOLD;
+        
         newFiles.push({
           id: fileId,
           file,
@@ -302,7 +334,13 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           description: '',
           tags: [],
           category: 'other',
-          uploadProgress: 0
+          uploadProgress: 0,
+          isChunked: isLargeFile,
+          chunkProgress: isLargeFile ? {
+            currentChunk: 0,
+            totalChunks: Math.ceil(file.size / (40 * 1024 * 1024)), // 40MB chunks
+            chunkProgress: 0
+          } : undefined
         });
       } else {
         errors.push(`${file.name}: ${validation.error}`);
@@ -378,8 +416,15 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
 
   const uploadSingleFile = async (file: UploadedFile) => {
     try {
+      // Start with preparing status
       setUploadedFiles(prev => prev.map(f => 
-        f.id === file.id ? { ...f, status: 'uploading', uploadProgress: 0 } : f
+        f.id === file.id ? { 
+          ...f, 
+          status: 'uploading', 
+          uploadProgress: 0, 
+          uploadStatus: 'preparing',
+          estimatedTime: file.isChunked ? '3-5 minutes' : '30-60 seconds'
+        } : f
       ));
 
       // Initialize vector store if needed
@@ -406,18 +451,64 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         tags: file.tags.filter(tag => tag.trim().length > 0)
       };
 
-      // Simulate progress for better UX
+      // Enhanced progress simulation with status updates
+      let currentStatus: 'preparing' | 'chunking' | 'uploading' | 'reassembling' | 'processing' = 'uploading';
+      
+      // Update status to uploading after vector store initialization
+      setUploadedFiles(prev => prev.map(f => 
+        f.id === file.id ? { 
+          ...f, 
+          uploadStatus: file.isChunked ? 'chunking' : 'uploading',
+          uploadProgress: 5
+        } : f
+      ));
+      
       const progressInterval = setInterval(() => {
-        setUploadedFiles(prev => prev.map(f => 
-          f.id === file.id ? { 
+        setUploadedFiles(prev => prev.map(f => {
+          if (f.id !== file.id) return f;
+          
+          let newProgress = Math.min(85, (f.uploadProgress || 0) + Math.random() * 15);
+          let newStatus = f.uploadStatus;
+          
+          // Status progression for chunked uploads
+          if (file.isChunked) {
+            if (newProgress > 20 && newStatus === 'chunking') {
+              newStatus = 'uploading';
+            }
+          }
+          
+          return { 
             ...f, 
-            uploadProgress: Math.min(90, (f.uploadProgress || 0) + Math.random() * 20)
-          } : f
-        ));
-      }, 500);
+            uploadProgress: newProgress,
+            uploadStatus: newStatus,
+            uploadSpeed: file.isChunked ? '8-12 MB/s' : '15-20 MB/s'
+          };
+        }));
+      }, 800);
 
       const [response, uploadError] = await safeAsync(async () => {
-        return await uploadDocumentToVectorStore(uploadRequest);
+        console.log('🚨🚨🚨 COMPONENT: About to call uploadDocumentToVectorStore');
+        console.log('🚨🚨🚨 COMPONENT: Upload request:', uploadRequest);
+        
+        // Create progress callback for real-time updates
+        const onProgress = (progress: any) => {
+          setUploadedFiles(prev => prev.map(f => {
+            if (f.id !== file.id) return f;
+            
+            return {
+              ...f,
+              uploadProgress: progress.overallProgress,
+              uploadStatus: progress.status,
+              chunkProgress: progress.type === 'chunk' ? {
+                currentChunk: progress.currentChunk || 0,
+                totalChunks: progress.totalChunks || 0,
+                chunkProgress: ((progress.currentChunk || 0) / (progress.totalChunks || 1)) * 100
+              } : f.chunkProgress
+            };
+          }));
+        };
+        
+        return await uploadDocumentToVectorStore(uploadRequest, onProgress);
       }, {
         context: `uploading document ${file.file.name} to vector store`,
         severity: ErrorSeverity.HIGH,
@@ -432,7 +523,8 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         
         setUploadedFiles(prev => prev.map(f => 
           f.id === file.id ? { 
-            ...f, 
+            ...f,
+            uploadStatus: 'error', 
             status: 'error', 
             error: errorMessage, 
             canRetry,
@@ -910,56 +1002,19 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                     const Icon = typeInfo.icon;
                     
                     return (
-                      <motion.div
+                      <ChunkedUploadProgress
                         key={file.id}
-                        layout
-                        className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 shadow-lg"
-                      >
-                        <div className="flex items-center space-x-4">
-                          <div className={`p-3 rounded-xl ${typeInfo.color}`}>
-                            <Icon className="w-6 h-6" />
-                          </div>
-                          
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between mb-2">
-                              <p className="font-semibold text-gray-900">{file.title}</p>
-                              
-                              {file.status === 'uploading' && (
-                                <div className="flex items-center space-x-2 text-sm text-blue-600">
-                                  <Loader2 className="w-4 h-4 animate-spin" />
-                                  <span>{t('documents.modal.upload.uploading')}</span>
-                                </div>
-                              )}
-                              
-                              {file.status === 'success' && (
-                                <div className="flex items-center space-x-2 text-sm text-green-600">
-                                  <CheckCircle2 className="w-4 h-4" />
-                                  <span>{t('documents.modal.upload.complete')}</span>
-                                </div>
-                              )}
-                              
-                              {file.status === 'error' && (
-                                <div className="flex items-center space-x-2 text-sm text-red-600">
-                                  <AlertTriangle className="w-4 h-4" />
-                                  <span>{t('documents.modal.upload.failed')}</span>
-                                </div>
-                              )}
-                            </div>
-                            
-                            {(file.status === 'uploading' || file.uploadProgress !== undefined) && (
-                              <div className="w-full bg-gray-200 rounded-full h-2">
-                                <motion.div
-                                  className="h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
-                                  style={{ width: `${file.uploadProgress || 0}%` }}
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${file.uploadProgress || 0}%` }}
-                                  transition={{ duration: 0.3 }}
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </motion.div>
+                        fileName={file.file.name}
+                        fileSize={file.file.size}
+                        overallProgress={file.uploadProgress || 0}
+                        chunkProgress={file.chunkProgress}
+                        status={file.uploadStatus || (file.status === 'uploading' ? 'uploading' : file.status === 'success' ? 'complete' : file.status === 'error' ? 'error' : 'preparing')}
+                        error={file.error}
+                        isChunked={file.isChunked || false}
+                        estimatedTime={file.estimatedTime}
+                        uploadSpeed={file.uploadSpeed}
+                        className="mb-4"
+                      />
                     );
                   })}
                 </div>

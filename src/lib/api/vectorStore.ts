@@ -234,26 +234,89 @@ export async function deleteVectorStore(): Promise<VectorStoreDeleteResponse> {
  * Document Management
  */
 
-// Upload document to OpenAI Vector Store
+// Progress callback type for real-time updates
+export type UploadProgressCallback = (progress: {
+  type: 'chunk' | 'overall';
+  currentChunk?: number;
+  totalChunks?: number;
+  overallProgress: number;
+  status: 'preparing' | 'chunking' | 'uploading' | 'reassembling' | 'processing';
+}) => void;
+
+// Upload document to OpenAI Vector Store with chunking support
 export async function uploadDocumentToVectorStore(
-  request: DocumentUploadRequest
+  request: DocumentUploadRequest,
+  onProgress?: UploadProgressCallback
 ): Promise<DocumentUploadResponse> {
+  // EXTREMELY VISIBLE DEBUG LOG - This should ALWAYS appear if function is called
+  console.log('🚨🚨🚨 UPLOAD FUNCTION CALLED! File:', request.file.name, 'Size:', request.file.size);
+  console.log('🚨🚨🚨 Request object:', request);
+  
+  // Import chunking utilities
+  const { 
+    shouldChunkFile, 
+    splitFileIntoChunks, 
+    createChunkMetadata,
+    generateChunkPath,
+    calculateChunkProgress 
+  } = await import('../utils/fileChunking');
+  
+  // Check if file needs chunking
+  if (shouldChunkFile(request.file)) {
+    console.log('🧩 Large file detected - using chunked upload');
+    return await uploadFileInChunks(request, onProgress);
+  }
+  
+  // For smaller files, use direct upload
+  console.log('📄 Small file - using direct upload');
+  return await uploadFileDirectly(request, onProgress);
+}
+
+// Direct upload for files under 45MB
+async function uploadFileDirectly(request: DocumentUploadRequest, onProgress?: UploadProgressCallback): Promise<DocumentUploadResponse> {
   try {
+    console.log('🔄 Starting direct document upload process...');
+    
     const { data: { session } } = await supabase.auth.getSession();
+    console.log('🔐 Session check:', session ? 'authenticated' : 'not authenticated');
+    
     if (!session) {
       throw new DocumentUploadError('Authentication required');
     }
 
     // Stage 1: Upload file to Supabase Storage first (avoids Netlify function memory limits)
-    const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}-${request.file.name}`;
+    // Sanitize filename to avoid special characters that break storage URLs
+    const sanitizedFileName = request.file.name
+      .replace(/[^\w\s.-]/g, '') // Remove special chars except word chars, spaces, dots, hyphens
+      .replace(/\s+/g, '_') // Replace spaces with underscores
+      .replace(/_{2,}/g, '_') // Replace multiple underscores with single
+      .replace(/^_+|_+$/g, ''); // Remove leading/trailing underscores
+    
+    const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}-${sanitizedFileName}`;
     const filePath = `uploads/${session.user.id}/${fileName}`;
     
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('user-uploads')
-      .upload(filePath, request.file, {
-        cacheControl: '3600',
-        upsert: false
-      });
+    console.log('📤 Uploading to Supabase Storage:', filePath);
+    console.log('📄 File details:', { name: request.file.name, size: request.file.size, type: request.file.type });
+    
+    console.log('🚨 ABOUT TO START SUPABASE STORAGE UPLOAD...');
+    
+    // Add timeout to prevent infinite hanging on large files
+    const uploadWithTimeout = Promise.race([
+      supabase.storage
+        .from('user-uploads')
+        .upload(filePath, request.file, {
+          cacheControl: '3600',
+          upsert: false
+        }),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Storage upload timeout (10 minutes)')), 10 * 60 * 1000)
+      )
+    ]);
+    
+    const { data: uploadData, error: uploadError } = await uploadWithTimeout as any;
+      
+    console.log('🚨 SUPABASE STORAGE UPLOAD COMPLETED!');
+    console.log('📤 Storage upload result:', { uploadData, uploadError });
 
     if (uploadError) {
 
@@ -276,6 +339,9 @@ export async function uploadDocumentToVectorStore(
     };
 
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    console.log('🚀 Calling Edge Function:', `${supabaseUrl}/functions/v1/upload-document-to-openai`);
+    console.log('📦 Payload:', requestPayload);
+    
     const response = await fetch(`${supabaseUrl}/functions/v1/upload-document-to-openai`, {
       method: 'POST',
       headers: {
@@ -283,8 +349,8 @@ export async function uploadDocumentToVectorStore(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestPayload),
-      // Add timeout for large file uploads
-      signal: AbortSignal.timeout(5 * 60 * 1000), // 5 minute timeout
+      // Add timeout for large file uploads - extended for 500MB files
+      signal: AbortSignal.timeout(15 * 60 * 1000), // 15 minute timeout for large files
     });
 
     // Check if response is JSON
@@ -344,6 +410,273 @@ export async function uploadDocumentToVectorStore(
     }
     
     throw new DocumentUploadError('Failed to upload document to Vector Store');
+  }
+}
+
+// Chunked upload for files over 45MB
+async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: UploadProgressCallback): Promise<DocumentUploadResponse> {
+  try {
+    console.log('🧩 Starting chunked upload process...');
+    
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw new DocumentUploadError('Authentication required');
+    }
+
+    // Import chunking utilities
+    const { 
+      splitFileIntoChunks, 
+      createChunkMetadata,
+      generateChunkPath,
+      formatFileSize 
+    } = await import('../utils/fileChunking');
+
+    // Split file into chunks
+    const chunks = splitFileIntoChunks(request.file);
+    const sessionId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
+    console.log(`🧩 File split into ${chunks.length} chunks:`, {
+      originalSize: formatFileSize(request.file.size),
+      chunkSize: formatFileSize(chunks[0].chunkSize),
+      totalChunks: chunks.length
+    });
+
+    // Notify UI of chunking completion
+    onProgress?.({
+      type: 'overall',
+      totalChunks: chunks.length,
+      overallProgress: 5,
+      status: 'uploading'
+    });
+
+    // Upload chunks sequentially with progress updates
+    const uploadedChunks: string[] = [];
+    
+    for (let i = 0; i < chunks.length; i++) {
+      const chunk = chunks[i];
+      console.log(`🧩 Uploading chunk ${i + 1}/${chunks.length} (${formatFileSize(chunk.chunkSize)})`);
+      
+      // Update progress for current chunk (10% to 80% for chunk uploads)
+      const chunkProgress = 10 + Math.round((i / chunks.length) * 70);
+      console.log(`📊 Chunk upload progress: ${chunkProgress}%`);
+      
+      // Notify UI of chunk progress
+      onProgress?.({
+        type: 'chunk',
+        currentChunk: i + 1,
+        totalChunks: chunks.length,
+        overallProgress: chunkProgress,
+        status: 'uploading'
+      });
+      
+      // Generate chunk path
+      const chunkPath = generateChunkPath(session.user.id, sessionId, chunk);
+      
+      // Upload chunk to storage with retry logic
+      let uploadData, uploadError;
+      let retryAttempts = 0;
+      const maxRetries = 3;
+      
+      while (retryAttempts < maxRetries) {
+        try {
+          console.log(`🔄 Uploading chunk ${i + 1}/${chunks.length}, attempt ${retryAttempts + 1}/${maxRetries}...`);
+          
+          const uploadResult = await supabase.storage
+            .from('user-uploads')
+            .upload(chunkPath, chunk.chunkData, {
+              cacheControl: '3600',
+              upsert: false
+            });
+          
+          uploadData = uploadResult.data;
+          uploadError = uploadResult.error;
+          
+          if (!uploadError) {
+            console.log(`✅ Chunk ${i + 1} uploaded successfully on attempt ${retryAttempts + 1}`);
+            break; // Success, exit retry loop
+          } else {
+            console.warn(`⚠️ Chunk ${i + 1} upload attempt ${retryAttempts + 1} failed:`, uploadError);
+          }
+        } catch (error) {
+          console.warn(`⚠️ Chunk ${i + 1} upload attempt ${retryAttempts + 1} threw error:`, error);
+          uploadError = error;
+        }
+        
+        retryAttempts++;
+        
+        if (retryAttempts < maxRetries) {
+          // Wait before retrying (exponential backoff)
+          const waitTime = Math.pow(2, retryAttempts) * 2000; // 4s, 8s, 16s
+          console.log(`⏳ Waiting ${waitTime/1000}s before retry...`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+      }
+      
+      if (uploadError) {
+        console.error(`❌ Chunk ${i + 1} upload failed:`, uploadError);
+        
+        // Clean up any uploaded chunks on failure
+        await cleanupChunks(session.user.id, sessionId, uploadedChunks);
+        
+        throw new DocumentUploadError(
+          `Failed to upload chunk ${i + 1}: ${uploadError.message}`
+        );
+      }
+      
+      uploadedChunks.push(uploadData.path);
+      console.log(`✅ Chunk ${i + 1}/${chunks.length} uploaded successfully`);
+    }
+
+    console.log('🎉 All chunks uploaded successfully, processing each chunk as separate documents...');
+
+    // Notify UI of processing starting
+    onProgress?.({
+      type: 'overall',
+      totalChunks: chunks.length,
+      overallProgress: 85,
+      status: 'processing'
+    });
+
+    // Process each chunk as a separate document
+    const chunkResults: any[] = [];
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    
+    // Refresh session before processing
+    console.log('🔄 Refreshing session for document processing...');
+    const { data: { session: freshSession } } = await supabase.auth.getSession();
+    
+    if (!freshSession) {
+      throw new DocumentUploadError('Authentication session expired during upload');
+    }
+    
+    console.log('✅ Fresh session obtained, processing chunks individually...');
+
+    for (let i = 0; i < uploadedChunks.length; i++) {
+      const chunkPath = uploadedChunks[i];
+      console.log(`📄 Processing chunk ${i + 1}/${uploadedChunks.length} as separate document...`);
+      
+      // Create chunk-specific title (truncate if too long for database)
+      const maxTitleLength = 200; // Database constraint limit
+      const partSuffix = ` - Part ${i + 1}/${uploadedChunks.length}`;
+      const maxBaseLength = maxTitleLength - partSuffix.length;
+      
+      let baseTitle = request.title;
+      if (baseTitle.length > maxBaseLength) {
+        baseTitle = baseTitle.substring(0, maxBaseLength - 3) + '...';
+      }
+      
+      const chunkTitle = `${baseTitle}${partSuffix}`;
+      console.log(`📝 Generated chunk title (${chunkTitle.length} chars): ${chunkTitle}`);
+      
+      const chunkRequest = {
+        supabaseFilePath: chunkPath,
+        vectorStoreId: request.vectorStoreId,
+        title: chunkTitle,
+        description: request.description ? `${request.description} (Part ${i + 1} of ${uploadedChunks.length})` : `Part ${i + 1} of ${uploadedChunks.length}`,
+        category: request.category,
+        tags: [...(request.tags || []), 'chunked-document', `part-${i + 1}-of-${uploadedChunks.length}`],
+        fileName: `${request.file.name.replace(/\.([^.]+)$/, `-part${i + 1}.$1`)}`,
+        fileType: request.file.type,
+        fileSize: chunks[i].chunkSize
+      };
+
+      try {
+        const response = await fetch(`${supabaseUrl}/functions/v1/upload-document-to-openai`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${freshSession.access_token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(chunkRequest),
+          signal: AbortSignal.timeout(10 * 60 * 1000), // 10 minute timeout per chunk
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          chunkResults.push(result);
+          console.log(`✅ Chunk ${i + 1}/${uploadedChunks.length} processed successfully`);
+          
+          // Update progress
+          const chunkProgress = 85 + Math.round(((i + 1) / uploadedChunks.length) * 15);
+          onProgress?.({
+            type: 'overall',
+            totalChunks: chunks.length,
+            overallProgress: chunkProgress,
+            status: 'processing'
+          });
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          console.warn(`⚠️ Chunk ${i + 1} processing failed:`, errorData);
+          // Continue with other chunks instead of failing completely
+        }
+      } catch (error) {
+        console.warn(`⚠️ Chunk ${i + 1} processing error:`, error);
+        // Continue with other chunks
+      }
+    }
+
+    console.log(`🎉 Chunked document processing complete! ${chunkResults.length}/${uploadedChunks.length} chunks processed successfully`);
+    
+    // Show where the final documents are stored
+    console.log(`📁 Document storage summary:`);
+    console.log(`   • Vector Store ID: ${request.vectorStoreId}`);
+    console.log(`   • OpenAI Files: ${chunkResults.length} separate files uploaded`);
+    console.log(`   • Database Records: ${chunkResults.length} documents created`);
+    console.log(`   • Temp Storage: Chunks will be cleaned up from temp-chunks/`);
+
+    // Clean up chunk files after processing
+    await cleanupChunks(session.user.id, sessionId, uploadedChunks);
+
+    // Return summary of results
+    return {
+      success: true,
+      message: `Large document successfully split and processed as ${chunkResults.length} separate documents`,
+      chunkedUpload: true,
+      totalChunks: uploadedChunks.length,
+      successfulChunks: chunkResults.length,
+      chunkResults: chunkResults,
+      // Return first chunk's document info for compatibility
+      documentId: chunkResults[0]?.documentId,
+      uploadedFileId: chunkResults[0]?.uploadedFileId
+    };
+  } catch (error) {
+    console.error('❌ Chunked upload failed:', error);
+    
+    if (error instanceof DocumentUploadError) {
+      throw error;
+    }
+    
+    if (error.name === 'TimeoutError' || error.message?.includes('timeout')) {
+      throw new DocumentUploadError('Chunked upload timed out. Please try again or use a smaller file.');
+    }
+    
+    if (error.name === 'AbortError') {
+      throw new DocumentUploadError('Chunked upload was cancelled.');
+    }
+    
+    throw new DocumentUploadError('Failed to upload large document');
+  }
+}
+
+// Clean up uploaded chunks after processing
+async function cleanupChunks(userId: string, sessionId: string, chunkPaths: string[]): Promise<void> {
+  try {
+    console.log(`🧹 Cleaning up ${chunkPaths.length} temporary chunks from Supabase Storage...`);
+    console.log(`   📁 Removing temp files from: temp-chunks/chunks-${new Date().toISOString().split('T')[0]}/`);
+    
+    if (chunkPaths.length > 0) {
+      const { error } = await supabase.storage
+        .from('user-uploads')
+        .remove(chunkPaths);
+      
+      if (error) {
+        console.warn('⚠️ Failed to clean up some temp chunks:', error);
+      } else {
+        console.log('✅ Temporary chunks cleaned up successfully (final documents are in OpenAI Vector Store)');
+      }
+    }
+  } catch (error) {
+    console.warn('⚠️ Chunk cleanup failed:', error);
   }
 }
 
@@ -484,14 +817,21 @@ export async function deleteUserDocument(
   partialSuccess?: boolean;
 }> {
   try {
+    console.log('🔑 Getting session for document deletion...');
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       throw new Error('Authentication required');
     }
 
+    console.log('✅ Session found, calling Edge Function');
+
     // Call the Supabase Edge Function to delete from OpenAI and database
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const response = await fetch(`${supabaseUrl}/functions/v1/delete-document-from-openai`, {
+    const deleteUrl = `${supabaseUrl}/functions/v1/delete-document-from-openai`;
+    console.log('🚀 Calling Edge Function:', deleteUrl);
+    console.log('📦 Request payload:', { documentId: request.documentId });
+
+    const response = await fetch(deleteUrl, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -502,13 +842,19 @@ export async function deleteUserDocument(
       })
     });
 
+    console.log('📡 Edge Function response status:', response.status);
+    console.log('📡 Edge Function response headers:', response.headers);
+
     // Handle both complete success (200) and partial success (207)
     if (!response.ok && response.status !== 207) {
+      console.error('❌ Edge Function returned error status:', response.status);
       const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Error data from Edge Function:', errorData);
       throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
     }
 
     const result = await response.json();
+    console.log('✅ Edge Function response:', result);
     
     // Determine if this was a partial success (207 status = some cleanup failed)
     const partialSuccess = response.status === 207;
@@ -611,28 +957,45 @@ export async function initializeUserVectorStore(
   const cacheKey = `initializeUserVectorStore-${userId}`;
 
   return makeRequestWithRetry(async () => {
-    // First check if user already has a Vector Store (bypass cache for fresh data)
-    const { hasVectorStore, vectorStore } = await checkUserVectorStore();
+    console.log('🔄 Checking if user has an existing vector store...');
+    
+    // Clear any cached vector store data to force fresh lookup
+    clearCacheFor(`VectorStore-${userId}`);
+    clearCacheFor(`getUserVectorStore-${userId}`);
+    clearCacheFor(cacheKey);
+    
+    try {
+      // First check if user already has a Vector Store (bypass cache for fresh data)
+      const { hasVectorStore, vectorStore } = await checkUserVectorStore();
 
-    if (hasVectorStore && vectorStore) {
-      // Return existing vector store information in the expected format
-      const existingResponse = {
-        message: 'Vector Store already exists',
-        vectorStore: {
-          id: vectorStore.id,
-          openai_vector_store_id: vectorStore.openai_vector_store_id,
-          name: vectorStore.name,
-          description: vectorStore.description || '',
-          status: vectorStore.status,
-          document_count: vectorStore.document_count,
-          created_at: vectorStore.created_at
-        }
-      };
-      return existingResponse;
+      if (hasVectorStore && vectorStore) {
+        console.log('✅ Found existing vector store:', vectorStore.openai_vector_store_id);
+        
+        // Return existing vector store information in the expected format
+        const existingResponse = {
+          message: 'Vector Store already exists',
+          vectorStore: {
+            id: vectorStore.id,
+            openai_vector_store_id: vectorStore.openai_vector_store_id,
+            name: vectorStore.name,
+            description: vectorStore.description || '',
+            status: vectorStore.status,
+            document_count: vectorStore.document_count,
+            created_at: vectorStore.created_at
+          }
+        };
+        return existingResponse;
+      }
+    } catch (error) {
+      console.warn('⚠️ Error checking existing vector store, will create new one:', error.message);
+      // Continue to create a new vector store
     }
     
-    // If no vector store exists, create a new one
+    console.log('🆕 No existing vector store found, creating new one...');
+    
+    // If no vector store exists or there was an error, create a new one
     const createResponse = await createVectorStore({ name, description });
+    console.log('✅ New vector store created:', createResponse.vectorStore.openai_vector_store_id);
     return createResponse;
   }, cacheKey);
 }

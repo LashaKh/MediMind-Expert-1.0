@@ -202,7 +202,7 @@ export interface FileValidationRules {
 }
 
 export const SUPPORTED_FILE_TYPES: Record<string, { ext: string; maxSize: number }> = {
-  'application/pdf': { ext: 'pdf', maxSize: 50 * 1024 * 1024 }, // 50MB
+  'application/pdf': { ext: 'pdf', maxSize: 500 * 1024 * 1024 }, // 500MB
   'application/msword': { ext: 'doc', maxSize: 25 * 1024 * 1024 }, // 25MB
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document': { ext: 'docx', maxSize: 25 * 1024 * 1024 },
   'text/plain': { ext: 'txt', maxSize: 10 * 1024 * 1024 }, // 10MB

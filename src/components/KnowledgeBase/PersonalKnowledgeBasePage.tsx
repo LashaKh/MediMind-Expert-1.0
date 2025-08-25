@@ -239,11 +239,18 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
       if (loadError) {
         setError(loadError.userMessage || 'Failed to load documents');
       } else {
-        setDocuments(result.documents.map(convertUserDocumentToLegacy));
+        const convertedDocs = result.documents.map(convertUserDocumentToLegacy);
+        console.log('🔍 CONVERTED DOCUMENTS FOR GROUPING:', convertedDocs.map(d => ({
+          id: d.id,
+          title: d.title,
+          tags: d.tags,
+          isChunked: d.tags?.includes('chunked-document')
+        })));
+        
+        setDocuments(convertedDocs);
         setTotal(result.total);
         setHasMore(result.hasMore);
         // Update the global personal document count
-
         setPersonalDocumentCount(result.total);
       }
     } finally {
@@ -308,8 +315,13 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
       return;
     }
 
+    console.log('🗑️ Starting document deletion:', { documentId, title });
+
     const [result, deleteError] = await safeAsync(async () => {
-      return await deleteUserDocument({ documentId, deleteFromOpenAI: true });
+      console.log('🚀 Calling deleteUserDocument with:', { documentId, deleteFromOpenAI: true });
+      const deleteResult = await deleteUserDocument({ documentId, deleteFromOpenAI: true });
+      console.log('📄 Delete result:', deleteResult);
+      return deleteResult;
     }, {
       context: `deleting document "${title}" from knowledge base`,
       severity: ErrorSeverity.HIGH,
@@ -567,6 +579,7 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
             searchTerm={filters.searchTerm}
             filterStatus={filters.status}
             total={total}
+            viewMode={viewMode}
             onDeleteDocument={handleDeleteDocument}
             onViewDocument={handleViewDocument}
             onDownloadDocument={handleDownloadDocument}

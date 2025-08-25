@@ -104,7 +104,7 @@ const ERROR_CODES = {
     category: ERROR_CATEGORIES.UPLOAD,
     severity: ERROR_SEVERITY.ERROR,
     httpStatus: 413,
-    userMessage: 'File too large. Maximum size allowed is 50MB.',
+    userMessage: 'File too large. Maximum size allowed is 500MB for PDFs, 25MB for other file types.',
     internalMessage: 'File size exceeds MAX_FILE_SIZE limit',
     i18nKey: 'errors.upload.fileSize'
   },

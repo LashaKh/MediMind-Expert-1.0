@@ -65,12 +65,12 @@ const SECURITY_METADATA_PATTERNS = {
 const SIZE_ANALYSIS_THRESHOLDS = {
   suspicious: {
     tinyFile: 100, // Files under 100 bytes might be suspicious
-    largeFile: 50 * 1024 * 1024, // Files over 50MB might need special handling
+    largeFile: 500 * 1024 * 1024, // Files over 500MB might need special handling
     emptyFile: 0 // Empty files
   },
   limits: {
-    maxProcessingSize: 100 * 1024 * 1024, // 100MB processing limit
-    warningSize: 25 * 1024 * 1024 // 25MB warning threshold
+    maxProcessingSize: 500 * 1024 * 1024, // 500MB processing limit
+    warningSize: 100 * 1024 * 1024 // 100MB warning threshold
   }
 };
 
@@ -379,8 +379,9 @@ function categorizeSizeRisk(size) {
   if (size < 1024) return 'small';
   if (size < 1024 * 1024) return 'medium';
   if (size < 10 * 1024 * 1024) return 'large';
-  if (size < 50 * 1024 * 1024) return 'very-large';
-  return 'huge';
+  if (size < 100 * 1024 * 1024) return 'very-large';
+  if (size < 500 * 1024 * 1024) return 'huge';
+  return 'massive';
 }
 
 /**

@@ -45,6 +45,7 @@ import {
   X,
   ChevronDown,
   ChevronUp,
+  ChevronRight as ChevronRightIcon,
   ArrowUpDown,
   MoreHorizontal,
   FilterX,
@@ -97,6 +98,8 @@ type DisplayDensity = 'comfortable' | 'compact' | 'spacious';
 
 interface PersonalLibraryState {
   documents: DocumentWithMetadata[];
+  documentGroups: DocumentGroup[];
+  expandedGroups: Set<string>;
   selectedDocuments: Set<string>;
   viewMode: ViewMode;
   sortBy: SortBy;
@@ -105,6 +108,98 @@ interface PersonalLibraryState {
   showMetadata: boolean;
   showPreview: boolean;
 }
+
+// Group chunked documents together
+interface DocumentGroup {
+  id: string;
+  isChunked: boolean;
+  baseTitle: string;
+  documents: DocumentWithMetadata[];
+  totalParts?: number;
+  isExpanded?: boolean;
+}
+
+// Utility function to group documents
+const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
+  console.log('🔍 PREMIUM GROUPING DEBUG: Starting to group documents:', documents.length);
+  
+  const chunkedGroups = new Map<string, DocumentWithMetadata[]>();
+  const regularDocuments: DocumentWithMetadata[] = [];
+
+  // Separate chunked and regular documents
+  documents.forEach(doc => {
+    console.log('📄 Checking document:', doc.title, 'Tags:', doc.tags);
+    const isChunked = doc.tags?.includes('chunked-document');
+    console.log('🧩 Is chunked?', isChunked);
+    
+    if (isChunked) {
+      // Extract base title by removing " - Part X/Y"
+      const baseTitle = doc.title.replace(/ - Part \d+\/\d+$/, '');
+      console.log('📝 Base title extracted:', baseTitle);
+      
+      if (!chunkedGroups.has(baseTitle)) {
+        chunkedGroups.set(baseTitle, []);
+      }
+      chunkedGroups.get(baseTitle)!.push(doc);
+      console.log('✅ Added to chunked group:', baseTitle);
+    } else {
+      regularDocuments.push(doc);
+      console.log('📋 Added to regular documents');
+    }
+  });
+
+  const groups: DocumentGroup[] = [];
+
+  // Add regular documents as individual groups
+  regularDocuments.forEach(doc => {
+    groups.push({
+      id: doc.id,
+      isChunked: false,
+      baseTitle: doc.title,
+      documents: [doc]
+    });
+  });
+
+  // Add chunked document groups
+  chunkedGroups.forEach((chunks, baseTitle) => {
+    // Sort chunks by part number
+    chunks.sort((a, b) => {
+      const aPartMatch = a.title.match(/Part (\d+)\/\d+$/);
+      const bPartMatch = b.title.match(/Part (\d+)\/\d+$/);
+      const aPart = aPartMatch ? parseInt(aPartMatch[1]) : 0;
+      const bPart = bPartMatch ? parseInt(bPartMatch[1]) : 0;
+      return aPart - bPart;
+    });
+
+    const totalPartsMatch = chunks[0]?.title.match(/Part \d+\/(\d+)$/);
+    const totalParts = totalPartsMatch ? parseInt(totalPartsMatch[1]) : chunks.length;
+
+    groups.push({
+      id: `chunked-${baseTitle}`,
+      isChunked: true,
+      baseTitle,
+      documents: chunks,
+      totalParts,
+      isExpanded: false
+    });
+  });
+
+  const sortedGroups = groups.sort((a, b) => {
+    // Sort by latest document date in each group
+    const aLatest = Math.max(...a.documents.map(d => new Date(d.created_at).getTime()));
+    const bLatest = Math.max(...b.documents.map(d => new Date(d.created_at).getTime()));
+    return bLatest - aLatest;
+  });
+  
+  console.log('🎯 PREMIUM FINAL GROUPS:', sortedGroups.map(g => ({
+    id: g.id,
+    isChunked: g.isChunked,
+    baseTitle: g.baseTitle,
+    documentCount: g.documents.length
+  })));
+  
+  return sortedGroups;
+};
 
 // Convert UserDocument to DocumentWithMetadata for compatibility
 const convertUserDocumentToLegacy = (doc: UserDocument): DocumentWithMetadata => {
@@ -190,6 +285,237 @@ const PremiumFileIcon: React.FC<{ fileType: string; className?: string; showGrad
   }
   
   return <Icon className={`${className} ${solid}`} />;
+};
+
+// Chunked Document Group Component
+const ChunkedDocumentCard: React.FC<{
+  group: DocumentGroup;
+  viewMode: ViewMode;
+  displayDensity: DisplayDensity;
+  isExpanded: boolean;
+  selectedDocuments: Set<string>;
+  onToggle: () => void;
+  onView: (document: DocumentWithMetadata) => void;
+  onDelete: (documentId: string, title: string) => void;
+  onSelect: (id: string) => void;
+  index: number;
+}> = ({ group, viewMode, displayDensity, isExpanded, selectedDocuments, onToggle, onView, onDelete, onSelect, index }) => {
+  const prefersReducedMotion = useReducedMotion();
+  
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
+    visible: { 
+      opacity: 1, y: 0, scale: 1,
+      transition: {
+        duration: prefersReducedMotion ? 0 : 0.5,
+        delay: prefersReducedMotion ? 0 : index * 0.1,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      }
+    },
+    hover: { scale: 1.02, y: -4, transition: { duration: 0.2 } },
+    tap: { scale: 0.98 }
+  };
+
+  if (viewMode === 'list') {
+    return (
+      <motion.div
+        variants={cardVariants}
+        initial="hidden"
+        animate="visible"
+        whileHover={!prefersReducedMotion ? "hover" : undefined}
+        whileTap={!prefersReducedMotion ? "tap" : undefined}
+        className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300"
+      >
+        {/* Group Header */}
+        <div 
+          className="p-4 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl transition-colors"
+          onClick={onToggle}
+        >
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              {isExpanded ? (
+                <ChevronDown className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              ) : (
+                <ChevronRightIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              )}
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-800 rounded-lg flex items-center justify-center">
+                <Layers className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              </div>
+            </div>
+            
+            <div className="flex-1">
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
+                {group.baseTitle}
+              </h3>
+              <div className="flex items-center space-x-4 mt-1">
+                <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                  📚 {group.documents.length}/{group.totalParts} parts
+                </span>
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                  Chunked Document
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={(e) => { e.stopPropagation(); onView(group.documents[0]); }}
+              className="p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800"
+              title="View first part"
+            >
+              <FileText className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Expanded Parts */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="bg-gray-50 dark:bg-gray-800/50 border-t border-blue-200 dark:border-blue-800"
+            >
+              <div className="p-2 space-y-1">
+                {group.documents.map((document, partIndex) => (
+                  <div
+                    key={document.id}
+                    className="flex items-center justify-between p-3 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors border-l-4 border-blue-200 dark:border-blue-700"
+                  >
+                    <div className="flex items-center space-x-3 flex-1">
+                      <div className={`
+                        w-4 h-4 rounded border transition-all duration-200
+                        ${selectedDocuments.has(document.id)
+                          ? 'bg-blue-500 border-blue-500'
+                          : 'border-gray-300 hover:border-blue-400'
+                        }
+                        flex items-center justify-center cursor-pointer
+                      `}
+                      onClick={() => onSelect(document.id)}>
+                        {selectedDocuments.has(document.id) && <CheckCircle className="w-3 h-3 text-white" />}
+                      </div>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                        Part {partIndex + 1} • {formatFileSize(document.file_size || 0)}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <button
+                        onClick={() => onView(document)}
+                        className="p-1.5 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800"
+                        title="View this part"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => onDelete(document.id, document.title)}
+                        className="p-1.5 text-gray-400 hover:text-red-600 transition-colors rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20"
+                        title="Delete this part"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    );
+  }
+
+  // Grid View
+  return (
+    <motion.div
+      variants={cardVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover={!prefersReducedMotion ? "hover" : undefined}
+      whileTap={!prefersReducedMotion ? "tap" : undefined}
+      className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+    >
+      {/* Header */}
+      <div className="p-6">
+        <div className="flex items-start space-x-3 mb-4">
+          <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Layers className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm leading-tight mb-2 line-clamp-2">
+              {group.baseTitle}
+            </h3>
+            <div className="flex items-center space-x-2">
+              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
+                📚 {group.documents.length}/{group.totalParts} parts
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700">
+            🧩 Chunked Document
+          </span>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => onView(group.documents[0])}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-3 rounded-lg transition-colors"
+          >
+            View Document
+          </button>
+          <button
+            onClick={onToggle}
+            className="p-2 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-300 dark:hover:border-blue-600"
+            title={isExpanded ? 'Hide parts' : 'Show all parts'}
+          >
+            {isExpanded ? (
+              <ChevronUp className="w-4 h-4" />
+            ) : (
+              <ChevronDown className="w-4 h-4" />
+            )}
+          </button>
+        </div>
+
+        {/* Expanded parts list */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-700 space-y-2"
+            >
+              {group.documents.map((document, partIndex) => (
+                <div key={document.id} className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600 dark:text-gray-400 truncate flex-1">
+                    Part {partIndex + 1} • {formatFileSize(document.file_size || 0)}
+                  </span>
+                  <div className="flex items-center space-x-1 ml-2">
+                    <button
+                      onClick={() => onView(document)}
+                      className="p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                      title="View this part"
+                    >
+                      <Eye className="w-3 h-3" />
+                    </button>
+                    <button
+                      onClick={() => onDelete(document.id, document.title)}
+                      className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                      title="Delete this part"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
 };
 
 // Sophisticated Document Card Component
@@ -498,6 +824,8 @@ export const PersonalLibraryPremium: React.FC = () => {
   const { setPersonalDocumentCount } = useAppStore();
   const [state, setState] = useState<PersonalLibraryState>({
     documents: [],
+    documentGroups: [],
+    expandedGroups: new Set(),
     selectedDocuments: new Set(),
     viewMode: 'grid',
     sortBy: 'date',
@@ -606,9 +934,20 @@ export const PersonalLibraryPremium: React.FC = () => {
       if (loadError) {
         setError(loadError.userMessage || 'Failed to load documents');
       } else {
+        const convertedDocs = result.documents.map(convertUserDocumentToLegacy);
+        console.log('🔍 PREMIUM CONVERTED DOCUMENTS FOR GROUPING:', convertedDocs.map(d => ({
+          id: d.id,
+          title: d.title,
+          tags: d.tags,
+          isChunked: d.tags?.includes('chunked-document')
+        })));
+        
+        const documentGroups = groupDocuments(convertedDocs);
+        
         setState(prev => ({
           ...prev,
-          documents: result.documents.map(convertUserDocumentToLegacy)
+          documents: convertedDocs,
+          documentGroups: documentGroups
         }));
         setTotal(result.total);
         setHasMore(result.hasMore);
@@ -624,50 +963,76 @@ export const PersonalLibraryPremium: React.FC = () => {
     loadDocuments();
   }, [user, filters]);
 
-  // Filtered and sorted documents
-  const processedDocuments = useMemo(() => {
-    let filtered = [...state.documents];
+  // Filtered and sorted document groups
+  const processedDocumentGroups = useMemo(() => {
+    let filteredGroups = [...state.documentGroups];
 
-    // Date range filter
-    if (filters.dateRange.from) {
-      const fromDate = new Date(filters.dateRange.from);
-      filtered = filtered.filter(doc => new Date(doc.created_at) >= fromDate);
-    }
-    
-    if (filters.dateRange.to) {
-      const toDate = new Date(filters.dateRange.to);
-      filtered = filtered.filter(doc => new Date(doc.created_at) <= toDate);
-    }
+    // Apply filters to groups
+    filteredGroups = filteredGroups.filter(group => {
+      // Check if any document in the group matches date range filters
+      const matchesDateRange = group.documents.some(doc => {
+        let matches = true;
+        
+        if (filters.dateRange.from) {
+          const fromDate = new Date(filters.dateRange.from);
+          matches = matches && new Date(doc.created_at) >= fromDate;
+        }
+        
+        if (filters.dateRange.to) {
+          const toDate = new Date(filters.dateRange.to);
+          matches = matches && new Date(doc.created_at) <= toDate;
+        }
+        
+        return matches;
+      });
+      
+      return matchesDateRange;
+    });
 
-    // Sort documents
-    filtered.sort((a, b) => {
+    // Sort groups
+    filteredGroups.sort((a, b) => {
       let comparison = 0;
+      
+      // For sorting, use the primary document (first for chunked, only for regular)
+      const aPrimary = a.documents[0];
+      const bPrimary = b.documents[0];
       
       switch (state.sortBy) {
         case 'name':
-          comparison = a.title.localeCompare(b.title);
+          comparison = a.baseTitle.localeCompare(b.baseTitle);
           break;
         case 'date':
-          comparison = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+          const aLatest = Math.max(...a.documents.map(d => new Date(d.created_at).getTime()));
+          const bLatest = Math.max(...b.documents.map(d => new Date(d.created_at).getTime()));
+          comparison = aLatest - bLatest;
           break;
         case 'size':
-          comparison = (a.file_size || 0) - (b.file_size || 0);
+          const aTotalSize = a.documents.reduce((sum, doc) => sum + (doc.file_size || 0), 0);
+          const bTotalSize = b.documents.reduce((sum, doc) => sum + (doc.file_size || 0), 0);
+          comparison = aTotalSize - bTotalSize;
           break;
         case 'type':
-          comparison = a.file_type.localeCompare(b.file_type);
+          comparison = aPrimary.file_type.localeCompare(bPrimary.file_type);
           break;
         case 'category':
-          comparison = a.category.localeCompare(b.category);
+          comparison = aPrimary.category.localeCompare(bPrimary.category);
           break;
         default:
-          comparison = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+          const aDefaultLatest = Math.max(...a.documents.map(d => new Date(d.created_at).getTime()));
+          const bDefaultLatest = Math.max(...b.documents.map(d => new Date(d.created_at).getTime()));
+          comparison = aDefaultLatest - bDefaultLatest;
       }
       
       return state.sortOrder === 'asc' ? comparison : -comparison;
     });
 
-    return filtered;
-  }, [state.documents, filters, state.sortBy, state.sortOrder]);
+    return filteredGroups;
+  }, [state.documentGroups, filters, state.sortBy, state.sortOrder]);
+
+  // Get flattened documents for stats
+  const processedDocuments = useMemo(() => {
+    return processedDocumentGroups.flatMap(group => group.documents);
+  }, [processedDocumentGroups]);
 
   // Document stats
   const documentStats = useMemo(() => {
@@ -715,6 +1080,15 @@ export const PersonalLibraryPremium: React.FC = () => {
       selectedDocuments: prev.selectedDocuments.size === processedDocuments.length
         ? new Set()
         : new Set(processedDocuments.map(doc => doc.id))
+    }));
+  };
+
+  const toggleGroup = (groupId: string) => {
+    setState(prev => ({
+      ...prev,
+      expandedGroups: prev.expandedGroups.has(groupId)
+        ? new Set([...prev.expandedGroups].filter(id => id !== groupId))
+        : new Set([...prev.expandedGroups, groupId])
     }));
   };
 
@@ -1273,7 +1647,7 @@ export const PersonalLibraryPremium: React.FC = () => {
               </div>
             </motion.div>
           </div>
-        ) : processedDocuments.length === 0 ? (
+        ) : processedDocumentGroups.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1319,11 +1693,14 @@ export const PersonalLibraryPremium: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  {processedDocuments.length} document{processedDocuments.length !== 1 ? 's' : ''}
+                  {processedDocumentGroups.length} item{processedDocumentGroups.length !== 1 ? 's' : ''} 
+                  <span className="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">
+                    ({processedDocuments.length} document{processedDocuments.length !== 1 ? 's' : ''})
+                  </span>
                 </h2>
                 {total > processedDocuments.length && (
                   <span className="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 text-sm rounded-full">
-                    Showing first {processedDocuments.length} of {total}
+                    Showing first {processedDocuments.length} of {total} documents
                   </span>
                 )}
               </div>
@@ -1339,38 +1716,70 @@ export const PersonalLibraryPremium: React.FC = () => {
                 className={`grid ${getGridClasses()}`}
                 staggerDelay={0.05}
               >
-                {processedDocuments.map((document, index) => (
-                  <DocumentCard
-                    key={document.id}
-                    document={document}
-                    viewMode={state.viewMode}
-                    displayDensity={state.displayDensity}
-                    isSelected={state.selectedDocuments.has(document.id)}
-                    showMetadata={state.showMetadata}
-                    onSelect={handleDocumentSelect}
-                    onView={() => handleViewDocument(document)}
-                    onDelete={() => handleDeleteDocument(document.id, document.title)}
-                    onDownload={() => handleDownloadDocument(document)}
-                    index={index}
-                  />
+                {processedDocumentGroups.map((group, index) => (
+                  group.isChunked ? (
+                    <ChunkedDocumentCard
+                      key={group.id}
+                      group={group}
+                      viewMode={state.viewMode}
+                      displayDensity={state.displayDensity}
+                      isExpanded={state.expandedGroups.has(group.id)}
+                      selectedDocuments={state.selectedDocuments}
+                      onToggle={() => toggleGroup(group.id)}
+                      onView={handleViewDocument}
+                      onDelete={handleDeleteDocument}
+                      onSelect={handleDocumentSelect}
+                      index={index}
+                    />
+                  ) : (
+                    <DocumentCard
+                      key={group.documents[0].id}
+                      document={group.documents[0]}
+                      viewMode={state.viewMode}
+                      displayDensity={state.displayDensity}
+                      isSelected={state.selectedDocuments.has(group.documents[0].id)}
+                      showMetadata={state.showMetadata}
+                      onSelect={handleDocumentSelect}
+                      onView={() => handleViewDocument(group.documents[0])}
+                      onDelete={() => handleDeleteDocument(group.documents[0].id, group.documents[0].title)}
+                      onDownload={() => handleDownloadDocument(group.documents[0])}
+                      index={index}
+                    />
+                  )
                 ))}
               </StaggeredGrid>
             ) : (
               <div className="space-y-3">
-                {processedDocuments.map((document, index) => (
-                  <DocumentCard
-                    key={document.id}
-                    document={document}
-                    viewMode={state.viewMode}
-                    displayDensity={state.displayDensity}
-                    isSelected={state.selectedDocuments.has(document.id)}
-                    showMetadata={state.showMetadata}
-                    onSelect={handleDocumentSelect}
-                    onView={() => handleViewDocument(document)}
-                    onDelete={() => handleDeleteDocument(document.id, document.title)}
-                    onDownload={() => handleDownloadDocument(document)}
-                    index={index}
-                  />
+                {processedDocumentGroups.map((group, index) => (
+                  group.isChunked ? (
+                    <ChunkedDocumentCard
+                      key={group.id}
+                      group={group}
+                      viewMode={state.viewMode}
+                      displayDensity={state.displayDensity}
+                      isExpanded={state.expandedGroups.has(group.id)}
+                      selectedDocuments={state.selectedDocuments}
+                      onToggle={() => toggleGroup(group.id)}
+                      onView={handleViewDocument}
+                      onDelete={handleDeleteDocument}
+                      onSelect={handleDocumentSelect}
+                      index={index}
+                    />
+                  ) : (
+                    <DocumentCard
+                      key={group.documents[0].id}
+                      document={group.documents[0]}
+                      viewMode={state.viewMode}
+                      displayDensity={state.displayDensity}
+                      isSelected={state.selectedDocuments.has(group.documents[0].id)}
+                      showMetadata={state.showMetadata}
+                      onSelect={handleDocumentSelect}
+                      onView={() => handleViewDocument(group.documents[0])}
+                      onDelete={() => handleDeleteDocument(group.documents[0].id, group.documents[0].title)}
+                      onDownload={() => handleDownloadDocument(group.documents[0])}
+                      index={index}
+                    />
+                  )
                 ))}
               </div>
             )}

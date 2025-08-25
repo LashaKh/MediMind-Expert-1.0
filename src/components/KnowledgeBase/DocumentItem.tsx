@@ -8,18 +8,20 @@ interface DocumentItemProps {
   onDelete: () => void;
   onView: () => void;
   onDownload: () => void;
+  isChunkItem?: boolean;
 }
 
 export const DocumentItem: React.FC<DocumentItemProps> = ({
   document,
   onDelete,
   onView,
-  onDownload
+  onDownload,
+  isChunkItem = false
 }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="p-4 sm:p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200 group">
+    <div className={`p-4 sm:p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200 group ${isChunkItem ? 'pl-8 bg-gray-25 dark:bg-gray-800' : ''}`}>
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-3 sm:space-x-4 flex-1 min-w-0">
           {/* File Icon */}

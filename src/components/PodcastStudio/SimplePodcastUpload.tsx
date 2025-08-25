@@ -83,8 +83,8 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
       return;
     }
 
-    // Validate file size (50MB for PDF, 25MB for others)
-    const maxSize = selectedFile.type === 'application/pdf' ? 50 * 1024 * 1024 : 25 * 1024 * 1024;
+    // Validate file size (500MB for PDF, 25MB for others)
+    const maxSize = selectedFile.type === 'application/pdf' ? 500 * 1024 * 1024 : 25 * 1024 * 1024;
     if (selectedFile.size > maxSize) {
       setError(`File too large. Maximum size is ${maxSize / 1024 / 1024}MB`);
       return;

@@ -16,14 +16,15 @@ const RATE_LIMIT_CONFIG = {
   DEFAULT_LIMITS: {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxUploads: 10,
-    maxTotalSize: 100 * 1024 * 1024, // 100MB total per window
-    maxProcessingTime: 300 * 1000, // 5 minutes total processing time
+    maxTotalSize: 500 * 1024 * 1024, // 500MB total per window (for single massive files)
+    maxProcessingTime: 900 * 1000, // 15 minutes total processing time
   },
   SIZE_PENALTIES: {
     SMALL_FILE: 1.0,    // < 1MB
     MEDIUM_FILE: 1.5,   // 1-10MB
     LARGE_FILE: 2.0,    // 10-25MB
-    HUGE_FILE: 3.0,     // > 25MB
+    HUGE_FILE: 3.0,     // 25-100MB
+    MASSIVE_FILE: 5.0,  // 100-500MB
   }
 };
 
@@ -31,7 +32,9 @@ const RATE_LIMIT_CONFIG = {
 const rateLimitStore = new Map();
 
 function calculateFileSizePenalty(fileSize: number): number {
-  if (fileSize > 25 * 1024 * 1024) {
+  if (fileSize > 100 * 1024 * 1024) {
+    return RATE_LIMIT_CONFIG.SIZE_PENALTIES.MASSIVE_FILE;
+  } else if (fileSize > 25 * 1024 * 1024) {
     return RATE_LIMIT_CONFIG.SIZE_PENALTIES.HUGE_FILE;
   } else if (fileSize > 10 * 1024 * 1024) {
     return RATE_LIMIT_CONFIG.SIZE_PENALTIES.LARGE_FILE;
