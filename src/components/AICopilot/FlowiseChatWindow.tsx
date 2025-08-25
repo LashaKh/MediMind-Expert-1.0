@@ -98,6 +98,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   const [showConversationList, setShowConversationList] = useState(false);
   const [showCaseModal, setShowCaseModal] = useState(false);
   const [showCaseListModal, setShowCaseListModal] = useState(false);
+  const [activeCase, setActiveCase] = useState<PatientCase | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isPulsing, setIsPulsing] = useState(false);
   
