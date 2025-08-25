@@ -35,6 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
   const firstNavItemRef = useRef<HTMLAnchorElement>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
@@ -133,6 +134,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
+  // Debounced hover handlers to reduce flickering
+  const handleMouseEnter = (path: string) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setHoveredItem(path);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoveredItem(null);
+    }, 50);
+  };
+
   // Swipe to close functionality for mobile
   const onTouchStart = (e: React.TouchEvent) => {
     if (!isMobile || !isOpen) return;
@@ -218,6 +236,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
     }
   }, [isOpen, isMobile, t]);
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <>
       {/* Enhanced Sidebar with Glassmorphism and Modern Design */}
@@ -262,13 +289,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           ${shouldOptimize ? 'shadow-lg' : 'shadow-2xl shadow-black/5 dark:shadow-black/20'}
           transition-all duration-700
         `}>
-          {/* Animated gradient overlay - desktop only */}
+          {/* Subtle gradient overlay - desktop only */}
           {!shouldOptimize && (
             <div className={`
-              absolute inset-0 opacity-50
+              absolute inset-0 opacity-30
               bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-cyan-500/10
               dark:from-blue-400/10 dark:via-purple-400/5 dark:to-cyan-400/10
-              animate-pulse-glow
+              transition-opacity duration-500
             `} />
           )}
           
@@ -292,10 +319,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
               ${isMobile && window.innerHeight < 500 ? 'space-x-2' : 'space-x-3'}
             `}>
               <div className="relative flex-shrink-0">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg blur animate-pulse-glow opacity-50" />
                 <div className={`
                   relative bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg shadow-lg overflow-hidden 
                   ${isMobile && window.innerHeight < 500 ? 'w-8 h-8' : 'w-10 h-10'}
+                  transition-shadow duration-300
                 `}>
                   {profile?.profile_picture_url ? (
                     <img
@@ -387,8 +414,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                     ref={index === 0 ? firstNavItemRef : undefined}
                     to={item.path}
                     onClick={onClose}
-                    onMouseEnter={() => setHoveredItem(item.path)}
-                    onMouseLeave={() => setHoveredItem(null)}
+                    onMouseEnter={() => handleMouseEnter(item.path)}
+                    onMouseLeave={handleMouseLeave}
                     role="listitem"
                     aria-current={active ? 'page' : undefined}
                     className={`
@@ -400,17 +427,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                     {/* Subtle to Colorful Card Design */}
                     <div 
                       className={`
-                        relative overflow-hidden rounded-xl transition-all duration-300
+                        relative overflow-hidden rounded-xl transition-all duration-300 ease-in-out
                         ${isCollapsed && !isMobile ? 'w-12 h-12 mx-auto' : 'w-full h-11'}
                         ${active 
-                          ? `bg-gradient-to-r ${item.color} shadow-lg ${item.shadowColor} ${shouldOptimize ? '' : 'transform scale-[1.02]'}`
-                          : `bg-gray-100/80 dark:bg-gray-800/80 hover:shadow-md ${shouldOptimize ? '' : 'hover:transform hover:scale-[1.01]'} border border-gray-300/60 dark:border-gray-600/60 hover:border-white/20 dark:hover:border-white/10`
+                          ? `bg-gradient-to-r ${item.color} shadow-lg ${item.shadowColor}`
+                          : `bg-gray-100/80 dark:bg-gray-800/80 hover:shadow-md border border-gray-300/60 dark:border-gray-600/60 hover:border-white/20 dark:hover:border-white/10`
                         }
                         ${shouldOptimize ? '' : 'backdrop-blur-sm'}
+                        will-change-auto
                       `}
                       style={!active && isHovered ? {
                         background: getGradientColors(item.color),
-                      } : {}}
+                        transition: 'all 300ms ease-in-out',
+                      } : {
+                        transition: 'all 300ms ease-in-out',
+                      }}
                     >
                       
                       {/* Background Pattern */}
@@ -432,7 +463,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                         {/* Icon */}
                         <div className="flex items-center justify-center flex-shrink-0">
                           <Icon className={`
-                            transition-all duration-300
+                            transition-all duration-300 ease-in-out
                             ${isCollapsed && !isMobile ? 'w-6 h-6' : 'w-5 h-5'}
                             ${active 
                               ? 'text-white drop-shadow-sm' 
@@ -440,7 +471,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                                 ? 'text-white drop-shadow-sm'
                                 : 'text-black dark:text-gray-200'
                             }
-                            ${isHovered ? 'scale-110' : active ? 'scale-105' : 'scale-100'}
+                            ${isHovered && !active ? 'scale-105' : 'scale-100'}
                           `} />
                         </div>
                         
@@ -468,9 +499,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                         <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-white/80 rounded-r-full shadow-sm" />
                       )}
                       
-                      {/* Hover Shine Effect */}
-                      {isHovered && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+                      {/* Subtle Hover Highlight */}
+                      {isHovered && !active && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-80 transition-opacity duration-300" />
                       )}
                     </div>
 
