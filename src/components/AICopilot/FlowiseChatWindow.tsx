@@ -75,6 +75,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     activeConversationId,
     setActiveConversation,
     createCase,
+    updateCase,
     activeCase,
     setActiveCase,
     resetCaseContext,
@@ -99,6 +100,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   const [showConversationList, setShowConversationList] = useState(false);
   const [showCaseModal, setShowCaseModal] = useState(false);
   const [showCaseListModal, setShowCaseListModal] = useState(false);
+  const [editingCase, setEditingCase] = useState<PatientCase | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isPulsing, setIsPulsing] = useState(false);
   
@@ -515,6 +517,9 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   const handleCaseCreate = async (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newCase = await createCase(caseData);
     
+    // Reload cases to ensure the list is up-to-date
+    await loadCases();
+    
     // Create a new conversation for this case
     createNewConversation(
       `Case: ${newCase.title}`, 
@@ -536,6 +541,37 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     addMessage(caseIntroMessage);
     
     return newCase;
+  };
+
+  // Handle case update
+  const handleCaseUpdate = async (caseId: string, caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => {
+    updateCase(caseId, caseData);
+    
+    // Reload cases to ensure the list is up-to-date
+    await loadCases();
+    
+    // Return the updated case (the store should handle this)
+    const updatedCase = caseHistory.find(c => c.id === caseId);
+    if (updatedCase) {
+      // Update the case data with the new information
+      Object.assign(updatedCase, caseData);
+      return updatedCase;
+    }
+    
+    // Fallback - create a minimal updated case object
+    return {
+      id: caseId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...caseData
+    } as PatientCase;
+  };
+
+  // Handle edit case
+  const handleEditCase = (caseItem: PatientCase) => {
+    setEditingCase(caseItem);
+    setShowCaseModal(true);
+    setShowCaseListModal(false); // Close the case list modal
   };
 
   // Handle case reset - Enhanced with better debugging
@@ -591,7 +627,10 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
           addMessage(welcomeMessage);
         }, 100);
         
-        // Step 7: Force re-render by clearing error state
+        // Step 7: Reload cases to ensure case list is up-to-date
+        await loadCases();
+        
+        // Step 8: Force re-render by clearing error state
         setChatError(undefined);
       },
       {
@@ -607,7 +646,9 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   };
 
   // Handle viewing case details (could expand to show full case modal later)
-  const handleViewCase = () => {
+  const handleViewCase = async () => {
+    // Reload cases before showing the modal to ensure fresh data
+    await loadCases();
     // For now, we'll show the case list modal to allow case switching
     setShowCaseListModal(true);
   };
@@ -979,7 +1020,10 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => setShowCaseListModal(true)}
+                          onClick={async () => {
+                            await loadCases();
+                            setShowCaseListModal(true);
+                          }}
                           className={`
                             group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
                             bg-white/80 hover:bg-violet-50/80
@@ -1241,8 +1285,13 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
       <CaseCreationModal
         isOpen={showCaseModal}
-        onClose={() => setShowCaseModal(false)}
+        onClose={() => {
+          setShowCaseModal(false);
+          setEditingCase(null); // Reset editing case when modal closes
+        }}
         onCaseCreate={handleCaseCreate}
+        onCaseUpdate={handleCaseUpdate}
+        editingCase={editingCase}
         specialty={profile?.medical_specialty as 'cardiology' | 'obgyn'}
       />
 
@@ -1251,6 +1300,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         onClose={() => setShowCaseListModal(false)}
         cases={caseHistory}
         onCaseSelect={handleCaseSelect}
+        onEditCase={handleEditCase}
         activeCase={activeCase}
       />
 

@@ -5,7 +5,7 @@ import {
   Activity, Brain, Heart, Stethoscope, ArrowRight, MoreHorizontal,
   Download, Share2, Archive, Copy, Tag, Users, TrendingUp, Zap,
   Grid3X3, List, SortAsc, SortDesc, Plus, Sparkles, ChevronDown,
-  AlertTriangle, CheckCircle, Clock4, User, Shield, MessageSquare
+  AlertTriangle, CheckCircle, Clock4, User, Shield, MessageSquare, Edit3
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -19,6 +19,7 @@ interface CaseListModalProps {
   onClose: () => void;
   cases: PatientCase[];
   onCaseSelect: (caseItem: PatientCase) => void;
+  onEditCase?: (caseItem: PatientCase) => void;
   activeCase?: PatientCase | null;
   className?: string;
 }
@@ -32,6 +33,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
   onClose,
   cases,
   onCaseSelect,
+  onEditCase,
   activeCase,
   className = ''
 }) => {
@@ -109,6 +111,13 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
   const handleDeleteClick = (e: React.MouseEvent, caseItem: PatientCase) => {
     e.stopPropagation();
     setShowDeleteConfirm({ case: caseItem });
+  };
+
+  const handleEditClick = (e: React.MouseEvent, caseItem: PatientCase) => {
+    e.stopPropagation();
+    if (onEditCase) {
+      onEditCase(caseItem);
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -460,11 +469,23 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                           </div>
                           
                           <div className="flex items-center space-x-2">
+                            {onEditCase && (
+                              <Button
+                                onClick={(e) => handleEditClick(e, caseItem)}
+                                variant="ghost"
+                                size="sm"
+                                className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-blue-50 hover:text-blue-600"
+                                title="Edit case"
+                              >
+                                <Edit3 className="w-4 h-4" />
+                              </Button>
+                            )}
                             <Button
                               onClick={(e) => handleDeleteClick(e, caseItem)}
                               variant="ghost"
                               size="sm"
                               className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-50 hover:text-red-600"
+                              title="Delete case"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>

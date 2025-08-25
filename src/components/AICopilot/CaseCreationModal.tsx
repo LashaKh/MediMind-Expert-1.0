@@ -13,6 +13,8 @@ interface CaseCreationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCaseCreate: (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => Promise<PatientCase>;
+  onCaseUpdate?: (caseId: string, caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => Promise<PatientCase>;
+  editingCase?: PatientCase | null;
   specialty?: 'cardiology' | 'obgyn';
   className?: string;
 }
@@ -39,6 +41,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
   isOpen,
   onClose,
   onCaseCreate,
+  onCaseUpdate,
+  editingCase,
   specialty,
   className = ''
 }) => {
@@ -58,6 +62,31 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [attachments, setAttachments] = useState<CaseAttachment[]>([]);
   const [isProcessingFiles, setIsProcessingFiles] = useState(false);
+
+  // Populate form data when editing a case
+  useEffect(() => {
+    if (editingCase) {
+      setFormData({
+        title: editingCase.title || '',
+        description: editingCase.description || '',
+        anonymizedInfo: editingCase.patientName || editingCase.anonymizedInfo || '',
+        category: editingCase.category || '',
+        tags: editingCase.metadata?.tags ? editingCase.metadata.tags.join(', ') : '',
+        complexity: editingCase.metadata?.complexity || 'medium'
+      });
+    } else {
+      // Reset form for new case
+      setFormData({
+        title: '',
+        description: '',
+        anonymizedInfo: '',
+        category: '',
+        tags: '',
+        complexity: 'medium'
+      });
+    }
+    setErrors({});
+  }, [editingCase, isOpen]);
 
   // Animation control
   useEffect(() => {
@@ -130,7 +159,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
     setIsSubmitting(true);
     setIsProcessingFiles(true);
     
-    const [createdCase, error] = await safeAsync(
+    const [result, error] = await safeAsync(
       async () => {
         // Process attachments if any
         let processedAttachments: ProcessedAttachment[] = [];
@@ -142,7 +171,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
         let attachmentMetadata: any[] = [];
         if (processedAttachments.length > 0 && user) {
           const { attachmentMetadata: attachments } = await uploadCaseAttachments(
-            crypto.randomUUID(), // temporary ID for file organization
+            editingCase?.id || crypto.randomUUID(), // Use case ID or temporary ID for file organization
             user.id, 
             processedAttachments
           );
@@ -154,8 +183,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
           title: formData.title.trim(),
           description: formData.description.trim(),
           anonymizedInfo: formData.anonymizedInfo.trim(),
-          specialty: specialty,
-          status: 'active',
+          specialty: specialty || editingCase?.specialty,
+          status: editingCase?.status || 'active',
           metadata: {
             category: formData.category.trim() || undefined,
             tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
@@ -165,11 +194,15 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
           }
         };
 
-        // Create the case with attachment metadata
-        return await onCaseCreate(caseData);
+        // Create or update the case
+        if (editingCase && onCaseUpdate) {
+          return await onCaseUpdate(editingCase.id, caseData);
+        } else {
+          return await onCaseCreate(caseData);
+        }
       },
       {
-        context: 'create patient case with attachments',
+        context: editingCase ? 'update patient case with attachments' : 'create patient case with attachments',
         showToast: true,
         severity: ErrorSeverity.HIGH
       }
@@ -321,7 +354,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-1">
-                  Create New Case
+                  {editingCase ? 'Edit Case Study' : 'Create New Case'}
                 </h1>
                 <p className={`text-lg text-gray-600 bg-gradient-to-r ${specialtyConfig.gradient} bg-clip-text text-transparent font-medium`}>
                   {specialtyConfig.title}
@@ -683,12 +716,12 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   {isSubmitting ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                      Creating Case...
+{editingCase ? 'Updating Case...' : 'Creating Case...'}
                     </>
                   ) : (
                     <>
                       <Save className="w-4 h-4 mr-2" />
-                      Create Case
+                      {editingCase ? 'Update Case' : 'Create Case'}
                     </>
                   )}
                 </Button>
