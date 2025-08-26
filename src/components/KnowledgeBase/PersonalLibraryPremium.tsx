@@ -1,95 +1,78 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence, useReducedMotion, useSpring, useTransform, useScroll, useMotionValue } from 'framer-motion';
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
   BookOpen, 
-  Plus, 
   RefreshCw, 
   Upload,
   Search,
   Filter,
   Grid,
   List,
-  Calendar,
   File,
   FileText,
   FileImage,
   FileSpreadsheet,
-  Tag,
   Clock,
-  TrendingUp,
   AlertCircle,
   CheckCircle,
   Loader,
   Sparkles,
   Archive,
-  Zap,
   Eye,
   Download,
   Trash2,
-  Heart,
-  Star,
-  Bookmark,
-  FolderOpen,
   Layers,
-  BarChart3,
   Cloud,
   Shield,
-  Users,
-  Share2,
   Settings,
   SortDesc,
   SortAsc,
-  Layout,
-  Grid3X3,
-  Menu,
   X,
   ChevronDown,
-  ChevronUp,
   ChevronRight as ChevronRightIcon,
   ArrowUpDown,
-  MoreHorizontal,
   Activity,
-  FilterX,
-  Infinity,
-  Gauge,
-  Command,
-  MousePointer,
-  Cpu,
-  Wifi,
-  Database
+  Calendar,
+  Command
 } from 'lucide-react';
 import { 
   PremiumLoader, 
   FloatingActionButton, 
-  ProgressRing, 
   StaggeredGrid, 
   MagneticButton, 
   MorphingIcon, 
-  LiquidLoader, 
-  PremiumCard,
+  LiquidLoader,
   FloatingParticles
 } from './PremiumAnimations';
-import { useTranslation } from '../../hooks/useTranslation';
-import { safeAsync, safe, ErrorSeverity } from '../../lib/utils/errorHandling';
+import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
 import { useAuth, useSpecialty, MedicalSpecialty, useAppStore } from '../../stores/useAppStore';
 import { DocumentUpload } from './DocumentUpload';
-import { DocumentSearch, SearchFilters } from './DocumentSearch';
 import { DocumentDetails } from './DocumentDetails';
 import { CommandPalette, useCommandPalette } from './CommandPalette';
 import { AdvancedSearch } from './AdvancedSearch';
 import { 
   listUserDocuments, 
   deleteUserDocument,
-  getUserDocument,
   monitorVectorStoreStatus
 } from '../../lib/api/vectorStore';
 import { 
   DocumentListParams,
-  DocumentListResponse,
-  UserDocument,
-  DocumentDeleteRequest
+  UserDocument
 } from '../../types/openai-vector-store';
-import { DocumentWithMetadata } from '../../lib/api/knowledgeBase';
+import { DocumentWithMetadata, DocumentCategory } from '../../lib/api/knowledgeBase';
+
+// Extended SearchFilters interface with additional properties
+interface SearchFilters {
+  searchTerm: string;
+  status: string;  // Changed to string to match AdvancedSearch
+  category: string; // Changed to string to match AdvancedSearch
+  tags: string[];
+  dateRange: { from: string; to: string };
+  fileTypes: string[];
+  sizeRange: { min: number; max: number };
+  favorites: boolean;
+  recent: boolean;
+}
 
 // Advanced Types
 type ViewMode = 'grid' | 'list' | 'masonry' | 'timeline';
@@ -453,7 +436,7 @@ const ChunkedDocumentCard: React.FC<{
   onDeleteAll?: (documentIds: string[], title: string) => void;
   onSelect: (id: string) => void;
   index: number;
-}> = ({ group, viewMode, displayDensity, isExpanded, selectedDocuments, onToggle, onView, onDelete, onDeleteAll, onSelect, index }) => {
+}> = ({ group, viewMode, isExpanded, selectedDocuments, onToggle, onView, onDelete, onDeleteAll, onSelect, index }) => {
   const prefersReducedMotion = useReducedMotion();
   
   const cardVariants = {
@@ -578,7 +561,7 @@ const ChunkedDocumentCard: React.FC<{
     );
   }
 
-  // Grid View
+  // Grid View - Standardized with single document cards
   return (
     <motion.div
       variants={cardVariants}
@@ -586,59 +569,92 @@ const ChunkedDocumentCard: React.FC<{
       animate="visible"
       whileHover={!prefersReducedMotion ? "hover" : undefined}
       whileTap={!prefersReducedMotion ? "tap" : undefined}
-      className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+      className={`
+        group relative bg-white dark:bg-gray-800
+        border border-gray-200 dark:border-gray-700
+        rounded-xl shadow-sm hover:shadow-xl
+        transition-all duration-300 ease-out
+        cursor-pointer overflow-hidden
+      `}
+      onClick={onToggle}
     >
-      {/* Header */}
-      <div className="p-6">
-        <div className="flex items-start space-x-3 mb-4">
-          <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Layers className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+      {/* Selection Badge */}
+      <div className={`
+        absolute top-3 left-3 z-10 transition-all duration-200
+        scale-100 opacity-100
+      `}>
+        <div className="w-6 h-6 rounded-full border-2 bg-blue-500 border-blue-500 flex items-center justify-center shadow-lg">
+          <Layers className="w-3 h-3 text-white" />
+        </div>
+      </div>
+
+      {/* Document Preview Area - Standardized */}
+      <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 relative overflow-hidden">
+        {/* Group Icon */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
+            <Layers className="w-8 h-8 text-gray-600 dark:text-gray-300" />
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm leading-tight mb-2 line-clamp-2">
-              {group.baseTitle}
-            </h3>
+        </div>
+        
+        {/* Parts Count Overlay */}
+        <div className="absolute top-3 right-3">
+          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-2 py-1">
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+              {group.documents.length}/{group.totalParts}
+            </span>
+          </div>
+        </div>
+
+        {/* Hover Actions */}
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="opacity-0 group-hover:opacity-100 absolute inset-0 bg-black/10 backdrop-blur-[1px] flex items-center justify-center transition-opacity"
+          >
             <div className="flex items-center space-x-2">
-              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
-                📚 {group.documents.length}/{group.totalParts} parts
-              </span>
+              <button
+                onClick={(e) => { e.stopPropagation(); onView(group.documents[0]); }}
+                className="p-2 bg-white/90 dark:bg-gray-800/90 rounded-full hover:scale-110 transition-transform shadow-lg"
+              >
+                <Eye className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+              </button>
+              {onDeleteAll && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); onDeleteAll(group.documents.map(d => d.id), group.baseTitle); }}
+                  className="p-2 bg-red-500/90 rounded-full hover:scale-110 transition-transform shadow-lg"
+                >
+                  <Trash2 className="w-5 h-5 text-white" />
+                </button>
+              )}
             </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Document Info - Standardized */}
+      <div className="p-4">
+        <h3 className="font-semibold text-gray-900 dark:text-gray-100 truncate group-hover:text-blue-600 transition-colors">
+          {group.baseTitle}
+        </h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
+          Chunked Document • {group.documents.length} parts
+        </p>
+
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center space-x-2">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+              📚 {group.documents.length} parts
+            </span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {formatFileSize(group.documents.reduce((acc, doc) => acc + (doc.file_size || 0), 0))}
+            </span>
           </div>
-        </div>
-
-        <div className="mb-4">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700">
-            🧩 Chunked Document
-          </span>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={() => onView(group.documents[0])}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-3 rounded-lg transition-colors"
-          >
-            View Document
-          </button>
-          {onDeleteAll && (
-            <button
-              onClick={() => onDeleteAll(group.documents.map(doc => doc.id), group.baseTitle)}
-              className="p-2 text-gray-400 hover:text-red-600 transition-colors border border-gray-300 dark:border-gray-600 rounded-lg hover:border-red-300 dark:hover:border-red-600"
-              title="Delete all parts"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          )}
-          <button
-            onClick={onToggle}
-            className="p-2 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-300 dark:hover:border-blue-600"
-            title={isExpanded ? 'Hide parts' : 'Show all parts'}
-          >
-            {isExpanded ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </button>
+          <div className="text-xs text-gray-500 dark:text-gray-400">
+            {new Date(group.documents[0]?.created_at).toLocaleDateString()}
+          </div>
         </div>
 
         {/* Expanded parts list */}
@@ -981,7 +997,6 @@ const DocumentCard: React.FC<{
 
 // Main Component
 export const PersonalLibraryPremium: React.FC = () => {
-  const { t } = useTranslation();
   const { user } = useAuth();
   const { specialty } = useSpecialty();
   const { setPersonalDocumentCount } = useAppStore();
@@ -1002,9 +1017,7 @@ export const PersonalLibraryPremium: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
-  const [hasMore, setHasMore] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<DocumentWithMetadata | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
   const [showSortOptions, setShowSortOptions] = useState(false);
   const [showViewOptions, setShowViewOptions] = useState(false);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
@@ -1081,7 +1094,7 @@ export const PersonalLibraryPremium: React.FC = () => {
       }
 
       if (filters.category !== 'all') {
-        queryOptions.category = filters.category;
+        queryOptions.category = filters.category as DocumentCategory;
       }
 
       if (filters.tags.length > 0) {
@@ -1115,7 +1128,6 @@ export const PersonalLibraryPremium: React.FC = () => {
           documentGroups: documentGroups
         }));
         setTotal(result.total);
-        setHasMore(result.hasMore);
         setPersonalDocumentCount(result.total);
       }
     } finally {
@@ -1277,13 +1289,13 @@ export const PersonalLibraryPremium: React.FC = () => {
       
     if (result.partialSuccess) {
       const warningDetails = [];
-      if (result.cleanupResults?.vectorStoreRemoval?.attempted && !result.cleanupResults.vectorStoreRemoval.success) {
+      if (result.cleanupResults?.openaiCleanup && !result.cleanupResults.openaiCleanup.success) {
         warningDetails.push('- Failed to remove from OpenAI Vector Store');
       }
-      if (result.cleanupResults?.openaiFileDeletion?.attempted && !result.cleanupResults.openaiFileDeletion.success) {
-        warningDetails.push('- Failed to delete from OpenAI Files');
+      if (result.cleanupResults?.supabaseCleanup && !result.cleanupResults.supabaseCleanup.success) {
+        warningDetails.push('- Failed to delete from Supabase');
       }
-      if (result.cleanupResults?.storageDeletion?.attempted && !result.cleanupResults.storageDeletion.success) {
+      if (result.cleanupResults?.storageCleanup && !result.cleanupResults.storageCleanup.success) {
         warningDetails.push('- Failed to remove from storage');
       }
       
@@ -1303,7 +1315,7 @@ export const PersonalLibraryPremium: React.FC = () => {
       return;
     }
 
-    const [results, deleteError] = await safeAsync(async () => {
+    const [, deleteError] = await safeAsync(async () => {
       // Delete all documents in parallel
       const deletePromises = documentIds.map(documentId => 
         deleteUserDocument({ documentId, deleteFromOpenAI: true })
@@ -1336,7 +1348,7 @@ export const PersonalLibraryPremium: React.FC = () => {
     setSelectedDocument(document);
   };
 
-  const handleDownloadDocument = (document: DocumentWithMetadata) => {
+  const handleDownloadDocument = () => {
     // Implement download functionality
   };
 
@@ -1585,71 +1597,101 @@ export const PersonalLibraryPremium: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Advanced Controls */}
+          {/* Enhanced Controls Section */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="flex flex-col lg:flex-row gap-4"
+            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-6"
           >
-            {/* Primary Actions */}
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowUpload(true)}
-                className={`
-                  px-6 py-3 rounded-xl font-semibold text-white shadow-lg
-                  bg-gradient-to-r ${theme.primaryGradient}
-                  hover:shadow-xl hover:scale-105 transition-all duration-300
-                  flex items-center space-x-2
-                `}
-              >
-                <Upload className="w-5 h-5" />
-                <span>Upload Documents</span>
-              </button>
-              
-              <button
-                onClick={handleRefresh}
-                disabled={isLoading}
-                className="px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 flex items-center space-x-2"
-              >
-                <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
-                <span>Refresh</span>
-              </button>
+            {/* Controls Container */}
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+              {/* Primary Actions */}
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => setShowUpload(true)}
+                  className={`
+                    group relative px-6 py-3 rounded-xl font-semibold text-white shadow-lg
+                    bg-gradient-to-r ${theme.primaryGradient}
+                    hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] 
+                    transition-all duration-300 overflow-hidden
+                    flex items-center space-x-2 min-h-[48px]
+                  `}
+                >
+                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Upload className="w-5 h-5 relative z-10" />
+                  <span className="relative z-10">Upload Documents</span>
+                </button>
+                
+                <button
+                  onClick={handleRefresh}
+                  disabled={isLoading}
+                  className={`
+                    px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-600 
+                    bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm
+                    hover:bg-white dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    transition-all duration-200 flex items-center space-x-2 min-h-[48px] shadow-sm hover:shadow-md
+                    text-gray-700 dark:text-gray-200
+                  `}
+                >
+                  <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
+                  <span className="font-medium">Refresh</span>
+                </button>
 
-              <button
-                onClick={handleMonitorStatus}
-                disabled={isMonitoring}
-                className="px-4 py-3 rounded-xl border border-blue-300 dark:border-blue-600 bg-blue-50 dark:bg-blue-900 hover:bg-blue-100 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-200 transition-all duration-200 flex items-center space-x-2"
-                title="Check OpenAI processing status for uploaded files"
-              >
-                <Activity className={`w-5 h-5 ${isMonitoring ? 'animate-pulse' : ''}`} />
-                <span>{isMonitoring ? 'Checking...' : 'Monitor'}</span>
-              </button>
-            </div>
+                <button
+                  onClick={handleMonitorStatus}
+                  disabled={isMonitoring}
+                  className={`
+                    px-5 py-3 rounded-xl border border-blue-200 dark:border-blue-600 
+                    bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-sm
+                    hover:bg-blue-100/80 dark:hover:bg-blue-800/30 hover:border-blue-300 dark:hover:border-blue-500
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    text-blue-700 dark:text-blue-200 transition-all duration-200 
+                    flex items-center space-x-2 min-h-[48px] shadow-sm hover:shadow-md
+                  `}
+                  title="Check OpenAI processing status for uploaded files"
+                >
+                  <Activity className={`w-5 h-5 ${isMonitoring ? 'animate-pulse' : ''}`} />
+                  <span className="font-medium">{isMonitoring ? 'Checking...' : 'Monitor'}</span>
+                </button>
+              </div>
 
-            {/* Search Bar */}
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search your knowledge base..."
-                value={filters.searchTerm}
-                onChange={(e) => setFilters(prev => ({ ...prev, searchTerm: e.target.value }))}
-                className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-              />
-            </div>
+              {/* Search Bar with Enhanced Styling */}
+              <div className="flex-1 w-full lg:w-auto relative">
+                <div className="relative group">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" />
+                  <input
+                    type="text"
+                    placeholder="Search your knowledge base..."
+                    value={filters.searchTerm}
+                    onChange={(e) => setFilters(prev => ({ ...prev, searchTerm: e.target.value }))}
+                    className={`
+                      w-full pl-12 pr-4 py-3 rounded-xl 
+                      border border-gray-200 dark:border-gray-600 
+                      bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm
+                      hover:bg-white dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500
+                      focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500
+                      placeholder:text-gray-500 dark:placeholder:text-gray-400
+                      transition-all duration-200 shadow-sm focus:shadow-md min-h-[48px]
+                      text-gray-900 dark:text-gray-100
+                    `}
+                  />
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                </div>
+              </div>
 
-            {/* View Controls */}
-            <div className="flex items-center space-x-2">
+              {/* Enhanced View Controls */}
+              <div className="flex items-center gap-2">
               {/* Advanced Search Toggle */}
               <div className="relative">
                 <MagneticButton
                   onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
                   className={`
-                    p-3 rounded-xl border transition-all duration-200
+                    p-3 rounded-xl border transition-all duration-200 min-h-[48px] min-w-[48px] shadow-sm hover:shadow-md
                     ${showAdvancedSearch 
                       ? `${theme.primaryBg} text-white border-transparent shadow-lg` 
-                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700'
+                      : 'border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500 text-gray-600 dark:text-gray-300'
                     }
                   `}
                 >
@@ -1666,7 +1708,14 @@ export const PersonalLibraryPremium: React.FC = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowSortOptions(!showSortOptions)}
-                  className="p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
+                  className={`
+                    p-3 rounded-xl border border-gray-200 dark:border-gray-600 
+                    bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm
+                    hover:bg-white dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500
+                    transition-all duration-200 min-h-[48px] min-w-[48px] shadow-sm hover:shadow-md
+                    text-gray-600 dark:text-gray-300
+                  `}
+                  title="Sort Options"
                 >
                   <ArrowUpDown className="w-5 h-5" />
                 </button>
@@ -1712,39 +1761,48 @@ export const PersonalLibraryPremium: React.FC = () => {
                 </AnimatePresence>
               </div>
 
-              {/* View Mode */}
-              <div className="flex items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl p-1">
+              {/* Enhanced View Mode Toggle */}
+              <div className="flex items-center bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-1 border border-gray-200/50 dark:border-gray-700/50 shadow-sm">
                 <button
                   onClick={() => setState(prev => ({ ...prev, viewMode: 'grid' }))}
                   className={`
-                    p-2 rounded-lg transition-all duration-200
+                    p-2.5 rounded-lg transition-all duration-200 min-h-[40px] min-w-[40px]
                     ${state.viewMode === 'grid'
-                      ? `${theme.primaryBg} text-white`
-                      : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      ? `${theme.primaryBg} text-white shadow-md`
+                      : 'text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-700/60 hover:text-gray-700 dark:hover:text-gray-300'
                     }
                   `}
+                  title="Grid View"
                 >
                   <Grid className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => setState(prev => ({ ...prev, viewMode: 'list' }))}
                   className={`
-                    p-2 rounded-lg transition-all duration-200
+                    p-2.5 rounded-lg transition-all duration-200 min-h-[40px] min-w-[40px]
                     ${state.viewMode === 'list'
-                      ? `${theme.primaryBg} text-white`
-                      : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      ? `${theme.primaryBg} text-white shadow-md`
+                      : 'text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-700/60 hover:text-gray-700 dark:hover:text-gray-300'
                     }
                   `}
+                  title="List View"
                 >
                   <List className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Display Options */}
+              {/* Enhanced Display Options */}
               <div className="relative">
                 <button
                   onClick={() => setShowViewOptions(!showViewOptions)}
-                  className="p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
+                  className={`
+                    p-3 rounded-xl border border-gray-200 dark:border-gray-600 
+                    bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm
+                    hover:bg-white dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500
+                    transition-all duration-200 min-h-[48px] min-w-[48px] shadow-sm hover:shadow-md
+                    text-gray-600 dark:text-gray-300
+                  `}
+                  title="Display Options"
                 >
                   <Settings className="w-5 h-5" />
                 </button>
@@ -1804,6 +1862,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                 </AnimatePresence>
               </div>
             </div>
+            </div>
           </motion.div>
 
           {/* Selection Controls */}
@@ -1844,7 +1903,7 @@ export const PersonalLibraryPremium: React.FC = () => {
           {/* Advanced Search */}
           <AdvancedSearch
             filters={filters}
-            onFiltersChange={setFilters}
+            onFiltersChange={(newFilters) => setFilters(newFilters)}
             availableTags={availableTags}
             availableCategories={availableCategories}
             availableFileTypes={availableFileTypes}
@@ -2000,7 +2059,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                       onSelect={handleDocumentSelect}
                       onView={() => handleViewDocument(group.documents[0])}
                       onDelete={() => handleDeleteDocument(group.documents[0].id, group.documents[0].title)}
-                      onDownload={() => handleDownloadDocument(group.documents[0])}
+                      onDownload={handleDownloadDocument}
                       index={index}
                     />
                   )
@@ -2035,7 +2094,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                       onSelect={handleDocumentSelect}
                       onView={() => handleViewDocument(group.documents[0])}
                       onDelete={() => handleDeleteDocument(group.documents[0].id, group.documents[0].title)}
-                      onDownload={() => handleDownloadDocument(group.documents[0])}
+                      onDownload={handleDownloadDocument}
                       index={index}
                     />
                   )
@@ -2105,7 +2164,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                 onDelete={async () => {
                   await handleDeleteDocument(selectedDocument.id, selectedDocument.title);
                 }}
-                onDownload={() => handleDownloadDocument(selectedDocument)}
+                onDownload={handleDownloadDocument}
               />
             </motion.div>
           </motion.div>
