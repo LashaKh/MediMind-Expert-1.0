@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Mic,
   Square,
@@ -47,6 +47,9 @@ interface TranscriptPanelProps {
     isPaused: boolean;
     duration: number;
     audioLevel: number;
+    isProcessingChunks: boolean;
+    processedChunks: number;
+    totalChunks: number;
   };
   isTranscribing: boolean;
   transcriptionResult: {
@@ -112,8 +115,23 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const [contextText, setContextText] = useState('');
   const [isRecordingContext, setIsRecordingContext] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  
+  // Ref for auto-scrolling transcript
+  const transcriptRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const contextFileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Get current transcript text
+  const currentTranscript = currentSession?.transcript || transcriptionResult?.text || '';
+  const hasTranscript = currentTranscript.trim().length > 0;
+  
+  // Auto-scroll transcript when new content appears during recording
+  useEffect(() => {
+    if (recordingState.isRecording && transcriptRef.current && currentTranscript) {
+      // Smooth scroll to bottom to show latest transcript
+      transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
+    }
+  }, [currentTranscript, recordingState.isRecording]);
 
   const formatTime = (ms: number) => {
     const seconds = Math.floor(ms / 1000);
@@ -172,8 +190,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     }
   };
 
-  const currentTranscript = currentSession?.transcript || transcriptionResult?.text || '';
-  const hasTranscript = currentTranscript.length > 0;
 
   const tabs = [
     { id: 'transcript', label: 'Transcript', icon: FileText },
@@ -220,13 +236,49 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
 
     if (hasTranscript) {
       return (
-        <div className="bg-white dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600">
+        <div className="bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 h-96 flex flex-col">
+          {/* Live Streaming Indicator */}
+          {recordingState.isRecording && (
+            <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-600 bg-green-50 dark:bg-green-900/20">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                <span className="text-sm text-green-700 dark:text-green-400 font-medium">Live transcription</span>
+                {error && error.includes('experiencing issues') && (
+                  <div className="flex items-center space-x-1 text-xs text-amber-600 dark:text-amber-400">
+                    <div className="w-1 h-1 bg-amber-500 rounded-full" />
+                    <span>Service degraded</span>
+                  </div>
+                )}
+              </div>
+              {recordingState.isProcessingChunks && (
+                <div className="flex items-center space-x-2 text-xs text-green-600 dark:text-green-400">
+                  <div className="w-3 h-3 border border-green-500/30 border-t-green-500 rounded-full animate-spin" />
+                  <span>Processing...</span>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* Scrollable Transcript Content */}
           <div 
-            className="text-gray-900 dark:text-white text-lg leading-relaxed whitespace-pre-wrap"
-            style={{ fontFamily: 'Georgia, serif' }}
-            dir="auto"
+            ref={transcriptRef}
+            className="flex-1 overflow-y-auto p-6 scroll-smooth"
           >
-            {currentTranscript}
+            <div 
+              className="text-gray-900 dark:text-white text-lg leading-relaxed whitespace-pre-wrap"
+              style={{ fontFamily: 'Georgia, serif' }}
+              dir="auto"
+            >
+              {currentTranscript}
+              {/* Typing indicator while processing */}
+              {recordingState.isRecording && recordingState.isProcessingChunks && (
+                <span className="inline-flex items-center ml-2">
+                  <span className="animate-pulse text-blue-500">●</span>
+                  <span className="animate-pulse text-blue-500 delay-75">●</span>
+                  <span className="animate-pulse text-blue-500 delay-150">●</span>
+                </span>
+              )}
+            </div>
           </div>
         </div>
       );
@@ -242,7 +294,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             Transcription not started
           </h3>
           <p className="text-gray-600 dark:text-gray-400 text-sm max-w-sm">
-            Your transcription will appear here in increments during your session
+            Your live transcription will stream here in real-time as you speak
           </p>
           <button
             onClick={canRecord ? onStartRecording : undefined}
@@ -776,6 +828,39 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             <div className="flex items-center space-x-1">
               <Volume2 className="w-4 h-4" />
               <span>{Math.round(recordingState.audioLevel)}%</span>
+            </div>
+          </div>
+        )}
+
+        {/* Smart Segmentation Status */}
+        {recordingState.isProcessingChunks && (
+          <div className="flex items-center justify-center space-x-3 text-sm bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-4 h-4 border-2 border-green-500/30 border-t-green-500 rounded-full animate-spin" />
+              <span className="text-green-700 dark:text-green-300 font-medium">
+                Auto-restart in progress...
+              </span>
+            </div>
+            <div className="text-green-600 dark:text-green-400 text-xs">
+              Seamless continuation (23s segments)
+            </div>
+          </div>
+        )}
+        
+        {/* Legacy Chunked Processing Status - keep for compatibility */}
+        {recordingState.isProcessingChunks && recordingState.totalChunks > 0 && (
+          <div className="flex items-center space-x-4 text-sm text-blue-600 dark:text-blue-400 mb-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-4 h-4 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+              <span>Processing chunks: {recordingState.processedChunks}/{recordingState.totalChunks}</span>
+            </div>
+            <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div 
+                className="bg-blue-500 h-2 rounded-full transition-all duration-300" 
+                style={{ 
+                  width: `${recordingState.totalChunks > 0 ? (recordingState.processedChunks / recordingState.totalChunks) * 100 : 0}%` 
+                }}
+              />
             </div>
           </div>
         )}

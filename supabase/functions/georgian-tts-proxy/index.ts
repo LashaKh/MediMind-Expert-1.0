@@ -1,12 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 
-interface AuthRequest {
-  Email: string
-  Password: string
-  RememberMe: boolean
-}
-
 interface SpeechRequest {
   theAudioDataAsBase64: string
   Language: string
@@ -17,7 +11,75 @@ interface SpeechRequest {
   Model?: string
 }
 
+interface AuthResponse {
+  Success: boolean
+  ErrorCode: string
+  Error: string
+  Message: string
+  AccessToken: string
+  RefreshToken: string
+  Email: string
+  PackageID: number
+}
+
+interface SpeechResponse {
+  Success: boolean
+  ErrorCode: string
+  Error: string
+  Message: string
+  Text: string
+  WordsCount: number
+  VoiceFilePath: string
+}
+
 const ENAGRAMM_API_BASE = 'https://enagramm.com/API'
+
+// Global token storage (in-memory for this instance)
+let cachedAccessToken: string | null = null
+let tokenExpiryTime: number | null = null
+
+async function getValidToken(): Promise<string> {
+  // Check if we have a valid cached token
+  if (cachedAccessToken && tokenExpiryTime && Date.now() < (tokenExpiryTime - 60000)) {
+    console.log('🎯 Using cached token')
+    return cachedAccessToken
+  }
+
+  console.log('🔑 Getting fresh Enagramm token...')
+  
+  // Login to get fresh token
+  const loginResponse = await fetch('https://enagramm.com/API/Account/Login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      Email: 'Lasha.khosht@gmail.com',
+      Password: 'Dba545c5fde36242@',
+      RememberMe: true
+    })
+  })
+
+  if (!loginResponse.ok) {
+    const errorText = await loginResponse.text()
+    console.error('❌ Login failed:', errorText)
+    throw new Error(`Login failed: ${loginResponse.status} - ${errorText}`)
+  }
+
+  const loginData: AuthResponse = await loginResponse.json()
+  
+  if (!loginData.Success || !loginData.AccessToken) {
+    console.error('❌ Invalid login response:', loginData)
+    throw new Error(`Login failed: ${loginData.Error || loginData.Message || 'Unknown error'}`)
+  }
+
+  // Cache the token with 29-minute expiry (tokens expire in 30 minutes)
+  cachedAccessToken = loginData.AccessToken
+  tokenExpiryTime = Date.now() + (29 * 60 * 1000)
+  
+  console.log('✅ Fresh token obtained')
+  return cachedAccessToken
+}
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -25,41 +87,146 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
-  try {
-    const url = new URL(req.url)
-    const path = url.pathname.replace('/georgian-tts-proxy', '')
-    
-    // Extract the action from the path
-    const action = path.replace('/', '')
+  if (req.method !== 'POST') {
+    return new Response(
+      JSON.stringify({ error: 'Method not allowed' }),
+      { 
+        status: 405, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
+    )
+  }
 
-    switch (action) {
-      case 'login':
-        return await handleLogin(req)
-      
-      case 'refresh-token':
-        return await handleRefreshToken(req)
-      
-      case 'recognize-speech':
-        return await handleRecognizeSpeech(req)
-      
-      case 'recognize-file':
-        return await handleRecognizeFile(req)
-      
-      default:
-        return new Response(
-          JSON.stringify({ error: 'Unknown action', action }),
-          { 
-            status: 400, 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-          }
-        )
+  try {
+    const body: SpeechRequest = await req.json()
+    
+    console.log('📨 Received JSON request:', {
+      audioSize: body.theAudioDataAsBase64?.length || 0,
+      Language: body.Language,
+      Autocorrect: body.Autocorrect,
+      Punctuation: body.Punctuation,
+      Digits: body.Digits
+    })
+
+    // Get valid token (cached or fresh)
+    let accessToken: string
+    try {
+      accessToken = await getValidToken()
+    } catch (error) {
+      console.error('💥 Token acquisition failed:', error)
+      return new Response(
+        JSON.stringify({ 
+          error: 'Authentication failed',
+          message: error.message
+        }),
+        { 
+          status: 500, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
     }
+
+    // Prepare the request (REMOVED STT2 ENGINE REQUIREMENT)
+    const speechRequest = {
+      theAudioDataAsBase64: body.theAudioDataAsBase64,
+      Language: body.Language === 'ka-GE' ? 'ka' : body.Language, // Convert ka-GE to ka for compatibility
+      Punctuation: body.Punctuation,
+      Autocorrect: body.Autocorrect,
+      Digits: body.Digits
+      // NOTE: Engine is NOT specified, letting Enagramm use default engine
+    }
+
+    console.log('🚀 Sending to Enagramm RecognizeSpeech endpoint...', {
+      Engine: 'DEFAULT (no engine specified)', // FIXED: Use default engine instead of STT2
+      Language: speechRequest.Language,
+      Punctuation: speechRequest.Punctuation,
+      Autocorrect: speechRequest.Autocorrect,
+      Digits: speechRequest.Digits,
+      audioDataLength: body.theAudioDataAsBase64?.length || 0
+    })
+
+    // Make the API call to Enagramm
+    const enagrammResponse = await fetch(`${ENAGRAMM_API_BASE}/STT/RecognizeSpeech`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(speechRequest)
+    })
+
+    console.log('📡 Enagramm response status:', enagrammResponse.status)
+
+    if (!enagrammResponse.ok) {
+      const errorText = await enagrammResponse.text()
+      let errorDetails
+      
+      try {
+        errorDetails = JSON.parse(errorText)
+      } catch {
+        errorDetails = { error: errorText }
+      }
+      
+      console.error('❌ Enagramm API error:', {
+        status: enagrammResponse.status,
+        statusText: enagrammResponse.statusText,
+        error: errorText
+      })
+
+      // If authentication fails, clear cached token and retry once
+      if (enagrammResponse.status === 401) {
+        console.log('🔄 Authentication failed, clearing cache and retrying...')
+        cachedAccessToken = null
+        tokenExpiryTime = null
+        
+        try {
+          const newToken = await getValidToken()
+          
+          const retryResponse = await fetch(`${ENAGRAMM_API_BASE}/STT/RecognizeSpeech`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${newToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(speechRequest)
+          })
+          
+          if (retryResponse.ok) {
+            const retryData: SpeechResponse = await retryResponse.json()
+            return new Response(retryData.Text || '', {
+              status: 200,
+              headers: { ...corsHeaders, 'Content-Type': 'text/plain; charset=utf-8' }
+            })
+          }
+        } catch (retryError) {
+          console.error('🔄 Retry failed:', retryError)
+        }
+      }
+      
+      throw new Error(`Enagramm API error: ${enagrammResponse.status} - ${errorText}`)
+    }
+
+    const speechData: SpeechResponse = await enagrammResponse.json()
+    
+    if (!speechData.Success) {
+      console.error('❌ Enagramm API returned failure:', speechData)
+      throw new Error(`Speech recognition failed: ${speechData.Error || speechData.Message || 'Unknown error'}`)
+    }
+
+    console.log('✅ Speech recognition successful:', speechData.Text?.substring(0, 50) + (speechData.Text?.length > 50 ? '...' : ''))
+    
+    // Return the recognized text as plain text (matching client expectations)
+    return new Response(speechData.Text || '', {
+      status: 200,
+      headers: { ...corsHeaders, 'Content-Type': 'text/plain; charset=utf-8' }
+    })
+    
   } catch (error) {
-    console.error('Georgian TTS Proxy Error:', error)
+    console.error('💥 Edge Function error:', error)
     return new Response(
       JSON.stringify({ 
-        error: 'Internal server error', 
-        message: error.message 
+        error: 'Internal server error',
+        message: error.message
       }),
       { 
         status: 500, 
@@ -68,115 +235,3 @@ serve(async (req) => {
     )
   }
 })
-
-async function handleLogin(req: Request) {
-  const body: AuthRequest = await req.json()
-  
-  const response = await fetch(`${ENAGRAMM_API_BASE}/Account/Login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body)
-  })
-
-  const data = await response.json()
-  
-  return new Response(
-    JSON.stringify(data),
-    { 
-      status: response.status,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    }
-  )
-}
-
-async function handleRefreshToken(req: Request) {
-  const body = await req.json()
-  
-  const response = await fetch(`${ENAGRAMM_API_BASE}/Account/RefreshToken`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body)
-  })
-
-  const data = await response.json()
-  
-  return new Response(
-    JSON.stringify(data),
-    { 
-      status: response.status,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    }
-  )
-}
-
-async function handleRecognizeSpeech(req: Request) {
-  const georgianToken = req.headers.get('X-Georgian-Token')
-  if (!georgianToken) {
-    return new Response(
-      JSON.stringify({ error: 'Georgian token required' }),
-      { 
-        status: 401, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
-    )
-  }
-
-  const body: SpeechRequest = await req.json()
-  
-  const response = await fetch(`${ENAGRAMM_API_BASE}/STT/RecognizeSpeech`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${georgianToken}`
-    },
-    body: JSON.stringify(body)
-  })
-
-  const data = await response.json()
-  
-  return new Response(
-    JSON.stringify(data),
-    { 
-      status: response.status,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    }
-  )
-}
-
-async function handleRecognizeFile(req: Request) {
-  const georgianToken = req.headers.get('X-Georgian-Token')
-  if (!georgianToken) {
-    return new Response(
-      JSON.stringify({ error: 'Georgian token required' }),
-      { 
-        status: 401, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
-    )
-  }
-
-  // For file upload, we need to handle multipart/form-data
-  const formData = await req.formData()
-  
-  const response = await fetch(`${ENAGRAMM_API_BASE}/STT/RecognizeSpeechFileSubmit`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${georgianToken}`
-    },
-    body: formData
-  })
-
-  const data = await response.json()
-  
-  return new Response(
-    JSON.stringify(data),
-    { 
-      status: response.status,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    }
-  )
-}

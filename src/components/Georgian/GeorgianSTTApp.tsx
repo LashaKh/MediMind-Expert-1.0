@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { 
-  AlertTriangle, 
   WifiOff, 
   Stethoscope,
   Activity,
   Shield,
-  X
+  X,
+  AlertTriangle
 } from 'lucide-react';
 import { SessionHistory } from './SessionHistory';
 import { TranscriptPanel } from './TranscriptPanel';
@@ -36,19 +36,21 @@ export const GeorgianSTTApp: React.FC = () => {
     clearError: clearSessionError,
     searchSessions
   } = useSessionManagement();
+  
+  // Session-aware transcript updates - prevents cross-session contamination
+  const handleLiveTranscriptUpdate = useCallback((newText: string, fullText: string, sessionId?: string) => {
+    // ROBUST VALIDATION: Only update if session IDs match exactly
+    if (currentSession && newText.trim() && sessionId === currentSession.id) {
+      console.log(`✅ Session-validated update for ${currentSession.id}: "${newText.trim().substring(0, 30)}..."`);
+      appendToTranscript(currentSession.id, newText.trim());
+    } else if (sessionId && sessionId !== currentSession?.id) {
+      console.log(`🚫 BLOCKED cross-session contamination: chunk from ${sessionId} blocked from reaching ${currentSession?.id}`);
+    } else if (!currentSession) {
+      console.log(`⚠️ No active session - ignoring transcript chunk`);
+    }
+  }, [currentSession, appendToTranscript]);
 
-  // AI Processing
-  const {
-    processing,
-    error: aiError,
-    lastResult,
-    processingHistory,
-    processText,
-    clearError: clearAIError,
-    clearHistory
-  } = useAIProcessing();
-
-  // Georgian TTS
+  // Georgian TTS - Check support first
   const {
     recordingState,
     isTranscribing,
@@ -63,19 +65,35 @@ export const GeorgianSTTApp: React.FC = () => {
     processFileUpload,
     clearError: clearTTSError,
     clearResult: clearTTSResult,
+    resetTranscript,
     canRecord,
     canStop,
     canPause,
     canResume,
     remainingTime,
-    isNearMaxDuration
+    isNearMaxDuration,
+    service
   } = useGeorgianTTS({
     language: 'ka-GE',
     autocorrect: true,
     punctuation: true,
     digits: true,
-    maxDuration: 25000
+    maxDuration: 0, // No limit - use chunked processing
+    chunkDuration: 12000, // 12 second chunks for processing
+    sessionId: currentSession?.id, // Pass current session ID for isolation
+    onLiveTranscriptUpdate: handleLiveTranscriptUpdate
   });
+
+  // AI Processing
+  const {
+    processing,
+    error: aiError,
+    lastResult,
+    processingHistory,
+    processText,
+    clearError: clearAIError,
+    clearHistory
+  } = useAIProcessing();
 
   // Filter sessions based on search
   useEffect(() => {
@@ -88,25 +106,55 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Don't auto-create sessions - only create when user starts recording or uploads
 
-  // Handle transcription result and save to current session
+  // Handle final transcription result (when not using live updates)
   useEffect(() => {
-    if (transcriptionResult && currentSession) {
-      appendToTranscript(
-        currentSession.id,
-        transcriptionResult.text,
-        transcriptionResult.duration
-      );
+    if (transcriptionResult && currentSession && !recordingState.isRecording) {
+      // Only update transcript if not currently recording (to avoid conflicts with live updates)
+      const currentTranscript = currentSession.transcript || '';
+      
+      // FIXED: Don't overwrite - only append new text that isn't already in session
+      if (transcriptionResult.text.length > currentTranscript.length && 
+          transcriptionResult.text.startsWith(currentTranscript)) {
+        // Extract only the new text that was added
+        const newText = transcriptionResult.text.substring(currentTranscript.length).trim();
+        if (newText) {
+          console.log(`📝 Appending final segment: "${newText.substring(0, 50)}..."`);
+          appendToTranscript(currentSession.id, newText);
+        }
+      } else if (!currentTranscript && transcriptionResult.text.trim()) {
+        // First transcription - set the initial text
+        console.log(`📝 Setting initial transcript: "${transcriptionResult.text.substring(0, 50)}..."`);
+        updateTranscript(currentSession.id, transcriptionResult.text, transcriptionResult.duration);
+      }
       clearTTSResult();
     }
-  }, [transcriptionResult, currentSession, appendToTranscript, clearTTSResult]);
+  }, [transcriptionResult, currentSession, recordingState.isRecording, updateTranscript, appendToTranscript, clearTTSResult]);
 
-  // Handle session creation
+  // Handle session creation with robust cleanup
   const handleCreateSession = useCallback(async (title?: string) => {
+    console.log('🔄 Creating new session - initiating complete cleanup...');
+    
+    // STEP 1: Stop any ongoing recording and clear TTS state
+    if (recordingState.isRecording) {
+      console.log('🛑 Stopping active recording before session change');
+      stopRecording();
+    }
+    
+    // STEP 2: Clear ALL TTS state (this cancels background processing)
+    resetTranscript(); // Reset transcript internal state
+    clearTTSResult(); // Clear transcription results
+    
+    // STEP 3: Create new session
     const newSession = await createSession(title);
     if (newSession) {
+      console.log(`✨ New session created: ${newSession.id}`);
       selectSession(newSession.id);
+      
+      // STEP 4: Ensure state propagation
+      await new Promise(resolve => setTimeout(resolve, 100));
+      console.log('🎯 Session isolation complete - ready for recording');
     }
-  }, [createSession, selectSession]);
+  }, [createSession, selectSession, resetTranscript, clearTTSResult, recordingState.isRecording, stopRecording]);
 
   // Handle session deletion with confirmation
   const handleDeleteSession = useCallback(async (sessionId: string) => {
@@ -134,17 +182,44 @@ export const GeorgianSTTApp: React.FC = () => {
     }
   }, [currentSession, transcriptionResult, processText, addProcessingResult]);
 
+  // Handle session selection with robust cleanup
+  const handleSelectSession = useCallback(async (sessionId: string) => {
+    const selectedSession = sessions.find(s => s.id === sessionId);
+    if (selectedSession) {
+      console.log(`🔄 Switching to session ${sessionId} - initiating cleanup...`);
+      
+      // STEP 1: Stop any ongoing recording
+      if (recordingState.isRecording) {
+        console.log('🛑 Stopping active recording before session switch');
+        stopRecording();
+      }
+      
+      // STEP 2: Clear ALL TTS state (cancels background processing)
+      resetTranscript();
+      clearTTSResult();
+      
+      // STEP 3: Switch session
+      selectSession(sessionId);
+      
+      // STEP 4: Ensure state propagation
+      await new Promise(resolve => setTimeout(resolve, 100));
+      console.log(`🎯 Switched to session ${sessionId} - isolation complete`);
+    }
+  }, [sessions, resetTranscript, clearTTSResult, selectSession, recordingState.isRecording, stopRecording]);
+
   // Handle file upload
   const handleFileUpload = useCallback(async (file: File) => {
     if (!currentSession) {
       // Create new session for file upload
       const newSession = await createSession(`File: ${file.name}`);
       if (newSession) {
+        resetTranscript(); // Reset transcript for new session
+        clearTTSResult(); // Clear old transcription result
         selectSession(newSession.id);
       }
     }
     await processFileUpload(file);
-  }, [currentSession, createSession, selectSession, processFileUpload]);
+  }, [currentSession, createSession, selectSession, processFileUpload, resetTranscript, clearTTSResult]);
 
   // Handle transcript update (for editing existing transcript)
   const handleTranscriptUpdate = useCallback((transcript: string, duration?: number) => {
@@ -162,6 +237,10 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Handle recording start - create session if needed
   const handleStartRecording = useCallback(async () => {
+    // ALWAYS clear TTS state first, before creating session
+    resetTranscript(); // Reset transcript state first
+    clearTTSResult(); // Clear old transcription result first
+    
     if (!currentSession) {
       // Create new session when user starts recording
       const newSession = await createSession('New Recording');
@@ -169,9 +248,13 @@ export const GeorgianSTTApp: React.FC = () => {
         selectSession(newSession.id);
       }
     }
+    
+    // Small delay to ensure state is clean before starting
+    await new Promise(resolve => setTimeout(resolve, 50));
+    
     // Start the actual recording
     startRecording();
-  }, [currentSession, createSession, selectSession, startRecording]);
+  }, [currentSession, createSession, selectSession, startRecording, resetTranscript, clearTTSResult]);
 
   // Clear all errors
   const clearAllErrors = useCallback(() => {
@@ -180,25 +263,80 @@ export const GeorgianSTTApp: React.FC = () => {
     clearTTSError();
   }, [clearSessionError, clearAIError, clearTTSError]);
 
+  // Test function: Send parallel requests to test server behavior
+  const testParallelRequests = useCallback(async () => {
+    // Get the current service reference directly from the hook return
+    const currentService = service;
+    
+    if (!currentService) {
+      console.error('❌ Georgian TTS service not available. Please wait for the app to fully load and try again.');
+      alert('Georgian TTS service is not yet initialized. Please wait a moment and try again.');
+      return;
+    }
+    
+    console.log('✅ Georgian TTS service available, starting parallel test...');
+    console.log('🎙️ Please speak for 3 seconds when prompted...');
+
+    try {
+      // Request microphone permission
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          sampleRate: 16000,
+        }
+      });
+
+      console.log('🎙️ Recording audio for parallel test... Speak now!');
+      
+      // Create MediaRecorder for real audio
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'audio/webm;codecs=opus'
+      });
+      
+      const audioChunks: Blob[] = [];
+      
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunks.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = async () => {
+        // Stop the microphone stream
+        stream.getTracks().forEach(track => track.stop());
+        
+        if (audioChunks.length > 0) {
+          const testBlob = new Blob(audioChunks, { type: 'audio/webm;codecs=opus' });
+          console.log(`🧪 Running parallel request test with recorded audio (${Math.round(testBlob.size/1024)}KB)...`);
+          await currentService.testParallelRequests(testBlob);
+        } else {
+          console.error('❌ No audio recorded, cannot run test');
+        }
+      };
+
+      // Start recording
+      mediaRecorder.start();
+      
+      // Stop recording after 3 seconds
+      setTimeout(() => {
+        if (mediaRecorder.state === 'recording') {
+          console.log('🛑 Stopping recording, processing audio...');
+          mediaRecorder.stop();
+        }
+      }, 3000);
+
+    } catch (error) {
+      console.error('❌ Failed to access microphone for test:', error);
+      alert('Microphone access required for parallel test. Please allow microphone permission and try again.');
+    }
+  }, [service]); // Include service so callback updates when service becomes available
+
   // Get current transcript
   const currentTranscript = currentSession?.transcript || transcriptionResult?.text || '';
 
-  // Check for browser support
-  if (!isSupported) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6 flex items-center justify-center">
-        <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center">
-          <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Browser Not Supported
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Your browser doesn't support audio recording. Please use a modern browser like Chrome, Firefox, or Safari.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // Browser support is checked in GeorgianSTTAppWrapper
 
   return (
     <div className="h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
@@ -239,6 +377,15 @@ export const GeorgianSTTApp: React.FC = () => {
                   <span>Offline</span>
                 )}
               </div>
+
+              {/* Parallel Test Button (Development) */}
+              <button
+                onClick={testParallelRequests}
+                className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium flex items-center space-x-2 transition-colors"
+                title="Test: Send two parallel requests to check if issue is sequential vs capacity"
+              >
+                <span>🧪 Test</span>
+              </button>
             </div>
 
             {/* Clean User Profile */}
@@ -269,7 +416,7 @@ export const GeorgianSTTApp: React.FC = () => {
               currentSession={currentSession}
               loading={sessionLoading}
               onCreateSession={handleCreateSession}
-              onSelectSession={selectSession}
+              onSelectSession={handleSelectSession}
               onDeleteSession={handleDeleteSession}
               onDuplicateSession={duplicateSession}
               onSearchChange={setSearchQuery}
