@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { MainLayout } from './components/Layout/MainLayout';
 import { ProtectedRoute } from './components/Auth/ProtectedRoute';
 import { SpecialtyGuard } from './components/Auth/SpecialtyGuard';
@@ -19,7 +19,7 @@ import { MediSearchPage } from './components/MediSearch/MediSearchPage';
 import { Profile } from './components/Profile/Profile';
 import { HelpCenter } from './components/Help/HelpCenter';
 import { ComingSoon } from './components/ui/ComingSoon';
-import { TTSTestPage } from './components/TTSTest/TTSTestPage';
+import { GeorgianSTTApp } from './components/Georgian/GeorgianSTTApp';
 
 // Import SignIn directly to avoid loading issues
 import { SignIn } from './components/Auth/SignIn';
@@ -123,7 +123,8 @@ function App() {
               <Route path="/knowledge-base" element={<KnowledgeBase />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/help" element={<HelpCenter />} />
-              <Route path="/tts-test" element={<TTSTestPage />} />
+              <Route path="/mediscribe" element={<GeorgianSTTApp />} />
+              <Route path="/tts-test" element={<Navigate to="/mediscribe" replace />} />
               
               <Route path="/podcast-studio" element={
                 <ComingSoon 

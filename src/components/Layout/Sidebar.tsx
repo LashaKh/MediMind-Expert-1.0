@@ -13,7 +13,8 @@ import {
   Mic2,
   Search,
   BarChart3,
-  TestTube2
+  TestTube2,
+  FileText
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useAuth } from '../../stores/useAppStore';
@@ -93,6 +94,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
       path: '/abg-analysis',
       color: 'from-red-500 to-rose-500',
       shadowColor: 'shadow-red-500/25',
+      category: 'primary'
+    },
+    {
+      icon: FileText,
+      label: 'MediScribe',
+      path: '/mediscribe',
+      color: 'from-emerald-500 to-teal-500',
+      shadowColor: 'shadow-emerald-500/25',
       category: 'primary'
     },
     {

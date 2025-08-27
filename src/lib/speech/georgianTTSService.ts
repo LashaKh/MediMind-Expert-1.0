@@ -231,11 +231,26 @@ export class GeorgianTTSService {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
-        const arrayBuffer = reader.result as ArrayBuffer;
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-        resolve(base64);
+        try {
+          const arrayBuffer = reader.result as ArrayBuffer;
+          const bytes = new Uint8Array(arrayBuffer);
+          
+          // Convert to base64 using chunks to avoid stack overflow
+          let binary = '';
+          const chunkSize = 8192;
+          
+          for (let i = 0; i < bytes.length; i += chunkSize) {
+            const chunk = bytes.subarray(i, i + chunkSize);
+            binary += String.fromCharCode.apply(null, Array.from(chunk));
+          }
+          
+          const base64 = btoa(binary);
+          resolve(base64);
+        } catch (error) {
+          reject(new Error(`Failed to convert audio to base64: ${error instanceof Error ? error.message : 'Unknown error'}`));
+        }
       };
-      reader.onerror = () => reject(new Error('Failed to convert audio to base64'));
+      reader.onerror = () => reject(new Error('Failed to read audio file'));
       reader.readAsArrayBuffer(audioBlob);
     });
   }
