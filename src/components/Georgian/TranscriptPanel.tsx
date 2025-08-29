@@ -27,7 +27,6 @@ import {
   Redo,
   Paperclip,
   FileIcon,
-  Plus,
   Shield,
   Activity
 } from 'lucide-react';
@@ -392,14 +391,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     navigator.clipboard.writeText(contextText);
   };
 
-  const pasteFromClipboard = async () => {
-    try {
-      const text = await navigator.clipboard.readText();
-      setContextText(prev => prev + text);
-    } catch (err) {
-      console.error('Failed to paste from clipboard:', err);
-    }
-  };
 
   const renderContextContent = () => {
     return (
@@ -460,15 +451,56 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
               </div>
             </div>
 
+            {/* Attached Files Display */}
+            {attachedFiles.length > 0 && (
+              <div className="mb-3">
+                <div className="flex flex-wrap gap-2">
+                  {attachedFiles.map((file, index) => (
+                    <div key={index} className="flex items-center space-x-2 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-full text-sm">
+                      <FileIcon className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+                      <span className="text-blue-900 dark:text-blue-100 truncate max-w-32">
+                        {file.name}
+                      </span>
+                      <button
+                        onClick={() => removeAttachedFile(index)}
+                        className="p-0.5 text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors duration-200"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Main Text Area */}
             <div className="flex-1 relative">
               <textarea
                 value={contextText}
                 onChange={(e) => setContextText(e.target.value)}
                 placeholder="Add any additional context about the patient or paste files here"
-                className="w-full h-full p-4 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 text-base leading-relaxed"
+                className="w-full h-full p-4 pr-12 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 text-base leading-relaxed"
                 style={{ minHeight: '300px' }}
               />
+              
+              {/* Attachment Upload Icon */}
+              <div className="absolute bottom-4 right-4">
+                <input
+                  ref={contextFileInputRef}
+                  type="file"
+                  multiple
+                  onChange={handleContextFileUpload}
+                  className="hidden"
+                  accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp3,.wav"
+                />
+                <button
+                  onClick={() => contextFileInputRef.current?.click()}
+                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200"
+                  title="Attach files"
+                >
+                  <Paperclip className="w-5 h-5" />
+                </button>
+              </div>
               
               {/* Recording Indicator */}
               {isRecordingContext && (
@@ -509,97 +541,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
-          <div className="p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Past Sessions */}
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Past sessions</h3>
-                <div className="bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 p-4">
-                  <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
-                    <FileIcon className="w-4 h-4" />
-                    <span className="text-sm">Not linked to a profile</span>
-                    <button className="p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded">
-                      <Paperclip className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Attachments */}
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-                  {attachedFiles.length === 0 ? 'No attachments' : `${attachedFiles.length} attachment${attachedFiles.length > 1 ? 's' : ''}`}
-                </h3>
-                <div className="bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 p-4 min-h-[80px]">
-                  {attachedFiles.length === 0 ? (
-                    <div className="flex items-center justify-center h-full">
-                      <input
-                        ref={contextFileInputRef}
-                        type="file"
-                        multiple
-                        onChange={handleContextFileUpload}
-                        className="hidden"
-                        accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp3,.wav"
-                      />
-                      <button
-                        onClick={() => contextFileInputRef.current?.click()}
-                        className="flex items-center space-x-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200"
-                      >
-                        <Plus className="w-4 h-4" />
-                        <span className="text-sm">Add files</span>
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      {attachedFiles.map((file, index) => (
-                        <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-gray-600 rounded p-2">
-                          <div className="flex items-center space-x-2">
-                            <FileIcon className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm text-gray-900 dark:text-white truncate">
-                              {file.name}
-                            </span>
-                          </div>
-                          <button
-                            onClick={() => removeAttachedFile(index)}
-                            className="p-1 text-red-400 hover:text-red-600 transition-colors duration-200"
-                          >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </div>
-                      ))}
-                      <button
-                        onClick={() => contextFileInputRef.current?.click()}
-                        className="w-full p-2 border border-dashed border-gray-300 dark:border-gray-600 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 text-sm"
-                      >
-                        + Add more files
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Actions</h3>
-                </div>
-                <div className="space-y-2">
-                  <button
-                    onClick={pasteFromClipboard}
-                    className="w-full p-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-left hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200"
-                  >
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Paste from clipboard</span>
-                  </button>
-                  <button className="w-full p-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-left hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Create note from context</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     );
   };
