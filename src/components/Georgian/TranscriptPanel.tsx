@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   Mic,
   Square,
@@ -27,9 +27,12 @@ import {
   Redo,
   Paperclip,
   FileIcon,
-  Plus
+  Plus,
+  Shield,
+  Activity
 } from 'lucide-react';
 import { GeorgianSession } from '../../hooks/useSessionManagement';
+import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
 
 interface ProcessingHistory {
   userInstruction: string;
@@ -116,6 +119,34 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const [isRecordingContext, setIsRecordingContext] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   
+  // Context recording TTS - separate instance with 5-second chunks
+  const {
+    recordingState: contextRecordingState,
+    isTranscribing: isContextTranscribing,
+    transcriptionResult: contextTranscriptionResult,
+    error: contextTTSError,
+    startRecording: startContextRecording,
+    stopRecording: stopContextRecording,
+    clearError: clearContextTTSError,
+    clearResult: clearContextTTSResult,
+    canRecord: canContextRecord,
+    canStop: canContextStop
+  } = useGeorgianTTS({
+    language: 'ka-GE',
+    autocorrect: true,
+    punctuation: true,
+    digits: true,
+    maxDuration: 0,
+    chunkDuration: 5000, // 5 second chunks for context notes
+    sessionId: `context_${currentSession?.id}`, // Separate session for context
+    onLiveTranscriptUpdate: (newText: string) => {
+      // Add transcribed text to context area
+      if (newText.trim()) {
+        setContextText(prev => prev + (prev ? '\n\n' : '') + newText.trim());
+      }
+    }
+  });
+  
   // Ref for auto-scrolling transcript
   const transcriptRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -132,6 +163,30 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
     }
   }, [currentTranscript, recordingState.isRecording]);
+
+  // Sync context recording state with actual recording state
+  useEffect(() => {
+    setIsRecordingContext(contextRecordingState.isRecording);
+  }, [contextRecordingState.isRecording]);
+
+  // Handle context transcription results
+  useEffect(() => {
+    if (contextTranscriptionResult && !contextRecordingState.isRecording) {
+      // Add final transcription result to context if not already added via live updates
+      const newText = contextTranscriptionResult.text.trim();
+      if (newText && !contextText.includes(newText)) {
+        setContextText(prev => prev + (prev ? '\n\n' : '') + newText);
+      }
+      
+      // Also append to main transcript if there's a current session
+      if (currentSession && onAppendTranscript && newText) {
+        onAppendTranscript(`Context Note: ${newText}`);
+      }
+      
+      // Clear the result
+      clearContextTTSResult();
+    }
+  }, [contextTranscriptionResult, contextRecordingState.isRecording, currentSession, onAppendTranscript, contextText, clearContextTTSResult]);
 
   const formatTime = (ms: number) => {
     const seconds = Math.floor(ms / 1000);
@@ -236,46 +291,52 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
 
     if (hasTranscript) {
       return (
-        <div className="bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 h-96 flex flex-col">
-          {/* Live Streaming Indicator */}
+        <div className="bg-white/90 dark:bg-gray-700/90 backdrop-blur-sm rounded-xl border border-slate-200/50 dark:border-gray-600/50 shadow-sm h-96 flex flex-col">
+          {/* Enhanced Live Streaming Indicator */}
           {recordingState.isRecording && (
-            <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-600 bg-green-50 dark:bg-green-900/20">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-sm text-green-700 dark:text-green-400 font-medium">Live transcription</span>
+            <div className="flex items-center justify-between p-4 border-b border-slate-200/50 dark:border-gray-600/50 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20">
+              <div className="flex items-center space-x-3">
+                <div className="relative">
+                  <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />
+                  <div className="absolute inset-0 w-3 h-3 bg-emerald-400 rounded-full animate-ping" />
+                </div>
+                <span className="text-sm text-emerald-700 dark:text-emerald-300 font-semibold">Live Transcription</span>
                 {error && error.includes('experiencing issues') && (
-                  <div className="flex items-center space-x-1 text-xs text-amber-600 dark:text-amber-400">
-                    <div className="w-1 h-1 bg-amber-500 rounded-full" />
-                    <span>Service degraded</span>
+                  <div className="flex items-center space-x-2 px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-full text-xs font-medium">
+                    <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" />
+                    <span>Service Degraded</span>
                   </div>
                 )}
               </div>
               {recordingState.isProcessingChunks && (
-                <div className="flex items-center space-x-2 text-xs text-green-600 dark:text-green-400">
-                  <div className="w-3 h-3 border border-green-500/30 border-t-green-500 rounded-full animate-spin" />
-                  <span>Processing...</span>
+                <div className="flex items-center space-x-2 px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-full text-xs font-medium">
+                  <div className="w-3 h-3 border border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+                  <span>Processing</span>
                 </div>
               )}
             </div>
           )}
           
-          {/* Scrollable Transcript Content */}
+          {/* Enhanced Medical Transcript Content */}
           <div 
             ref={transcriptRef}
-            className="flex-1 overflow-y-auto p-6 scroll-smooth"
+            className="flex-1 overflow-y-auto p-6 lg:p-8 scroll-smooth"
           >
             <div 
-              className="text-gray-900 dark:text-white text-lg leading-relaxed whitespace-pre-wrap"
-              style={{ fontFamily: 'Georgia, serif' }}
+              className="text-gray-900 dark:text-white text-lg lg:text-xl leading-relaxed whitespace-pre-wrap selection:bg-blue-200 dark:selection:bg-blue-800 selection:text-blue-900 dark:selection:text-blue-100"
+              style={{ 
+                fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+                lineHeight: '1.8'
+              }}
               dir="auto"
             >
               {currentTranscript}
-              {/* Typing indicator while processing */}
+              {/* Enhanced Typing Indicator */}
               {recordingState.isRecording && recordingState.isProcessingChunks && (
-                <span className="inline-flex items-center ml-2">
-                  <span className="animate-pulse text-blue-500">●</span>
-                  <span className="animate-pulse text-blue-500 delay-75">●</span>
-                  <span className="animate-pulse text-blue-500 delay-150">●</span>
+                <span className="inline-flex items-center ml-3 px-2 py-1 bg-blue-100 dark:bg-blue-900/30 rounded-full">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-1"></span>
+                  <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-75 mr-1"></span>
+                  <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-150"></span>
                 </span>
               )}
             </div>
@@ -286,24 +347,21 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
 
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-center">
-          <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FileText className="w-8 h-8 text-gray-400" />
+        <div className="text-center max-w-md mx-auto px-6">
+          <div className="relative mb-8">
+            <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+              <FileText className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div className="absolute -top-2 -right-2 w-8 h-8 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
+              <Stethoscope className="w-4 h-4 text-white" />
+            </div>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            Transcription not started
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+            Ready for Medical Transcription
           </h3>
-          <p className="text-gray-600 dark:text-gray-400 text-sm max-w-sm">
-            Your live transcription will stream here in real-time as you speak
+          <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed mb-8">
+            Begin your Georgian medical transcription session. Your speech will be converted to text in real-time with medical terminology recognition.
           </p>
-          <button
-            onClick={canRecord ? onStartRecording : undefined}
-            disabled={!canRecord}
-            className="mt-6 px-6 py-3 bg-gray-800 hover:bg-gray-900 disabled:bg-gray-400 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2 mx-auto"
-          >
-            <Mic className="w-5 h-5" />
-            <span>Start transcribing</span>
-          </button>
         </div>
       </div>
     );
@@ -318,25 +376,17 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     setAttachedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleContextVoiceRecord = () => {
-    if (isRecordingContext) {
+  const handleContextVoiceRecord = useCallback(() => {
+    if (contextRecordingState.isRecording) {
+      // Stop recording
+      stopContextRecording();
       setIsRecordingContext(false);
-      // In a real implementation, this would stop the recording
-      // and add the transcribed text to the context text area
-      // For now, we'll simulate adding some text
-      const voiceNoteText = '[Voice note transcribed text would appear here]';
-      setContextText(prev => prev + (prev ? '\n\n' : '') + voiceNoteText);
-      
-      // Also append to the main transcript if there's a current session
-      if (currentSession && onAppendTranscript) {
-        onAppendTranscript(`Context Note: ${voiceNoteText}`);
-      }
-    } else {
+    } else if (canContextRecord) {
+      // Start recording
+      startContextRecording();
       setIsRecordingContext(true);
-      // In a real implementation, this would start recording audio
-      // and use the same TTS service as the main transcript
     }
-  };
+  }, [contextRecordingState.isRecording, canContextRecord, startContextRecording, stopContextRecording]);
 
   const copyContextText = () => {
     navigator.clipboard.writeText(contextText);
@@ -424,7 +474,35 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
               {isRecordingContext && (
                 <div className="absolute top-4 right-4 flex items-center space-x-2 bg-red-100 dark:bg-red-900/30 px-3 py-2 rounded-lg">
                   <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                  <span className="text-sm text-red-600 dark:text-red-400">Recording...</span>
+                  <span className="text-sm text-red-600 dark:text-red-400">
+                    Recording... {formatTime(contextRecordingState.duration)}
+                  </span>
+                </div>
+              )}
+              
+              {/* Context Transcribing Indicator */}
+              {isContextTranscribing && !isRecordingContext && (
+                <div className="absolute top-4 right-4 flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 px-3 py-2 rounded-lg">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                  <span className="text-sm text-blue-600 dark:text-blue-400">
+                    Processing...
+                  </span>
+                </div>
+              )}
+              
+              {/* Context Recording Error */}
+              {contextTTSError && (
+                <div className="absolute top-4 right-4 flex items-center space-x-2 bg-red-100 dark:bg-red-900/30 px-3 py-2 rounded-lg">
+                  <AlertCircle className="w-4 h-4 text-red-500" />
+                  <span className="text-sm text-red-600 dark:text-red-400">
+                    Recording failed
+                  </span>
+                  <button
+                    onClick={clearContextTTSError}
+                    className="text-red-500 hover:text-red-700 ml-1"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
                 </div>
               )}
             </div>
@@ -762,25 +840,24 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      {/* Header with Record Button */}
-      <div className="bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Stethoscope className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                MediScribe
-              </h2>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                {currentSession ? currentSession.title : 'Georgian Medical Transcription'}
+      {/* Enhanced Medical Professional Header - Responsive */}
+      <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-3 sm:p-4 lg:p-6 border-b border-slate-200/50 dark:border-gray-700/50">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
+            <div className="relative flex-shrink-0">
+              <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg">
+                <Stethoscope className="w-4 sm:w-5 h-4 sm:h-5 text-white" />
               </div>
+              {recordingState.isRecording && (
+                <div className="absolute -top-1 -right-1 w-3 sm:w-4 h-3 sm:h-4 bg-red-500 rounded-full border-2 border-white dark:border-gray-800 shadow-sm">
+                  <div className="w-full h-full bg-red-400 rounded-full animate-ping" />
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Record Button - Top Right */}
-          <div className="flex items-center space-x-3">
+          {/* Desktop Control Buttons - Hidden on Mobile */}
+          <div className="hidden sm:flex items-center space-x-2 lg:space-x-3">
             <input
               ref={fileInputRef}
               type="file"
@@ -788,75 +865,120 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
               onChange={handleFileSelect}
               className="hidden"
             />
+            
+            {/* Upload Button - Medical Style */}
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-lg transition-colors duration-200 text-sm"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl transition-all duration-200 text-sm font-medium shadow-sm hover:shadow-md min-h-[44px]"
             >
-              Upload
+              <Upload className="w-4 h-4" />
+              <span className="hidden md:inline">Upload</span>
             </button>
             
+            {/* Enhanced Recording Button - Desktop Only */}
             <button
               onClick={canRecord ? onStartRecording : canStop ? onStopRecording : undefined}
               disabled={isTranscribing}
               className={`
-                px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2
+                flex items-center space-x-2 lg:space-x-3 px-4 lg:px-6 py-2.5 lg:py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 min-h-[44px] lg:min-h-[52px]
                 ${canRecord 
-                  ? 'bg-green-600 hover:bg-green-700 text-white' 
+                  ? 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-green-500/25' 
                   : canStop
-                    ? 'bg-red-600 hover:bg-red-700 text-white'
-                    : 'bg-gray-400 cursor-not-allowed text-white'
+                    ? 'bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-red-500/25'
+                    : 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-gray-500 dark:text-gray-400 shadow-none'
                 }
               `}
             >
-              <Mic className="w-4 h-4" />
-              <span>{recordingState.isRecording ? 'Stop Recording' : 'Start transcribing'}</span>
+              <Mic className="w-5 h-5" />
+              <span className="text-sm lg:text-base">
+                {recordingState.isRecording ? 'Stop Recording' : 'Start Transcribing'}
+              </span>
+            </button>
+          </div>
+          
+          {/* Mobile: Compact Upload Button Only */}
+          <div className="sm:hidden">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center justify-center w-10 h-10 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg transition-all duration-200 shadow-sm"
+            >
+              <Upload className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        {/* Recording Status */}
+        {/* Enhanced Recording Status - Medical Professional Style */}
         {recordingState.isRecording && (
-          <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-300 mb-4">
-            <div className="flex items-center space-x-1">
-              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              <span>Recording</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Clock className="w-4 h-4" />
-              <span>{formatTime(recordingState.duration)}</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Volume2 className="w-4 h-4" />
-              <span>{Math.round(recordingState.audioLevel)}%</span>
+          <div className="bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/10 dark:to-rose-900/10 border border-red-200/50 dark:border-red-700/30 rounded-xl p-4 mb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <div className="relative">
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                    <div className="absolute inset-0 w-3 h-3 bg-red-400 rounded-full animate-ping" />
+                  </div>
+                  <span className="text-red-700 dark:text-red-300 font-semibold">Live Recording</span>
+                </div>
+                <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-300">
+                  <Clock className="w-4 h-4" />
+                  <span className="font-mono font-semibold">{formatTime(recordingState.duration)}</span>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Volume2 className="w-4 h-4 text-slate-500" />
+                <div className="w-16 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-green-500 to-emerald-500 transition-all duration-200 rounded-full"
+                    style={{ width: `${Math.round(recordingState.audioLevel)}%` }}
+                  />
+                </div>
+                <span className="text-xs font-medium text-slate-500 min-w-[32px]">
+                  {Math.round(recordingState.audioLevel)}%
+                </span>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Smart Segmentation Status */}
+        {/* Enhanced Smart Segmentation Status */}
         {recordingState.isProcessingChunks && (
-          <div className="flex items-center justify-center space-x-3 text-sm bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-4 h-4 border-2 border-green-500/30 border-t-green-500 rounded-full animate-spin" />
-              <span className="text-green-700 dark:text-green-300 font-medium">
-                Auto-restart in progress...
-              </span>
-            </div>
-            <div className="text-green-600 dark:text-green-400 text-xs">
-              Seamless continuation (23s segments)
+          <div className="bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/10 dark:to-green-900/10 border border-emerald-200/50 dark:border-emerald-700/30 rounded-xl p-4 mb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-5 h-5 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+                <div>
+                  <span className="text-emerald-700 dark:text-emerald-300 font-semibold block">
+                    Auto-Processing Active
+                  </span>
+                  <span className="text-emerald-600 dark:text-emerald-400 text-xs">
+                    Continuous 23-second segments
+                  </span>
+                </div>
+              </div>
+              <div className="text-emerald-600 dark:text-emerald-400 text-xs font-medium px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 rounded-full">
+                Seamless Mode
+              </div>
             </div>
           </div>
         )}
         
-        {/* Legacy Chunked Processing Status - keep for compatibility */}
+        {/* Enhanced Legacy Chunked Processing Status */}
         {recordingState.isProcessingChunks && recordingState.totalChunks > 0 && (
-          <div className="flex items-center space-x-4 text-sm text-blue-600 dark:text-blue-400 mb-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-4 h-4 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
-              <span>Processing chunks: {recordingState.processedChunks}/{recordingState.totalChunks}</span>
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 border border-blue-200/50 dark:border-blue-700/30 rounded-xl p-4 mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center space-x-3">
+                <div className="w-5 h-5 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+                <span className="text-blue-700 dark:text-blue-300 font-semibold">
+                  Processing: {recordingState.processedChunks}/{recordingState.totalChunks} chunks
+                </span>
+              </div>
+              <span className="text-blue-600 dark:text-blue-400 text-xs font-medium">
+                {Math.round((recordingState.processedChunks / recordingState.totalChunks) * 100)}%
+              </span>
             </div>
-            <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div className="w-full bg-blue-200 dark:bg-blue-800/30 rounded-full h-2.5">
               <div 
-                className="bg-blue-500 h-2 rounded-full transition-all duration-300" 
+                className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full transition-all duration-500" 
                 style={{ 
                   width: `${recordingState.totalChunks > 0 ? (recordingState.processedChunks / recordingState.totalChunks) * 100 : 0}%` 
                 }}
@@ -865,80 +987,96 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
           </div>
         )}
 
+        {/* Enhanced Transcription Processing Status */}
         {isTranscribing && (
-          <div className="flex items-center space-x-2 text-blue-600 dark:text-blue-400 mb-4">
-            <div className="w-4 h-4 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
-            <span className="text-sm">Processing audio...</span>
+          <div className="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/10 dark:to-violet-900/10 border border-purple-200/50 dark:border-purple-700/30 rounded-xl p-4 mb-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-5 h-5 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+              <div>
+                <span className="text-purple-700 dark:text-purple-300 font-semibold block">Processing Audio</span>
+                <span className="text-purple-600 dark:text-purple-400 text-xs">AI transcription in progress...</span>
+              </div>
+            </div>
           </div>
         )}
 
-        {/* Tab Navigation */}
-        <div className="flex space-x-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
+        {/* Enhanced Medical Tab Navigation */}
+        <div className="flex space-x-1 bg-slate-100/80 dark:bg-slate-700/50 p-1.5 rounded-xl backdrop-blur-sm">
           {tabs.map((tab) => {
             const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200
-                  ${activeTab === tab.id
-                    ? 'bg-white dark:bg-gray-800 text-red-600 dark:text-red-400 shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  flex items-center space-x-2 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 min-h-[48px]
+                  ${isActive
+                    ? 'bg-white dark:bg-slate-800 text-blue-700 dark:text-blue-300 shadow-lg shadow-blue-500/10 border border-blue-200/50 dark:border-blue-700/50'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-600/50'
                   }
                 `}
               >
-                <Icon className="w-4 h-4" />
-                <span>{tab.label}</span>
+                <Icon className="w-5 h-5" />
+                <span className="hidden sm:inline">{tab.label}</span>
+                <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
+                {isActive && (
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                )}
               </button>
             );
           })}
         </div>
 
-        {/* Action Buttons for Active Tab */}
+        {/* Enhanced Professional Action Buttons */}
         {activeTab === 'transcript' && hasTranscript && (
-          <div className="flex items-center space-x-2 mt-3">
+          <div className="flex items-center space-x-2 mt-4">
             <button
               onClick={copyToClipboard}
-              className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-lg transition-colors duration-200"
-              title="Copy to clipboard"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl transition-all duration-200 font-medium shadow-sm hover:shadow-md min-h-[44px]"
+              title="Copy transcript to clipboard"
             >
               <Copy className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm">Copy</span>
             </button>
             <button
               onClick={downloadTranscription}
-              className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-lg transition-colors duration-200"
-              title="Download transcript"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl transition-all duration-200 font-medium shadow-sm hover:shadow-md min-h-[44px]"
+              title="Download transcript as file"
             >
               <Download className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm">Download</span>
             </button>
             <button
               onClick={handleEditStart}
-              className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-lg transition-colors duration-200"
-              title="Edit transcript"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-blue-100 hover:bg-blue-200 dark:bg-blue-700/30 dark:hover:bg-blue-600/40 text-blue-700 dark:text-blue-200 rounded-xl transition-all duration-200 font-medium shadow-sm hover:shadow-md min-h-[44px]"
+              title="Edit transcript content"
             >
               <Edit3 className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm">Edit</span>
             </button>
           </div>
         )}
       </div>
 
-      {/* Error Display */}
+      {/* Enhanced Medical Error Display */}
       {error && (
-        <div className="mx-4 mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg">
-          <div className="flex items-start space-x-3">
-            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+        <div className="mx-4 lg:mx-6 mt-4 p-5 bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 border border-red-200/50 dark:border-red-700/50 rounded-xl shadow-sm">
+          <div className="flex items-start space-x-4">
+            <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+              <AlertCircle className="w-5 h-5 text-white" />
+            </div>
             <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium text-red-800 dark:text-red-200">Error</h4>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-base font-semibold text-red-800 dark:text-red-200">System Alert</h4>
                 <button
                   onClick={onClearError}
-                  className="text-red-400 hover:text-red-600 p-1"
+                  className="text-red-400 hover:text-red-600 dark:hover:text-red-300 p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
-              <p className="text-sm text-red-700 dark:text-red-300 mt-1">{error}</p>
+              <p className="text-sm text-red-700 dark:text-red-300 leading-relaxed">{error}</p>
             </div>
           </div>
         </div>

@@ -5,7 +5,14 @@ import {
   Activity,
   Shield,
   X,
-  AlertTriangle
+  AlertTriangle,
+  ChevronDown,
+  ChevronRight,
+  FileText,
+  Mic,
+  Square,
+  Plus,
+  Search
 } from 'lucide-react';
 import { SessionHistory } from './SessionHistory';
 import { TranscriptPanel } from './TranscriptPanel';
@@ -18,6 +25,11 @@ export const GeorgianSTTApp: React.FC = () => {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredSessions, setFilteredSessions] = useState<any[]>([]);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [drawerHeight, setDrawerHeight] = useState(0);
+  const [touchStart, setTouchStart] = useState<{ y: number; time: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(true);
 
   // Session Management
   const {
@@ -103,6 +115,20 @@ export const GeorgianSTTApp: React.FC = () => {
       setFilteredSessions(sessions);
     }
   }, [sessions, searchQuery, searchSessions]);
+
+  // Initialize drawer height and handle window resize
+  useEffect(() => {
+    const updateDrawerHeight = () => {
+      const windowHeight = window.innerHeight;
+      const headerHeight = 88; // Header height
+      const maxDrawerHeight = windowHeight * 0.75; // 75% of screen height
+      setDrawerHeight(maxDrawerHeight);
+    };
+
+    updateDrawerHeight();
+    window.addEventListener('resize', updateDrawerHeight);
+    return () => window.removeEventListener('resize', updateDrawerHeight);
+  }, []);
 
   // Don't auto-create sessions - only create when user starts recording or uploads
 
@@ -263,170 +289,475 @@ export const GeorgianSTTApp: React.FC = () => {
     clearTTSError();
   }, [clearSessionError, clearAIError, clearTTSError]);
 
-  // Test function: Send parallel requests to test server behavior
-  const testParallelRequests = useCallback(async () => {
-    // Get the current service reference directly from the hook return
-    const currentService = service;
+  // Handle mobile drawer controls
+  const openMobileDrawer = useCallback(() => {
+    setIsMobileDrawerOpen(true);
+  }, []);
+
+  const closeMobileDrawer = useCallback(() => {
+    setIsMobileDrawerOpen(false);
+  }, []);
+
+  // Handle drawer backdrop click
+  const handleDrawerBackdropClick = useCallback((e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      closeMobileDrawer();
+    }
+  }, [closeMobileDrawer]);
+
+  // Handle session selection and close drawer
+  const handleMobileSessionSelect = useCallback(async (sessionId: string) => {
+    await handleSelectSession(sessionId);
+    closeMobileDrawer();
+  }, [handleSelectSession, closeMobileDrawer]);
+
+  // Touch gesture handlers for drawer
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setTouchStart({ y: touch.clientY, time: Date.now() });
+    setIsDragging(false);
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!touchStart) return;
     
-    if (!currentService) {
-      console.error('❌ Georgian TTS service not available. Please wait for the app to fully load and try again.');
-      alert('Georgian TTS service is not yet initialized. Please wait a moment and try again.');
-      return;
+    const touch = e.touches[0];
+    const deltaY = touch.clientY - touchStart.y;
+    
+    // Only start dragging if moved more than 10px
+    if (Math.abs(deltaY) > 10 && !isDragging) {
+      setIsDragging(true);
     }
     
-    console.log('✅ Georgian TTS service available, starting parallel test...');
-    console.log('🎙️ Please speak for 3 seconds when prompted...');
-
-    try {
-      // Request microphone permission
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-          sampleRate: 16000,
-        }
-      });
-
-      console.log('🎙️ Recording audio for parallel test... Speak now!');
-      
-      // Create MediaRecorder for real audio
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
-      });
-      
-      const audioChunks: Blob[] = [];
-      
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunks.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = async () => {
-        // Stop the microphone stream
-        stream.getTracks().forEach(track => track.stop());
-        
-        if (audioChunks.length > 0) {
-          const testBlob = new Blob(audioChunks, { type: 'audio/webm;codecs=opus' });
-          console.log(`🧪 Running parallel request test with recorded audio (${Math.round(testBlob.size/1024)}KB)...`);
-          await currentService.testParallelRequests(testBlob);
-        } else {
-          console.error('❌ No audio recorded, cannot run test');
-        }
-      };
-
-      // Start recording
-      mediaRecorder.start();
-      
-      // Stop recording after 3 seconds
-      setTimeout(() => {
-        if (mediaRecorder.state === 'recording') {
-          console.log('🛑 Stopping recording, processing audio...');
-          mediaRecorder.stop();
-        }
-      }, 3000);
-
-    } catch (error) {
-      console.error('❌ Failed to access microphone for test:', error);
-      alert('Microphone access required for parallel test. Please allow microphone permission and try again.');
+    // If dragging down significantly, close drawer
+    if (isDragging && deltaY > 100) {
+      closeMobileDrawer();
+      setTouchStart(null);
+      setIsDragging(false);
     }
-  }, [service]); // Include service so callback updates when service becomes available
+  }, [touchStart, isDragging, closeMobileDrawer]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!touchStart) return;
+    
+    const touch = e.changedTouches[0];
+    const deltaY = touch.clientY - touchStart.y;
+    const deltaTime = Date.now() - touchStart.time;
+    
+    // Fast swipe down - close drawer
+    if (deltaY > 50 && deltaTime < 300) {
+      closeMobileDrawer();
+    }
+    
+    setTouchStart(null);
+    setIsDragging(false);
+  }, [touchStart, closeMobileDrawer]);
+
+  // Handle history collapse change
+  const handleHistoryCollapseChange = useCallback((isCollapsed: boolean) => {
+    setIsHistoryCollapsed(isCollapsed);
+  }, []);
+
 
   // Get current transcript
   const currentTranscript = currentSession?.transcript || transcriptionResult?.text || '';
 
+  // Format time helper for mobile display
+  const formatTime = (ms: number) => {
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
   // Browser support is checked in GeorgianSTTAppWrapper
 
   return (
-    <div className="h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
-      {/* Clean Professional Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <div className="h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20 overflow-hidden">
+      {/* Enhanced Medical Professional Header */}
+      <div className="bg-white/80 dark:bg-gray-800/90 backdrop-blur-xl border-b border-blue-200/50 dark:border-gray-700/50 shadow-sm">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              {/* Clean Professional Logo */}
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <Stethoscope className="w-5 h-5 text-white" />
+            <div className="flex items-center space-x-6">
+              {/* Enhanced Medical Branding */}
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg">
+                    <Stethoscope className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-800 shadow-sm animate-pulse" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                     MediScribe
                   </h1>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-                    <span>Georgian Medical Transcription</span>
-                    <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                    <span className="text-green-600 dark:text-green-400 font-medium">HIPAA Secure</span>
+                  <div className="flex items-center space-x-3 text-sm">
+                    <span className="text-slate-600 dark:text-slate-300 font-medium">Georgian Medical Transcription</span>
+                    <div className="flex items-center space-x-2 px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full">
+                      <Shield className="w-3 h-3" />
+                      <span className="text-xs font-semibold">HIPAA Secure</span>
+                    </div>
                   </div>
                 </div>
               </div>
               
-              {/* Clean Connection Status */}
-              <div className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium ${
+              {/* Enhanced Connection Status with Medical Context */}
+              <div className={`flex items-center space-x-3 px-4 py-2 rounded-xl text-sm font-semibold shadow-sm transition-all duration-200 ${
                 authStatus.isAuthenticated
-                  ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
-                  : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'
+                  ? 'bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 text-emerald-700 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-700/50'
+                  : 'bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 text-red-700 dark:text-red-300 border border-red-200/50 dark:border-red-700/50'
               }`}>
-                <div className={`w-2 h-2 rounded-full ${
-                  authStatus.isAuthenticated ? 'bg-green-500' : 'bg-red-500'
-                }`} />
+                <div className="relative">
+                  <div className={`w-3 h-3 rounded-full ${
+                    authStatus.isAuthenticated ? 'bg-emerald-500 shadow-emerald-500/25' : 'bg-red-500 shadow-red-500/25'
+                  } shadow-lg`} />
+                  {authStatus.isAuthenticated && (
+                    <div className="absolute inset-0 w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
+                  )}
+                </div>
+                <Activity className="w-4 h-4" />
                 {authStatus.isAuthenticated ? (
-                  <span>Connected</span>
+                  <span>Service Active</span>
                 ) : (
-                  <span>Offline</span>
+                  <span>Connecting...</span>
                 )}
               </div>
 
-              {/* Parallel Test Button (Development) */}
-              <button
-                onClick={testParallelRequests}
-                className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium flex items-center space-x-2 transition-colors"
-                title="Test: Send two parallel requests to check if issue is sequential vs capacity"
-              >
-                <span>🧪 Test</span>
-              </button>
             </div>
 
-            {/* Clean User Profile */}
-            {user && (
-              <div className="flex items-center space-x-3">
-                <div className="text-right hidden sm:block">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {user.email?.split('@')[0] || 'Medical Professional'}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Physician</p>
-                </div>
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
-                  {user.email?.charAt(0).toUpperCase() || 'M'}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
 
-      {/* Two-Panel Layout */}
-      <div className="flex flex-col lg:flex-row h-[calc(100vh-80px)] bg-gray-50 dark:bg-gray-900">
-        {/* Left Panel - Session History */}
-        <div className="w-full lg:w-80 flex-shrink-0 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700">
-          <div className="h-64 lg:h-full bg-white dark:bg-gray-800">
-            <SessionHistory
-              sessions={filteredSessions}
-              currentSession={currentSession}
-              loading={sessionLoading}
-              onCreateSession={handleCreateSession}
-              onSelectSession={handleSelectSession}
-              onDeleteSession={handleDeleteSession}
-              onDuplicateSession={duplicateSession}
-              onSearchChange={setSearchQuery}
+      {/* Mobile-First Responsive Layout */}
+      <div className="flex flex-col h-[calc(100vh-88px)] bg-gradient-to-br from-slate-50/50 via-white to-blue-50/30 dark:from-gray-900/50 dark:via-gray-800 dark:to-blue-900/10">
+        
+        {/* Mobile: Compact Session Header with Drawer Toggle */}
+        <div className="lg:hidden">
+          {currentSession ? (
+            // Active session header with drawer toggle
+            <div className="h-16 bg-white/80 dark:bg-gray-800/90 backdrop-blur-xl border-b border-slate-200/50 dark:border-gray-700/50">
+              <div className="p-4 flex items-center justify-between">
+                <div className="flex items-center space-x-3 flex-1 min-w-0">
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FileText className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                      {currentSession.title}
+                    </h3>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      Active Session • {formatTime(recordingState.duration)}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={openMobileDrawer}
+                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  aria-label="Open session history"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ) : (
+            // No active session - show sessions button
+            <div className="h-16 bg-white/80 dark:bg-gray-800/90 backdrop-blur-xl border-b border-slate-200/50 dark:border-gray-700/50">
+              <div className="p-4 flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <FileText className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                      No Active Session
+                    </h3>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      {sessions.length} sessions available
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={openMobileDrawer}
+                  className="flex items-center space-x-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
+                  aria-label="View sessions"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>Sessions</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile: Session History Drawer */}
+        {isMobileDrawerOpen && (
+          <div className="lg:hidden fixed inset-0 z-50">
+            {/* Backdrop */}
+            <div 
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={handleDrawerBackdropClick}
             />
+            
+            {/* Drawer */}
+            <div 
+              className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl shadow-2xl transform transition-transform duration-300 ease-out"
+              style={{ maxHeight: `${drawerHeight}px` }}
+            >
+              {/* Drawer Handle */}
+              <div 
+                className="flex items-center justify-center py-3 cursor-pointer active:bg-gray-50 dark:active:bg-gray-700"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onClick={closeMobileDrawer}
+              >
+                <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full" />
+              </div>
+              
+              {/* Drawer Header */}
+              <div className="px-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                      <FileText className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        Sessions
+                      </h2>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {sessions.length} recordings
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={handleCreateSession}
+                      className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                      aria-label="Create new session"
+                    >
+                      <Plus className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={closeMobileDrawer}
+                      className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      aria-label="Close drawer"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Search Input */}
+                <div className="mt-3 relative">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                    <Search className="text-gray-400 w-4 h-4" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search sessions..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+              
+              {/* Drawer Content */}
+              <div className="flex-1 overflow-y-auto" style={{ maxHeight: `${drawerHeight - 180}px` }}>
+                <div className="p-4 space-y-3">
+                  {sessionLoading ? (
+                    <div className="flex items-center justify-center py-8">
+                      <div className="text-center space-y-3">
+                        <div className="w-8 h-8 border-3 border-gray-200 border-t-blue-600 rounded-full animate-spin mx-auto" />
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Loading sessions...</p>
+                      </div>
+                    </div>
+                  ) : filteredSessions.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-8 px-4">
+                      <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center mb-4">
+                        <Stethoscope className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                        No Sessions Yet
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-6 max-w-sm">
+                        Create your first medical transcription session to begin capturing patient consultations.
+                      </p>
+                      <button
+                        onClick={() => {
+                          handleCreateSession();
+                          closeMobileDrawer();
+                        }}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+                      >
+                        Create First Session
+                      </button>
+                    </div>
+                  ) : (
+                    filteredSessions.map((session) => {
+                      const isActive = currentSession?.id === session.id;
+                      const hasTranscript = session.transcript && session.transcript.length > 0;
+                      
+                      return (
+                        <div
+                          key={session.id}
+                          className={`
+                            relative p-4 rounded-xl cursor-pointer transition-all duration-200 border-2
+                            ${isActive
+                              ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700'
+                              : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:border-blue-200 dark:hover:border-blue-700 hover:bg-blue-50/50 dark:hover:bg-blue-900/10'
+                            }
+                          `}
+                          onClick={() => handleMobileSessionSelect(session.id)}
+                        >
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center space-x-3 flex-1 min-w-0">
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                                isActive 
+                                  ? 'bg-blue-600 text-white' 
+                                  : 'bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
+                              }`}>
+                                <FileText className="w-5 h-5" />
+                              </div>
+                              
+                              <div className="flex-1 min-w-0">
+                                <h3 className={`text-base font-semibold truncate mb-1 ${
+                                  isActive ? 'text-blue-900 dark:text-blue-100' : 'text-gray-900 dark:text-white'
+                                }`}>
+                                  {session.title}
+                                </h3>
+                                
+                                <div className="flex items-center space-x-3 text-sm">
+                                  <span className={isActive ? 'text-blue-600 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400'}>
+                                    {new Date(session.createdAt).toLocaleDateString('en-US', { 
+                                      month: 'short', 
+                                      day: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit'
+                                    })}
+                                  </span>
+                                  {session.durationMs > 0 && (
+                                    <span className={isActive ? 'text-blue-600 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400'}>
+                                      {formatTime(session.durationMs)}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {hasTranscript && (
+                              <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                isActive 
+                                  ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                                  : 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400'
+                              }`}>
+                                Transcribed
+                              </div>
+                            )}
+                          </div>
+                          
+                          {session.transcript && (
+                            <div className={`text-sm leading-relaxed line-clamp-2 ${
+                              isActive 
+                                ? 'text-blue-800 dark:text-blue-200'
+                                : 'text-gray-600 dark:text-gray-300'
+                            }`}>
+                              {session.transcript.length > 100 
+                                ? session.transcript.substring(0, 100) + '...'
+                                : session.transcript
+                              }
+                            </div>
+                          )}
+                          
+                          {isActive && (
+                            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-12 bg-blue-600 rounded-r-full" />
+                          )}
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Desktop: Side Panel Layout */}
+        <div className="hidden lg:flex lg:flex-row h-full">
+          {/* Desktop Session History Panel - Only show when not collapsed */}
+          {!isHistoryCollapsed && (
+            <div className="w-80 xl:w-96 flex-shrink-0 border-r border-blue-200/30 dark:border-gray-700/50">
+              <div className="h-full bg-white/70 dark:bg-gray-800/80 backdrop-blur-sm">
+                <SessionHistory
+                  sessions={filteredSessions}
+                  currentSession={currentSession}
+                  loading={sessionLoading}
+                  onCreateSession={handleCreateSession}
+                  onSelectSession={handleSelectSession}
+                  onDeleteSession={handleDeleteSession}
+                  onDuplicateSession={duplicateSession}
+                  onSearchChange={setSearchQuery}
+                  onCollapseChange={handleHistoryCollapseChange}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Desktop Transcript Panel */}
+          <div className="flex-1 flex flex-col min-h-0">
+            {/* Collapsed History Toggle - Show when history is collapsed */}
+            {isHistoryCollapsed && (
+              <div className="hidden lg:flex items-center justify-start p-4 bg-white/70 dark:bg-gray-800/80 backdrop-blur-sm border-b border-blue-200/30 dark:border-gray-700/50">
+                <button
+                  onClick={() => setIsHistoryCollapsed(false)}
+                  className="flex items-center space-x-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 text-sm font-medium"
+                  title="Show sessions"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                  <span>Sessions ({sessions.length})</span>
+                </button>
+              </div>
+            )}
+            <div className="h-full bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm shadow-inner">
+              <TranscriptPanel
+                currentSession={currentSession}
+                recordingState={recordingState}
+                isTranscribing={isTranscribing}
+                transcriptionResult={transcriptionResult}
+                error={ttsError}
+                isSupported={isSupported}
+                canRecord={canRecord}
+                canStop={canStop}
+                canPause={canPause}
+                canResume={canResume}
+                remainingTime={remainingTime}
+                isNearMaxDuration={isNearMaxDuration}
+                onStartRecording={handleStartRecording}
+                onStopRecording={stopRecording}
+                onPauseRecording={pauseRecording}
+                onResumeRecording={resumeRecording}
+                onFileUpload={handleFileUpload}
+                onClearError={clearTTSError}
+                onClearResult={clearTTSResult}
+                onUpdateTranscript={handleTranscriptUpdate}
+                onAppendTranscript={handleTranscriptAppend}
+                processing={processing}
+                aiError={aiError}
+                processingHistory={processingHistory}
+                onProcessText={handleProcessText}
+                onClearAIError={clearAIError}
+                onClearHistory={clearHistory}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Main Panel - Tabbed Interface with Transcript, Context, and AI Processing */}
-        <div className="flex-1 flex flex-col">
-          <div className="h-96 lg:h-full bg-white dark:bg-gray-800">
+        {/* Mobile: Full-Screen Transcript Panel */}
+        <div className="lg:hidden flex-1 flex flex-col min-h-0">
+          <div className="h-full bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm">
             <TranscriptPanel
               currentSession={currentSession}
               recordingState={recordingState}
@@ -458,26 +789,59 @@ export const GeorgianSTTApp: React.FC = () => {
             />
           </div>
         </div>
+
+        {/* Mobile: Floating Action Button for Recording */}
+        <div className="lg:hidden">
+          {!recordingState.isRecording && (
+            <div className="fixed bottom-20 right-4 z-50">
+              <button
+                onClick={canRecord ? handleStartRecording : undefined}
+                disabled={!canRecord}
+                className={`
+                  w-16 h-16 rounded-full shadow-2xl transform transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center
+                  ${canRecord 
+                    ? 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-green-500/25' 
+                    : 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-gray-500 dark:text-gray-400 shadow-none'
+                  }
+                `}
+              >
+                <Mic className="w-8 h-8" />
+              </button>
+            </div>
+          )}
+          
+          {recordingState.isRecording && (
+            <div className="fixed bottom-20 right-4 z-50">
+              <button
+                onClick={canStop ? stopRecording : undefined}
+                disabled={!canStop}
+                className="w-16 h-16 rounded-full shadow-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-red-500/25 transform transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center animate-pulse"
+              >
+                <Square className="w-8 h-8" />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Clean Error Display */}
+      {/* Enhanced Medical Error Display */}
       {(sessionError && !ttsError && !aiError) && (
-        <div className="fixed bottom-4 right-4 max-w-sm bg-white dark:bg-gray-800 border border-red-200 dark:border-red-700 rounded-lg p-4 shadow-lg">
-          <div className="flex items-start space-x-3">
-            <div className="w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-              <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
+        <div className="fixed bottom-6 right-6 max-w-sm bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-red-200/50 dark:border-red-700/50 rounded-xl p-5 shadow-2xl shadow-red-500/10">
+          <div className="flex items-start space-x-4">
+            <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+              <AlertTriangle className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-red-800 dark:text-red-200">Error</h3>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-base font-semibold text-red-800 dark:text-red-200">System Alert</h3>
                 <button
                   onClick={clearAllErrors}
-                  className="text-gray-400 hover:text-gray-600 p-1"
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
-              <p className="text-sm text-red-700 dark:text-red-300 mt-1">
+              <p className="text-sm text-red-700 dark:text-red-300 leading-relaxed">
                 {sessionError}
               </p>
             </div>
@@ -485,18 +849,27 @@ export const GeorgianSTTApp: React.FC = () => {
         </div>
       )}
 
-      {/* Clean HTTPS Security Warning */}
+      {/* Enhanced Medical Security Warning */}
       {window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 max-w-md bg-white dark:bg-gray-800 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4 shadow-lg">
-          <div className="flex items-start space-x-3">
-            <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-              <Shield className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
+        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 max-w-lg bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-amber-200/50 dark:border-amber-700/50 rounded-xl p-6 shadow-2xl shadow-amber-500/10">
+          <div className="flex items-start space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+              <Shield className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
-              <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">HTTPS Required</h3>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                Medical transcription requires secure HTTPS connection for patient privacy and microphone access.
+              <div className="flex items-center space-x-2 mb-3">
+                <h3 className="text-lg font-bold text-amber-800 dark:text-amber-200">Security Protocol Required</h3>
+                <div className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-full text-xs font-semibold">
+                  HIPAA
+                </div>
+              </div>
+              <p className="text-sm text-amber-700 dark:text-amber-300 leading-relaxed mb-3">
+                Medical transcription requires secure HTTPS connection for patient privacy protection and microphone access.
               </p>
+              <div className="flex items-center space-x-2 text-xs text-amber-600 dark:text-amber-400">
+                <Activity className="w-3 h-3" />
+                <span>Please ensure secure connection before proceeding</span>
+              </div>
             </div>
           </div>
         </div>

@@ -627,7 +627,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       chunkProcessingIntervalRef.current = null;
     }
 
-    // Process any remaining chunks with fresh service instance
+    // Process any remaining chunks with fresh service instance (only if not already processed)
     const remainingChunks = audioChunksForProcessingRef.current.slice();
     if (remainingChunks.length > 0) {
       try {
@@ -659,12 +659,14 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
           // Call live transcript callback with final new text
           if (onLiveTranscriptUpdate) {
             const newText = combinedTranscriptRef.current.substring(previousLength);
-            onLiveTranscriptUpdate(newText, combinedTranscriptRef.current);
+            onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionId);
           }
         }
       } catch (error) {
         console.warn('Failed to process final audio chunks:', error);
       }
+    } else {
+      console.log('🧹 No remaining chunks to process (already processed in manual stop)');
     }
 
     // Final result
@@ -700,7 +702,8 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       // Process current audio segment immediately
       if (audioChunksRef.current.length > 0) {
         const currentBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
-        console.log(`🎙️ Processing segment: ${Math.round(currentBlob.size/1024)}KB`);
+        const segmentDurationSeconds = audioChunksRef.current.length * (chunkSize / 1000);
+        console.log(`🎙️ Processing segment: ${Math.round(currentBlob.size/1024)}KB (${audioChunksRef.current.length} chunks, ~${segmentDurationSeconds}s)`);
         
         // For auto-restarts: process in background (non-blocking)
         // For manual stops: process synchronously (blocking)
@@ -725,7 +728,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
                 
                 if (onLiveTranscriptUpdate) {
                   const newText = combinedTranscriptRef.current.substring(previousLength);
-                  onLiveTranscriptUpdate(newText, combinedTranscriptRef.current);
+                  onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionId);
                 }
                 
                 const result: TranscriptionResult = {
@@ -759,7 +762,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               
               if (onLiveTranscriptUpdate) {
                 const newText = combinedTranscriptRef.current.substring(previousLength);
-                onLiveTranscriptUpdate(newText, combinedTranscriptRef.current);
+                onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionId);
               }
               
               const result: TranscriptionResult = {
@@ -769,6 +772,12 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               };
               setTranscriptionResult(result);
             }
+            
+            // CRITICAL FIX: Clear chunks after manual processing to prevent duplicate processing in cleanup
+            audioChunksRef.current = [];
+            audioChunksForProcessingRef.current = [];
+            console.log('🧹 Cleared audio chunks after manual stop processing');
+            
           } catch (error) {
             console.error('❌ Failed to process final segment:', error);
             setError('Failed to process final audio segment.');
@@ -786,6 +795,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         pendingAutoRestartRef.current = false;
         
         // Reset audio chunks for new segment
+        console.log(`🧹 AUTO-RESTART: Clearing ${audioChunksRef.current.length} processed chunks for new segment`);
         audioChunksRef.current = [];
         audioChunksForProcessingRef.current = [];
         
@@ -1121,9 +1131,6 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     canPause: recordingState.isRecording && !recordingState.isPaused,
     canResume: recordingState.isRecording && recordingState.isPaused,
     remainingTime: Math.max(0, maxDuration - recordingState.duration),
-    isNearMaxDuration: recordingState.duration > maxDuration * 0.9,
-    
-    // Service reference for advanced usage
-    service: georgianTTSServiceRef.current
+    isNearMaxDuration: recordingState.duration > maxDuration * 0.9
   };
 };

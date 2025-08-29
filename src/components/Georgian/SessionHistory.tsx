@@ -36,6 +36,7 @@ interface SessionHistoryProps {
   onDeleteSession: (sessionId: string) => void;
   onDuplicateSession: (sessionId: string) => void;
   onSearchChange: (query: string) => void;
+  onCollapseChange?: (isCollapsed: boolean) => void;
 }
 
 export const SessionHistory: React.FC<SessionHistoryProps> = ({
@@ -46,11 +47,13 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   onSelectSession,
   onDeleteSession,
   onDuplicateSession,
-  onSearchChange
+  onSearchChange,
+  onCollapseChange
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set());
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(true);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -65,6 +68,12 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
       newExpanded.add(sessionId);
     }
     setExpandedSessions(newExpanded);
+  };
+
+  const toggleHistory = () => {
+    const newCollapsedState = !isHistoryCollapsed;
+    setIsHistoryCollapsed(newCollapsedState);
+    onCollapseChange?.(newCollapsedState);
   };
 
   const formatDate = (dateString: string) => {
@@ -108,9 +117,17 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
       <div className="bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Archive className="w-4 h-4 text-white" />
-            </div>
+            <button
+              onClick={toggleHistory}
+              className="w-8 h-8 bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center justify-center transition-colors duration-200"
+              title={isHistoryCollapsed ? "Expand sessions" : "Collapse sessions"}
+            >
+              {isHistoryCollapsed ? (
+                <ChevronRight className="w-4 h-4 text-white" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-white" />
+              )}
+            </button>
             <div>
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Sessions
@@ -130,23 +147,26 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
           </button>
         </div>
         
-        {/* Clean Search */}
-        <div className="relative">
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-            <Search className="text-gray-400 w-4 h-4" />
+        {/* Clean Search - Only show when expanded */}
+        {!isHistoryCollapsed && (
+          <div className="relative">
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+              <Search className="text-gray-400 w-4 h-4" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search sessions..."
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
           </div>
-          <input
-            type="text"
-            placeholder="Search sessions..."
-            value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
+        )}
       </div>
 
-      {/* Session List */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      {/* Session List - Only show when expanded */}
+      {!isHistoryCollapsed && (
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="text-center space-y-3">
@@ -378,19 +398,22 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             })}
           </div>
         )}
-      </div>
+        </div>
+      )}
 
-      {/* Footer */}
-      <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-        <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
-          <span>{sessions.length} session{sessions.length !== 1 ? 's' : ''}</span>
-          <span>•</span>
-          <div className="flex items-center space-x-1">
-            <Shield className="w-3 h-3 text-green-500" />
-            <span>Secure</span>
+      {/* Footer - Only show when expanded */}
+      {!isHistoryCollapsed && (
+        <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+          <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+            <span>{sessions.length} session{sessions.length !== 1 ? 's' : ''}</span>
+            <span>•</span>
+            <div className="flex items-center space-x-1">
+              <Shield className="w-3 h-3 text-green-500" />
+              <span>Secure</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Close dropdown when clicking outside */}
       {activeDropdown && (
