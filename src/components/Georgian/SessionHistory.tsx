@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
   Plus,
   Search,
   Calendar,
   Clock,
-  FileText,
+  Stethoscope,
   Trash2,
   Copy,
   MoreHorizontal,
   ChevronDown,
   ChevronRight,
   Sparkles,
-  Heart,
   Activity,
-  Stethoscope,
   Brain,
   Award,
   Shield,
@@ -23,9 +21,29 @@ import {
   Star,
   Archive,
   Volume2,
-  MoreVertical
+  MoreVertical,
+  X,
+  Hash,
+  Headphones,
+  Mic,
+  PlayCircle,
+  PauseCircle,
+  BarChart3,
+  Eye,
+  CheckCircle2,
+  AlertCircle,
+  Layers,
+  Wand2,
+  RefreshCcw,
+  BookOpen,
+  Target,
+  Lightbulb,
+  Zap as ZapIcon,
+  Crown,
+  Gem
 } from 'lucide-react';
 import { GeorgianSession } from '../../hooks/useSessionManagement';
+import { MedicalButton, MedicalCard, MedicalInput, MedicalLoading, MedicalBadge } from '../ui/MedicalDesignSystem';
 
 interface SessionHistoryProps {
   sessions: GeorgianSession[];
@@ -39,6 +57,27 @@ interface SessionHistoryProps {
   onCollapseChange?: (isCollapsed: boolean) => void;
 }
 
+// Session categories for intelligent grouping
+const getSessionCategory = (session: GeorgianSession) => {
+  const hasTranscript = session.transcript && session.transcript.length > 0;
+  const hasProcessing = session.processingResults && session.processingResults.length > 0;
+  const isRecent = new Date(session.createdAt).getTime() > Date.now() - 86400000; // Last 24 hours
+  
+  if (hasTranscript && hasProcessing) return 'complete';
+  if (hasTranscript) return 'transcribed';
+  if (isRecent) return 'recent';
+  return 'draft';
+};
+
+// Advanced session metrics
+const getSessionMetrics = (session: GeorgianSession) => {
+  const wordCount = session.transcript ? session.transcript.split(' ').length : 0;
+  const quality = wordCount > 100 ? 'high' : wordCount > 50 ? 'medium' : 'low';
+  const processingCount = session.processingResults?.length || 0;
+  
+  return { wordCount, quality, processingCount };
+};
+
 export const SessionHistory: React.FC<SessionHistoryProps> = ({
   sessions,
   currentSession,
@@ -51,23 +90,90 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   onCollapseChange
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set());
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(true);
+  const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(false);
+  const [filterBy, setFilterBy] = useState<'all' | 'transcribed' | 'recent' | 'favorites'>('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+  const [hoveredSession, setHoveredSession] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Enhanced search functionality
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     onSearchChange(query);
   };
 
-  const toggleExpanded = (sessionId: string) => {
-    const newExpanded = new Set(expandedSessions);
-    if (newExpanded.has(sessionId)) {
-      newExpanded.delete(sessionId);
+  // Smart session grouping by date with category badges
+  const groupedSessions = useMemo(() => {
+    const filtered = sessions.filter(session => {
+      const matchesSearch = searchQuery.trim() === '' || 
+        session.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (session.transcript && session.transcript.toLowerCase().includes(searchQuery.toLowerCase()));
+      
+      const matchesFilter = 
+        filterBy === 'all' ||
+        (filterBy === 'transcribed' && session.transcript) ||
+        (filterBy === 'recent' && new Date(session.createdAt).getTime() > Date.now() - 86400000) ||
+        (filterBy === 'favorites' && favorites.has(session.id));
+      
+      return matchesSearch && matchesFilter;
+    });
+
+    const groups: { [key: string]: GeorgianSession[] } = {
+      'Today': [],
+      'Yesterday': [],
+      'This Week': [],
+      'This Month': [],
+      'Older': []
+    };
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const thisWeek = new Date(today);
+    thisWeek.setDate(thisWeek.getDate() - 7);
+    const thisMonth = new Date(today);
+    thisMonth.setMonth(thisMonth.getMonth() - 1);
+
+    filtered.forEach(session => {
+      const sessionDate = new Date(session.createdAt);
+      const sessionDay = new Date(sessionDate.getFullYear(), sessionDate.getMonth(), sessionDate.getDate());
+      
+      if (sessionDay.getTime() === today.getTime()) {
+        groups['Today'].push(session);
+      } else if (sessionDay.getTime() === yesterday.getTime()) {
+        groups['Yesterday'].push(session);
+      } else if (sessionDate.getTime() > thisWeek.getTime()) {
+        groups['This Week'].push(session);
+      } else if (sessionDate.getTime() > thisMonth.getTime()) {
+        groups['This Month'].push(session);
+      } else {
+        groups['Older'].push(session);
+      }
+    });
+
+    // Remove empty groups
+    Object.keys(groups).forEach(key => {
+      if (groups[key].length === 0) {
+        delete groups[key];
+      }
+    });
+
+    return groups;
+  }, [sessions, searchQuery, filterBy, favorites]);
+
+  const toggleFavorite = (sessionId: string) => {
+    const newFavorites = new Set(favorites);
+    if (newFavorites.has(sessionId)) {
+      newFavorites.delete(sessionId);
     } else {
-      newExpanded.add(sessionId);
+      newFavorites.add(sessionId);
     }
-    setExpandedSessions(newExpanded);
+    setFavorites(newFavorites);
   };
 
   const toggleHistory = () => {
@@ -78,22 +184,19 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    if (date.toDateString() === today.toDateString()) {
-      return `Today ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return `Yesterday ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-    } else {
-      return date.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    }
+    const now = new Date();
+    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return 'Just now';
+    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
+    
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   const formatDuration = (ms: number) => {
@@ -105,323 +208,471 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   };
 
   const getSessionPreview = (session: GeorgianSession) => {
-    if (!session.transcript) return 'No transcript yet...';
-    return session.transcript.length > 80 
-      ? session.transcript.substring(0, 80) + '...'
-      : session.transcript;
+    if (!session.transcript) return 'No content yet';
+    // Get first 4-5 words only
+    const words = session.transcript.split(' ').slice(0, 5);
+    return words.join(' ') + (session.transcript.split(' ').length > 5 ? '...' : '');
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'complete': return CheckCircle2;
+      case 'transcribed': return Stethoscope;
+      case 'recent': return Clock;
+      default: return AlertCircle;
+    }
+  };
+
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'complete': return 'text-emerald-500';
+      case 'transcribed': return 'text-blue-500';
+      case 'recent': return 'text-amber-500';
+      default: return 'text-slate-400';
+    }
+  };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+      if (e.key === 'Escape') {
+        setActiveDropdown(null);
+        searchInputRef.current?.blur();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const renderSessionCard = (session: GeorgianSession) => {
+    const isActive = currentSession?.id === session.id;
+    const isHovered = hoveredSession === session.id;
+    const isFavorite = favorites.has(session.id);
+    const category = getSessionCategory(session);
+    const metrics = getSessionMetrics(session);
+    const CategoryIcon = getCategoryIcon(category);
+    const categoryColor = getCategoryColor(category);
+
+    return (
+      <MedicalCard
+        key={session.id}
+        variant={isActive ? "elevated" : "interactive"}
+        className={`
+          group relative cursor-pointer transition-all duration-300 ease-out transform
+          ${isActive
+            ? 'scale-[1.02] shadow-2xl shadow-medical-blue-500/25 border-medical-blue-400 bg-gradient-to-br from-medical-blue-50 via-white to-medical-blue-50/50 dark:from-medical-blue-900/20 dark:via-medical-gray-800 dark:to-medical-blue-900/10'
+            : isHovered
+            ? 'scale-[1.01] shadow-xl shadow-medical-gray-500/20 border-medical-blue-300 dark:border-medical-blue-600'
+            : 'hover:scale-[1.005] hover:shadow-lg hover:border-medical-blue-200 dark:hover:border-medical-blue-700'
+          }
+          ${isActive ? 'ring-1 ring-medical-blue-500/30' : ''}
+          overflow-hidden backdrop-blur-sm
+        `}
+        onClick={() => onSelectSession(session.id)}
+        onMouseEnter={() => setHoveredSession(session.id)}
+        onMouseLeave={() => setHoveredSession(null)}
+        padding="none"
+      >
+        {/* Animated background gradient */}
+        <div className={`absolute inset-0 opacity-0 transition-opacity duration-500 ${isActive ? 'opacity-100' : ''}`}>
+          <div className="absolute inset-0 bg-gradient-to-r from-medical-blue-500/5 via-transparent to-medical-blue-500/5 animate-pulse" />
+        </div>
+
+        {/* Compact Content - Fixed Height */}
+        <div className="relative p-4 h-32 flex flex-col justify-between">
+          {/* Compact Header */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-3 flex-1 min-w-0">
+              {/* Compact session icon */}
+              <div className={`
+                relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200
+                ${isActive 
+                  ? 'bg-medical-blue-600 text-white' 
+                  : 'bg-medical-gray-100 dark:bg-medical-gray-600 text-medical-gray-600 dark:text-medical-gray-300 group-hover:bg-medical-blue-100 dark:group-hover:bg-medical-blue-900/30'
+                }
+              `}>
+                <CategoryIcon className="w-5 h-5" />
+                
+                {/* Active indicator */}
+                {isActive && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white dark:border-medical-gray-800" />
+                )}
+                
+                {/* Favorite star */}
+                {isFavorite && (
+                  <div className="absolute -top-1 -left-1 w-4 h-4 bg-amber-500 rounded-full flex items-center justify-center">
+                    <Star className="w-2 h-2 text-white fill-current" />
+                  </div>
+                )}
+              </div>
+
+              {/* Compact session info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center mb-1">
+                  <h3 className={`
+                    text-sm font-bold truncate transition-colors duration-200
+                    ${isActive 
+                      ? 'text-medical-blue-900 dark:text-medical-blue-100' 
+                      : 'text-medical-gray-900 dark:text-medical-gray-100 group-hover:text-medical-blue-800 dark:group-hover:text-medical-blue-200'
+                    }
+                  `}>
+                    {session.title}
+                  </h3>
+                </div>
+
+                {/* Compact metadata */}
+                <div className="flex items-center space-x-3 text-xs text-medical-gray-500 dark:text-medical-gray-400">
+                  <span>{formatDate(session.createdAt)}</span>
+                  {session.durationMs > 0 && <span>{formatDuration(session.durationMs)}</span>}
+                  {metrics.wordCount > 0 && <span>{metrics.wordCount} words</span>}
+                </div>
+
+                {/* Compact status badges */}
+                <div className="flex items-center space-x-1 mt-2">
+                  {session.transcript && (
+                    <span className="px-2 py-0.5 text-xs font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-lg">
+                      Transcribed
+                    </span>
+                  )}
+                  {session.processingResults && session.processingResults.length > 0 && (
+                    <span className="px-2 py-0.5 text-xs font-medium bg-medical-blue-100 dark:bg-medical-blue-900/30 text-medical-blue-700 dark:text-medical-blue-300 rounded-lg">
+                      AI: {session.processingResults.length}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Compact actions */}
+            <div className="flex items-center space-x-1">
+              {/* Favorite toggle */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite(session.id);
+                }}
+                className={`
+                  p-2 rounded-lg transition-all duration-200
+                  ${isFavorite
+                    ? 'text-amber-500 hover:text-amber-600 bg-amber-50 dark:bg-amber-900/20'
+                    : 'text-medical-gray-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20'
+                  }
+                `}
+                title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+              >
+                <Star className={`w-3 h-3 ${isFavorite ? 'fill-current' : ''}`} />
+              </button>
+
+              {/* Options dropdown */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveDropdown(activeDropdown === session.id ? null : session.id);
+                  }}
+                  className="p-2 rounded-lg transition-all duration-200 text-medical-gray-400 hover:text-medical-gray-600 dark:hover:text-medical-gray-300 hover:bg-medical-gray-100 dark:hover:bg-medical-gray-700"
+                  title="Session options"
+                >
+                  <MoreVertical className="w-3 h-3" />
+                </button>
+                
+                {activeDropdown === session.id && (
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white/95 dark:bg-medical-gray-800/95 backdrop-blur-xl border border-medical-gray-200/50 dark:border-medical-gray-700/50 rounded-xl shadow-xl z-50 overflow-hidden">
+                    <div className="p-1">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDuplicateSession(session.id);
+                          setActiveDropdown(null);
+                        }}
+                        className="w-full px-3 py-2 text-left text-sm font-medium text-medical-gray-700 dark:text-medical-gray-200 hover:bg-medical-blue-50 dark:hover:bg-medical-blue-900/30 rounded-lg transition-all duration-200 flex items-center space-x-2"
+                      >
+                        <Copy className="w-3 h-3 text-medical-blue-500" />
+                        <span>Duplicate</span>
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (confirm(`Delete "${session.title}"?`)) {
+                            onDeleteSession(session.id);
+                          }
+                          setActiveDropdown(null);
+                        }}
+                        className="w-full px-3 py-2 text-left text-sm font-medium text-medical-error-600 dark:text-medical-error-400 hover:bg-medical-error-50 dark:hover:bg-medical-error-900/30 rounded-lg transition-all duration-200 flex items-center space-x-2"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Compact Session preview - Always visible for consistent height */}
+          <div className={`
+            p-2 rounded-lg text-xs leading-tight transition-all duration-200 h-8 flex items-center
+            ${isActive 
+              ? 'bg-medical-blue-50/70 dark:bg-medical-blue-900/20 text-medical-blue-800 dark:text-medical-blue-200 border border-medical-blue-200/50 dark:border-medical-blue-700/50' 
+              : 'bg-medical-gray-50/80 dark:bg-medical-gray-700/50 text-medical-gray-600 dark:text-medical-gray-400 border border-medical-gray-200/50 dark:border-medical-gray-600/50'
+            }
+          `}>
+            <div className="flex items-center space-x-2 w-full">
+              <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${categoryColor}`} />
+              <p className="font-medium truncate">{getSessionPreview(session)}</p>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Active session indicator */}
+        {isActive && (
+          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1.5 h-16 bg-gradient-to-b from-medical-blue-600 to-medical-blue-700 rounded-r-full shadow-lg">
+            <div className="absolute inset-0 bg-medical-blue-500 rounded-r-full animate-pulse" />
+          </div>
+        )}
+      </MedicalCard>
+    );
   };
 
   return (
-    <div className="h-full flex flex-col overflow-hidden">
-      {/* Clean Header */}
-      <div className="bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-4">
+    <div className="h-full flex flex-col overflow-hidden bg-gradient-to-br from-slate-50/50 via-white to-blue-50/30 dark:from-gray-900/50 dark:via-gray-800 dark:to-blue-900/10">
+      {/* Clean Compact Header */}
+      <div className="relative bg-white/90 dark:bg-medical-gray-800/90 backdrop-blur-xl border-b border-medical-gray-200/50 dark:border-medical-gray-700/50 p-4 shadow-sm">
+        <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
               onClick={toggleHistory}
-              className="w-8 h-8 bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center justify-center transition-colors duration-200"
+              className={`
+                w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md
+                ${isHistoryCollapsed 
+                  ? 'bg-medical-gray-600 text-white hover:bg-medical-gray-700' 
+                  : 'bg-medical-blue-600 text-white hover:bg-medical-blue-700'
+                }
+              `}
               title={isHistoryCollapsed ? "Expand sessions" : "Collapse sessions"}
             >
               {isHistoryCollapsed ? (
-                <ChevronRight className="w-4 h-4 text-white" />
+                <ChevronRight className="w-5 h-5" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-white" />
+                <ChevronDown className="w-5 h-5" />
               )}
             </button>
+            
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-lg font-bold text-medical-gray-900 dark:text-white">
                 Sessions
               </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-medical-gray-600 dark:text-medical-gray-400">
                 {sessions.length} recordings
               </p>
             </div>
           </div>
           
-          <button
+          {/* Compact Create Button */}
+          <MedicalButton
             onClick={() => onCreateSession()}
-            className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 flex items-center justify-center"
-            title="Create new session"
+            variant="primary"
+            size="md"
+            leftIcon={Plus}
+            className="shadow-sm hover:shadow-md transition-all duration-200"
           >
-            <Plus className="w-5 h-5" />
-          </button>
+            New
+          </MedicalButton>
         </div>
         
-        {/* Clean Search - Only show when expanded */}
+        {/* Compact Search and Filters - Only show when expanded */}
         {!isHistoryCollapsed && (
-          <div className="relative">
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-              <Search className="text-gray-400 w-4 h-4" />
+          <div className="mt-4 space-y-3">
+            <div className="flex items-center space-x-3">
+              {/* Compact Search */}
+              <div className="flex-1 relative">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                  <Search className="text-medical-gray-400 w-4 h-4" />
+                </div>
+                <MedicalInput
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Search sessions..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  className="pl-10 pr-10 h-10 bg-white/80 dark:bg-medical-gray-700/80 border-medical-gray-200 dark:border-medical-gray-600 rounded-xl text-sm"
+                  size="sm"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => handleSearch('')}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-medical-gray-400 hover:text-medical-gray-600 dark:hover:text-medical-gray-300"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+
+              {/* Compact Filter Options */}
+              <div className="flex items-center space-x-1">
+                {['all', 'transcribed', 'recent', 'favorites'].map((filter) => (
+                  <button
+                    key={filter}
+                    onClick={() => setFilterBy(filter as any)}
+                    className={`
+                      px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 capitalize
+                      ${filterBy === filter
+                        ? 'bg-medical-blue-600 text-white shadow-sm'
+                        : 'text-medical-gray-600 dark:text-medical-gray-400 hover:text-medical-blue-600 dark:hover:text-medical-blue-400 hover:bg-medical-blue-50 dark:hover:bg-medical-blue-900/30'
+                      }
+                    `}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
             </div>
-            <input
-              type="text"
-              placeholder="Search sessions..."
-              value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
           </div>
         )}
       </div>
 
       {/* Session List - Only show when expanded */}
       {!isHistoryCollapsed && (
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="text-center space-y-3">
-              <div className="w-8 h-8 border-3 border-gray-200 border-t-blue-600 rounded-full animate-spin mx-auto" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Loading Sessions</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Retrieving transcriptions...</p>
+        <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="text-center space-y-6">
+                <div className="relative">
+                  <div className="w-16 h-16 border-4 border-medical-blue-200 border-t-medical-blue-600 border-r-medical-blue-600 rounded-full animate-spin" />
+                  <div className="absolute inset-0 w-16 h-16 border-2 border-medical-blue-400/30 rounded-full animate-ping" />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-lg font-semibold text-medical-gray-700 dark:text-medical-gray-200">Loading Sessions</p>
+                  <p className="text-sm text-medical-gray-500 dark:text-medical-gray-400">Retrieving your medical transcriptions...</p>
+                </div>
               </div>
             </div>
-          </div>
-        ) : sessions.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 px-4">
-            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center mb-4">
-              <Stethoscope className="w-8 h-8 text-gray-400 dark:text-gray-500" />
-            </div>
-            
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              No Sessions Yet
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-6 max-w-sm">
-              Create your first medical transcription session to begin capturing patient consultations.
-            </p>
-            
-            <button
-              onClick={() => onCreateSession()}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2 font-medium"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Create First Session</span>
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {sessions.map((session, index) => {
-              const isActive = currentSession?.id === session.id;
-              const hasTranscript = session.transcript && session.transcript.length > 0;
-              const hasProcessing = session.processingResults && session.processingResults.length > 0;
-              
-              return (
-                <div
-                  key={session.id}
-                  className={`
-                    group relative p-4 rounded-lg cursor-pointer transition-all duration-200 border
-                    ${isActive
-                      ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 shadow-sm'
-                      : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600'
-                    }
-                  `}
-                  onClick={() => onSelectSession(session.id)}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-3 mb-3">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                          isActive 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
-                        }`}>
-                          <FileText className="w-4 h-4" />
-                        </div>
-                        
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-1">
-                            {session.transcript && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toggleExpanded(session.id);
-                                }}
-                                className={`flex-shrink-0 p-1 rounded-lg transition-all duration-200 ${
-                                  isActive 
-                                    ? 'text-indigo-600 dark:text-indigo-400 hover:bg-white/60 dark:hover:bg-slate-800/60' 
-                                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600'
-                                }`}
-                              >
-                                {expandedSessions.has(session.id) ? (
-                                  <ChevronDown className="w-4 h-4" />
-                                ) : (
-                                  <ChevronRight className="w-4 h-4" />
-                                )}
-                              </button>
-                            )}
-                            <h3 className={`text-base font-semibold truncate ${
-                              isActive ? 'text-blue-900 dark:text-blue-100' : 'text-gray-900 dark:text-white'
-                            }`}>
-                              {session.title}
-                            </h3>
-                          </div>
-                          
-                          <div className="flex items-center space-x-2 mt-1">
-                            {hasTranscript && (
-                              <div className={`flex items-center space-x-1 px-2 py-1 rounded text-xs font-medium ${
-                                isActive 
-                                  ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' 
-                                  : 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400'
-                              }`}>
-                                <span>Transcribed</span>
-                              </div>
-                            )}
-                            {hasProcessing && (
-                              <div className={`flex items-center space-x-1 px-2 py-1 rounded text-xs font-medium ${
-                                isActive 
-                                  ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' 
-                                  : 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'
-                              }`}>
-                                <span>AI Processed</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-3 text-sm mb-3">
-                        <div className={`flex items-center space-x-1 ${
-                          isActive ? 'text-blue-600 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400'
-                        }`}>
-                          <Calendar className="w-3 h-3" />
-                          <span>{formatDate(session.createdAt)}</span>
-                        </div>
-                        {session.durationMs > 0 && (
-                          <div className={`flex items-center space-x-1 ${
-                            isActive ? 'text-blue-600 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400'
-                          }`}>
-                            <Clock className="w-3 h-3" />
-                            <span>{formatDuration(session.durationMs)}</span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {session.transcript && !expandedSessions.has(session.id) && (
-                        <div className={`p-3 rounded-lg border text-sm leading-relaxed line-clamp-2 ${
-                          isActive 
-                            ? 'bg-blue-50/50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-700 text-blue-900 dark:text-blue-100' 
-                            : 'bg-gray-50 dark:bg-gray-600 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300'
-                        }`}>
-                          {getSessionPreview(session)}
-                        </div>
-                      )}
-                      
-                      {/* Expanded Content */}
-                      {expandedSessions.has(session.id) && session.transcript && (
-                        <div className="mt-4">
-                          <div className={`p-3 rounded-lg border text-sm leading-relaxed ${
-                            isActive 
-                              ? 'bg-blue-50/50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-700 text-blue-900 dark:text-blue-100' 
-                              : 'bg-gray-50 dark:bg-gray-600 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300'
-                          }`}>
-                            {session.transcript}
-                          </div>
-                          
-                          {/* Processing Results Count */}
-                          {session.processingResults && session.processingResults.length > 0 && (
-                            <div className="mt-2 flex items-center space-x-2">
-                              <div className={`flex items-center space-x-1 px-2 py-1 rounded text-xs font-medium ${
-                                isActive 
-                                  ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' 
-                                  : 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'
-                              }`}>
-                                <span>{session.processingResults.length} AI analysis</span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      
-                      {/* Quality Indicators */}
-                      <div className="flex items-center space-x-2 mt-3">
-                        <div className="flex items-center space-x-1 px-2 py-1 rounded text-xs font-medium bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300">
-                          <Shield className="w-3 h-3" />
-                          <span>Secure</span>
-                        </div>
-                        {session.transcript && (
-                          <div className="flex items-center space-x-1 px-2 py-1 rounded text-xs font-medium bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400">
-                            <span>98%</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    {/* Action Menu */}
-                    <div className="relative ml-3">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveDropdown(activeDropdown === session.id ? null : session.id);
-                        }}
-                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-400 transition-colors duration-200"
-                      >
-                        <MoreVertical className="w-4 h-4" />
-                      </button>
-                      
-                      {activeDropdown === session.id && (
-                        <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10 overflow-hidden">
-                          <div className="p-1">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onDuplicateSession(session.id);
-                                setActiveDropdown(null);
-                              }}
-                              className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors duration-200 flex items-center space-x-2"
-                            >
-                              <Copy className="w-4 h-4 text-blue-500" />
-                              <span>Duplicate</span>
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onDeleteSession(session.id);
-                                setActiveDropdown(null);
-                              }}
-                              className="w-full px-3 py-2 text-left text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors duration-200 flex items-center space-x-2"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              <span>Delete</span>
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* Active Session Indicator */}
-                  {isActive && (
-                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-blue-600 rounded-r" />
-                  )}
+          ) : Object.keys(groupedSessions).length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 px-6">
+              <div className="relative mb-8">
+                <div className="w-24 h-24 bg-gradient-to-br from-medical-blue-100 to-purple-100 dark:from-medical-blue-900/30 dark:to-purple-900/30 rounded-3xl flex items-center justify-center shadow-2xl">
+                  <Stethoscope className="w-12 h-12 text-medical-blue-600 dark:text-medical-blue-400" />
                 </div>
-              );
-            })}
-          </div>
-        )}
-        </div>
-      )}
-
-      {/* Footer - Only show when expanded */}
-      {!isHistoryCollapsed && (
-        <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-          <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
-            <span>{sessions.length} session{sessions.length !== 1 ? 's' : ''}</span>
-            <span>•</span>
-            <div className="flex items-center space-x-1">
-              <Shield className="w-3 h-3 text-green-500" />
-              <span>Secure</span>
+                <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-white" />
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-bold text-medical-gray-900 dark:text-white mb-3">
+                {searchQuery || filterBy !== 'all' ? 'No Sessions Found' : 'Ready to Begin'}
+              </h3>
+              <p className="text-medical-gray-600 dark:text-medical-gray-400 text-center mb-8 max-w-md leading-relaxed">
+                {searchQuery || filterBy !== 'all' 
+                  ? 'Try adjusting your search terms or filters to find what you\'re looking for.'
+                  : 'Create your first medical transcription session to begin capturing patient consultations with AI-powered analysis.'
+                }
+              </p>
+              
+              {!searchQuery && filterBy === 'all' && (
+                <MedicalButton
+                  onClick={() => onCreateSession()}
+                  variant="primary"
+                  size="xl"
+                  leftIcon={Plus}
+                  className="shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 bg-gradient-to-r from-medical-blue-600 via-medical-blue-700 to-purple-600 hover:from-medical-blue-700 hover:via-medical-blue-800 hover:to-purple-700"
+                >
+                  Create Your First Session
+                </MedicalButton>
+              )}
             </div>
+          ) : (
+            <div className="space-y-6">
+              {Object.entries(groupedSessions).map(([groupName, groupSessions]) => (
+                <div key={groupName}>
+                  {/* Compact Group Header */}
+                  <div className="flex items-center space-x-3 mb-3">
+                    <h4 className="text-sm font-bold text-medical-gray-900 dark:text-white">
+                      {groupName}
+                    </h4>
+                    <div className="h-px flex-1 bg-gradient-to-r from-medical-gray-300 via-medical-gray-200 to-transparent dark:from-medical-gray-600 dark:via-medical-gray-700 dark:to-transparent" />
+                    <span className="text-xs text-medical-gray-500 dark:text-medical-gray-400 font-medium">
+                      {groupSessions.length}
+                    </span>
+                  </div>
+
+                  {/* Compact Sessions List */}
+                  <div className={`
+                    ${viewMode === 'grid' 
+                      ? 'grid grid-cols-1 xl:grid-cols-2 gap-4' 
+                      : 'space-y-3'
+                    }
+                  `}>
+                    {groupSessions.map((session) => renderSessionCard(session))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Compact Footer - Only show when expanded */}
+      {!isHistoryCollapsed && (
+        <div className="relative px-4 py-2 bg-white/80 dark:bg-medical-gray-800/80 border-t border-medical-gray-200/50 dark:border-medical-gray-700/50">
+          <div className="flex items-center justify-center text-xs text-medical-gray-500 dark:text-medical-gray-400">
+            <span>{sessions.length} sessions • </span>
+            <Shield className="w-3 h-3 mx-1 text-emerald-500" />
+            <span>Secure</span>
           </div>
         </div>
       )}
 
-      {/* Close dropdown when clicking outside */}
-      {activeDropdown && (
-        <div
-          className="fixed inset-0 z-0"
-          onClick={() => setActiveDropdown(null)}
-        />
-      )}
+      {/* Enhanced keyboard shortcuts overlay */}
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+          border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(to bottom, #2563eb, #7c3aed);
+        }
+        
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        
+        .animate-shimmer::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
     </div>
   );
 };

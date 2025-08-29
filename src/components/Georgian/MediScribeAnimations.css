@@ -1,0 +1,411 @@
+/* MediScribe Premium Animations & Micro-Interactions */
+
+/* Sophisticated Keyframes */
+@keyframes premium-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes premium-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-30px) rotateX(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotateX(0deg);
+  }
+}
+
+@keyframes premium-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotateZ(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotateZ(0deg);
+  }
+}
+
+@keyframes premium-bounce {
+  0% { transform: scale(1) rotateZ(0deg); }
+  50% { transform: scale(1.05) rotateZ(2deg); }
+  100% { transform: scale(1) rotateZ(0deg); }
+}
+
+@keyframes premium-pulse-ring {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+@keyframes premium-gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes premium-typing-dots {
+  0%, 20% { opacity: 0; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-10px); }
+  60%, 100% { opacity: 0; transform: translateY(0); }
+}
+
+@keyframes premium-neural-pulse {
+  0% { 
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 0 10px rgba(168, 85, 247, 0.1);
+    transform: scale(1.02);
+  }
+  100% { 
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0);
+    transform: scale(1);
+  }
+}
+
+@keyframes premium-medical-wave {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+@keyframes premium-sparkle {
+  0%, 100% { opacity: 0; transform: rotate(0deg) scale(0); }
+  50% { opacity: 1; transform: rotate(180deg) scale(1); }
+}
+
+@keyframes premium-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+/* Sophisticated Class Animations */
+.animate-premium-fade-in {
+  animation: premium-fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-premium-slide-in {
+  animation: premium-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-premium-scale-in {
+  animation: premium-scale-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-premium-bounce {
+  animation: premium-bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+.animate-premium-pulse-ring {
+  animation: premium-pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-premium-gradient {
+  background-size: 200% 200%;
+  animation: premium-gradient-shift 3s ease infinite;
+}
+
+.animate-premium-typing {
+  animation: premium-typing-dots 1.4s infinite;
+}
+
+.animate-premium-neural {
+  animation: premium-neural-pulse 2s infinite;
+}
+
+.animate-premium-medical-wave {
+  animation: premium-medical-wave 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-premium-sparkle {
+  animation: premium-sparkle 2s ease-in-out infinite;
+}
+
+.animate-premium-float {
+  animation: premium-float 3s ease-in-out infinite;
+}
+
+/* Premium Hover Effects */
+.premium-hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-hover-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.premium-hover-glow {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.premium-hover-glow:hover {
+  filter: brightness(1.1);
+}
+
+.premium-hover-glow:hover::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #3B82F6, #8B5CF6, #EC4899, #3B82F6);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.7;
+  filter: blur(8px);
+  animation: premium-gradient-shift 2s ease infinite;
+}
+
+.premium-hover-scale {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.premium-hover-scale:hover {
+  transform: scale(1.05) rotate(1deg);
+}
+
+.premium-hover-scale:active {
+  transform: scale(0.98) rotate(-1deg);
+  transition: all 0.1s ease;
+}
+
+/* Sophisticated Glass Morphism */
+.premium-glass {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.premium-glass-dark {
+  background: rgba(17, 25, 40, 0.25);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Premium Gradient Buttons */
+.premium-gradient-button {
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.premium-gradient-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.premium-gradient-button:hover::before {
+  left: 100%;
+}
+
+.premium-gradient-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+/* Medical Premium Patterns */
+.premium-medical-pattern {
+  background-image: 
+    radial-gradient(circle at 2px 2px, rgba(59, 130, 246, 0.15) 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+.premium-medical-cross {
+  position: relative;
+}
+
+.premium-medical-cross::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 12px;
+  background: currentColor;
+  opacity: 0.3;
+}
+
+.premium-medical-cross::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.3;
+}
+
+/* Premium Loading States */
+.premium-loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: premium-gradient-shift 1.5s infinite;
+}
+
+.premium-loading-shimmer-dark {
+  background: linear-gradient(90deg, #374151 25%, #4B5563 50%, #374151 75%);
+  background-size: 200% 100%;
+  animation: premium-gradient-shift 1.5s infinite;
+}
+
+/* Premium Focus States */
+.premium-focus {
+  transition: all 0.2s ease;
+}
+
+.premium-focus:focus {
+  outline: none;
+  transform: scale(1.02);
+  box-shadow: 
+    0 0 0 3px rgba(59, 130, 246, 0.1),
+    0 0 0 6px rgba(59, 130, 246, 0.05),
+    0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Premium Audio Visualizer */
+.premium-audio-bar {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: bottom;
+}
+
+.premium-audio-bar.active {
+  background: linear-gradient(to top, #10B981, #34D399);
+  animation: premium-bounce 0.6s ease-in-out infinite alternate;
+}
+
+/* Premium Notification Animations */
+.premium-notification-enter {
+  animation: premium-slide-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.premium-notification-exit {
+  animation: premium-fade-in 0.3s cubic-bezier(0.4, 0, 1, 1) reverse forwards;
+}
+
+/* Sophisticated Scroll Indicators */
+.premium-scroll-indicator {
+  position: relative;
+}
+
+.premium-scroll-indicator::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: var(--scroll-progress, 0%);
+  background: linear-gradient(to bottom, #3B82F6, #8B5CF6);
+  border-radius: 2px;
+  transition: height 0.1s ease;
+}
+
+/* Premium Tab Indicator */
+.premium-tab-indicator {
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-tab-indicator::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-tab-indicator.active::before {
+  transform: scaleX(1);
+}
+
+/* Premium Tooltip */
+.premium-tooltip {
+  position: relative;
+}
+
+.premium-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: rgba(17, 24, 39, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.premium-tooltip:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* Responsive Animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .premium-hover-lift:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+  
+  .premium-hover-scale:hover {
+    transform: scale(1.03);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .premium-glass,
+  .premium-glass-dark {
+    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #000;
+  }
+  
+  .premium-hover-glow:hover {
+    outline: 3px solid #000;
+  }
+}
