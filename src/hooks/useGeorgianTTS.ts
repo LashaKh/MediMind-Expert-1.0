@@ -97,7 +97,23 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   const silenceCountRef = useRef<number>(0);
   const autoRestartTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingAutoRestartRef = useRef<boolean>(false);
+
+  // 🚀 Pre-initialization refs for instant recording
+  const preInitializedStreamRef = useRef<MediaStream | null>(null);
+  const isPreInitializingRef = useRef<boolean>(false);
+  const preInitPromiseRef = useRef<Promise<MediaStream> | null>(null);
+  
+  // Session ID ref for dynamic updates
+  const sessionIdRef = useRef<string | undefined>(sessionId);
   const manualStopRef = useRef<boolean>(false); // Flag to track manual vs auto stops
+
+  // Update session ID ref when prop changes
+  useEffect(() => {
+    if (sessionId !== sessionIdRef.current) {
+      console.log(`🔄 Session ID updated: ${sessionIdRef.current} → ${sessionId}`);
+      sessionIdRef.current = sessionId;
+    }
+  }, [sessionId]);
 
   const updateAuthStatus = useCallback(() => {
     if (georgianTTSServiceRef.current) {
@@ -273,6 +289,56 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     }
   }, [monitorAudioLevel]);
 
+  // 🚀 Pre-initialize microphone for instant recording
+  const preInitializeMicrophone = useCallback(async (): Promise<MediaStream> => {
+    if (preInitializedStreamRef.current && preInitializedStreamRef.current.active) {
+      console.log('🎯 Using existing pre-initialized stream');
+      return preInitializedStreamRef.current;
+    }
+
+    if (preInitPromiseRef.current) {
+      console.log('⏳ Pre-initialization in progress, waiting...');
+      return await preInitPromiseRef.current;
+    }
+
+    if (isPreInitializingRef.current) {
+      throw new Error('Pre-initialization already in progress');
+    }
+
+    console.log('🚀 Starting microphone pre-initialization for instant recording...');
+    isPreInitializingRef.current = true;
+
+    const initPromise = safeAsync(
+      () => navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          sampleRate: 16000,
+        }
+      })
+    ).then(([stream, error]) => {
+      isPreInitializingRef.current = false;
+      preInitPromiseRef.current = null;
+
+      if (error) {
+        console.error('❌ Pre-initialization failed:', error);
+        throw error;
+      }
+
+      if (!stream) {
+        throw new Error('No stream returned from getUserMedia');
+      }
+
+      preInitializedStreamRef.current = stream;
+      console.log('✅ Microphone pre-initialized successfully - instant recording ready!');
+      return stream;
+    });
+
+    preInitPromiseRef.current = initPromise;
+    return await initPromise;
+  }, []);
+
   // Cleanup audio resources
   const cleanupAudioResources = useCallback(() => {
     stopDurationTracking();
@@ -280,6 +346,12 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
+    }
+
+    // Clean up pre-initialized stream when done
+    if (preInitializedStreamRef.current) {
+      preInitializedStreamRef.current.getTracks().forEach(track => track.stop());
+      preInitializedStreamRef.current = null;
     }
     
     if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
@@ -561,7 +633,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             // Call live transcript callback with new text
             if (onLiveTranscriptUpdate) {
               const newText = combinedTranscriptRef.current.substring(previousLength);
-              onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionId);
+              onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionIdRef.current);
             }
             
             console.log(`📝 Added to transcript: "${result.text.trim().substring(0, 30) + (result.text.trim().length > 30 ? '...' : '')}"`);
@@ -659,7 +731,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
           // Call live transcript callback with final new text
           if (onLiveTranscriptUpdate) {
             const newText = combinedTranscriptRef.current.substring(previousLength);
-            onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionId);
+            onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionIdRef.current);
           }
         }
       } catch (error) {
@@ -724,15 +796,15 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
                 const previousLength = combinedTranscriptRef.current.length;
                 combinedTranscriptRef.current += separator + segmentText.trim();
                 
-                console.log(`📝 Background processed: "${segmentText.trim().substring(0, 50)}..."`);
+                console.log(`📝 Auto-segment: "${segmentText.trim().substring(0, 50)}..."`);
                 
                 if (onLiveTranscriptUpdate) {
                   const newText = combinedTranscriptRef.current.substring(previousLength);
-                  onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionId);
+                  onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionIdRef.current);
                 }
                 
                 const result: TranscriptionResult = {
-                  text: combinedTranscriptRef.current,
+                  text: segmentText.trim(), // FIXED: Send only the new segment, not accumulated text
                   timestamp: Date.now(),
                   duration: Date.now() - (recordingStartTimeRef.current || Date.now())
                 };
@@ -762,11 +834,11 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               
               if (onLiveTranscriptUpdate) {
                 const newText = combinedTranscriptRef.current.substring(previousLength);
-                onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionId);
+                onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionIdRef.current);
               }
               
               const result: TranscriptionResult = {
-                text: combinedTranscriptRef.current,
+                text: segmentText.trim(), // FIXED: Send only the new segment, not accumulated text
                 timestamp: Date.now(),
                 duration: Date.now() - (recordingStartTimeRef.current || Date.now())
               };
@@ -777,10 +849,8 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             audioChunksRef.current = [];
             audioChunksForProcessingRef.current = [];
             console.log('🧹 Cleared audio chunks after manual stop processing');
-            
           } catch (error) {
-            console.error('❌ Failed to process final segment:', error);
-            setError('Failed to process final audio segment.');
+            console.error('❌ Manual stop processing failed:', error);
           }
         }
       }
@@ -880,19 +950,12 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       failedChunksCountRef.current = 0;
       totalProcessedChunksRef.current = 0;
       
-      // Request microphone permission
-      const [stream, streamError] = await safeAsync(
-        () => navigator.mediaDevices.getUserMedia({ 
-          audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true,
-            sampleRate: 16000, // Optimal for speech recognition
-          }
-        })
-      );
-      
-      if (streamError) {
+      // 🚀 Use pre-initialized stream for instant recording
+      let stream: MediaStream;
+      try {
+        console.log('⚡ Getting stream for instant recording...');
+        stream = await preInitializeMicrophone();
+      } catch (streamError: any) {
         // Enhanced error handling for common microphone permission issues
         let errorMessage = streamError.message;
         
@@ -910,6 +973,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       }
       
       streamRef.current = stream;
+      console.log('⚡ Stream ready - starting recording immediately!');
       
       // Setup audio monitoring
       await setupAudioMonitoring(stream);
@@ -990,7 +1054,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       setError(errorMessage);
       cleanupAudioResources();
     }
-  }, [chunkSize, setupAudioMonitoring, startDurationTracking, cleanupAudioResources, createRecordingStopHandler]);
+  }, [chunkSize, setupAudioMonitoring, startDurationTracking, cleanupAudioResources, createRecordingStopHandler, preInitializeMicrophone]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && recordingState.isRecording) {
@@ -1104,6 +1168,21 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     navigator.mediaDevices.getUserMedia && 
     window.MediaRecorder
   );
+
+  // 🚀 Auto pre-initialize microphone for instant recording
+  useEffect(() => {
+    if (!isSupported) return;
+
+    // Start pre-initialization in background to eliminate delay
+    const timer = setTimeout(() => {
+      preInitializeMicrophone().catch(error => {
+        console.log('🤖 Background pre-initialization failed (this is normal):', error.message);
+        // Don't set error state - this is just background optimization
+      });
+    }, 100); // Small delay to avoid blocking initial render
+
+    return () => clearTimeout(timer);
+  }, [isSupported, preInitializeMicrophone]);
 
   return {
     // State

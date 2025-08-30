@@ -24,6 +24,8 @@ interface ProcessingHistory {
 
 interface TranscriptPanelProps {
   currentSession: GeorgianSession | null;
+  // Local transcript override - single source of truth for display
+  localTranscript?: string;
   recordingState: {
     isRecording: boolean;
     isPaused: boolean;
@@ -76,6 +78,7 @@ interface TranscriptPanelProps {
 
 export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   currentSession,
+  localTranscript,
   recordingState,
   // isTranscribing, // Currently unused
   transcriptionResult,
@@ -125,8 +128,8 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const transcriptRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  // Get current transcript text
-  const currentTranscript = currentSession?.transcript || transcriptionResult?.text || '';
+  // Get current transcript text - prioritize localTranscript for instant updates
+  const currentTranscript = localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
   const hasTranscript = currentTranscript.length > 0;
 
   // Sync context recording state with actual recording state
@@ -287,6 +290,11 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         onCopy={handleCopyToClipboard}
         onDownload={handleDownloadTranscription}
         onEdit={handleEditStart}
+        canRecord={canRecord}
+        canStop={canStop}
+        isRecording={recordingState.isRecording}
+        onStartRecording={onStartRecording}
+        onStopRecording={onStopRecording}
       />
 
       {/* Content Area */}

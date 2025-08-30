@@ -114,10 +114,32 @@ serve(async (req) => {
       accessToken = await getValidToken()
     } catch (error) {
       console.error('💥 Token acquisition failed:', error)
+      
+      // Check if this is a connection refused error (service down)
+      const isConnectionRefused = error.message.includes('Connection refused') || 
+                                 error.message.includes('ECONNREFUSED') ||
+                                 error.code === 'ECONNREFUSED'
+      
+      if (isConnectionRefused) {
+        return new Response(
+          JSON.stringify({ 
+            error: 'Service temporarily unavailable',
+            message: 'The Georgian TTS service (enagramm.com) is currently unavailable. Please try again later.',
+            details: 'This is likely a temporary service outage. The service should be back online shortly.',
+            suggestion: 'You can try again in a few minutes or contact support if the issue persists.'
+          }),
+          { 
+            status: 503, // Service Unavailable
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        )
+      }
+      
       return new Response(
         JSON.stringify({ 
           error: 'Authentication failed',
-          message: error.message
+          message: error.message,
+          suggestion: 'Please verify your credentials and try again.'
         }),
         { 
           status: 500, 
@@ -126,7 +148,7 @@ serve(async (req) => {
       )
     }
 
-    // Prepare the request (REMOVED STT2 ENGINE REQUIREMENT)
+    // Prepare the request (REMOVED STT1 ENGINE REQUIREMENT)
     const speechRequest = {
       theAudioDataAsBase64: body.theAudioDataAsBase64,
       Language: body.Language === 'ka-GE' ? 'ka' : body.Language, // Convert ka-GE to ka for compatibility
@@ -137,7 +159,7 @@ serve(async (req) => {
     }
 
     console.log('🚀 Sending to Enagramm RecognizeSpeech endpoint...', {
-      Engine: 'DEFAULT (no engine specified)', // FIXED: Use default engine instead of STT2
+      Engine: 'DEFAULT (no engine specified)', // FIXED: Use default engine instead of STT1
       Language: speechRequest.Language,
       Punctuation: speechRequest.Punctuation,
       Autocorrect: speechRequest.Autocorrect,

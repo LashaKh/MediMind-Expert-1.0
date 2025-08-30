@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy, Download, Edit3, Stethoscope, MessageSquare, Sparkles } from 'lucide-react';
+import { Copy, Download, Edit3, Stethoscope, MessageSquare, Sparkles, Mic, Square } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { TRANSCRIPT_TABS, TabId } from '../utils/uiConstants';
 
@@ -10,6 +10,12 @@ interface TabNavigationProps {
   onCopy?: () => void;
   onDownload?: () => void;
   onEdit?: () => void;
+  // Recording controls
+  canRecord?: boolean;
+  canStop?: boolean;
+  isRecording?: boolean;
+  onStartRecording?: () => void;
+  onStopRecording?: () => void;
 }
 
 const tabs = TRANSCRIPT_TABS;
@@ -27,7 +33,12 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
   hasTranscript,
   onCopy,
   onDownload,
-  onEdit
+  onEdit,
+  canRecord = false,
+  canStop = false,
+  isRecording = false,
+  onStartRecording,
+  onStopRecording
 }) => {
   return (
     <div className="relative overflow-hidden">
@@ -86,10 +97,49 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
             </div>
           </div>
           
-          {/* Action Buttons - Premium Design */}
-          {activeTab === 'transcript' && hasTranscript && (
-            <div className="flex items-center space-x-2">
-              {/* Action Button Group */}
+          {/* Right Side Actions */}
+          <div className="flex items-center space-x-3">
+            {/* Premium Record Button */}
+            {(onStartRecording || onStopRecording) && (
+              <button
+                onClick={isRecording ? (canStop ? onStopRecording : undefined) : (canRecord ? onStartRecording : undefined)}
+                disabled={isRecording ? !canStop : !canRecord}
+                className={`
+                  group relative overflow-hidden px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl flex items-center space-x-2.5 min-w-[120px] justify-center
+                  ${isRecording 
+                    ? (canStop 
+                        ? 'bg-gradient-to-r from-red-500 via-rose-600 to-red-600 hover:from-red-600 hover:via-rose-700 hover:to-red-700 text-white shadow-red-500/40' 
+                        : 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-gray-500 dark:text-gray-400 shadow-none')
+                    : (canRecord 
+                        ? 'bg-gradient-to-r from-emerald-500 via-green-600 to-emerald-600 hover:from-emerald-600 hover:via-green-700 hover:to-emerald-700 text-white shadow-emerald-500/40' 
+                        : 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-gray-500 dark:text-gray-400 shadow-none')
+                  }
+                `}
+              >
+                {(isRecording ? canStop : canRecord) && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse opacity-60" />
+                )}
+                {isRecording ? (
+                  <>
+                    <Square className="w-4 h-4 relative z-10" />
+                    <span className="relative z-10">Stop</span>
+                  </>
+                ) : (
+                  <>
+                    <Mic className="w-4 h-4 relative z-10" />
+                    <span className="relative z-10">Record</span>
+                  </>
+                )}
+                
+                {/* Pulsing ring for recording state */}
+                {isRecording && (
+                  <div className="absolute inset-0 rounded-xl border-2 border-red-400/60 animate-pulse" />
+                )}
+              </button>
+            )}
+
+            {/* Action Buttons for Transcript */}
+            {activeTab === 'transcript' && hasTranscript && (
               <div className="flex items-center bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-xl p-1 shadow-lg">
                 {onCopy && (
                   <button
@@ -121,8 +171,8 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                   </button>
                 )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

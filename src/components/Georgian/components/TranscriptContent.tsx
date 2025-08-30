@@ -215,14 +215,76 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   }
 
   return (
-    <div className="flex flex-col h-full p-3">
-      <textarea
-        className="w-full resize-none border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-base leading-relaxed overflow-y-auto"
-        placeholder="Transcript will appear here..."
-        readOnly
-        dir="auto"
-        style={{ height: 'calc(100vh - 280px)' }}
-      />
+    <div className="flex flex-col h-full p-6 bg-gradient-to-br from-slate-50/80 via-white/90 to-blue-50/60 dark:from-gray-900/80 dark:via-gray-800/90 dark:to-blue-900/40">
+      {/* Enhanced Container with Premium Glass Effect */}
+      <div className="relative group h-full">
+        {/* Sophisticated Background Layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-slate-50/95 to-blue-50/90 dark:from-gray-800/90 dark:via-gray-700/95 dark:to-blue-900/60 backdrop-blur-xl rounded-2xl shadow-2xl shadow-slate-900/5 dark:shadow-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent dark:from-white/5 rounded-2xl" />
+        <div className="absolute inset-0 border border-white/20 dark:border-white/10 rounded-2xl" />
+        
+        {/* Premium Glow Effect */}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 via-purple-500/10 to-indigo-500/20 dark:from-blue-400/20 dark:via-purple-400/10 dark:to-indigo-400/20 rounded-2xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500" />
+        
+        {/* Main Content Area */}
+        <div className="relative h-full p-1">
+          <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-slate-200/60 dark:border-gray-600/60 shadow-inner shadow-slate-900/5 dark:shadow-black/20 overflow-hidden">
+            
+            {/* Elegant Header Strip */}
+            <div className="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-gray-700/90 dark:via-gray-600/95 dark:to-gray-700/90 border-b border-slate-200/50 dark:border-gray-600/50">
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-gradient-to-r from-emerald-400 to-green-500 rounded-full shadow-lg shadow-emerald-500/40 animate-pulse" />
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 tracking-wide">Live Transcript</span>
+              </div>
+              
+              {/* Subtle Status Indicators */}
+              <div className="flex items-center space-x-2">
+                <div className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-medium rounded-full border border-blue-200/50 dark:border-blue-700/50">
+                  <Stethoscope className="w-3 h-3 inline mr-1" />
+                  Medical
+                </div>
+                <div className="px-2 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-full border border-emerald-200/50 dark:border-emerald-700/50">
+                  <Shield className="w-3 h-3 inline mr-1" />
+                  Secure
+                </div>
+              </div>
+            </div>
+            
+            {/* Premium Text Area */}
+            <div className="relative h-[calc(100%-60px)] p-0">
+              <textarea
+                value={transcript}
+                className="w-full h-full resize-none bg-transparent text-slate-800 dark:text-slate-100 px-6 py-4 focus:outline-none text-base leading-relaxed overflow-y-auto selection:bg-blue-200/60 dark:selection:bg-blue-800/60 selection:text-blue-900 dark:selection:text-blue-100"
+                placeholder="Your medical transcript will appear here with real-time precision..."
+                readOnly
+                dir="auto"
+                style={{ 
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", system-ui, ui-sans-serif, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
+                  lineHeight: '1.7',
+                  letterSpacing: '0.01em'
+                }}
+              />
+              
+              {/* Elegant Scroll Indicator */}
+              <div className="absolute right-2 top-4 bottom-4 w-1 bg-slate-200/60 dark:bg-slate-600/60 rounded-full overflow-hidden">
+                <div className="w-full bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full transition-all duration-300" style={{height: '20%'}} />
+              </div>
+              
+              {/* Floating Action Hints */}
+              <div className="absolute bottom-4 right-6 flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <div className="px-3 py-1.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-slate-200/50 dark:border-gray-600/50 rounded-lg shadow-lg text-xs text-slate-600 dark:text-slate-400 font-medium">
+                  <Sparkles className="w-3 h-3 inline mr-1" />
+                  AI Enhanced
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Subtle Corner Accents */}
+        <div className="absolute top-0 left-0 w-8 h-8 bg-gradient-to-br from-blue-400/20 to-transparent rounded-2xl" />
+        <div className="absolute bottom-0 right-0 w-8 h-8 bg-gradient-to-tl from-purple-400/20 to-transparent rounded-2xl" />
+      </div>
     </div>
   );
 };

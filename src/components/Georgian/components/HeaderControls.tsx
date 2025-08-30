@@ -14,21 +14,13 @@ interface HeaderControlsProps {
   recordingState: RecordingState;
   processing?: boolean;
   activeTab?: 'transcript' | 'context' | 'ai';
-  canRecord?: boolean;
-  canStop?: boolean;
-  onStartRecording?: () => void;
-  onStopRecording?: () => void;
 }
 
 export const HeaderControls: React.FC<HeaderControlsProps> = ({
   authStatus,
   recordingState,
   processing = false,
-  activeTab,
-  canRecord = false,
-  canStop = false,
-  onStartRecording,
-  onStopRecording
+  activeTab
 }) => {
   return (
     <div className="relative overflow-hidden">
@@ -79,45 +71,6 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
 
           {/* Right Section - Status & Controls */}
           <div className="flex items-center space-x-4">
-            {/* Recording Controls - Only show when transcript tab is active */}
-            {activeTab === 'transcript' && (
-              <div className="flex items-center space-x-2">
-                {!recordingState.isRecording ? (
-                  <button
-                    onClick={canRecord ? onStartRecording : undefined}
-                    disabled={!canRecord}
-                    className={`
-                      relative flex items-center space-x-2 px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg
-                      ${canRecord 
-                        ? 'bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white shadow-emerald-500/25 hover:shadow-emerald-500/40' 
-                        : 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-gray-500 dark:text-gray-400 shadow-none'
-                      }
-                    `}
-                  >
-                    {canRecord && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/30 to-green-500/30 animate-pulse rounded-xl" />
-                    )}
-                    <div className="relative flex items-center space-x-2">
-                      <Mic className="w-4 h-4" />
-                      <span>Record</span>
-                    </div>
-                  </button>
-                ) : (
-                  <button
-                    onClick={canStop ? onStopRecording : undefined}
-                    disabled={!canStop}
-                    className="relative flex items-center space-x-2 px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white shadow-red-500/25 hover:shadow-red-500/40"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-red-400/30 to-rose-500/30 animate-pulse rounded-xl" />
-                    <div className="relative flex items-center space-x-2">
-                      <Square className="w-4 h-4" />
-                      <span>Stop</span>
-                    </div>
-                  </button>
-                )}
-              </div>
-            )}
-
             {/* Security Status */}
             <div className="hidden md:flex items-center space-x-2 px-3 py-1.5 bg-emerald-50/80 dark:bg-emerald-900/20 border border-emerald-200/50 dark:border-emerald-700/30 rounded-xl">
               <Shield className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />

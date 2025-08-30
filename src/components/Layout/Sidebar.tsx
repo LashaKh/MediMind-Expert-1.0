@@ -14,7 +14,7 @@ import {
   Search,
   BarChart3,
   TestTube2,
-  FileText
+  Stethoscope
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useAuth } from '../../stores/useAppStore';
@@ -97,7 +97,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
       category: 'primary'
     },
     {
-      icon: FileText,
+      icon: Stethoscope,
       label: 'MediScribe',
       path: '/mediscribe',
       color: 'from-emerald-500 to-teal-500',

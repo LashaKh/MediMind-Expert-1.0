@@ -52,182 +52,201 @@ export const ContextContent: React.FC<ContextContentProps> = ({
   const contextFileInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 dark:from-gray-800 dark:via-gray-700/80 dark:to-blue-900/10">
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col p-2 min-h-0 max-h-[calc(100vh-120px)]">
-        {/* Medical Toolbar - Compact */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-1 mb-2">
-          <MedicalCard className="p-2 w-full sm:w-auto" variant="elevated">
-            <div className="flex items-center justify-center sm:justify-start space-x-3">
-              {/* Medical Voice Record Button */}
-              <MedicalButton
-                onClick={onContextVoiceRecord}
-                variant={isRecordingContext ? "destructive" : "primary"}
-                size="lg"
-                leftIcon={isRecordingContext ? Square : Mic}
-                className="min-w-[140px]"
-                aria-label={isRecordingContext ? "Stop voice recording" : "Start voice recording"}
-              >
-                {isRecordingContext ? (
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm font-bold">Stop Recording</span>
-                    {contextRecordingState.duration > 0 && (
-                      <span className="text-xs font-mono opacity-90">{formatTime(contextRecordingState.duration)}</span>
+    <div className="flex flex-col h-full p-6 bg-gradient-to-br from-indigo-50/80 via-purple-50/90 to-pink-50/60 dark:from-indigo-900/80 dark:via-purple-800/90 dark:to-pink-900/40">
+      {/* World-Class Context Container */}
+      <div className="relative group h-full flex flex-col">
+        {/* Sophisticated Background Layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-indigo-50/98 to-purple-50/95 dark:from-gray-800/95 dark:via-indigo-900/70 dark:to-purple-900/60 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-indigo-900/10 dark:shadow-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-transparent to-transparent dark:from-white/5 rounded-3xl" />
+        <div className="absolute inset-0 border border-white/30 dark:border-white/10 rounded-3xl" />
+        
+        {/* Premium Glow Effect */}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500/20 via-purple-500/15 to-pink-500/20 dark:from-indigo-400/20 dark:via-purple-400/15 dark:to-pink-400/20 rounded-3xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-700" />
+        
+        {/* Main Content Structure */}
+        <div className="relative h-full flex flex-col p-1">
+          
+          {/* Elegant Toolbar Header */}
+          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border border-indigo-200/50 dark:border-indigo-600/50 shadow-lg shadow-indigo-500/10 mb-4">
+            <div className="flex items-center justify-between px-6 py-4">
+              {/* Left Actions */}
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full shadow-lg shadow-purple-500/40 animate-pulse" />
+                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 tracking-wide">Clinical Context</span>
+                </div>
+                
+                {/* Voice Recording Button */}
+                <button
+                  onClick={onContextVoiceRecord}
+                  className={`
+                    group relative overflow-hidden px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg flex items-center space-x-2
+                    ${isRecordingContext 
+                      ? 'bg-gradient-to-r from-red-500 via-rose-600 to-red-600 hover:from-red-600 hover:via-rose-700 hover:to-red-700 text-white shadow-red-500/30' 
+                      : 'bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-600 hover:via-purple-700 hover:to-indigo-700 text-white shadow-indigo-500/30'
+                    }
+                  `}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse opacity-50" />
+                  {isRecordingContext ? <Square className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                  <span>{isRecordingContext ? 'Stop' : 'Record'}</span>
+                  {isRecordingContext && contextRecordingState.duration > 0 && (
+                    <span className="text-xs font-mono opacity-90">
+                      {formatTime(contextRecordingState.duration)}
+                    </span>
+                  )}
+                </button>
+              </div>
+              
+              {/* Right Actions */}
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={onCopyContext}
+                  className="px-4 py-2.5 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-600/50 rounded-xl text-indigo-700 dark:text-indigo-300 text-sm font-medium hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all duration-300 flex items-center space-x-2"
+                >
+                  <Copy className="w-4 h-4" />
+                  <span>Copy</span>
+                </button>
+                
+                {/* Attach Files */}
+                <button
+                  onClick={() => contextFileInputRef.current?.click()}
+                  className="px-4 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl shadow-lg shadow-purple-500/30 transition-all duration-300 flex items-center space-x-2 text-sm font-medium"
+                >
+                  <Paperclip className="w-4 h-4" />
+                  <span>Attach</span>
+                </button>
+                
+                <input
+                  ref={contextFileInputRef}
+                  type="file"
+                  multiple
+                  onChange={onFileUpload}
+                  className="hidden"
+                  accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp3,.wav"
+                />
+              </div>
+            </div>
+          </div>
+          
+          {/* Attached Files Display */}
+          {attachedFiles.length > 0 && (
+            <div className="mb-4">
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-purple-200/50 dark:border-purple-600/50 p-4">
+                <h4 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-3 flex items-center space-x-2">
+                  <FileIcon className="w-4 h-4" />
+                  <span>Attached Files ({attachedFiles.length})</span>
+                </h4>
+                <div className="flex flex-wrap gap-3">
+                  {attachedFiles.map((file, index) => (
+                    <div key={index} className="group relative flex items-center space-x-3 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 border border-indigo-200/50 dark:border-indigo-700/50 px-4 py-3 rounded-xl hover:shadow-lg hover:shadow-indigo-500/10 transition-all duration-300">
+                      <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <FileIcon className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-indigo-900 dark:text-indigo-100 font-semibold truncate max-w-40">
+                          {file.name}
+                        </p>
+                        <p className="text-indigo-600 dark:text-indigo-400 text-xs">
+                          {(file.size / 1024).toFixed(1)} KB
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => onRemoveFile(index)}
+                        className="opacity-0 group-hover:opacity-100 p-1.5 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all duration-300"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Premium Text Area */}
+          <div className="flex-1 relative overflow-hidden">
+            <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden">
+              
+              {/* Text Area Header */}
+              <div className="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-indigo-50/90 via-purple-50/95 to-indigo-50/90 dark:from-indigo-700/90 dark:via-purple-600/95 dark:to-indigo-700/90 border-b border-indigo-200/50 dark:border-indigo-600/50">
+                <div className="flex items-center space-x-3">
+                  <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300 tracking-wide">Patient Context & Notes</span>
+                </div>
+                
+                {/* Status Indicators */}
+                <div className="flex items-center space-x-2">
+                  <div className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-xs font-medium rounded-full border border-indigo-200/50 dark:border-indigo-700/50">
+                    Private
+                  </div>
+                  <div className="px-2 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-medium rounded-full border border-purple-200/50 dark:border-purple-700/50">
+                    Encrypted
+                  </div>
+                </div>
+              </div>
+              
+              {/* Main Text Area */}
+              <div className="relative h-[calc(100%-56px)] p-0">
+                <textarea
+                  value={contextText}
+                  onChange={(e) => onContextChange(e.target.value)}
+                  className="w-full h-full resize-none bg-transparent text-slate-800 dark:text-slate-100 px-6 py-4 focus:outline-none text-base leading-relaxed overflow-y-auto selection:bg-indigo-200/60 dark:selection:bg-indigo-800/60 selection:text-indigo-900 dark:selection:text-indigo-100"
+                  placeholder="Enter patient information, medical history, clinical context, or additional notes here..."
+                  style={{ 
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", system-ui, ui-sans-serif, Helvetica, Arial, sans-serif',
+                    lineHeight: '1.7',
+                    letterSpacing: '0.01em'
+                  }}
+                />
+                
+                {/* Status Overlays */}
+                {isRecordingContext && (
+                  <div className="absolute top-4 right-4 flex items-center space-x-2 bg-gradient-to-r from-red-500/95 to-rose-600/95 backdrop-blur-xl px-4 py-2 rounded-xl text-white shadow-lg shadow-red-500/30">
+                    <div className="relative">
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                      <div className="absolute inset-0 w-2 h-2 bg-white/70 rounded-full animate-ping" />
+                    </div>
+                    <span className="text-sm font-semibold">
+                      Recording {formatTime(contextRecordingState.duration)}
+                    </span>
+                  </div>
+                )}
+                
+                {isContextTranscribing && !isRecordingContext && (
+                  <div className="absolute top-4 right-4 flex items-center space-x-2 bg-gradient-to-r from-indigo-500/95 to-purple-600/95 backdrop-blur-xl px-4 py-2 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+                    <div className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    <span className="text-sm font-semibold">Processing...</span>
+                  </div>
+                )}
+                
+                {contextTTSError && (
+                  <div className="absolute top-4 right-4 flex items-center space-x-2 bg-gradient-to-r from-red-500/95 to-rose-600/95 backdrop-blur-xl px-4 py-2 rounded-xl text-white shadow-lg shadow-red-500/30">
+                    <AlertCircle className="w-4 h-4" />
+                    <span className="text-sm font-semibold">Recording Failed</span>
+                    {onClearError && (
+                      <button
+                        onClick={onClearError}
+                        className="text-white/80 hover:text-white hover:bg-white/20 p-1 rounded-lg transition-all duration-300"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
                     )}
                   </div>
-                ) : (
-                  <span>Record Voice Note</span>
                 )}
-              </MedicalButton>
-
-              {/* Medical Action Buttons */}
-              <div className="flex items-center space-x-2">
-                <MedicalButton
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Undo"
-                >
-                  <Undo className="w-4 h-4" />
-                </MedicalButton>
-                <MedicalButton
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Redo"
-                >
-                  <Redo className="w-4 h-4" />
-                </MedicalButton>
-              </div>
-            </div>
-          </MedicalCard>
-
-          {/* Context Actions */}
-          <MedicalCard className="p-2 w-full sm:w-auto">
-            <div className="flex items-center justify-center space-x-3">
-              <MedicalButton
-                onClick={onCopyContext}
-                variant="secondary"
-                size="md"
-                leftIcon={Copy}
-                className="min-w-[100px]"
-              >
-                Copy Text
-              </MedicalButton>
-            </div>
-          </MedicalCard>
-        </div>
-
-        {/* Premium Attached Files Display */}
-        {attachedFiles.length > 0 && (
-          <div className="mb-2">
-            <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Attached Files</h4>
-            <div className="flex flex-wrap gap-3">
-              {attachedFiles.map((file, index) => (
-                <div key={index} className="group relative flex items-center space-x-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-200/50 dark:border-blue-700/50 px-4 py-2 rounded-xl text-sm hover:shadow-lg transition-all duration-300">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-md">
-                    <FileIcon className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-blue-900 dark:text-blue-100 font-semibold truncate max-w-32">
-                      {file.name}
-                    </p>
-                    <p className="text-blue-600 dark:text-blue-400 text-xs">
-                      {(file.size / 1024).toFixed(1)} KB
-                    </p>
-                  </div>
-                  <MedicalButton
-                    onClick={() => onRemoveFile(index)}
-                    variant="ghost"
-                    size="icon"
-                    className="opacity-0 group-hover:opacity-100 text-medical-error-500 hover:text-medical-error-600 hover:bg-medical-error-50 dark:hover:bg-medical-error-900/30"
-                    aria-label="Remove attached file"
-                  >
-                    <X className="w-4 h-4" />
-                  </MedicalButton>
+                
+                {/* Elegant Scroll Indicator */}
+                <div className="absolute right-2 top-4 bottom-4 w-1 bg-indigo-200/60 dark:bg-indigo-600/60 rounded-full overflow-hidden">
+                  <div className="w-full bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full transition-all duration-300" style={{height: '25%'}} />
                 </div>
-              ))}
+              </div>
             </div>
           </div>
-        )}
-
-        {/* Premium Text Area - Constrained height */}
-        <div className="flex-1 flex flex-col min-h-0 max-h-[calc(100vh-240px)]">
-          <div className="flex-1 relative bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 dark:from-gray-800 dark:via-gray-700/80 dark:to-blue-900/10 backdrop-blur-xl rounded-2xl border border-slate-200/30 dark:border-gray-600/30 shadow-xl shadow-slate-500/10 overflow-hidden h-full max-h-[calc(100vh-280px)]">
-            {/* Glass Effect Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent dark:from-gray-700/20 pointer-events-none rounded-3xl" />
-            
-            <textarea
-              value={contextText}
-              onChange={(e) => onContextChange(e.target.value)}
-              placeholder="Add patient information, context notes, or medical history here..."
-              className="relative z-10 w-full h-full p-3 pr-10 bg-transparent text-slate-800 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm leading-relaxed"
-              style={{ 
-                fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
-                maxHeight: 'calc(100vh - 320px)'
-              }}
-            />
-            
-            {/* Premium Attachment Button */}
-            <div className="absolute bottom-3 right-3 z-20">
-              <input
-                ref={contextFileInputRef}
-                type="file"
-                multiple
-                onChange={onFileUpload}
-                className="hidden"
-                accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp3,.wav"
-              />
-              <div className="relative">
-                <MedicalButton
-                  onClick={() => contextFileInputRef.current?.click()}
-                  variant="primary"
-                  size="icon"
-                  className="shadow-lg"
-                  aria-label="Attach files"
-                >
-                  <Paperclip className="w-5 h-5" />
-                </MedicalButton>
-              </div>
-            </div>
-            
-            {/* Premium Status Indicators */}
-            {isRecordingContext && (
-              <div className="absolute top-3 right-3 flex items-center space-x-3 bg-gradient-to-r from-red-500/90 to-rose-600/90 backdrop-blur-sm px-3 py-1.5 rounded-xl text-white shadow-lg shadow-red-500/25">
-                <div className="relative">
-                  <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
-                  <div className="absolute inset-0 w-3 h-3 bg-white/70 rounded-full animate-ping" />
-                </div>
-                <span className="text-sm font-bold">
-                  Recording {formatTime(contextRecordingState.duration)}
-                </span>
-              </div>
-            )}
-            
-            {isContextTranscribing && !isRecordingContext && (
-              <div className="absolute top-3 right-3 flex items-center space-x-3 bg-gradient-to-r from-blue-500/90 to-indigo-600/90 backdrop-blur-sm px-3 py-1.5 rounded-xl text-white shadow-lg shadow-blue-500/25">
-                <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                <span className="text-sm font-bold">Processing...</span>
-              </div>
-            )}
-            
-            {contextTTSError && (
-              <div className="absolute top-3 right-3 flex items-center space-x-3 bg-gradient-to-r from-red-500/90 to-rose-600/90 backdrop-blur-sm px-3 py-1.5 rounded-xl text-white shadow-lg shadow-red-500/25">
-                <AlertCircle className="w-4 h-4" />
-                <span className="text-sm font-bold">Recording failed</span>
-                {onClearError && (
-                  <MedicalButton
-                    onClick={onClearError}
-                    variant="ghost"
-                    size="icon"
-                    className="text-white hover:bg-white/20"
-                    aria-label="Clear error"
-                  >
-                    <X className="w-4 h-4" />
-                  </MedicalButton>
-                )}
-              </div>
-            )}
-          </div>
         </div>
+        
+        {/* Subtle Corner Accents */}
+        <div className="absolute top-0 left-0 w-8 h-8 bg-gradient-to-br from-indigo-400/20 to-transparent rounded-3xl" />
+        <div className="absolute bottom-0 right-0 w-8 h-8 bg-gradient-to-tl from-purple-400/20 to-transparent rounded-3xl" />
       </div>
     </div>
   );
