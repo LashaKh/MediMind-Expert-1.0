@@ -195,9 +195,8 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     // Silence detection for smart segmentation
     const currentTime = Date.now();
     
-    // Debug timing issue - check if segmentStartTimeRef is set properly
+    // Initialize segment start time if not set
     if (!segmentStartTimeRef.current || segmentStartTimeRef.current <= 0) {
-
       segmentStartTimeRef.current = currentTime;
     }
     
@@ -206,12 +205,12 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     // OPTIMIZED: 15-second automatic restart for faster word capture
     const maxSegmentDuration = 15000; // 15 seconds - faster, seamless segmentation
     
-    // Clean status logging every 5 seconds
-    if (segmentDuration % 5000 < 50) { // Every 5 seconds
-      const secondsElapsed = Math.round(segmentDuration/1000);
-      const secondsRemaining = Math.max(0, 15 - secondsElapsed);
-      console.log(`⏱️ Recording: ${secondsElapsed}s elapsed, ${secondsRemaining}s until auto-restart, audio: ${Math.round(normalizedLevel)}%`);
-    }
+    // Clean status logging every 5 seconds (disabled in production)
+    // if (segmentDuration % 5000 < 50) { // Every 5 seconds
+    //   const secondsElapsed = Math.round(segmentDuration/1000);
+    //   const secondsRemaining = Math.max(0, 15 - secondsElapsed);
+    //   console.log(`⏱️ Recording: ${secondsElapsed}s elapsed, ${secondsRemaining}s until auto-restart, audio: ${Math.round(normalizedLevel)}%`);
+    // }
     
     // Execute 15-second restart
     if (segmentDuration >= maxSegmentDuration && !pendingAutoRestartRef.current) {
@@ -227,17 +226,29 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     setRecordingState(prev => ({ ...prev, audioLevel: normalizedLevel }));
     
     // CRITICAL: Continue the animation frame loop
-    // Only log loop issues, not every successful continuation
-    if (mediaRecorderRef.current && 
-        mediaRecorderRef.current.state === 'recording' && 
-        !pendingAutoRestartRef.current) {
+    // Check MediaRecorder state directly - don't rely on React state in callback
+    const shouldContinueMonitoring = mediaRecorderRef.current && 
+                                   mediaRecorderRef.current.state === 'recording' && 
+                                   !pendingAutoRestartRef.current;
+    
+    if (shouldContinueMonitoring) {
       animationFrameRef.current = requestAnimationFrame(monitorAudioLevel);
     } else {
       // Debug only when monitoring actually stops
       const hasRecorder = !!mediaRecorderRef.current;
       const recorderState = mediaRecorderRef.current?.state;
       const isPending = pendingAutoRestartRef.current;
-
+      
+      console.log(`🛑 Audio monitoring stopped - MediaRecorder state: ${recorderState}, pending: ${isPending}`);
+      
+      // Fix state mismatch: if MediaRecorder is still recording but monitoring stopped
+      if (recorderState === 'recording' && !isPending) {
+        console.log('🔧 Fixing state mismatch - stopping orphaned MediaRecorder');
+        mediaRecorderRef.current?.stop();
+        mediaRecorderRef.current = null;
+        setRecordingState(prev => ({ ...prev, isRecording: false }));
+        cleanupAudioResources();
+      }
     }
   }, [handleAutoSegmentation]); // Remove recordingState dependencies that recreate the callback
 
@@ -956,6 +967,12 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
 
   const startRecording = useCallback(async () => {
     try {
+      // Prevent multiple recordings
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+        console.log('🚫 Recording already in progress, ignoring start request');
+        return;
+      }
+      
       setError(null);
       audioChunksRef.current = [];
       audioChunksForProcessingRef.current = [];
@@ -1029,7 +1046,9 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       
       recorder.onerror = (event) => {
         const error = (event as any).error;
+        console.error('🚨 MediaRecorder error:', error);
         setError(`Recording error: ${error?.message || 'Unknown error'}`);
+        setRecordingState(prev => ({ ...prev, isRecording: false }));
         cleanupAudioResources();
       };
       
@@ -1056,7 +1075,6 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       startDurationTracking();
       
       // CRITICAL: Start audio monitoring AFTER MediaRecorder is set
-
       monitorAudioLevel();
       
       // Start processing based on mode - but disable it for smart segmentation approach

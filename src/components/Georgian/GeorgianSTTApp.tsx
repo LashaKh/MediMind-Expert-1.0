@@ -49,6 +49,8 @@ export const GeorgianSTTApp: React.FC = () => {
     loading: sessionLoading,
     error: sessionError,
     createSession,
+    createTemporarySession,
+    saveTemporarySession,
     selectSession,
     // updateSession, // Currently unused
     deleteSession,
@@ -57,7 +59,8 @@ export const GeorgianSTTApp: React.FC = () => {
     appendToTranscript,
     addProcessingResult,
     clearError: clearSessionError,
-    searchSessions
+    searchSessions,
+    cleanupEmptyTemporarySessions
   } = useSessionManagement();
   
   // Session-aware transcript updates - prevents cross-session contamination
@@ -141,15 +144,44 @@ export const GeorgianSTTApp: React.FC = () => {
     clearError: clearAIError,
     clearHistory
   } = useAIProcessing();
+  
+  // Debug processing history updates (disabled in production)
+  // console.log('📋 Georgian App processingHistory:', {
+  //   count: processingHistory?.length || 0,
+  //   items: processingHistory?.map(item => ({
+  //     instruction: item.userInstruction?.slice(0, 30) + '...',
+  //     responseLength: item.aiResponse?.length || 0,
+  //     timestamp: item.timestamp
+  //   })) || []
+  // });
 
-  // Filter sessions based on search
+  // Filter sessions based on search and exclude empty temporary sessions
   useEffect(() => {
+    let filteredSessions = sessions.filter(session => {
+      // Exclude temporary sessions that don't have content, UNLESS they are the current active session
+      if (session.isTemporary && (!session.transcript || session.transcript.trim() === '')) {
+        // Show temporary session if it's the currently selected one (user just created it)
+        return currentSession?.id === session.id;
+      }
+      return true;
+    });
+
     if (searchQuery.trim()) {
-      setFilteredSessions(searchSessions(searchQuery));
-    } else {
-      setFilteredSessions(sessions);
+      filteredSessions = filteredSessions.filter(session =>
+        session.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        session.transcript.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
-  }, [sessions, searchQuery, searchSessions]);
+    
+    setFilteredSessions(filteredSessions);
+  }, [sessions, searchQuery, currentSession]);
+
+  // Cleanup empty temporary sessions on unmount
+  useEffect(() => {
+    return () => {
+      cleanupEmptyTemporarySessions();
+    };
+  }, [cleanupEmptyTemporarySessions]);
 
   // Don't auto-create sessions - only create when user starts recording or uploads
 
@@ -166,7 +198,7 @@ export const GeorgianSTTApp: React.FC = () => {
   }, [transcriptionResult, currentSession, recordingState.isRecording, clearTTSResult]);
   */
 
-  // Handle session creation with cleanup
+  // Handle session creation with cleanup - creates temporary session only
   const handleCreateSession = useCallback(async (title?: string) => {
     // Stop any ongoing recording and clear TTS state
     if (recordingState.isRecording) {
@@ -179,12 +211,10 @@ export const GeorgianSTTApp: React.FC = () => {
     setLocalTranscript('');
     setCurrentRecordingSessionId(''); // Clear recording session
     
-    // Create new session
-    const newSession = await createSession(title);
-    if (newSession) {
-      selectSession(newSession.id);
-    }
-  }, [createSession, selectSession, resetTranscript, clearTTSResult, recordingState.isRecording, stopRecording]);
+    // Create temporary session (not saved to DB until it has content)
+    const newSession = createTemporarySession(title);
+    selectSession(newSession.id);
+  }, [createTemporarySession, selectSession, resetTranscript, clearTTSResult, recordingState.isRecording, stopRecording]);
 
   // Handle session deletion with confirmation
   const handleDeleteSession = useCallback(async (sessionId: string) => {
@@ -196,44 +226,22 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Handle AI text processing with direct transcript parameter
   const handleProcessText = useCallback(async (instruction: string, directTranscript?: string) => {
-    console.log('🚀 handleProcessText called:', {
-      instruction,
-      hasDirectTranscript: !!directTranscript,
-      directTranscriptLength: directTranscript?.length || 0,
-      hasCurrentSession: !!currentSession,
-      currentSessionId: currentSession?.id,
-      sessionTranscript: currentSession?.transcript?.slice(0, 100) + '...',
-      transcriptionResultText: transcriptionResult?.text?.slice(0, 100) + '...',
-      localTranscriptLength: localTranscript?.length || 0,
-      localTranscriptPreview: localTranscript?.slice(0, 100) + '...'
-    });
+    // Debug info (disabled in production)
+    // console.log('🚀 handleProcessText called:', { ... });
     
     // Use directTranscript first (passed from UI), then fallback to other sources
     const transcript = directTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
     
-    console.log('📋 Final transcript for AI processing:', {
-      source: directTranscript ? 'directTranscript' : (localTranscript ? 'localTranscript' : (currentSession?.transcript ? 'sessionTranscript' : 'transcriptionResult')),
-      length: transcript.length,
-      preview: transcript.slice(0, 150) + '...'
-    });
+    // Debug transcript source (disabled in production)
     
     if (!transcript.trim()) {
       console.error('❌ No transcript available for processing');
       return;
     }
 
-    console.log('✅ Starting AI processing with transcript length:', transcript.length);
-    
     const result = await processText(transcript, instruction);
     
-    console.log('📊 AI processing result:', {
-      hasResult: !!result,
-      resultLength: result?.result?.length || 0,
-      model: result?.model
-    });
-    
     if (result && currentSession) {
-      console.log('💾 Saving processing result to session:', currentSession.id);
       // Save processing result to session
       await addProcessingResult(currentSession.id, {
         userInstruction: instruction,
@@ -242,11 +250,10 @@ export const GeorgianSTTApp: React.FC = () => {
         tokensUsed: result.tokensUsed,
         processingTime: result.processingTime
       });
-      console.log('✅ Processing result saved successfully');
     } else if (!currentSession) {
       console.error('❌ No current session to save result to - creating temp session');
-      // Create a temporary session for the AI processing result
-      const tempSession = await createSession('AI Analysis Session');
+      // Create a temporary session for the AI processing result with initial content
+      const tempSession = await createSession('AI Analysis Session', transcript.substring(0, 100) + '...');
       if (tempSession && result) {
         await addProcessingResult(tempSession.id, {
           userInstruction: instruction,
@@ -288,16 +295,14 @@ export const GeorgianSTTApp: React.FC = () => {
   // Handle file upload
   const handleFileUpload = useCallback(async (file: File) => {
     if (!currentSession) {
-      // Create new session for file upload
-      const newSession = await createSession(`File: ${file.name}`);
-      if (newSession) {
-        resetTranscript(); // Reset transcript for new session
-        clearTTSResult(); // Clear old transcription result
-        selectSession(newSession.id);
-      }
+      // Create temporary session for file upload
+      const newSession = createTemporarySession(`File: ${file.name}`);
+      resetTranscript(); // Reset transcript for new session
+      clearTTSResult(); // Clear old transcription result
+      selectSession(newSession.id);
     }
     await processFileUpload(file);
-  }, [currentSession, createSession, selectSession, processFileUpload, resetTranscript, clearTTSResult]);
+  }, [currentSession, createTemporarySession, selectSession, processFileUpload, resetTranscript, clearTTSResult]);
 
   // Handle transcript update (for editing existing transcript)
   const handleTranscriptUpdate = useCallback((transcript: string, duration?: number) => {
@@ -313,7 +318,7 @@ export const GeorgianSTTApp: React.FC = () => {
     }
   }, [currentSession, appendToTranscript]);
 
-  // Handle recording start - create session if needed
+  // Handle recording start - create temporary session if needed
   const handleStartRecording = useCallback(async () => {
     // Generate new recording session ID for tracking
     const newRecordingSessionId = `rec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -324,26 +329,20 @@ export const GeorgianSTTApp: React.FC = () => {
     lastProcessedTimeRef.current = 0;
 
     if (!currentSession) {
-      // Create new session when user starts recording - clear local state for fresh start
+      // Create temporary session when user starts recording - clear local state for fresh start
       setLocalTranscript(''); // Clear local transcript for new session
       resetTranscript(); // Reset TTS hook state
       clearTTSResult(); // Clear old transcription result
       
-      const newSession = await createSession('New Recording');
-      if (newSession) {
-        selectSession(newSession.id);
-      } else {
-
-        return; // Don't start recording without a session
-      }
+      const newSession = createTemporarySession('New Recording');
+      selectSession(newSession.id);
     } else {
       // IMPORTANT: Don't clear localTranscript when recording in existing session
       // This preserves user's typed content!
-
       clearTTSResult(); // Just clear pending results
     }
     startRecording();
-  }, [currentSession, createSession, selectSession, startRecording, resetTranscript, clearTTSResult]);
+  }, [currentSession, createTemporarySession, selectSession, startRecording, resetTranscript, clearTTSResult]);
 
   // Clear all errors
   const clearAllErrors = useCallback(() => {

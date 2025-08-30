@@ -146,7 +146,27 @@ export const useAIProcessing = (): UseAIProcessingReturn => {
       timestamp: Date.now()
     };
 
-    setProcessingHistory(prev => [historyItem, ...prev]);
+    console.log('📋 Adding to processing history:', {
+      instruction: instruction.slice(0, 50) + '...',
+      responseLength: response.length,
+      model,
+      tokensUsed,
+      processingTime,
+      timestamp: historyItem.timestamp
+    });
+
+    setProcessingHistory(prev => {
+      const newHistory = [historyItem, ...prev];
+      console.log('📊 Updated processing history:', {
+        newCount: newHistory.length,
+        items: newHistory.map(item => ({
+          instruction: item.userInstruction.slice(0, 30) + '...',
+          responseLength: item.aiResponse.length,
+          timestamp: item.timestamp
+        }))
+      });
+      return newHistory;
+    });
   }, []);
 
   // Clear error

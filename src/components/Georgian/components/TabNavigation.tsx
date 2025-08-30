@@ -99,8 +99,8 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
           
           {/* Right Side Actions */}
           <div className="flex items-center space-x-3">
-            {/* Premium Record Button */}
-            {(onStartRecording || onStopRecording) && (
+            {/* Premium Record Button - Only show on transcript tab */}
+            {activeTab === 'transcript' && (onStartRecording || onStopRecording) && (
               <button
                 onClick={isRecording ? (canStop ? onStopRecording : undefined) : (canRecord ? onStartRecording : undefined)}
                 disabled={isRecording ? !canStop : !canRecord}

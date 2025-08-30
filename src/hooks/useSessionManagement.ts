@@ -21,6 +21,7 @@ export interface GeorgianSession {
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
+  isTemporary?: boolean; // For sessions not yet saved to DB
 }
 
 interface UseSessionManagementReturn {
@@ -30,7 +31,9 @@ interface UseSessionManagementReturn {
   error: string | null;
   
   // Session operations
-  createSession: (title?: string) => Promise<GeorgianSession | null>;
+  createSession: (title?: string, initialContent?: string) => Promise<GeorgianSession | null>;
+  createTemporarySession: (title?: string) => GeorgianSession;
+  saveTemporarySession: (session: GeorgianSession) => Promise<GeorgianSession | null>;
   selectSession: (sessionId: string) => void;
   updateSession: (sessionId: string, updates: Partial<GeorgianSession>) => Promise<boolean>;
   deleteSession: (sessionId: string) => Promise<boolean>;
@@ -51,6 +54,7 @@ interface UseSessionManagementReturn {
   clearError: () => void;
   refreshSessions: () => Promise<void>;
   searchSessions: (query: string) => GeorgianSession[];
+  cleanupEmptyTemporarySessions: () => void;
 }
 
 export const useSessionManagement = (): UseSessionManagementReturn => {
@@ -68,7 +72,7 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     setError(null);
 
     const [data, loadError] = await safeAsync(
-      () => supabase
+      () => (supabase as any)
         .from('georgian_sessions')
         .select('*')
         .eq('user_id', user.id)
@@ -79,18 +83,20 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     if (loadError) {
       setError(`Failed to load sessions: ${loadError.message}`);
     } else {
-      const formattedSessions: GeorgianSession[] = (data?.data || []).map(session => ({
-        id: session.id,
-        userId: session.user_id,
-        title: session.title,
-        transcript: session.transcript || '',
-        durationMs: session.duration_ms || 0,
-        audioFileUrl: session.audio_file_url,
-        processingResults: session.processing_results || [],
-        createdAt: session.created_at,
-        updatedAt: session.updated_at,
-        isActive: session.is_active
-      }));
+      const formattedSessions: GeorgianSession[] = (data?.data || [])
+        .filter((session: any) => session !== null && session !== undefined) // Filter out null sessions
+        .map((session: any) => ({
+          id: session.id,
+          userId: session.user_id,
+          title: session.title,
+          transcript: session.transcript || '',
+          durationMs: session.duration_ms || 0,
+          audioFileUrl: session.audio_file_url,
+          processingResults: session.processing_results || [],
+          createdAt: session.created_at,
+          updatedAt: session.updated_at,
+          isActive: session.is_active
+        }));
       
       // Remove duplicates by ID to prevent React key conflicts
       const uniqueSessions = formattedSessions.filter((session, index, arr) => 
@@ -103,8 +109,8 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     setLoading(false);
   }, [user]);
 
-  // Create new session
-  const createSession = useCallback(async (title?: string): Promise<GeorgianSession | null> => {
+  // Create new session - ONLY creates when there's actual content
+  const createSession = useCallback(async (title?: string, initialContent?: string): Promise<GeorgianSession | null> => {
     if (!user) {
       setError('User not authenticated');
       return null;
@@ -113,12 +119,12 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     const sessionTitle = title || `Session ${new Date().toLocaleString()}`;
     
     const [data, createError] = await safeAsync(
-      () => supabase
+      () => (supabase as any)
         .from('georgian_sessions')
         .insert({
           user_id: user.id,
           title: sessionTitle,
-          transcript: '',
+          transcript: initialContent || '',
           duration_ms: 0,
           processing_results: []
         })
@@ -131,17 +137,24 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
       return null;
     }
 
+    // Ensure data and data.data exist before accessing properties
+    if (!data || !(data as any)?.data) {
+      setError('Failed to create session: Invalid response from database');
+      return null;
+    }
+
+    const sessionData = (data as any).data;
     const newSession: GeorgianSession = {
-      id: data.data.id,
-      userId: data.data.user_id,
-      title: data.data.title,
-      transcript: data.data.transcript || '',
-      durationMs: data.data.duration_ms || 0,
-      audioFileUrl: data.data.audio_file_url,
-      processingResults: data.data.processing_results || [],
-      createdAt: data.data.created_at,
-      updatedAt: data.data.updated_at,
-      isActive: data.data.is_active
+      id: sessionData.id,
+      userId: sessionData.user_id,
+      title: sessionData.title,
+      transcript: sessionData.transcript || '',
+      durationMs: sessionData.duration_ms || 0,
+      audioFileUrl: sessionData.audio_file_url,
+      processingResults: sessionData.processing_results || [],
+      createdAt: sessionData.created_at,
+      updatedAt: sessionData.updated_at,
+      isActive: sessionData.is_active
     };
 
     setSessions(prev => {
@@ -159,6 +172,91 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     return newSession;
   }, [user]);
 
+  // Create temporary session (in-memory only, not saved to DB)
+  const createTemporarySession = useCallback((title?: string): GeorgianSession => {
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
+
+    const sessionTitle = title || `New Recording`;
+    const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    const tempSession: GeorgianSession = {
+      id: tempId,
+      userId: user.id,
+      title: sessionTitle,
+      transcript: '',
+      durationMs: 0,
+      audioFileUrl: undefined,
+      processingResults: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      isActive: true,
+      isTemporary: true
+    };
+
+    setSessions(prev => [tempSession, ...prev]);
+    setCurrentSession(tempSession);
+    return tempSession;
+  }, [user]);
+
+  // Save temporary session to database (only if it has content)
+  const saveTemporarySession = useCallback(async (session: GeorgianSession): Promise<GeorgianSession | null> => {
+    if (!session.isTemporary) {
+      console.warn('Attempting to save non-temporary session');
+      return session;
+    }
+
+    // Only save if session has actual content
+    if (!session.transcript || session.transcript.trim() === '') {
+      console.log('Skipping save of empty temporary session');
+      return null;
+    }
+
+    if (!user) {
+      setError('User not authenticated');
+      return null;
+    }
+    
+    const [data, createError] = await safeAsync(
+      () => supabase
+        .from('georgian_sessions')
+        .insert({
+          user_id: user.id,
+          title: session.title,
+          transcript: session.transcript,
+          duration_ms: session.durationMs,
+          processing_results: session.processingResults || []
+        })
+        .select()
+        .single()
+    );
+
+    if (createError) {
+      setError(`Failed to save session: ${createError.message}`);
+      return null;
+    }
+
+    const savedSession: GeorgianSession = {
+      id: data.data.id,
+      userId: data.data.user_id,
+      title: data.data.title,
+      transcript: data.data.transcript || '',
+      durationMs: data.data.duration_ms || 0,
+      audioFileUrl: data.data.audio_file_url,
+      processingResults: data.data.processing_results || [],
+      createdAt: data.data.created_at,
+      updatedAt: data.data.updated_at,
+      isActive: data.data.is_active,
+      isTemporary: false
+    };
+
+    // Replace temporary session with saved session
+    setSessions(prev => prev.map(s => s.id === session.id ? savedSession : s));
+    setCurrentSession(savedSession);
+    return savedSession;
+  }, [user]);
+
   // Select session
   const selectSession = useCallback((sessionId: string) => {
     const session = sessions.find(s => s.id === sessionId);
@@ -169,8 +267,26 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
 
   // Update session
   const updateSession = useCallback(async (sessionId: string, updates: Partial<GeorgianSession>): Promise<boolean> => {
+    // Handle temporary sessions (in-memory only)
+    if (sessionId.startsWith('temp_')) {
+      // Update local state only for temporary sessions
+      setSessions(prev => prev.map(session => 
+        session.id === sessionId 
+          ? { ...session, ...updates, updatedAt: new Date().toISOString() }
+          : session
+      ));
+
+      // Update current session if it's the one being updated
+      if (currentSession?.id === sessionId) {
+        setCurrentSession(prev => prev ? { ...prev, ...updates, updatedAt: new Date().toISOString() } : null);
+      }
+
+      return true;
+    }
+
+    // Handle database sessions
     const [data, updateError] = await safeAsync(
-      () => supabase
+      () => (supabase as any)
         .from('georgian_sessions')
         .update({
           title: updates.title,
@@ -189,16 +305,23 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
       return false;
     }
 
+    // Ensure data and data.data exist before accessing properties
+    if (!data || !(data as any)?.data) {
+      setError('Failed to update session: Invalid response from database');
+      return false;
+    }
+
+    const sessionData = (data as any).data;
     // Update local state
     setSessions(prev => prev.map(session => 
       session.id === sessionId 
-        ? { ...session, ...updates, updatedAt: data.data.updated_at }
+        ? { ...session, ...updates, updatedAt: sessionData.updated_at }
         : session
     ));
 
     // Update current session if it's the one being updated
     if (currentSession?.id === sessionId) {
-      setCurrentSession(prev => prev ? { ...prev, ...updates, updatedAt: data.data.updated_at } : null);
+      setCurrentSession(prev => prev ? { ...prev, ...updates, updatedAt: sessionData.updated_at } : null);
     }
 
     return true;
@@ -207,7 +330,7 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
   // Delete session
   const deleteSession = useCallback(async (sessionId: string): Promise<boolean> => {
     const [, deleteError] = await safeAsync(
-      () => supabase
+      () => (supabase as any)
         .from('georgian_sessions')
         .update({ is_active: false })
         .eq('id', sessionId)
@@ -263,11 +386,32 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     const combinedTranscript = existingTranscript + separator + newText;
     const totalDuration = session.durationMs + duration;
 
+    // If this is a temporary session, update it in memory and save to DB when it has content
+    if (session.isTemporary) {
+      const updatedSession = { 
+        ...session, 
+        transcript: combinedTranscript, 
+        durationMs: totalDuration,
+        updatedAt: new Date().toISOString()
+      };
+      
+      // Update in memory first
+      setSessions(prev => prev.map(s => s.id === sessionId ? updatedSession : s));
+      setCurrentSession(updatedSession);
+      
+      // Save to database now that we have content
+      if (combinedTranscript.trim()) {
+        await saveTemporarySession(updatedSession);
+      }
+      
+      return true;
+    }
+
     return await updateSession(sessionId, { 
       transcript: combinedTranscript, 
       durationMs: totalDuration 
     });
-  }, [sessions, updateSession]);
+  }, [sessions, updateSession, saveTemporarySession]);
 
   // Add processing result
   const addProcessingResult = useCallback(async (sessionId: string, result: {
@@ -314,6 +458,18 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     await loadSessions();
   }, [loadSessions]);
 
+  // Clean up empty temporary sessions
+  const cleanupEmptyTemporarySessions = useCallback(() => {
+    setSessions(prev => prev.filter(session => {
+      // Remove temporary sessions that don't have content
+      if (session.isTemporary && (!session.transcript || session.transcript.trim() === '')) {
+        console.log('🧹 Cleaning up empty temporary session:', session.id);
+        return false;
+      }
+      return true;
+    }));
+  }, []);
+
   // Load sessions on user change
   useEffect(() => {
     if (user) {
@@ -331,6 +487,8 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     error,
     
     createSession,
+    createTemporarySession,
+    saveTemporarySession,
     selectSession,
     updateSession,
     deleteSession,
@@ -342,6 +500,7 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     
     clearError,
     refreshSessions,
-    searchSessions
+    searchSessions,
+    cleanupEmptyTemporarySessions
   };
 };

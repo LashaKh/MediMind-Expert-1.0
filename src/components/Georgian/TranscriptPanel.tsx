@@ -152,14 +152,14 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const currentTranscript = editableTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
   const hasTranscript = currentTranscript.length > 0;
   
-  // Debug transcript resolution
-  console.log('🔍 Transcript resolution:', {
-    hasEditableTranscript: !!editableTranscript,
-    editableLength: editableTranscript?.length || 0,
-    hasLocalTranscript: !!localTranscript,
-    hasSessionTranscript: !!currentSession?.transcript,
-    finalTranscript: currentTranscript.slice(0, 100) + '...'
-  });
+  // Debug transcript resolution (disabled in production)
+  // console.log('🔍 Transcript resolution:', {
+  //   hasEditableTranscript: !!editableTranscript,
+  //   editableLength: editableTranscript?.length || 0,
+  //   hasLocalTranscript: !!localTranscript,
+  //   hasSessionTranscript: !!currentSession?.transcript,
+  //   finalTranscript: currentTranscript.slice(0, 100) + '...'
+  // });
   
   // Reset tracking when recording starts (not on every render)
   useEffect(() => {
@@ -178,10 +178,9 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
 
   // Load session transcript when session changes
   useEffect(() => {
-    if (currentSession?.transcript && !editableTranscript) {
-
-      setEditableTranscript(currentSession.transcript);
-    }
+    // Always load the session transcript when session changes, even if it's empty
+    const sessionTranscript = currentSession?.transcript || '';
+    setEditableTranscript(sessionTranscript);
   }, [currentSession?.id]); // Only trigger on session ID change, not transcript content changes
   
   // Sync context recording state with actual recording state
@@ -261,19 +260,17 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   useEffect(() => {
     // Circuit breaker: prevent multiple simultaneous executions
     if (processingLockRef.current) {
-      console.log('🚫 Processing already in progress, skipping duplicate useEffect');
+      // Processing already in progress, skipping
       return;
     }
     
     // Additional check: don't process if neither transcriptionResult nor localTranscript have meaningful updates
     if (!transcriptionResult && !localTranscript) {
-      console.log('🚫 No transcript updates to process');
       return;
     }
     
     // Prevent processing the same localTranscript multiple times
     if (localTranscript && localTranscript === lastProcessedLocalTranscriptRef.current) {
-      console.log('🚫 Same localTranscript already processed, skipping');
       return;
     }
     
@@ -299,7 +296,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       const currentLength = editableTranscript.length;
       if (localTranscript.length > currentLength) {
         newText = localTranscript.substring(currentLength).trim();
-        console.log(`📝 Processing localTranscript update (recording: ${recordingState.isRecording})`);
+        // Processing localTranscript update
       }
     }
     
@@ -308,26 +305,22 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       const contentHash = hashContent(newText);
       const now = Date.now();
       
-      // ENHANCED DEBUG: Log every attempt to see the pattern
-      console.log(`🔍 Processing attempt: hash=${contentHash}, text="${newText.substring(0, 30)}...", source=${transcriptionResult ? 'transcriptionResult' : 'localTranscript'}`);
+      // Processing new transcript text
       
       // Global duplicate check (catches rapid duplicate calls)
       if (lastGlobalProcessedRef.current.hash === contentHash && 
           (now - lastGlobalProcessedRef.current.timestamp) < 500) {
-        console.log(`🚫 Global duplicate detected (hash: ${contentHash}), skipping rapid trigger`);
         return; // Exit early to prevent any processing
       }
       
       // Check for duplicates in session set BEFORE logging to prevent race conditions
       if (processedSet.has(contentHash)) {
-        console.log(`🚫 Duplicate segment detected (hash: ${contentHash}), skipping`);
         return; // Exit early to prevent any processing
       }
       
       // Update global tracking
       lastGlobalProcessedRef.current = { hash: contentHash, timestamp: now };
       
-      console.log(`✅ PROCESSING: New transcript segment (hash: ${contentHash}): "${newText.substring(0, 50)}..."`);
       processedSet.add(contentHash);
       
       // Update the last processed localTranscript reference
