@@ -194,13 +194,46 @@ export const GeorgianSTTApp: React.FC = () => {
     }
   }, [sessions, deleteSession]);
 
-  // Handle AI text processing
-  const handleProcessText = useCallback(async (instruction: string) => {
-    const transcript = currentSession?.transcript || transcriptionResult?.text || '';
-    if (!transcript.trim()) return;
+  // Handle AI text processing with direct transcript parameter
+  const handleProcessText = useCallback(async (instruction: string, directTranscript?: string) => {
+    console.log('🚀 handleProcessText called:', {
+      instruction,
+      hasDirectTranscript: !!directTranscript,
+      directTranscriptLength: directTranscript?.length || 0,
+      hasCurrentSession: !!currentSession,
+      currentSessionId: currentSession?.id,
+      sessionTranscript: currentSession?.transcript?.slice(0, 100) + '...',
+      transcriptionResultText: transcriptionResult?.text?.slice(0, 100) + '...',
+      localTranscriptLength: localTranscript?.length || 0,
+      localTranscriptPreview: localTranscript?.slice(0, 100) + '...'
+    });
+    
+    // Use directTranscript first (passed from UI), then fallback to other sources
+    const transcript = directTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
+    
+    console.log('📋 Final transcript for AI processing:', {
+      source: directTranscript ? 'directTranscript' : (localTranscript ? 'localTranscript' : (currentSession?.transcript ? 'sessionTranscript' : 'transcriptionResult')),
+      length: transcript.length,
+      preview: transcript.slice(0, 150) + '...'
+    });
+    
+    if (!transcript.trim()) {
+      console.error('❌ No transcript available for processing');
+      return;
+    }
 
+    console.log('✅ Starting AI processing with transcript length:', transcript.length);
+    
     const result = await processText(transcript, instruction);
+    
+    console.log('📊 AI processing result:', {
+      hasResult: !!result,
+      resultLength: result?.result?.length || 0,
+      model: result?.model
+    });
+    
     if (result && currentSession) {
+      console.log('💾 Saving processing result to session:', currentSession.id);
       // Save processing result to session
       await addProcessingResult(currentSession.id, {
         userInstruction: instruction,
@@ -209,8 +242,23 @@ export const GeorgianSTTApp: React.FC = () => {
         tokensUsed: result.tokensUsed,
         processingTime: result.processingTime
       });
+      console.log('✅ Processing result saved successfully');
+    } else if (!currentSession) {
+      console.error('❌ No current session to save result to - creating temp session');
+      // Create a temporary session for the AI processing result
+      const tempSession = await createSession('AI Analysis Session');
+      if (tempSession && result) {
+        await addProcessingResult(tempSession.id, {
+          userInstruction: instruction,
+          aiResponse: result.result,
+          model: result.model,
+          tokensUsed: result.tokensUsed,
+          processingTime: result.processingTime
+        });
+        console.log('✅ Processing result saved to new session:', tempSession.id);
+      }
     }
-  }, [currentSession, transcriptionResult, processText, addProcessingResult]);
+  }, [currentSession, transcriptionResult, localTranscript, processText, addProcessingResult, createSession]);
 
   // Handle session selection with local transcript loading
   const handleSelectSession = useCallback(async (sessionId: string) => {
@@ -617,30 +665,6 @@ export const GeorgianSTTApp: React.FC = () => {
 
       </div>
 
-      {/* Enhanced Medical Error Display */}
-      {(sessionError && !ttsError && !aiError) && (
-        <div className="fixed bottom-6 right-6 max-w-sm bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-red-200/50 dark:border-red-700/50 rounded-xl p-5 shadow-2xl shadow-red-500/10">
-          <div className="flex items-start space-x-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
-              <AlertTriangle className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-base font-semibold text-red-800 dark:text-red-200">System Alert</h3>
-                <button
-                  onClick={clearAllErrors}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              <p className="text-sm text-red-700 dark:text-red-300 leading-relaxed">
-                {sessionError}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Enhanced Medical Security Warning */}
       {window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && (

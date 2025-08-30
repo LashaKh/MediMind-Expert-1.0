@@ -67,12 +67,41 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   onClearHistory
 }) => {
   const [instruction, setInstruction] = useState('');
+  
+  // Debug props on every render
+  console.log('📊 AIProcessingContent props:', {
+    hasTranscript,
+    transcriptLength: transcript?.length || 0,
+    transcriptPreview: transcript?.slice(0, 100) + '...',
+    processing,
+    hasOnProcessText: !!onProcessText,
+    aiError,
+    processingHistoryCount: processingHistory?.length || 0,
+    instructionLength: instruction.length
+  });
 
   const handleProcessSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    console.log('💆‍♂️ Button clicked - Form submit handler called:', {
+      hasInstruction: !!instruction.trim(),
+      instructionLength: instruction.trim().length,
+      instruction: instruction.trim(),
+      hasOnProcessText: !!onProcessText,
+      hasTranscript,
+      transcriptPreview: transcript?.slice(0, 100) + '...'
+    });
+    
     if (instruction.trim() && onProcessText) {
+      console.log('✅ Calling onProcessText with instruction:', instruction.trim());
       onProcessText(instruction.trim());
       setInstruction('');
+      console.log('🔄 Instruction cleared, form submitted');
+    } else {
+      console.error('❌ Cannot process:', {
+        hasInstruction: !!instruction.trim(),
+        hasOnProcessText: !!onProcessText
+      });
     }
   };
 
@@ -153,7 +182,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
               />
               
               {/* Premium Submit Button */}
-              <div className="absolute bottom-6 right-6">
+              <div className="absolute bottom-6 right-6 z-20">
                 <MedicalButton
                   type="submit"
                   disabled={processing || !instruction.trim()}
@@ -164,6 +193,16 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                   rightIcon={processing ? Sparkles : Wand2}
                   className="shadow-2xl min-w-[120px] h-16"
                   aria-label="Submit AI analysis request"
+                  onClick={(e) => {
+                    console.log('💆‍♂️ MedicalButton clicked:', {
+                      isDisabled: processing || !instruction.trim(),
+                      processing,
+                      hasInstruction: !!instruction.trim(),
+                      buttonType: e.currentTarget.type,
+                      event: e.type
+                    });
+                    // Don't prevent default - let form submission handle it
+                  }}
                 >
                   <span className="font-bold">
                     {processing ? 'Processing' : 'Analyze'}

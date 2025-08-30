@@ -43,14 +43,30 @@ export const useAIProcessing = (): UseAIProcessingReturn => {
     userInstruction: string,
     model = 'gpt-4o-mini'
   ): Promise<ProcessingResult | null> => {
+    console.log('🚀 AI Processing started:', {
+      hasTranscript: !!transcript,
+      transcriptLength: transcript?.length || 0,
+      transcriptPreview: transcript?.slice(0, 100) + '...',
+      userInstruction,
+      model
+    });
+
     if (!transcript.trim() || !userInstruction.trim()) {
+      console.error('❌ Validation failed:', {
+        hasTranscript: !!transcript.trim(),
+        hasInstruction: !!userInstruction.trim()
+      });
       setError('Both transcript and instruction are required');
       return null;
     }
 
+    console.log('✅ Validation passed, starting processing...');
     setProcessing(true);
     setError(null);
 
+    console.log('📡 Calling Supabase Edge Function...');
+    const startTime = Date.now();
+    
     const [result, processError] = await safeAsync(
       () => supabase.functions.invoke('process-georgian-text', {
         body: {
@@ -60,25 +76,43 @@ export const useAIProcessing = (): UseAIProcessingReturn => {
         }
       })
     );
+    
+    const callTime = Date.now() - startTime;
+    console.log('⏱️ Function call completed:', {
+      duration: callTime + 'ms',
+      hasResult: !!result,
+      hasError: !!processError
+    });
 
     if (processError) {
+      console.error('❌ Process error:', processError);
       setError(`Processing failed: ${processError.message}`);
       setProcessing(false);
       return null;
     }
 
+    console.log('📊 Raw result:', result);
+    
     if (result?.error) {
+      console.error('❌ Result error:', result.error);
       setError(`Processing error: ${result.error.message || result.error}`);
       setProcessing(false);
       return null;
     }
 
     const processedResult: ProcessingResult = {
-      result: result.data.result,
-      model: result.data.model,
-      tokensUsed: result.data.tokensUsed,
-      processingTime: result.data.processingTime
+      result: result.data?.result || 'No result',
+      model: result.data?.model || model,
+      tokensUsed: result.data?.tokensUsed,
+      processingTime: result.data?.processingTime || callTime
     };
+
+    console.log('✅ Processing completed successfully:', {
+      resultLength: processedResult.result.length,
+      model: processedResult.model,
+      tokensUsed: processedResult.tokensUsed,
+      processingTime: processedResult.processingTime
+    });
 
     setLastResult(processedResult);
     

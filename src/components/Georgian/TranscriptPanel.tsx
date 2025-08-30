@@ -67,11 +67,11 @@ interface TranscriptPanelProps {
   onUpdateTranscript: (transcript: string, duration?: number) => void;
   onAppendTranscript?: (newText: string, duration?: number) => void;
   
-  // AI Processing props
+  // AI Processing props - modified to pass transcript directly
   processing?: boolean;
   aiError?: string | null;
   processingHistory?: ProcessingHistory[];
-  onProcessText?: (instruction: string) => void;
+  onProcessText?: (instruction: string, transcript?: string) => void;
   onClearAIError?: () => void;
   onClearHistory?: () => void;
 }
@@ -148,9 +148,18 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   // Track last processed localTranscript to prevent loops
   const lastProcessedLocalTranscriptRef = useRef<string>('');
   
-  // Simple transcript resolution like context window
-  const currentTranscript = editableTranscript || currentSession?.transcript || transcriptionResult?.text || '';
+  // Simple transcript resolution with editableTranscript priority for AI processing
+  const currentTranscript = editableTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
   const hasTranscript = currentTranscript.length > 0;
+  
+  // Debug transcript resolution
+  console.log('🔍 Transcript resolution:', {
+    hasEditableTranscript: !!editableTranscript,
+    editableLength: editableTranscript?.length || 0,
+    hasLocalTranscript: !!localTranscript,
+    hasSessionTranscript: !!currentSession?.transcript,
+    finalTranscript: currentTranscript.slice(0, 100) + '...'
+  });
   
   // Reset tracking when recording starts (not on every render)
   useEffect(() => {
@@ -239,9 +248,13 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     copyToClipboard(contextText);
   };
 
-  // Simple direct change handler like context window
+  // Simple direct change handler that updates both local and parent state
   const handleTranscriptChange = (newTranscript: string) => {
     setEditableTranscript(newTranscript);
+    // Also update parent state so AI Processing can access the transcript
+    if (onUpdateTranscript) {
+      onUpdateTranscript(newTranscript);
+    }
   };
 
   // Handle transcription updates with better deduplication and debouncing
@@ -378,7 +391,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             processing={processing}
             aiError={aiError}
             processingHistory={processingHistory}
-            onProcessText={onProcessText}
+            onProcessText={(instruction) => onProcessText?.(instruction, currentTranscript)}
             onClearAIError={onClearAIError}
             onClearHistory={onClearHistory}
           />

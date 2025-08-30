@@ -252,7 +252,8 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
   const appendToTranscript = useCallback(async (sessionId: string, newText: string, duration = 0): Promise<boolean> => {
     const session = sessions.find(s => s.id === sessionId);
     if (!session) {
-      setError('Session not found');
+      // Silent failure - don't show UI error for background transcript updates during recording
+      console.warn(`📝 Session ${sessionId} not found for transcript append, skipping silently`);
       return false;
     }
 
