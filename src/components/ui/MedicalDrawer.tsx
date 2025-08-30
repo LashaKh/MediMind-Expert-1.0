@@ -157,11 +157,11 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white medical-mobile-text-xl">
                   {title}
                 </h2>
                 {subtitle && (
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 font-medium medical-mobile-text-sm">
                     {subtitle}
                   </p>
                 )}
@@ -172,7 +172,7 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
               {actions}
               <button
                 onClick={onClose}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 premium-hover-scale"
+                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 premium-hover-scale medical-touch-target medical-drawer-item"
                 aria-label="Close drawer"
               >
                 <X className="w-6 h-6" />
@@ -201,8 +201,9 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
                   focus:border-blue-500 dark:focus:border-blue-400
                   transition-all duration-200 premium-focus
                   touch-manipulation
+                  medical-input medical-mobile-touch-md
                 "
-                style={{ minHeight: '48px' }} // Medical touch target
+                style={{ minHeight: 'var(--medical-mobile-touch-md)' }}
               />
             </div>
           )}
@@ -212,7 +213,7 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
         <div 
           className="flex-1 overflow-y-auto premium-scroll-indicator"
           style={{ 
-            maxHeight: `calc(${maxHeight} - 200px)`,
+            maxHeight: `calc(${maxHeight} - 160px)`,
             scrollbarWidth: 'thin',
             scrollbarColor: '#3B82F6 #F3F4F6'
           }}

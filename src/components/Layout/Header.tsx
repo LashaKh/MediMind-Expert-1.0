@@ -84,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
               <button
                 onClick={onMenuToggle}
                 className={`
-                  touch-target-md md:hidden rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 
+                  touch-target-md medical-touch-target medical-mobile-touch-md md:hidden rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 
                   transition-all duration-200 focus-enhanced active:scale-95
                   ${isCondensed ? 'p-1' : 'p-2'}
                 `}

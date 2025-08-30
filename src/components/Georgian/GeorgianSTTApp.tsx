@@ -8,7 +8,9 @@ import {
   ChevronRight,
   FileText,
   Plus,
-  Search
+  Search,
+  Mic,
+  Square
 } from 'lucide-react';
 import { MedicalButton, MedicalCard, MedicalInput, MedicalLoading, MedicalBadge } from '../ui/MedicalDesignSystem';
 import { MedicalDrawer } from '../ui/MedicalDrawer';
@@ -376,20 +378,13 @@ export const GeorgianSTTApp: React.FC = () => {
         recordingState={recordingState}
         processing={processing}
         activeTab={activeTab}
+        onOpenMobileSessions={openMobileDrawer}
+        sessionsCount={sessions.length}
       />
 
       {/* Mobile-First Responsive Layout */}
       <div className="flex flex-col h-[calc(100vh-64px)] bg-gradient-to-br from-slate-50/50 via-white to-blue-50/30 dark:from-gray-900/50 dark:via-gray-800 dark:to-blue-900/10">
         
-        {/* Mobile: Compact Session Header with Drawer Toggle */}
-        <MobileSessionHeader
-          currentSession={currentSession}
-          sessions={sessions}
-          recordingDuration={recordingState.duration}
-          onOpenDrawer={openMobileDrawer}
-          formatTime={formatTime}
-        />
-
         {/* Medical Session History Drawer */}
         <MedicalDrawer
           isOpen={isMobileDrawerOpen}
@@ -397,110 +392,97 @@ export const GeorgianSTTApp: React.FC = () => {
           title="Medical Sessions"
           subtitle={`${sessions.length} recordings available`}
           icon={Stethoscope}
-          maxHeight={75}
+          maxHeight="85vh"
           showHandle={true}
           enableSwipeGestures={true}
           className="lg:hidden"
         >
-          <div className="p-4 space-y-4">
-            {/* Medical Drawer Header Actions */}
-            <div className="flex items-center justify-between mb-4">
-              <MedicalButton
+          <div className="space-y-4">
+            {/* Simplified Header Actions */}
+            <div className="flex flex-col space-y-3">
+              <button
                 onClick={handleCreateSession}
-                variant="primary"
-                size="md"
-                leftIcon={Plus}
-                className="flex-1 mr-2"
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
               >
-                New Session
-              </MedicalButton>
+                <Plus className="w-4 h-4" />
+                <span>New Session</span>
+              </button>
               
-              {/* Medical Search Input */}
-              <div className="flex-1 ml-2">
-                <MedicalInput
-                  type="text"
-                  placeholder="Search sessions..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  leftIcon={Search}
-                  size="md"
-                  className="w-full"
-                />
-              </div>
+              <input
+                type="text"
+                placeholder="Search sessions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
             </div>
             
             {/* Session List */}
-            <div className="space-y-3 max-h-96 overflow-y-auto">
+            <div className="space-y-3 overflow-y-auto" style={{ maxHeight: '50vh' }}>
               {sessionLoading ? (
                 <div className="flex items-center justify-center py-8">
-                  <MedicalLoading
-                    size="lg"
-                    variant="medical"
-                    text="Loading sessions..."
-                  />
+                  <div className="text-blue-500">Loading sessions...</div>
                 </div>
               ) : filteredSessions.length === 0 ? (
-                <MedicalCard className="p-6 text-center">
+                <div className="bg-white p-6 rounded-lg border text-center">
                   <div className="flex flex-col items-center space-y-4">
-                    <div className="w-16 h-16 bg-medical-blue-100 dark:bg-medical-blue-900/30 rounded-xl flex items-center justify-center">
-                      <Stethoscope className="w-8 h-8 text-medical-blue-600 dark:text-medical-blue-400" />
+                    <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center">
+                      <Stethoscope className="w-8 h-8 text-blue-600" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-medical-gray-900 dark:text-medical-gray-100 mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         No Sessions Yet
                       </h3>
-                      <p className="text-sm text-medical-gray-600 dark:text-medical-gray-400 mb-4 max-w-sm">
+                      <p className="text-sm text-gray-600 mb-4 max-w-sm">
                         Create your first medical transcription session to begin capturing patient consultations.
                       </p>
-                      <MedicalButton
+                      <button
                         onClick={() => {
                           handleCreateSession();
                           closeMobileDrawer();
                         }}
-                        variant="primary"
-                        size="lg"
-                        leftIcon={Plus}
+                        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium flex items-center space-x-2"
                       >
-                        Create First Session
-                      </MedicalButton>
+                        <Plus className="w-4 h-4" />
+                        <span>Create First Session</span>
+                      </button>
                     </div>
                   </div>
-                </MedicalCard>
+                </div>
               ) : (
                 filteredSessions.map((session) => {
                   const isActive = currentSession?.id === session.id;
                   const hasTranscript = session.transcript && session.transcript.length > 0;
                   
                   return (
-                    <MedicalCard
+                    <div
                       key={session.id}
-                      variant={isActive ? "elevated" : "interactive"}
-                      className={`cursor-pointer transition-all duration-200 ${
+                      className={`bg-white border-2 rounded-lg p-4 cursor-pointer transition-all duration-200 ${
                         isActive
-                          ? 'border-medical-blue-500 bg-medical-blue-50 dark:bg-medical-blue-900/20'
-                          : 'hover:border-medical-blue-300 dark:hover:border-medical-blue-600'
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-blue-300'
                       }`}
                       onClick={() => handleMobileSessionSelect(session.id)}
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm ${
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
                             isActive 
-                              ? 'bg-medical-blue-600 text-white' 
-                              : 'bg-medical-gray-100 dark:bg-medical-gray-600 text-medical-gray-500 dark:text-medical-gray-400'
+                              ? 'bg-blue-600 text-white' 
+                              : 'bg-gray-200 text-gray-500'
                           }`}>
                             <FileText className="w-5 h-5" />
                           </div>
                           
                           <div className="flex-1 min-w-0">
                             <h3 className={`text-base font-semibold truncate mb-1 ${
-                              isActive ? 'text-medical-blue-900 dark:text-medical-blue-100' : 'text-medical-gray-900 dark:text-medical-gray-100'
+                              isActive ? 'text-blue-900' : 'text-gray-900'
                             }`}>
                               {session.title}
                             </h3>
                             
                             <div className="flex items-center space-x-3 text-sm">
-                              <span className={isActive ? 'text-medical-blue-600 dark:text-medical-blue-300' : 'text-medical-gray-500 dark:text-medical-gray-400'}>
+                              <span className={isActive ? 'text-blue-600' : 'text-gray-500'}>
                                 {new Date(session.createdAt).toLocaleDateString('en-US', { 
                                   month: 'short', 
                                   day: 'numeric',
@@ -509,7 +491,7 @@ export const GeorgianSTTApp: React.FC = () => {
                                 })}
                               </span>
                               {session.durationMs > 0 && (
-                                <span className={isActive ? 'text-medical-blue-600 dark:text-medical-blue-300' : 'text-medical-gray-500 dark:text-medical-gray-400'}>
+                                <span className={isActive ? 'text-blue-600' : 'text-gray-500'}>
                                   {formatTime(session.durationMs)}
                                 </span>
                               )}
@@ -518,32 +500,32 @@ export const GeorgianSTTApp: React.FC = () => {
                         </div>
                         
                         {hasTranscript && (
-                          <MedicalBadge 
-                            variant="success" 
-                            className="text-xs"
-                          >
+                          <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">
                             Transcribed
-                          </MedicalBadge>
+                          </span>
                         )}
                       </div>
                       
                       {session.transcript && (
-                        <p className={`text-sm leading-relaxed line-clamp-2 ${
+                        <p className={`text-sm leading-relaxed ${
                           isActive 
-                            ? 'text-medical-blue-800 dark:text-medical-blue-200'
-                            : 'text-medical-gray-600 dark:text-medical-gray-300'
-                        }`}>
+                            ? 'text-blue-800'
+                            : 'text-gray-600'
+                        }`}
+                          style={{ 
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden'
+                          }}
+                        >
                           {session.transcript.length > 100 
                             ? session.transcript.substring(0, 100) + '...'
                             : session.transcript
                           }
                         </p>
                       )}
-                      
-                      {isActive && (
-                        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-12 bg-medical-blue-600 rounded-r-full" />
-                      )}
-                    </MedicalCard>
+                    </div>
                   );
                 })
               )}
@@ -625,7 +607,7 @@ export const GeorgianSTTApp: React.FC = () => {
         </div>
 
         {/* Mobile: Full-Screen Transcript Panel */}
-        <div className="lg:hidden flex-1 flex flex-col min-h-0">
+        <div className="lg:hidden flex-1 flex flex-col min-h-0 relative">
           <div className="h-full bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm">
             <TranscriptPanel
               currentSession={currentSession}
@@ -660,6 +642,59 @@ export const GeorgianSTTApp: React.FC = () => {
               onActiveTabChange={setActiveTab}
             />
           </div>
+          
+          {/* Mobile Floating Action Button (FAB) - Only visible on transcript tab */}
+          {activeTab === 'transcript' && (
+            <div className="absolute bottom-6 right-6 z-50">
+              <button
+              onClick={recordingState.isRecording ? (canStop ? stopRecording : undefined) : (canRecord ? handleStartRecording : undefined)}
+              disabled={recordingState.isRecording ? !canStop : !canRecord}
+              className={`
+                group relative overflow-hidden rounded-full shadow-2xl transform transition-all duration-300 
+                active:scale-95 hover:scale-110 flex items-center justify-center
+                medical-mobile-touch-2xl border-4 border-white/20 backdrop-blur-sm
+                ${recordingState.isRecording 
+                  ? (canStop 
+                      ? 'bg-gradient-to-r from-red-500 via-rose-600 to-red-600 hover:from-red-600 hover:via-rose-700 hover:to-red-700 shadow-red-500/50 animate-pulse' 
+                      : 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed shadow-gray-400/30')
+                  : (canRecord 
+                      ? 'bg-gradient-to-r from-emerald-500 via-green-600 to-emerald-600 hover:from-emerald-600 hover:via-green-700 hover:to-emerald-700 shadow-emerald-500/50' 
+                      : 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed shadow-gray-400/30')
+                }
+              `}
+              style={{ 
+                width: 'var(--medical-mobile-touch-2xl)', 
+                height: 'var(--medical-mobile-touch-2xl)' 
+              }}
+              aria-label={recordingState.isRecording ? 'Stop Recording' : 'Start Recording'}
+            >
+              {/* Animated Background Rings */}
+              {recordingState.isRecording && (
+                <>
+                  <div className="absolute inset-0 rounded-full border-4 border-red-400/40 animate-ping" />
+                  <div className="absolute inset-0 rounded-full border-2 border-red-300/60 animate-pulse" style={{ animationDelay: '0.5s' }} />
+                </>
+              )}
+              
+              {/* Icon */}
+              {recordingState.isRecording ? (
+                <Square className="w-8 h-8 text-white relative z-10" />
+              ) : (
+                <Mic className="w-8 h-8 text-white relative z-10" />
+              )}
+              
+              {/* Shimmer Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 animate-shimmer" />
+            </button>
+            
+            {/* Recording Duration Badge */}
+            {recordingState.isRecording && recordingState.duration > 0 && (
+              <div className="absolute -top-3 -left-3 bg-red-500/90 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg backdrop-blur-sm border border-white/20">
+                {formatTime(recordingState.duration)}
+              </div>
+            )}
+            </div>
+          )}
         </div>
 
       </div>

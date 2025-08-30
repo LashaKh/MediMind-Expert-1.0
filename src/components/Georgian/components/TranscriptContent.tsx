@@ -52,76 +52,14 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         {/* Main Content Structure */}
         <div className="relative h-full flex flex-col p-1">
           
-          {/* Elegant Toolbar Header */}
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border border-indigo-200/50 dark:border-indigo-600/50 shadow-lg shadow-indigo-500/10 mb-4">
-            <div className="flex items-center justify-between px-6 py-4">
-              {/* Left Section */}
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full shadow-lg shadow-purple-500/40 animate-pulse" />
-                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 tracking-wide">Live Medical Transcript</span>
-                </div>
-                
-                {/* Live Recording Indicator */}
-                {recordingState.isRecording && (
-                  <div className="flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-red-500/95 to-rose-600/95 backdrop-blur-xl rounded-xl text-white shadow-lg shadow-red-500/30">
-                    <div className="relative">
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                      <div className="absolute inset-0 w-2 h-2 bg-white/70 rounded-full animate-ping" />
-                    </div>
-                    <span className="text-sm font-semibold">LIVE</span>
-                  </div>
-                )}
-                
-                {/* Processing Indicator */}
-                {recordingState.isProcessingChunks && (
-                  <div className="flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-indigo-500/95 to-purple-600/95 backdrop-blur-xl rounded-xl text-white shadow-lg shadow-indigo-500/30">
-                    <div className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                    <span className="text-sm font-semibold">Processing...</span>
-                  </div>
-                )}
-              </div>
-              
-              {/* Right Actions */}
-              <div className="flex items-center space-x-2">
-                <div className="px-2 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-medium rounded-full border border-blue-200/50 dark:border-blue-700/50">
-                  <Stethoscope className="w-3 h-3 inline mr-1" />
-                  Medical
-                </div>
-                <div className="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-full border border-emerald-200/50 dark:border-emerald-700/50">
-                  <Shield className="w-3 h-3 inline mr-1" />
-                  Secure
-                </div>
-              </div>
-            </div>
-          </div>
           
           {/* Premium Text Area */}
           <div className="flex-1 relative overflow-hidden">
             <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden">
               
-              {/* Text Area Header */}
-              <div className="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-indigo-50/90 via-purple-50/95 to-indigo-50/90 dark:from-indigo-700/90 dark:via-purple-600/95 dark:to-indigo-700/90 border-b border-indigo-200/50 dark:border-indigo-600/50">
-                <div className="flex items-center space-x-3">
-                  <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                  <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300 tracking-wide">Medical Transcript & Notes</span>
-                </div>
-                
-                {/* Status Indicators */}
-                <div className="flex items-center space-x-2">
-                  <div className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-xs font-medium rounded-full border border-indigo-200/50 dark:border-indigo-700/50">
-                    <Brain className="w-3 h-3 inline mr-1" />
-                    AI Enhanced
-                  </div>
-                  <div className="px-2 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-medium rounded-full border border-purple-200/50 dark:border-purple-700/50">
-                    <Zap className="w-3 h-3 inline mr-1" />
-                    Editable
-                  </div>
-                </div>
-              </div>
               
               {/* Main Text Area */}
-              <div className="relative h-[calc(100%-56px)] p-0">
+              <div className="relative h-full p-0">
                 <textarea
                   value={transcript}
                   onChange={(e) => onEditChange(e.target.value)}

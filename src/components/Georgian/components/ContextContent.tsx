@@ -66,68 +66,6 @@ export const ContextContent: React.FC<ContextContentProps> = ({
         {/* Main Content Structure */}
         <div className="relative h-full flex flex-col p-1">
           
-          {/* Elegant Toolbar Header */}
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border border-indigo-200/50 dark:border-indigo-600/50 shadow-lg shadow-indigo-500/10 mb-4">
-            <div className="flex items-center justify-between px-6 py-4">
-              {/* Left Actions */}
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full shadow-lg shadow-purple-500/40 animate-pulse" />
-                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 tracking-wide">Clinical Context</span>
-                </div>
-                
-                {/* Voice Recording Button */}
-                <button
-                  onClick={onContextVoiceRecord}
-                  className={`
-                    group relative overflow-hidden px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg flex items-center space-x-2
-                    ${isRecordingContext 
-                      ? 'bg-gradient-to-r from-red-500 via-rose-600 to-red-600 hover:from-red-600 hover:via-rose-700 hover:to-red-700 text-white shadow-red-500/30' 
-                      : 'bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-600 hover:via-purple-700 hover:to-indigo-700 text-white shadow-indigo-500/30'
-                    }
-                  `}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse opacity-50" />
-                  {isRecordingContext ? <Square className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                  <span>{isRecordingContext ? 'Stop' : 'Record'}</span>
-                  {isRecordingContext && contextRecordingState.duration > 0 && (
-                    <span className="text-xs font-mono opacity-90">
-                      {formatTime(contextRecordingState.duration)}
-                    </span>
-                  )}
-                </button>
-              </div>
-              
-              {/* Right Actions */}
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={onCopyContext}
-                  className="px-4 py-2.5 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-600/50 rounded-xl text-indigo-700 dark:text-indigo-300 text-sm font-medium hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all duration-300 flex items-center space-x-2"
-                >
-                  <Copy className="w-4 h-4" />
-                  <span>Copy</span>
-                </button>
-                
-                {/* Attach Files */}
-                <button
-                  onClick={() => contextFileInputRef.current?.click()}
-                  className="px-4 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl shadow-lg shadow-purple-500/30 transition-all duration-300 flex items-center space-x-2 text-sm font-medium"
-                >
-                  <Paperclip className="w-4 h-4" />
-                  <span>Attach</span>
-                </button>
-                
-                <input
-                  ref={contextFileInputRef}
-                  type="file"
-                  multiple
-                  onChange={onFileUpload}
-                  className="hidden"
-                  accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp3,.wav"
-                />
-              </div>
-            </div>
-          </div>
           
           {/* Attached Files Display */}
           {attachedFiles.length > 0 && (
@@ -175,14 +113,54 @@ export const ContextContent: React.FC<ContextContentProps> = ({
                   <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300 tracking-wide">Patient Context & Notes</span>
                 </div>
                 
-                {/* Status Indicators */}
+                {/* Action Buttons */}
                 <div className="flex items-center space-x-2">
-                  <div className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-xs font-medium rounded-full border border-indigo-200/50 dark:border-indigo-700/50">
-                    Private
-                  </div>
-                  <div className="px-2 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-medium rounded-full border border-purple-200/50 dark:border-purple-700/50">
-                    Encrypted
-                  </div>
+                  {/* Voice Recording Button */}
+                  <button
+                    onClick={onContextVoiceRecord}
+                    className={`
+                      group relative overflow-hidden px-3 py-1.5 rounded-lg font-semibold text-xs transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md flex items-center space-x-1.5
+                      ${isRecordingContext 
+                        ? 'bg-gradient-to-r from-red-500 via-rose-600 to-red-600 hover:from-red-600 hover:via-rose-700 hover:to-red-700 text-white shadow-red-500/30' 
+                        : 'bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:from-indigo-600 hover:via-purple-700 hover:to-indigo-700 text-white shadow-indigo-500/30'
+                      }
+                    `}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse opacity-50" />
+                    {isRecordingContext ? <Square className="w-3 h-3" /> : <Mic className="w-3 h-3" />}
+                    <span>{isRecordingContext ? 'Stop' : 'Record'}</span>
+                    {isRecordingContext && contextRecordingState.duration > 0 && (
+                      <span className="text-xs font-mono opacity-90">
+                        {formatTime(contextRecordingState.duration)}
+                      </span>
+                    )}
+                  </button>
+                  
+                  <button
+                    onClick={onCopyContext}
+                    className="px-3 py-1.5 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-600/50 rounded-lg text-indigo-700 dark:text-indigo-300 text-xs font-medium hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all duration-300 flex items-center space-x-1.5"
+                  >
+                    <Copy className="w-3 h-3" />
+                    <span>Copy</span>
+                  </button>
+                  
+                  {/* Attach Files */}
+                  <button
+                    onClick={() => contextFileInputRef.current?.click()}
+                    className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg shadow-md shadow-purple-500/30 transition-all duration-300 flex items-center space-x-1.5 text-xs font-medium"
+                  >
+                    <Paperclip className="w-3 h-3" />
+                    <span>Attach</span>
+                  </button>
+                  
+                  <input
+                    ref={contextFileInputRef}
+                    type="file"
+                    multiple
+                    onChange={onFileUpload}
+                    className="hidden"
+                    accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp3,.wav"
+                  />
                 </div>
               </div>
               

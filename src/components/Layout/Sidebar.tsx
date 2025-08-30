@@ -14,7 +14,8 @@ import {
   Search,
   BarChart3,
   TestTube2,
-  Stethoscope
+  Stethoscope,
+  FileText
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useAuth } from '../../stores/useAppStore';
@@ -97,7 +98,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
       category: 'primary'
     },
     {
-      icon: Stethoscope,
+      icon: FileText,
       label: 'MediScribe',
       path: '/mediscribe',
       color: 'from-emerald-500 to-teal-500',
@@ -389,7 +390,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                 <button
                   ref={closeButtonRef}
                   onClick={onClose}
-                  className="p-2 rounded-lg transition-all duration-300 hover:bg-white/20 dark:hover:bg-gray-700/30 active:scale-95 focus-enhanced"
+                  className="p-2 rounded-lg transition-all duration-300 hover:bg-white/20 dark:hover:bg-gray-700/30 active:scale-95 focus-enhanced medical-touch-target medical-mobile-touch-md"
                    aria-label={t('ui.closeMenu', 'Close menu')}
                 >
                   <X className="w-5 h-5 text-gray-600 dark:text-gray-300" />

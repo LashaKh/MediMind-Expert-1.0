@@ -67,6 +67,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                       onClick={() => onTabChange(tab.id as TabId)}
                       className={`
                         relative flex items-center space-x-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 group
+                        medical-touch-target medical-nav-item
                         ${isActive
                           ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25' 
                           : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100/50 dark:hover:bg-slate-700/50'
@@ -99,13 +100,14 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
           
           {/* Right Side Actions */}
           <div className="flex items-center space-x-3">
-            {/* Premium Record Button - Only show on transcript tab */}
+            {/* Premium Record Button - Only show on transcript tab and hidden on mobile (FAB handles mobile) */}
             {activeTab === 'transcript' && (onStartRecording || onStopRecording) && (
               <button
                 onClick={isRecording ? (canStop ? onStopRecording : undefined) : (canRecord ? onStartRecording : undefined)}
                 disabled={isRecording ? !canStop : !canRecord}
                 className={`
                   group relative overflow-hidden px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl flex items-center space-x-2.5 min-w-[120px] justify-center
+                  medical-primary-action medical-touch-target hidden sm:flex
                   ${isRecording 
                     ? (canStop 
                         ? 'bg-gradient-to-r from-red-500 via-rose-600 to-red-600 hover:from-red-600 hover:via-rose-700 hover:to-red-700 text-white shadow-red-500/40' 
@@ -144,7 +146,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 {onCopy && (
                   <button
                     onClick={onCopy}
-                    className="flex items-center space-x-2 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 text-sm font-medium group"
+                    className="flex items-center space-x-2 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 text-sm font-medium group medical-touch-target"
                   >
                     <Copy className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
                     <span>Copy</span>
@@ -154,7 +156,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 {onDownload && (
                   <button
                     onClick={onDownload}
-                    className="flex items-center space-x-2 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 rounded-lg transition-all duration-200 text-sm font-medium group"
+                    className="flex items-center space-x-2 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 rounded-lg transition-all duration-200 text-sm font-medium group medical-touch-target"
                   >
                     <Download className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
                     <span>Download</span>

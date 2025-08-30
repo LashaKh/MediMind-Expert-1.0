@@ -66,8 +66,16 @@
   --medical-touch-md: 44px;  /* Apple recommended minimum */
   --medical-touch-lg: 48px;
   --medical-touch-xl: 56px;
+  --medical-touch-2xl: 64px; /* Extra large for prominent actions */
+
+  /* Mobile-First Touch Targets */
+  --medical-mobile-touch-sm: 44px;   /* Minimum for mobile */
+  --medical-mobile-touch-md: 48px;   /* Comfortable mobile touch */
+  --medical-mobile-touch-lg: 56px;   /* Large mobile touch */
+  --medical-mobile-touch-xl: 64px;   /* Premium mobile touch */
+  --medical-mobile-touch-2xl: 72px;  /* Extra large FAB */
   
-  /* Medical Spacing Scale */
+  /* Medical Spacing Scale - Desktop Base */
   --medical-space-xs: 0.125rem;  /* 2px */
   --medical-space-sm: 0.25rem;   /* 4px */
   --medical-space-md: 0.5rem;    /* 8px */
@@ -78,6 +86,18 @@
   --medical-space-4xl: 2rem;     /* 32px */
   --medical-space-5xl: 2.5rem;   /* 40px */
   --medical-space-6xl: 3rem;     /* 48px */
+
+  /* Mobile-First Spacing Scale - More generous for touch interfaces */
+  --medical-mobile-space-xs: 0.25rem;   /* 4px */
+  --medical-mobile-space-sm: 0.5rem;    /* 8px */
+  --medical-mobile-space-md: 0.75rem;   /* 12px */
+  --medical-mobile-space-lg: 1rem;      /* 16px */
+  --medical-mobile-space-xl: 1.25rem;   /* 20px */
+  --medical-mobile-space-2xl: 1.5rem;   /* 24px */
+  --medical-mobile-space-3xl: 2rem;     /* 32px */
+  --medical-mobile-space-4xl: 2.5rem;   /* 40px */
+  --medical-mobile-space-5xl: 3rem;     /* 48px */
+  --medical-mobile-space-6xl: 4rem;     /* 64px */
   
   /* Medical Border Radius */
   --medical-radius-sm: 0.375rem;  /* 6px */
@@ -99,7 +119,7 @@
   --medical-focus-ring-error: 0 0 0 3px rgba(239, 68, 68, 0.1), 0 0 0 6px rgba(239, 68, 68, 0.05);
   --medical-focus-ring-success: 0 0 0 3px rgba(16, 185, 129, 0.1), 0 0 0 6px rgba(16, 185, 129, 0.05);
   
-  /* Medical Typography Scale */
+  /* Medical Typography Scale - Desktop Base */
   --medical-text-xs: 0.75rem;     /* 12px */
   --medical-text-sm: 0.875rem;    /* 14px */
   --medical-text-base: 1rem;      /* 16px */
@@ -108,6 +128,16 @@
   --medical-text-2xl: 1.5rem;     /* 24px */
   --medical-text-3xl: 1.875rem;   /* 30px */
   --medical-text-4xl: 2.25rem;    /* 36px */
+
+  /* Mobile-First Typography Scale - Larger for medical professionals */
+  --medical-mobile-text-xs: 0.875rem;   /* 14px */
+  --medical-mobile-text-sm: 1rem;       /* 16px */
+  --medical-mobile-text-base: 1.125rem; /* 18px */
+  --medical-mobile-text-lg: 1.25rem;    /* 20px */
+  --medical-mobile-text-xl: 1.375rem;   /* 22px */
+  --medical-mobile-text-2xl: 1.625rem;  /* 26px */
+  --medical-mobile-text-3xl: 2rem;      /* 32px */
+  --medical-mobile-text-4xl: 2.5rem;    /* 40px */
   
   /* Medical Line Heights */
   --medical-leading-tight: 1.25;
@@ -377,21 +407,69 @@
 }
 
 /* Responsive Medical Breakpoints */
+
+/* Mobile-First: Base styles for small screens */
 @media (max-width: 640px) {
+  :root {
+    /* Override with mobile-specific tokens */
+    --medical-text-xs: var(--medical-mobile-text-xs);
+    --medical-text-sm: var(--medical-mobile-text-sm);
+    --medical-text-base: var(--medical-mobile-text-base);
+    --medical-text-lg: var(--medical-mobile-text-lg);
+    --medical-text-xl: var(--medical-mobile-text-xl);
+    --medical-text-2xl: var(--medical-mobile-text-2xl);
+    --medical-text-3xl: var(--medical-mobile-text-3xl);
+    --medical-text-4xl: var(--medical-mobile-text-4xl);
+    
+    --medical-space-xs: var(--medical-mobile-space-xs);
+    --medical-space-sm: var(--medical-mobile-space-sm);
+    --medical-space-md: var(--medical-mobile-space-md);
+    --medical-space-lg: var(--medical-mobile-space-lg);
+    --medical-space-xl: var(--medical-mobile-space-xl);
+    --medical-space-2xl: var(--medical-mobile-space-2xl);
+    --medical-space-3xl: var(--medical-mobile-space-3xl);
+  }
+
   /* Mobile optimizations */
   .medical-touch-target {
-    min-height: var(--medical-touch-lg);
-    min-width: var(--medical-touch-lg);
+    min-height: var(--medical-mobile-touch-md);
+    min-width: var(--medical-mobile-touch-md);
   }
   
   .medical-button-primary {
-    min-height: var(--medical-touch-lg);
+    min-height: var(--medical-mobile-touch-md);
     font-size: var(--medical-text-lg);
+    padding: var(--medical-space-lg) var(--medical-space-3xl);
   }
   
   .medical-input {
-    min-height: var(--medical-touch-lg);
+    min-height: var(--medical-mobile-touch-md);
     font-size: var(--medical-text-lg);
+    padding: var(--medical-space-xl) var(--medical-space-2xl);
+  }
+
+  /* Larger touch targets for primary actions */
+  .medical-primary-action {
+    min-height: var(--medical-mobile-touch-lg);
+    min-width: var(--medical-mobile-touch-lg);
+  }
+
+  /* Enhanced readability */
+  .medical-card {
+    padding: var(--medical-space-3xl) var(--medical-space-2xl);
+  }
+
+  /* Mobile-specific navigation */
+  .medical-nav-item {
+    min-height: var(--medical-mobile-touch-lg);
+    padding: var(--medical-space-xl) var(--medical-space-2xl);
+    font-size: var(--medical-text-lg);
+  }
+
+  /* Mobile drawer optimizations */
+  .medical-drawer-item {
+    min-height: var(--medical-mobile-touch-lg);
+    padding: var(--medical-space-2xl);
   }
 }
 
@@ -423,4 +501,14 @@
     background: white;
     backdrop-filter: none;
   }
+}
+
+/* Mobile FAB Animations */
+@keyframes shimmer {
+  0% { transform: translateX(-100%) skewX(-12deg); }
+  100% { transform: translateX(200%) skewX(-12deg); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
 }

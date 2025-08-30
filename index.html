@@ -3,13 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=5.0" />
     <title>MediMind - AI Medical Assistant</title>
     <meta name="description" content="MediMind - Your advanced AI medical assistant for enhanced clinical decision-making" />
     <meta name="theme-color" content="#1a365d" />
     
+    <!-- Mobile Web App Capabilities -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-touch-fullscreen" content="yes">
+    
     <!-- Permissions Policy for microphone access -->
     <meta http-equiv="Permissions-Policy" content="microphone=*, camera=*" />
+    
+    <!-- Performance Optimization -->
+    <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
+    <meta name="apple-mobile-web-app-title" content="MediMind Expert">
+    <meta name="application-name" content="MediMind Expert">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/src/styles/medical-design-tokens.css" as="style">
+    <link rel="preload" href="/src/main.tsx" as="script" crossorigin>
     
     <!-- Mobile-Optimized Font Loading with Block Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
