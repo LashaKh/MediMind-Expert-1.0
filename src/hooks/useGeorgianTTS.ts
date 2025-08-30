@@ -203,24 +203,21 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     
     const segmentDuration = Math.max(0, currentTime - segmentStartTimeRef.current);
     
-    // SIMPLIFIED: 23-second automatic restart for reliable segmentation
-    const maxSegmentDuration = 23000; // 23 seconds - clean, predictable restart
+    // OPTIMIZED: 15-second automatic restart for faster word capture
+    const maxSegmentDuration = 15000; // 15 seconds - faster, seamless segmentation
     
     // Clean status logging every 5 seconds
     if (segmentDuration % 5000 < 50) { // Every 5 seconds
       const secondsElapsed = Math.round(segmentDuration/1000);
-      const secondsRemaining = Math.max(0, 23 - secondsElapsed);
+      const secondsRemaining = Math.max(0, 15 - secondsElapsed);
       console.log(`⏱️ Recording: ${secondsElapsed}s elapsed, ${secondsRemaining}s until auto-restart, audio: ${Math.round(normalizedLevel)}%`);
     }
     
-    // Execute 23-second restart
+    // Execute 15-second restart
     if (segmentDuration >= maxSegmentDuration && !pendingAutoRestartRef.current) {
 
-      // Set UI state to show auto-restart is happening
-      setRecordingState(prev => ({ 
-        ...prev, 
-        isProcessingChunks: true // Shows "Processing segment..." UI indicator
-      }));
+      // SEAMLESS UI: No visible processing indicator for auto-segments to prevent blink/refresh
+      // Processing happens in background while maintaining continuous recording visual
       
       handleAutoSegmentation();
       return; // Don't continue the loop - segmentation will restart it
@@ -918,11 +915,11 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             newRecorder.start(chunkSize);
             mediaRecorderRef.current = newRecorder;
             
-            // Clear processing state and resume recording state immediately for instant UI update
+            // SEAMLESS UI: Maintain continuous recording state without processing indicators
             setRecordingState(prev => ({ 
               ...prev, 
               isRecording: true, 
-              isProcessingChunks: false // Hide UI indicator instantly
+              isProcessingChunks: false // Keep seamless visual continuity
             }));
 
             // CRITICAL: Resume audio level monitoring immediately for fastest continuation
@@ -937,7 +934,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             setError('Auto-restart failed. Please manually restart recording.');
             cleanupAudioResources();
           }
-        }, 100); // Small delay to ensure processing completes before restart
+        }, 10); // Minimal delay for seamless continuation
         
       } else {
         // Manual stop or normal stop - clean up everything and don't restart
@@ -1081,6 +1078,9 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       // Set manual stop flag BEFORE stopping to prevent restart
       manualStopRef.current = true;
       pendingAutoRestartRef.current = false; // Clear any pending auto-restart
+      
+      // INSTANT UI FEEDBACK: Update UI state immediately for better UX
+      setRecordingState(prev => ({ ...prev, isRecording: false }));
       
       mediaRecorderRef.current.stop();
       mediaRecorderRef.current = null;
