@@ -136,8 +136,7 @@ class PerformanceMonitor {
     
     // Track page visibility changes
     this.setupVisibilityTracking();
-    
-    console.log('[Performance] Monitoring initialized for session:', this.sessionId);
+
   }
 
   /**
@@ -165,7 +164,7 @@ class PerformanceMonitor {
       navObserver.observe({ entryTypes: ['navigation'] });
       this.observers.set('navigation', navObserver);
     } catch (error) {
-      console.warn('[Performance] Navigation observer failed:', error);
+
     }
 
     // Resource timing for medical content
@@ -180,7 +179,7 @@ class PerformanceMonitor {
       resourceObserver.observe({ entryTypes: ['resource'] });
       this.observers.set('resource', resourceObserver);
     } catch (error) {
-      console.warn('[Performance] Resource observer failed:', error);
+
     }
 
     // Long task tracking
@@ -198,7 +197,7 @@ class PerformanceMonitor {
       longTaskObserver.observe({ entryTypes: ['longtask'] });
       this.observers.set('longtask', longTaskObserver);
     } catch (error) {
-      console.warn('[Performance] Long task observer failed:', error);
+
     }
   }
 
@@ -233,7 +232,7 @@ class PerformanceMonitor {
         });
         lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
       } catch (error) {
-        console.warn('[Performance] LCP tracking failed:', error);
+
       }
     }
 
@@ -258,7 +257,7 @@ class PerformanceMonitor {
       });
       clsObserver.observe({ entryTypes: ['layout-shift'] });
     } catch (error) {
-      console.warn('[Performance] CLS tracking failed:', error);
+
     }
 
     // First Input Delay (FID) - approximation
@@ -754,8 +753,7 @@ class PerformanceMonitor {
 
     // Prioritize medical content alerts
     if (shouldAlert && metric.medicalContent && this.config.medicalContentPriority) {
-      console.warn(`[Performance Alert - Medical] ${alertMessage}`, metric);
-      
+
       // Could integrate with alerting system here
       // this.sendAlert(alertMessage, metric);
     }
@@ -907,9 +905,8 @@ class PerformanceMonitor {
       this.webVitals = [];
       this.errors = [];
 
-      console.log('[Performance] Metrics reported successfully');
     } catch (error) {
-      console.warn('[Performance] Failed to report metrics:', error);
+
     }
   }
 

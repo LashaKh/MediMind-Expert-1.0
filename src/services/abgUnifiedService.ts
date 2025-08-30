@@ -108,13 +108,6 @@ export async function processImageWithUnifiedAnalysis(
       confidence = freeOcrResult.confidence;
       extractionMethod = 'free-ocr';
 
-      console.log('✅ Using Free OCR result:', {
-        method: freeOcrResult.method,
-        qualityScore: freeOcrResult.qualityScore,
-        confidence: freeOcrResult.confidence,
-        textLength: extractedText.length
-      });
-
       onProgress?.({
         phase: 'extraction',
         stage: 'complete',
@@ -128,12 +121,6 @@ export async function processImageWithUnifiedAnalysis(
       });
     } else {
       // Free OCR failed or quality too low - fallback to Gemini
-      console.log('🔄 Falling back to Gemini Vision:', {
-        freeOcrSuccess: freeOcrResult.success,
-        shouldFallback: freeOcrResult.shouldFallbackToGemini,
-        qualityScore: freeOcrResult.qualityScore,
-        error: freeOcrResult.error
-      });
 
       onProgress?.({
         phase: 'extraction',
@@ -238,14 +225,6 @@ export async function processImageWithUnifiedAnalysis(
       method: 'gemini',
       extractionMethod,
       currentTask: 'Analysis complete'
-    });
-
-    console.log('🎉 Unified Analysis Complete:', {
-      extractionMethod,
-      confidence,
-      totalTime,
-      textLength: extractedText.length,
-      cost: extractionMethod === 'free-ocr' ? 'FREE' : 'GEMINI API'
     });
 
     return {

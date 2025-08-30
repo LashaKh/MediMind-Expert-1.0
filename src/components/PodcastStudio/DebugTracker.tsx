@@ -166,10 +166,7 @@ const ExpandableSection: React.FC<{
 const DebugTracker: React.FC<DebugTrackerProps> = ({ debugInfo, isVisible, onToggle }) => {
   // Debug logging to see what's being passed to the component
   React.useEffect(() => {
-    console.log('🔍 DebugTracker received props:', { 
-      hasDebugInfo: !!debugInfo, 
-      isVisible,
-      debugInfoKeys: debugInfo ? Object.keys(debugInfo) : []
+    : []
     });
   }, [debugInfo, isVisible]);
 
@@ -224,7 +221,6 @@ const DebugTracker: React.FC<DebugTrackerProps> = ({ debugInfo, isVisible, onTog
   const totalTime = (debugInfo.step1_document_overview?.timing || 0) + 
                    (debugInfo.step2_content_mapping?.timing || 0) + 
                    (debugInfo.step3_comprehensive_outline?.timing || 0);
-
 
   return (
     <div className="fixed bottom-4 right-4 w-[600px] max-h-[80vh] bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-50">

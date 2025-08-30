@@ -236,7 +236,7 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
           onCopy();
         }
       } catch (err) {
-        console.error('Failed to copy text:', err);
+
       }
     }
   };

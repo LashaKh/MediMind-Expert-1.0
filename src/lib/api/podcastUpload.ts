@@ -146,8 +146,7 @@ This document is ready for AI-powered podcast generation with medical accuracy a
 
     // Automatically trigger OpenAI processing
     try {
-      console.log(`[Podcast] Triggering OpenAI processing for document ${documentId}`);
-      
+
       const { data: processingResult, error: processingError } = await supabase.functions.invoke('process-podcast-document', {
         body: {
           documentId: documentRecord.id,
@@ -156,7 +155,7 @@ This document is ready for AI-powered podcast generation with medical accuracy a
       });
 
       if (processingError) {
-        console.warn(`[Podcast] OpenAI processing failed, document saved but not processed:`, processingError);
+
         // Don't fail the upload, just log the issue
         return {
           documentId: documentRecord.id,
@@ -169,8 +168,6 @@ This document is ready for AI-powered podcast generation with medical accuracy a
         };
       }
 
-      console.log(`[Podcast] OpenAI processing completed successfully:`, processingResult);
-      
       return {
         documentId: documentRecord.id,
         publicUrl,
@@ -183,8 +180,7 @@ This document is ready for AI-powered podcast generation with medical accuracy a
       };
 
     } catch (processingError) {
-      console.warn(`[Podcast] Failed to trigger OpenAI processing:`, processingError);
-      
+
       // Update document status to indicate processing failed
       await supabase
         .from('podcast_documents')
@@ -224,13 +220,7 @@ export async function generatePodcast(request: {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) throw new Error('Authentication required');
     try {
-      console.log('[Podcast] generate:request', {
-        userId: request.userId,
-        docs: request.documentIds?.length,
-        title: request.title,
-        style: request.synthesisStyle,
-        specialty: request.specialty
-      });
+
     } catch {}
     // TODO: Replace with working podcast generation function
     // const { data, error } = await supabase.functions.invoke('generate-podcast-debug', {

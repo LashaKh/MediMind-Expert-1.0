@@ -202,8 +202,7 @@ export const optimizeABGImage = async (
       optimizedFile
     };
 
-    console.log('Image optimization completed:', {
-      originalSize: `${Math.round(originalSize / 1024)}KB`,
+    }KB`,
       optimizedSize: `${Math.round(optimizedFile.size / 1024)}KB`,
       compressionRatio: `${compressionRatio.toFixed(2)}:1`,
       processingTime: `${Math.round(processingTime)}ms`
@@ -212,8 +211,7 @@ export const optimizeABGImage = async (
     return result;
   } catch (error) {
     const processingTime = performance.now() - startTime;
-    console.error('Image optimization failed:', error);
-    
+
     // Return original file as fallback
     return {
       originalSize: file.size,
@@ -262,7 +260,7 @@ export const batchOptimizeImages = async (
       const result = await optimizeABGImage(file, options);
       results.push(result);
     } catch (error) {
-      console.error(`Failed to optimize ${file.name}:`, error);
+
       // Add fallback result
       results.push({
         originalSize: file.size,
@@ -352,7 +350,7 @@ export const getOptimizationPreview = async (
       recommendedSettings
     };
   } catch (error) {
-    console.error('Failed to get optimization preview:', error);
+
     return {
       willOptimize: false,
       estimatedSize: file.size,
@@ -405,7 +403,7 @@ export const validateImageQuality = async (file: File): Promise<{
       recommendations
     };
   } catch (error) {
-    console.error('Image validation failed:', error);
+
     return {
       isValid: false,
       warnings: ['Unable to validate image'],

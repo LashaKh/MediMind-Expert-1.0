@@ -310,7 +310,7 @@ function ArticlesList({ status, state, actions, onLoadMore, isLoadingMore }: Art
         status={status}
         onAddArticle={() => {
           // Navigate to news section or show add dialog
-          console.log('Add article clicked');
+
         }}
       />
     );

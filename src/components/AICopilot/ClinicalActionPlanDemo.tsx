@@ -134,7 +134,7 @@ const currentExample = sampleActionPlans.hyponatremia;
 
 export const ClinicalActionPlanDemo: React.FC = () => {
   const handleActionComplete = (actionId: string) => {
-    console.log('Action completed:', actionId);
+
   };
 
   return (

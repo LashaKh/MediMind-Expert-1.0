@@ -759,6 +759,8 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         const processedChunkCount = processedSegmentsRef.current;
         const unprocessedChunks = audioChunksRef.current.slice(processedChunkCount);
         
+        console.log(`🔍 DEBUG: processedChunkCount=${processedChunkCount}, totalChunks=${audioChunksRef.current.length}, unprocessedLength=${unprocessedChunks.length}`);
+        
         if (unprocessedChunks.length === 0) {
           console.log('🧹 No remaining chunks to process (already processed in auto-segment)');
           // Don't return here - continue with cleanup and state management
@@ -788,13 +790,12 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
                 const previousLength = combinedTranscriptRef.current.length;
                 combinedTranscriptRef.current += separator + segmentText.trim();
                 
-                // Update processed chunk count to the total chunks processed (including current unprocessed ones)
-                const totalProcessedChunks = processedSegmentsRef.current + unprocessedChunks.length;
-                processedSegmentsRef.current = totalProcessedChunks;
+                // DON'T update processed chunk count for auto-segments to prevent race condition
+                // The auto-restart will handle chunk counter reset properly
                 lastProcessedTimeRef.current = Date.now();
                 
                 console.log(`📝 Auto-segment: "${segmentText.trim().substring(0, 50)}..."`);
-                console.log(`🔄 Updated processed chunks: ${processedSegmentsRef.current} (was ${processedSegmentsRef.current - unprocessedChunks.length}, added ${unprocessedChunks.length})`);
+                console.log(`🚫 Skipping processed chunk update for auto-segment to prevent race condition`);
                 
                 if (onLiveTranscriptUpdate) {
                   const newText = combinedTranscriptRef.current.substring(previousLength);
@@ -806,7 +807,13 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
                 console.log('🚫 Skipping setTranscriptionResult for auto-segment to prevent duplicates');
               }
             } catch (error) {
-
+              console.error('💥 Auto-segment processing failed:', error);
+              setError(`Auto-segment processing failed: ${error instanceof Error ? error.message : String(error)}`);
+              
+              // DON'T update processed chunks for auto-segments to prevent race condition
+              console.log('🚫 Skipping processed chunk update for failed auto-segment');
+              
+              // Continue recording despite error - don't break the flow
             }
           })();
         } else {
@@ -847,7 +854,16 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             audioChunksForProcessingRef.current = [];
 
           } catch (error) {
-
+            console.error('💥 Manual stop processing failed:', error);
+            setError(`Final segment processing failed: ${error instanceof Error ? error.message : String(error)}`);
+            
+            // Still update processed chunks to prevent chunk tracking issues
+            const totalProcessedChunks = processedSegmentsRef.current + unprocessedChunks.length;
+            processedSegmentsRef.current = totalProcessedChunks;
+            
+            // Clear chunks even on error to prevent reprocessing
+            audioChunksRef.current = [];
+            audioChunksForProcessingRef.current = [];
           }
         }
         } // Close the else block for unprocessed chunks
@@ -855,22 +871,26 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       
       // Handle auto-restart for smart segmentation (only if NOT manual stop)
       if (wasAutoSegmentation && !wasManualStop) {
-
-        // Reset segmentation timing for new segment
-        segmentStartTimeRef.current = Date.now();
-        silenceCountRef.current = 0;
-        pendingAutoRestartRef.current = false;
-        
-        // Reset audio chunks for new segment
-        audioChunksRef.current = [];
-        audioChunksForProcessingRef.current = [];
-        
-        // CRITICAL FIX: Reset processed chunk counter for new segment
-        processedSegmentsRef.current = 0;
-        console.log('🔄 Auto-restart: Reset processed chunk counter to 0 for new segment');
-        
-        // Start new recording segment with minimal delay for fastest restart
+        // CRITICAL: Wait a small delay to ensure all processing completes before restart
         setTimeout(async () => {
+          // Reset segmentation timing for new segment
+          segmentStartTimeRef.current = Date.now();
+          silenceCountRef.current = 0;
+          pendingAutoRestartRef.current = false;
+          
+          // Reset audio chunks for new segment
+          audioChunksRef.current = [];
+          audioChunksForProcessingRef.current = [];
+          
+          // CRITICAL FIX: Reset processed chunk counter for new segment
+          const previousCount = processedSegmentsRef.current;
+          processedSegmentsRef.current = 0;
+          console.log(`🔄 Auto-restart: Reset processed chunk counter from ${previousCount} to 0 for new segment`);
+          
+          // Force garbage collection to prevent memory issues
+          if (window.gc) window.gc();
+          
+        // Start new recording segment with minimal delay for fastest restart
           try {
             // Create new MediaRecorder for continued recording
             const newRecorder = new MediaRecorder(streamRef.current!, {
@@ -913,11 +933,11 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             }, 10); // Ultra-minimal delay for instant restart
             
           } catch (error) {
-
+            console.error('💥 Auto-restart failed:', error);
             setError('Auto-restart failed. Please manually restart recording.');
             cleanupAudioResources();
           }
-        }, 50); // Minimal delay for fastest restart - prioritize speed over processing
+        }, 100); // Small delay to ensure processing completes before restart
         
       } else {
         // Manual stop or normal stop - clean up everything and don't restart

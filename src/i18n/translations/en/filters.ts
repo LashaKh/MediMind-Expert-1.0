@@ -116,7 +116,7 @@ export const filters = {
   },
   changesNotApplied: 'Changes not yet applied',
   save: 'Save Filters',
-  categories: {
+  filterCategories: {
     all: 'All Filters',
     specialty: 'Medical Specialties',
     content: 'Content Types',

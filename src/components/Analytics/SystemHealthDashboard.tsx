@@ -245,7 +245,7 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
       setLastRefresh(new Date());
 
     } catch (err) {
-      console.error('Failed to fetch system health:', err);
+
       setError(err instanceof Error ? err.message : 'Failed to load system health data');
     } finally {
       setLoading(false);

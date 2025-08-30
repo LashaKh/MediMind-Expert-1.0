@@ -159,12 +159,12 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
   };
 
   const handleStartTour = (sectionId: string) => {
-    console.log('🎯 TourSelector: Starting tour:', sectionId);
+
     console.log('🎯 TourSelector: Calling onTourSelect callback only (NOT closing)');
     onTourSelect(sectionId);
     // DON'T call onClose() here - that closes the entire tour system!
     // The PremiumTour component will handle closing the selector via setShowSelector(false)
-    console.log('🎯 TourSelector: handleStartTour complete - selector will close automatically');
+
   };
 
   const handleTakeFullTour = () => {

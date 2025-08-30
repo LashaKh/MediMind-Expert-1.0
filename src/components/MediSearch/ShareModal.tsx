@@ -36,7 +36,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, article, onClose
         await handleCopyLink();
       }
     } catch (error) {
-      console.error('Error sharing:', error);
+
     } finally {
       setIsSharing(false);
     }
@@ -49,7 +49,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, article, onClose
       onShare?.(article, 'clipboard');
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      console.error('Failed to copy:', error);
+
     }
   };
 

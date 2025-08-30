@@ -58,7 +58,7 @@ export const PatientSelector: React.FC<PatientSelectorProps> = ({
       const results = await searchPatients(query.trim());
       setSearchResults(results);
     } catch (error) {
-      console.error('Patient search failed:', error);
+
       setSearchResults([]);
     } finally {
       setIsSearching(false);
@@ -125,7 +125,7 @@ export const PatientSelector: React.FC<PatientSelectorProps> = ({
         medical_record_number: ''
       });
     } catch (error) {
-      console.error('Failed to create patient:', error);
+
     } finally {
       setIsCreating(false);
     }
@@ -389,7 +389,6 @@ export const PatientSelector: React.FC<PatientSelectorProps> = ({
           )}
         </div>
       )}
-
 
     </div>
   );

@@ -49,8 +49,7 @@ export async function checkVectorStoreFileStatus(
     }
 
     const data = await response.json();
-    console.log('🔍 OpenAI Vector Store file status:', data);
-    
+
     return {
       id: data.id,
       status: data.status,
@@ -65,7 +64,7 @@ export async function checkVectorStoreFileStatus(
   });
 
   if (error) {
-    console.error('❌ Failed to check vector store file status:', error);
+
     return null;
   }
 
@@ -76,7 +75,6 @@ export async function checkVectorStoreFileStatus(
  * Monitor and sync all user documents with OpenAI Vector Store status
  */
 export async function monitorUserDocumentStatus(userId: string): Promise<FileStatusMonitoringResult[]> {
-  console.log('🔄 Starting document status monitoring for user:', userId);
 
   // Get all user documents that might need status updates
   const { data: documents, error: fetchError } = await supabase
@@ -99,16 +97,14 @@ export async function monitorUserDocumentStatus(userId: string): Promise<FileSta
     .in('processing_status', ['completed', 'processing', 'pending']);
 
   if (fetchError) {
-    console.error('❌ Failed to fetch user documents:', fetchError);
+
     return [];
   }
 
   if (!documents || documents.length === 0) {
-    console.log('ℹ️ No documents found for monitoring');
+
     return [];
   }
-
-  console.log(`📊 Monitoring ${documents.length} documents`);
 
   const results: FileStatusMonitoringResult[] = [];
 
@@ -126,7 +122,7 @@ export async function monitorUserDocumentStatus(userId: string): Promise<FileSta
     );
 
     if (!actualStatus) {
-      console.log(`⚠️ Could not verify status for: "${doc.title}"`);
+
       continue;
     }
 
@@ -150,8 +146,7 @@ export async function monitorUserDocumentStatus(userId: string): Promise<FileSta
 
     // Update database if needed
     if (shouldUpdate) {
-      console.log(`🔄 Updating status for "${doc.title}": ${doc.processing_status} → ${actualStatus.status}`);
-      
+
       const updateData: any = {
         processing_status: actualStatus.status,
         updated_at: new Date().toISOString()
@@ -174,12 +169,12 @@ export async function monitorUserDocumentStatus(userId: string): Promise<FileSta
         .eq('id', doc.id);
 
       if (updateError) {
-        console.error(`❌ Failed to update document ${doc.id}:`, updateError);
+
       } else {
-        console.log(`✅ Updated "${doc.title}" status to: ${actualStatus.status}`);
+
       }
     } else {
-      console.log(`✅ Status in sync for "${doc.title}": ${actualStatus.status}`);
+
     }
   }
 
@@ -191,7 +186,6 @@ export async function monitorUserDocumentStatus(userId: string): Promise<FileSta
  * Monitor specific document status
  */
 export async function monitorSingleDocumentStatus(documentId: string): Promise<FileStatusMonitoringResult | null> {
-  console.log('🔍 Monitoring single document:', documentId);
 
   const { data: doc, error: fetchError } = await supabase
     .from('user_documents')
@@ -210,12 +204,12 @@ export async function monitorSingleDocumentStatus(documentId: string): Promise<F
     .single();
 
   if (fetchError || !doc) {
-    console.error('❌ Failed to fetch document:', fetchError);
+
     return null;
   }
 
   if (!doc.openai_file_id || !doc.user_vector_stores?.openai_vector_store_id) {
-    console.log('⚠️ Document missing OpenAI identifiers');
+
     return null;
   }
 
@@ -243,8 +237,7 @@ export async function monitorSingleDocumentStatus(documentId: string): Promise<F
   };
 
   if (shouldUpdate) {
-    console.log(`🔄 Updating single document status: ${doc.processing_status} → ${actualStatus.status}`);
-    
+
     const updateData: any = {
       processing_status: actualStatus.status,
       updated_at: new Date().toISOString()
@@ -260,9 +253,9 @@ export async function monitorSingleDocumentStatus(documentId: string): Promise<F
       .eq('id', documentId);
 
     if (updateError) {
-      console.error(`❌ Failed to update document:`, updateError);
+
     } else {
-      console.log(`✅ Updated document status to: ${actualStatus.status}`);
+
     }
   }
 
@@ -276,8 +269,6 @@ export async function monitorRecentUploads(userId: string, hoursBack: number = 2
   const cutoffTime = new Date();
   cutoffTime.setHours(cutoffTime.getHours() - hoursBack);
 
-  console.log(`🔄 Monitoring uploads from the last ${hoursBack} hours`);
-
   const { data: recentDocs, error } = await supabase
     .from('user_documents')
     .select('id, title, created_at, file_size')
@@ -287,11 +278,9 @@ export async function monitorRecentUploads(userId: string, hoursBack: number = 2
     .order('created_at', { ascending: false });
 
   if (error || !recentDocs?.length) {
-    console.log('ℹ️ No recent uploads to monitor');
+
     return;
   }
-
-  console.log(`📊 Found ${recentDocs.length} recent uploads to monitor`);
 
   for (const doc of recentDocs) {
     await monitorSingleDocumentStatus(doc.id);

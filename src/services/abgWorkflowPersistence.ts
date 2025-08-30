@@ -74,7 +74,7 @@ export const saveWorkflowState = (
   metadata: Partial<StoredWorkflowData['metadata']> = {}
 ): string => {
   if (typeof window === 'undefined') {
-    console.warn('Cannot save workflow state: localStorage not available');
+
     return '';
   }
 
@@ -100,11 +100,10 @@ export const saveWorkflowState = (
     
     // Clean up old workflows
     cleanupOldWorkflows();
-    
-    console.log('ABG workflow saved:', sessionId);
+
     return sessionId;
   } catch (error) {
-    console.error('Failed to save workflow state:', error);
+
     return '';
   }
 };
@@ -114,7 +113,7 @@ export const saveWorkflowState = (
  */
 export const loadWorkflowState = (sessionId: string): StoredWorkflowData | null => {
   if (typeof window === 'undefined') {
-    console.warn('Cannot load workflow state: localStorage not available');
+
     return null;
   }
 
@@ -130,7 +129,7 @@ export const loadWorkflowState = (sessionId: string): StoredWorkflowData | null 
     
     // Validate version compatibility
     if (storedData.version !== STORAGE_VERSION) {
-      console.warn('Workflow version mismatch, skipping recovery');
+
       removeWorkflowState(sessionId);
       return null;
     }
@@ -140,14 +139,14 @@ export const loadWorkflowState = (sessionId: string): StoredWorkflowData | null 
     const daysDiff = (Date.now() - storedDate.getTime()) / (1000 * 60 * 60 * 24);
     
     if (daysDiff > AUTO_CLEANUP_DAYS) {
-      console.log('Workflow too old, removing:', sessionId);
+
       removeWorkflowState(sessionId);
       return null;
     }
 
     return storedData;
   } catch (error) {
-    console.error('Failed to load workflow state:', error);
+
     return null;
   }
 };
@@ -161,9 +160,9 @@ export const removeWorkflowState = (sessionId: string): void => {
   try {
     const workflowKey = getWorkflowKey(sessionId);
     localStorage.removeItem(workflowKey);
-    console.log('ABG workflow removed:', sessionId);
+
   } catch (error) {
-    console.error('Failed to remove workflow state:', error);
+
   }
 };
 
@@ -203,7 +202,7 @@ export const getRecoverableWorkflows = (): WorkflowRecoveryInfo[] => {
         }
       }
     } catch (error) {
-      console.warn('Failed to process workflow for recovery:', key, error);
+
     }
   }
 
@@ -252,10 +251,9 @@ export const recoverWorkflowState = (sessionId: string): ABGWorkflowPersistenceD
       }
     };
 
-    console.log('ABG workflow recovered:', sessionId, 'Recovery count:', updatedMetadata.recoveryCount);
     return recoveryData;
   } catch (error) {
-    console.error('Failed to recover workflow state:', error);
+
     return null;
   }
 };
@@ -297,7 +295,7 @@ export const cleanupOldWorkflows = (): void => {
     
     for (const workflow of oldWorkflows) {
       localStorage.removeItem(workflow!.key);
-      console.log('Cleaned up old workflow:', workflow!.sessionId);
+
     }
 
     // Keep only the most recent MAX_STORED_WORKFLOWS
@@ -311,14 +309,14 @@ export const cleanupOldWorkflows = (): void => {
 
     for (const workflow of excessWorkflows) {
       localStorage.removeItem(workflow!.key);
-      console.log('Cleaned up excess workflow:', workflow!.sessionId);
+
     }
 
     if (oldWorkflows.length > 0 || excessWorkflows.length > 0) {
-      console.log(`Cleaned up ${oldWorkflows.length + excessWorkflows.length} old workflows, keeping ${recentWorkflows.length}`);
+
     }
   } catch (error) {
-    console.error('Failed to cleanup old workflows:', error);
+
   }
 };
 
@@ -335,9 +333,8 @@ export const clearAllWorkflowData = (): void => {
       localStorage.removeItem(key);
     }
 
-    console.log(`Cleared ${workflowKeys.length} stored workflows`);
   } catch (error) {
-    console.error('Failed to clear workflow data:', error);
+
   }
 };
 
@@ -386,7 +383,7 @@ export const getWorkflowStorageStats = () => {
       newestWorkflow: workflowKeys.length > 0 ? new Date(newestTimestamp).toISOString() : null
     };
   } catch (error) {
-    console.error('Failed to get workflow storage stats:', error);
+
     return {
       totalWorkflows: 0,
       recoverableWorkflows: 0,

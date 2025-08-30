@@ -36,11 +36,11 @@ export const updateUserProfile = async (
       .eq('user_id', userId);
 
     if (error) {
-      console.error('Update profile error:', error);
+
       throw new Error(`Failed to update profile: ${error.message}`);
     }
   } catch (err) {
-    console.error('UpdateUserProfile error:', err);
+
     throw err;
   }
 };
@@ -57,8 +57,7 @@ export const getUserProfile = async (userId: string) => {
       .single();
 
     if (error) {
-      console.error('Get user profile error:', error);
-      
+
       // Handle specific error codes
       if (error.code === 'PGRST116') {
         throw new Error('User profile not found');
@@ -69,7 +68,7 @@ export const getUserProfile = async (userId: string) => {
 
     return data;
   } catch (err) {
-    console.error('getUserProfile error:', err);
+
     throw err;
   }
 };
@@ -96,7 +95,7 @@ export const createUserProfile = async (userId: string, email: string): Promise<
     }
   } catch (e: unknown) {
     const error = e instanceof Error ? e : new Error('Error creating profile');
-    console.warn('Profile creation failed:', error);
+
     // Don't throw here to prevent blocking sign-up flow
   }
 };

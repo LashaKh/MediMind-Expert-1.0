@@ -62,7 +62,7 @@ export const PerformanceDashboard: React.FC = () => {
       // Check for new alerts
       checkForAlerts(currentReport);
     } catch (error) {
-      console.error('[PerformanceDashboard] Failed to refresh data:', error);
+
     }
   }, []);
 

@@ -407,7 +407,7 @@ class ImageOptimizationManager {
     try {
       await attemptLoad();
     } catch (error) {
-      console.warn('Image load failed:', originalSrc, error);
+
     }
   }
 
@@ -466,7 +466,7 @@ class ImageOptimizationManager {
           img.onerror = reject;
         });
       } catch (error) {
-        console.warn('Failed to preload image:', url, error);
+
       }
     });
     

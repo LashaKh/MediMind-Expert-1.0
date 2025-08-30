@@ -32,7 +32,6 @@ export const ClinicalDashboard: React.FC<ClinicalDashboardProps> = ({
   const { profile } = useAuth();
   const navigate = useNavigate();
 
-
   // Quick actions based on specialty
   const getQuickActions = () => {
     const baseActions = [
@@ -143,7 +142,6 @@ export const ClinicalDashboard: React.FC<ClinicalDashboardProps> = ({
           );
         })}
       </div>
-
 
     </div>
   );

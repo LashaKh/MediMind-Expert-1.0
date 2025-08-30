@@ -71,13 +71,7 @@ async function monitoredFetch(
     
     // Log metrics if monitoring enabled
     if (MIGRATION_CONFIG.ENABLE_MONITORING) {
-      console.log('API_METRICS', {
-        functionType,
-        provider,
-        responseTime: duration,
-        status: response.status,
-        success: response.ok,
-        timestamp: new Date().toISOString(),
+      .toISOString(),
         url: url.replace(/\/\/(.*?)\./, '//***.')  // Mask domain for privacy
       });
     }

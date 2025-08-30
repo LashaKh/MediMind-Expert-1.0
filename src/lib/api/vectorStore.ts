@@ -289,9 +289,7 @@ export async function uploadDocumentToVectorStore(
   onProgress?: UploadProgressCallback
 ): Promise<DocumentUploadResponse> {
   // EXTREMELY VISIBLE DEBUG LOG - This should ALWAYS appear if function is called
-  console.log('🚨🚨🚨 UPLOAD FUNCTION CALLED! File:', request.file.name, 'Size:', request.file.size);
-  console.log('🚨🚨🚨 Request object:', request);
-  
+
   // Import chunking utilities
   const { 
     shouldChunkFile, 
@@ -303,23 +301,21 @@ export async function uploadDocumentToVectorStore(
   
   // Check if file needs chunking
   if (shouldChunkFile(request.file)) {
-    console.log('🧩 Large file detected - using chunked upload');
+
     return await uploadFileInChunks(request, onProgress);
   }
   
   // For smaller files, use direct upload
-  console.log('📄 Small file - using direct upload');
+
   return await uploadFileDirectly(request, onProgress);
 }
 
 // Direct upload for files under 45MB
 async function uploadFileDirectly(request: DocumentUploadRequest, onProgress?: UploadProgressCallback): Promise<DocumentUploadResponse> {
   try {
-    console.log('🔄 Starting direct document upload process...');
-    
+
     const { data: { session } } = await supabase.auth.getSession();
-    console.log('🔐 Session check:', session ? 'authenticated' : 'not authenticated');
-    
+
     if (!session) {
       throw new DocumentUploadError('Authentication required');
     }
@@ -334,12 +330,7 @@ async function uploadFileDirectly(request: DocumentUploadRequest, onProgress?: U
     
     const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}-${sanitizedFileName}`;
     const filePath = `uploads/${session.user.id}/${fileName}`;
-    
-    console.log('📤 Uploading to Supabase Storage:', filePath);
-    console.log('📄 File details:', { name: request.file.name, size: request.file.size, type: request.file.type });
-    
-    console.log('🚨 ABOUT TO START SUPABASE STORAGE UPLOAD...');
-    
+
     // Add timeout to prevent infinite hanging on large files
     const uploadWithTimeout = Promise.race([
       supabase.storage
@@ -354,9 +345,6 @@ async function uploadFileDirectly(request: DocumentUploadRequest, onProgress?: U
     ]);
     
     const { data: uploadData, error: uploadError } = await uploadWithTimeout as any;
-      
-    console.log('🚨 SUPABASE STORAGE UPLOAD COMPLETED!');
-    console.log('📤 Storage upload result:', { uploadData, uploadError });
 
     if (uploadError) {
 
@@ -379,9 +367,7 @@ async function uploadFileDirectly(request: DocumentUploadRequest, onProgress?: U
     };
 
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    console.log('🚀 Calling Edge Function:', `${supabaseUrl}/functions/v1/upload-document-to-openai`);
-    console.log('📦 Payload:', requestPayload);
-    
+
     const response = await fetch(`${supabaseUrl}/functions/v1/upload-document-to-openai`, {
       method: 'POST',
       headers: {
@@ -456,8 +442,7 @@ async function uploadFileDirectly(request: DocumentUploadRequest, onProgress?: U
 // Chunked upload for files over 45MB
 async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: UploadProgressCallback): Promise<DocumentUploadResponse> {
   try {
-    console.log('🧩 Starting chunked upload process...');
-    
+
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       throw new DocumentUploadError('Authentication required');
@@ -474,14 +459,6 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
     // Split file into chunks (async for PDF page-based chunking)
     const chunks = await splitFileIntoChunks(request.file);
     const sessionId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    
-    console.log(`🧩 File split into ${chunks.length} chunks:`, {
-      originalSize: formatFileSize(request.file.size),
-      chunkInfo: 'chunkSize' in chunks[0] ? 
-        `Binary chunks (${formatFileSize(chunks[0].chunkSize)})` :
-        `PDF pages (${chunks[0].startPage}-${chunks[0].endPage})`,
-      totalChunks: chunks.length
-    });
 
     // Notify UI of chunking completion
     onProgress?.({
@@ -500,8 +477,7 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
       
       // Update progress for current chunk (10% to 80% for chunk uploads)
       const chunkProgress = 10 + Math.round((i / chunks.length) * 70);
-      console.log(`📊 Chunk upload progress: ${chunkProgress}%`);
-      
+
       // Notify UI of chunk progress
       onProgress?.({
         type: 'chunk',
@@ -521,8 +497,7 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
       
       while (retryAttempts < maxRetries) {
         try {
-          console.log(`🔄 Uploading chunk ${i + 1}/${chunks.length}, attempt ${retryAttempts + 1}/${maxRetries}...`);
-          
+
           // Get the appropriate data based on chunk type
           const chunkData = 'chunkData' in chunk ? chunk.chunkData : chunk.pdfBytes;
           const fileName = 'chunkData' in chunk ? 
@@ -540,13 +515,13 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
           uploadError = uploadResult.error;
           
           if (!uploadError) {
-            console.log(`✅ Chunk ${i + 1} uploaded successfully on attempt ${retryAttempts + 1}`);
+
             break; // Success, exit retry loop
           } else {
-            console.warn(`⚠️ Chunk ${i + 1} upload attempt ${retryAttempts + 1} failed:`, uploadError);
+
           }
         } catch (error) {
-          console.warn(`⚠️ Chunk ${i + 1} upload attempt ${retryAttempts + 1} threw error:`, error);
+
           uploadError = error;
         }
         
@@ -555,14 +530,13 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
         if (retryAttempts < maxRetries) {
           // Wait before retrying (exponential backoff)
           const waitTime = Math.pow(2, retryAttempts) * 2000; // 4s, 8s, 16s
-          console.log(`⏳ Waiting ${waitTime/1000}s before retry...`);
+
           await new Promise(resolve => setTimeout(resolve, waitTime));
         }
       }
       
       if (uploadError) {
-        console.error(`❌ Chunk ${i + 1} upload failed:`, uploadError);
-        
+
         // Clean up any uploaded chunks on failure
         await cleanupChunks(session.user.id, sessionId, uploadedChunks);
         
@@ -572,10 +546,8 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
       }
       
       uploadedChunks.push(uploadData.path);
-      console.log(`✅ Chunk ${i + 1}/${chunks.length} uploaded successfully`);
-    }
 
-    console.log('🎉 All chunks uploaded successfully, processing each chunk as separate documents...');
+    }
 
     // Notify UI of processing starting
     onProgress?.({
@@ -590,14 +562,12 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     
     // Refresh session before processing
-    console.log('🔄 Refreshing session for document processing...');
+
     const { data: { session: freshSession } } = await supabase.auth.getSession();
     
     if (!freshSession) {
       throw new DocumentUploadError('Authentication session expired during upload');
     }
-    
-    console.log('✅ Fresh session obtained, processing chunks individually...');
 
     // Calculate maximum possible suffix length to ensure consistent base title truncation
     const maxTitleLength = 200; // Database constraint limit
@@ -619,15 +589,13 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
 
     for (let i = 0; i < uploadedChunks.length; i++) {
       const chunkPath = uploadedChunks[i];
-      console.log(`📄 Processing chunk ${i + 1}/${uploadedChunks.length} as separate document...`);
-      
+
       // Different title format for PDF page chunks vs binary chunks
       const chunk = chunks[i];
       const partSuffix = 'startPage' in chunk ? 
         ` - Pages ${chunk.startPage}-${chunk.endPage} (${i + 1}/${uploadedChunks.length})` :
         ` - Part ${i + 1}/${uploadedChunks.length}`;
-      
-      
+
       const chunkTitle = `${baseTitle}${partSuffix}`;
       console.log(`📝 Generated chunk title (${chunkTitle.length} chars): ${chunkTitle}`);
       
@@ -650,7 +618,7 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
         // Refresh session before each chunk to prevent JWT expiration
         const { data: { session: currentSession } } = await supabase.auth.getSession();
         if (!currentSession) {
-          console.warn(`⚠️ Chunk ${i + 1} failed: Session expired`);
+
           continue;
         }
 
@@ -667,8 +635,7 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
         if (response.ok) {
           const result = await response.json();
           chunkResults.push(result);
-          console.log(`✅ Chunk ${i + 1}/${uploadedChunks.length} processed successfully`);
-          
+
           // Update progress
           const chunkProgress = 85 + Math.round(((i + 1) / uploadedChunks.length) * 15);
           onProgress?.({
@@ -679,23 +646,16 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
           });
         } else {
           const errorData = await response.json().catch(() => ({}));
-          console.warn(`⚠️ Chunk ${i + 1} processing failed:`, errorData);
+
           // Continue with other chunks instead of failing completely
         }
       } catch (error) {
-        console.warn(`⚠️ Chunk ${i + 1} processing error:`, error);
+
         // Continue with other chunks
       }
     }
 
-    console.log(`🎉 Chunked document processing complete! ${chunkResults.length}/${uploadedChunks.length} chunks processed successfully`);
-    
     // Show where the final documents are stored
-    console.log(`📁 Document storage summary:`);
-    console.log(`   • Vector Store ID: ${request.vectorStoreId}`);
-    console.log(`   • OpenAI Files: ${chunkResults.length} separate files uploaded`);
-    console.log(`   • Database Records: ${chunkResults.length} documents created`);
-    console.log(`   • Temp Storage: Chunks will be cleaned up from temp-chunks/`);
 
     // Clean up chunk files after processing
     await cleanupChunks(session.user.id, sessionId, uploadedChunks);
@@ -713,8 +673,7 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
       uploadedFileId: chunkResults[0]?.uploadedFileId
     };
   } catch (error) {
-    console.error('❌ Chunked upload failed:', error);
-    
+
     if (error instanceof DocumentUploadError) {
       throw error;
     }
@@ -734,7 +693,7 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
 // Clean up uploaded chunks after processing
 async function cleanupChunks(userId: string, sessionId: string, chunkPaths: string[]): Promise<void> {
   try {
-    console.log(`🧹 Cleaning up ${chunkPaths.length} temporary chunks from Supabase Storage...`);
+
     console.log(`   📁 Removing temp files from: temp-chunks/chunks-${new Date().toISOString().split('T')[0]}/`);
     
     if (chunkPaths.length > 0) {
@@ -743,13 +702,13 @@ async function cleanupChunks(userId: string, sessionId: string, chunkPaths: stri
         .remove(chunkPaths);
       
       if (error) {
-        console.warn('⚠️ Failed to clean up some temp chunks:', error);
+
       } else {
         console.log('✅ Temporary chunks cleaned up successfully (final documents are in OpenAI Vector Store)');
       }
     }
   } catch (error) {
-    console.warn('⚠️ Chunk cleanup failed:', error);
+
   }
 }
 
@@ -890,19 +849,15 @@ export async function deleteUserDocument(
   partialSuccess?: boolean;
 }> {
   try {
-    console.log('🔑 Getting session for document deletion...');
+
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       throw new Error('Authentication required');
     }
 
-    console.log('✅ Session found, calling Edge Function');
-
     // Call the Supabase Edge Function to delete from OpenAI and database
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const deleteUrl = `${supabaseUrl}/functions/v1/delete-document-from-openai`;
-    console.log('🚀 Calling Edge Function:', deleteUrl);
-    console.log('📦 Request payload:', { documentId: request.documentId });
 
     const response = await fetch(deleteUrl, {
       method: 'DELETE',
@@ -915,20 +870,16 @@ export async function deleteUserDocument(
       })
     });
 
-    console.log('📡 Edge Function response status:', response.status);
-    console.log('📡 Edge Function response headers:', response.headers);
-
     // Handle both complete success (200) and partial success (207)
     if (!response.ok && response.status !== 207) {
-      console.error('❌ Edge Function returned error status:', response.status);
+
       const errorData = await response.json().catch(() => ({}));
-      console.error('❌ Error data from Edge Function:', errorData);
+
       throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
     }
 
     const result = await response.json();
-    console.log('✅ Edge Function response:', result);
-    
+
     // Determine if this was a partial success (207 status = some cleanup failed)
     const partialSuccess = response.status === 207;
 
@@ -1030,8 +981,7 @@ export async function initializeUserVectorStore(
   const cacheKey = `initializeUserVectorStore-${userId}`;
 
   return makeRequestWithRetry(async () => {
-    console.log('🔄 Checking if user has an existing vector store...');
-    
+
     // Clear any cached vector store data to force fresh lookup
     clearCacheFor(`VectorStore-${userId}`);
     clearCacheFor(`getUserVectorStore-${userId}`);
@@ -1042,8 +992,7 @@ export async function initializeUserVectorStore(
       const { hasVectorStore, vectorStore } = await checkUserVectorStore();
 
       if (hasVectorStore && vectorStore) {
-        console.log('✅ Found existing vector store:', vectorStore.openai_vector_store_id);
-        
+
         // Return existing vector store information in the expected format
         const existingResponse = {
           message: 'Vector Store already exists',
@@ -1060,15 +1009,13 @@ export async function initializeUserVectorStore(
         return existingResponse;
       }
     } catch (error) {
-      console.warn('⚠️ Error checking existing vector store, will create new one:', error.message);
+
       // Continue to create a new vector store
     }
-    
-    console.log('🆕 No existing vector store found, creating new one...');
-    
+
     // If no vector store exists or there was an error, create a new one
     const createResponse = await createVectorStore({ name, description });
-    console.log('✅ New vector store created:', createResponse.vectorStore.openai_vector_store_id);
+
     return createResponse;
   }, cacheKey);
 }

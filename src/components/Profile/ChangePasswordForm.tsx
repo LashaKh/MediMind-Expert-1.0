@@ -147,7 +147,6 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
           icon={<Lock className="w-5 h-5" />}
           delay={300}
         />
-        
 
         <div className="flex items-center space-x-4 pt-4">
           <MedicalButton

@@ -37,8 +37,7 @@ const PAGES_PER_CHUNK = 25;
  */
 export async function splitPDFIntoPageChunks(file: File): Promise<PDFPageChunk[]> {
   try {
-    console.log(`🔍 Splitting PDF "${file.name}" into page-based chunks...`);
-    
+
     // Read the PDF file
     const arrayBuffer = await file.arrayBuffer();
     const pdfBytes = new Uint8Array(arrayBuffer);
@@ -56,9 +55,7 @@ export async function splitPDFIntoPageChunks(file: File): Promise<PDFPageChunk[]
       const startPage = chunkIndex * PAGES_PER_CHUNK;
       const endPage = Math.min(startPage + PAGES_PER_CHUNK - 1, totalPages - 1);
       const pageIndices = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-      
-      console.log(`📝 Creating chunk ${chunkIndex + 1}/${totalChunks}: pages ${startPage + 1}-${endPage + 1}`);
-      
+
       // Create a new PDF document for this chunk
       const chunkPdf = await PDFDocument.create();
       
@@ -91,12 +88,11 @@ export async function splitPDFIntoPageChunks(file: File): Promise<PDFPageChunk[]
       
       console.log(`✅ Created chunk ${chunkIndex + 1}: ${Math.round(chunkBytes.length / 1024)}KB`);
     }
-    
-    console.log(`🎉 Successfully split PDF into ${chunks.length} page-based chunks`);
+
     return chunks;
     
   } catch (error) {
-    console.error('❌ Error splitting PDF into page chunks:', error);
+
     throw new Error(`Failed to split PDF: ${error.message}`);
   }
 }

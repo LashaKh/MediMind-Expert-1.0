@@ -139,7 +139,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
   // Load news data when component mounts or when news tab becomes active
   useEffect(() => {
     if ((activeTab === 'news' || activeTab === 'trending') && newsState.articles.length === 0 && !newsState.isLoading) {
-      console.log('🗞️ [MediSearchIntegrated] Loading news data for tab:', activeTab);
+
       if (activeTab === 'news') {
         newsState.loadNews(newsState.filters);
       } else if (activeTab === 'trending') {
@@ -194,15 +194,6 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
       return;
     }
 
-    console.log('Searching with:', {
-      query: searchQuery,
-      providers: selectedProviders,
-      activeTab,
-      trialFilters: activeTab === 'trials' ? trialFilters : null,
-      newsFilters: (activeTab === 'news' || activeTab === 'trending') ? newsState.filters : null,
-      advancedFilters: Object.keys(advancedFilters).length > 0 ? advancedFilters : null
-    });
-    
     // Execute search using the search context
     try {
       await searchContext.executeSearch({
@@ -217,7 +208,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
         tab: activeTab
       });
     } catch (error) {
-      console.error('Search failed:', error);
+
       // Error handling is managed by the search context
     }
   }, [searchQuery, selectedProviders, activeTab, trialFilters, advancedFilters, searchContext]);
@@ -243,7 +234,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
     setAdvancedFilters({});
     if (searchQuery.trim() && selectedProviders.length > 0) {
       // Refresh search without advanced filters  
-      console.log('Clearing advanced filters and refreshing search');
+
     }
   }, [searchQuery, selectedProviders]);
 
@@ -251,7 +242,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
     setShowAdvancedFilters(false);
     if (searchQuery.trim() && selectedProviders.length > 0) {
       // Trigger search with new advanced filters
-      console.log('Applying advanced filters:', advancedFilters);
+
     }
   }, [searchQuery, selectedProviders, advancedFilters]);
 
@@ -305,7 +296,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
 
   const toggleFavorite = useCallback(async (result: any) => {
     if (!user) {
-      console.warn('💖 [Heart Button] User not authenticated');
+
       return;
     }
 
@@ -321,7 +312,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
       
       await likedActions.refreshLikedResults();
     } catch (error) {
-      console.error('❌ [Heart Button] Error:', error);
+
     }
   }, [likedActions, state, user, searchQuery]);
 
@@ -332,7 +323,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
 
   const handleViewTrialDetails = useCallback((trial: ClinicalTrialSearchResult) => {
     // Open trial details - could open modal or navigate to details page
-    console.log('View trial details:', trial.clinicalTrialData?.nctId);
+
   }, []);
 
   // Render individual search result

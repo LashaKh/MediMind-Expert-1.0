@@ -283,7 +283,7 @@ export const FeatureFlagProvider: React.FC<FeatureFlagProviderProps> = ({ childr
       setAbTests(mockAbTests);
 
     } catch (err) {
-      console.error('Failed to fetch feature flags:', err);
+
       setError(err instanceof Error ? err.message : 'Failed to load feature flags');
     } finally {
       setLoading(false);
@@ -347,8 +347,6 @@ export const FeatureFlagProvider: React.FC<FeatureFlagProviderProps> = ({ childr
         }
       };
 
-      console.log('A/B Test Event:', eventData);
-      
       // In production, send to analytics API
       // await fetch('/.netlify/functions/ab-test-tracking', {
       //   method: 'POST',
@@ -360,7 +358,7 @@ export const FeatureFlagProvider: React.FC<FeatureFlagProviderProps> = ({ childr
       // });
 
     } catch (err) {
-      console.error('Failed to track A/B test event:', err);
+
     }
   }, [getTestVariant, user, userSegment]);
 

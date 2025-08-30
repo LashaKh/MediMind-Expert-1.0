@@ -122,7 +122,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       try {
         setSavedSearches(JSON.parse(saved));
       } catch (error) {
-        console.error('Failed to load saved searches:', error);
+
       }
     }
   }, []);

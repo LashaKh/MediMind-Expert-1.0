@@ -38,14 +38,14 @@ export const TooltipPositionTest: React.FC<TooltipPositionTestProps> = ({
         background: rgba(0,0,0,0.1) !important;
       `;
       document.body.appendChild(root);
-      console.log('🧪 Created test portal root:', root);
+
     }
     setPortalRoot(root);
 
     return () => {
       if (root && root.parentNode) {
         root.parentNode.removeChild(root);
-        console.log('🧹 Cleaned up test portal root');
+
       }
     };
   }, [isVisible]);
@@ -53,8 +53,6 @@ export const TooltipPositionTest: React.FC<TooltipPositionTestProps> = ({
   if (!isVisible || !portalRoot) {
     return null;
   }
-
-  console.log('🧪 Rendering position test tooltips');
 
   const testContent = (
     <>

@@ -196,7 +196,7 @@ class ErrorHandlingManager {
     // Open circuit breaker if threshold exceeded
     if (breaker.failureCount >= this.config.errorThreshold) {
       breaker.isOpen = true;
-      console.warn(`[ErrorHandler] Circuit breaker opened for component: ${component}`);
+
     }
 
     this.circuitBreakers.set(component, breaker);
@@ -313,8 +313,7 @@ class ErrorHandlingManager {
       return await primary();
     } catch (error) {
       if (this.config.gracefulDegradation) {
-        console.warn(`[ErrorHandler] Primary operation failed, falling back for ${context.component}:`, error);
-        
+
         try {
           return await fallback();
         } catch (fallbackError) {
@@ -355,7 +354,7 @@ class ErrorHandlingManager {
     } catch (error) {
       // Medical safety fallback
       if (safetyCallback) {
-        console.warn('[ErrorHandler] Medical operation failed, using safety callback');
+
         return await safetyCallback();
       }
       
@@ -397,8 +396,7 @@ class ErrorHandlingManager {
     } catch (error) {
       // Check if offline
       if (!navigator.onLine) {
-        console.warn('[ErrorHandler] Offline detected, attempting cached fallback');
-        
+
         if (cachedFallback) {
           try {
             const cachedData = await cachedFallback();
@@ -407,7 +405,7 @@ class ErrorHandlingManager {
               headers: { 'Content-Type': 'application/json' }
             });
           } catch (cacheError) {
-            console.error('[ErrorHandler] Cached fallback failed:', cacheError);
+
           }
         }
         
@@ -456,7 +454,7 @@ class ErrorHandlingManager {
         body: JSON.stringify(errorData)
       });
     } catch (monitoringError) {
-      console.error('[ErrorHandler] Failed to send error to monitoring:', monitoringError);
+
     }
   }
 

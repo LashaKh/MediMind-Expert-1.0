@@ -147,7 +147,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           tourType={tourType as any}
           autoStart={true}
           onComplete={() => {
-            console.log('Premium tour completed!');
+
           }}
         />
       )}

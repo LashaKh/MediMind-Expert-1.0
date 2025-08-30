@@ -33,11 +33,11 @@ document.documentElement.classList.add('light');
 // NUCLEAR FONT LOADING GUARANTEE - Wait for fonts before continuing
 document.fonts.ready.then(() => {
   document.documentElement.setAttribute('data-font-loaded', 'true');
-  console.log('All fonts loaded successfully');
+
 }).catch(() => {
   // Force set attribute even if fonts fail to load
   document.documentElement.setAttribute('data-font-loaded', 'true');
-  console.log('Font loading completed with fallbacks');
+
 });
 
 document.documentElement.lang = language;

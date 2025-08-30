@@ -22,7 +22,7 @@ export const loadLanguageResources = async (language: LanguageCode) => {
     try {
       // Only log in development to reduce console noise
       if (import.meta.env.DEV) {
-        console.log(`[i18n] Loading translations for ${language}`);
+
       }
       
       // Use Promise.resolve to prevent blocking the main thread
@@ -37,12 +37,12 @@ export const loadLanguageResources = async (language: LanguageCode) => {
       }
       
       if (import.meta.env.DEV) {
-        console.log(`[i18n] Translations loaded for ${language}`);
+
       }
       
       return translations;
     } catch (error) {
-      console.error(`[i18n] Failed to load translations for ${language}:`, error);
+
       // Remove from cache on failure so we can retry
       languageCache.delete(cacheKey);
       loadedLanguages.delete(language);

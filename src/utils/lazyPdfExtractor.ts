@@ -13,7 +13,7 @@ export const extractTextFromPdfLazy = async (
     const { extractTextFromPdf } = await import('./pdfTextExtractor');
     return await extractTextFromPdf(file, onProgress);
   } catch (error) {
-    console.error('Failed to load PDF extractor:', error);
+
     return {
       text: '',
       pageCount: 0,

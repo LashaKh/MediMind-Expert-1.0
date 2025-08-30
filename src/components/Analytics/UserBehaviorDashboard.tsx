@@ -205,7 +205,7 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
       setSpecialtyEngagement(specialtyData);
 
     } catch (err) {
-      console.error('Failed to fetch user behavior data:', err);
+
       setError(err instanceof Error ? err.message : 'Failed to load user behavior data');
     } finally {
       setLoading(false);

@@ -102,7 +102,7 @@ export function useLazyLoading<T = any>({
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load more items';
       setError(errorMessage);
-      console.error('Lazy loading error:', err);
+
     } finally {
       setIsLoading(false);
       loadingRef.current = false;

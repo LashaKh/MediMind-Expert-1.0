@@ -82,7 +82,7 @@ export const useRealtimeAnalytics = (
         .limit(50);
 
       if (behaviorError) {
-        console.warn('Failed to fetch user behavior data:', behaviorError);
+
       }
 
       // Fetch system health data
@@ -93,7 +93,7 @@ export const useRealtimeAnalytics = (
         .limit(30);
 
       if (healthError) {
-        console.warn('Failed to fetch system health data:', healthError);
+
       }
 
       setData({
@@ -105,7 +105,7 @@ export const useRealtimeAnalytics = (
 
       setConnected(true);
     } catch (err) {
-      console.error('Failed to fetch analytics data:', err);
+
       setError(err instanceof Error ? err.message : 'Failed to load analytics data');
       setConnected(false);
     } finally {
@@ -115,8 +115,7 @@ export const useRealtimeAnalytics = (
 
   // Handle real-time updates
   const handleRealtimeUpdate = useCallback((payload: any) => {
-    console.log('Real-time analytics update:', payload);
-    
+
     setData(prevData => {
       const newData = { ...prevData };
       
@@ -244,7 +243,6 @@ export const useRealtimeAnalytics = (
         return newData;
       });
 
-      console.log(`Processed ${updates.length} batched analytics updates`);
     };
 
     // Enhanced real-time handler with mobile-aware throttling
@@ -323,7 +321,7 @@ export const useRealtimeAnalytics = (
         setConnected(true);
         
       } catch (err) {
-        console.error('Failed to setup consolidated subscription:', err);
+
         setConnected(false);
       }
     };

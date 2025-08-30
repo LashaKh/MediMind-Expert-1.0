@@ -483,7 +483,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
 
   // Debug: Log category changes
   useEffect(() => {
-    console.log('Active category changed to:', activeCategory);
+
   }, [activeCategory]);
 
   // Close mobile menu when category or calculator changes
@@ -591,8 +591,6 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
     }
   };
 
-
-
   const activeCategory_data = calculatorCategories.find(cat => cat.id === activeCategory);
 
   // Filter calculators based on search
@@ -669,8 +667,6 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
       </div>
     );
   }
-
-
 
   return (
     <div className="h-full w-full overflow-auto">
@@ -788,7 +784,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                                 activeCategory === category.id ? 'scale-105' : ''
                               }`}
                               onClick={(e) => {
-                                console.log('Clicked category:', category.id);
+
                                 e.stopPropagation();
                                 setActiveCategory(category.id);
                               }}

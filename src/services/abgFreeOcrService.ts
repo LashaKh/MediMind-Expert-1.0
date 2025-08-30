@@ -115,8 +115,7 @@ function validateABGText(text: string): {
   );
 
   // Debug logging to understand fallback decisions
-  console.log('🔍 ABG Text Validation Debug:', {
-    qualityScore: qualityScore.toFixed(2),
+  console.log('Fallback decision analysis:', {
     foundParameters,
     textLength: text.trim().length,
     specialCharRatio: specialCharRatio.toFixed(2),
@@ -171,9 +170,7 @@ function formatBloodGasData(text: string): string {
   const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
   
   // Debug: Log the original lines to see what we're working with
-  console.log('📝 OCR line processing:');
-  console.log('Number of lines:', lines.length);
-  
+
   // Group related parameters
   const bgParams = {
     arterial: [] as string[],
@@ -233,11 +230,6 @@ function formatBloodGasData(text: string): string {
   }
 
   // Debug: Log what we found in each section
-  console.log('📊 Section content:');
-  console.log('Arterial:', bgParams.arterial.length, 'parameters');
-  console.log('Oxygenation:', bgParams.oxygenation.length, 'parameters');
-  console.log('Electrolytes:', bgParams.electrolytes.length, 'parameters');
-  console.log('Other:', bgParams.other.length, 'parameters');
 
   // Build formatted output with proper sections
   const output: string[] = [];
@@ -283,12 +275,12 @@ function formatBloodGasData(text: string): string {
 
   // If no structured data found, return cleaned original
   if (output.length <= 2) {
-    console.log('⚠️ No structured data found, returning original');
+
     return text; // Return original instead of cleaned to preserve formatting
   }
 
   const result = output.join('\n').trim();
-  console.log('✅ Formatted result length:', result.length);
+
   return result;
 }
 
@@ -409,19 +401,8 @@ export async function extractABGTextWithFreeOCR(
 
     const processingTime = Math.round(performance.now() - startTime);
 
-    console.log('🆓 Free OCR Results:', {
-      method,
-      originalLength: ocrResult.text.length,
-      cleanedLength: cleanedText.length,
-      confidence: ocrResult.confidence,
-      qualityScore: validation.qualityScore,
-      shouldFallback: validation.shouldFallbackToGemini,
-      issues: validation.issues,
-      processingTime
-    });
-
     // Debug: Log the formatted text to see if our formatting is working
-    console.log('🔍 OCR Text Transformation:');
+
     console.log('Original OCR text:', ocrResult.text.substring(0, 200) + '...');
     console.log('After postProcessABGText:', cleanedText.substring(0, 200) + '...');
     console.log('Original has', (ocrResult.text.match(/\n/g) || []).length, 'line breaks');
@@ -448,13 +429,6 @@ export async function extractABGTextWithFreeOCR(
       percentage: 100,
       method: 'free-ocr',
       currentTask: 'Error occurred'
-    });
-
-    console.error('🚫 Free OCR Error:', {
-      error: errorMessage,
-      fileType: file.type,
-      fileName: file.name,
-      processingTime
     });
 
     return {

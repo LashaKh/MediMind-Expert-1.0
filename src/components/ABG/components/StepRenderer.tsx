@@ -98,18 +98,6 @@ export const StepRenderer: React.FC<StepRendererProps> = ({
 }) => {
   if (!workflow) return null;
 
-  console.log('🔍 DEBUG: StepRenderer rendering step:', {
-    currentStep: workflow.currentStep,
-    hasExtractedText: !!extractedText,
-    hasInterpretation: !!interpretation,
-    showResults,
-    workflowInterpretationData: !!workflow?.interpretationResult?.data,
-    workflowActionPlanData: !!workflow?.actionPlanResult?.data,
-    processingStatus: workflow.processingStatus,
-    canProceed: workflow.canProceed,
-    hasError: !!workflow.error
-  });
-
   const commonProps = {
     isProcessing,
     onGoToStep,
@@ -155,14 +143,7 @@ export const StepRenderer: React.FC<StepRendererProps> = ({
       );
 
     case WorkflowStep.INTERPRETATION:
-      console.log('🔍 DEBUG: Rendering InterpretationStep with data:', {
-        extractedText: extractedText?.length || 0,
-        interpretation: interpretation?.length || 0,
-        showResults,
-        workflowInterpretationData: workflow?.interpretationResult?.data?.length || 0,
-        completedResult: !!completedResult
-      });
-      
+
       return (
         <InterpretationStep
           {...commonProps}

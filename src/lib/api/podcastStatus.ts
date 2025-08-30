@@ -46,20 +46,14 @@ export interface PodcastStatusResponse {
 
 export async function getPodcastStatus(podcastId: string, userId: string) {
   const { data: { session } } = await supabase.auth.getSession();
-  console.log('[Podcast] status:request', { podcastId, hasToken: !!session?.access_token });
+
   const { data, error } = await supabase.functions.invoke('podcast-status', {
     body: { podcastId, userId }
   });
   if (error) throw new Error(error.message || 'Failed to get status');
   try {
-    console.log('[Podcast] status:response', {
-      status: data?.podcast?.status,
-      queue: data?.queue,
-      vectorStoreId: data?.podcast?.podcast_vector_store_id,
-      // script details may not always be returned
-    });
+
   } catch {}
   return data as PodcastStatusResponse;
 }
-
 

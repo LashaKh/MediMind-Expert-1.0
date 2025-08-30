@@ -51,11 +51,9 @@ class LikedResultsAPI {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session?.access_token) {
-      console.error('❌ [likedResultsAPI] No authentication token available');
+
       throw new Error('Authentication required');
     }
-
-    console.log('🔐 [likedResultsAPI] Making authenticated request to:', endpoint);
 
     const response = await fetch(`/.netlify/functions/${endpoint}`, {
       ...options,
@@ -68,15 +66,12 @@ class LikedResultsAPI {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('❌ [likedResultsAPI] Request failed:', response.status, response.statusText, errorText);
+
       throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     const data = await response.json();
-    console.log('✅ [likedResultsAPI] Request successful, response:', {
-      hasData: !!data,
-      hasSuccess: !!data.success,
-      hasDataProperty: !!data.data,
+    console.log('API response debug:', {
       dataKeys: data ? Object.keys(data) : [],
       dataDataKeys: data?.data ? Object.keys(data.data) : []
     });
@@ -126,14 +121,10 @@ class LikedResultsAPI {
       tags: []
     };
 
-    console.log('📤 [likedResultsAPI] Sending like request:', likedResult);
-
     const response = await this.makeRequest('liked-results', {
       method: 'POST',
       body: JSON.stringify(likedResult)
     });
-
-    console.log('📥 [likedResultsAPI] Like response:', response);
 
     return response;
   }
@@ -231,12 +222,7 @@ class LikedResultsAPI {
       const actualData = response?.data || response;
       const results = actualData?.results || [];
       const pagination = actualData?.pagination || { total: 0 };
-      
-      console.log('📊 [getLikedResultsStats] Processing stats:', {
-        resultsCount: results.length,
-        totalCount: pagination.total
-      });
-      
+
       const stats = {
         totalCount: pagination.total || results.length,
         byProvider: {} as Record<string, number>,
@@ -259,10 +245,9 @@ class LikedResultsAPI {
         }
       });
 
-      console.log('📊 [getLikedResultsStats] Final stats:', stats);
       return stats;
     } catch (error) {
-      console.error('❌ [getLikedResultsStats] Error:', error);
+
       return {
         totalCount: 0,
         byProvider: {},

@@ -48,11 +48,10 @@ export function useBookmarkedNews() {
   // Load bookmarked news articles
   const loadBookmarkedNews = useCallback(async () => {
     if (!user?.id || !session?.access_token) {
-      console.log('🔐 [loadBookmarkedNews] No user/session, skipping load');
+
       return;
     }
 
-    console.log('🔄 [loadBookmarkedNews] Loading bookmarked news');
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     const [response, error] = await safeAsync(async () => {
@@ -64,15 +63,12 @@ export function useBookmarkedNews() {
         },
       });
 
-      console.log('📡 [loadBookmarkedNews] API Response Status:', res.status, res.statusText);
-
       if (!res.ok) {
         throw new Error(`Failed to fetch bookmarked news: ${res.status} ${res.statusText}`);
       }
 
       const jsonResponse = await res.json();
-      console.log('📊 [loadBookmarkedNews] Raw API Response:', jsonResponse);
-      
+
       return jsonResponse.data || jsonResponse;
     }, {
       context: 'fetching bookmarked news articles',
@@ -112,18 +108,16 @@ export function useBookmarkedNews() {
       });
 
       setStats(newStats);
-      console.log('✅ [loadBookmarkedNews] Successfully loaded bookmarked news', newStats);
+
     }
   }, [user?.id, session?.access_token]);
 
   // Add bookmark
   const addBookmark = useCallback(async (article: MedicalNewsArticle) => {
     if (!user || !session) {
-      console.log('🔐 [addBookmark] No user/session, cannot bookmark');
+
       return false;
     }
-
-    console.log('➕ [addBookmark] Adding bookmark for article:', article.id);
 
     const [success, error] = await safeAsync(async () => {
       const res = await fetch('/.netlify/functions/news-interaction', {
@@ -170,7 +164,6 @@ export function useBookmarkedNews() {
         [article.specialty as keyof typeof prev]: (prev[article.specialty as keyof typeof prev] || 0) + 1,
       }));
 
-      console.log('✅ [addBookmark] Successfully added bookmark');
       return true;
     }
 
@@ -180,11 +173,9 @@ export function useBookmarkedNews() {
   // Remove bookmark
   const removeBookmark = useCallback(async (articleId: string) => {
     if (!user || !session) {
-      console.log('🔐 [removeBookmark] No user/session, cannot remove bookmark');
+
       return false;
     }
-
-    console.log('➖ [removeBookmark] Removing bookmark for article:', articleId);
 
     const [success, error] = await safeAsync(async () => {
       const res = await fetch('/.netlify/functions/news-interaction', {
@@ -229,7 +220,6 @@ export function useBookmarkedNews() {
         }));
       }
 
-      console.log('✅ [removeBookmark] Successfully removed bookmark');
       return true;
     }
 

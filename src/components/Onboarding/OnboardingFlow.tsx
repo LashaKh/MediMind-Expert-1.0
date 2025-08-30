@@ -84,12 +84,12 @@ export const OnboardingFlow: React.FC = () => {
         // Update in background - don't await
         updateUserProfile(user.id, updateData)
           .then(() => {
-            console.log('Profile updated successfully');
+
             // Refresh profile in background
             refreshProfile().catch(console.warn);
           })
           .catch((error) => {
-            console.warn('Background profile update failed:', error);
+
             // Could show a non-blocking toast here in the future
           });
       }
@@ -109,7 +109,7 @@ export const OnboardingFlow: React.FC = () => {
       setIsLoading(false);
       
     } catch (error) {
-      console.error('Onboarding completion error:', error);
+
       setError('Something went wrong. Proceeding to workspace...');
       
       // Even if there's an error, still navigate to workspace after a short delay

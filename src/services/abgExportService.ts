@@ -91,10 +91,9 @@ export const exportToJSON = async (
       }
     };
 
-    console.log(`Exported ${processedResults.length} ABG results to JSON`);
     return exportData;
   } catch (error) {
-    console.error('Failed to export ABG results to JSON:', error);
+
     throw new Error(`${i18next.t('common.serviceErrors.jsonExportFailed')}: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };
@@ -184,10 +183,10 @@ export const exportToCSV = async (
     }
 
     const csvContent = csvRows.join('\n');
-    console.log(`Exported ${filteredResults.length} ABG results to CSV`);
+
     return csvContent;
   } catch (error) {
-    console.error('Failed to export ABG results to CSV:', error);
+
     throw new Error(`${i18next.t('common.serviceErrors.csvExportFailed')}: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };
@@ -223,10 +222,9 @@ export const downloadExportedData = (
     
     // Clean up the object URL
     URL.revokeObjectURL(url);
-    
-    console.log(`Downloaded file: ${filename}`);
+
   } catch (error) {
-    console.error('Failed to download exported data:', error);
+
     throw new Error(`${i18next.t('common.serviceErrors.downloadFailed')}: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };
@@ -311,8 +309,7 @@ export const exportAndDownload = async (
       default:
         throw new Error(`${i18next.t('common.serviceErrors.unsupportedExportFormat')}: ${options.format}`);
     }
-    
-    console.log(`Export completed: ${filename}`);
+
   } catch (error) {
     console.error(i18next.t('common.serviceErrors.failedToExportABGResults'), error);
     throw error;

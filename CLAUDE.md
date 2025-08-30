@@ -8,13 +8,14 @@ MediMind Expert is a comprehensive medical AI co-pilot platform for healthcare p
 
 ## Current Branch & Progress
 
-**Branch**: `main`
+**Branch**: `feature/mediScribe`
 **Recent Progress**:
-- ✅ Enhanced source references with collapsible UI and full text viewing
-- ✅ Completed news collection scheduling system  
-- ✅ Added Netlify scheduled functions for twice-daily news collection
-- ✅ Migrated news-collection function to Supabase Edge Functions
-- ✅ Completed full migration from Netlify to Supabase Edge Functions
+- ✅ Implemented Georgian medical transcription system (MediScribe)
+- ✅ Optimized recording start performance (<200ms with microphone pre-initialization)
+- ✅ Added real-time session management with cross-session isolation
+- ✅ Enhanced UI with medical iconography and responsive design
+- ✅ Completed performance optimizations for instant recording/transcription
+- ✅ Fixed React warnings and optimized component architecture
 
 ## MCP Server Configuration
 
@@ -32,7 +33,7 @@ MediMind Expert is a comprehensive medical AI co-pilot platform for healthcare p
 **Primary Tools for Browser Testing and Debugging**:
 
 #### Navigation & Setup
-my local host is lunched here :  http://localhost:8888  so navigate to this page 
+**Local Development**: http://localhost:8888 (use this URL for all browser testing)
 - `mcp__playwright__browser_navigate` - Navigate to application URLs for testing
 - `mcp__playwright__browser_resize` - Test responsive design at different viewport sizes
 - `mcp__playwright__browser_install` - Install browser if not available
@@ -70,6 +71,11 @@ my local host is lunched here :  http://localhost:8888  so navigate to this page
 - **Context7**: Library documentation and code patterns
 - **Browser Tools**: Alternative browser automation (use Playwright as primary)
 - **Taskmaster AI**: Project management and task tracking
+
+### MCP Usage Guidelines (from Cursor rules)
+- **Sequential Thinking MCP**: Use for debugging, troubleshooting, complex problem-solving, and detailed project planning. Avoid excessive recursive calls.
+- **Information Gathering**: Use Brave Search, Puppeteer, FireCrawl when troubleshooting or searching documentation. Combine with Sequential Thinking for refined solutions.
+- **Browser Tools**: Requires explicit user confirmation. User must start server and ensure Chromium is running. Disable Puppeteer before use.
 
 ## Development Commands
 
@@ -210,7 +216,28 @@ State: ChatContext → React reducers → Real-time UI
 - Case management integration with privacy protection
 - Calculator suggestions and result sharing
 
-#### 5. Mobile-First Responsive Design
+#### 5. Georgian Medical Transcription System (MediScribe)
+```
+src/components/Georgian/
+├── GeorgianSTTApp.tsx             # Main transcription interface
+├── GeorgianSTTAppWrapper.tsx      # Wrapper with context providers
+├── SessionHistory.tsx             # Session management UI
+├── TranscriptPanel.tsx            # Transcript display and editing
+├── hooks/useGeorgianTTS.ts        # Core transcription logic with optimizations
+├── lib/speech/georgianTTSService.ts # Supabase Edge Function integration
+└── components/                    # Specialized UI components
+    ├── ContextContent.tsx
+    ├── HeaderControls.tsx
+    ├── TabNavigation.tsx
+    └── TranscriptContent.tsx
+```
+- **Performance**: <200ms recording start (microphone pre-initialization)
+- **Real-time**: Live transcription with smart 23-second auto-segmentation  
+- **Session Management**: Cross-session isolation with unique session IDs
+- **Edge Functions**: Supabase integration for Georgian speech processing
+- **Mobile Optimized**: Touch-friendly recording controls for medical consultations
+
+#### 6. Mobile-First Responsive Design
 ```
 src/styles/responsive.css         # CSS custom properties system
 src/components/ui/mobile-form.tsx # Mobile form component library
@@ -223,6 +250,8 @@ src/components/Layout/BottomNavigation.tsx # Mobile navigation
 ### Key Services & APIs
 
 #### Medical Data Processing
+- **Georgian Transcription**: `src/hooks/useGeorgianTTS.ts` - Real-time medical transcription with performance optimizations
+- **Speech Processing**: `src/lib/speech/georgianTTSService.ts` - Supabase Edge Function integration
 - **ABG Analysis**: `src/services/abgService.ts` - Blood gas analysis with OCR
 - **Medical Calculators**: Validated algorithms with population-specific calibration
 - **Medical News**: Specialty-filtered news aggregation and engagement tracking
@@ -246,6 +275,9 @@ Pipeline: DocumentUpload → document-upload.js → documentProcessor.js → vec
 -- User management with specialty tracking
 profiles (id, specialty, created_at)
 
+-- Georgian transcription sessions with cross-session isolation
+georgian_sessions (id, user_id, title, transcript, processing_results, created_at, session_id)
+
 -- Medical news with specialty filtering  
 medical_news (specialty, category, evidence_level, engagement_score)
 
@@ -268,6 +300,13 @@ liked_search_results, clinical_trials_monitoring
 3. **Population-Specific**: Include demographic calibration factors
 4. **Conservative Bias**: Err on side of patient safety
 5. **Mobile Optimization**: Touch-friendly with responsive validation
+
+### Georgian Transcription Development
+1. **Performance Optimization**: Maintain <200ms recording start time with pre-initialization
+2. **Session Isolation**: Use unique session IDs to prevent transcript contamination
+3. **Real-time Processing**: Implement smart 23-second auto-segmentation for continuous recording
+4. **Error Handling**: Use `safeAsync` patterns for robust microphone and API handling
+5. **Mobile-First**: Touch-friendly controls optimized for bedside medical consultations
 
 ### AI Integration Patterns
 1. **Specialty Awareness**: Always route to appropriate medical chatbot
@@ -303,6 +342,24 @@ liked_search_results, clinical_trials_monitoring
 - Ensure WCAG accessibility compliance for medical professionals
 - Mobile-first CSS with Tailwind utilities
 - Comprehensive error handling with `safeAsync` patterns
+
+## Critical Architecture Patterns
+
+### Georgian Transcription Performance Optimizations
+- **Microphone Pre-initialization**: `preInitializeMicrophone()` in `useGeorgianTTS.ts` eliminates 2-3 second recording delays
+- **Smart Segmentation**: Automatic 23-second chunks with seamless continuation for long recordings
+- **Session Isolation**: Unique session IDs prevent transcript contamination across recordings
+- **Background Processing**: Non-blocking audio processing maintains responsive UI
+
+### Component State Management
+- **Local Transcript State**: GeorgianSTTApp maintains local transcript state separate from session management
+- **Real-time Updates**: `onLiveTranscriptUpdate` callback provides session-aware updates
+- **Cross-Component Communication**: Props drilling with TypeScript interfaces for type safety
+
+### Edge Function Integration
+- **Supabase Edge Functions**: `georgian-tts-proxy` handles speech processing with authentication
+- **Error Recovery**: Graceful fallback patterns for network/API failures
+- **Token Management**: Fresh authentication for reliable processing
 
 ### Build & Deployment
 - Always run cleanup commands before production builds

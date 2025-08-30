@@ -93,13 +93,12 @@ export const useABGStore = create<ABGStore>()(
         error: undefined
       });
 
-      console.log('ABG workflow started:', newWorkflow);
     },
 
     updateWorkflowStep: (step, data) => {
       const current = get().currentWorkflow;
       if (!current) {
-        console.warn('Attempted to update workflow step but no workflow is active');
+
         return;
       }
 
@@ -131,19 +130,13 @@ export const useABGStore = create<ABGStore>()(
       }
 
       set({ currentWorkflow: updatedWorkflow });
-      console.log('🔍 DEBUG: ABG Store workflow step updated:', { 
-        step, 
-        progress: updatedWorkflow.progress,
-        previousStep: current.currentStep,
-        newStep: updatedWorkflow.currentStep,
-        canProceed: updatedWorkflow.canProceed
-      });
+
     },
 
     setProcessingStatus: (status, message) => {
       const current = get().currentWorkflow;
       if (!current) {
-        console.warn('Attempted to update processing status but no workflow is active');
+
         return;
       }
 
@@ -158,7 +151,6 @@ export const useABGStore = create<ABGStore>()(
         error: status === ProcessingStatus.ERROR ? message : undefined
       });
 
-      console.log('Processing status updated:', { status, message });
     },
 
     completeWorkflow: (result) => {
@@ -190,7 +182,6 @@ export const useABGStore = create<ABGStore>()(
         set({ results: [result, ...existingResults] });
       }
 
-      console.log('ABG workflow completed:', result.id);
     },
 
     resetWorkflow: () => {
@@ -199,7 +190,7 @@ export const useABGStore = create<ABGStore>()(
         currentResult: undefined,
         error: undefined
       });
-      console.log('ABG workflow reset');
+
     },
 
     // ABG result actions
@@ -216,14 +207,13 @@ export const useABGStore = create<ABGStore>()(
           loading: false 
         });
 
-        console.log(`Loaded ${results.length} ABG results`);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to load results';
         set({ 
           error: errorMessage,
           loading: false 
         });
-        console.error('Failed to load ABG results:', error);
+
       }
     },
 
@@ -237,7 +227,6 @@ export const useABGStore = create<ABGStore>()(
           loading: false 
         });
 
-        console.log('Loaded ABG result:', id);
         return result;
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to load result';
@@ -245,7 +234,7 @@ export const useABGStore = create<ABGStore>()(
           error: errorMessage,
           loading: false 
         });
-        console.error('Failed to load ABG result:', error);
+
         throw error;
       }
     },
@@ -267,7 +256,6 @@ export const useABGStore = create<ABGStore>()(
           loading: false 
         });
 
-        console.log('Created ABG result:', id);
         return id;
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to create result';
@@ -275,7 +263,7 @@ export const useABGStore = create<ABGStore>()(
           error: errorMessage,
           loading: false 
         });
-        console.error('Failed to create ABG result:', error);
+
         throw error;
       }
     },
@@ -314,14 +302,13 @@ export const useABGStore = create<ABGStore>()(
           });
         }
 
-        console.log('Updated ABG result:', id);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to update result';
         set({ 
           error: errorMessage,
           loading: false 
         });
-        console.error('Failed to update ABG result:', error);
+
         throw error;
       }
     },
@@ -342,14 +329,13 @@ export const useABGStore = create<ABGStore>()(
           loading: false 
         });
 
-        console.log('Deleted ABG result:', id);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to delete result';
         set({ 
           error: errorMessage,
           loading: false 
         });
-        console.error('Failed to delete ABG result:', error);
+
         throw error;
       }
     },
@@ -359,9 +345,9 @@ export const useABGStore = create<ABGStore>()(
       try {
         const patients = await getUserPatients();
         set({ patients });
-        console.log(`Loaded ${patients.length} patients`);
+
       } catch (error) {
-        console.error('Failed to load patients:', error);
+
         // Don't set error for patients as it's not critical
       }
     },
@@ -369,10 +355,10 @@ export const useABGStore = create<ABGStore>()(
     searchPatients: async (query) => {
       try {
         const patients = await searchPatients(query);
-        console.log(`Found ${patients.length} patients for query: "${query}"`);
+
         return patients;
       } catch (error) {
-        console.error('Failed to search patients:', error);
+
         return [];
       }
     },
@@ -384,11 +370,10 @@ export const useABGStore = create<ABGStore>()(
         // Reload patients list
         const patients = await getUserPatients();
         set({ patients });
-        
-        console.log('Created patient:', id);
+
         return id;
       } catch (error) {
-        console.error('Failed to create patient:', error);
+
         throw error;
       }
     },
@@ -421,7 +406,7 @@ export const useABGStore = create<ABGStore>()(
       const currentConfig = get().configuration;
       const newConfig = { ...currentConfig, ...config };
       set({ configuration: newConfig });
-      console.log('ABG configuration updated:', config);
+
     }
   }))
 );
@@ -514,7 +499,7 @@ if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('abg-configuration', JSON.stringify(configuration));
       } catch (error) {
-        console.warn('Failed to persist ABG configuration:', error);
+
       }
     }
   );
@@ -527,6 +512,6 @@ if (typeof window !== 'undefined') {
       useABGStore.getState().updateConfiguration(parsedConfig);
     }
   } catch (error) {
-    console.warn('Failed to load ABG configuration from localStorage:', error);
+
   }
 }

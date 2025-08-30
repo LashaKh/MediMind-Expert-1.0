@@ -156,7 +156,7 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
       setSpecialtyData(Object.values(specialtyEngagement));
 
     } catch (err) {
-      console.error('Failed to fetch engagement data:', err);
+
       setError(err instanceof Error ? err.message : 'Failed to load analytics data');
     } finally {
       setLoading(false);

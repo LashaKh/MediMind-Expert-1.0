@@ -52,10 +52,8 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
   
   // Debug authentication state
   useEffect(() => {
-    console.log('🔐 [useLikedResults] Auth State:', {
-      hasUser: !!user,
+    console.log('Auth state check:', {
       userId: user?.id,
-      autoLoad,
       timestamp: new Date().toISOString()
     });
   }, [user, autoLoad]);
@@ -103,7 +101,6 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
   const refreshLikedResults = useCallback(async (filters: LikedResultsFilters = {}) => {
     if (!user) return;
 
-    console.log('🔄 [refreshLikedResults] Starting refresh with filters:', filters);
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     const [response, error] = await safeAsync(async () => {
@@ -120,7 +117,7 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
     });
 
     if (error) {
-      console.error('❌ [refreshLikedResults] Error:', error);
+
       setState(prev => ({
         ...prev,
         isLoading: false,
@@ -129,22 +126,10 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
       return;
     }
 
-    console.log('📊 [refreshLikedResults] API Response:', {
-      hasResponse: !!response,
-      results: response?.results?.length || 0,
-      pagination: response?.pagination,
-      totalCount: response?.pagination?.total
-    });
-
     // The API response has a nested structure: { success: true, data: { results: [], pagination: {} } }
     const actualData = response?.data || response;
     const results = actualData?.results || [];
     const pagination = actualData?.pagination || { limit: pageSize, offset: 0, total: 0, hasMore: false };
-
-    console.log('📊 [refreshLikedResults] Processed data:', {
-      results: results.length,
-      pagination,
-    });
 
     setState(prev => ({
      ...prev,
@@ -186,14 +171,11 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
    */
   const likeResult = useCallback(async (result: SearchResult, originalQuery: string, searchFilters?: any): Promise<boolean> => {
     if (!user) {
-      console.warn('💖 [likeResult] No user authenticated');
+
       return false;
     }
 
-    console.log('💖 [likeResult] Attempting to like result:', {
-      resultId: result.id,
-      provider: result.provider,
-      title: result.title.substring(0, 50) + '...',
+    console.log('Like result attempt:', {
       hasUser: !!user,
       userId: user.id
     });
@@ -207,14 +189,9 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
     });
 
     if (error) {
-      console.error('❌ [likeResult] Error liking result:', error);
+
       return false;
     }
-
-    console.log('✅ [likeResult] Response received:', {
-      alreadyLiked: response.alreadyLiked,
-      hasLikedResult: !!response.likedResult
-    });
 
     // If result was already liked, no need to update state
     if (response.alreadyLiked) {
@@ -224,11 +201,7 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
     // Add to local state immediately for better UX
     if (response.likedResult) {
       setState(prev => {
-        console.log('📊 [likeResult] Updating state - before:', {
-          totalCount: prev.stats.totalCount,
-          resultsLength: prev.likedResults.length
-        });
-        
+
         const newState = {
           ...prev,
           likedResults: [response.likedResult!, ...prev.likedResults],
@@ -237,12 +210,7 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
             totalCount: prev.stats.totalCount + 1
           }
         };
-        
-        console.log('📊 [likeResult] Updating state - after:', {
-          totalCount: newState.stats.totalCount,
-          resultsLength: newState.likedResults.length
-        });
-        
+
         return newState;
       });
     }
@@ -255,16 +223,9 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
    */
   const unlikeResult = useCallback(async (resultId: string, provider: string): Promise<boolean> => {
     if (!user) {
-      console.warn('💔 [unlikeResult] No user authenticated');
+
       return false;
     }
-
-    console.log('💔 [unlikeResult] Attempting to unlike result:', {
-      resultId,
-      provider,
-      hasUser: !!user,
-      userId: user.id
-    });
 
     const [, error] = await safeAsync(async () => {
       return await likedResultsAPI.unlikeResult(resultId, provider);
@@ -275,19 +236,13 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
     });
 
     if (error) {
-      console.error('❌ [unlikeResult] Error unliking result:', error);
+
       return false;
     }
 
-    console.log('✅ [unlikeResult] Successfully unliked result');
-
     // Remove from local state immediately for better UX
     setState(prev => {
-      console.log('📊 [unlikeResult] Updating state - before:', {
-        totalCount: prev.stats.totalCount,
-        resultsLength: prev.likedResults.length
-      });
-      
+
       const newState = {
         ...prev,
         likedResults: prev.likedResults.filter(
@@ -298,12 +253,7 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
           totalCount: Math.max(0, prev.stats.totalCount - 1)
         }
       };
-      
-      console.log('📊 [unlikeResult] Updating state - after:', {
-        totalCount: newState.stats.totalCount,
-        resultsLength: newState.likedResults.length
-      });
-      
+
       return newState;
     });
 

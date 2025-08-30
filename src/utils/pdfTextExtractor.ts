@@ -271,7 +271,7 @@ export async function extractTextFromPdf(
       
       // Debug logging for quality assessment
       if (process.env.NODE_ENV === 'development') {
-        console.log('PDF quality assessment:', qualityAssessment);
+
       }
       
       // Use Gemini if text appears garbled or quality is poor

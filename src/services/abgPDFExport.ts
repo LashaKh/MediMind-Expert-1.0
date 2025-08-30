@@ -515,9 +515,9 @@ export const exportMultipleResultsToPDF = (
 export const downloadPDF = (doc: jsPDF, filename: string): void => {
   try {
     doc.save(filename);
-    console.log(`PDF downloaded: ${filename}`);
+
   } catch (error) {
-    console.error('Failed to download PDF:', error);
+
     throw new Error(`PDF download failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };
@@ -564,7 +564,7 @@ export const exportABGToPDF = (
     
     console.log(`Exported ${results.length} ABG result(s) to PDF: ${filename}`);
   } catch (error) {
-    console.error('Failed to export ABG results to PDF:', error);
+
     throw error;
   }
 };

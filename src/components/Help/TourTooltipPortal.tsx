@@ -65,7 +65,7 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
         z-index: 999999 !important;
       `;
       document.body.appendChild(root);
-      console.log('🔧 Created TRULY persistent portal root:', root);
+
     }
     setPortalRoot(root);
 
@@ -110,36 +110,6 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
   const logDOMState = (tooltip: HTMLElement) => {
     const computedStyles = window.getComputedStyle(tooltip);
     const rect = tooltip.getBoundingClientRect();
-    
-    console.log('📊 DOM Inspection Report:', {
-      element: tooltip,
-      rect: {
-        x: rect.x,
-        y: rect.y,
-        width: rect.width,
-        height: rect.height,
-        top: rect.top,
-        left: rect.left,
-        bottom: rect.bottom,
-        right: rect.right
-      },
-      computedStyles: {
-        display: computedStyles.display,
-        visibility: computedStyles.visibility,
-        opacity: computedStyles.opacity,
-        position: computedStyles.position,
-        zIndex: computedStyles.zIndex,
-        transform: computedStyles.transform,
-        top: computedStyles.top,
-        left: computedStyles.left,
-        backgroundColor: computedStyles.backgroundColor,
-        color: computedStyles.color,
-        overflow: computedStyles.overflow,
-        clipPath: computedStyles.clipPath,
-        clip: computedStyles.clip
-      },
-      parentElements: []
-    });
 
     // Check parent elements for overflow/clip issues
     let parent = tooltip.parentElement;
@@ -174,20 +144,6 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
       rect.bottom <= window.innerHeight &&
       rect.right <= window.innerWidth
     );
-
-    console.log('👁️ Visibility Analysis:', {
-      isInViewport,
-      viewportSize: { width: window.innerWidth, height: window.innerHeight },
-      tooltipRect: rect,
-      recommendations: [
-        !isInViewport && 'Tooltip is outside viewport',
-        computedStyles.display === 'none' && 'display: none detected',
-        computedStyles.visibility === 'hidden' && 'visibility: hidden detected',
-        parseFloat(computedStyles.opacity) === 0 && 'opacity: 0 detected',
-        computedStyles.clipPath !== 'none' && 'clip-path detected on tooltip',
-        computedStyles.transform !== 'none' && `transform detected: ${computedStyles.transform}`
-      ].filter(Boolean)
-    });
   };
 
   // Smart positioning with collision detection
@@ -211,19 +167,11 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
       const spacing = 20;
       const margin = 16;
 
-      console.log('📍 Position Calculation:', {
-        targetRect,
-        tooltipRect,
-        viewport: { width: viewportWidth, height: viewportHeight }
-      });
-
       // Special handling for body element - center the tooltip
       if (targetElement === document.body) {
         const left = Math.max(margin, (viewportWidth - 400) / 2); // Use fixed width for body
         const top = Math.max(margin, (viewportHeight - 300) / 2);  // Use estimated height
-        
-        console.log('📍 Body positioning:', { left, top });
-        
+
         setFinalPosition('bottom');
         const style = {
           position: 'fixed' as const,
@@ -234,7 +182,7 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
         };
         
         setTooltipStyle(style);
-        console.log('✅ Applied body style:', style);
+
         return;
       }
 
@@ -298,8 +246,6 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
       left = Math.max(margin, Math.min(viewportWidth - (tooltipRect.width || 400) - margin, left));
       top = Math.max(margin, Math.min(viewportHeight - (tooltipRect.height || 300) - margin, top));
 
-      console.log('📍 Final positioning:', { bestPosition, left, top });
-
       const style = {
         position: 'fixed' as const,
         left: `${left}px`,
@@ -309,7 +255,6 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
       };
 
       setTooltipStyle(style);
-      console.log('✅ Applied style:', style);
 
       // Log DOM state after a short delay to allow styles to apply
       setTimeout(() => {
@@ -336,18 +281,11 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
   }, [targetElement, isVisible, position]);
 
   if (!isVisible || !portalRoot) {
-    console.log('❌ Not rendering - visible:', isVisible, 'portalRoot:', !!portalRoot);
+
     return null;
   }
 
   const progress = ((currentStep + 1) / totalSteps) * 100;
-
-  console.log('🎨 Rendering portal tooltip:', {
-    title,
-    debugMode,
-    tooltipStyle,
-    portalRoot: portalRoot?.id
-  });
 
   // Create tooltip content
   const tooltipContent = (

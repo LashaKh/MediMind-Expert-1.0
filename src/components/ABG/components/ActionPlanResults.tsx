@@ -218,7 +218,7 @@ export const ActionPlanResults: React.FC<ActionPlanResultsProps> = ({
         setCopySuccess(true);
         setTimeout(() => setCopySuccess(false), 2000);
       } catch (err) {
-        console.error('Failed to copy text:', err);
+
       }
     }
   };
@@ -528,7 +528,6 @@ export const ActionPlanResults: React.FC<ActionPlanResultsProps> = ({
           </div>
         </Card>
       )}
-
 
       {/* External Resources */}
       <div className="flex justify-center gap-2">

@@ -153,7 +153,6 @@ export const comprehensiveTourSteps: Record<string, TourStep[]> = {
     }
   ],
 
-
   // ABG Analysis Tour - 6 steps using specific data-tour attributes
   'abg-analysis': [
     {

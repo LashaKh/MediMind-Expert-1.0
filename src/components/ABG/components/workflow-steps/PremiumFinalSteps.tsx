@@ -66,16 +66,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
   const finalResult = abgResult || completedResult || storeResult;
 
   // Debug logging
-  console.log('🔍 PremiumFinalSteps Debug:', {
-    abgResult: abgResult,
-    completedResult: completedResult,
-    storeResult: storeResult,
-    finalResult: finalResult,
-    hasAbgResult: !!abgResult,
-    hasCompletedResult: !!completedResult,
-    hasStoreResult: !!storeResult,
-    hasFinalResult: !!finalResult,
-    finalResultKeys: finalResult ? Object.keys(finalResult) : null,
+  console.log('Final step debug:', {
     hasActionPlan: !!(finalResult?.action_plan),
     actionPlanLength: finalResult?.action_plan?.length || 0,
     actionPlanPreview: finalResult?.action_plan?.substring(0, 200),
@@ -100,34 +91,31 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
   };
 
   const handleGoToInterpretation = () => {
-    console.log('🔍 DEBUG: Back to Results button clicked!');
-    
+
     if (onBackToResults) {
-      console.log('🔍 DEBUG: Using onBackToResults callback to go to INTERPRETATION step');
+
       onBackToResults();
     } else {
-      console.log('🔍 DEBUG: About to navigate to /abg-analysis');
+
       try {
         // Navigate back to ABG analysis page instead of using browser history
         navigate('/abg-analysis');
-        console.log('✅ DEBUG: Navigation to /abg-analysis completed');
+
       } catch (error) {
-        console.error('❌ DEBUG: Navigation failed:', error);
+
       }
     }
   };
 
   const handleSelectiveConsultation = () => {
-    console.log('🎯 handleSelectiveConsultation called:', {
-      finalResult: finalResult,
-      hasActionPlan: !!(finalResult?.action_plan),
+    console.log('Selective consultation triggered:', {
       actionPlanPreview: finalResult?.action_plan?.substring(0, 500)
     });
     
     if (finalResult && finalResult.action_plan) {
       setShowActionSelector(true);
     } else {
-      console.warn('⚠️ No action plan available for selective consultation');
+
       // Fallback: Still open the modal if we have a result, even without action_plan
       if (finalResult) {
         setShowActionSelector(true);
@@ -199,10 +187,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
               {/* AI Clinical Consultation - Replicating original functionality */}
               <Button
                 onClick={() => {
-                  console.log('🧠 AI Clinical Consultation clicked:', {
-                    finalResult: finalResult,
-                    hasFinalResult: !!finalResult
-                  });
+
                   if (finalResult) {
                     navigate('/ai-copilot', { 
                       state: { 
@@ -320,9 +305,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
           {/* Primary Action */}
           <Button
             onClick={(e) => {
-              console.log('🔍 DEBUG: Button click event triggered!', e);
-              console.log('🔍 DEBUG: Button element:', e.currentTarget);
-              console.log('🔍 DEBUG: Navigate function available:', typeof navigate);
+
               e.preventDefault();
               e.stopPropagation();
               handleGoToInterpretation();

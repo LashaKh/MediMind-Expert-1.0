@@ -110,8 +110,6 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
     if (!result.action_plan || !isOpen) return;
 
     console.log('🔍 DEBUG: Action plan received (first 800 chars):', result.action_plan.substring(0, 800));
-    console.log('🔍 DEBUG: Full action plan length:', result.action_plan.length);
-    console.log('🔍 DEBUG: Looking for patterns in action plan...');
 
     // Extract actual issues from the action plan
     const items: ActionPlanItem[] = [];
@@ -119,20 +117,18 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
     // Try multiple patterns to extract action items
     
     // Pattern 1: Look for "# [severity_icon] Issue X:" format (with markdown header, any severity)
-    console.log('🔍 DEBUG: Testing pattern 1: # [🚨⚠️ℹ️] Issue X:');
+
     let issueMatches = result.action_plan.match(/#{1,3}\s*[🚨⚠️ℹ️]\s*Issue\s+\d+:\s*([^\n]+)/gi);
-    console.log('🔍 DEBUG: Pattern 1 matches:', issueMatches);
-    
+
     if (!issueMatches || issueMatches.length === 0) {
       // Pattern 1b: Look for plain "[severity_icon] Issue X:" format (without markdown header, any severity)
-      console.log('🔍 DEBUG: Testing pattern 1b: [🚨⚠️ℹ️] Issue X:');
+
       issueMatches = result.action_plan.match(/[🚨⚠️ℹ️]\s*Issue\s+\d+:\s*([^\n]+)/gi);
-      console.log('🔍 DEBUG: Pattern 1b matches:', issueMatches);
+
     }
     
     if (issueMatches && issueMatches.length > 0) {
-      console.log('🔍 DEBUG: Found emoji issues:', issueMatches);
-      
+
       issueMatches.forEach((match, index) => {
         const title = match.replace(/#{1,3}\s*[🚨⚠️ℹ️]\s*Issue\s+\d+:\s*/i, '').replace(/[🚨⚠️ℹ️]\s*Issue\s+\d+:\s*/i, '').trim();
         
@@ -146,13 +142,11 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
       });
     } else {
       // Pattern 2: Look for plain "Issue X:" format
-      console.log('🔍 DEBUG: Testing pattern 2: Issue X:');
+
       issueMatches = result.action_plan.match(/(?:^|\n)\s*Issue\s+\d+:\s*([^\n]+)/gi);
-      console.log('🔍 DEBUG: Pattern 2 matches:', issueMatches);
-      
+
       if (issueMatches && issueMatches.length > 0) {
-        console.log('🔍 DEBUG: Found plain issues:', issueMatches);
-        
+
         issueMatches.forEach((match, index) => {
           const title = match.replace(/(?:^|\n)\s*Issue\s+\d+:\s*/i, '').trim();
           
@@ -169,8 +163,7 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
         issueMatches = result.action_plan.match(/#{1,3}\s*Issue[^\n]*:\s*([^\n]+)/gi);
         
         if (issueMatches && issueMatches.length > 0) {
-          console.log('🔍 DEBUG: Found markdown issues:', issueMatches);
-          
+
           issueMatches.forEach((match, index) => {
             const title = match.replace(/#{1,3}\s*Issue[^:]*:\s*/i, '').trim();
             
@@ -187,8 +180,7 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
           const numberMatches = result.action_plan.match(/(?:^|\n)\s*\d+[\.\)]\s*([^\n]{10,100})/gi);
           
           if (numberMatches && numberMatches.length > 0) {
-            console.log('🔍 DEBUG: Found numbered items:', numberMatches);
-            
+
             numberMatches.slice(0, 5).forEach((match, index) => { // Limit to 5 items
               const title = match.replace(/(?:^|\n)\s*\d+[\.\)]\s*/i, '').trim();
               
@@ -205,8 +197,7 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
             const bulletMatches = result.action_plan.match(/(?:^|\n)\s*[-\*•]\s*([^\n]{10,100})/gi);
             
             if (bulletMatches && bulletMatches.length > 0) {
-              console.log('🔍 DEBUG: Found bullet items:', bulletMatches);
-              
+
               bulletMatches.slice(0, 5).forEach((match, index) => {
                 const title = match.replace(/(?:^|\n)\s*[-\*•]\s*/i, '').trim();
                 
@@ -224,19 +215,14 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
       }
     }
 
-    console.log('🔍 DEBUG: Extracted', items.length, 'action plan items');
-    console.log('🔍 DEBUG: Final parsed items:', items);
-    
     // If still no items found, try to extract sections or headings
     if (items.length === 0) {
-      console.log('🔍 DEBUG: No specific items found, trying to extract sections/headings');
-      
+
       // Pattern 6: Look for any markdown headers (##, ###, etc.)
       const headingMatches = result.action_plan.match(/#{1,6}\s*([^\n]{5,80})/gi);
       
       if (headingMatches && headingMatches.length > 0) {
-        console.log('🔍 DEBUG: Found headings:', headingMatches);
-        
+
         headingMatches.slice(0, 8).forEach((match, index) => {
           const title = match.replace(/#{1,6}\s*/i, '').trim();
           
@@ -257,7 +243,7 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
       
       // If still no items, create multiple generic consultation options
       if (items.length === 0) {
-        console.log('🔍 DEBUG: Creating comprehensive consultation options');
+
         items.push(
           {
             id: 'interpretation-consultation',

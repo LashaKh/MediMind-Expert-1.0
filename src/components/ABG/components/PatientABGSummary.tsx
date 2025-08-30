@@ -84,7 +84,7 @@ export const PatientABGSummary: React.FC<PatientABGSummaryProps> = ({
       });
 
     } catch (err) {
-      console.error('Failed to load patient ABG results:', err);
+
       setError('Failed to load ABG results');
     } finally {
       setIsLoading(false);

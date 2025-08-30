@@ -487,9 +487,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       }, 800);
 
       const [response, uploadError] = await safeAsync(async () => {
-        console.log('🚨🚨🚨 COMPONENT: About to call uploadDocumentToVectorStore');
-        console.log('🚨🚨🚨 COMPONENT: Upload request:', uploadRequest);
-        
+
         // Create progress callback for real-time updates
         const onProgress = (progress: any) => {
           setUploadedFiles(prev => prev.map(f => {

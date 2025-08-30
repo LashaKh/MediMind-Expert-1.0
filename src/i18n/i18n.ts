@@ -68,7 +68,7 @@ const initI18n = async () => {
   try {
     await loadLanguage(initialLanguage);
   } catch (error) {
-    console.error(`[i18n] Failed to load initial language ${initialLanguage}:`, error);
+
     if (initialLanguage !== DEFAULT_LANGUAGE) {
       await loadLanguage(DEFAULT_LANGUAGE as LanguageCode);
       await i18n.changeLanguage(DEFAULT_LANGUAGE);

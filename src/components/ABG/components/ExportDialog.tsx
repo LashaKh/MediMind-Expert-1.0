@@ -70,7 +70,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
         const summary = getExportSummary(results, exportOptions);
         setExportSummary(summary);
       } catch (error) {
-        console.error('Failed to get export summary:', error);
+
       }
     }
   }, [isOpen, results, exportOptions]);
@@ -137,7 +137,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Export failed';
       setExportError(errorMessage);
-      console.error('Export failed:', error);
+
     } finally {
       setIsExporting(false);
     }

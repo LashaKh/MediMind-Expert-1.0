@@ -246,7 +246,7 @@ export const useAppStore = create<AppStore>()(
                 await createUserProfile(data.user.id, data.user.email);
               } catch (profileError) {
                 // Log profile creation error but don't fail the signup
-                console.warn('Failed to create initial profile:', profileError);
+
               }
             }
             
@@ -302,13 +302,12 @@ export const useAppStore = create<AppStore>()(
                     return;
                   }
                 } catch (createError) {
-                  console.warn('Failed to create profile for existing user:', createError);
+
                 }
               }
               
               // Log the error but don't crash the app if profile table is not accessible
-              console.warn('Profile fetch error:', profileError);
-              
+
               // If it's a 406 error or table doesn't exist, set profile to null but don't set error
               if (profileError.code === '406' || profileError.code === '42P01') {
                 set({ profile: null });
@@ -328,7 +327,7 @@ export const useAppStore = create<AppStore>()(
             await refreshSpecialty();
           } catch (e: unknown) {
             const error = e instanceof Error ? e : new Error('Error fetching profile');
-            console.warn('Profile refresh failed:', error);
+
             set({ profile: null }); // Don't set error to prevent UI issues
           }
         },
@@ -695,7 +694,6 @@ export const useAppStore = create<AppStore>()(
               .eq('user_id', user.id)
               .maybeSingle(); // Use maybeSingle instead of single to handle no results
 
-
             if (!threadError && threadData) {
               // This is an OpenAI conversation - load messages from OpenAI
 
@@ -709,7 +707,7 @@ export const useAppStore = create<AppStore>()(
               });
 
               if (fnError || !response) {
-                console.error('Failed to load OpenAI messages:', fnError);
+
                 return;
               }
 
@@ -746,7 +744,6 @@ export const useAppStore = create<AppStore>()(
               .eq('user_id', user.id)
               .maybeSingle(); // Use maybeSingle instead of single to handle no results
 
-
             if (!flowiseError && flowiseData) {
 
               // Load stored Flowise messages for this session
@@ -777,14 +774,9 @@ export const useAppStore = create<AppStore>()(
             }
 
             // If we get here, neither OpenAI thread nor Flowise conversation was found
-            console.warn('Conversation not found in either openai_threads or flowise_conversations:', {
-              conversationId,
-              threadError: threadError?.message,
-              flowiseError: flowiseError?.message
-            });
 
           } catch (error) {
-            console.error('Error loading messages for conversation:', error, { conversationId });
+
           }
         },
 

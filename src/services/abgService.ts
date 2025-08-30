@@ -126,7 +126,7 @@ export const createABGResult = async (result: CreateABGResult): Promise<string> 
       .single();
 
     if (error) {
-      console.error('Database error creating ABG result:', error);
+
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToCreateABGResult'), error.message);
     }
 
@@ -134,14 +134,13 @@ export const createABGResult = async (result: CreateABGResult): Promise<string> 
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.noIdReturned'));
     }
 
-    console.log('ABG result created successfully:', { id: data.id, userId: user.id });
     return data.id;
 
   } catch (error) {
     if (error instanceof ABGServiceError) {
       throw error;
     }
-    console.error('Unexpected error creating ABG result:', error);
+
     throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToCreateABGResult'));
   }
 };
@@ -190,17 +189,15 @@ export const updateABGResult = async (id: string, updates: UpdateABGResult): Pro
       if (error.code === 'PGRST116') { // No rows updated
         throw new ABGServiceError('NOT_FOUND', i18next.t('common.serviceErrors.abgResultNotFound'));
       }
-      console.error('Database error updating ABG result:', error);
+
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToUpdateABGResult'), error.message);
     }
-
-    console.log('ABG result updated successfully:', { id, userId: user.id });
 
   } catch (error) {
     if (error instanceof ABGServiceError) {
       throw error;
     }
-    console.error('Unexpected error updating ABG result:', error);
+
     throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToUpdateABGResult'));
   }
 };
@@ -245,7 +242,7 @@ export const getABGResult = async (id: string): Promise<ABGResult> => {
       if (error.code === 'PGRST116') {
         throw new ABGServiceError('NOT_FOUND', i18next.t('common.serviceErrors.abgResultNotFound'));
       }
-      console.error('Database error getting ABG result:', error);
+
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToGetABGResult'), error.message);
     }
 
@@ -255,7 +252,7 @@ export const getABGResult = async (id: string): Promise<ABGResult> => {
     if (error instanceof ABGServiceError) {
       throw error;
     }
-    console.error('Unexpected error getting ABG result:', error);
+
     throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToGetABGResult'));
   }
 };
@@ -335,7 +332,7 @@ export const getUserABGResults = async (filters: ABGFilters = {}): Promise<ABGRe
     const { data, error } = await query;
 
     if (error) {
-      console.error('Database error getting user ABG results:', error);
+
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToGetABGResults'), error.message);
     }
 
@@ -345,7 +342,7 @@ export const getUserABGResults = async (filters: ABGFilters = {}): Promise<ABGRe
     if (error instanceof ABGServiceError) {
       throw error;
     }
-    console.error('Unexpected error getting user ABG results:', error);
+
     throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToGetABGResults'));
   }
 };
@@ -374,17 +371,15 @@ export const deleteABGResult = async (id: string): Promise<void> => {
       .eq('user_id', user.id);
 
     if (error) {
-      console.error('Database error deleting ABG result:', error);
+
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToDeleteABGResult'), error.message);
     }
-
-    console.log('ABG result deleted successfully:', { id, userId: user.id });
 
   } catch (error) {
     if (error instanceof ABGServiceError) {
       throw error;
     }
-    console.error('Unexpected error deleting ABG result:', error);
+
     throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToDeleteABGResult'));
   }
 };
@@ -433,7 +428,7 @@ export const createPatient = async (patient: CreatePatient): Promise<string> => 
       .single();
 
     if (error) {
-      console.error('Database error creating patient:', error);
+
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToCreatePatient'), error.message);
     }
 
@@ -441,14 +436,13 @@ export const createPatient = async (patient: CreatePatient): Promise<string> => 
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.noIdReturned'));
     }
 
-    console.log('Patient created successfully:', { id: data.id, userId: user.id });
     return data.id;
 
   } catch (error) {
     if (error instanceof ABGServiceError) {
       throw error;
     }
-    console.error('Unexpected error creating patient:', error);
+
     throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToCreatePatient'));
   }
 };
@@ -473,7 +467,7 @@ export const getUserPatients = async (limit = 50, offset = 0): Promise<PatientIn
       .range(offset, offset + limit - 1);
 
     if (error) {
-      console.error('Database error getting patients:', error);
+
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToGetPatients'), error.message);
     }
 
@@ -483,7 +477,7 @@ export const getUserPatients = async (limit = 50, offset = 0): Promise<PatientIn
     if (error instanceof ABGServiceError) {
       throw error;
     }
-    console.error('Unexpected error getting patients:', error);
+
     throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToGetPatients'));
   }
 };
@@ -515,7 +509,7 @@ export const searchPatients = async (searchTerm: string, limit = 10): Promise<Pa
       .limit(limit);
 
     if (error) {
-      console.error('Database error searching patients:', error);
+
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToSearchPatients'), error.message);
     }
 
@@ -525,7 +519,7 @@ export const searchPatients = async (searchTerm: string, limit = 10): Promise<Pa
     if (error instanceof ABGServiceError) {
       throw error;
     }
-    console.error('Unexpected error searching patients:', error);
+
     throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToSearchPatients'));
   }
 };

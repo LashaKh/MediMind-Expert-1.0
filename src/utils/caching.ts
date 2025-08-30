@@ -446,7 +446,7 @@ class AdvancedCacheManager {
           });
         }
       } catch (error) {
-        console.warn(`Failed to preload ${endpoint}:`, error);
+
       }
     }
   }
@@ -469,7 +469,7 @@ class AdvancedCacheManager {
     this.updateStats();
     
     if (cleaned > 0) {
-      console.log(`Cache cleanup: removed ${cleaned} expired entries`);
+
     }
   }
 }

@@ -109,11 +109,9 @@ export function useNewsInteraction(options: UseNewsInteractionOptions = {}) {
   // Load news articles
   const loadNews = useCallback(async (filters: NewsFilters, append = false) => {
     if (!user?.id) {
-      console.log('🔐 [loadNews] No user, skipping news load');
+
       return;
     }
-
-    console.log('🔄 [loadNews] Starting news load', { filters, append, specialty });
 
     dispatch({ type: 'SET_LOADING', payload: true });
 
@@ -131,8 +129,6 @@ export function useNewsInteraction(options: UseNewsInteractionOptions = {}) {
       sortBy: filters.sortBy || 'engagement',
       sortOrder: filters.sortOrder || 'desc'
     });
-
-    console.log('🌐 [loadNews] Using Supabase Edge Function for medical news');
 
     const [response, error] = await safeAsync(async () => {
       // Use Supabase Edge Function
@@ -153,12 +149,9 @@ export function useNewsInteraction(options: UseNewsInteractionOptions = {}) {
         throw new Error(`Failed to fetch news: ${error.message}`);
       }
 
-      console.log('📊 [loadNews] Supabase Response:', data);
-      
       // Handle wrapped response structure
       const actualData = data?.data || data;
-      console.log('📋 [loadNews] Processed Data:', actualData);
-      
+
       return {
         articles: actualData.results || [],
         totalCount: actualData.totalCount || 0,
@@ -213,7 +206,6 @@ export function useNewsInteraction(options: UseNewsInteractionOptions = {}) {
         throw new Error(`Failed to fetch trending news: ${error.message}`);
       }
 
-      console.log('📊 [loadTrending] Supabase Response:', data);
       // Handle wrapped response structure
       const actualData = data?.data || data;
       return actualData as TrendingResponse;

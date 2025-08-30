@@ -90,10 +90,8 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
   // Chart data objects kept minimal; rendered via SimpleLineChart
 
   // Quality trend chart data
-  
 
   // Performance chart data
-  
 
   // Distribution data
   const distributionData = useMemo(() => {

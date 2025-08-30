@@ -318,9 +318,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
     // });
 
     // Debug logging for parsed issues
-    console.log('🔍 DEBUG: Parsed Medical Issues:', {
-      actionPlanLength: actionPlan?.length || 0,
-      actionPlanPreview: actionPlan?.substring(0, 500) + '...',
+    console.log('Parsed issues info:', {
       validIssuesCount: validIssues.length,
       issues: validIssues.map(issue => ({
         id: issue.id,
@@ -337,13 +335,9 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
   // Debug logging for medical issues
   useEffect(() => {
     if (medicalIssues.length > 0) {
-      console.log('🔍 DEBUG: Medical Issues Parsed:', {
-        totalIssues: medicalIssues.length,
-        issues: medicalIssues.map(issue => ({
-          id: issue.id,
-          title: issue.title,
-          priority: issue.priority
-        }))
+      console.log('Medical issues found:', {
+        count: medicalIssues.length,
+        issues: medicalIssues.map(issue => issue.id)
       });
     }
   }, [medicalIssues]);
@@ -385,7 +379,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
       setCopySuccess(true);
       setTimeout(() => setCopySuccess(false), 2000);
     } catch (err) {
-      console.error('Failed to copy:', err);
+
     }
   };
 

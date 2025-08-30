@@ -642,7 +642,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
       )}
 
       {/* Enhanced keyboard shortcuts overlay */}
-      <style jsx>{`
+      <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
         }

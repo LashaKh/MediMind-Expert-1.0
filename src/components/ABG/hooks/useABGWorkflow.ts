@@ -95,7 +95,7 @@ export const useABGWorkflow = ({
   // Load existing ABG result from history
   const loadExistingResult = useCallback(async (resultId: string) => {
     try {
-      console.log('📋 Fetching ABG result:', resultId);
+
       const result = await getABGResult(resultId);
       
       // Set the completed result and workflow to completion step
@@ -111,10 +111,9 @@ export const useABGWorkflow = ({
         hasAnalysisResult: true,
         result: result
       });
-      
-      console.log('✅ Successfully loaded ABG result from history');
+
     } catch (error) {
-      console.error('❌ Failed to load ABG result:', error);
+
       setError('Failed to load ABG result from history');
     }
   }, [startWorkflow, setError]);
@@ -191,7 +190,7 @@ export const useABGWorkflow = ({
       setShowResults(true);
 
       // Update workflow state to INTERPRETATION step only
-      console.log('🔄 Updating workflow step to INTERPRETATION after unified analysis');
+
       updateWorkflowStep(WorkflowStep.INTERPRETATION, {
         analysisResult: {
           success: true,
@@ -211,8 +210,6 @@ export const useABGWorkflow = ({
         progress: 80,
         canProceed: true
       });
-      
-      console.log('✅ Workflow step should now be INTERPRETATION with unified results visible');
 
       // Save to database (without action plan yet)
       const resultId = await createResult({
@@ -345,14 +342,12 @@ export const useABGWorkflow = ({
 
   // Process the interpretation using local OpenAI function
   const processInterpretation = useCallback(async () => {
-    console.log('🔥 BUTTON CLICKED: processInterpretation called!');
-    
+
     if (!extractedText) {
-      console.log('❌ No extracted text available');
+
       return;
     }
 
-    console.log('✅ Extracted text available, proceeding with interpretation...');
     setIsProcessing(true);
     clearError();
 
@@ -371,8 +366,6 @@ export const useABGWorkflow = ({
         requestId
       };
 
-      console.log('🚀 Requesting interpretation with Supabase Edge Function:', { requestId, type: abgType });
-      
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/abg-interpretation`, {
         method: 'POST',
         headers: {
@@ -395,8 +388,6 @@ export const useABGWorkflow = ({
         processingTimeMs: result.data?.processingTimeMs || 0,
         requestId: result.data?.requestId || requestId
       };
-      
-      console.log('✅ Interpretation received:', { requestId, success: interpretationResult.success });
 
       updateWorkflowStep(WorkflowStep.INTERPRETATION, {
         interpretationResult,
@@ -408,8 +399,7 @@ export const useABGWorkflow = ({
       setCurrentProcessingStatus('Interpretation completed - Ready for action plan');
 
     } catch (err) {
-      console.error('ABG interpretation failed:', err);
-      
+
       let errorMessage = 'An unexpected error occurred during interpretation';
       
       if (err && typeof err === 'object') {
@@ -441,15 +431,13 @@ export const useABGWorkflow = ({
 
   // Process the action plan using local functions
   const processActionPlan = useCallback(async () => {
-    console.log('🔥 ACTION PLAN BUTTON CLICKED: processActionPlan called!');
-    
+
     if (!workflow?.interpretationResult) {
-      console.log('❌ No interpretation result available');
+
       setError('No interpretation available. Please get clinical interpretation first.');
       return;
     }
 
-    console.log('✅ Interpretation result available, proceeding with action plan...');
     setIsProcessing(true);
     clearError();
 
@@ -465,14 +453,10 @@ export const useABGWorkflow = ({
       });
 
       const parsingResult = parseABGInterpretation(workflow.interpretationResult.data);
-      console.log('🔍 Issues identified:', {
-        totalIssues: parsingResult.totalIssuesFound,
-        issues: parsingResult.issues.map(i => ({ title: i.title, severity: i.severity, category: i.category }))
-      });
 
       if (parsingResult.totalIssuesFound === 0) {
         // Fallback to single comprehensive action plan
-        console.log('📝 No specific issues identified, generating comprehensive action plan');
+
         setCurrentProcessingStatus('Generating comprehensive action plan...');
         
         const requestId = crypto.randomUUID();
@@ -563,7 +547,7 @@ export const useABGWorkflow = ({
           };
           
         } catch (issueError) {
-          console.error(`❌ Failed to generate action plan for ${issue.title}:`, issueError);
+
           return {
             issue: issue,
             success: false,
@@ -575,11 +559,10 @@ export const useABGWorkflow = ({
       });
 
       // Wait for all requests to complete
-      console.log('⏳ Waiting for all parallel action plan requests to complete...');
+
       setCurrentProcessingStatus('Waiting for all action plans to complete...');
       
       const actionPlans = await Promise.all(actionPlanPromises);
-      console.log('🎯 All parallel requests completed!');
 
       // Create combined action plan result
       const { createCombinedActionPlan } = await import('../utils/actionPlanUtils');
@@ -605,8 +588,7 @@ export const useABGWorkflow = ({
       setCurrentProcessingStatus(`Action plans completed! Generated ${combinedActionPlan.successfulPlans} action plans for identified issues.`);
 
     } catch (err) {
-      console.error('ABG action plan failed:', err);
-      
+
       let errorMessage = 'An unexpected error occurred during action plan generation';
       
       if (err && typeof err === 'object') {
@@ -638,11 +620,10 @@ export const useABGWorkflow = ({
 
   // Complete and save the analysis (final step)
   const completeAnalysis = useCallback(async () => {
-    console.log('🏁 COMPLETE ANALYSIS CLICKED: completeAnalysis called!');
-    
+
     // Action plan is optional. Only interpretation is required to complete.
     if (!workflow?.interpretationResult) {
-      console.log('❌ Missing interpretation for completion');
+
       setError('Cannot complete analysis - missing interpretation');
       return;
     }
@@ -653,12 +634,11 @@ export const useABGWorkflow = ({
                            extractedText;
 
     if (!rawAnalysisText) {
-      console.log('❌ Missing extracted text for completion');
+
       setError('Cannot complete analysis - missing extracted text. Please restart the analysis.');
       return;
     }
 
-    console.log('✅ All results available, saving to database and completing...');
     setIsProcessing(true);
     clearError();
 
@@ -705,8 +685,7 @@ export const useABGWorkflow = ({
       }
 
     } catch (err) {
-      console.error('Analysis completion failed:', err);
-      
+
       let errorMessage = 'Failed to save analysis results';
       
       if (err && typeof err === 'object') {

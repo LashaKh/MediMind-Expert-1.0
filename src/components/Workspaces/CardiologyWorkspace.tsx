@@ -827,7 +827,6 @@ export const CardiologyWorkspace: React.FC = () => {
           </div>
         </div>
 
-
         {/* Emergency Response Command Center */}
         <div className="relative bg-white rounded-3xl shadow-2xl border border-red-100 p-12 mb-20 overflow-hidden">
           {/* Sophisticated Background Effects */}

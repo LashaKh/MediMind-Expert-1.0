@@ -81,7 +81,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
     const locationState = location.state as { resultId?: string; viewMode?: string } | null;
     
     if (locationState?.resultId && locationState?.viewMode === 'history') {
-      console.log('🔄 Loading existing ABG result from history:', locationState.resultId);
+
       workflowHook.loadExistingResult(locationState.resultId);
       
       // Clear the location state to prevent re-loading

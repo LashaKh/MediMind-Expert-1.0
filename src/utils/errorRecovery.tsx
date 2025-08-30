@@ -95,8 +95,7 @@ class ErrorRecoveryManager {
       condition: (error, context) => 
         context.action.includes('api') && !error.message.includes('authentication'),
       action: async (error, context) => {
-        console.log('[Recovery] Attempting cache fallback for:', context.action);
-        
+
         // Try to get cached data
         const cacheKey = `${context.component}_${context.action}`;
         const cachedData = await cacheManager.get(cacheKey, {
@@ -123,8 +122,7 @@ class ErrorRecoveryManager {
       condition: (error, context) => 
         context.medicalContent && error.message.includes('network'),
       action: async (error, context) => {
-        console.log('[Recovery] Entering degraded service mode for:', context.component);
-        
+
         if (context.action.includes('news')) {
           return this.fallbackData.medicalNews;
         }
@@ -153,8 +151,7 @@ class ErrorRecoveryManager {
       condition: (error, context) => 
         error.message.includes('timeout') || error.message.includes('503'),
       action: async (error, context) => {
-        console.log('[Recovery] Retrying with exponential backoff:', context.action);
-        
+
         // This would be handled by the retry mechanism in errorHandler
         throw error; // Let the retry mechanism handle it
       },
@@ -168,8 +165,7 @@ class ErrorRecoveryManager {
       condition: (error, context) => 
         error.message.includes('401') || error.message.includes('authentication'),
       action: async (error, context) => {
-        console.log('[Recovery] Attempting authentication recovery');
-        
+
         // Try to refresh authentication
         try {
           // In a real app, this would refresh the auth token
@@ -191,8 +187,7 @@ class ErrorRecoveryManager {
       condition: (error, context) => 
         context.medicalContent && context.action.includes('calculator'),
       action: async (error, context) => {
-        console.warn('[Recovery] Medical safety override activated');
-        
+
         return {
           error: 'calculator_unavailable',
           message: 'Medical calculators are temporarily unavailable. Please use alternative calculation methods and verify all results independently.',
@@ -217,24 +212,21 @@ class ErrorRecoveryManager {
    * Attempt recovery for an error
    */
   async attemptRecovery(error: Error, context: ErrorContext): Promise<any> {
-    console.log('[Recovery] Attempting recovery for error:', error.message);
-    
+
     for (const strategy of this.strategies) {
       if (strategy.condition(error, context)) {
-        console.log(`[Recovery] Trying strategy: ${strategy.name}`);
-        
+
         try {
           const result = await strategy.action(error, context);
-          console.log(`[Recovery] Strategy ${strategy.name} succeeded`);
+
           return result;
         } catch (recoveryError) {
-          console.warn(`[Recovery] Strategy ${strategy.name} failed:`, recoveryError);
+
           continue;
         }
       }
     }
-    
-    console.error('[Recovery] All recovery strategies failed');
+
     throw error;
   }
 
@@ -439,10 +431,9 @@ export class OfflineActionQueue {
     for (const queuedAction of actionsToProcess) {
       try {
         await this.executeAction(queuedAction);
-        console.log('[OfflineQueue] Successfully processed action:', queuedAction.action);
+
       } catch (error) {
-        console.error('[OfflineQueue] Failed to process action:', queuedAction.action, error);
-        
+
         // Re-queue if not too old (max 1 hour)
         if (Date.now() - queuedAction.timestamp < 60 * 60 * 1000) {
           this.queue.push(queuedAction);
@@ -484,7 +475,7 @@ export class OfflineActionQueue {
         break;
         
       default:
-        console.warn('[OfflineQueue] Unknown action type:', action.action);
+
     }
   }
 
@@ -495,7 +486,7 @@ export class OfflineActionQueue {
     try {
       localStorage.setItem('medimind_offline_queue', JSON.stringify(this.queue));
     } catch (error) {
-      console.warn('[OfflineQueue] Failed to save to storage:', error);
+
     }
   }
 
@@ -509,7 +500,7 @@ export class OfflineActionQueue {
         this.queue = JSON.parse(stored);
       }
     } catch (error) {
-      console.warn('[OfflineQueue] Failed to load from storage:', error);
+
       this.queue = [];
     }
   }
@@ -605,14 +596,14 @@ export function useResilientFetch<T>(
       setData(result);
     } catch (fetchError) {
       try {
-        console.log('[ResilientFetch] Primary fetch failed, attempting recovery');
+
         const recoveredData = await recoveryManager.attemptRecovery(fetchError as Error, context);
         
         setData(recoveredData);
         setIsRecovered(true);
         setRecoveryMethod('cache_fallback');
       } catch (recoveryError) {
-        console.error('[ResilientFetch] Recovery failed:', recoveryError);
+
         setError(fetchError as Error);
       }
     } finally {
@@ -699,7 +690,7 @@ if (typeof window !== 'undefined') {
   
   // Process queue when coming online
   window.addEventListener('online', () => {
-    console.log('[Recovery] Connection restored, processing offline queue');
+
     offlineQueue.processQueue();
   });
 }

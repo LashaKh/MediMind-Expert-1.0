@@ -89,7 +89,7 @@ export const trackPerformance = (operation: string, duration: number, metadata?:
 
   // Log slow medical operations
   if (duration > 3000) {
-    console.warn(`Slow medical operation: ${operation} took ${duration}ms`);
+
   }
 };
 

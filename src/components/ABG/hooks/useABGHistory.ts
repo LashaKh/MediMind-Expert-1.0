@@ -40,7 +40,7 @@ export const useABGHistory = ({ patientId }: UseABGHistoryProps = {}) => {
       const patientData = await getUserPatients();
       setPatients(patientData);
     } catch (error) {
-      console.error('Failed to load patients:', error);
+
     }
   }, []);
 
@@ -88,7 +88,7 @@ export const useABGHistory = ({ patientId }: UseABGHistoryProps = {}) => {
       setResults(data);
       setStats(calculateStats(data));
     } catch (err) {
-      console.error('Failed to load ABG results:', err);
+
       setError('Failed to load results. Please try again.');
     } finally {
       setIsLoading(false);
@@ -141,7 +141,7 @@ export const useABGHistory = ({ patientId }: UseABGHistoryProps = {}) => {
       setSelectedResults(new Set());
       await loadResults();
     } catch (error) {
-      console.error('Failed to delete results:', error);
+
       setError('Failed to delete results. Please try again.');
     } finally {
       setIsLoading(false);

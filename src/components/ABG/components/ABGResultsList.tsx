@@ -95,7 +95,7 @@ export const ABGResultsList: React.FC<ABGResultsListProps> = ({
       const patientData = await getUserPatients();
       setPatients(patientData);
     } catch (error) {
-      console.error('Failed to load patients:', error);
+
     }
   }, []);
 
@@ -139,7 +139,7 @@ export const ABGResultsList: React.FC<ABGResultsListProps> = ({
 
       return sortedResults;
     } catch (error) {
-      console.error('Failed to load ABG results:', error);
+
       throw error;
     }
   }, [filters, searchQuery, sortOption]);

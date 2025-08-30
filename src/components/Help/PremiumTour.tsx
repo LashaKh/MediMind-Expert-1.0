@@ -81,7 +81,7 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
   // Handle tour selector mode
   useEffect(() => {
     if (tourType === 'selector' && isOpen) {
-      console.log('🎬 PremiumTour: Opening in selector mode - resetting state');
+
       // Reset all state when opening in selector mode
       setSelectedTourType(null);
       setCurrentStep(0);
@@ -99,9 +99,7 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
   // Debug logging
   useEffect(() => {
     if (selectedTourType) {
-      console.log('Selected tour type:', selectedTourType);
-      console.log('Available steps:', steps.length);
-      console.log('Current step data:', currentStepData);
+
     }
   }, [selectedTourType, steps, currentStepData]);
 
@@ -111,13 +109,7 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
       const attempt = (retriesLeft: number) => {
         const element = document.querySelector(selector) as HTMLElement;
         if (element) {
-          console.log('🎯 Setting highlighted element:', {
-            selector,
-            element: element.tagName,
-            className: element.className,
-            id: element.id
-          });
-          
+
           // Set the element in state
           setHighlightedElement(element);
           
@@ -133,7 +125,7 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
           console.log(`⏳ Element ${selector} not found, retrying... (${retriesLeft} attempts left)`);
           setTimeout(() => attempt(retriesLeft - 1), 200);
         } else {
-          console.warn(`❌ Element ${selector} not found after all retries`);
+
           setHighlightedElement(null);
           resolve(null);
         }
@@ -148,10 +140,9 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
     if (!isOpen || !currentStepData || !isInitialized) return;
 
     const executeStep = async () => {
-      console.log('🚀 Executing step:', currentStepData.id, currentStepData.target);
-      
+
       // CRITICAL: Clear previous highlighted element and force a render cycle
-      console.log('🧹 Clearing previous highlighted element');
+
       setHighlightedElement(null);
       
       // Force React to process the state update before continuing
@@ -168,7 +159,7 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
 
       // Handle navigation if required
       if (currentStepData.path && location.pathname !== currentStepData.path) {
-        console.log('🌐 Navigating to:', currentStepData.path);
+
         navigate(currentStepData.path);
         
         // Wait for navigation to complete
@@ -177,9 +168,8 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
       }
 
       // Find and highlight target element
-      console.log('🎯 Finding element with selector:', currentStepData.target);
+
       const element = await findAndHighlightElement(currentStepData.target);
-      console.log('✅ Found and set element:', element?.tagName, element?.className);
 
       // Execute after step callback
       if (currentStepData.afterStep) {
@@ -258,7 +248,7 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
   }, [currentStep]);
 
   const handleCloseToSelector = useCallback(() => {
-    console.log('🏠 PremiumTour: Closing to selector');
+
     // Return to tour selector instead of closing entire system
     setSelectedTourType(null);
     setShowSelector(true);
@@ -273,9 +263,7 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
     const completedTourType = selectedTourType || tourType;
     localStorage.setItem(`premium-tour-completed-${completedTourType}`, 'true');
     localStorage.setItem(`premium-tour-completed-at-${completedTourType}`, new Date().toISOString());
-    
-    console.log('🎉 PremiumTour: Tour completed:', completedTourType);
-    
+
     // FIXED: Use shared close-to-selector logic
     handleCloseToSelector();
     
@@ -300,7 +288,7 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
   }, [tourType, selectedTourType, handleCloseToSelector]);
 
   const handleBackToTours = useCallback(() => {
-    console.log('🏠 PremiumTour: Returning to tour selector');
+
     handleCloseToSelector(); // Use the shared logic
   }, [handleCloseToSelector]);
 
@@ -311,32 +299,22 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
 
   // Handle tour selection from TourSelector
   const handleTourSelect = useCallback((selectedTour: string) => {
-    console.log('🚀 PremiumTour: Tour selected:', selectedTour);
-    console.log('🚀 PremiumTour: Current state before update:', {
-      selectedTourType,
-      showSelector,
-      currentStep,
-      isInitialized,
-      highlightedElement: !!highlightedElement
-    });
-    
+
     setSelectedTourType(selectedTour);
     setShowSelector(false);
     setCurrentStep(0);
     setIsInitialized(false);
     setHighlightedElement(null);
-    
-    console.log('🚀 PremiumTour: State updated, will initialize in 200ms');
-    
+
     // Small delay to allow state to update
     setTimeout(() => {
-      console.log('🚀 PremiumTour: Initializing tour:', selectedTour);
+
       setIsInitialized(true);
     }, 200);
   }, [selectedTourType, showSelector, currentStep, isInitialized, highlightedElement]);
 
   const handleSelectorClose = useCallback(() => {
-    console.log('🚪 PremiumTour: Selector closing - properly closing entire tour system');
+
     // When user closes the selector, they want to close the entire tour
     // This allows the tour to be reopened fresh from the outside
     setShowSelector(false);
@@ -364,14 +342,7 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
   }
 
   if (!currentStepData || !isInitialized) {
-    console.log('🔍 PremiumTour: Not ready to render tour:', { 
-      currentStepData: !!currentStepData, 
-      isInitialized, 
-      selectedTourType, 
-      tourType, 
-      stepsLength: steps.length,
-      currentStep 
-    });
+
     return null;
   }
 
@@ -384,17 +355,9 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
   const effectiveTargetElement = (isElementValid ? highlightedElement : null) || 
     (currentStepData.target === 'body' ? document.body : null);
 
-  console.log('🎭 Effective target element:', { 
-    stepId: currentStepData.id,
-    targetSelector: currentStepData.target,
-    highlightedElement: highlightedElement ? `${highlightedElement.tagName}.${highlightedElement.className}` : null,
-    isElementValid,
-    effectiveElement: effectiveTargetElement ? `${effectiveTargetElement.tagName}.${effectiveTargetElement.className}` : null
-  });
-
   // Don't render until we have an effective target element
   if (!effectiveTargetElement) {
-    console.log('Waiting for target element:', { target: currentStepData.target, highlightedElement });
+
     return (
       <>
         <TourSpotlight
@@ -405,13 +368,6 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
       </>
     );
   }
-
-  console.log('🎨 PremiumTour: Rendering tour with:', {
-    selectedTourType,
-    currentStep,
-    currentStepData: currentStepData?.title,
-    effectiveTargetElement: effectiveTargetElement?.tagName
-  });
 
   return (
     <>

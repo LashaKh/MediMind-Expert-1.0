@@ -45,19 +45,12 @@ export const ActionPlanStep: React.FC<ActionPlanStepProps> = ({
   };
 
   const handleBackToResults = () => {
-    console.log('🔍 DEBUG: ActionPlanStep handleBackToResults called - navigating to INTERPRETATION step');
+
     // Go back to the interpretation results view using correct enum value
     onGoToStep(WorkflowStep.INTERPRETATION);
   };
   const getActionPlanData = () => {
-    console.log('🔍 DEBUG: Action plan data structure:', {
-      hasResult: !!workflow?.actionPlanResult,
-      hasData: !!workflow?.actionPlanResult?.data,
-      dataType: typeof workflow?.actionPlanResult?.data,
-      resultType: typeof workflow?.actionPlanResult,
-      directResult: workflow?.actionPlanResult,
-    });
-    
+
     // Try multiple fallback paths
     if (workflow?.actionPlanResult?.data) {
       return workflow.actionPlanResult.data;
@@ -89,15 +82,12 @@ export const ActionPlanStep: React.FC<ActionPlanStepProps> = ({
     patient: null
   } : undefined);
 
-  console.log('🔍 DEBUG: ActionPlanStep tempResult:', {
-    hasCompletedResult: !!completedResult,
-    hasTempResult: !!tempResult,
-    hasInterpretation: !!(tempResult?.interpretation),
+  const debugInfo = useMemo(() => ({
     hasActionPlan: !!(tempResult?.action_plan),
     hasRawAnalysis: !!(tempResult?.raw_analysis),
     interpretationLength: tempResult?.interpretation?.length || 0,
     actionPlanLength: tempResult?.action_plan?.length || 0
-  });
+  }), [tempResult]);
 
   const getInterpretation = () => {
     return workflow?.interpretationResult?.data || 
@@ -205,8 +195,7 @@ export const ActionPlanStep: React.FC<ActionPlanStepProps> = ({
           patient: null
         } : undefined)}
       />
-      
-      
+
       {/* Premium Final Steps - Only show when action plan is ready */}
       {workflow?.actionPlanResult && (
         <PremiumFinalSteps

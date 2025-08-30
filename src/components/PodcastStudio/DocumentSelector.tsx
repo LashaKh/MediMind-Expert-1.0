@@ -107,7 +107,7 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
     
     // Only allow selection of completed documents
     if (document && document.openai_upload_status !== 'completed') {
-      console.log(`Cannot select document ${documentId}: status is ${document.openai_upload_status}`);
+
       return;
     }
     

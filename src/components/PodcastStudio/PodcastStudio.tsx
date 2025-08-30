@@ -219,7 +219,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
               {/* Test Debug Data Button */}
               <motion.button
                 onClick={() => {
-                  console.log('🧪 Test Debug Data clicked');
+
                   const testDebugData = {
                     step1_extraction: {
                       queries: ["Test query 1", "Test query 2"],
@@ -292,7 +292,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                   };
                   setDebugInfo(testDebugData);
                   setShowDebugTracker(true);
-                  console.log('🧪 Test debug data set:', testDebugData);
+
                 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

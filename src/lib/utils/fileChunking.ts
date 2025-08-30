@@ -37,10 +37,10 @@ const CHUNK_SIZE = 25 * 1024 * 1024; // 25MB - Balanced chunk size
  */
 export async function splitFileIntoChunks(file: File): Promise<FileChunk[] | PDFPageChunk[]> {
   if (shouldUsePageBasedChunking(file)) {
-    console.log('📄 Using page-based chunking for PDF file');
+
     return await splitPDFIntoPageChunks(file);
   } else {
-    console.log('🔧 Using binary chunking for file');
+
     return splitFileIntoBinaryChunks(file);
   }
 }

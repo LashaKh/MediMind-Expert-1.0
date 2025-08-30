@@ -100,19 +100,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
     );
   };
 
-  console.log('🔍 DEBUG: InterpretationStep render data:', {
-    showResults,
-    hasExtractedText: !!extractedText,
-    hasInterpretation: !!interpretation,
-    interpretationLength: interpretation?.length || 0,
-    extractedTextLength: extractedText?.length || 0,
-    workflowData: !!workflow?.interpretationResult?.data,
-    fallbackInterpretation: workflow?.interpretationResult?.data?.length || 0,
-    workflowStep: workflow?.currentStep,
-    workflowProgress: workflow?.progress,
-    shouldShowUnifiedResults: showResults && extractedText && interpretation,
-    shouldShowFallbackResults: !(showResults && extractedText && interpretation) && (interpretation || workflow?.interpretationResult?.data)
-  });
+  const hasValidResults = !!(interpretation || workflow?.interpretationResult?.data);
 
   // Determine if we should show unified results or fallback content
   const shouldShowUnifiedResults = showResults && extractedText && interpretation;
@@ -177,7 +165,6 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
               </div>
             )}
           </div>
-
 
           {/* Clinical Interpretation Panel - Collapsible */}
           <div className="abg-card abg-glass p-5">

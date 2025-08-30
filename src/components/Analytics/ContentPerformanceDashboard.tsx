@@ -192,7 +192,7 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
       setSourcePerformance(mockSources.sort((a, b) => b.engagementImpact - a.engagementImpact));
 
     } catch (err) {
-      console.error('Failed to fetch content performance data:', err);
+
       setError(err instanceof Error ? err.message : 'Failed to load content performance data');
     } finally {
       setLoading(false);

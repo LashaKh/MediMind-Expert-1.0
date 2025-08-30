@@ -188,33 +188,29 @@ class PerformanceMonitor {
     
     // Calculator loading performance
     if (summary.totalCalculatorsLoaded > 0) {
-      console.log(`⚡ Calculator Loading Performance:`);
+
       console.log(`- Average load time: ${summary.averageLoadTime.toFixed(2)}ms`);
       console.log(`- Cache hit rate: ${summary.cacheHitRate.toFixed(1)}%`);
-      console.log(`- Total calculators loaded: ${summary.totalCalculatorsLoaded}`);
+
     }
     
     // Re-render performance
     if (renderReport.length > 0) {
-      console.log(`🔄 Component Re-render Analysis:`);
+
       const totalRenders = renderReport.reduce((sum, metric) => sum + metric.renderCount, 0);
       const excessiveRerenders = renderReport.filter(metric => metric.renderCount > 20);
-      
-      console.log(`- Total renders tracked: ${totalRenders}`);
-      console.log(`- Components monitored: ${renderReport.length}`);
-      console.log(`- Components with >20 renders: ${excessiveRerenders.length}`);
-      
+
       if (excessiveRerenders.length > 0) {
-        console.warn('⚠️ Components needing optimization:');
+
         excessiveRerenders.forEach(metric => {
-          console.warn(`  - ${metric.componentName}: ${metric.renderCount} renders`);
+
         });
       }
       
       // Show performance improvement results
       const wellOptimized = renderReport.filter(metric => metric.renderCount <= 10);
       if (wellOptimized.length > 0) {
-        console.log(`✅ Well-optimized components: ${wellOptimized.length}`);
+
       }
     }
     

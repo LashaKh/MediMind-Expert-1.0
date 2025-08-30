@@ -109,14 +109,9 @@ Please extract ALL visible text and numerical values exactly as shown, maintaini
     const base64Image = await convertImageToBase64(file);
     
     // Debug logging for image processing
-    console.log('=== Image Processing Debug ===');
-    console.log('File name:', file.name);
-    console.log('File type:', file.type);
-    console.log('File size:', file.size, 'bytes');
-    console.log('Base64 length:', base64Image.length);
+
     console.log('Base64 preview (first 100 chars):', base64Image.substring(0, 100));
-    console.log('===============================');
-    
+
     const apiResponse = await fetch(
       'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=' + 
       import.meta.env.VITE_GEMINI_API_KEY,
@@ -178,15 +173,11 @@ Please extract ALL visible text and numerical values exactly as shown, maintaini
     const data = await apiResponse.json();
 
     // Debug logging to understand what Gemini is actually returning
-    console.log('=== Gemini Vision API Response Debug ===');
+
     console.log('Full API Response:', JSON.stringify(data, null, 2));
-    console.log('Candidates length:', data.candidates?.length);
-    console.log('First candidate:', data.candidates?.[0]);
-    console.log('Content parts:', data.candidates?.[0]?.content?.parts);
-    console.log('==========================================');
 
     if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
-      console.error('No analysis result in Gemini response. Full response:', data);
+
       throw new Error('No analysis result returned from Gemini Vision API');
     }
 
@@ -194,10 +185,6 @@ Please extract ALL visible text and numerical values exactly as shown, maintaini
     const rawAnalysis = data.candidates[0].content.parts[0].text;
     
     // Debug the extracted text
-    console.log('=== Extracted Text from Gemini ===');
-    console.log('Raw Analysis:', rawAnalysis);
-    console.log('Text length:', rawAnalysis.length);
-    console.log('===================================');
 
     // Estimate confidence based on response quality and completeness
     const confidence = estimateAnalysisConfidence(rawAnalysis);
@@ -211,7 +198,6 @@ Please extract ALL visible text and numerical values exactly as shown, maintaini
 
   } catch (error) {
     const processingTime = Math.round(performance.now() - startTime);
-    console.error('ABG image analysis failed:', error);
 
     // Re-throw with appropriate error type
     if (error instanceof Error) {

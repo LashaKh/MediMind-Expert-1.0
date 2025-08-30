@@ -38,5 +38,3 @@ export interface PodcastScript {
   specialty: string;
 }
 
-
-

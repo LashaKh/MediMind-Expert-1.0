@@ -58,7 +58,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
   const addDebugLog = (message: string, data?: any) => {
     const timestamp = new Date().toISOString().split('T')[1].slice(0, 8);
     const logEntry = `[${timestamp}] ${message}${data ? ': ' + JSON.stringify(data, null, 2) : ''}`;
-    console.log(`[PodcastDebug] ${logEntry}`);
+
     setDebugInfo(prev => ({
       ...prev,
       logs: [...(prev?.logs || []).slice(-10), logEntry] // Keep last 10 logs
@@ -125,10 +125,9 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
   }, [stopPolling]);
 
   const handleDebugGenerate = async () => {
-    console.log('🧪 Debug Script Only clicked!', { userId: user?.id, documents: selectedDocuments.length });
-    
+
     if (!user?.id || selectedDocuments.length === 0) {
-      console.warn('🧪 Debug cancelled - missing user or documents');
+
       return;
     }
 
@@ -161,7 +160,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
       const debugInfo = data?.debugInfo || (data?.step1_document_overview ? data : null);
       
       if (debugInfo) {
-        console.log('🔍 Real debug info received from debug-script-only:', debugInfo);
+
         setDebugInfo(debugInfo);
         addDebugLog('🔍 Real 3-step debug data captured', {
           step1: !!debugInfo.step1_document_overview,
@@ -273,12 +272,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
     });
 
     try {
-      console.log('[Podcast] generate:start', {
-        userId: user.id,
-        docs: selectedDocuments.length,
-        title: settings.title,
-        style: settings.synthesisStyle,
-        specialty: (user as any).medical_specialty || 'general'
+      .medical_specialty || 'general'
       });
     } catch {}
 
@@ -303,13 +297,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
         });
 
         try {
-          console.log('[Podcast] generate:response', {
-            status: result?.status,
-            podcastId: result?.podcastId,
-            vectorStoreId: result?.podcastVectorStoreId,
-            queuePosition: result?.queuePosition,
-            eta: result?.estimatedWaitTime
-          });
+
         } catch {}
 
         if (result.status === 'queued') {
@@ -332,9 +320,9 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
 
         // Trigger queue processor once to move from queued -> processing (uses user JWT)
         try {
-          console.log('[Podcast] processor:kick:request');
+
           await supabase.functions.invoke('podcast-queue-processor', { method: 'POST' } as any);
-          console.log('[Podcast] processor:kick:ok');
+
         } catch {}
 
         // DB-driven polling
@@ -359,14 +347,14 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
             // Update debug info with AI outputs from 4-step medical script generation
             if (status?.debugInfo) {
               // Use the new 4-step debug information from medical-script-writer
-              console.log('🔍 Debug info received from status:', status.debugInfo);
+
               setDebugInfo(status.debugInfo);
             } else if (status?.script) {
               // Fallback: Check if debug info is nested in script (backward compatibility)
               const scriptDebugInfo = status.script.debugInfo;
               
               if (scriptDebugInfo) {
-                console.log('🔍 Debug info found in script:', scriptDebugInfo);
+
                 setDebugInfo(scriptDebugInfo);
               } else {
                 // Legacy debug format for old podcasts
@@ -388,11 +376,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
             }
 
             try {
-              console.log('[Podcast] status', {
-                status: status?.podcast?.status,
-                queue: status?.queue,
-                vectorStoreId: status?.podcast?.podcast_vector_store_id
-              });
+
             } catch {}
             if (cancelled) return;
             if (status.podcast.status === 'completed') {

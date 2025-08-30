@@ -11,8 +11,6 @@ import {
 } from './GRACE';
 import { GRACE2Validator, type GRACEFormData } from '../../utils/grace2Validator';
 
-
-
 const GRACERiskCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
   

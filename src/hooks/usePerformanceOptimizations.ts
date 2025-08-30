@@ -172,7 +172,7 @@ export const usePerformanceMonitor = (componentName: string) => {
     lastRenderTime.current = now;
 
     if (process.env.NODE_ENV === 'development') {
-      console.log(`${componentName} rendered #${renderCountRef.current} in ${renderTime}ms`);
+
     }
   });
 

@@ -109,9 +109,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
       if (targetElement === document.body) {
         const left = (viewportWidth - tooltipRect.width) / 2;
         const top = (viewportHeight - tooltipRect.height) / 2;
-        
-        console.log('Positioning tooltip for body:', { left, top, tooltipRect, viewportWidth, viewportHeight });
-        
+
         setFinalPosition('bottom');
         setTooltipStyle({
           position: 'fixed',
@@ -184,8 +182,6 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
       // Ensure tooltip stays within viewport bounds
       left = Math.max(margin, Math.min(viewportWidth - tooltipRect.width - margin, left));
       top = Math.max(margin, Math.min(viewportHeight - tooltipRect.height - margin, top));
-
-      console.log('Positioning tooltip:', { bestPosition, left, top, targetRect, tooltipRect });
 
       setTooltipStyle({
         position: 'fixed',
@@ -282,11 +278,9 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
   };
 
   if (!isVisible) {
-    console.log('TourTooltip not visible');
+
     return null;
   }
-
-  console.log('TourTooltip rendering:', { title, isVisible, targetElement, tooltipStyle });
 
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
@@ -294,16 +288,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
   // debugMode is now passed as a prop from PremiumTour
   
   // Add console log for debugging
-  console.log('TourTooltip render state:', { 
-    debugMode, 
-    isVisible, 
-    targetElement: !!targetElement,
-    tooltipStyle,
-    finalPosition,
-    currentStep,
-    totalSteps
-  });
-  
+
   // EMERGENCY DOM SOLUTION - Direct DOM manipulation
   useEffect(() => {
     if (debugMode && isVisible) {
@@ -375,8 +360,6 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
         window.tourBackToTours = onBackToTours;
       }
 
-      console.log('🚨 EMERGENCY TOOLTIP CREATED:', tooltip);
-
       return () => {
         const existing = document.getElementById('claude-emergency-tooltip');
         if (existing) {
@@ -397,13 +380,6 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
   }
 
   if (false) { // Disable the old debug code
-    console.log('🐛 DEBUG: Rendering ultra-simple tooltip', {
-      title,
-      isVisible,
-      tooltipStyle,
-      targetElement: targetElement?.tagName,
-      progress
-    });
 
     // Test component - simple red square at top-left to verify rendering works
     const testElement = (

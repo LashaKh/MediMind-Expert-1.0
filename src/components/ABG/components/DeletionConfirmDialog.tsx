@@ -96,7 +96,7 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
       setDeletionPreview(preview);
       setSafetyCheck(safety);
     } catch (error) {
-      console.error('Failed to load deletion info:', error);
+
     }
   };
 
@@ -128,7 +128,7 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
         }, 1500);
       }
     } catch (error) {
-      console.error('Deletion failed:', error);
+
       setDeletionResult({
         success: false,
         deletedCount: 0,

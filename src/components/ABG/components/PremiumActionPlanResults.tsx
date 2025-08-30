@@ -298,9 +298,7 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
 
   // Handle raw string action plan (from webhooks)
   if (typeof actionPlan === 'string') {
-    console.log('🔍 DEBUG: Full action plan string:', actionPlan);
-    console.log('🔍 DEBUG: Action plan length:', actionPlan.length);
-    
+
     return (
       <div className={cn(
         "abg-premium transition-all duration-700 transform",

@@ -6,7 +6,7 @@ export const initializeSentry = () => {
   const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
 
   if (!sentryDsn) {
-    console.warn('Sentry DSN not configured');
+
     return;
   }
 

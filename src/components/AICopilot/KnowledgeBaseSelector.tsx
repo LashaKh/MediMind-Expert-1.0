@@ -36,7 +36,6 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
     
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-  
 
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<KnowledgeBaseType | null>(null);

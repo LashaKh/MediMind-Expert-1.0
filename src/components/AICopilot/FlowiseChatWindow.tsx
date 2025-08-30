@@ -119,15 +119,14 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     
     if (state?.abgContext) {
       console.log('ABG context received (passive loading):', state.abgContext);
-      console.log('Setting curated knowledge base for ABG consultation');
+
       setIsContextLoading(true);
       setAbgContext(state.abgContext);
       setAbgContextType(state.contextType || 'abg-analysis');
       
       // Auto-select curated knowledge base for ABG consultations
       setKnowledgeBase('curated');
-      console.log('Knowledge base set to curated');
-      
+
       // Create new conversation if requested
       if (state.startNewSession) {
         const newConversationId = createNewConversation(
@@ -171,8 +170,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       
       // Clear current messages for the new context
       clearMessages();
-      
-      console.log(`Knowledge base changed from ${knowledgeBase} to ${newKnowledgeBase}, started new conversation: ${newConversationId}`);
+
     }
     
     // Update the knowledge base
@@ -328,8 +326,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     
     // Enhance content with ABG context if available - prioritize ABG context over other enhancements
     let finalEnhancedContent = enhancedContent;
-    console.log('🔍 Message enhancement check:', { abgContext: !!abgContext, enhancedContent: !!enhancedContent, abgContextType });
-    
+
     if (abgContext) {
       console.log('🔧 Enhancing message with ABG context (overriding any existing enhancement)');
       // Use enhanced context function based on context type
@@ -347,7 +344,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       
       console.log('✅ Enhanced ABG content created:', finalEnhancedContent?.substring(0, 200) + '...');
     } else {
-      console.log('❌ No ABG context available for enhancement');
+
     }
     
     const userMessage: Message = {
@@ -377,12 +374,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       async () => {
         // Send enhanced content (with ABG context or PDF text) to AI, but display original content in UI
         const messageToSend = finalEnhancedContent || content;
-        
-        console.log('📤 Sending to Flowise:', { 
-          originalContent: content, 
-          messageToSend: messageToSend.substring(0, 200) + '...', 
-          hasEnhancement: !!finalEnhancedContent 
-        });
         
         // If we have enhanced content, don't send attachments (text already extracted)
         const attachmentsToSend = finalEnhancedContent ? undefined : attachments;
@@ -1065,7 +1056,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
               </div>
             </div>
 
-            
             {/* Mobile-only case management section */}
             {activeCase && (
               <div className="sm:hidden mt-1.5 pt-1.5 border-t border-white/30">

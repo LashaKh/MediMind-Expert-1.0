@@ -183,7 +183,7 @@ export async function extractTextFromImage(
           };
         }
       } catch (geminiError) {
-        console.warn('Gemini Vision fallback failed:', geminiError);
+
         // Continue with OCR result
       }
     }
@@ -205,7 +205,7 @@ export async function extractTextFromImage(
         onProgress?.({ current: 100, total: 100, message: 'Recovered with Gemini Vision' });
         return geminiResult;
       } catch (geminiError) {
-        console.error('Both OCR and Gemini Vision failed:', error, geminiError);
+
       }
     }
     

@@ -98,7 +98,6 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
     if (filters.subspecialties?.length) counts['medical-domain'] += filters.subspecialties.length;
     if (filters.diseaseCategories?.length) counts['medical-domain'] += filters.diseaseCategories.length;
 
-
     // Publication & Access
     if (filters.recencyPeriod) counts['publication-access'] += 1;
     if (filters.accessType?.length) counts['publication-access'] += filters.accessType.length;

@@ -60,8 +60,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
       }
 
     } catch (err) {
-      console.error('Failed to initialize camera:', err);
-      
+
       if (err instanceof DOMException) {
         switch (err.name) {
           case 'NotAllowedError':
@@ -142,7 +141,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
       }, 'image/jpeg', 0.9);
 
     } catch (err) {
-      console.error('Failed to capture photo:', err);
+
       setError('Failed to capture photo. Please try again.');
       setIsCapturing(false);
     }
@@ -183,7 +182,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
         setFlashEnabled(!flashEnabled);
       }
     } catch (err) {
-      console.error('Failed to toggle flash:', err);
+
     }
   }, [flashEnabled]);
 

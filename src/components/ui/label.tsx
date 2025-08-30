@@ -14,4 +14,3 @@ export const Label: React.FC<LabelProps> = ({ className, ...props }) => {
 
 Label.displayName = 'Label';
 
-

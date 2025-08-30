@@ -48,7 +48,6 @@ export const ObGynWorkspace: React.FC = () => {
   const goToKnowledgeBase = () => navigate('/knowledge-base');
   const goToABGAnalysis = () => navigate('/abg-analysis');
 
-
   // Dashboard features with enhanced styling
   const dashboardFeatures = [
     {
@@ -278,7 +277,6 @@ export const ObGynWorkspace: React.FC = () => {
             );
           })}
         </div>
-
 
         {/* Analytics Dashboard */}
         <div className="space-y-8">

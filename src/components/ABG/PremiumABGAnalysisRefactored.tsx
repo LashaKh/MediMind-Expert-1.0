@@ -88,7 +88,7 @@ export const PremiumABGAnalysis: React.FC<PremiumABGAnalysisProps> = ({
     const locationState = location.state as { resultId?: string; viewMode?: string } | null;
     
     if (locationState?.resultId && locationState?.viewMode === 'history') {
-      console.log('🔄 Loading existing ABG result from history:', locationState.resultId);
+
       workflowHook.loadExistingResult(locationState.resultId);
       
       // Clear the location state to prevent re-loading
@@ -133,18 +133,6 @@ export const PremiumABGAnalysis: React.FC<PremiumABGAnalysisProps> = ({
   // Render current step content
   const renderStepContent = () => {
     if (!workflow) return null;
-
-    console.log('🎯 Rendering workflow step:', {
-      currentStep: workflow.currentStep,
-      canProceed: workflow.canProceed,
-      hasAnalysisResult: !!workflow.analysisResult,
-      hasInterpretationResult: !!workflow.interpretationResult,
-      processingStatus: workflow.processingStatus,
-      isProcessing: workflowHook.isProcessing,
-      showResults: workflowHook.showResults,
-      hasExtractedText: !!workflowHook.extractedText,
-      hasInterpretation: !!workflowHook.interpretation
-    });
 
     const commonProps = {
       workflow,
