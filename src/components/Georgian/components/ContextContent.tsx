@@ -236,7 +236,7 @@ export const ContextContent: React.FC<ContextContentProps> = ({
                 )}
                 
                 {/* Elegant Scroll Indicator */}
-                <div className="absolute right-2 top-4 bottom-4 w-1 bg-indigo-200/60 dark:bg-indigo-600/60 rounded-full overflow-hidden">
+                <div className="absolute right-2 top-4 bottom-4 w-1 bg-indigo-200/60 dark:bg-indigo-600/60 rounded-full overflow-hidden pointer-events-none">
                   <div className="w-full bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full transition-all duration-300" style={{height: '25%'}} />
                 </div>
               </div>

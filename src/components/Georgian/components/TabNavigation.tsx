@@ -161,15 +161,6 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                   </button>
                 )}
                 
-                {onEdit && (
-                  <button
-                    onClick={onEdit}
-                    className="flex items-center space-x-2 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/50 dark:hover:bg-amber-900/20 rounded-lg transition-all duration-200 text-sm font-medium group"
-                  >
-                    <Edit3 className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                    <span>Edit</span>
-                  </button>
-                )}
               </div>
             )}
           </div>

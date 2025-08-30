@@ -65,7 +65,7 @@ export class GeorgianTTSService {
         const result = await this.performSpeechRecognition(base64Audio, options);
         
         if (attempt > 1) {
-          console.log(`✅ Speech recognition succeeded on attempt ${attempt}`);
+
         }
         
         return result;
@@ -77,8 +77,7 @@ export class GeorgianTTSService {
         if (attempt === maxRetries) {
           break;
         }
-        
-        console.warn(`Speech recognition attempt ${attempt} failed, retrying...`, errorMessage);
+
         const delay = 1000 * attempt; // 1s, 2s, 3s
         await new Promise(resolve => setTimeout(resolve, delay));
       }
@@ -107,12 +106,6 @@ export class GeorgianTTSService {
       ...(options.engine && { Engine: options.engine }),
       ...(options.model && { Model: options.model })
     };
-
-    console.log('🎤 Sending to Edge Function:', { 
-      Language: request.Language, 
-      audioSize: base64Audio.length,
-      Engine: 'DEFAULT (no engine specified)'
-    });
 
     const [response, error] = await safeAsync(
       () => fetch(`${GeorgianTTSService.EDGE_FUNCTION_URL}`, {

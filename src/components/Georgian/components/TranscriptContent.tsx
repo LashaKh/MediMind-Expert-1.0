@@ -27,254 +27,117 @@ interface RecordingState {
 interface TranscriptContentProps {
   transcript: string;
   recordingState: RecordingState;
-  isEditing: boolean;
-  editedTranscript: string;
-  error?: string | null;
-  hasTranscript: boolean;
-  onEditSave: () => void;
-  onEditCancel: () => void;
   onEditChange: (value: string) => void;
-  canRecord?: boolean;
-  canStop?: boolean;
-  onStartRecording?: () => void;
-  onStopRecording?: () => void;
-  onFileUpload?: (file: File) => void;
 }
 
 export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   transcript,
   recordingState,
-  isEditing,
-  editedTranscript,
-  error,
-  hasTranscript,
-  onEditSave,
-  onEditCancel,
   onEditChange,
-  canRecord = false,
-  canStop = false,
-  onStartRecording,
-  onStopRecording,
-  onFileUpload
 }) => {
-  const transcriptRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (isEditing) {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Edit Transcript
-          </h3>
-          <div className="flex items-center space-x-3">
-            <MedicalButton
-              onClick={onEditSave}
-              variant="success"
-              size="md"
-              leftIcon={Save}
-              className="min-w-[120px]"
-            >
-              Save Changes
-            </MedicalButton>
-            <MedicalButton
-              onClick={onEditCancel}
-              variant="secondary"
-              size="md"
-              leftIcon={X}
-              className="min-w-[100px]"
-            >
-              Cancel
-            </MedicalButton>
-          </div>
-        </div>
+  return (
+    <div className="flex flex-col h-full p-6 bg-gradient-to-br from-indigo-50/80 via-purple-50/90 to-pink-50/60 dark:from-indigo-900/80 dark:via-purple-800/90 dark:to-pink-900/40">
+      {/* World-Class Transcript Container */}
+      <div className="relative group h-full flex flex-col">
+        {/* Sophisticated Background Layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-indigo-50/98 to-purple-50/95 dark:from-gray-800/95 dark:via-indigo-900/70 dark:to-purple-900/60 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-indigo-900/10 dark:shadow-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-transparent to-transparent dark:from-white/5 rounded-3xl" />
+        <div className="absolute inset-0 border border-white/30 dark:border-white/10 rounded-3xl" />
         
-        <textarea
-          value={editedTranscript}
-          onChange={(e) => onEditChange(e.target.value)}
-          className="w-full h-80 p-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-base leading-relaxed"
-          placeholder="Enter Georgian medical transcript here..."
-          dir="auto"
-        />
-      </div>
-    );
-  }
-
-  if (hasTranscript) {
-    return (
-      <div className="relative bg-gradient-to-br from-white via-slate-50/50 to-blue-50/30 dark:from-gray-800 dark:via-gray-700/80 dark:to-blue-900/10 backdrop-blur-xl rounded-3xl border border-slate-200/30 dark:border-gray-600/30 shadow-2xl shadow-slate-500/10 min-h-96 flex flex-col overflow-hidden">
-        {/* Premium Glass Effect Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent dark:from-gray-700/40 pointer-events-none rounded-3xl" />
+        {/* Premium Glow Effect */}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500/20 via-purple-500/15 to-pink-500/20 dark:from-indigo-400/20 dark:via-purple-400/15 dark:to-pink-400/20 rounded-3xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-700" />
         
-        {/* World-Class Live Streaming Header */}
-        {recordingState.isRecording && (
-          <div className="relative z-10 bg-gradient-to-r from-emerald-500/10 via-green-500/10 to-teal-500/10 dark:from-emerald-900/30 dark:via-green-900/30 dark:to-teal-900/30 backdrop-blur-xl border-b border-emerald-200/30 dark:border-emerald-700/30">
-            <div className="flex items-center justify-between p-6">
+        {/* Main Content Structure */}
+        <div className="relative h-full flex flex-col p-1">
+          
+          {/* Elegant Toolbar Header */}
+          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border border-indigo-200/50 dark:border-indigo-600/50 shadow-lg shadow-indigo-500/10 mb-4">
+            <div className="flex items-center justify-between px-6 py-4">
+              {/* Left Section */}
               <div className="flex items-center space-x-4">
-                {/* Premium Live Indicator */}
-                <div className="relative">
-                  <div className="w-4 h-4 bg-emerald-500 rounded-full animate-pulse shadow-emerald-500/50 shadow-lg" />
-                  <div className="absolute inset-0 w-4 h-4 bg-emerald-400 rounded-full animate-ping" />
-                  <div className="absolute -inset-0.5 border border-emerald-300 rounded-full animate-pulse" />
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full shadow-lg shadow-purple-500/40 animate-pulse" />
+                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 tracking-wide">Live Medical Transcript</span>
                 </div>
                 
-                <div className="flex flex-col">
-                  <span className="text-emerald-700 dark:text-emerald-300 font-bold text-lg flex items-center space-x-2">
-                    <span>Live Transcription</span>
-                    <Sparkles className="w-4 h-4" />
-                  </span>
-                  <span className="text-emerald-600 dark:text-emerald-400 text-sm font-medium">
-                    AI-powered medical transcription
-                  </span>
-                </div>
-                
-                {/* Service Status Indicators */}
-                {error && error.includes('experiencing issues') ? (
-                  <div className="flex items-center space-x-2 px-3 py-1.5 bg-amber-100 dark:bg-amber-900/40 border border-amber-200/50 dark:border-amber-700/50 text-amber-700 dark:text-amber-300 rounded-xl text-xs font-bold">
-                    <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-                    <span>Service Degraded</span>
+                {/* Live Recording Indicator */}
+                {recordingState.isRecording && (
+                  <div className="flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-red-500/95 to-rose-600/95 backdrop-blur-xl rounded-xl text-white shadow-lg shadow-red-500/30">
+                    <div className="relative">
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                      <div className="absolute inset-0 w-2 h-2 bg-white/70 rounded-full animate-ping" />
+                    </div>
+                    <span className="text-sm font-semibold">LIVE</span>
                   </div>
-                ) : (
-                  <div className="flex items-center space-x-2 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/40 border border-blue-200/50 dark:border-blue-700/50 text-blue-700 dark:text-blue-300 rounded-xl text-xs font-bold">
-                    <Star className="w-3 h-3" />
-                    <span>Premium Quality</span>
+                )}
+                
+                {/* Processing Indicator */}
+                {recordingState.isProcessingChunks && (
+                  <div className="flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-indigo-500/95 to-purple-600/95 backdrop-blur-xl rounded-xl text-white shadow-lg shadow-indigo-500/30">
+                    <div className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    <span className="text-sm font-semibold">Processing...</span>
                   </div>
                 )}
               </div>
               
-              {/* Processing Status */}
-              {recordingState.isProcessingChunks && (
-                <div className="flex items-center space-x-3 px-4 py-2 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-700/50 rounded-xl">
-                  <div className="relative">
-                    <div className="w-5 h-5 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
-                    <div className="absolute inset-1 w-3 h-3 border border-emerald-400/40 border-t-emerald-400 rounded-full animate-spin animate-reverse" />
-                  </div>
-                  <span className="text-emerald-700 dark:text-emerald-300 text-sm font-bold">Neural Processing</span>
-                </div>
-              )}
-            </div>
-            
-            {/* Premium Progress Indicator */}
-            <div className="h-1 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 opacity-30">
-              <div className="h-full bg-gradient-to-r from-emerald-400 to-green-400 animate-pulse" />
-            </div>
-          </div>
-        )}
-        
-        {/* Premium Medical Transcript Content */}
-        <div 
-          ref={transcriptRef}
-          className="relative z-10 flex-1 overflow-y-auto p-8 lg:p-12 scroll-smooth"
-        >
-          {/* Content Enhancement Overlay */}
-          <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white/80 dark:from-gray-800/80 to-transparent pointer-events-none z-10" />
-          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/80 dark:from-gray-800/80 to-transparent pointer-events-none z-10" />
-          
-          <div 
-            className="relative text-slate-800 dark:text-slate-100 text-lg lg:text-xl leading-loose whitespace-pre-wrap selection:bg-gradient-to-r selection:from-blue-200 selection:to-indigo-200 dark:selection:from-blue-800 dark:selection:to-indigo-800 selection:text-blue-900 dark:selection:text-blue-100"
-            style={{ 
-              fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
-              lineHeight: '1.9',
-              textShadow: '0 1px 2px rgba(0,0,0,0.05)'
-            }}
-            dir="auto"
-          >
-            {/* Enhanced Text with Gradient Highlights for Medical Terms */}
-            <div className="space-y-4">
-              {transcript.split('\n').map((paragraph, index) => (
-                paragraph.trim() && (
-                  <p 
-                    key={index} 
-                    className="transition-all duration-300 hover:bg-blue-50/30 dark:hover:bg-blue-900/10 rounded-lg p-2 -m-2"
-                  >
-                    {paragraph}
-                  </p>
-                )
-              ))}
-            </div>
-            
-            {/* Premium Typing Indicator */}
-            {recordingState.isRecording && recordingState.isProcessingChunks && (
-              <div className="inline-flex items-center ml-4 px-4 py-2 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-900/40 dark:via-indigo-900/40 dark:to-purple-900/40 backdrop-blur-sm border border-blue-200/50 dark:border-blue-700/50 rounded-2xl shadow-lg">
-                <div className="flex space-x-1">
-                  <div className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full animate-pulse"></div>
-                  <div className="w-2.5 h-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full animate-pulse" style={{animationDelay: '150ms'}}></div>
-                  <div className="w-2.5 h-2.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse" style={{animationDelay: '300ms'}}></div>
-                </div>
-                <span className="ml-3 text-sm font-semibold text-blue-700 dark:text-blue-300">Processing...</span>
-              </div>
-            )}
-          </div>
-          
-          {/* Scroll Progress Indicator */}
-          <div className="fixed right-6 top-1/2 transform -translate-y-1/2 w-1 h-32 bg-slate-200 dark:bg-slate-700 rounded-full opacity-50 hover:opacity-100 transition-opacity">
-            <div className="w-full bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full transition-all duration-300" style={{height: '30%'}} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col h-full p-6 bg-gradient-to-br from-slate-50/80 via-white/90 to-blue-50/60 dark:from-gray-900/80 dark:via-gray-800/90 dark:to-blue-900/40">
-      {/* Enhanced Container with Premium Glass Effect */}
-      <div className="relative group h-full">
-        {/* Sophisticated Background Layers */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-slate-50/95 to-blue-50/90 dark:from-gray-800/90 dark:via-gray-700/95 dark:to-blue-900/60 backdrop-blur-xl rounded-2xl shadow-2xl shadow-slate-900/5 dark:shadow-black/20" />
-        <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent dark:from-white/5 rounded-2xl" />
-        <div className="absolute inset-0 border border-white/20 dark:border-white/10 rounded-2xl" />
-        
-        {/* Premium Glow Effect */}
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 via-purple-500/10 to-indigo-500/20 dark:from-blue-400/20 dark:via-purple-400/10 dark:to-indigo-400/20 rounded-2xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500" />
-        
-        {/* Main Content Area */}
-        <div className="relative h-full p-1">
-          <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-slate-200/60 dark:border-gray-600/60 shadow-inner shadow-slate-900/5 dark:shadow-black/20 overflow-hidden">
-            
-            {/* Elegant Header Strip */}
-            <div className="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-slate-50/90 via-white/95 to-slate-50/90 dark:from-gray-700/90 dark:via-gray-600/95 dark:to-gray-700/90 border-b border-slate-200/50 dark:border-gray-600/50">
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-gradient-to-r from-emerald-400 to-green-500 rounded-full shadow-lg shadow-emerald-500/40 animate-pulse" />
-                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 tracking-wide">Live Transcript</span>
-              </div>
-              
-              {/* Subtle Status Indicators */}
+              {/* Right Actions */}
               <div className="flex items-center space-x-2">
-                <div className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-medium rounded-full border border-blue-200/50 dark:border-blue-700/50">
+                <div className="px-2 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-medium rounded-full border border-blue-200/50 dark:border-blue-700/50">
                   <Stethoscope className="w-3 h-3 inline mr-1" />
                   Medical
                 </div>
-                <div className="px-2 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-full border border-emerald-200/50 dark:border-emerald-700/50">
+                <div className="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-full border border-emerald-200/50 dark:border-emerald-700/50">
                   <Shield className="w-3 h-3 inline mr-1" />
                   Secure
                 </div>
               </div>
             </div>
-            
-            {/* Premium Text Area */}
-            <div className="relative h-[calc(100%-60px)] p-0">
-              <textarea
-                value={transcript}
-                className="w-full h-full resize-none bg-transparent text-slate-800 dark:text-slate-100 px-6 py-4 focus:outline-none text-base leading-relaxed overflow-y-auto selection:bg-blue-200/60 dark:selection:bg-blue-800/60 selection:text-blue-900 dark:selection:text-blue-100"
-                placeholder="Your medical transcript will appear here with real-time precision..."
-                readOnly
-                dir="auto"
-                style={{ 
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", system-ui, ui-sans-serif, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
-                  lineHeight: '1.7',
-                  letterSpacing: '0.01em'
-                }}
-              />
+          </div>
+          
+          {/* Premium Text Area */}
+          <div className="flex-1 relative overflow-hidden">
+            <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden">
               
-              {/* Elegant Scroll Indicator */}
-              <div className="absolute right-2 top-4 bottom-4 w-1 bg-slate-200/60 dark:bg-slate-600/60 rounded-full overflow-hidden">
-                <div className="w-full bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full transition-all duration-300" style={{height: '20%'}} />
+              {/* Text Area Header */}
+              <div className="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-indigo-50/90 via-purple-50/95 to-indigo-50/90 dark:from-indigo-700/90 dark:via-purple-600/95 dark:to-indigo-700/90 border-b border-indigo-200/50 dark:border-indigo-600/50">
+                <div className="flex items-center space-x-3">
+                  <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300 tracking-wide">Medical Transcript & Notes</span>
+                </div>
+                
+                {/* Status Indicators */}
+                <div className="flex items-center space-x-2">
+                  <div className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-xs font-medium rounded-full border border-indigo-200/50 dark:border-indigo-700/50">
+                    <Brain className="w-3 h-3 inline mr-1" />
+                    AI Enhanced
+                  </div>
+                  <div className="px-2 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-medium rounded-full border border-purple-200/50 dark:border-purple-700/50">
+                    <Zap className="w-3 h-3 inline mr-1" />
+                    Editable
+                  </div>
+                </div>
               </div>
               
-              {/* Floating Action Hints */}
-              <div className="absolute bottom-4 right-6 flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <div className="px-3 py-1.5 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-slate-200/50 dark:border-gray-600/50 rounded-lg shadow-lg text-xs text-slate-600 dark:text-slate-400 font-medium">
-                  <Sparkles className="w-3 h-3 inline mr-1" />
-                  AI Enhanced
+              {/* Main Text Area */}
+              <div className="relative h-[calc(100%-56px)] p-0">
+                <textarea
+                  value={transcript}
+                  onChange={(e) => onEditChange(e.target.value)}
+                  className="w-full h-full resize-none bg-transparent text-slate-800 dark:text-slate-100 px-6 py-4 focus:outline-none text-base leading-relaxed overflow-y-auto selection:bg-indigo-200/60 dark:selection:bg-indigo-800/60 selection:text-indigo-900 dark:selection:text-indigo-100"
+                  placeholder="Your medical transcript will appear here with real-time precision. You can edit this text at any time..."
+                  dir="auto"
+                  style={{ 
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", system-ui, ui-sans-serif, Helvetica, Arial, sans-serif',
+                    lineHeight: '1.7',
+                    letterSpacing: '0.01em'
+                  }}
+                />
+                
+                {/* Elegant Scroll Indicator */}
+                <div className="absolute right-2 top-4 bottom-4 w-1 bg-indigo-200/60 dark:bg-indigo-600/60 rounded-full overflow-hidden pointer-events-none">
+                  <div className="w-full bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full transition-all duration-300" style={{height: '25%'}} />
                 </div>
               </div>
             </div>
@@ -282,8 +145,8 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         </div>
         
         {/* Subtle Corner Accents */}
-        <div className="absolute top-0 left-0 w-8 h-8 bg-gradient-to-br from-blue-400/20 to-transparent rounded-2xl" />
-        <div className="absolute bottom-0 right-0 w-8 h-8 bg-gradient-to-tl from-purple-400/20 to-transparent rounded-2xl" />
+        <div className="absolute top-0 left-0 w-8 h-8 bg-gradient-to-br from-indigo-400/20 to-transparent rounded-3xl" />
+        <div className="absolute bottom-0 right-0 w-8 h-8 bg-gradient-to-tl from-purple-400/20 to-transparent rounded-3xl" />
       </div>
     </div>
   );

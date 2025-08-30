@@ -191,8 +191,7 @@ const findDocumentGroupKey = (doc: DocumentWithMetadata, existingGroupKeys: stri
 
 // Enhanced robust grouping algorithm
 const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
-  console.log('🔍 PREMIUM GROUPING DEBUG: Starting robust grouping for', documents.length, 'documents');
-  
+
   const chunkedGroups = new Map<string, DocumentWithMetadata[]>();
   const regularDocuments: DocumentWithMetadata[] = [];
 
@@ -211,9 +210,7 @@ const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
       // Create new group key using the cleanest possible base title
       groupKey = extractCleanBaseTitle(doc.title);
     }
-    
-    console.log(`📝 Document "${doc.title}" → Group key: "${groupKey}"`);
-    
+
     if (!chunkedGroups.has(groupKey)) {
       chunkedGroups.set(groupKey, []);
     }
@@ -231,8 +228,7 @@ const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
   documents.forEach(doc => {
     const isChunked = doc.tags?.includes('chunked-document');
     if (isChunked && !groupedChunkedDocs.has(doc.id)) {
-      console.log(`🔄 Trying to group orphaned document: ${doc.title}`);
-      
+
       // Look for documents uploaded within 10 minutes of each other with some title similarity
       const uploadTime = new Date(doc.created_at).getTime();
       const TIME_WINDOW = 10 * 60 * 1000; // 10 minutes
@@ -258,13 +254,13 @@ const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
       });
       
       if (bestGroupKey) {
-        console.log(`🕐 Time-based grouping: Adding "${doc.title}" to group "${bestGroupKey}"`);
+
         chunkedGroups.get(bestGroupKey)!.push(doc);
         groupedChunkedDocs.add(doc.id);
       } else {
         // Create a new group for this orphaned document
         const newGroupKey = extractCleanBaseTitle(doc.title);
-        console.log(`🆕 Creating new group for orphaned document: "${newGroupKey}"`);
+
         chunkedGroups.set(newGroupKey, [doc]);
       }
     }
@@ -326,13 +322,6 @@ const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
     const bLatest = Math.max(...b.documents.map(d => new Date(d.created_at).getTime()));
     return bLatest - aLatest;
   });
-  
-  console.log('🎯 PREMIUM FINAL GROUPS:', sortedGroups.map(g => ({
-    id: g.id,
-    isChunked: g.isChunked,
-    baseTitle: g.baseTitle,
-    documentCount: g.documents.length
-  })));
   
   return sortedGroups;
 };
@@ -1113,12 +1102,6 @@ export const PersonalLibraryPremium: React.FC = () => {
         setError(loadError.userMessage || 'Failed to load documents');
       } else {
         const convertedDocs = result.documents.map(convertUserDocumentToLegacy);
-        console.log('🔍 PREMIUM CONVERTED DOCUMENTS FOR GROUPING:', convertedDocs.map(d => ({
-          id: d.id,
-          title: d.title,
-          tags: d.tags,
-          isChunked: d.tags?.includes('chunked-document')
-        })));
         
         const documentGroups = groupDocuments(convertedDocs);
         
@@ -1333,13 +1316,12 @@ export const PersonalLibraryPremium: React.FC = () => {
     }
 
     try {
-      console.log(`✅ All ${documentIds.length} parts deleted successfully for:`, title);
-      
+
       // Refresh the documents list
       await loadDocuments();
       
     } catch (error) {
-      console.error('❌ Delete all documents error:', error);
+
       setError('Failed to delete all document parts');
     }
   };
@@ -1381,7 +1363,7 @@ export const PersonalLibraryPremium: React.FC = () => {
       // Clear status after 5 seconds
       setTimeout(() => setMonitoringStatus(''), 5000);
     } catch (error) {
-      console.error('Monitoring failed:', error);
+
       setMonitoringStatus('❌ Failed to check file status');
       setTimeout(() => setMonitoringStatus(''), 5000);
     } finally {

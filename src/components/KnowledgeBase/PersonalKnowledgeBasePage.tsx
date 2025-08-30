@@ -240,12 +240,6 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
         setError(loadError.userMessage || 'Failed to load documents');
       } else {
         const convertedDocs = result.documents.map(convertUserDocumentToLegacy);
-        console.log('🔍 CONVERTED DOCUMENTS FOR GROUPING:', convertedDocs.map(d => ({
-          id: d.id,
-          title: d.title,
-          tags: d.tags,
-          isChunked: d.tags?.includes('chunked-document')
-        })));
         
         setDocuments(convertedDocs);
         setTotal(result.total);
@@ -315,12 +309,10 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
       return;
     }
 
-    console.log('🗑️ Starting document deletion:', { documentId, title });
-
     const [result, deleteError] = await safeAsync(async () => {
-      console.log('🚀 Calling deleteUserDocument with:', { documentId, deleteFromOpenAI: true });
+
       const deleteResult = await deleteUserDocument({ documentId, deleteFromOpenAI: true });
-      console.log('📄 Delete result:', deleteResult);
+
       return deleteResult;
     }, {
       context: `deleting document "${title}" from knowledge base`,

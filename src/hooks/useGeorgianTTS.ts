@@ -77,6 +77,9 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   const durationIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  // Track processed segments to prevent duplicates
+  const processedSegmentsRef = useRef<number>(0); // Count of processed segments
+  const lastProcessedTimeRef = useRef<number>(0); // Last processed timestamp
   const dataArrayRef = useRef<Uint8Array | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const georgianTTSServiceRef = useRef<GeorgianTTSService | null>(null);
@@ -110,7 +113,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   // Update session ID ref when prop changes
   useEffect(() => {
     if (sessionId !== sessionIdRef.current) {
-      console.log(`🔄 Session ID updated: ${sessionIdRef.current} → ${sessionId}`);
+
       sessionIdRef.current = sessionId;
     }
   }, [sessionId]);
@@ -134,7 +137,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
           await georgianTTSServiceRef.current!.initialize();
           updateAuthStatus();
         } catch (error) {
-          console.warn('Georgian TTS authentication initialization failed:', error);
+
           setError('Authentication failed. Please refresh the page.');
         }
       };
@@ -152,8 +155,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     }
 
     try {
-      console.log('🔄 23s AUTO-RESTART: Stopping current segment for processing and seamless restart...');
-      
+
       // Set flag to prevent duplicate calls
       pendingAutoRestartRef.current = true;
       
@@ -161,7 +163,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       mediaRecorderRef.current.stop();
       
     } catch (error) {
-      console.error('❌ Auto-restart failed:', error);
+
       pendingAutoRestartRef.current = false;
       
       // Clear UI state on error
@@ -176,7 +178,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   const monitorAudioLevel = useCallback(() => {
     // Safety check
     if (!analyserRef.current || !dataArrayRef.current) {
-      console.warn('⚠️ Audio monitoring stopped - analyser or data array not available');
+
       return;
     }
 
@@ -195,7 +197,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     
     // Debug timing issue - check if segmentStartTimeRef is set properly
     if (!segmentStartTimeRef.current || segmentStartTimeRef.current <= 0) {
-      console.warn('⚠️ Segment start time not set, initializing now...');
+
       segmentStartTimeRef.current = currentTime;
     }
     
@@ -213,8 +215,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     
     // Execute 23-second restart
     if (segmentDuration >= maxSegmentDuration && !pendingAutoRestartRef.current) {
-      console.log(`🔄 AUTO-RESTART: 23-second limit reached, restarting recording...`);
-      
+
       // Set UI state to show auto-restart is happening
       setRecordingState(prev => ({ 
         ...prev, 
@@ -239,8 +240,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       const hasRecorder = !!mediaRecorderRef.current;
       const recorderState = mediaRecorderRef.current?.state;
       const isPending = pendingAutoRestartRef.current;
-      
-      console.log(`🛑 Audio monitoring stopped: hasRecorder=${hasRecorder}, state=${recorderState}, pending=${isPending}`);
+
     }
   }, [handleAutoSegmentation]); // Remove recordingState dependencies that recreate the callback
 
@@ -281,23 +281,22 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       dataArrayRef.current = new Uint8Array(bufferLength);
       
       source.connect(analyserRef.current);
-      
-      console.log('🎵 Audio monitoring setup complete - starting level monitoring for smart segmentation');
+
       monitorAudioLevel();
     } catch (error) {
-      console.warn('Audio monitoring setup failed:', error);
+
     }
   }, [monitorAudioLevel]);
 
   // 🚀 Pre-initialize microphone for instant recording
   const preInitializeMicrophone = useCallback(async (): Promise<MediaStream> => {
     if (preInitializedStreamRef.current && preInitializedStreamRef.current.active) {
-      console.log('🎯 Using existing pre-initialized stream');
+
       return preInitializedStreamRef.current;
     }
 
     if (preInitPromiseRef.current) {
-      console.log('⏳ Pre-initialization in progress, waiting...');
+
       return await preInitPromiseRef.current;
     }
 
@@ -305,7 +304,6 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       throw new Error('Pre-initialization already in progress');
     }
 
-    console.log('🚀 Starting microphone pre-initialization for instant recording...');
     isPreInitializingRef.current = true;
 
     const initPromise = safeAsync(
@@ -322,7 +320,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       preInitPromiseRef.current = null;
 
       if (error) {
-        console.error('❌ Pre-initialization failed:', error);
+
         throw error;
       }
 
@@ -331,7 +329,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       }
 
       preInitializedStreamRef.current = stream;
-      console.log('✅ Microphone pre-initialized successfully - instant recording ready!');
+
       return stream;
     });
 
@@ -406,16 +404,14 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       const errorMessage = error instanceof Error ? error.message : String(error);
       failedChunksCountRef.current++;
       totalProcessedChunksRef.current++;
-      
-      console.warn('Chunk processing failed:', errorMessage);
-      
+
       // Log specific error types for debugging
       if (errorMessage.includes('500')) {
-        console.error('Server error detected - Georgian TTS service may be temporarily unavailable:', errorMessage);
+
       } else if (errorMessage.includes('401')) {
-        console.error('Authentication error:', errorMessage);
+
       } else if (errorMessage.includes('422')) {
-        console.error('Request validation error:', errorMessage);
+
       }
       
       // If too many chunks fail, show an error to the user
@@ -450,7 +446,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     const processChunksInParallel = async () => {
       // Safety check - prevent infinite loops
       if (!isProcessingActiveRef.current) {
-        console.log('🛑 Parallel processing stopped - isProcessingActiveRef is false');
+
         return;
       }
 
@@ -459,10 +455,10 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         // Schedule next check only if still recording
         const isStillRecording = mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording';
         if (isStillRecording) {
-          console.log('⏳ No chunks yet, scheduling next check in 2s...');
+
           setTimeout(processChunksInParallel, 2000);
         } else {
-          console.log('🏁 Recording finished and no more chunks to process');
+
         }
         return;
       }
@@ -482,7 +478,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
           console.log(`🏁 Recording stopped, processing remaining ${chunksToProcess.length} chunks (${chunksToProcess.length * chunkSize / 1000}s)...`);
           // Process remaining chunks even if less than 20 seconds
         } else {
-          console.log('🏁 Recording finished, no more chunks to process');
+
           return;
         }
       }
@@ -539,7 +535,6 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       const audioSegments: Blob[] = [finalAudioBlob];
       const batchNumber = Math.floor(totalProcessedChunksRef.current / standardBatchSize) + 1;
       console.log(`🎧 Processing batch ${batchNumber}: ${Math.round(finalAudioBlob.size/1024)}KB (${finalSegmentChunks.length} chunks, ${finalSegmentChunks.length * chunkSize / 1000}s)`);
-      console.log(`📊 Remaining in queue: ${audioChunksForProcessingRef.current.length} chunks`);
 
       // No need to check if audioSegments is empty since we always create exactly one segment above
 
@@ -567,8 +562,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             console.log(`🆕 Forcing fresh authentication for batch ${batchNumber} (true session isolation)...`);
             await freshService.logout(); // Clear any cached tokens
             await freshService.initialize(); // Force fresh login
-            console.log(`🔄 Fresh service + token ready for batch ${batchNumber}`);
-            
+
             const chunkText = await freshService.recognizeSpeech(batchBlob, {
               language,
               autocorrect,
@@ -589,8 +583,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             totalProcessedChunksRef.current++;
             
             const processingTime = Date.now() - segmentStart;
-            console.warn(`❌ Batch ${batchNumber} failed after ${processingTime}ms:`, error);
-            
+
             // Check failure rate and show user error if too many failures
             const failureRate = failedChunksCountRef.current / totalProcessedChunksRef.current;
             if (totalProcessedChunksRef.current >= 3 && failureRate > 0.7) {
@@ -618,8 +611,6 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
           }
         });
 
-        console.log(`📊 BATCH RESULTS: ${successCount}/1 batches successful, ${failCount} failed`);
-
         // Sort results by original index to maintain order
         successfulResults.sort((a, b) => a.index - b.index);
 
@@ -642,12 +633,8 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
 
         // Update transcription result with accumulated text
         if (combinedTranscriptRef.current.trim()) {
-          const result: TranscriptionResult = {
-            text: combinedTranscriptRef.current,
-            timestamp: Date.now(),
-            duration: Date.now() - (recordingStartTimeRef.current || Date.now())
-          };
-          setTranscriptionResult(result);
+          // DON'T set transcriptionResult on manual stop - live updates already handled everything
+          console.log('🚫 Skipping setTranscriptionResult for manual stop to prevent duplicates');
         }
 
         setRecordingState(prev => ({
@@ -665,15 +652,15 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             if (isProcessingActiveRef.current) {
               processChunksInParallel();
             } else {
-              console.log('🛑 Batch processing stopped');
+
             }
           }, 30000); // 30 second delay between batches - maximum delay to allow full server reset
         } else {
-          console.log('🏁 All batches processed, recording finished');
+
         }
 
       } catch (error) {
-        console.warn('Batch processing failed:', error);
+
         // Continue with retry after error
         setTimeout(() => {
           if (isProcessingActiveRef.current) {
@@ -711,7 +698,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         const freshService = new GeorgianTTSService();
         
         // FRESH TOKEN for final processing
-        console.log('🆕 Forcing fresh authentication for final chunks...');
+
         await freshService.logout();
         await freshService.initialize();
         
@@ -735,20 +722,15 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
           }
         }
       } catch (error) {
-        console.warn('Failed to process final audio chunks:', error);
+
       }
     } else {
       console.log('🧹 No remaining chunks to process (already processed in manual stop)');
     }
 
-    // Final result
+    // Final result - DON'T set transcriptionResult, live updates handled everything
     if (combinedTranscriptRef.current.trim()) {
-      const finalResult: TranscriptionResult = {
-        text: combinedTranscriptRef.current,
-        timestamp: Date.now(),
-        duration: recordingState.duration
-      };
-      setTranscriptionResult(finalResult);
+      console.log('🚫 Skipping final transcriptionResult to prevent duplicates');
     }
 
     setRecordingState(prev => ({
@@ -766,16 +748,26 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       const wasManualStop = manualStopRef.current;
       
       if (wasManualStop) {
-        console.log('🛑 MANUAL STOP: Recording stopped by user - processing final audio...');
+
       } else {
-        console.log('🛑 AUTO-RESTART: Processing segment for seamless continuation...');
+
       }
       
       // Process current audio segment immediately
       if (audioChunksRef.current.length > 0) {
-        const currentBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
-        const segmentDurationSeconds = audioChunksRef.current.length * (chunkSize / 1000);
-        console.log(`🎙️ Processing segment: ${Math.round(currentBlob.size/1024)}KB (${audioChunksRef.current.length} chunks, ~${segmentDurationSeconds}s)`);
+        // Get only the unprocessed chunks to prevent duplicates
+        const processedChunkCount = processedSegmentsRef.current;
+        const unprocessedChunks = audioChunksRef.current.slice(processedChunkCount);
+        
+        if (unprocessedChunks.length === 0) {
+          console.log('🧹 No remaining chunks to process (already processed in auto-segment)');
+          // Don't return here - continue with cleanup and state management
+        } else {
+        
+        const currentBlob = new Blob(unprocessedChunks, { type: 'audio/webm;codecs=opus' });
+        const segmentDurationSeconds = unprocessedChunks.length * (chunkSize / 1000);
+        console.log(`🎙️ Processing segment: ${Math.round(currentBlob.size/1024)}KB (${unprocessedChunks.length} chunks, ~${segmentDurationSeconds}s)`);
+        console.log(`📊 Chunk tracking: processed=${processedChunkCount}, total=${audioChunksRef.current.length}, unprocessed=${unprocessedChunks.length}`);
         
         // For auto-restarts: process in background (non-blocking)
         // For manual stops: process synchronously (blocking)
@@ -796,22 +788,25 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
                 const previousLength = combinedTranscriptRef.current.length;
                 combinedTranscriptRef.current += separator + segmentText.trim();
                 
+                // Update processed chunk count to the total chunks processed (including current unprocessed ones)
+                const totalProcessedChunks = processedSegmentsRef.current + unprocessedChunks.length;
+                processedSegmentsRef.current = totalProcessedChunks;
+                lastProcessedTimeRef.current = Date.now();
+                
                 console.log(`📝 Auto-segment: "${segmentText.trim().substring(0, 50)}..."`);
+                console.log(`🔄 Updated processed chunks: ${processedSegmentsRef.current} (was ${processedSegmentsRef.current - unprocessedChunks.length}, added ${unprocessedChunks.length})`);
                 
                 if (onLiveTranscriptUpdate) {
                   const newText = combinedTranscriptRef.current.substring(previousLength);
                   onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionIdRef.current);
                 }
                 
-                const result: TranscriptionResult = {
-                  text: segmentText.trim(), // FIXED: Send only the new segment, not accumulated text
-                  timestamp: Date.now(),
-                  duration: Date.now() - (recordingStartTimeRef.current || Date.now())
-                };
-                setTranscriptionResult(result);
+                // DON'T set transcriptionResult for auto-segments - only use live updates
+                // This prevents the useEffect in TranscriptPanel from also processing the same content
+                console.log('🚫 Skipping setTranscriptionResult for auto-segment to prevent duplicates');
               }
             } catch (error) {
-              console.error('❌ Background processing failed:', error);
+
             }
           })();
         } else {
@@ -830,44 +825,49 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               const previousLength = combinedTranscriptRef.current.length;
               combinedTranscriptRef.current += separator + segmentText.trim();
               
+              // Update processed chunk count to the total chunks processed (including current unprocessed ones)
+              const totalProcessedChunks = processedSegmentsRef.current + unprocessedChunks.length;
+              processedSegmentsRef.current = totalProcessedChunks;
+              lastProcessedTimeRef.current = Date.now();
+              
               console.log(`📝 Final segment: "${segmentText.trim().substring(0, 50)}..."`);
+              console.log(`🔄 Updated processed chunks: ${processedSegmentsRef.current} (was ${processedSegmentsRef.current - unprocessedChunks.length}, added ${unprocessedChunks.length})`);
               
               if (onLiveTranscriptUpdate) {
                 const newText = combinedTranscriptRef.current.substring(previousLength);
                 onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionIdRef.current);
               }
               
-              const result: TranscriptionResult = {
-                text: segmentText.trim(), // FIXED: Send only the new segment, not accumulated text
-                timestamp: Date.now(),
-                duration: Date.now() - (recordingStartTimeRef.current || Date.now())
-              };
-              setTranscriptionResult(result);
+              // DON'T set transcriptionResult for final segments - keep using live updates only
+              console.log('🚫 Skipping setTranscriptionResult for final segment to prevent duplicates');
             }
             
             // CRITICAL FIX: Clear chunks after manual processing to prevent duplicate processing in cleanup
             audioChunksRef.current = [];
             audioChunksForProcessingRef.current = [];
-            console.log('🧹 Cleared audio chunks after manual stop processing');
+
           } catch (error) {
-            console.error('❌ Manual stop processing failed:', error);
+
           }
         }
+        } // Close the else block for unprocessed chunks
       }
       
       // Handle auto-restart for smart segmentation (only if NOT manual stop)
       if (wasAutoSegmentation && !wasManualStop) {
-        console.log('🚀 AUTO-RESTART: Restarting recording for seamless continuation...');
-        
+
         // Reset segmentation timing for new segment
         segmentStartTimeRef.current = Date.now();
         silenceCountRef.current = 0;
         pendingAutoRestartRef.current = false;
         
         // Reset audio chunks for new segment
-        console.log(`🧹 AUTO-RESTART: Clearing ${audioChunksRef.current.length} processed chunks for new segment`);
         audioChunksRef.current = [];
         audioChunksForProcessingRef.current = [];
+        
+        // CRITICAL FIX: Reset processed chunk counter for new segment
+        processedSegmentsRef.current = 0;
+        console.log('🔄 Auto-restart: Reset processed chunk counter to 0 for new segment');
         
         // Start new recording segment with minimal delay for fastest restart
         setTimeout(async () => {
@@ -904,9 +904,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               isRecording: true, 
               isProcessingChunks: false // Hide UI indicator instantly
             }));
-            
-            console.log('✅ 23s AUTO-RESTART: Seamless continuation started - next restart in 23 seconds');
-            
+
             // CRITICAL: Resume audio level monitoring immediately for fastest continuation
             setTimeout(() => {
               if (analyserRef.current && dataArrayRef.current && mediaRecorderRef.current) {
@@ -915,7 +913,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             }, 10); // Ultra-minimal delay for instant restart
             
           } catch (error) {
-            console.error('❌ Auto-restart failed:', error);
+
             setError('Auto-restart failed. Please manually restart recording.');
             cleanupAudioResources();
           }
@@ -923,7 +921,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         
       } else {
         // Manual stop or normal stop - clean up everything and don't restart
-        console.log('🏁 FINAL STOP: Recording ended - processing complete');
+
         setRecordingState(prev => ({ 
           ...prev, 
           isRecording: false, 
@@ -950,10 +948,14 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       failedChunksCountRef.current = 0;
       totalProcessedChunksRef.current = 0;
       
+      // Reset segment tracking for new recording session
+      processedSegmentsRef.current = 0;
+      lastProcessedTimeRef.current = 0;
+      
       // 🚀 Use pre-initialized stream for instant recording
       let stream: MediaStream;
       try {
-        console.log('⚡ Getting stream for instant recording...');
+
         stream = await preInitializeMicrophone();
       } catch (streamError: any) {
         // Enhanced error handling for common microphone permission issues
@@ -973,8 +975,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       }
       
       streamRef.current = stream;
-      console.log('⚡ Stream ready - starting recording immediately!');
-      
+
       // Setup audio monitoring
       await setupAudioMonitoring(stream);
       
@@ -1034,13 +1035,11 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       segmentStartTimeRef.current = startTime;
       silenceCountRef.current = 0;
       pendingAutoRestartRef.current = false;
-      
-      console.log(`🎯 Smart segmentation initialized at ${startTime} - monitoring will start after audio setup`);
-      
+
       startDurationTracking();
       
       // CRITICAL: Start audio monitoring AFTER MediaRecorder is set
-      console.log('🎵 Starting audio monitoring now that MediaRecorder is ready...');
+
       monitorAudioLevel();
       
       // Start processing based on mode - but disable it for smart segmentation approach
@@ -1058,8 +1057,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && recordingState.isRecording) {
-      console.log('👆 MANUAL STOP: User clicked stop button');
-      
+
       // Set manual stop flag BEFORE stopping to prevent restart
       manualStopRef.current = true;
       pendingAutoRestartRef.current = false; // Clear any pending auto-restart
@@ -1091,7 +1089,6 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     }
   }, [recordingState.isPaused, startDurationTracking, monitorAudioLevel]);
 
-
   const processFileUpload = useCallback(async (file: File) => {
     if (!georgianTTSServiceRef.current) {
       setError('Georgian TTS service not initialized');
@@ -1119,13 +1116,14 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       // Combine all speaker texts
       const combinedText = speakers.map(speaker => speaker.Text).join(' ');
       
+      // For file uploads, we still need transcriptionResult since there's no live updates
       const result: TranscriptionResult = {
         text: combinedText,
         timestamp: Date.now(),
         duration: 0 // File duration not tracked
       };
       
-      setTranscriptionResult(result);
+      setTranscriptionResult(result); // Keep this one - file uploads need it
       updateAuthStatus();
       
       return speakers;
@@ -1152,7 +1150,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     combinedTranscriptRef.current = '';
     lastSavedTranscriptLengthRef.current = 0;
     setTranscriptionResult(null);
-    console.log('🔄 Transcript reset for new session');
+
   }, []);
 
   // Cleanup on unmount

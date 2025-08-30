@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { 
   Stethoscope,
   Activity,
@@ -39,6 +39,8 @@ export const GeorgianSTTApp: React.FC = () => {
   
   // Local transcript state - single source of truth for UI display
   const [localTranscript, setLocalTranscript] = useState('');
+  // Recording session tracking
+  const [currentRecordingSessionId, setCurrentRecordingSessionId] = useState<string>('');
   
   // Session Management
   const {
@@ -59,9 +61,26 @@ export const GeorgianSTTApp: React.FC = () => {
   } = useSessionManagement();
   
   // Session-aware transcript updates - prevents cross-session contamination
+  const lastProcessedContentRef = useRef<string>('');
+  const lastProcessedTimeRef = useRef<number>(0);
+  
   const handleLiveTranscriptUpdate = useCallback((newText: string, fullText: string, sessionId?: string) => {
     // OPTIMISTIC UI: Update local state immediately for instant feedback
     if (newText.trim()) {
+      const now = Date.now();
+      
+      // Prevent duplicate processing of the same content within a short time window
+      if (lastProcessedContentRef.current === newText.trim() && (now - lastProcessedTimeRef.current) < 1000) {
+        console.log(`🚫 Duplicate live update detected (within 1s), skipping: "${newText.substring(0, 50)}..."`);
+        return;
+      }
+      
+      lastProcessedContentRef.current = newText.trim();
+      lastProcessedTimeRef.current = now;
+      
+      // Only append NEW text, not full text - this prevents duplicates
+      console.log(`📤 Live update received: "${newText.substring(0, 50)}..." (session: ${sessionId})`);
+      
       // Update local transcript immediately (optimistic UI)
       setLocalTranscript(prev => {
         const separator = prev ? '\n\n' : '';
@@ -71,7 +90,7 @@ export const GeorgianSTTApp: React.FC = () => {
       // Save to database in background (if sessionId available)
       if (sessionId) {
         appendToTranscript(sessionId, newText.trim()).catch(error => {
-          console.warn('Failed to save transcript to database:', error);
+
           // Keep local state - user still sees the transcript
         });
       }
@@ -132,7 +151,6 @@ export const GeorgianSTTApp: React.FC = () => {
     }
   }, [sessions, searchQuery, searchSessions]);
 
-
   // Don't auto-create sessions - only create when user starts recording or uploads
 
   // Handle final transcription result (DISABLED - live updates handle everything)
@@ -159,6 +177,7 @@ export const GeorgianSTTApp: React.FC = () => {
     resetTranscript();
     clearTTSResult();
     setLocalTranscript('');
+    setCurrentRecordingSessionId(''); // Clear recording session
     
     // Create new session
     const newSession = await createSession(title);
@@ -206,6 +225,9 @@ export const GeorgianSTTApp: React.FC = () => {
       resetTranscript();
       clearTTSResult();
       
+      // Clear recording session when switching
+      setCurrentRecordingSessionId('');
+      
       // Load session transcript into local state immediately
       const sessionTranscript = selectedSession.transcript || '';
       setLocalTranscript(sessionTranscript);
@@ -245,6 +267,14 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Handle recording start - create session if needed
   const handleStartRecording = useCallback(async () => {
+    // Generate new recording session ID for tracking
+    const newRecordingSessionId = `rec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    setCurrentRecordingSessionId(newRecordingSessionId);
+    
+    // Reset duplicate detection for new recording session
+    lastProcessedContentRef.current = '';
+    lastProcessedTimeRef.current = 0;
+
     if (!currentSession) {
       // Create new session when user starts recording - clear local state for fresh start
       setLocalTranscript(''); // Clear local transcript for new session
@@ -255,12 +285,14 @@ export const GeorgianSTTApp: React.FC = () => {
       if (newSession) {
         selectSession(newSession.id);
       } else {
-        console.error('❌ Failed to create session for recording');
+
         return; // Don't start recording without a session
       }
     } else {
-      // Only clear TTS result for clean processing, keep local transcript intact
-      clearTTSResult();
+      // IMPORTANT: Don't clear localTranscript when recording in existing session
+      // This preserves user's typed content!
+
+      clearTTSResult(); // Just clear pending results
     }
     startRecording();
   }, [currentSession, createSession, selectSession, startRecording, resetTranscript, clearTTSResult]);
@@ -282,7 +314,6 @@ export const GeorgianSTTApp: React.FC = () => {
   const handleHistoryCollapseChange = useCallback((isCollapsed: boolean) => {
     setIsHistoryCollapsed(isCollapsed);
   }, []);
-
 
   // Current transcript is accessed directly in components
 

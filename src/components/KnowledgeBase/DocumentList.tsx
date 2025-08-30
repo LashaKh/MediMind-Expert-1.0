@@ -16,30 +16,27 @@ interface DocumentGroup {
 
 // Utility function to group documents
 const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
-  console.log('🔍 GROUPING DEBUG: Starting to group documents:', documents.length);
-  
+
   const chunkedGroups = new Map<string, DocumentWithMetadata[]>();
   const regularDocuments: DocumentWithMetadata[] = [];
 
   // Separate chunked and regular documents
   documents.forEach(doc => {
-    console.log('📄 Checking document:', doc.title, 'Tags:', doc.tags);
+
     const isChunked = doc.tags?.includes('chunked-document');
-    console.log('🧩 Is chunked?', isChunked);
-    
+
     if (isChunked) {
       // Extract base title by removing " - Part X/Y"
       const baseTitle = doc.title.replace(/ - Part \d+\/\d+$/, '');
-      console.log('📝 Base title extracted:', baseTitle);
-      
+
       if (!chunkedGroups.has(baseTitle)) {
         chunkedGroups.set(baseTitle, []);
       }
       chunkedGroups.get(baseTitle)!.push(doc);
-      console.log('✅ Added to chunked group:', baseTitle);
+
     } else {
       regularDocuments.push(doc);
-      console.log('📋 Added to regular documents');
+
     }
   });
 
@@ -85,13 +82,6 @@ const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
     const bLatest = Math.max(...b.documents.map(d => new Date(d.created_at).getTime()));
     return bLatest - aLatest;
   });
-  
-  console.log('🎯 FINAL GROUPS:', sortedGroups.map(g => ({
-    id: g.id,
-    isChunked: g.isChunked,
-    baseTitle: g.baseTitle,
-    documentCount: g.documents.length
-  })));
   
   return sortedGroups;
 };

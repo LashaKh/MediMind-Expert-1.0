@@ -76,6 +76,19 @@ interface TranscriptPanelProps {
   onClearHistory?: () => void;
 }
 
+// Utility function for content hashing
+const hashContent = (content: string): string => {
+  // Simple hash function for content identification
+  let hash = 0;
+  const str = content.trim().toLowerCase();
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return `${hash}_${str.length}_${str.slice(0, 20)}`;
+};
+
 export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   currentSession,
   localTranscript,
@@ -100,11 +113,11 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   activeTab,
   onActiveTabChange
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedTranscript, setEditedTranscript] = useState('');
   const [contextText, setContextText] = useState('');
   const [isRecordingContext, setIsRecordingContext] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  const [editableTranscript, setEditableTranscript] = useState('');
+  const [lastRecordingSessionId, setLastRecordingSessionId] = useState<string>('');
   
   // Context recording TTS - separate instance with 5-second chunks
   const {
@@ -127,11 +140,41 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   // Refs
   const transcriptRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const processedSegmentsRef = useRef<Map<string, Set<string>>>(new Map()); // Per-session tracking
+  // Global deduplication check with timestamp
+  const lastGlobalProcessedRef = useRef<{ hash: string, timestamp: number }>({ hash: '', timestamp: 0 });
+  // Circuit breaker to prevent multiple rapid useEffect executions
+  const processingLockRef = useRef<boolean>(false);
+  // Track last processed localTranscript to prevent loops
+  const lastProcessedLocalTranscriptRef = useRef<string>('');
   
-  // Get current transcript text - prioritize localTranscript for instant updates
-  const currentTranscript = localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
+  // Simple transcript resolution like context window
+  const currentTranscript = editableTranscript || currentSession?.transcript || transcriptionResult?.text || '';
   const hasTranscript = currentTranscript.length > 0;
+  
+  // Reset tracking when recording starts (not on every render)
+  useEffect(() => {
+    if (recordingState.isRecording && !lastRecordingSessionId) {
+      const newSessionId = Date.now().toString();
+      setLastRecordingSessionId(newSessionId);
+      processedSegmentsRef.current.set(newSessionId, new Set());
+      // Reset global tracking for new session
+      lastGlobalProcessedRef.current = { hash: '', timestamp: 0 };
 
+    } else if (!recordingState.isRecording && lastRecordingSessionId) {
+
+      setLastRecordingSessionId('');
+    }
+  }, [recordingState.isRecording, lastRecordingSessionId]);
+
+  // Load session transcript when session changes
+  useEffect(() => {
+    if (currentSession?.transcript && !editableTranscript) {
+
+      setEditableTranscript(currentSession.transcript);
+    }
+  }, [currentSession?.id]); // Only trigger on session ID change, not transcript content changes
+  
   // Sync context recording state with actual recording state
   useEffect(() => {
     setIsRecordingContext(contextRecordingState.isRecording);
@@ -157,23 +200,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   }, [contextTranscriptionResult, contextRecordingState.isRecording, currentSession, onAppendTranscript, contextText, clearContextTTSResult]);
 
   // Utility functions (using imported utilities)
-
-  const handleEditStart = () => {
-    setEditedTranscript(currentSession?.transcript || transcriptionResult?.text || '');
-    setIsEditing(true);
-  };
-
-  const handleEditSave = () => {
-    if (currentSession && editedTranscript.trim()) {
-      onUpdateTranscript(editedTranscript.trim());
-    }
-    setIsEditing(false);
-  };
-
-  const handleEditCancel = () => {
-    setIsEditing(false);
-    setEditedTranscript('');
-  };
 
   const handleCopyToClipboard = () => {
     const text = currentSession?.transcript || transcriptionResult?.text || '';
@@ -213,6 +239,106 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     copyToClipboard(contextText);
   };
 
+  // Simple direct change handler like context window
+  const handleTranscriptChange = (newTranscript: string) => {
+    setEditableTranscript(newTranscript);
+  };
+
+  // Handle transcription updates with better deduplication and debouncing
+  useEffect(() => {
+    // Circuit breaker: prevent multiple simultaneous executions
+    if (processingLockRef.current) {
+      console.log('🚫 Processing already in progress, skipping duplicate useEffect');
+      return;
+    }
+    
+    // Additional check: don't process if neither transcriptionResult nor localTranscript have meaningful updates
+    if (!transcriptionResult && !localTranscript) {
+      console.log('🚫 No transcript updates to process');
+      return;
+    }
+    
+    // Prevent processing the same localTranscript multiple times
+    if (localTranscript && localTranscript === lastProcessedLocalTranscriptRef.current) {
+      console.log('🚫 Same localTranscript already processed, skipping');
+      return;
+    }
+    
+    // Debounce rapid state changes to prevent multiple processing
+    const timeoutId = setTimeout(() => {
+      processingLockRef.current = true; // Set lock
+    const sessionId = lastRecordingSessionId || 'default';
+    let processedSet = processedSegmentsRef.current.get(sessionId);
+    
+    if (!processedSet) {
+      processedSet = new Set<string>();
+      processedSegmentsRef.current.set(sessionId, processedSet);
+    }
+    
+    let newText = '';
+    
+    if (transcriptionResult && !recordingState.isRecording) {
+      // This should only be for file uploads now - recording uses live updates only
+      newText = transcriptionResult.text.trim();
+      console.log('📁 File upload transcription result processed');
+    } else if (localTranscript) {
+      // Extract only the NEW part from localTranscript (works both during and after recording)
+      const currentLength = editableTranscript.length;
+      if (localTranscript.length > currentLength) {
+        newText = localTranscript.substring(currentLength).trim();
+        console.log(`📝 Processing localTranscript update (recording: ${recordingState.isRecording})`);
+      }
+    }
+    
+    if (newText) {
+      // Create content hash for better deduplication
+      const contentHash = hashContent(newText);
+      const now = Date.now();
+      
+      // ENHANCED DEBUG: Log every attempt to see the pattern
+      console.log(`🔍 Processing attempt: hash=${contentHash}, text="${newText.substring(0, 30)}...", source=${transcriptionResult ? 'transcriptionResult' : 'localTranscript'}`);
+      
+      // Global duplicate check (catches rapid duplicate calls)
+      if (lastGlobalProcessedRef.current.hash === contentHash && 
+          (now - lastGlobalProcessedRef.current.timestamp) < 500) {
+        console.log(`🚫 Global duplicate detected (hash: ${contentHash}), skipping rapid trigger`);
+        return; // Exit early to prevent any processing
+      }
+      
+      // Check for duplicates in session set BEFORE logging to prevent race conditions
+      if (processedSet.has(contentHash)) {
+        console.log(`🚫 Duplicate segment detected (hash: ${contentHash}), skipping`);
+        return; // Exit early to prevent any processing
+      }
+      
+      // Update global tracking
+      lastGlobalProcessedRef.current = { hash: contentHash, timestamp: now };
+      
+      console.log(`✅ PROCESSING: New transcript segment (hash: ${contentHash}): "${newText.substring(0, 50)}..."`);
+      processedSet.add(contentHash);
+      
+      // Update the last processed localTranscript reference
+      if (localTranscript) {
+        lastProcessedLocalTranscriptRef.current = localTranscript;
+      }
+        
+      // Append to editable transcript
+      setEditableTranscript(prev => {
+        const separator = prev.trim() ? '\n\n' : '';
+        return prev + separator + newText;
+      });
+    }
+    
+    // Always clear the lock at the end of processing
+    processingLockRef.current = false;
+    }, 100); // 100ms debounce to prevent rapid duplicate triggers
+    
+    return () => {
+      clearTimeout(timeoutId);
+      processingLockRef.current = false; // Clear lock on cleanup
+    };
+  }, [transcriptionResult, localTranscript, recordingState.isRecording, lastRecordingSessionId]);
+
   // Render content based on active tab
   const renderContent = () => {
     switch (activeTab) {
@@ -221,18 +347,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
           <TranscriptContent
             transcript={currentTranscript}
             recordingState={recordingState}
-            isEditing={isEditing}
-            editedTranscript={editedTranscript}
-            error={error}
-            hasTranscript={hasTranscript}
-            onEditSave={handleEditSave}
-            onEditCancel={handleEditCancel}
-            onEditChange={setEditedTranscript}
-            canRecord={canRecord}
-            canStop={canStop}
-            onStartRecording={onStartRecording}
-            onStopRecording={onStopRecording}
-            onFileUpload={onFileUpload}
+            onEditChange={handleTranscriptChange}
           />
         );
       
@@ -289,7 +404,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         hasTranscript={hasTranscript}
         onCopy={handleCopyToClipboard}
         onDownload={handleDownloadTranscription}
-        onEdit={handleEditStart}
         canRecord={canRecord}
         canStop={canStop}
         isRecording={recordingState.isRecording}
