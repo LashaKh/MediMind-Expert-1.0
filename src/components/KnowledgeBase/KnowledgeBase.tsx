@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState } from 'react';
 import { 
   BookOpen, 
   Database, 
@@ -13,9 +13,9 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useSpecialty, MedicalSpecialty } from '../../stores/useAppStore';
-// Lazy load components for better performance on mobile
-const PersonalKnowledgeBasePage = lazy(() => import('./PersonalKnowledgeBasePage').then(module => ({ default: module.PersonalKnowledgeBasePage })));
-const CuratedKnowledgeBasePage = lazy(() => import('./CuratedKnowledgeBasePage'));
+// Direct imports for instant loading
+import { PersonalKnowledgeBasePage } from './PersonalKnowledgeBasePage';
+import CuratedKnowledgeBasePage from './CuratedKnowledgeBasePage';
 
 type KnowledgeBaseTab = 'personal' | 'curated';
 
@@ -188,37 +188,19 @@ export const KnowledgeBase: React.FC = () => {
         <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-b from-transparent to-gray-100 pointer-events-none"></div>
       </div>
 
-      {/* Tab Content with Enhanced Transitions and Lazy Loading */}
+      {/* Tab Content with Enhanced Transitions and Instant Loading */}
       <div className="relative">
         <div className={`transition-all duration-500 ${activeTab === 'curated' ? 'opacity-100' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
           {activeTab === 'curated' && (
             <div className="min-h-screen">
-              <Suspense fallback={
-                <div className="flex items-center justify-center py-20">
-                  <div className="text-center">
-                    <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading curated knowledge...</p>
-                  </div>
-                </div>
-              }>
-                <CuratedKnowledgeBasePage />
-              </Suspense>
+              <CuratedKnowledgeBasePage />
             </div>
           )}
         </div>
         <div className={`transition-all duration-500 ${activeTab === 'personal' ? 'opacity-100' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
           {activeTab === 'personal' && (
             <div className="min-h-screen">
-              <Suspense fallback={
-                <div className="flex items-center justify-center py-20">
-                  <div className="text-center">
-                    <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading personal library...</p>
-                  </div>
-                </div>
-              }>
-                <PersonalKnowledgeBasePage />
-              </Suspense>
+              <PersonalKnowledgeBasePage />
             </div>
           )}
         </div>

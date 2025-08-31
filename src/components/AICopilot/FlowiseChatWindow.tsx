@@ -190,11 +190,11 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     return activeConversationId;
   }, [activeConversationId, createNewConversation, setActiveConversation, profile]);
 
-  // Enhanced animations and interactions - Optimized frequency for performance
+  // Enhanced animations and interactions - Further optimized for instant navigation
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
-    }, 300000); // Update every 5 minutes (reduced from 1 minute for performance)
+    }, 600000); // Update every 10 minutes (optimized for battery life)
 
     return () => {
       clearInterval(timer);
@@ -252,12 +252,12 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     }
   }, [profile?.user_id, setPersonalDocumentCount]);
 
-  // Pulse effect for AI readiness - Optimized frequency and pattern for performance
+  // Pulse effect for AI readiness - Battery-optimized for mobile performance
   useEffect(() => {
     const pulseTimer = setInterval(() => {
       setIsPulsing(true);
-      setTimeout(() => setIsPulsing(false), 2000);
-    }, 30000); // Reduced from 8 seconds to 30 seconds for performance
+      setTimeout(() => setIsPulsing(false), 1000); // Shorter pulse duration
+    }, 120000); // 2 minutes - significant battery improvement
 
     return () => clearInterval(pulseTimer);
   }, []);

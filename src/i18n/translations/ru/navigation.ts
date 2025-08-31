@@ -70,7 +70,17 @@ export const navigation = {
   newCase: 'Новый случай',
   newCalculation: 'Новый расчет',
   uploadDocument: 'Загрузить документ',
-  startChat: 'Начать чат'
+  startChat: 'Начать чат',
+
+  // Navigation sections
+  sections: {
+    coreAI: 'Основные функции ИИ',
+    coreAIDesc: 'Основные медицинские инструменты на основе ИИ',
+    clinicalTools: 'Клинические инструменты',
+    clinicalToolsDesc: 'Профессиональные медицинские инструменты анализа',
+    knowledge: 'Знания и профиль',
+    knowledgeDesc: 'Образовательные ресурсы и управление аккаунтом'
+  }
 };
 
 export default navigation; 

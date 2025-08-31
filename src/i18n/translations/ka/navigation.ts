@@ -70,7 +70,17 @@ export const navigation = {
   newCase: 'ახალი შემთხვევა',
   newCalculation: 'ახალი გამოთვლა',
   uploadDocument: 'დოკუმენტის ატვირთვა',
-  startChat: 'ჩატის დაწყება'
+  startChat: 'ჩატის დაწყება',
+
+  // Navigation sections
+  sections: {
+    coreAI: 'AI ძირითადი ფუნქციები',
+    coreAIDesc: 'აუცილებელი AI-ზე დაფუძნებული სამედიცინო ინსტრუმენტები',
+    clinicalTools: 'კლინიკური ინსტრუმენტები',
+    clinicalToolsDesc: 'პროფესიონალური სამედიცინო ანალიზის ინსტრუმენტები',
+    knowledge: 'ცოდნა და პროფილი',
+    knowledgeDesc: 'სასწავლო რესურსები და ანგარიშის მართვა'
+  }
 };
 
 export default navigation; 

@@ -55,7 +55,7 @@ export function useBookmarkedNews() {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     const [response, error] = await safeAsync(async () => {
-      const res = await fetch('/.netlify/functions/news-interaction', {
+      const res = await fetch('https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/news-interaction', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${session.access_token}`,
@@ -120,7 +120,7 @@ export function useBookmarkedNews() {
     }
 
     const [success, error] = await safeAsync(async () => {
-      const res = await fetch('/.netlify/functions/news-interaction', {
+      const res = await fetch('https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/news-interaction', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${session.access_token}`,
@@ -178,16 +178,16 @@ export function useBookmarkedNews() {
     }
 
     const [success, error] = await safeAsync(async () => {
-      const res = await fetch('/.netlify/functions/news-interaction', {
+      // Send newsId as query parameter instead of in body for DELETE request
+      const url = new URL('https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/news-interaction');
+      url.searchParams.append('newsId', articleId);
+      
+      const res = await fetch(url.toString(), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${session.access_token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          newsId: articleId,
-          interactionType: 'bookmark',
-        }),
       });
 
       if (!res.ok) {

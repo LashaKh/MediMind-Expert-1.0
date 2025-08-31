@@ -73,7 +73,17 @@ export const navigation = {
   newCase: 'New Case',
   newCalculation: 'New Calculation',
   uploadDocument: 'Upload Document',
-  startChat: 'Start Chat'
+  startChat: 'Start Chat',
+
+  // Navigation sections
+  sections: {
+    coreAI: 'AI Core Features',
+    coreAIDesc: 'Essential AI-powered medical tools',
+    clinicalTools: 'Clinical Tools',
+    clinicalToolsDesc: 'Professional medical analysis tools',
+    knowledge: 'Knowledge & Profile',
+    knowledgeDesc: 'Learning resources & account management'
+  }
 };
 
 export default navigation; 

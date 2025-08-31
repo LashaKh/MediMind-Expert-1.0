@@ -37,7 +37,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
-    }, 1000);
+    }, 60000); // Update every minute instead of every second - major battery improvement
     return () => clearInterval(timer);
   }, []);
 

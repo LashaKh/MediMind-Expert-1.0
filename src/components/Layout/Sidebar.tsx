@@ -6,6 +6,8 @@ import {
   BookOpen, 
   X,
   ChevronLeft,
+  ChevronDown,
+  ChevronRight,
   Activity,
   User,
   Database,
@@ -40,6 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  
 
   // Color mapping for dynamic gradients
   const getGradientColors = (colorString: string) => {
@@ -56,95 +59,133 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
     return colorMap[colorString] || 'linear-gradient(to right, #64748b, #6b7280)';
   };
 
-  const navigationItems = [
-    {
-      icon: MessageSquare,
-      label: t('navigation.aiCoPilot', 'AI Assistant'),
-      path: '/ai-copilot',
-      color: 'from-blue-500 to-cyan-500',
-      shadowColor: 'shadow-blue-500/25',
-      category: 'primary'
+  // PROFESSIONAL 3-TIER IMPORTANCE-BASED SEGMENTATION
+  const navigationItems = {
+    // TIER 1: CORE AI FEATURES - Most Important & Frequently Used
+    coreAI: {
+      title: t('navigation.sections.coreAI', 'AI Core Features'),
+      subtitle: t('navigation.sections.coreAIDesc', 'Essential AI-powered medical tools'),
+      priority: 1,
+      items: [
+        {
+          icon: MessageSquare,
+          label: t('navigation.aiCoPilot', 'AI Co-Pilot'),
+          subtitle: 'Medical consultation AI',
+          path: '/ai-copilot',
+          color: 'from-blue-600 to-indigo-600',
+          shadowColor: 'shadow-blue-500/30',
+          importance: 'critical'
+        },
+        {
+          icon: Mic2,
+          label: 'MediScribe',
+          subtitle: 'Voice transcription for medical notes',
+          path: '/mediscribe',
+          color: 'from-emerald-600 to-teal-600',
+          shadowColor: 'shadow-emerald-500/30',
+          importance: 'critical'
+        }
+      ]
     },
-    {
-      icon: Search,
-      label: t('navigation.mediSearch', 'Medi Search & News'),
-      path: '/search',
-      color: 'from-indigo-500 to-purple-500',
-      shadowColor: 'shadow-indigo-500/25',
-      category: 'primary'
+
+    // TIER 2: CLINICAL TOOLS - Medical Analysis & Calculation Tools
+    clinicalTools: {
+      title: t('navigation.sections.clinicalTools', 'Clinical Tools'),
+      subtitle: t('navigation.sections.clinicalToolsDesc', 'Professional medical analysis tools'),
+      priority: 2,
+      items: [
+        {
+          icon: Calculator,
+          label: t('navigation.calculators', 'Medical Calculators'),
+          subtitle: 'Clinical risk assessment tools',
+          path: '/calculators',
+          color: 'from-purple-600 to-violet-600',
+          shadowColor: 'shadow-purple-500/30',
+          importance: 'high'
+        },
+        {
+          icon: TestTube2,
+          label: 'Blood Gas Analysis',
+          subtitle: 'ABG interpretation & analysis',
+          path: '/abg-analysis',
+          color: 'from-red-600 to-rose-600',
+          shadowColor: 'shadow-red-500/30',
+          importance: 'high'
+        },
+        {
+          icon: Search,
+          label: t('navigation.mediSearch', 'MediSearch'),
+          subtitle: 'Medical literature & news',
+          path: '/search',
+          color: 'from-indigo-600 to-blue-600',
+          shadowColor: 'shadow-indigo-500/30',
+          importance: 'high'
+        },
+        {
+          icon: Mic,
+          label: t('navigation.podcastStudio', 'Podcast Studio'),
+          subtitle: 'AI-powered medical podcasts',
+          path: '/podcast-studio',
+          color: 'from-pink-600 to-rose-600',
+          shadowColor: 'shadow-pink-500/30',
+          importance: 'medium'
+        }
+      ]
     },
-    {
-      icon: Mic,
-      label: t('navigation.podcastStudio', 'Podcast Studio'),
-      path: '/podcast-studio',
-      color: 'from-purple-500 to-pink-500',
-      shadowColor: 'shadow-purple-500/25',
-      category: 'primary'
-    },
-    {
-      icon: Calculator,
-      label: t('navigation.calculators', 'Calculators'),
-      path: '/calculators',
-      color: 'from-violet-500 to-purple-500',
-      shadowColor: 'shadow-violet-500/25',
-      category: 'primary'
-    },
-    {
-      icon: TestTube2,
-      label: 'Blood Gas Analysis',
-      path: '/abg-analysis',
-      color: 'from-red-500 to-rose-500',
-      shadowColor: 'shadow-red-500/25',
-      category: 'primary'
-    },
-    {
-      icon: FileText,
-      label: 'MediScribe',
-      path: '/mediscribe',
-      color: 'from-emerald-500 to-teal-500',
-      shadowColor: 'shadow-emerald-500/25',
-      category: 'primary'
-    },
-    {
-      icon: BookOpen,
-      label: t('navigation.knowledgeBase', 'Knowledge Base'),
-      path: '/knowledge-base',
-      color: 'from-amber-500 to-orange-500',
-      shadowColor: 'shadow-amber-500/25',
-      category: 'secondary'
-    },
-    {
-      icon: Database,
-      label: 'Diseases',
-      path: '/diseases',
-      color: 'from-red-500 to-rose-500',
-      shadowColor: 'shadow-red-500/25',
-      category: 'secondary'
-    },
-    {
-      icon: BarChart3,
-      label: 'Analytics',
-      path: '/analytics',
-      color: 'from-violet-500 to-purple-500',
-      shadowColor: 'shadow-violet-500/25',
-      category: 'secondary',
-      adminOnly: true
-    },
-    {
-      icon: User,
-      label: t('navigation.profile', 'Profile'),
-      path: '/profile',
-      color: 'from-rose-500 to-pink-500',
-      shadowColor: 'shadow-rose-500/25',
-      category: 'utility'
+
+    // TIER 3: KNOWLEDGE & PROFILE - Information & Personal Management
+    knowledge: {
+      title: t('navigation.sections.knowledge', 'Knowledge & Profile'),
+      subtitle: t('navigation.sections.knowledgeDesc', 'Learning resources & account management'),
+      priority: 3,
+      items: [
+        {
+          icon: BookOpen,
+          label: t('navigation.knowledgeBase', 'Knowledge Base'),
+          subtitle: 'Medical reference library',
+          path: '/knowledge-base',
+          color: 'from-amber-600 to-orange-600',
+          shadowColor: 'shadow-amber-500/30',
+          importance: 'medium'
+        },
+        {
+          icon: Database,
+          label: 'Disease Library',
+          subtitle: 'Comprehensive disease database',
+          path: '/diseases',
+          color: 'from-teal-600 to-cyan-600',
+          shadowColor: 'shadow-teal-500/30',
+          importance: 'medium'
+        },
+        {
+          icon: User,
+          label: t('navigation.profile', 'Profile & Settings'),
+          subtitle: 'Account preferences',
+          path: '/profile',
+          color: 'from-slate-600 to-gray-600',
+          shadowColor: 'shadow-slate-500/30',
+          importance: 'low'
+        },
+        {
+          icon: BarChart3,
+          label: 'Analytics Dashboard',
+          subtitle: 'Usage insights & metrics',
+          path: '/analytics',
+          color: 'from-violet-600 to-purple-600',
+          shadowColor: 'shadow-violet-500/30',
+          importance: 'low',
+          adminOnly: true
+        }
+      ]
     }
-  ];
+  };
 
   const isActive = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
-  // Debounced hover handlers to reduce flickering
+
+  // Optimized hover handlers for instant navigation
   const handleMouseEnter = (path: string) => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
@@ -156,9 +197,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
     }
-    hoverTimeoutRef.current = setTimeout(() => {
-      setHoveredItem(null);
-    }, 50);
+    // Instant response - no delay
+    setHoveredItem(null);
   };
 
   // Swipe to close functionality for mobile
@@ -269,7 +309,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         onTouchEnd={onTouchEnd}
         className={`
           ${isCollapsed && !isMobile ? 'w-20' : isMobile ? 'w-80 max-w-[90vw]' : 'w-72'} 
-          relative transform transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
+          relative transform transition-transform duration-200
           sidebar-container group
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
           ${isMobile ? 'fixed left-0 z-50' : 'relative z-40'}
@@ -287,40 +327,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           })
         }}
       >
-        {/* Glassmorphism Background with Animated Gradient */}
+        {/* Solid Background - Always Opaque */}
         <div className={`
           absolute inset-0 
-          ${getGPUSafeClasses(
-            'bg-gradient-to-br from-white/95 via-white/90 to-white/95 dark:from-gray-900/95 dark:via-gray-900/90 dark:to-gray-900/95 backdrop-blur-xl backdrop-saturate-150',
-            animationClasses.gradients,
-            shouldOptimize
-          )}
-          border-r border-white/20 dark:border-gray-700/50
-          ${shouldOptimize ? 'shadow-lg' : 'shadow-2xl shadow-black/5 dark:shadow-black/20'}
-          transition-all duration-700
+          ${shouldOptimize 
+            ? 'bg-white dark:bg-gray-900' 
+            : 'bg-white dark:bg-gray-900 backdrop-blur-sm'
+          }
+          border-r border-gray-200 dark:border-gray-700
+          shadow-lg
         `}>
-          {/* Subtle gradient overlay - desktop only */}
-          {!shouldOptimize && (
-            <div className={`
-              absolute inset-0 opacity-30
-              bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-cyan-500/10
-              dark:from-blue-400/10 dark:via-purple-400/5 dark:to-cyan-400/10
-              transition-opacity duration-500
-            `} />
-          )}
-          
-          {/* Noise texture for premium feel - desktop only */}
-          {!shouldOptimize && (
-            <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSBiYXNlRnJlcXVlbmN5PSIwLjkiIG51bU9jdGF2ZXM9IjEiIHJlc3VsdD0ibm9pc2UiLz48ZmVDb21wb3NpdGUgaW49Im5vaXNlIiBpbjI9IlNvdXJjZUdyYXBoaWMiIG9wZXJhdG9yPSJtdWx0aXBseSIvPjwvZmlsdGVyPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIwLjI1Ii8+PC9zdmc+')] bg-repeat" />
-          )}
+          {/* Minimal overlay for visual appeal */}
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-50/30 via-transparent to-transparent dark:from-blue-900/20" />
         </div>
 
         <div className="relative z-10 flex flex-col h-full">
           {/* Enhanced Header - Simplified without logo duplication */}
           <div className={`
-            flex items-center justify-between pt-6 pb-4 px-4 border-b border-white/10 dark:border-gray-700/30
+            flex items-center justify-between pt-6 pb-4 px-4 border-b border-gray-200/50 dark:border-gray-700/50
             ${isCollapsed && !isMobile ? 'px-2' : 'px-6'}
-            transition-all duration-300
+            transition-all duration-200
           `}>
             {/* User Profile Summary - Compressed on mobile landscape */}
             <div className={`
@@ -399,146 +425,269 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
             </div>
           </div>
 
-          {/* Compact Colorful Navigation Design */}
+          {/* PROFESSIONAL TIERED NAVIGATION SYSTEM */}
           <nav 
             className={`
-              flex-1 py-3 overflow-y-auto scrollbar-hide
-              ${isCollapsed && !isMobile ? 'px-2' : 'px-4'}
+              flex-1 py-2 overflow-y-auto scrollbar-hide
+              ${isCollapsed && !isMobile ? 'px-2' : 'px-3'}
               transition-all duration-300
             `}
             role="list"
             aria-label={t('navigation.toggleMenu', 'Toggle menu')}
           >
-            {/* Single Column Layout - All Items */}
-            <div className="space-y-1.5">
-              {navigationItems
-                .filter(item => !item.adminOnly || (profile?.medical_specialty === 'admin'))
-                .map((item, index) => {
-                const Icon = item.icon;
-                const active = isActive(item.path);
-                const isHovered = hoveredItem === item.path;
-                
-                return (
-                  <Link
-                    key={item.path}
-                    ref={index === 0 ? firstNavItemRef : undefined}
-                    to={item.path}
-                    onClick={onClose}
-                    onMouseEnter={() => handleMouseEnter(item.path)}
-                    onMouseLeave={handleMouseLeave}
-                    role="listitem"
-                    aria-current={active ? 'page' : undefined}
-                    className={`
-                      group relative block transition-all duration-300 sidebar-nav-item
-                      ${isCollapsed && !isMobile ? 'mx-auto' : ''}
-                      min-h-[44px] touch-target-md
-                    `}
-                  >
-                    {/* Subtle to Colorful Card Design */}
-                    <div 
-                      className={`
-                        relative overflow-hidden rounded-xl transition-all duration-300 ease-in-out
-                        ${isCollapsed && !isMobile ? 'w-12 h-12 mx-auto' : 'w-full h-11'}
-                        ${active 
-                          ? `bg-gradient-to-r ${item.color} shadow-lg ${item.shadowColor}`
-                          : `bg-gray-100/80 dark:bg-gray-800/80 hover:shadow-md border border-gray-300/60 dark:border-gray-600/60 hover:border-white/20 dark:hover:border-white/10`
-                        }
-                        ${shouldOptimize ? '' : 'backdrop-blur-sm'}
-                        will-change-auto
-                      `}
-                      style={!active && isHovered ? {
-                        background: getGradientColors(item.color),
-                        transition: 'all 300ms ease-in-out',
-                      } : {
-                        transition: 'all 300ms ease-in-out',
-                      }}
-                    >
-                      
-                      {/* Background Pattern */}
+            {/* 3-TIER SEGMENTED NAVIGATION */}
+            <div className="space-y-6">
+              {Object.entries(navigationItems).map(([sectionKey, section], sectionIndex) => (
+                <div key={sectionKey} className="space-y-3">
+                  {/* SECTION HEADER - Only show when not collapsed */}
+                  {(!isCollapsed || isMobile) && (
+                    <div className="px-3 py-2">
                       <div className={`
-                        absolute inset-0 transition-all duration-300
-                        ${active ? 'opacity-20' : 'opacity-0 group-hover:opacity-15'}
+                        flex items-center space-x-3 mb-2 
+                        ${section.priority === 1 ? 'border-l-4 border-blue-500 pl-3' : ''}
+                        ${section.priority === 2 ? 'border-l-4 border-purple-500 pl-3' : ''}
+                        ${section.priority === 3 ? 'border-l-4 border-amber-500 pl-3' : ''}
                       `}>
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-white/10" />
-                        <div className="absolute top-1 right-1 w-1 h-1 bg-white/40 rounded-full" />
-                        <div className="absolute bottom-1 left-1 w-0.5 h-0.5 bg-white/30 rounded-full" />
+                        <div className={`
+                          w-2 h-2 rounded-full
+                          ${section.priority === 1 ? 'bg-blue-500 shadow-lg shadow-blue-500/40' : ''}
+                          ${section.priority === 2 ? 'bg-purple-500 shadow-lg shadow-purple-500/40' : ''}
+                          ${section.priority === 3 ? 'bg-amber-500 shadow-lg shadow-amber-500/40' : ''}
+                        `} />
+                        <h4 className={`
+                          font-bold text-xs uppercase tracking-wider
+                          ${section.priority === 1 ? 'text-blue-700 dark:text-blue-300' : ''}
+                          ${section.priority === 2 ? 'text-purple-700 dark:text-purple-300' : ''}
+                          ${section.priority === 3 ? 'text-amber-700 dark:text-amber-300' : ''}
+                        `}
+                        style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 700 }}>
+                          {section.title}
+                        </h4>
                       </div>
-                      
-                      {/* Content Container */}
-                      <div className={`
-                        relative z-10 h-full flex items-center
-                        ${isCollapsed && !isMobile ? 'justify-center' : 'px-3'}
-                      `}>
-                        
-                        {/* Icon */}
-                        <div className="flex items-center justify-center flex-shrink-0">
-                          <Icon className={`
-                            transition-all duration-300 ease-in-out
-                            ${isCollapsed && !isMobile ? 'w-6 h-6' : 'w-5 h-5'}
-                            ${active 
-                              ? 'text-white drop-shadow-sm' 
-                              : isHovered
-                                ? 'text-white drop-shadow-sm'
-                                : 'text-black dark:text-gray-200'
-                            }
-                            ${isHovered && !active ? 'scale-105' : 'scale-100'}
-                          `} />
-                        </div>
-                        
-                        {/* Label */}
-                        {(!isCollapsed || isMobile) && (
-                          <div className="flex-1 ml-3 min-w-0">
-                            <h3 className={`
-                              font-semibold text-sm transition-all duration-300 truncate tracking-tight
-                              ${active 
-                                ? 'text-white drop-shadow-sm' 
-                                : isHovered
-                                  ? 'text-white drop-shadow-sm'
-                                  : 'text-black dark:text-gray-200'
-                              }
-                            `}
-                            style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 600 }}>
-                              {item.label}
-                            </h3>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Active State Indicator */}
-                      {active && (
-                        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-white/80 rounded-r-full shadow-sm" />
-                      )}
-                      
-                      {/* Subtle Hover Highlight */}
-                      {isHovered && !active && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-80 transition-opacity duration-300" />
-                      )}
+                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed ml-6"
+                         style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 400 }}>
+                        {section.subtitle}
+                      </p>
                     </div>
+                  )}
 
-                    {/* Collapsed State Tooltip */}
-                    {isCollapsed && !isMobile && (
+                  {/* SECTION ITEMS */}
+                  <div className={`
+                    space-y-1.5
+                    ${section.priority === 1 ? 'mb-4' : ''}
+                    ${section.priority === 2 ? 'mb-3' : ''}
+                  `}>
+                    {section.items
+                      .filter(item => !item.adminOnly || (profile?.medical_specialty === 'admin'))
+                      .map((item, index) => {
+                      const Icon = item.icon;
+                      const active = isActive(item.path);
+                      const isHovered = hoveredItem === item.path;
+                      const globalIndex = sectionIndex * 10 + index; // Ensure unique refs
+                      
+                      return (
+                        <Link
+                          key={item.path}
+                          ref={sectionIndex === 0 && index === 0 ? firstNavItemRef : undefined}
+                          to={item.path}
+                          onClick={onClose}
+                          onMouseEnter={() => handleMouseEnter(item.path)}
+                          onMouseLeave={handleMouseLeave}
+                          role="listitem"
+                          aria-current={active ? 'page' : undefined}
+                          className={`
+                            group relative block transition-colors duration-150 sidebar-nav-item
+                            ${isCollapsed && !isMobile ? 'mx-auto' : ''}
+                            min-h-[44px] touch-target-md
+                            hover:bg-gray-50 dark:hover:bg-gray-800/50
+                            active:bg-gray-100 dark:active:bg-gray-800
+                            ${section.priority === 1 ? 'mb-2' : 'mb-1.5'}
+                          `}
+                          style={{ 
+                            WebkitTapHighlightColor: 'transparent',
+                            touchAction: 'manipulation' 
+                          }}
+                        >
+                          {/* PREMIUM NAVIGATION CARD WITH TIER-BASED STYLING */}
+                          <div 
+                            className={`
+                              relative overflow-hidden rounded-xl transition-all duration-200 ease-out
+                              ${isCollapsed && !isMobile ? 'w-12 h-12 mx-auto' : 'w-full'}
+                              ${section.priority === 1 ? 'h-12' : section.priority === 2 ? 'h-11' : 'h-10'}
+                              ${active 
+                                ? `bg-gradient-to-r ${item.color} shadow-lg ${item.shadowColor}`
+                                : `bg-gray-100/60 dark:bg-gray-800/60 border
+                                   ${section.priority === 1 ? 'border-blue-300/40 dark:border-blue-600/40' : ''}
+                                   ${section.priority === 2 ? 'border-purple-300/40 dark:border-purple-600/40' : ''}
+                                   ${section.priority === 3 ? 'border-amber-300/40 dark:border-amber-600/40' : ''}
+                                   group-hover:shadow-md group-hover:border-white/30 dark:group-hover:border-white/20`
+                              }
+                              ${section.priority === 1 ? 'transform group-hover:scale-[1.03] group-active:scale-[0.97]' : 
+                                section.priority === 2 ? 'transform group-hover:scale-[1.02] group-active:scale-[0.98]' :
+                                'transform group-hover:scale-[1.015] group-active:scale-[0.985]'}
+                            `}
+                            style={!active && isHovered ? {
+                              background: getGradientColors(item.color),
+                              boxShadow: section.priority === 1 ? '0 6px 16px rgba(0, 0, 0, 0.18)' : 
+                                        section.priority === 2 ? '0 4px 12px rgba(0, 0, 0, 0.15)' : 
+                                        '0 2px 8px rgba(0, 0, 0, 0.12)',
+                              transition: 'all 200ms ease-out',
+                            } : {
+                              transition: 'all 200ms ease-out',
+                            }}
+                          >
+                            
+                            {/* TIER-SPECIFIC BACKGROUND EFFECTS */}
+                            <div className="absolute inset-0">
+                              {/* Active state overlay with tier intensity */}
+                              {active && (
+                                <div className={`
+                                  absolute inset-0 bg-gradient-to-br from-white/20 via-white/10 to-transparent
+                                  ${section.priority === 1 ? 'opacity-90' : section.priority === 2 ? 'opacity-80' : 'opacity-70'}
+                                `} />
+                              )}
+                              
+                              {/* Hover state overlay */}
+                              {isHovered && !active && (
+                                <div className={`
+                                  absolute inset-0 bg-gradient-to-br from-white/15 via-white/8 to-transparent transition-opacity duration-200
+                                  ${section.priority === 1 ? 'opacity-90' : section.priority === 2 ? 'opacity-85' : 'opacity-80'}
+                                `} />
+                              )}
+                              
+                              {/* Tier-specific sparkle effects for active state */}
+                              {active && section.priority === 1 && (
+                                <>
+                                  <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-white/70 rounded-full animate-pulse" />
+                                  <div className="absolute bottom-2 left-2 w-1 h-1 bg-white/50 rounded-full animate-pulse delay-300" />
+                                  <div className="absolute top-1/2 right-3 w-0.5 h-0.5 bg-white/60 rounded-full animate-pulse delay-500" />
+                                </>
+                              )}
+                              
+                              {active && section.priority === 2 && (
+                                <>
+                                  <div className="absolute top-2 right-2 w-1 h-1 bg-white/60 rounded-full animate-pulse" />
+                                  <div className="absolute bottom-2 left-2 w-0.5 h-0.5 bg-white/40 rounded-full animate-pulse delay-300" />
+                                </>
+                              )}
+                            </div>
+                            
+                            {/* CONTENT CONTAINER */}
+                            <div className={`
+                              relative z-10 h-full flex items-center
+                              ${isCollapsed && !isMobile ? 'justify-center' : 'px-3'}
+                            `}>
+                              
+                              {/* ICON WITH TIER-BASED SIZING */}
+                              <div className="flex items-center justify-center flex-shrink-0">
+                                <Icon className={`
+                                  transition-all duration-200 ease-out
+                                  ${isCollapsed && !isMobile 
+                                    ? section.priority === 1 ? 'w-7 h-7' : section.priority === 2 ? 'w-6 h-6' : 'w-5 h-5'
+                                    : section.priority === 1 ? 'w-6 h-6' : section.priority === 2 ? 'w-5 h-5' : 'w-4.5 h-4.5'
+                                  }
+                                  ${active 
+                                    ? 'text-white drop-shadow-sm transform scale-105' 
+                                    : isHovered
+                                      ? 'text-white drop-shadow-sm transform scale-105'
+                                      : 'text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 group-hover:scale-105'
+                                  }
+                                `} />
+                              </div>
+                              
+                              {/* LABEL & SUBTITLE */}
+                              {(!isCollapsed || isMobile) && (
+                                <div className="flex-1 ml-3 min-w-0">
+                                  <h3 className={`
+                                    font-semibold transition-all duration-200 ease-out truncate tracking-tight
+                                    ${section.priority === 1 ? 'text-sm' : section.priority === 2 ? 'text-sm' : 'text-xs'}
+                                    ${active 
+                                      ? 'text-white drop-shadow-sm' 
+                                      : isHovered
+                                        ? 'text-white drop-shadow-sm'
+                                        : 'text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100'
+                                    }
+                                  `}
+                                  style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 600 }}>
+                                    {item.label}
+                                  </h3>
+                                  {/* Subtitle only for priority 1 items */}
+                                  {section.priority === 1 && item.subtitle && (
+                                    <p className={`
+                                      text-xs mt-0.5 truncate transition-all duration-200 ease-out
+                                      ${active 
+                                        ? 'text-white/80' 
+                                        : isHovered
+                                          ? 'text-white/80'
+                                          : 'text-gray-500 dark:text-gray-400'
+                                      }
+                                    `}
+                                    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 400 }}>
+                                      {item.subtitle}
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* TIER-SPECIFIC ACTIVE STATE INDICATOR */}
+                            {active && (
+                              <div className={`
+                                absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/95 rounded-r-full shadow-lg shadow-white/40 transition-all duration-200
+                                ${section.priority === 1 ? 'w-2 h-10' : section.priority === 2 ? 'w-1.5 h-8' : 'w-1 h-6'}
+                              `} />
+                            )}
+                            
+                            {/* Hover state indicator */}
+                            {isHovered && !active && (
+                              <div className={`
+                                absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/70 rounded-r-full transition-all duration-200
+                                ${section.priority === 1 ? 'w-1.5 h-8' : section.priority === 2 ? 'w-1 h-6' : 'w-0.5 h-4'}
+                              `} />
+                            )}
+                          </div>
+
+                          {/* ENHANCED TOOLTIP WITH TIER INFO */}
+                          {isCollapsed && !isMobile && (
+                            <div className={`
+                              absolute left-full ml-4 px-3 py-2 rounded-lg
+                              bg-gray-900/95 text-white font-medium whitespace-nowrap
+                              opacity-0 group-hover:opacity-100 pointer-events-none
+                              transition-all duration-200 transform translate-x-2 group-hover:translate-x-0
+                              z-50 shadow-xl border border-gray-700/50 backdrop-blur-sm
+                              ${section.priority === 1 ? 'text-sm' : 'text-xs'}
+                            `}>
+                              <div>{item.label}</div>
+                              {item.subtitle && section.priority === 1 && (
+                                <div className="text-xs text-gray-300 mt-1">{item.subtitle}</div>
+                              )}
+                              <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900/95 rotate-45" />
+                            </div>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* SECTION DIVIDER - Only between sections when not collapsed */}
+                  {(!isCollapsed || isMobile) && sectionIndex < Object.keys(navigationItems).length - 1 && (
+                    <div className="px-3">
                       <div className={`
-                        absolute left-full ml-4 px-3 py-2 rounded-lg
-                        bg-gray-900/95 text-white text-sm font-medium whitespace-nowrap
-                        opacity-0 group-hover:opacity-100 pointer-events-none
-                        transition-all duration-300 transform translate-x-2 group-hover:translate-x-0
-                        z-50 shadow-xl border border-gray-700/50
-                      `}>
-                        {item.label}
-                        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900/95 rotate-45" />
-                      </div>
-                    )}
-                  </Link>
-                );
-              })}
+                        h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-600
+                        ${section.priority === 1 ? 'opacity-60' : section.priority === 2 ? 'opacity-40' : 'opacity-30'}
+                      `} />
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </nav>
 
           {/* Compact Footer */}
           <div className={`
-            p-3 border-t border-white/10 dark:border-gray-700/30 safe-bottom
+            p-3 border-t border-gray-200/50 dark:border-gray-700/50 safe-bottom
             ${isCollapsed && !isMobile ? 'px-2' : 'px-4'}
-            transition-all duration-300
+            transition-all duration-200
           `}>
             {(!isCollapsed || isMobile) ? (
               <div className="space-y-2">

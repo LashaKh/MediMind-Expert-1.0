@@ -51,11 +51,11 @@ class LikedResultsAPI {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session?.access_token) {
-
       throw new Error('Authentication required');
     }
 
-    const response = await fetch(`/.netlify/functions/${endpoint}`, {
+    // Use Supabase Edge Function instead of Netlify
+    const response = await fetch(`https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/${endpoint}`, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -66,15 +66,10 @@ class LikedResultsAPI {
 
     if (!response.ok) {
       const errorText = await response.text();
-
       throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     const data = await response.json();
-    console.log('API response debug:', {
-      dataKeys: data ? Object.keys(data) : [],
-      dataDataKeys: data?.data ? Object.keys(data.data) : []
-    });
     return data;
   }
 
