@@ -145,7 +145,9 @@ export const GeorgianSTTApp: React.FC = () => {
     processText,
     clearError: clearAIError,
     clearHistory
-  } = useAIProcessing();
+  } = useAIProcessing({
+    sessionProcessingResults: currentSession?.processingResults
+  });
   
   // Debug processing history updates (disabled in production)
   // console.log('📋 Georgian App processingHistory:', {

@@ -457,20 +457,24 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                 <div className="relative">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Brief Description *
+                    <span className="text-gray-500 font-normal ml-2">
+                      ({formData.description.length}/1000 characters)
+                    </span>
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={handleInputChange('description')}
-                    placeholder="Brief overview of the case and what you'd like to discuss"
-                    rows={4}
+                    placeholder="Provide a comprehensive overview of the case including: chief complaint, relevant history, examination findings, initial impression, key questions for discussion, and what specific guidance you're seeking..."
+                    rows={8}
+                    maxLength={1000}
                     className={`
-                      w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200 resize-none
+                      w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200 resize-y min-h-[200px]
                       ${errors.description 
                         ? 'border-red-300 focus:border-red-500' 
                         : 'border-gray-200 focus:border-blue-500'
                       }
                       focus:outline-none focus:ring-4 focus:ring-blue-100
-                      text-lg bg-white/50 backdrop-blur-sm
+                      text-lg bg-white/50 backdrop-blur-sm leading-relaxed
                     `}
                   />
                   {errors.description && (
@@ -479,6 +483,26 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                       {errors.description}
                     </p>
                   )}
+                  
+                  {/* Character count and helpful tips */}
+                  <div className="mt-3 p-4 bg-blue-50/80 border border-blue-200/60 rounded-xl backdrop-blur-sm">
+                    <div className="flex items-start space-x-3">
+                      <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <h4 className="font-medium text-blue-900 mb-2">Make your case description more effective:</h4>
+                        <ul className="text-sm text-blue-800 space-y-1">
+                          <li>• Include chief complaint and presenting symptoms</li>
+                          <li>• Mention relevant medical history and medications</li>
+                          <li>• Describe key examination or diagnostic findings</li>
+                          <li>• State your working diagnosis or differential</li>
+                          <li>• Specify what guidance or discussion you're seeking</li>
+                        </ul>
+                        <div className="mt-2 text-xs text-blue-600">
+                          {formData.description.length}/1000 characters
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

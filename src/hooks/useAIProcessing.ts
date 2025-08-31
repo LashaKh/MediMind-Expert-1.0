@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { safeAsync } from '../lib/utils/errorHandling';
 
@@ -29,13 +29,43 @@ interface UseAIProcessingReturn {
   clearError: () => void;
   clearHistory: () => void;
   addToHistory: (instruction: string, response: string, model: string, tokensUsed?: number, processingTime?: number) => void;
+  setProcessingHistory: (history: ProcessingHistory[]) => void;
 }
 
-export const useAIProcessing = (): UseAIProcessingReturn => {
+interface UseAIProcessingOptions {
+  sessionProcessingResults?: {
+    userInstruction: string;
+    aiResponse: string;
+    model: string;
+    tokensUsed?: number;
+    processingTime: number;
+    timestamp: number;
+  }[];
+}
+
+export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessingReturn => {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastResult, setLastResult] = useState<ProcessingResult | null>(null);
   const [processingHistory, setProcessingHistory] = useState<ProcessingHistory[]>([]);
+
+  // Sync with session processing results when they change
+  useEffect(() => {
+    if (options?.sessionProcessingResults) {
+      console.log('🔄 Syncing processing history with session data:', {
+        sessionResultsCount: options.sessionProcessingResults.length,
+        results: options.sessionProcessingResults.map(r => ({
+          instruction: r.userInstruction.slice(0, 30) + '...',
+          responseLength: r.aiResponse.length,
+          timestamp: r.timestamp
+        }))
+      });
+      setProcessingHistory(options.sessionProcessingResults);
+    } else {
+      console.log('🔄 No session processing results, clearing history');
+      setProcessingHistory([]);
+    }
+  }, [options?.sessionProcessingResults]);
 
   // Process text with AI
   const processText = useCallback(async (
@@ -189,6 +219,7 @@ export const useAIProcessing = (): UseAIProcessingReturn => {
     processText,
     clearError,
     clearHistory,
-    addToHistory
+    addToHistory,
+    setProcessingHistory
   };
 };
