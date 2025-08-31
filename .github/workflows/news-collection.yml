@@ -2,11 +2,8 @@
 # To re-enable, uncomment the 'on:' section below
 name: Medical News Collection (DISABLED)
 
-# on:
-#   schedule:
-#     # Run twice daily: 6 AM and 6 PM UTC
-#     - cron: '0 6,18 * * *'
-#   workflow_dispatch: # Allow manual trigger
+on:
+  workflow_dispatch: # Allow manual trigger only (disabled schedule)
 
 jobs:
   collect-news:
