@@ -100,14 +100,9 @@
         font-size: 16px; /* Prevent mobile zoom on all inputs */
       }
       
-      /* Mobile keyboard layout optimization - simplified */
+      /* Mobile keyboard layout optimization - targeted */
       @media (max-width: 768px) {
-        /* Prevent text from appearing in wrong positions */
-        * {
-          position: static !important;
-        }
-        
-        /* Exception for mobile input container */
+        /* Mobile input container positioning */
         .mobile-input-container {
           position: fixed !important;
           transition: transform 0.15s ease-out;
@@ -123,16 +118,17 @@
         }
         
         /* Enhanced input focus states for mobile - iOS specific */
-        textarea, input {
+        .mobile-input-container textarea, 
+        .mobile-input-container input {
           outline: none !important;
           border: none !important;
           box-shadow: none !important;
           -webkit-tap-highlight-color: transparent !important;
-          position: static !important;
         }
         
         /* Ensure proper text input on iOS */
-        textarea:focus, input:focus {
+        .mobile-input-container textarea:focus, 
+        .mobile-input-container input:focus {
           -webkit-user-select: text !important;
           user-select: text !important;
           -webkit-touch-callout: default !important;
