@@ -115,6 +115,16 @@
         /* Hide desktop input completely on mobile */
         .desktop-input-wrapper {
           display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
+        
+        /* Also hide any nested input components inside desktop wrapper */
+        .desktop-input-wrapper * {
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
         }
         
         /* Enhanced input focus states for mobile - iOS specific */
@@ -142,6 +152,20 @@
         /* Prevent duplicate inputs */
         .mobile-input-container ~ .mobile-input-container {
           display: none !important;
+        }
+        
+        /* Hide back-to-top button on mobile when mobile input is active */
+        button[aria-label="Back to top"] {
+          display: none !important;
+        }
+        
+        /* Hide any blue floating buttons at bottom right on mobile */
+        .fixed.bottom-8.right-8.bg-blue-600,
+        .fixed.bottom-8.right-8 .bg-blue-600,
+        button.fixed.bottom-8.right-8.bg-blue-600 {
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
         }
       }
       
