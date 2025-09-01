@@ -116,19 +116,19 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     }
   }, [isMobile]);
 
-  // Handle focus - enhanced mobile keyboard interaction with layout stabilization
+  // Handle focus - fix iOS input connection and layout stabilization
   const handleFocus = useCallback(() => {
     if (isMobile && textAreaRef.current && containerRef.current) {
-      // Prevent layout shift by locking viewport
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${window.scrollY}px`;
-      document.body.style.width = '100%';
+      // CRITICAL: Force input connection for iOS Safari
+      const textarea = textAreaRef.current;
+      textarea.focus();
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
       
-      // Store scroll position for restoration
-      const scrollY = window.scrollY;
-      document.body.setAttribute('data-scroll-y', scrollY.toString());
+      // Trigger input event to ensure connection
+      const event = new Event('input', { bubbles: true });
+      textarea.dispatchEvent(event);
       
-      // Immediately position input optimally without scrolling
+      // Prevent layout shift with minimal intervention
       setTimeout(() => {
         if (window.visualViewport && textAreaRef.current && containerRef.current) {
           const viewportHeight = window.visualViewport.height;
@@ -136,46 +136,31 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           const keyboardHeight = windowHeight - viewportHeight;
           
           if (keyboardHeight > 100) {
-            // Keyboard is open - adjust positioning without viewport scrolling
+            // Keep input visible without aggressive layout changes
             const inputRect = textAreaRef.current.getBoundingClientRect();
-            const availableSpace = viewportHeight - 60; // Reserve space for input
+            const availableSpace = viewportHeight - 80; // Reserve space for input
             
-            // Keep input in optimal position within keyboard-adjusted viewport
+            // Minimal positioning adjustment
             if (inputRect.bottom > availableSpace) {
-              containerRef.current.style.transform = `translateY(-${Math.min(keyboardHeight * 0.3, 120)}px)`;
+              containerRef.current.style.transform = `translateY(-${Math.min(keyboardHeight * 0.2, 60)}px)`;
             }
-            
-            // Add safe padding
-            containerRef.current.style.paddingBottom = `${Math.max(keyboardHeight * 0.1, 10)}px`;
           }
         }
-      }, 150); // Reduced delay for faster response
+      }, 100); // Faster response for better UX
     }
   }, [isMobile]);
 
-  // Handle blur - restore layout and clean up mobile keyboard adjustments
+  // Handle blur - clean up mobile keyboard adjustments with minimal intervention
   const handleBlur = useCallback(() => {
     if (isMobile && containerRef.current) {
-      // Restore viewport layout
+      // Clean up with minimal layout disruption
       setTimeout(() => {
         if (containerRef.current) {
-          // Clear all keyboard-related styles
-          containerRef.current.style.paddingBottom = '';
+          // Clear keyboard-related styles smoothly
           containerRef.current.style.transform = '';
-          
-          // Restore body scrolling
-          const scrollY = document.body.getAttribute('data-scroll-y');
-          document.body.style.position = '';
-          document.body.style.top = '';
-          document.body.style.width = '';
-          document.body.removeAttribute('data-scroll-y');
-          
-          // Restore scroll position if stored
-          if (scrollY) {
-            window.scrollTo(0, parseInt(scrollY));
-          }
+          containerRef.current.style.paddingBottom = '';
         }
-      }, 300); // Wait for keyboard to hide
+      }, 200); // Faster cleanup
     }
   }, [isMobile]);
 
@@ -657,6 +642,11 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               placeholder={placeholder || t('chat.typeMessage')}
               disabled={disabled}
               maxLength={maxLength}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="sentences"
+              spellCheck="true"
+              inputMode="text"
               className={`
                 w-full resize-none border-none outline-none bg-transparent
                 focus:outline-none focus:ring-0 focus:border-none
@@ -666,13 +656,17 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 ${className || ''}
               `}
               style={{ 
-                fontSize: '16px !important', // CRITICAL: Exactly 16px prevents mobile zoom - force override
-                minHeight: isMobile ? '56px' : '24px', // Increased mobile height for better visibility
+                fontSize: '16px !important', // CRITICAL: Exactly 16px prevents mobile zoom
+                minHeight: isMobile ? '48px' : '24px',
                 maxHeight: isMobile ? '120px' : '160px',
-                padding: isMobile ? '12px 0' : '8px 0', // Better mobile padding
+                padding: isMobile ? '12px 0' : '8px 0',
                 lineHeight: '1.5',
-                WebkitTextSizeAdjust: '100%', // Prevent text size adjustment
-                WebkitAppearance: 'none' // Remove iOS styling
+                WebkitTextSizeAdjust: '100%',
+                WebkitAppearance: 'none',
+                // iOS-specific fixes for input connection
+                WebkitUserSelect: 'text',
+                WebkitTouchCallout: 'default',
+                WebkitTapHighlightColor: 'transparent'
               }}
               rows={isMobile ? 2 : 1}
             />

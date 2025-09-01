@@ -100,45 +100,32 @@
         font-size: 16px; /* Prevent mobile zoom on all inputs */
       }
       
-      /* Mobile keyboard layout optimization */
+      /* Mobile keyboard layout optimization - simplified */
       @media (max-width: 768px) {
-        /* Prevent layout shifts when keyboard opens */
-        body.mobile-keyboard-open {
-          position: fixed;
-          width: 100%;
-          overflow: hidden;
-        }
-        
         /* Smooth container transitions */
         .mobile-input-container {
-          transition: transform 0.2s ease-out, padding 0.2s ease-out;
+          transition: transform 0.15s ease-out;
         }
         
-        /* Optimize chat messages during keyboard interaction */
-        body.mobile-keyboard-open .message-list {
-          pointer-events: none; /* Prevent accidental scrolling */
-        }
-        
-        /* Enhanced input focus states for mobile */
-        textarea:focus, input:focus {
+        /* Enhanced input focus states for mobile - iOS specific */
+        textarea, input {
           outline: none !important;
           border: none !important;
           box-shadow: none !important;
-          background: transparent !important;
+          -webkit-tap-highlight-color: transparent !important;
         }
         
-        /* Prevent text selection issues during keyboard interaction */
-        body.mobile-keyboard-open * {
-          user-select: none;
-          -webkit-user-select: none;
-          -webkit-touch-callout: none;
+        /* Ensure proper text input on iOS */
+        textarea:focus, input:focus {
+          -webkit-user-select: text !important;
+          user-select: text !important;
+          -webkit-touch-callout: default !important;
         }
         
-        /* Allow text selection in active input */
-        body.mobile-keyboard-open textarea:focus,
-        body.mobile-keyboard-open input:focus {
-          user-select: text;
-          -webkit-user-select: text;
+        /* Keyboard state indicator */
+        body.mobile-keyboard-open .mobile-input-container {
+          /* Visual feedback only - no layout locking */
+          backdrop-filter: blur(20px);
         }
       }
       
