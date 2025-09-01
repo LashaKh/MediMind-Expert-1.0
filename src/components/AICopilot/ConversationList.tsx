@@ -195,156 +195,160 @@ export const ConversationList: React.FC<ConversationListProps> = ({
 
   return (
     <>
-      {/* Premium Backdrop with Blur */}
+      {/* Mobile-Optimized Backdrop */}
       <div 
-        className={`fixed inset-0 bg-slate-900/20 backdrop-blur-md z-40 transition-opacity duration-300 ${className}`} 
+        className={`fixed inset-0 bg-slate-900/40 z-40 transition-opacity duration-300 ${className}`} 
         onClick={onClose} 
       />
       
-      {/* Sophisticated Conversation Panel */}
-      <div className="fixed left-6 top-20 bottom-6 w-[420px] bg-white/98 backdrop-blur-3xl rounded-3xl shadow-2xl shadow-slate-900/10 z-50 flex flex-col border border-slate-200/60 overflow-hidden">
-        {/* Luxurious Header Section */}
-        <div className="relative bg-gradient-to-br from-slate-50/80 via-white/90 to-slate-50/80 border-b border-slate-200/60">
-          {/* Subtle background effects */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/2 via-indigo-500/1 to-purple-500/2" />
-          
-          <div className="relative p-6 pb-5">
-            {/* Premium Header Row */}
-            <div className="flex items-center justify-between mb-6">
+      {/* Mobile-First Conversation Panel */}
+      <div className="fixed inset-0 md:left-6 md:top-20 md:bottom-6 md:w-[420px] bg-white z-50 flex flex-col md:rounded-3xl md:shadow-2xl md:shadow-slate-900/10 md:border md:border-slate-200/60 overflow-hidden">
+        {/* Mobile-First Header Section */}
+        <div className="relative bg-white border-b border-slate-200/60 safe-top">
+          <div className="relative px-4 py-4 md:p-6 md:pb-5">
+            {/* Mobile Header Row */}
+            <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25">
-                  <MessageCircle className="w-6 h-6 text-white" />
+                <div className="p-2 md:p-2.5 rounded-xl md:rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25">
+                  <MessageCircle className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 </div>
-                <div>
-                  <h2 className="text-xl font-black text-slate-800 tracking-tight">
-                    {t('conversations.title')}
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-lg md:text-xl font-bold text-slate-800 tracking-tight truncate">
+                    Conversations
                   </h2>
-                  <p className="text-sm text-slate-500 font-medium">
-                    {t('conversations.manageSubtitle')}
+                  <p className="text-sm text-slate-500 font-medium hidden md:block">
+                    View, search, and organize all your conversation history
                   </p>
                 </div>
               </div>
               
               <div className="flex items-center space-x-2">
+                {/* Mobile-Optimized New Chat Button */}
                 <Button
                   onClick={handleCreateNew}
                   size="sm"
                   className="
-                    relative h-10 px-4 py-2.5 rounded-xl
+                    min-h-[44px] px-3 md:px-4 py-2.5 rounded-xl
                     bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold text-sm
                     shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30
-                    hover:scale-105 hover:-translate-y-0.5 active:scale-95
-                    transition-all duration-300 ease-out
-                    focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-2
+                    active:scale-95 transition-all duration-200
+                    focus:outline-none focus:ring-2 focus:ring-blue-500/20
                   "
                 >
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                  <Plus className="w-4 h-4 mr-2 relative z-10" />
-                  <span className="relative z-10">{t('conversations.newChat')}</span>
+                  <Plus className="w-4 h-4 md:mr-2" />
+                  <span className="hidden md:inline">New Chat</span>
                 </Button>
                 
+                {/* Mobile-Optimized Refresh Button */}
                 <Button
                   onClick={loadConversationsFromDatabase}
                   size="sm"
                   variant="outline"
                   className="
-                    relative h-10 px-3 py-2.5 rounded-xl
+                    min-h-[44px] px-3 md:px-3 py-2.5 rounded-xl
                     bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 font-semibold text-sm border-green-200
                     shadow-lg shadow-green-500/10 hover:shadow-xl hover:shadow-green-500/20
-                    hover:scale-105 hover:-translate-y-0.5 active:scale-95
-                    transition-all duration-300 ease-out
-                    focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:ring-offset-2
+                    active:scale-95 transition-all duration-200
+                    focus:outline-none focus:ring-2 focus:ring-green-500/20
                   "
                 >
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-green-100 to-emerald-100 opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                  <span className="relative z-10">{t('ui.refresh')}</span>
+                  <span className="hidden md:inline">Refresh</span>
+                  <span className="md:hidden">↻</span>
                 </Button>
                 
+                {/* Mobile-Optimized Close Button */}
                 <Button
                   onClick={onClose}
                   variant="ghost"
                   size="sm"
                   className="
-                    relative h-10 w-10 p-0 rounded-xl
+                    min-h-[44px] min-w-[44px] p-0 rounded-xl
                     bg-gradient-to-br from-slate-50 to-slate-100/80 border border-slate-200/60
                     text-slate-600 hover:text-slate-800 shadow-lg shadow-slate-900/5
-                    hover:shadow-xl hover:shadow-slate-900/10 hover:scale-105 hover:-translate-y-0.5
-                    active:scale-95 transition-all duration-300 ease-out
-                    focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:ring-offset-2
+                    hover:shadow-xl hover:shadow-slate-900/10 active:scale-95
+                    transition-all duration-200
+                    focus:outline-none focus:ring-2 focus:ring-slate-500/20
                   "
                 >
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-slate-500/5 to-gray-500/10 opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                  <X className="w-4 h-4 relative z-10" />
+                  <X className="w-4 h-4" />
                 </Button>
               </div>
             </div>
 
-            {/* Premium Search Bar */}
-            <div className="relative mb-5">
+            {/* Mobile-Optimized Search Bar */}
+            <div className="relative mb-4 md:mb-5">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5 z-10" />
                 <input
                   type="text"
-                  placeholder={t('conversations.searchPlaceholder')}
+                  placeholder="Search conversations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="
-                    w-full pl-12 pr-5 py-3.5 text-sm font-medium text-slate-700
+                    w-full pl-12 pr-12 py-4 md:py-3.5 text-sm font-medium text-slate-700
                     bg-gradient-to-r from-white/90 to-slate-50/90 border border-slate-200/60
-                    rounded-2xl shadow-lg shadow-slate-900/5 backdrop-blur-xl
+                    rounded-xl md:rounded-2xl shadow-lg shadow-slate-900/5 backdrop-blur-xl
                     placeholder:text-slate-400 placeholder:font-medium
                     focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-200/60
-                    hover:shadow-xl hover:shadow-slate-900/10 hover:-translate-y-0.5
-                    transition-all duration-300 ease-out
+                    hover:shadow-xl hover:shadow-slate-900/10
+                    transition-all duration-200 min-h-[52px]
                   "
+                  style={{ fontSize: '16px' }} // Prevent mobile zoom
                 />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 to-indigo-500/5 opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 min-h-[44px] min-w-[44px] p-2 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors duration-200 z-10 rounded-lg hover:bg-slate-100/50"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
 
-            {/* Conversation Type Tabs */}
-            <div className="mb-5">
+            {/* Mobile-Optimized Filter Tabs */}
+            <div className="mb-4 md:mb-5">
               <div className="flex items-center space-x-1 p-1 bg-slate-100/60 rounded-xl border border-slate-200/50">
                 <button
                   onClick={() => setSelectedType('all')}
                   className={`
-                    flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300
+                    flex-1 flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 px-2 md:px-4 py-3 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-200 min-h-[56px] md:min-h-[auto]
                     ${selectedType === 'all'
                       ? 'bg-white text-slate-800 shadow-md shadow-slate-900/10 border border-slate-200/60'
                       : 'text-slate-600 hover:text-slate-800 hover:bg-white/50'
                     }
                   `}
                 >
-                  <Users className="w-4 h-4" />
-                  <span>{t('conversations.all')} ({conversationSummaries.length})</span>
+                  <Users className="w-4 h-4 flex-shrink-0" />
+                  <span className="text-center">All ({conversationSummaries.length})</span>
                 </button>
                 
                 <button
                   onClick={() => setSelectedType('general')}
                   className={`
-                    flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300
+                    flex-1 flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 px-2 md:px-4 py-3 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-200 min-h-[56px] md:min-h-[auto]
                     ${selectedType === 'general'
                       ? 'bg-white text-slate-800 shadow-md shadow-slate-900/10 border border-slate-200/60'
                       : 'text-slate-600 hover:text-slate-800 hover:bg-white/50'
                     }
                   `}
                 >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>{t('conversations.conversations')} ({generalConversations.length})</span>
+                  <MessageCircle className="w-4 h-4 flex-shrink-0" />
+                  <span className="text-center">Chats ({generalConversations.length})</span>
                 </button>
                 
                 <button
                   onClick={() => setSelectedType('case-study')}
                   className={`
-                    flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300
+                    flex-1 flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 px-2 md:px-4 py-3 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-200 min-h-[56px] md:min-h-[auto]
                     ${selectedType === 'case-study'
                       ? 'bg-white text-slate-800 shadow-md shadow-slate-900/10 border border-slate-200/60'
                       : 'text-slate-600 hover:text-slate-800 hover:bg-white/50'
                     }
                   `}
                 >
-                  <Stethoscope className="w-4 h-4" />
-                  <span>{t('conversations.caseStudies')} ({caseStudyConversations.length})</span>
+                  <Stethoscope className="w-4 h-4 flex-shrink-0" />
+                  <span className="text-center">Cases ({caseStudyConversations.length})</span>
                 </button>
               </div>
             </div>
@@ -396,8 +400,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
           </div>
         </div>
 
-        {/* Premium Conversation List */}
-        <div className="flex-1 overflow-y-auto px-5 py-4">
+        {/* Mobile-Optimized Conversation List */}
+        <div className="flex-1 overflow-y-auto px-4 md:px-5 py-4 safe-bottom -webkit-overflow-scrolling-touch">
           {filteredConversations.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="relative mb-6">
@@ -437,24 +441,23 @@ export const ConversationList: React.FC<ConversationListProps> = ({
               )}
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2 md:space-y-3">
               {filteredConversations.map((conv, index) => (
                 <div
                   key={conv.id}
-                  className={`group relative rounded-2xl cursor-pointer transition-all duration-300 ease-out ${
+                  className={`group relative rounded-xl md:rounded-2xl cursor-pointer transition-all duration-200 ${
                     activeConversationId === conv.id
                       ? conv.type === 'case-study'
-                        ? 'bg-gradient-to-r from-blue-50 to-sky-50 border-2 border-blue-200/60 shadow-lg shadow-blue-500/10 scale-105'
-                        : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200/60 shadow-lg shadow-blue-500/10 scale-105'
+                        ? 'bg-gradient-to-r from-blue-50 to-sky-50 border-2 border-blue-200/60 shadow-lg shadow-blue-500/10'
+                        : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200/60 shadow-lg shadow-blue-500/10'
                       : conv.type === 'case-study'
-                        ? 'bg-gradient-to-r from-blue-50/30 to-sky-50/30 border-2 border-blue-200/30 hover:border-blue-300/60 hover:shadow-lg hover:shadow-blue-500/10 hover:scale-[1.02] hover:-translate-y-0.5'
-                        : 'bg-gradient-to-r from-white/90 to-slate-50/90 border-2 border-slate-200/40 hover:border-slate-300/60 hover:shadow-lg hover:shadow-slate-900/10 hover:scale-[1.02] hover:-translate-y-0.5'
+                        ? 'bg-gradient-to-r from-blue-50/30 to-sky-50/30 border-2 border-blue-200/30 hover:border-blue-300/60 hover:shadow-lg hover:shadow-blue-500/10 active:scale-[0.98]'
+                        : 'bg-gradient-to-r from-white/90 to-slate-50/90 border-2 border-slate-200/40 hover:border-slate-300/60 hover:shadow-lg hover:shadow-slate-900/10 active:scale-[0.98]'
                   }`}
                   onClick={() => editingId !== conv.id && handleSelectConversation(conv.id)}
-                  style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  {/* Sophisticated Card Content */}
-                  <div className="p-5">
+                  {/* Mobile-Optimized Card Content */}
+                  <div className="p-4 md:p-5">
                     {editingId === conv.id ? (
                       <div className="space-y-3">
                         <input
@@ -493,12 +496,12 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                       </div>
                     ) : (
                       <>
-                        {/* Card Header */}
-                        <div className="flex items-start justify-between mb-3">
+                        {/* Mobile-Optimized Card Header */}
+                        <div className="flex items-center space-x-3 mb-3">
                           <div className="flex items-center space-x-3 min-w-0 flex-1">
-                            {/* Premium Type & Specialty Icon */}
+                            {/* Mobile-Friendly Icon */}
                             <div className={`
-                              p-2.5 rounded-xl shadow-md transition-all duration-300 relative
+                              p-2 md:p-2.5 rounded-lg md:rounded-xl shadow-md transition-all duration-200 relative flex-shrink-0
                               ${conv.type === 'case-study'
                                 ? 'bg-gradient-to-br from-blue-50 to-sky-100 border border-blue-200/50'
                                 : conv.specialty === 'cardiology' 
@@ -507,10 +510,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                                     ? 'bg-gradient-to-br from-purple-50 to-violet-100 border border-purple-200/50'
                                     : 'bg-gradient-to-br from-slate-50 to-gray-100 border border-slate-200/50'
                               }
-                              ${activeConversationId === conv.id ? 'scale-110' : 'group-hover:scale-105'}
                             `}>
                               {conv.type === 'case-study' ? (
-                                <Stethoscope className="w-3 h-3 text-blue-600" />
+                                <Stethoscope className="w-4 h-4 md:w-3 md:h-3 text-blue-600" />
                               ) : (
                                 getSpecialtyIcon(conv.specialty)
                               )}
@@ -519,47 +521,40 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                               )}
                             </div>
                             
-                            {/* Conversation Title */}
+                            {/* Mobile-Optimized Content */}
                             <div className="min-w-0 flex-1">
-                              <h3 className="font-bold text-base text-slate-800 truncate leading-tight">
+                              <h3 className="font-bold text-base md:text-base text-slate-800 truncate leading-tight mb-1">
                                 {conv.title}
                               </h3>
                               
-                              {/* Quick Stats */}
-                              <div className="flex items-center space-x-2 mt-1">
-                                <div className="flex items-center space-x-1">
-                                  <Hash className="w-3 h-3 text-slate-400" />
-                                  <span className="text-xs font-semibold text-slate-500">
-                                    {conv.messageCount}
-                                  </span>
-                                </div>
+                              {/* Mobile-Friendly Stats */}
+                              <div className="flex items-center space-x-2 text-xs">
+                                <span className="font-semibold text-slate-500">
+                                  {conv.messageCount} messages
+                                </span>
                                 <div className="w-1 h-1 bg-slate-300 rounded-full" />
-                                <div className="flex items-center space-x-1">
-                                  <Clock className="w-3 h-3 text-slate-400" />
-                                  <span className="text-xs font-semibold text-slate-500">
-                                    {formatTimestampDetailed(conv.updatedAt, 'relative')}
-                                  </span>
-                                </div>
+                                <span className="font-semibold text-slate-500 truncate">
+                                  {formatTimestampDetailed(conv.updatedAt, 'relative')}
+                                </span>
                               </div>
                             </div>
                           </div>
                           
-                          {/* Action Buttons */}
-                          <div className="flex items-center space-x-2">
+                          {/* Mobile-Optimized Action Buttons */}
+                          <div className="flex items-center space-x-1 md:space-x-2 flex-shrink-0">
                             <Button
                               variant="ghost"
                               size="sm"
                               className="
-                                opacity-0 group-hover:opacity-100 transition-all duration-300
-                                h-8 w-8 p-0 rounded-lg bg-white/80 hover:bg-blue-50 shadow-md
-                                hover:scale-110 hover:shadow-lg
+                                md:opacity-0 md:group-hover:opacity-100 transition-all duration-200
+                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-white/80 hover:bg-blue-50 shadow-md
+                                active:scale-95 hover:shadow-lg border border-blue-200/30
                               "
                               onClick={(e) => {
                                 e.stopPropagation();
-
                                 loadMessagesForConversation(conv.id);
                               }}
-                              title={t('conversations.loadMessages')}
+                              title="Load messages"
                             >
                               <MessageCircle className="w-4 h-4 text-blue-600" />
                             </Button>
@@ -567,14 +562,15 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                               variant="ghost"
                               size="sm"
                               className="
-                                opacity-0 group-hover:opacity-100 transition-all duration-300
-                                h-8 w-8 p-0 rounded-lg bg-white/80 hover:bg-white shadow-md
-                                hover:scale-110 hover:shadow-lg
+                                md:opacity-0 md:group-hover:opacity-100 transition-all duration-200
+                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-white/80 hover:bg-slate-50 shadow-md
+                                active:scale-95 hover:shadow-lg border border-slate-200/30
                               "
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleStartEdit(conv);
                               }}
+                              title="Edit conversation"
                             >
                               <Edit className="w-4 h-4 text-slate-600" />
                             </Button>
@@ -582,14 +578,15 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                               variant="ghost"
                               size="sm"
                               className="
-                                opacity-0 group-hover:opacity-100 transition-all duration-300
-                                h-8 w-8 p-0 rounded-lg bg-white/80 hover:bg-red-50 shadow-md
-                                hover:scale-110 hover:shadow-lg
+                                md:opacity-0 md:group-hover:opacity-100 transition-all duration-200
+                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-white/80 hover:bg-red-50 shadow-md
+                                active:scale-95 hover:shadow-lg border border-red-200/30
                               "
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDeleteClick(conv.id);
                               }}
+                              title="Delete conversation"
                             >
                               <Trash2 className="w-4 h-4 text-slate-600 hover:text-red-600" />
                             </Button>
