@@ -66,7 +66,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Detect mobile device and keyboard
+  // Enhanced mobile device and keyboard detection
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -74,23 +74,35 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
     const handleResize = () => {
       checkMobile();
-      
-      // Detect virtual keyboard on mobile
-      if (isMobile) {
-        const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    };
+
+    // Enhanced keyboard detection with Visual Viewport API
+    const handleViewportChange = () => {
+      if (isMobile && window.visualViewport) {
+        const viewportHeight = window.visualViewport.height;
         const windowHeight = window.innerHeight;
         const heightDiff = windowHeight - viewportHeight;
-        setKeyboardHeight(heightDiff > 150 ? heightDiff : 0);
+        const keyboardVisible = heightDiff > 150;
+        
+        setKeyboardHeight(keyboardVisible ? heightDiff : 0);
+        
+        // Add keyboard state class to body for global styling
+        if (keyboardVisible) {
+          document.body.classList.add('mobile-keyboard-open');
+        } else {
+          document.body.classList.remove('mobile-keyboard-open');
+        }
       }
     };
 
     checkMobile();
     window.addEventListener('resize', handleResize);
-    window.visualViewport?.addEventListener('resize', handleResize);
+    window.visualViewport?.addEventListener('resize', handleViewportChange);
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.visualViewport?.removeEventListener('resize', handleResize);
+      window.visualViewport?.removeEventListener('resize', handleViewportChange);
+      document.body.classList.remove('mobile-keyboard-open');
     };
   }, [isMobile]);
 
@@ -104,47 +116,64 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     }
   }, [isMobile]);
 
-  // Handle focus - enhanced mobile keyboard interaction
+  // Handle focus - enhanced mobile keyboard interaction with layout stabilization
   const handleFocus = useCallback(() => {
     if (isMobile && textAreaRef.current && containerRef.current) {
-      // Immediately scroll to ensure input is visible
-      textAreaRef.current.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'end',
-        inline: 'nearest'
-      });
+      // Prevent layout shift by locking viewport
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${window.scrollY}px`;
+      document.body.style.width = '100%';
       
-      // Additional keyboard-specific adjustments
+      // Store scroll position for restoration
+      const scrollY = window.scrollY;
+      document.body.setAttribute('data-scroll-y', scrollY.toString());
+      
+      // Immediately position input optimally without scrolling
       setTimeout(() => {
-        if (window.visualViewport && textAreaRef.current) {
+        if (window.visualViewport && textAreaRef.current && containerRef.current) {
           const viewportHeight = window.visualViewport.height;
           const windowHeight = window.innerHeight;
           const keyboardHeight = windowHeight - viewportHeight;
           
           if (keyboardHeight > 100) {
-            // Keyboard is open, ensure input stays in view
-            textAreaRef.current.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'center'
-            });
+            // Keyboard is open - adjust positioning without viewport scrolling
+            const inputRect = textAreaRef.current.getBoundingClientRect();
+            const availableSpace = viewportHeight - 60; // Reserve space for input
             
-            // Update container padding for keyboard
-            if (containerRef.current) {
-              containerRef.current.style.paddingBottom = `${Math.max(keyboardHeight - 20, 0)}px`;
+            // Keep input in optimal position within keyboard-adjusted viewport
+            if (inputRect.bottom > availableSpace) {
+              containerRef.current.style.transform = `translateY(-${Math.min(keyboardHeight * 0.3, 120)}px)`;
             }
+            
+            // Add safe padding
+            containerRef.current.style.paddingBottom = `${Math.max(keyboardHeight * 0.1, 10)}px`;
           }
         }
-      }, 300); // Wait for keyboard animation
+      }, 150); // Reduced delay for faster response
     }
   }, [isMobile]);
 
-  // Handle blur - clean up mobile keyboard adjustments
+  // Handle blur - restore layout and clean up mobile keyboard adjustments
   const handleBlur = useCallback(() => {
     if (isMobile && containerRef.current) {
-      // Remove keyboard padding when input loses focus
+      // Restore viewport layout
       setTimeout(() => {
         if (containerRef.current) {
+          // Clear all keyboard-related styles
           containerRef.current.style.paddingBottom = '';
+          containerRef.current.style.transform = '';
+          
+          // Restore body scrolling
+          const scrollY = document.body.getAttribute('data-scroll-y');
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          document.body.removeAttribute('data-scroll-y');
+          
+          // Restore scroll position if stored
+          if (scrollY) {
+            window.scrollTo(0, parseInt(scrollY));
+          }
         }
       }, 300); // Wait for keyboard to hide
     }
@@ -417,7 +446,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       ref={containerRef}
       className={`
         flex flex-col transition-all duration-300 safe-bottom
-        ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 shadow-lg mobile-input-container' : 'relative'}
+        ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50 bg-white/98 dark:bg-gray-900/98 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-700/50 shadow-xl mobile-input-container' : 'relative'}
         ${className}
       `}
       data-tour="message-input"
