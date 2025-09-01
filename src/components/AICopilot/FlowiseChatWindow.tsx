@@ -745,7 +745,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   const specialtyConfig = getSpecialtyConfig();
 
   return (
-    <div className={`h-full w-full flex flex-col relative overflow-hidden ${className}`}>
+    <div className={`h-full w-full flex flex-col relative overflow-hidden chat-window-container ${className}`}>
       {/* Revolutionary Background System */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Primary ambient gradient - Optimized for mobile */}
@@ -793,7 +793,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       {/* Mobile-Optimized Premium Header */}
       <div className="relative z-20" data-tour="chat-window">
         {/* Mobile-first glass morphism header container */}
-        <div className={`relative ${animationClasses.backdropBlur} bg-gradient-to-r from-white/95 via-white/98 to-white/95 border-b border-gradient-to-r from-white/20 via-white/40 to-white/20 shadow-2xl shadow-slate-900/8`}>
+        <div className={`relative chat-header-area ${animationClasses.backdropBlur} bg-gradient-to-r from-white/95 via-white/98 to-white/95 border-b border-gradient-to-r from-white/20 via-white/40 to-white/20 shadow-2xl shadow-slate-900/8`}>
           {/* Simplified animated background for mobile performance */}
           <div className="absolute inset-0 overflow-hidden">
             {!shouldOptimize && (
@@ -1146,11 +1146,11 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
             </div>
           ) : (
             // Mobile-enhanced Messages with optimized styling
-            <div className="flex-1 flex flex-col min-h-0 relative">
+            <div className="flex-1 flex flex-col min-h-0 relative chat-messages-area">
               <MessageList 
                 messages={messages} 
                 isTyping={isTyping}
-                className={`flex-1 px-2 sm:px-4 py-4 sm:py-6 bg-gradient-to-b from-transparent via-white/20 to-transparent ${shouldOptimize ? 'pb-32' : ''}`}
+                className={`flex-1 px-2 sm:px-4 py-4 sm:py-6 bg-gradient-to-b from-transparent via-white/20 to-transparent`}
               />
             </div>
           )}

@@ -104,9 +104,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       checkMobile();
     };
 
-    // ChatGPT-style keyboard detection with Visual Viewport API
+    // Simplified keyboard detection - CSS handles positioning
     const handleViewportChange = () => {
-      if (isMobile && window.visualViewport && containerRef.current) {
+      if (isMobile && window.visualViewport) {
         const viewportHeight = window.visualViewport.height;
         const windowHeight = window.innerHeight;
         const heightDiff = windowHeight - viewportHeight;
@@ -117,15 +117,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         // Add keyboard state class to body for global styling
         if (keyboardVisible) {
           document.body.classList.add('mobile-keyboard-open');
-          // Position input above keyboard using Visual Viewport API
-          const keyboardHeight = heightDiff;
-          containerRef.current.style.transform = `translateY(-${keyboardHeight}px)`;
-          containerRef.current.style.transition = 'transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)';
         } else {
           document.body.classList.remove('mobile-keyboard-open');
-          // Reset input position when keyboard closes
-          containerRef.current.style.transform = '';
-          containerRef.current.style.transition = 'transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)';
         }
       }
     };
@@ -138,10 +131,6 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       window.removeEventListener('resize', handleResize);
       window.visualViewport?.removeEventListener('resize', handleViewportChange);
       document.body.classList.remove('mobile-keyboard-open');
-      // Clean up any transforms on unmount
-      if (containerRef.current) {
-        containerRef.current.style.transform = '';
-      }
     };
   }, [isMobile]);
 
