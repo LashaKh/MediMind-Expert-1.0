@@ -9,6 +9,8 @@ interface SpeechRequest {
   Digits: boolean
   Engine?: string
   Model?: string
+  Speakers?: number  // Added for speaker diarization
+  enableSpeakerDiarization?: boolean  // Flag to enable speaker detection
 }
 
 interface AuthResponse {
@@ -29,6 +31,23 @@ interface SpeechResponse {
   Message: string
   Text: string
   WordsCount: number
+  VoiceFilePath: string
+}
+
+interface SpeakerSegment {
+  Speaker: string
+  Text: string
+  CanBeMultiple: boolean
+  StartSeconds: number
+  EndSeconds: number
+}
+
+interface SpeakerDiarizationResponse {
+  Success: boolean
+  ErrorCode: string
+  Error: string
+  Message: string
+  lstSpeakers: SpeakerSegment[]
   VoiceFilePath: string
 }
 
@@ -81,6 +100,33 @@ async function getValidToken(): Promise<string> {
   return cachedAccessToken
 }
 
+// Helper function to convert base64 to blob for file upload
+function base64ToBlob(base64Data: string, mimeType: string): Blob {
+  const byteCharacters = atob(base64Data)
+  const byteNumbers = new Array(byteCharacters.length)
+  
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i)
+  }
+  
+  const byteArray = new Uint8Array(byteNumbers)
+  return new Blob([byteArray], { type: mimeType })
+}
+
+// Format speaker-diarized transcript for display
+function formatSpeakerTranscript(speakers: SpeakerSegment[]): string {
+  if (!speakers || speakers.length === 0) {
+    return ''
+  }
+
+  // Sort by start time to ensure chronological order
+  const sortedSpeakers = speakers.sort((a, b) => a.StartSeconds - b.StartSeconds)
+  
+  return sortedSpeakers
+    .map(segment => `${segment.Speaker}: ${segment.Text}`)
+    .join('\n\n')
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -105,7 +151,9 @@ serve(async (req) => {
       Language: body.Language,
       Autocorrect: body.Autocorrect,
       Punctuation: body.Punctuation,
-      Digits: body.Digits
+      Digits: body.Digits,
+      Speakers: body.Speakers,
+      enableSpeakerDiarization: body.enableSpeakerDiarization
     })
 
     // Get valid token (cached or fresh)
@@ -148,6 +196,103 @@ serve(async (req) => {
       )
     }
 
+    // Check if speaker diarization is requested - with detailed debugging
+    console.log('🎭 Speaker diarization condition check:', {
+      enableSpeakerDiarization: body.enableSpeakerDiarization,
+      speakersValue: body.Speakers,
+      speakersType: typeof body.Speakers,
+      speakersGreaterThan1: body.Speakers > 1,
+      allConditions: {
+        hasEnableSpeakerDiarization: !!body.enableSpeakerDiarization,
+        hasSpeakers: !!body.Speakers,
+        speakersGreaterThan1: body.Speakers > 1
+      },
+      finalCondition: body.enableSpeakerDiarization === true && body.Speakers && body.Speakers >= 2
+    })
+    
+    if (body.enableSpeakerDiarization === true && body.Speakers && body.Speakers >= 2) {
+      console.log('🎭 Speaker diarization requested, using file upload endpoint...', {
+        enableSpeakerDiarization: body.enableSpeakerDiarization,
+        Speakers: body.Speakers,
+        Language: body.Language,
+        audioSize: body.theAudioDataAsBase64?.length || 0
+      })
+      
+      // Convert base64 to blob for file upload
+      const audioBlob = base64ToBlob(body.theAudioDataAsBase64, 'audio/webm')
+      
+      // Create form data for file upload
+      const formData = new FormData()
+      formData.append('AudioFile', audioBlob, 'audio.webm')
+      formData.append('Speakers', body.Speakers.toString())
+      formData.append('Language', body.Language === 'ka-GE' ? 'ka' : body.Language)
+      formData.append('Autocorrect', body.Autocorrect.toString())
+      formData.append('Punctuation', body.Punctuation.toString())
+      formData.append('Digits', body.Digits.toString())
+      if (body.Engine) {
+        formData.append('Engine', body.Engine)
+      }
+
+      console.log('🚀 Sending to Enagramm RecognizeSpeechFileSubmit with speaker diarization...', {
+        Speakers: body.Speakers,
+        Language: body.Language === 'ka-GE' ? 'ka' : body.Language,
+        Punctuation: body.Punctuation,
+        Autocorrect: body.Autocorrect,
+        Digits: body.Digits,
+        audioDataLength: body.theAudioDataAsBase64?.length || 0
+      })
+
+      // Make the API call to Enagramm file upload endpoint
+      const enagrammResponse = await fetch(`${ENAGRAMM_API_BASE}/STT/RecognizeSpeechFileSubmit`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+          // Note: No Content-Type header for FormData - browser sets it automatically with boundary
+        },
+        body: formData
+      })
+
+      console.log('📡 Enagramm speaker diarization response status:', enagrammResponse.status)
+
+      if (!enagrammResponse.ok) {
+        const errorText = await enagrammResponse.text()
+        console.error('❌ Enagramm speaker diarization API error:', {
+          status: enagrammResponse.status,
+          statusText: enagrammResponse.statusText,
+          error: errorText
+        })
+        throw new Error(`Enagramm speaker diarization API error: ${enagrammResponse.status} - ${errorText}`)
+      }
+
+      const speakerData: SpeakerDiarizationResponse = await enagrammResponse.json()
+      
+      if (!speakerData.Success) {
+        console.error('❌ Enagramm speaker diarization API returned failure:', speakerData)
+        throw new Error(`Speaker diarization failed: ${speakerData.Error || speakerData.Message || 'Unknown error'}`)
+      }
+
+      console.log('✅ Speaker diarization successful:', {
+        speakersFound: speakerData.lstSpeakers?.length || 0,
+        speakers: speakerData.lstSpeakers?.map(s => s.Speaker).join(', ') || 'none'
+      })
+
+      // Format the speaker-diarized transcript
+      const formattedTranscript = formatSpeakerTranscript(speakerData.lstSpeakers)
+      
+      // Return the formatted transcript as JSON with speaker metadata
+      return new Response(JSON.stringify({
+        text: formattedTranscript,
+        speakers: speakerData.lstSpeakers,
+        hasSpeakers: true
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json; charset=utf-8' }
+      })
+    }
+
+    // Fallback to regular speech recognition (no speaker diarization)
+    console.log('🎤 Regular speech recognition requested...')
+    
     // Prepare the request (REMOVED STT1 ENGINE REQUIREMENT)
     const speechRequest = {
       theAudioDataAsBase64: body.theAudioDataAsBase64,

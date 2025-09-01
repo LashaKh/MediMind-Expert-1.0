@@ -74,6 +74,20 @@ interface TranscriptPanelProps {
   onProcessText?: (instruction: string, transcript?: string) => void;
   onClearAIError?: () => void;
   onClearHistory?: () => void;
+  
+  // Speaker diarization props
+  enableSpeakerDiarization?: boolean;
+  onToggleSpeakerDiarization?: (enabled: boolean) => void;
+  speakerCount?: number;
+  onSpeakerCountChange?: (count: number) => void;
+  // Speaker diarization results
+  hasSpeakers?: boolean;
+  speakers?: Array<{
+    Speaker: string;
+    Text: string;
+    StartSeconds: number;
+    EndSeconds: number;
+  }>;
 }
 
 // Utility function for content hashing
@@ -111,13 +125,24 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   onClearAIError,
   onClearHistory,
   activeTab,
-  onActiveTabChange
+  onActiveTabChange,
+  enableSpeakerDiarization = false,
+  onToggleSpeakerDiarization,
+  speakerCount = 2,
+  onSpeakerCountChange,
+  // Speaker diarization results
+  hasSpeakers: hasSpeakersFromHook = false,
+  speakers: speakersFromHook = []
 }) => {
   const [contextText, setContextText] = useState('');
   const [isRecordingContext, setIsRecordingContext] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [editableTranscript, setEditableTranscript] = useState('');
   const [lastRecordingSessionId, setLastRecordingSessionId] = useState<string>('');
+  
+  // Use speaker diarization state from hook, fallback to local state
+  const hasSpeakers = hasSpeakersFromHook;
+  const speakerSegments = speakersFromHook;
   
   // Context recording TTS - separate instance with 5-second chunks
   const {
@@ -360,6 +385,12 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             recordingState={recordingState}
             onEditChange={handleTranscriptChange}
             onFileUpload={onFileUpload}
+            hasSpeakers={hasSpeakers}
+            speakers={speakerSegments}
+            enableSpeakerDiarization={enableSpeakerDiarization}
+            onToggleSpeakerDiarization={onToggleSpeakerDiarization}
+            speakerCount={speakerCount}
+            onSpeakerCountChange={onSpeakerCountChange}
           />
         );
       

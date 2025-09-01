@@ -8,6 +8,22 @@ interface SpeechRecognitionRequest {
   Punctuation: boolean;
   Digits: boolean;
   Model?: string;
+  Speakers?: number;
+  enableSpeakerDiarization?: boolean;
+}
+
+interface SpeakerSegment {
+  Speaker: string;
+  Text: string;
+  CanBeMultiple: boolean;
+  StartSeconds: number;
+  EndSeconds: number;
+}
+
+interface SpeakerDiarizationResult {
+  text: string;
+  speakers: SpeakerSegment[];
+  hasSpeakers: boolean;
 }
 
 // Only keep interfaces needed for the Edge Function
@@ -54,8 +70,10 @@ export class GeorgianTTSService {
       engine?: string;
       model?: string;
       maxRetries?: number;
+      enableSpeakerDiarization?: boolean;
+      speakers?: number;
     } = {}
-  ): Promise<string> {
+  ): Promise<string | SpeakerDiarizationResult> {
     const maxRetries = options.maxRetries || 3;
     let lastError;
 
@@ -95,8 +113,17 @@ export class GeorgianTTSService {
       digits?: boolean;
       engine?: string;
       model?: string;
+      enableSpeakerDiarization?: boolean;
+      speakers?: number;
     }
-  ): Promise<string> {
+  ): Promise<string | SpeakerDiarizationResult> {
+    // Add debug logging for speaker diarization options
+    console.log('🎭 GeorgianTTSService: Speaker diarization options received:', {
+      enableSpeakerDiarization: options.enableSpeakerDiarization,
+      speakers: options.speakers,
+      allOptions: Object.keys(options)
+    });
+    
     const request: SpeechRecognitionRequest = {
       theAudioDataAsBase64: base64Audio,
       Language: options.language === 'ka-GE' ? 'ka' : (options.language === 'Georgian' ? 'ka' : (options.language || 'ka')),
@@ -104,8 +131,42 @@ export class GeorgianTTSService {
       Punctuation: options.punctuation ?? true,
       Digits: options.digits ?? true,
       ...(options.engine && { Engine: options.engine }),
-      ...(options.model && { Model: options.model })
+      ...(options.model && { Model: options.model }),
+      // Always include speaker diarization parameters for debugging
+      enableSpeakerDiarization: options.enableSpeakerDiarization ?? false,
+      Speakers: options.speakers || 2
     };
+
+    console.log('🎭 GeorgianTTSService: Sending request to Edge Function:', {
+      enableSpeakerDiarization: options.enableSpeakerDiarization,
+      speakers: options.speakers,
+      hasEngine: !!options.engine,
+      language: request.Language,
+      requestHasSpeakerParams: !!(request.enableSpeakerDiarization && request.Speakers)
+    });
+    
+    console.log('🎭 GeorgianTTSService: Actual request object being sent:', {
+      enableSpeakerDiarization: request.enableSpeakerDiarization,
+      Speakers: request.Speakers,
+      Language: request.Language,
+      audioDataLength: request.theAudioDataAsBase64?.length || 0
+    });
+
+    // Debug the exact JSON being sent
+    const requestBody = JSON.stringify(request);
+    const parsedBody = JSON.parse(requestBody);
+    console.log('🎭 GeorgianTTSService: JSON.stringify result check:', {
+      originalRequest: {
+        enableSpeakerDiarization: request.enableSpeakerDiarization,
+        Speakers: request.Speakers
+      },
+      stringifiedAndParsed: {
+        enableSpeakerDiarization: parsedBody.enableSpeakerDiarization,
+        Speakers: parsedBody.Speakers
+      },
+      requestBodyLength: requestBody.length,
+      hasAllKeys: Object.keys(parsedBody).includes('enableSpeakerDiarization') && Object.keys(parsedBody).includes('Speakers')
+    });
 
     const [response, error] = await safeAsync(
       () => fetch(`${GeorgianTTSService.EDGE_FUNCTION_URL}`, {
@@ -114,7 +175,7 @@ export class GeorgianTTSService {
           'Authorization': `Bearer ${GeorgianTTSService.SUPABASE_ANON_KEY}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(request)
+        body: requestBody
       })
     );
 
@@ -149,10 +210,31 @@ export class GeorgianTTSService {
       throw new Error(errorMessage);
     }
 
-    // Edge Function returns plain text
-    const result = await response.text();
-    console.log('✅ Transcription result:', result?.substring(0, 50) + (result?.length > 50 ? '...' : ''));
-    return result.trim();
+    // Check if this is a speaker diarization response (JSON) or regular text response
+    const contentType = response.headers.get('content-type');
+    
+    console.log('🎭 GeorgianTTSService: Response received:', {
+      contentType,
+      status: response.status,
+      headers: Object.fromEntries(response.headers.entries()),
+      requestedSpeakerDiarization: options.enableSpeakerDiarization
+    });
+    
+    if (contentType?.includes('application/json')) {
+      // Speaker diarization response
+      const speakerResult: SpeakerDiarizationResult = await response.json();
+      console.log('✅ Speaker diarization result:', {
+        hasSpeakers: speakerResult.hasSpeakers,
+        speakersCount: speakerResult.speakers?.length || 0,
+        preview: speakerResult.text?.substring(0, 100) + (speakerResult.text?.length > 100 ? '...' : '')
+      });
+      return speakerResult;
+    } else {
+      // Regular transcription response (plain text)
+      const result = await response.text();
+      console.log('✅ Transcription result (text):', result?.substring(0, 50) + (result?.length > 50 ? '...' : ''));
+      return result.trim();
+    }
   }
 
   /**
@@ -191,8 +273,10 @@ export class GeorgianTTSService {
       model?: string;
       onProgress?: (progress: number) => void;
       onChunkComplete?: (chunkIndex: number, chunkText: string, totalChunks: number) => void;
+      enableSpeakerDiarization?: boolean;
+      speakers?: number;
     } = {}
-  ): Promise<string> {
+  ): Promise<string | SpeakerDiarizationResult> {
     const { AudioProcessor } = await import('../../utils/audioProcessing');
     
     // Validate file
@@ -201,6 +285,35 @@ export class GeorgianTTSService {
       throw new Error(validation.error);
     }
 
+    // For speaker diarization, process the entire file at once
+    if (options.enableSpeakerDiarization && options.speakers && options.speakers > 1) {
+      console.log('🎭 Processing entire file with speaker diarization...');
+      
+      // Convert file to blob for processing
+      const fileBlob = new Blob([file], { type: file.type });
+      
+      const result = await this.recognizeSpeech(fileBlob, {
+        language: options.language,
+        autocorrect: options.autocorrect,
+        punctuation: options.punctuation,
+        digits: options.digits,
+        engine: options.engine,
+        model: options.model,
+        enableSpeakerDiarization: true,
+        speakers: options.speakers,
+        maxRetries: 2
+      });
+
+      if (options.onProgress) {
+        options.onProgress(100);
+      }
+
+      return result as SpeakerDiarizationResult;
+    }
+
+    // Regular chunked processing for non-speaker-diarized transcription
+    console.log('🎤 Processing file in chunks (no speaker diarization)...');
+    
     // Get file info and split into chunks
     const audioInfo = await AudioProcessor.getAudioFileInfo(file);
     const chunks = await AudioProcessor.splitAudioIntoChunks(file, (progress) => {
@@ -217,7 +330,7 @@ export class GeorgianTTSService {
       const chunk = chunks[i];
       
       try {
-        const chunkText = await this.recognizeSpeech(chunk.blob, {
+        const chunkResult = await this.recognizeSpeech(chunk.blob, {
           language: options.language,
           autocorrect: options.autocorrect,
           punctuation: options.punctuation,
@@ -226,6 +339,9 @@ export class GeorgianTTSService {
           model: options.model,
           maxRetries: 2
         });
+
+        // Extract text from result (it should be a string for regular transcription)
+        const chunkText = typeof chunkResult === 'string' ? chunkResult : chunkResult.text;
 
         if (chunkText?.trim()) {
           const separator = combinedTranscript.trim() ? ' ' : '';

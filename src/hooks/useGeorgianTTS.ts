@@ -13,6 +13,9 @@ interface UseGeorgianTTSOptions {
   enableStreaming?: boolean; // Enable streaming transcription or use single-shot mode, default true
   sessionId?: string; // Session ID for cross-session isolation
   onLiveTranscriptUpdate?: (newText: string, fullText: string, sessionId?: string) => void; // Callback for session-aware real-time updates
+  // Speaker diarization options
+  enableSpeakerDiarization?: boolean; // Enable speaker separation
+  speakers?: number; // Number of speakers to detect (default: 2)
 }
 
 interface RecordingState {
@@ -25,10 +28,20 @@ interface RecordingState {
   totalChunks: number;
 }
 
+interface SpeakerSegment {
+  Speaker: string;
+  Text: string;
+  StartSeconds: number;
+  EndSeconds: number;
+}
+
 interface TranscriptionResult {
   text: string;
   timestamp: number;
   duration: number;
+  // Speaker diarization results
+  hasSpeakers?: boolean;
+  speakers?: SpeakerSegment[];
 }
 
 interface AuthStatus {
@@ -38,6 +51,10 @@ interface AuthStatus {
 }
 
 export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
+  // Use a ref to store current options to avoid stale closure
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
+  
   const {
     language = 'ka-GE',
     autocorrect = true,
@@ -48,7 +65,10 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     chunkDuration = 20000, // 20 seconds per processing chunk for optimal streaming transcription
     enableStreaming = true, // Enable streaming by default, set to false for single-shot mode
     sessionId, // Session ID for cross-session isolation
-    onLiveTranscriptUpdate
+    onLiveTranscriptUpdate,
+    // Speaker diarization options (for compatibility, but use ref for current values)
+    enableSpeakerDiarization = false,
+    speakers = 2
   } = options;
 
   // State
@@ -69,6 +89,10 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     tokenExpiresIn: null,
     email: null
   });
+  
+  // Speaker diarization state
+  const [speakerSegments, setSpeakerSegments] = useState<SpeakerSegment[]>([]);
+  const [hasSpeakerResults, setHasSpeakerResults] = useState(false);
 
   // Refs
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -398,16 +422,38 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     }
 
     try {
-      const text = await georgianTTSServiceRef.current.recognizeSpeech(audioBlob, {
+      console.log('🎭 useGeorgianTTS: Calling recognizeSpeech with options:', {
+        language,
+        enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+        speakers: optionsRef.current.speakers ?? 2,
+        destructuredValues: { enableSpeakerDiarization, speakers },
+        currentOptions: { enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization, speakers: optionsRef.current.speakers },
+        usingCurrentOptions: true
+      });
+      
+      const result = await georgianTTSServiceRef.current.recognizeSpeech(audioBlob, {
         language,
         autocorrect,
         punctuation,
         digits,
+        enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+        speakers: optionsRef.current.speakers ?? 2, // Use current ref value
         maxRetries: 2 // Moderate retries for parallel chunks
       });
       
-      totalProcessedChunksRef.current++;
-      return text || '';
+      // Handle speaker diarization results
+      if (typeof result === 'object' && result.hasSpeakers) {
+        console.log('🎭 Speaker diarization result received:', result);
+        setSpeakerSegments(result.speakers || []);
+        setHasSpeakerResults(true);
+        totalProcessedChunksRef.current++;
+        return result.text;
+      } else {
+        // Regular text result
+        const text = typeof result === 'string' ? result : result.text;
+        totalProcessedChunksRef.current++;
+        return text || '';
+      }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       failedChunksCountRef.current++;
@@ -571,13 +617,34 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             await freshService.logout(); // Clear any cached tokens
             await freshService.initialize(); // Force fresh login
 
-            const chunkText = await freshService.recognizeSpeech(batchBlob, {
+            console.log('🎭 Batch processing with speaker options:', {
+              enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+              speakers: optionsRef.current.speakers ?? 2,
+              destructuredValues: { enableSpeakerDiarization, speakers },
+              currentOptions: { enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization, speakers: optionsRef.current.speakers },
+              usingCurrentOptions: true
+            });
+            
+            const result = await freshService.recognizeSpeech(batchBlob, {
               language,
               autocorrect,
               punctuation,
               digits,
+              enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+              speakers: optionsRef.current.speakers ?? 2, // Use current props value
               maxRetries: 2 // Moderate retries since this should work as "first request"
             });
+            
+            // Handle speaker diarization results
+            let chunkText = '';
+            if (typeof result === 'object' && result.hasSpeakers) {
+              console.log('🎭 Batch speaker diarization result received:', result);
+              setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
+              setHasSpeakerResults(true);
+              chunkText = result.text;
+            } else {
+              chunkText = typeof result === 'string' ? result : result.text;
+            }
             
             // Update statistics for successful processing
             totalProcessedChunksRef.current++;
@@ -710,13 +777,34 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         await freshService.logout();
         await freshService.initialize();
         
-        const finalText = await freshService.recognizeSpeech(combinedBlob, {
+        console.log('🎭 Manual stop processing with speaker options:', {
+          enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+          speakers: optionsRef.current.speakers ?? 2,
+          destructuredValues: { enableSpeakerDiarization, speakers },
+          currentOptions: { enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization, speakers: optionsRef.current.speakers },
+          usingCurrentOptions: true
+        });
+        
+        const result = await freshService.recognizeSpeech(combinedBlob, {
           language,
           autocorrect,
           punctuation,
           digits,
+          enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+          speakers: optionsRef.current.speakers ?? 2, // Use current props value
           maxRetries: 2
         });
+        
+        // Handle speaker diarization results for final processing
+        let finalText = '';
+        if (typeof result === 'object' && result.hasSpeakers) {
+          console.log('🎭 Final chunk speaker diarization result received:', result);
+          setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
+          setHasSpeakerResults(true);
+          finalText = result.text;
+        } else {
+          finalText = typeof result === 'string' ? result : result.text;
+        }
         
         if (finalText && finalText.trim()) {
           const separator = combinedTranscriptRef.current.trim() ? ' ' : '';
@@ -789,9 +877,33 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               const freshService = new GeorgianTTSService();
               await freshService.initialize();
               
-              const segmentText = await freshService.recognizeSpeech(currentBlob, {
-                language, autocorrect, punctuation, digits, maxRetries: 2
+              console.log('🎭 Auto-segment processing with speaker options:', {
+                enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+                speakers: optionsRef.current.speakers ?? 2,
+                destructuredValues: { enableSpeakerDiarization, speakers },
+                usingCurrentOptions: true
               });
+              
+              const result = await freshService.recognizeSpeech(currentBlob, {
+                language, 
+                autocorrect, 
+                punctuation, 
+                digits, 
+                enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+                speakers: optionsRef.current.speakers ?? 2, // Use current props value
+                maxRetries: 2
+              });
+              
+              // Handle speaker diarization results for manual stop processing
+              let segmentText = '';
+              if (typeof result === 'object' && result.hasSpeakers) {
+                console.log('🎭 Manual stop speaker diarization result received:', result);
+                setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
+                setHasSpeakerResults(true);
+                segmentText = result.text;
+              } else {
+                segmentText = typeof result === 'string' ? result : result.text;
+              }
               
               if (segmentText?.trim()) {
                 const separator = combinedTranscriptRef.current.trim() ? ' ' : '';
@@ -831,9 +943,34 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             const freshService = new GeorgianTTSService();
             await freshService.initialize();
             
-            const segmentText = await freshService.recognizeSpeech(currentBlob, {
-              language, autocorrect, punctuation, digits, maxRetries: 2
+            console.log('🎭 Manual stop segment processing with speaker options:', {
+              enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+              speakers: optionsRef.current.speakers ?? 2,
+              destructuredValues: { enableSpeakerDiarization, speakers },
+              currentOptions: { enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization, speakers: optionsRef.current.speakers },
+              usingCurrentOptions: true
             });
+            
+            const result = await freshService.recognizeSpeech(currentBlob, {
+              language, 
+              autocorrect, 
+              punctuation, 
+              digits, 
+              enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+              speakers: optionsRef.current.speakers ?? 2, // Use current props value
+              maxRetries: 2
+            });
+            
+            // Handle speaker diarization results for auto-segmentation
+            let segmentText = '';
+            if (typeof result === 'object' && result.hasSpeakers) {
+              console.log('🎭 Auto-segment speaker diarization result received:', result);
+              setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
+              setHasSpeakerResults(true);
+              segmentText = result.text;
+            } else {
+              segmentText = typeof result === 'string' ? result : result.text;
+            }
             
             if (segmentText?.trim()) {
               const separator = combinedTranscriptRef.current.trim() ? ' ' : '';
@@ -1138,12 +1275,14 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     
     try {
       // Use the new processAudioFile method with chunking support
-      const [transcriptText, transcriptionError] = await safeAsync(
+      const [transcriptResult, transcriptionError] = await safeAsync(
         () => georgianTTSServiceRef.current!.processAudioFile(file, {
           language: language === 'ka-GE' ? 'ka' : language,
           autocorrect,
           punctuation,
           digits,
+          enableSpeakerDiarization,
+          speakers,
           onProgress: (progress) => {
             // Update processing state for UI feedback
             setRecordingState(prev => ({
@@ -1170,11 +1309,24 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         throw transcriptionError;
       }
       
+      // Handle speaker diarization results for file uploads
+      let transcriptText = '';
+      if (typeof transcriptResult === 'object' && transcriptResult.hasSpeakers) {
+        console.log('🎭 File upload speaker diarization result received:', transcriptResult);
+        setSpeakerSegments(transcriptResult.speakers || []);
+        setHasSpeakerResults(true);
+        transcriptText = transcriptResult.text;
+      } else {
+        transcriptText = typeof transcriptResult === 'string' ? transcriptResult : transcriptResult.text;
+      }
+      
       // For file uploads, create transcription result
       const result: TranscriptionResult = {
         text: transcriptText,
         timestamp: Date.now(),
-        duration: 0 // File duration not tracked here
+        duration: 0, // File duration not tracked here
+        hasSpeakers: typeof transcriptResult === 'object' ? transcriptResult.hasSpeakers : false,
+        speakers: typeof transcriptResult === 'object' ? transcriptResult.speakers : undefined
       };
       
       setTranscriptionResult(result);
@@ -1256,6 +1408,10 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     error,
     authStatus,
     isSupported,
+    
+    // Speaker diarization state
+    speakerSegments,
+    hasSpeakerResults,
     
     // Actions
     startRecording,

@@ -21,6 +21,9 @@ interface AudioUploadOptions {
   sessionId?: string;
   onProgress?: (state: AudioUploadState) => void;
   onTranscriptUpdate?: (newText: string, fullText: string, sessionId?: string) => void;
+  // Speaker diarization options
+  enableSpeakerDiarization?: boolean;
+  speakers?: number;
 }
 
 interface AudioUploadResult {
@@ -39,7 +42,10 @@ export const useAudioFileUpload = (options: AudioUploadOptions = {}) => {
     digits = true,
     sessionId,
     onProgress,
-    onTranscriptUpdate
+    onTranscriptUpdate,
+    // Speaker diarization options
+    enableSpeakerDiarization = false,
+    speakers = 2
   } = options;
 
   const [uploadState, setUploadState] = useState<AudioUploadState>({
@@ -154,6 +160,8 @@ export const useAudioFileUpload = (options: AudioUploadOptions = {}) => {
               autocorrect,
               punctuation,
               digits,
+              enableSpeakerDiarization,
+              speakers,
               maxRetries: 2
             })
           );
@@ -163,11 +171,20 @@ export const useAudioFileUpload = (options: AudioUploadOptions = {}) => {
             continue;
           }
 
-          const chunkText = result?.trim();
-          if (chunkText) {
+          // Handle speaker diarization results
+          let chunkText = '';
+          if (typeof result === 'object' && result.hasSpeakers) {
+            console.log('🎭 AudioFileUpload: Speaker diarization result received for chunk:', i + 1);
+            chunkText = result.text;
+            // Note: Individual chunks with speaker diarization are handled by the full file processing in georgianTTSService
+          } else {
+            chunkText = typeof result === 'string' ? result : result?.text || '';
+          }
+          
+          if (chunkText?.trim()) {
             const separator = combinedTranscript.trim() ? ' ' : '';
             const previousLength = combinedTranscript.length;
-            combinedTranscript += separator + chunkText;
+            combinedTranscript += separator + chunkText.trim();
             
             // Chunk processed successfully
 

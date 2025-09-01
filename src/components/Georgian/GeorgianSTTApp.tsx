@@ -41,6 +41,18 @@ export const GeorgianSTTApp: React.FC = () => {
   const closeMobileDrawer = () => setIsMobileDrawerOpen(false);
   const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(true);
   
+  // Speaker diarization state
+  const [enableSpeakerDiarization, setEnableSpeakerDiarization] = useState(false);
+  const [speakerCount, setSpeakerCount] = useState(2);
+  
+  // Debug speaker diarization state changes
+  useEffect(() => {
+    console.log('🎭 GeorgianSTTApp speaker diarization state changed:', {
+      enableSpeakerDiarization,
+      speakerCount
+    });
+  }, [enableSpeakerDiarization, speakerCount]);
+  
   // Local transcript state - single source of truth for UI display
   const [localTranscript, setLocalTranscript] = useState('');
   // Recording session tracking
@@ -144,6 +156,9 @@ export const GeorgianSTTApp: React.FC = () => {
     canResume,
     remainingTime,
     isNearMaxDuration,
+    // Speaker diarization state from hook
+    speakerSegments,
+    hasSpeakerResults,
     // service // Currently unused
   } = useGeorgianTTS({
     language: 'ka-GE',
@@ -153,7 +168,10 @@ export const GeorgianSTTApp: React.FC = () => {
     maxDuration: 0, // No limit - use chunked processing
     chunkDuration: 12000, // 12 second chunks for processing
     sessionId: currentSession?.id, // Pass current session ID for isolation
-    onLiveTranscriptUpdate: handleLiveTranscriptUpdate
+    onLiveTranscriptUpdate: handleLiveTranscriptUpdate,
+    // Speaker diarization options
+    enableSpeakerDiarization,
+    speakers: speakerCount
   });
 
   // Audio File Upload
@@ -171,7 +189,10 @@ export const GeorgianSTTApp: React.FC = () => {
     punctuation: true,
     digits: true,
     sessionId: currentSession?.id,
-    onTranscriptUpdate: handleLiveTranscriptUpdate
+    onTranscriptUpdate: handleLiveTranscriptUpdate,
+    // Speaker diarization options
+    enableSpeakerDiarization,
+    speakers: speakerCount
   });
 
   // AI Processing
@@ -676,6 +697,13 @@ export const GeorgianSTTApp: React.FC = () => {
                 onProcessText={handleProcessText}
                 onClearAIError={clearAIError}
                 onClearHistory={clearHistory}
+                enableSpeakerDiarization={enableSpeakerDiarization}
+                onToggleSpeakerDiarization={setEnableSpeakerDiarization}
+                speakerCount={speakerCount}
+                onSpeakerCountChange={setSpeakerCount}
+                // Speaker diarization results from hook
+                hasSpeakers={hasSpeakerResults}
+                speakers={speakerSegments}
               />
             </div>
           </div>
@@ -715,6 +743,13 @@ export const GeorgianSTTApp: React.FC = () => {
               onClearHistory={clearHistory}
               activeTab={activeTab}
               onActiveTabChange={setActiveTab}
+              enableSpeakerDiarization={enableSpeakerDiarization}
+              onToggleSpeakerDiarization={setEnableSpeakerDiarization}
+              speakerCount={speakerCount}
+              onSpeakerCountChange={setSpeakerCount}
+              // Speaker diarization results from hook
+              hasSpeakers={hasSpeakerResults}
+              speakers={speakerSegments}
             />
           </div>
         </div>
