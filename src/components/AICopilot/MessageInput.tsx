@@ -633,10 +633,11 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 focus:outline-none focus:ring-0 focus:border-none
                 placeholder:text-gray-500 dark:placeholder:text-gray-400
                 text-gray-900 dark:text-white
-                text-base leading-6 min-h-[44px]
+                leading-6 min-h-[44px]
                 ${className || ''}
               `}
               style={{ 
+                fontSize: '16px', // CRITICAL: Exactly 16px prevents mobile zoom
                 minHeight: isMobile ? '44px' : '24px', 
                 maxHeight: isMobile ? '120px' : '160px' 
               }}
