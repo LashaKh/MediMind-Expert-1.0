@@ -1204,7 +1204,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         </div>
       )}
 
-      {/* Mobile-Optimized Input Area - Hide wrapper on mobile since input is now fixed */}
+      {/* Desktop Input Area - Only show on desktop */}
       <div className={`flex-shrink-0 relative z-20 ${shouldOptimize ? 'hidden' : ''}`}>
         {/* Mobile-first glass morphism container */}
         <div className={`relative ${animationClasses.backdropBlur} bg-gradient-to-t from-white/95 via-white/90 to-white/95 border-t border-white/60 shadow-2xl shadow-slate-900/10`}>
@@ -1266,6 +1266,62 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         </div>
         </div>
       </div>
+
+      {/* Mobile Input Area - Fixed positioned for mobile only */}
+      {shouldOptimize && (
+        <>
+          {activeCase ? (
+            <CaseContextProvider 
+              activeCase={activeCase}
+              selectedDocuments={selectedDocuments}
+            >
+              {({ caseContext, attachmentUploads, attachments }) => (
+                <MessageInput
+                  onSendMessage={(content, messageAttachments, enhancedMessage) => 
+                    handleSendMessageWithEnhancedContext(content, messageAttachments, caseContext, attachmentUploads, enhancedMessage)
+                  }
+                  disabled={isDisabled || isLoading || !isConnected}
+                  placeholder={
+                    personalKBPlaceholder || 
+                    placeholder || 
+                      (isConnected ? t('chat.typeMessage') : t('chat.connectToStartChatting'))
+                  }
+                  allowAttachments={allowAttachments}
+                  maxFileSize={10}
+                  maxFiles={5}
+                  selectedKnowledgeBase={knowledgeBase}
+                  personalDocumentCount={personalDocumentCount}
+                  className="border-0 bg-transparent backdrop-blur-none"
+                  caseDocuments={attachments}
+                  selectedDocuments={selectedDocuments}
+                  onDocumentToggle={toggleDocumentSelection}
+                  onSelectAllDocuments={selectAllDocuments}
+                  onClearSelectedDocuments={clearSelectedDocuments}
+                  showDocumentSelector={true}
+                />
+              )}
+            </CaseContextProvider>
+          ) : (
+            <MessageInput
+              onSendMessage={handleSendMessage}
+              disabled={isDisabled || isLoading || !isConnected}
+              placeholder={
+                abgContext 
+                  ? t('chat.abg.placeholder', 'Ask about the blood gas analysis, clinical interpretation, or get treatment recommendations...')
+                  : personalKBPlaceholder || 
+                  placeholder || 
+                  (isConnected ? t('chat.typeMessage') : t('chat.connectToStartChatting'))
+              }
+              allowAttachments={allowAttachments}
+              maxFileSize={10}
+              maxFiles={5}
+              selectedKnowledgeBase={knowledgeBase}
+              personalDocumentCount={personalDocumentCount}
+              className="border-0 bg-transparent backdrop-blur-none"
+            />
+          )}
+        </>
+      )}
 
       {/* Modal Components */}
       <ConversationList
