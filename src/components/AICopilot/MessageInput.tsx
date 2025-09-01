@@ -104,9 +104,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       checkMobile();
     };
 
-    // Enhanced keyboard detection with Visual Viewport API
+    // ChatGPT-style keyboard detection with Visual Viewport API
     const handleViewportChange = () => {
-      if (isMobile && window.visualViewport) {
+      if (isMobile && window.visualViewport && containerRef.current) {
         const viewportHeight = window.visualViewport.height;
         const windowHeight = window.innerHeight;
         const heightDiff = windowHeight - viewportHeight;
@@ -117,8 +117,15 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         // Add keyboard state class to body for global styling
         if (keyboardVisible) {
           document.body.classList.add('mobile-keyboard-open');
+          // Position input above keyboard using Visual Viewport API
+          const keyboardHeight = heightDiff;
+          containerRef.current.style.transform = `translateY(-${keyboardHeight}px)`;
+          containerRef.current.style.transition = 'transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)';
         } else {
           document.body.classList.remove('mobile-keyboard-open');
+          // Reset input position when keyboard closes
+          containerRef.current.style.transform = '';
+          containerRef.current.style.transition = 'transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)';
         }
       }
     };
@@ -131,6 +138,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       window.removeEventListener('resize', handleResize);
       window.visualViewport?.removeEventListener('resize', handleViewportChange);
       document.body.classList.remove('mobile-keyboard-open');
+      // Clean up any transforms on unmount
+      if (containerRef.current) {
+        containerRef.current.style.transform = '';
+      }
     };
   }, [isMobile]);
 
@@ -144,9 +155,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     }
   }, [isMobile]);
 
-  // Handle focus - fix iOS input connection and layout stabilization
+  // Handle focus - fix iOS input connection (no layout changes)
   const handleFocus = useCallback(() => {
-    if (isMobile && textAreaRef.current && containerRef.current) {
+    if (isMobile && textAreaRef.current) {
       // CRITICAL: Force input connection for iOS Safari
       const textarea = textAreaRef.current;
       textarea.focus();
@@ -156,40 +167,13 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       const event = new Event('input', { bubbles: true });
       textarea.dispatchEvent(event);
       
-      // Prevent layout shift with minimal intervention
-      setTimeout(() => {
-        if (window.visualViewport && textAreaRef.current && containerRef.current) {
-          const viewportHeight = window.visualViewport.height;
-          const windowHeight = window.innerHeight;
-          const keyboardHeight = windowHeight - viewportHeight;
-          
-          if (keyboardHeight > 100) {
-            // Keep input visible without aggressive layout changes
-            const inputRect = textAreaRef.current.getBoundingClientRect();
-            const availableSpace = viewportHeight - 80; // Reserve space for input
-            
-            // Minimal positioning adjustment
-            if (inputRect.bottom > availableSpace) {
-              containerRef.current.style.transform = `translateY(-${Math.min(keyboardHeight * 0.2, 60)}px)`;
-            }
-          }
-        }
-      }, 100); // Faster response for better UX
+      // No layout adjustments needed - Visual Viewport API handles positioning
     }
   }, [isMobile]);
 
-  // Handle blur - clean up mobile keyboard adjustments with minimal intervention
+  // Handle blur - minimal cleanup
   const handleBlur = useCallback(() => {
-    if (isMobile && containerRef.current) {
-      // Clean up with minimal layout disruption
-      setTimeout(() => {
-        if (containerRef.current) {
-          // Clear keyboard-related styles smoothly
-          containerRef.current.style.transform = '';
-          containerRef.current.style.paddingBottom = '';
-        }
-      }, 200); // Faster cleanup
-    }
+    // No layout adjustments needed - Visual Viewport API handles positioning
   }, [isMobile]);
 
   // Handle message content change
@@ -458,14 +442,11 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     <div 
       ref={containerRef}
       className={`
-        flex flex-col transition-all duration-300 safe-bottom
+        flex flex-col safe-bottom
         ${(isMobile && !disableInternalMobilePositioning) || forceMobileLayout ? 'fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-gray-900/98 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-700/50 shadow-xl mobile-input-container' : 'relative'}
         ${className}
       `}
       data-tour="message-input"
-      style={{
-        paddingBottom: isMobile && keyboardHeight > 0 ? `${keyboardHeight}px` : undefined
-      }}
     >
       {/* Knowledge Base Indicator - Hidden to prevent overlap */}
       {/* {selectedKnowledgeBase && (
