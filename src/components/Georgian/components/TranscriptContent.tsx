@@ -28,14 +28,31 @@ interface TranscriptContentProps {
   transcript: string;
   recordingState: RecordingState;
   onEditChange: (value: string) => void;
+  onFileUpload?: (file: File) => void;
 }
 
 export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   transcript,
   recordingState,
   onEditChange,
+  onFileUpload,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && onFileUpload) {
+      onFileUpload(file);
+    }
+    // Reset file input to allow selecting the same file again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   return (
     <div className="flex flex-col h-full p-6 bg-gradient-to-br from-indigo-50/80 via-purple-50/90 to-pink-50/60 dark:from-indigo-900/80 dark:via-purple-800/90 dark:to-pink-900/40">
@@ -52,6 +69,33 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         {/* Main Content Structure */}
         <div className="relative h-full flex flex-col p-1">
           
+          {/* Upload Button - Top Right Corner */}
+          {onFileUpload && (
+            <div className="absolute top-4 right-4 z-10">
+              <button
+                onClick={handleFileUploadClick}
+                className="flex items-center justify-center w-10 h-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-600/50 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all duration-200 shadow-lg hover:shadow-xl group medical-touch-target"
+                title="Upload audio file"
+                disabled={recordingState.isRecording}
+              >
+                <Upload className={`w-5 h-5 transition-all duration-200 ${
+                  recordingState.isRecording 
+                    ? 'text-gray-400 dark:text-gray-500' 
+                    : 'text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 group-hover:scale-110'
+                }`} />
+              </button>
+            </div>
+          )}
+
+          {/* Hidden File Input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="audio/*,.mp3,.wav,.m4a,.webm,.ogg"
+            onChange={handleFileChange}
+            className="hidden"
+            disabled={recordingState.isRecording}
+          />
           
           {/* Premium Text Area */}
           <div className="flex-1 relative overflow-hidden">

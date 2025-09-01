@@ -178,10 +178,15 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
 
   // Load session transcript when session changes
   useEffect(() => {
-    // Always load the session transcript when session changes, even if it's empty
+    // Load the session transcript when session changes, but preserve editableTranscript if user is actively editing
     const sessionTranscript = currentSession?.transcript || '';
-    setEditableTranscript(sessionTranscript);
-  }, [currentSession?.id]); // Only trigger on session ID change, not transcript content changes
+    
+    // Only update editableTranscript if it's empty or if the session transcript has more content
+    // This prevents clearing user's typed content when a new session is created
+    if (!editableTranscript || sessionTranscript.length > editableTranscript.length) {
+      setEditableTranscript(sessionTranscript);
+    }
+  }, [currentSession?.id, editableTranscript]); // Include editableTranscript in deps for comparison
   
   // Sync context recording state with actual recording state
   useEffect(() => {
@@ -354,6 +359,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             transcript={currentTranscript}
             recordingState={recordingState}
             onEditChange={handleTranscriptChange}
+            onFileUpload={onFileUpload}
           />
         );
       

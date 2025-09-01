@@ -178,6 +178,79 @@ export class GeorgianTTSService {
   }
 
   /**
+   * Process an entire audio file by splitting it into chunks and transcribing each chunk
+   */
+  async processAudioFile(
+    file: File,
+    options: {
+      language?: string;
+      autocorrect?: boolean;
+      punctuation?: boolean;
+      digits?: boolean;
+      engine?: string;
+      model?: string;
+      onProgress?: (progress: number) => void;
+      onChunkComplete?: (chunkIndex: number, chunkText: string, totalChunks: number) => void;
+    } = {}
+  ): Promise<string> {
+    const { AudioProcessor } = await import('../../utils/audioProcessing');
+    
+    // Validate file
+    const validation = AudioProcessor.validateAudioFile(file);
+    if (!validation.valid) {
+      throw new Error(validation.error);
+    }
+
+    // Get file info and split into chunks
+    const audioInfo = await AudioProcessor.getAudioFileInfo(file);
+    const chunks = await AudioProcessor.splitAudioIntoChunks(file, (progress) => {
+      if (options.onProgress) {
+        options.onProgress(progress * 0.2); // Chunking is 20% of total process
+      }
+    });
+
+    let combinedTranscript = '';
+    const totalChunks = chunks.length;
+
+    // Process each chunk sequentially
+    for (let i = 0; i < chunks.length; i++) {
+      const chunk = chunks[i];
+      
+      try {
+        const chunkText = await this.recognizeSpeech(chunk.blob, {
+          language: options.language,
+          autocorrect: options.autocorrect,
+          punctuation: options.punctuation,
+          digits: options.digits,
+          engine: options.engine,
+          model: options.model,
+          maxRetries: 2
+        });
+
+        if (chunkText?.trim()) {
+          const separator = combinedTranscript.trim() ? ' ' : '';
+          combinedTranscript += separator + chunkText.trim();
+          
+          // Notify chunk completion
+          if (options.onChunkComplete) {
+            options.onChunkComplete(i, chunkText.trim(), totalChunks);
+          }
+        }
+      } catch (error) {
+        console.warn(`Chunk ${i + 1}/${totalChunks} processing failed:`, error);
+        // Continue with other chunks instead of failing entirely
+      }
+
+      // Update overall progress (20% for chunking + 80% for transcription)
+      if (options.onProgress) {
+        options.onProgress(20 + ((i + 1) / totalChunks) * 80);
+      }
+    }
+
+    return combinedTranscript;
+  }
+
+  /**
    * Service is always ready (no initialization needed)
    */
   async initialize(): Promise<void> {

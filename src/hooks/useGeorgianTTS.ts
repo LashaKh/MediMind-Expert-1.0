@@ -1137,13 +1137,32 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     setError(null);
     
     try {
-      const [speakers, transcriptionError] = await safeAsync(
-        () => georgianTTSServiceRef.current!.recognizeSpeechFromFile(file, {
+      // Use the new processAudioFile method with chunking support
+      const [transcriptText, transcriptionError] = await safeAsync(
+        () => georgianTTSServiceRef.current!.processAudioFile(file, {
           language: language === 'ka-GE' ? 'ka' : language,
           autocorrect,
           punctuation,
           digits,
-          speakers: 1
+          onProgress: (progress) => {
+            // Update processing state for UI feedback
+            setRecordingState(prev => ({
+              ...prev,
+              isProcessingChunks: progress < 100,
+              processedChunks: Math.floor(progress / 5), // Rough estimate
+              totalChunks: 20 // Rough estimate
+            }));
+          },
+          onChunkComplete: (chunkIndex, chunkText, totalChunks) => {
+            console.log(`✅ Chunk ${chunkIndex + 1}/${totalChunks} completed: "${chunkText.substring(0, 50)}..."`);
+            
+            // Update live transcript if callback provided
+            if (onLiveTranscriptUpdate) {
+              // Get current combined transcript from all previous chunks
+              const chunkProgress = (chunkIndex + 1) / totalChunks;
+              // We don't have the full transcript yet, so we'll let the final result handle the update
+            }
+          }
         })
       );
       
@@ -1151,20 +1170,22 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         throw transcriptionError;
       }
       
-      // Combine all speaker texts
-      const combinedText = speakers.map(speaker => speaker.Text).join(' ');
-      
-      // For file uploads, we still need transcriptionResult since there's no live updates
+      // For file uploads, create transcription result
       const result: TranscriptionResult = {
-        text: combinedText,
+        text: transcriptText,
         timestamp: Date.now(),
-        duration: 0 // File duration not tracked
+        duration: 0 // File duration not tracked here
       };
       
-      setTranscriptionResult(result); // Keep this one - file uploads need it
+      setTranscriptionResult(result);
       updateAuthStatus();
       
-      return speakers;
+      // Also trigger live update for session management
+      if (onLiveTranscriptUpdate && transcriptText) {
+        onLiveTranscriptUpdate(transcriptText, transcriptText, sessionIdRef.current);
+      }
+      
+      return transcriptText;
       
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'File transcription failed';
@@ -1172,8 +1193,15 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       return null;
     } finally {
       setIsTranscribing(false);
+      // Reset processing state
+      setRecordingState(prev => ({
+        ...prev,
+        isProcessingChunks: false,
+        processedChunks: 0,
+        totalChunks: 0
+      }));
     }
-  }, [language, autocorrect, punctuation, digits, updateAuthStatus]);
+  }, [language, autocorrect, punctuation, digits, updateAuthStatus, onLiveTranscriptUpdate]);
 
   const clearError = useCallback(() => {
     setError(null);

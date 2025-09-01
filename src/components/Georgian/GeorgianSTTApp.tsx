@@ -20,11 +20,13 @@ import { TranscriptPanel } from './TranscriptPanel';
 import { useSessionManagement, GeorgianSession } from '../../hooks/useSessionManagement';
 import { useAIProcessing } from '../../hooks/useAIProcessing';
 import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
+import { useAudioFileUpload } from '../../hooks/useAudioFileUpload';
 import { useAuth } from '../../stores/useAppStore';
 
 // Import extracted components
 import { HeaderControls } from './components/HeaderControls';
 import { MobileSessionHeader } from './components/MobileSessionHeader';
+import { AudioUploadProgress } from './components/AudioUploadProgress';
 import { formatTime } from './utils/transcriptUtils';
 
 export const GeorgianSTTApp: React.FC = () => {
@@ -94,13 +96,31 @@ export const GeorgianSTTApp: React.FC = () => {
       
       // Save to database in background (if sessionId available)
       if (sessionId) {
-        appendToTranscript(sessionId, newText.trim()).catch(error => {
-
-          // Keep local state - user still sees the transcript
-        });
+        // Check if session exists, create if needed
+        const sessionExists = sessions.find(s => s.id === sessionId);
+        if (!sessionExists) {
+          console.warn(`⚠️ Session ${sessionId} not found, creating temporary session`);
+          const newSession = createTemporarySession('Live Recording');
+          // Update the session with the current transcript content
+          setTimeout(() => {
+            appendToTranscript(newSession.id, newText.trim());
+          }, 0);
+        } else {
+          appendToTranscript(sessionId, newText.trim()).catch(error => {
+            // Keep local state - user still sees the transcript
+          });
+        }
+      } else if (!currentSession) {
+        // No session at all, create one
+        console.warn(`⚠️ No session available for live update, creating one`);
+        const newSession = createTemporarySession('Live Recording');
+        selectSession(newSession.id);
+        setTimeout(() => {
+          appendToTranscript(newSession.id, newText.trim());
+        }, 0);
       }
     }
-  }, [appendToTranscript]);
+  }, [appendToTranscript, sessions, createTemporarySession, currentSession, selectSession]);
 
   // Georgian TTS - Check support first
   const {
@@ -134,6 +154,24 @@ export const GeorgianSTTApp: React.FC = () => {
     chunkDuration: 12000, // 12 second chunks for processing
     sessionId: currentSession?.id, // Pass current session ID for isolation
     onLiveTranscriptUpdate: handleLiveTranscriptUpdate
+  });
+
+  // Audio File Upload
+  const {
+    uploadState,
+    processAudioFile,
+    cancelProcessing,
+    resetState: resetUploadState,
+    getStatusMessage,
+    canProcess,
+    canCancel
+  } = useAudioFileUpload({
+    language: 'ka-GE',
+    autocorrect: true,
+    punctuation: true,
+    digits: true,
+    sessionId: currentSession?.id,
+    onTranscriptUpdate: handleLiveTranscriptUpdate
   });
 
   // AI Processing
@@ -298,6 +336,11 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Handle file upload
   const handleFileUpload = useCallback(async (file: File) => {
+    if (!canProcess) {
+      console.warn('Cannot process file - upload already in progress');
+      return;
+    }
+
     if (!currentSession) {
       // Create temporary session for file upload
       const newSession = createTemporarySession(`File: ${file.name}`);
@@ -305,15 +348,33 @@ export const GeorgianSTTApp: React.FC = () => {
       clearTTSResult(); // Clear old transcription result
       selectSession(newSession.id);
     }
-    await processFileUpload(file);
-  }, [currentSession, createTemporarySession, selectSession, processFileUpload, resetTranscript, clearTTSResult]);
+    
+    // Reset any previous upload state
+    resetUploadState();
+    
+    // Use the new audio file upload hook
+    const result = await processAudioFile(file);
+    if (result.success) {
+      console.log(`✅ Audio file upload completed: ${result.chunksProcessed} chunks, ${Math.round(result.duration)}s audio`);
+    } else {
+      console.error('❌ Audio file upload failed:', result.error);
+    }
+  }, [currentSession, createTemporarySession, selectSession, resetTranscript, clearTTSResult, canProcess, resetUploadState, processAudioFile]);
 
   // Handle transcript update (for editing existing transcript)
   const handleTranscriptUpdate = useCallback((transcript: string, duration?: number) => {
     if (currentSession) {
       updateTranscript(currentSession.id, transcript, duration);
+    } else if (transcript.trim()) {
+      // Create a new session when user starts typing and no session exists
+      const newSession = createTemporarySession('Manual Entry');
+      // IMPORTANT: Update session with content BEFORE selecting it to avoid race conditions
+      newSession.transcript = transcript; // Set initial content
+      selectSession(newSession.id);
+      // Also update in database/memory
+      updateTranscript(newSession.id, transcript, duration);
     }
-  }, [currentSession, updateTranscript]);
+  }, [currentSession, updateTranscript, createTemporarySession, selectSession]);
 
   // Handle transcript append (for new recordings)
   const handleTranscriptAppend = useCallback((newText: string, duration?: number) => {
@@ -335,15 +396,23 @@ export const GeorgianSTTApp: React.FC = () => {
     if (!currentSession) {
       // Create temporary session when user starts recording - clear local state for fresh start
       setLocalTranscript(''); // Clear local transcript for new session
-      resetTranscript(); // Reset TTS hook state
+      resetTranscript(); // Reset TTS hook state for new session
       clearTTSResult(); // Clear old transcription result
       
       const newSession = createTemporarySession('New Recording');
       selectSession(newSession.id);
     } else {
-      // IMPORTANT: Don't clear localTranscript when recording in existing session
-      // This preserves user's typed content!
-      clearTTSResult(); // Just clear pending results
+      // IMPORTANT: For existing session, we need to preserve the existing content
+      // Don't call resetTranscript() as it clears the TTS hook's internal state
+      // This preserves user's typed/pasted content when starting recording
+      clearTTSResult(); // Just clear pending results, keep existing transcript state
+      
+      // CRITICAL: Initialize TTS hook's internal state with existing content
+      // The TTS hook needs to know about existing content to properly append new transcriptions
+      if (localTranscript.trim()) {
+        // TODO: Add a way to initialize TTS hook with existing content
+        // For now, we'll rely on the live update system to handle this
+      }
     }
     startRecording();
   }, [currentSession, createTemporarySession, selectSession, startRecording, resetTranscript, clearTTSResult]);
@@ -678,6 +747,18 @@ export const GeorgianSTTApp: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Audio Upload Progress Overlay */}
+      <AudioUploadProgress
+        isVisible={uploadState.isUploading || uploadState.isProcessing}
+        stage={uploadState.processingStage}
+        progress={uploadState.progress}
+        currentChunk={uploadState.currentChunk}
+        totalChunks={uploadState.totalChunks}
+        fileName={uploadState.processingStage !== 'idle' ? 'Audio file' : undefined}
+        error={uploadState.error}
+        onCancel={canCancel ? cancelProcessing : undefined}
+      />
     </div>
   );
 };
