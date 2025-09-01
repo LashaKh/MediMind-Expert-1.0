@@ -29,6 +29,9 @@ interface MessageInputProps {
   onSelectAllDocuments?: () => void;
   onClearSelectedDocuments?: () => void;
   showDocumentSelector?: boolean;
+  // Layout control props
+  forceMobileLayout?: boolean;
+  disableInternalMobilePositioning?: boolean;
 }
 
 export const MessageInput: React.FC<MessageInputProps> = ({
@@ -49,10 +52,35 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   onDocumentToggle,
   onSelectAllDocuments,
   onClearSelectedDocuments,
-  showDocumentSelector = false
+  showDocumentSelector = false,
+  // Layout control props
+  forceMobileLayout = false,
+  disableInternalMobilePositioning = false
 }) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
+  
+  // Clear message state on component mount/unmount for mobile optimization
+  useEffect(() => {
+    // Reset all states on mount to prevent stale data display
+    setMessage('');
+    setAttachments([]);
+    setIsSubmitting(false);
+    setIsProcessingFiles(false);
+    setUploadError(null);
+    
+    return () => {
+      // Clean up on unmount
+      setMessage('');
+      setAttachments([]);
+      // Clear any keyboard-related body classes
+      document.body.classList.remove('mobile-keyboard-open');
+      // Clear any fixed positioning on body
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+    };
+  }, []);
   const [attachments, setAttachments] = useState<EnhancedAttachment[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isProcessingFiles, setIsProcessingFiles] = useState(false);
@@ -431,7 +459,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       ref={containerRef}
       className={`
         flex flex-col transition-all duration-300 safe-bottom
-        ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50 bg-white/98 dark:bg-gray-900/98 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-700/50 shadow-xl mobile-input-container' : 'relative'}
+        ${(isMobile && !disableInternalMobilePositioning) || forceMobileLayout ? 'fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-gray-900/98 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-700/50 shadow-xl mobile-input-container' : 'relative'}
         ${className}
       `}
       data-tour="message-input"
@@ -657,7 +685,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               `}
               style={{ 
                 fontSize: '16px !important', // CRITICAL: Exactly 16px prevents mobile zoom
-                minHeight: isMobile ? '48px' : '24px',
+                minHeight: isMobile ? '44px' : '24px', // Apple's minimum touch target
                 maxHeight: isMobile ? '120px' : '160px',
                 padding: isMobile ? '12px 0' : '8px 0',
                 lineHeight: '1.5',
@@ -666,7 +694,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 // iOS-specific fixes for input connection
                 WebkitUserSelect: 'text',
                 WebkitTouchCallout: 'default',
-                WebkitTapHighlightColor: 'transparent'
+                WebkitTapHighlightColor: 'transparent',
+                // Performance optimizations
+                transform: 'translateZ(0)', // Force GPU acceleration
+                willChange: 'auto' // Optimize for changes
               }}
               rows={isMobile ? 2 : 1}
             />

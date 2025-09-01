@@ -1205,7 +1205,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       )}
 
       {/* Desktop Input Area - Only show on desktop */}
-      <div className={`flex-shrink-0 relative z-20 ${shouldOptimize ? 'hidden' : ''}`}>
+      <div className={`desktop-input-wrapper flex-shrink-0 relative z-20 ${shouldOptimize ? 'hidden md:hidden lg:hidden xl:hidden' : 'block'}`}>
         {/* Mobile-first glass morphism container */}
         <div className={`relative ${animationClasses.backdropBlur} bg-gradient-to-t from-white/95 via-white/90 to-white/95 border-t border-white/60 shadow-2xl shadow-slate-900/10`}>
           {/* Performance-optimized ambient glow effect */}
@@ -1241,6 +1241,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                   onSelectAllDocuments={selectAllDocuments}
                   onClearSelectedDocuments={clearSelectedDocuments}
                   showDocumentSelector={true}
+                  disableInternalMobilePositioning={true}
                 />
               )}
             </CaseContextProvider>
@@ -1261,6 +1262,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
               selectedKnowledgeBase={knowledgeBase}
               personalDocumentCount={personalDocumentCount}
                 className="border-0 bg-transparent backdrop-blur-none"
+              disableInternalMobilePositioning={true}
             />
           )}
         </div>
@@ -1277,6 +1279,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
             >
               {({ caseContext, attachmentUploads, attachments }) => (
                 <MessageInput
+                  key={`mobile-case-input-${activeCase?.id || 'default'}-${Date.now()}`}
                   onSendMessage={(content, messageAttachments, enhancedMessage) => 
                     handleSendMessageWithEnhancedContext(content, messageAttachments, caseContext, attachmentUploads, enhancedMessage)
                   }
@@ -1298,11 +1301,13 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                   onSelectAllDocuments={selectAllDocuments}
                   onClearSelectedDocuments={clearSelectedDocuments}
                   showDocumentSelector={true}
+                  forceMobileLayout={true}
                 />
               )}
             </CaseContextProvider>
           ) : (
             <MessageInput
+              key={`mobile-general-input-${sessionId || 'default'}`}
               onSendMessage={handleSendMessage}
               disabled={isDisabled || isLoading || !isConnected}
               placeholder={
@@ -1318,6 +1323,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
               selectedKnowledgeBase={knowledgeBase}
               personalDocumentCount={personalDocumentCount}
               className="border-0 bg-transparent backdrop-blur-none"
+              forceMobileLayout={true}
             />
           )}
         </>
