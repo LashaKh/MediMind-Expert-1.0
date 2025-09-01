@@ -416,8 +416,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     <div 
       ref={containerRef}
       className={`
-        flex flex-col transition-all duration-300 safe-bottom relative
-        ${isMobile ? 'mobile-input-container' : ''}
+        flex flex-col transition-all duration-300 safe-bottom
+        ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 shadow-lg mobile-input-container' : 'relative'}
         ${className}
       `}
       data-tour="message-input"
@@ -633,13 +633,17 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                 focus:outline-none focus:ring-0 focus:border-none
                 placeholder:text-gray-500 dark:placeholder:text-gray-400
                 text-gray-900 dark:text-white
-                leading-6 min-h-[44px]
+                leading-6
                 ${className || ''}
               `}
               style={{ 
-                fontSize: '16px', // CRITICAL: Exactly 16px prevents mobile zoom
-                minHeight: isMobile ? '44px' : '24px', 
-                maxHeight: isMobile ? '120px' : '160px' 
+                fontSize: '16px !important', // CRITICAL: Exactly 16px prevents mobile zoom - force override
+                minHeight: isMobile ? '56px' : '24px', // Increased mobile height for better visibility
+                maxHeight: isMobile ? '120px' : '160px',
+                padding: isMobile ? '12px 0' : '8px 0', // Better mobile padding
+                lineHeight: '1.5',
+                WebkitTextSizeAdjust: '100%', // Prevent text size adjustment
+                WebkitAppearance: 'none' // Remove iOS styling
               }}
               rows={isMobile ? 2 : 1}
             />

@@ -1150,7 +1150,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
               <MessageList 
                 messages={messages} 
                 isTyping={isTyping}
-                className="flex-1 px-2 sm:px-4 py-4 sm:py-6 bg-gradient-to-b from-transparent via-white/20 to-transparent"
+                className={`flex-1 px-2 sm:px-4 py-4 sm:py-6 bg-gradient-to-b from-transparent via-white/20 to-transparent ${shouldOptimize ? 'pb-32' : ''}`}
               />
             </div>
           )}
@@ -1204,8 +1204,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         </div>
       )}
 
-      {/* Mobile-Optimized Input Area */}
-      <div className="flex-shrink-0 relative z-20">
+      {/* Mobile-Optimized Input Area - Hide wrapper on mobile since input is now fixed */}
+      <div className={`flex-shrink-0 relative z-20 ${shouldOptimize ? 'hidden' : ''}`}>
         {/* Mobile-first glass morphism container */}
         <div className={`relative ${animationClasses.backdropBlur} bg-gradient-to-t from-white/95 via-white/90 to-white/95 border-t border-white/60 shadow-2xl shadow-slate-900/10`}>
           {/* Performance-optimized ambient glow effect */}
