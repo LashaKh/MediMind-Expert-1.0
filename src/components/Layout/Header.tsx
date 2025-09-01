@@ -60,13 +60,44 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
 
   return (
     <>
-      {/* Header with smart condensing on scroll */}
+      {/* Floating Menu Button for Mobile - Edge Tab Style */}
+      {isMobile && user && !isOnboardingPage && (
+        <button
+          onClick={onMenuToggle}
+          className="fixed left-0 top-1/2 -translate-y-1/2 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-lg hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 focus-enhanced active:scale-95 rounded-r-2xl"
+          aria-label={t('navigation.toggleMenu')}
+          aria-expanded="false"
+          style={{
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            width: '24px',
+            height: '48px',
+            transform: 'translateX(-8px) translateY(-50%)',
+            borderLeft: 'none',
+          }}
+        >
+          <div className="flex items-center justify-center h-full pl-2">
+            <svg 
+              className="w-3 h-3 text-gray-600 dark:text-gray-300" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+              strokeWidth={3}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </button>
+      )}
+
+      {/* Header - hidden on mobile */}
       <header 
         className={`
-          fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm
+          ${isMobile ? 'hidden' : 'fixed top-0 left-0 right-0 z-50'}
+          bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm
           border-b border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out safe-top
           ${isScrolled ? 'shadow-lg' : 'shadow-md'}
-          ${isCondensed && isMobile ? 'h-14' : 'h-20'}
+          ${isCondensed ? 'h-14' : 'h-20'}
         `}
         style={{
           backdropFilter: 'blur(12px)',
@@ -75,23 +106,19 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
       >
         <div className={`
           flex items-center justify-between px-4 sm:px-6 lg:px-8 safe-left safe-right transition-all duration-300
-          ${isCondensed && isMobile ? 'h-14 py-2' : 'h-20 py-5'}
+          ${isCondensed ? 'h-14 py-2' : 'h-20 py-5'}
         `}>
-          {/* Left side: Logo and mobile menu button */}
+          {/* Left side: Logo and desktop menu button */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            {/* Mobile menu button with enhanced touch target */}
+            {/* Desktop menu button - only shown on desktop when sidebar exists */}
             {user && !isOnboardingPage && (
               <button
                 onClick={onMenuToggle}
-                className={`
-                  touch-target-md medical-touch-target medical-mobile-touch-md md:hidden rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 
-                  transition-all duration-200 focus-enhanced active:scale-95
-                  ${isCondensed ? 'p-1' : 'p-2'}
-                `}
+                className="hidden lg:flex touch-target-md rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 focus-enhanced active:scale-95 p-2"
                 aria-label={t('navigation.toggleMenu')}
                 aria-expanded="false"
               >
-                <Menu className={`text-gray-600 dark:text-gray-300 ${isCondensed ? 'w-4 h-4' : 'w-5 h-5'}`} />
+                <Menu className="w-5 h-5 text-gray-600 dark:text-gray-300" />
               </button>
             )}
 
@@ -105,12 +132,12 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
                 <div className={`
                   relative bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 
                   rounded-full flex items-center justify-center shadow-lg transition-all duration-300
-                  ${isCondensed && isMobile ? 'w-8 h-8' : 'w-10 h-10 sm:w-12 sm:h-12'}
+                  ${isCondensed ? 'w-8 h-8' : 'w-10 h-10 sm:w-12 sm:h-12'}
                   hover:shadow-xl hover:scale-110 group
                 `}>
                   <Stethoscope className={`
                     text-white transition-all duration-300 group-hover:rotate-12
-                    ${isCondensed && isMobile ? 'w-4 h-4' : 'w-5 h-5 sm:w-6 sm:h-6'}
+                    ${isCondensed ? 'w-4 h-4' : 'w-5 h-5 sm:w-6 sm:h-6'}
                   `} />
                   {/* Subtle Glow Effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm scale-110"></div>
@@ -119,27 +146,27 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
                 {/* Enhanced Typography */}
                 <div className={`
                   ml-3 flex flex-col transition-all duration-300
-                  ${isCondensed && isMobile ? 'opacity-0 w-0 overflow-hidden ml-0' : ''}
+                  ${isCondensed ? 'opacity-0 w-0 overflow-hidden ml-0' : ''}
                 `}>
                   <div className="flex items-baseline space-x-1">
                     <span className={`
                       font-bold bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-700 
                       dark:from-blue-400 dark:via-cyan-400 dark:to-blue-500 
                       bg-clip-text text-transparent transition-all duration-200
-                      ${isCondensed && isMobile ? 'text-base' : 'text-lg sm:text-xl lg:text-2xl'}
+                      ${isCondensed ? 'text-base' : 'text-lg sm:text-xl lg:text-2xl'}
                     `}>
                       MediMind
                     </span>
                     <span className={`
                       font-medium text-cyan-600 dark:text-cyan-400 transition-all duration-200
-                      ${isCondensed && isMobile ? 'text-sm' : 'text-sm sm:text-base lg:text-lg'}
+                      ${isCondensed ? 'text-sm' : 'text-sm sm:text-base lg:text-lg'}
                     `}>
                       Expert
                     </span>
                   </div>
                   <span className={`
                     text-gray-500 dark:text-gray-400 font-medium tracking-wide transition-all duration-200
-                    ${isCondensed && isMobile ? 'hidden' : 'text-xs hidden xs:block'}
+                    ${isCondensed ? 'hidden' : 'text-xs hidden xs:block'}
                   `}>
                     AI Medical Co-Pilot
                   </span>

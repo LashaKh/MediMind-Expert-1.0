@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Plus,
   Search,
@@ -96,9 +97,11 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const [hoveredSession, setHoveredSession] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number } | null>(null);
   
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
 
   // Enhanced search functionality
   const handleSearch = (query: string) => {
@@ -174,6 +177,36 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
       newFavorites.add(sessionId);
     }
     setFavorites(newFavorites);
+  };
+
+  const calculateDropdownPosition = (sessionId: string) => {
+    const button = buttonRefs.current[sessionId];
+    if (!button) return null;
+
+    const rect = button.getBoundingClientRect();
+    const dropdownWidth = 192; // w-48 = 192px
+    const dropdownHeight = 96; // Approximate height for 2 items
+    
+    // Position dropdown to the left of the button, aligned to the right edge of button
+    let left = rect.right - dropdownWidth;
+    let top = rect.bottom + 4; // Small gap below button
+    
+    // Adjust if dropdown would go off the left edge
+    if (left < 8) {
+      left = rect.left;
+    }
+    
+    // Adjust if dropdown would go off the right edge
+    if (left + dropdownWidth > window.innerWidth - 8) {
+      left = window.innerWidth - dropdownWidth - 8;
+    }
+    
+    // If not enough space below, position above the button
+    if (top + dropdownHeight > window.innerHeight - 8) {
+      top = rect.top - dropdownHeight - 4;
+    }
+    
+    return { top, left };
   };
 
   const toggleHistory = () => {
@@ -381,48 +414,25 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
               </button>
 
               {/* Options dropdown */}
-              <div className="relative" ref={dropdownRef}>
+              <div className="relative">
                 <button
+                  ref={(el) => { buttonRefs.current[session.id] = el; }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setActiveDropdown(activeDropdown === session.id ? null : session.id);
+                    if (activeDropdown === session.id) {
+                      setActiveDropdown(null);
+                      setDropdownPosition(null);
+                    } else {
+                      const position = calculateDropdownPosition(session.id);
+                      setDropdownPosition(position);
+                      setActiveDropdown(session.id);
+                    }
                   }}
                   className="p-2 rounded-lg transition-all duration-200 text-medical-gray-400 hover:text-medical-gray-600 dark:hover:text-medical-gray-300 hover:bg-medical-gray-100 dark:hover:bg-medical-gray-700"
                   title="Session options"
                 >
                   <MoreVertical className="w-3 h-3" />
                 </button>
-                
-                {activeDropdown === session.id && (
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white/95 dark:bg-medical-gray-800/95 backdrop-blur-xl border border-medical-gray-200/50 dark:border-medical-gray-700/50 rounded-xl shadow-xl z-50 overflow-hidden">
-                    <div className="p-1">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDuplicateSession(session.id);
-                          setActiveDropdown(null);
-                        }}
-                        className="w-full px-3 py-2 text-left text-sm font-medium text-medical-gray-700 dark:text-medical-gray-200 hover:bg-medical-blue-50 dark:hover:bg-medical-blue-900/30 rounded-lg transition-all duration-200 flex items-center space-x-2"
-                      >
-                        <Copy className="w-3 h-3 text-medical-blue-500" />
-                        <span>Duplicate</span>
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (confirm(`Delete "${session.title}"?`)) {
-                            onDeleteSession(session.id);
-                          }
-                          setActiveDropdown(null);
-                        }}
-                        className="w-full px-3 py-2 text-left text-sm font-medium text-medical-error-600 dark:text-medical-error-400 hover:bg-medical-error-50 dark:hover:bg-medical-error-900/30 rounded-lg transition-all duration-200 flex items-center space-x-2"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                        <span>Delete</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -639,6 +649,58 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             <span>Secure</span>
           </div>
         </div>
+      )}
+
+      {/* Global dropdown portal - renders at document root to escape overflow:hidden */}
+      {activeDropdown && dropdownPosition && createPortal(
+        <>
+          <div 
+            className="fixed inset-0 z-[9999]" 
+            onClick={() => {
+              setActiveDropdown(null);
+              setDropdownPosition(null);
+            }} 
+          />
+          <div 
+            className="fixed z-[10000] w-48 bg-white dark:bg-medical-gray-800 border border-medical-gray-200 dark:border-medical-gray-700 rounded-xl shadow-2xl"
+            style={{
+              top: dropdownPosition.top,
+              left: dropdownPosition.left
+            }}
+            ref={dropdownRef}
+          >
+            <div className="p-1">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDuplicateSession(activeDropdown);
+                  setActiveDropdown(null);
+                  setDropdownPosition(null);
+                }}
+                className="w-full px-3 py-2 text-left text-sm font-medium text-medical-gray-700 dark:text-medical-gray-200 hover:bg-medical-blue-50 dark:hover:bg-medical-blue-900/30 rounded-lg transition-all duration-200 flex items-center space-x-2"
+              >
+                <Copy className="w-3 h-3 text-medical-blue-500" />
+                <span>Duplicate</span>
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const sessionToDelete = sessions.find(s => s.id === activeDropdown);
+                  if (sessionToDelete && confirm(`Delete "${sessionToDelete.title}"?`)) {
+                    onDeleteSession(activeDropdown);
+                  }
+                  setActiveDropdown(null);
+                  setDropdownPosition(null);
+                }}
+                className="w-full px-3 py-2 text-left text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 flex items-center space-x-2"
+              >
+                <Trash2 className="w-3 h-3" />
+                <span>Delete</span>
+              </button>
+            </div>
+          </div>
+        </>,
+        document.body
       )}
 
       {/* Enhanced keyboard shortcuts overlay */}

@@ -29,6 +29,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   // Check if we're on the AI Copilot page
   const isAICopilotPage = location.pathname === '/ai-copilot';
   
+  // Check if we're on the MediScribe page - hide bottom navigation for full screen transcription
+  const isMediScribePage = location.pathname === '/mediscribe';
+  
   // Initialize theme - this will force light mode
   useTheme();
 
@@ -92,7 +95,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Header with safe area support */}
       <Header onMenuToggle={handleMenuToggle} isOnboardingPage={isOnboardingPage} />
       
-      <div className="flex flex-1 layout-container pt-20">
+      <div className={`flex flex-1 layout-container ${isMobile ? 'pt-0' : 'pt-20'}`}>
         {/* Sidebar - only show for authenticated users and not on onboarding */}
         {user && !isOnboardingPage && (
           <Sidebar 
@@ -117,11 +120,11 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             flex-1 transition-all duration-300 ease-in-out 
             overflow-hidden bg-background
             ${user && isMobile && isSidebarOpen ? 'pointer-events-none' : ''}
-            ${user && isMobile ? 'pb-16' : ''}
+            ${''}
           `}
           style={{
-            height: 'calc(100vh - 80px)', // Full height minus header
-            minHeight: 'calc(100vh - 80px)'
+            height: isMobile ? '100vh' : 'calc(100vh - 80px)', // Full height on mobile, minus header on desktop
+            minHeight: isMobile ? '100vh' : 'calc(100vh - 80px)'
           }}
         >
           {/* Complete gap elimination - zero margin/padding wrapper */}
@@ -131,8 +134,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         </main>
       </div>
       
-      {/* Bottom Navigation for mobile - only for authenticated users and not on onboarding */}
-      {user && !isOnboardingPage && <BottomNavigation />}
+      {/* Bottom Navigation for mobile - DISABLED 
+      {user && !isOnboardingPage && !isMediScribePage && <BottomNavigation />} */}
       
       {/* Footer - completely removed */}
       

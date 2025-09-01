@@ -49,7 +49,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
       {/* Subtle Border */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200/40 to-transparent dark:via-slate-700/40" />
       
-      <div className="relative px-6 py-4">
+      <div className="relative px-3 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           {/* Premium Tab System */}
           <div className="relative">
@@ -66,7 +66,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                       key={tab.id}
                       onClick={() => onTabChange(tab.id as TabId)}
                       className={`
-                        relative flex items-center space-x-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 group
+                        relative flex items-center space-x-1.5 sm:space-x-2.5 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 group
                         medical-touch-target medical-nav-item
                         ${isActive
                           ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25' 
@@ -74,7 +74,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                         }
                       `}
                     >
-                      <Icon className={`w-4 h-4 transition-all duration-300 ${
+                      <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-all duration-300 flex-shrink-0 ${
                         isActive 
                           ? 'text-white drop-shadow-sm' 
                           : 'text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300'
@@ -98,8 +98,8 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
             </div>
           </div>
           
-          {/* Right Side Actions */}
-          <div className="flex items-center space-x-3">
+          {/* Right Side Actions - Mobile Optimized */}
+          <div className="flex items-center space-x-2 sm:space-x-3">
             {/* Premium Record Button - Only show on transcript tab and hidden on mobile (FAB handles mobile) */}
             {activeTab === 'transcript' && (onStartRecording || onStopRecording) && (
               <button
@@ -140,26 +140,28 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
               </button>
             )}
 
-            {/* Action Buttons for Transcript */}
+            {/* Action Buttons for Transcript - Mobile Friendly */}
             {activeTab === 'transcript' && hasTranscript && (
               <div className="flex items-center bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-xl p-1 shadow-lg">
                 {onCopy && (
                   <button
                     onClick={onCopy}
-                    className="flex items-center space-x-2 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 text-sm font-medium group medical-touch-target"
+                    className="flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium group"
+                    style={{ minWidth: 'var(--medical-mobile-touch-md)', minHeight: 'var(--medical-mobile-touch-md)' }}
                   >
-                    <Copy className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                    <span>Copy</span>
+                    <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform duration-200 flex-shrink-0" />
+                    <span className="hidden sm:inline">Copy</span>
                   </button>
                 )}
                 
                 {onDownload && (
                   <button
                     onClick={onDownload}
-                    className="flex items-center space-x-2 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 rounded-lg transition-all duration-200 text-sm font-medium group medical-touch-target"
+                    className="flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium group"
+                    style={{ minWidth: 'var(--medical-mobile-touch-md)', minHeight: 'var(--medical-mobile-touch-md)' }}
                   >
-                    <Download className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                    <span>Download</span>
+                    <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform duration-200 flex-shrink-0" />
+                    <span className="hidden sm:inline">Download</span>
                   </button>
                 )}
                 
