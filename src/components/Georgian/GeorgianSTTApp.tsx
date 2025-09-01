@@ -382,6 +382,10 @@ export const GeorgianSTTApp: React.FC = () => {
         activeTab={activeTab}
         onOpenMobileSessions={openMobileDrawer}
         sessionsCount={sessions.length}
+        canRecord={canRecord}
+        canStop={canStop}
+        onStartRecording={handleStartRecording}
+        onStopRecording={stopRecording}
       />
 
       {/* Mobile-First Responsive Layout */}
@@ -644,59 +648,6 @@ export const GeorgianSTTApp: React.FC = () => {
               onActiveTabChange={setActiveTab}
             />
           </div>
-          
-          {/* Mobile Floating Action Button (FAB) - Only visible on transcript tab */}
-          {activeTab === 'transcript' && (
-            <div className="absolute bottom-6 right-6 z-50">
-              <button
-              onClick={recordingState.isRecording ? (canStop ? stopRecording : undefined) : (canRecord ? handleStartRecording : undefined)}
-              disabled={recordingState.isRecording ? !canStop : !canRecord}
-              className={`
-                group relative overflow-hidden rounded-full shadow-2xl transform transition-all duration-300 
-                active:scale-95 hover:scale-110 flex items-center justify-center
-                medical-mobile-touch-2xl border-4 border-white/20 backdrop-blur-sm
-                ${recordingState.isRecording 
-                  ? (canStop 
-                      ? 'bg-gradient-to-r from-red-500 via-rose-600 to-red-600 hover:from-red-600 hover:via-rose-700 hover:to-red-700 shadow-red-500/50 animate-pulse' 
-                      : 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed shadow-gray-400/30')
-                  : (canRecord 
-                      ? 'bg-gradient-to-r from-emerald-500 via-green-600 to-emerald-600 hover:from-emerald-600 hover:via-green-700 hover:to-emerald-700 shadow-emerald-500/50' 
-                      : 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed shadow-gray-400/30')
-                }
-              `}
-              style={{ 
-                width: 'var(--medical-mobile-touch-2xl)', 
-                height: 'var(--medical-mobile-touch-2xl)' 
-              }}
-              aria-label={recordingState.isRecording ? 'Stop Recording' : 'Start Recording'}
-            >
-              {/* Animated Background Rings */}
-              {recordingState.isRecording && (
-                <>
-                  <div className="absolute inset-0 rounded-full border-4 border-red-400/40 animate-ping" />
-                  <div className="absolute inset-0 rounded-full border-2 border-red-300/60 animate-pulse" style={{ animationDelay: '0.5s' }} />
-                </>
-              )}
-              
-              {/* Icon */}
-              {recordingState.isRecording ? (
-                <Square className="w-8 h-8 text-white relative z-10" />
-              ) : (
-                <Mic className="w-8 h-8 text-white relative z-10" />
-              )}
-              
-              {/* Shimmer Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 animate-shimmer" />
-            </button>
-            
-            {/* Recording Duration Badge */}
-            {recordingState.isRecording && recordingState.duration > 0 && (
-              <div className="absolute -top-3 -left-3 bg-red-500/90 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg backdrop-blur-sm border border-white/20">
-                {formatTime(recordingState.duration)}
-              </div>
-            )}
-            </div>
-          )}
         </div>
 
       </div>
