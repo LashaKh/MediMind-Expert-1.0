@@ -219,7 +219,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                 }`}
               >
                 <FileText className="w-4 h-4" />
-                <span>History ({processingHistory.length})</span>
+                <span>Generated Reports ({processingHistory.length})</span>
               </button>
             </div>
 

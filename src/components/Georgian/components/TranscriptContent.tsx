@@ -140,7 +140,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         <div className="relative h-full flex flex-col p-1">
           
           {/* Controls Row - Top */}
-          <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between">
+          <div className="relative mb-4 z-10 flex items-center justify-between px-4 pt-4">
             
             {/* Speaker Diarization Controls - Left */}
             {onToggleSpeakerDiarization && (
@@ -223,7 +223,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
           />
           
           {/* Premium Text Area */}
-          <div className="flex-1 relative overflow-hidden mt-16">
+          <div className="flex-1 relative overflow-hidden">
             <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden">
               
               {/* Conditional Content Display */}
