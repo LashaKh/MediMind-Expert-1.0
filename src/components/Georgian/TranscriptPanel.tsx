@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './MediScribeAnimations.css';
 import { GeorgianSession } from '../../hooks/useSessionManagement';
 import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
+import { Brain } from 'lucide-react';
 
 // Import extracted components
 import { TabNavigation } from './components/TabNavigation';
@@ -74,6 +75,7 @@ interface TranscriptPanelProps {
   onProcessText?: (instruction: string, transcript?: string) => void;
   onClearAIError?: () => void;
   onClearHistory?: () => void;
+  onExpandChat?: (expandFunction: () => void) => void;
   
   // Speaker diarization props
   enableSpeakerDiarization?: boolean;
@@ -90,18 +92,6 @@ interface TranscriptPanelProps {
   }>;
 }
 
-// Utility function for content hashing
-const hashContent = (content: string): string => {
-  // Simple hash function for content identification
-  let hash = 0;
-  const str = content.trim().toLowerCase();
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32-bit integer
-  }
-  return `${hash}_${str.length}_${str.slice(0, 20)}`;
-};
 
 export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   currentSession,
@@ -124,6 +114,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   onProcessText,
   onClearAIError,
   onClearHistory,
+  onExpandChat,
   activeTab,
   onActiveTabChange,
   enableSpeakerDiarization = false,
@@ -165,13 +156,8 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   // Refs
   const transcriptRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const processedSegmentsRef = useRef<Map<string, Set<string>>>(new Map()); // Per-session tracking
-  // Global deduplication check with timestamp
-  const lastGlobalProcessedRef = useRef<{ hash: string, timestamp: number }>({ hash: '', timestamp: 0 });
-  // Circuit breaker to prevent multiple rapid useEffect executions
-  const processingLockRef = useRef<boolean>(false);
-  // Track last processed localTranscript to prevent loops
-  const lastProcessedLocalTranscriptRef = useRef<string>('');
+  // Simplified refs for basic tracking
+  const lastRecordingSessionIdRef = useRef<string>('');
   
   // Simple transcript resolution with editableTranscript priority for AI processing
   const currentTranscript = editableTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
@@ -186,32 +172,24 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   //   finalTranscript: currentTranscript.slice(0, 100) + '...'
   // });
   
-  // Reset tracking when recording starts (not on every render)
+  // Track recording session changes for cleanup
   useEffect(() => {
     if (recordingState.isRecording && !lastRecordingSessionId) {
       const newSessionId = Date.now().toString();
       setLastRecordingSessionId(newSessionId);
-      processedSegmentsRef.current.set(newSessionId, new Set());
-      // Reset global tracking for new session
-      lastGlobalProcessedRef.current = { hash: '', timestamp: 0 };
-
+      lastRecordingSessionIdRef.current = newSessionId;
     } else if (!recordingState.isRecording && lastRecordingSessionId) {
-
       setLastRecordingSessionId('');
+      lastRecordingSessionIdRef.current = '';
     }
   }, [recordingState.isRecording, lastRecordingSessionId]);
 
   // Load session transcript when session changes
   useEffect(() => {
-    // Load the session transcript when session changes, but preserve editableTranscript if user is actively editing
+    // Always update editableTranscript when session changes to reflect the selected session
     const sessionTranscript = currentSession?.transcript || '';
-    
-    // Only update editableTranscript if it's empty or if the session transcript has more content
-    // This prevents clearing user's typed content when a new session is created
-    if (!editableTranscript || sessionTranscript.length > editableTranscript.length) {
-      setEditableTranscript(sessionTranscript);
-    }
-  }, [currentSession?.id, editableTranscript]); // Include editableTranscript in deps for comparison
+    setEditableTranscript(sessionTranscript);
+  }, [currentSession?.id]); // Only depend on session ID change
   
   // Sync context recording state with actual recording state
   useEffect(() => {
@@ -286,94 +264,17 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     }
   };
 
-  // Handle transcription updates with better deduplication and debouncing
+  // File upload transcription handling only (live updates are handled by parent component)
   useEffect(() => {
-    // Circuit breaker: prevent multiple simultaneous executions
-    if (processingLockRef.current) {
-      // Processing already in progress, skipping
-      return;
-    }
-    
-    // Additional check: don't process if neither transcriptionResult nor localTranscript have meaningful updates
-    if (!transcriptionResult && !localTranscript) {
-      return;
-    }
-    
-    // Prevent processing the same localTranscript multiple times
-    if (localTranscript && localTranscript === lastProcessedLocalTranscriptRef.current) {
-      return;
-    }
-    
-    // Debounce rapid state changes to prevent multiple processing
-    const timeoutId = setTimeout(() => {
-      processingLockRef.current = true; // Set lock
-    const sessionId = lastRecordingSessionId || 'default';
-    let processedSet = processedSegmentsRef.current.get(sessionId);
-    
-    if (!processedSet) {
-      processedSet = new Set<string>();
-      processedSegmentsRef.current.set(sessionId, processedSet);
-    }
-    
-    let newText = '';
-    
     if (transcriptionResult && !recordingState.isRecording) {
-      // This should only be for file uploads now - recording uses live updates only
-      newText = transcriptionResult.text.trim();
-      console.log('📁 File upload transcription result processed');
-    } else if (localTranscript) {
-      // Extract only the NEW part from localTranscript (works both during and after recording)
-      const currentLength = editableTranscript.length;
-      if (localTranscript.length > currentLength) {
-        newText = localTranscript.substring(currentLength).trim();
-        // Processing localTranscript update
+      // Handle file upload transcription results only
+      const newText = transcriptionResult.text.trim();
+      if (newText && newText !== editableTranscript.trim()) {
+        console.log('📁 File upload transcription result processed');
+        setEditableTranscript(newText);
       }
     }
-    
-    if (newText) {
-      // Create content hash for better deduplication
-      const contentHash = hashContent(newText);
-      const now = Date.now();
-      
-      // Processing new transcript text
-      
-      // Global duplicate check (catches rapid duplicate calls)
-      if (lastGlobalProcessedRef.current.hash === contentHash && 
-          (now - lastGlobalProcessedRef.current.timestamp) < 500) {
-        return; // Exit early to prevent any processing
-      }
-      
-      // Check for duplicates in session set BEFORE logging to prevent race conditions
-      if (processedSet.has(contentHash)) {
-        return; // Exit early to prevent any processing
-      }
-      
-      // Update global tracking
-      lastGlobalProcessedRef.current = { hash: contentHash, timestamp: now };
-      
-      processedSet.add(contentHash);
-      
-      // Update the last processed localTranscript reference
-      if (localTranscript) {
-        lastProcessedLocalTranscriptRef.current = localTranscript;
-      }
-        
-      // Append to editable transcript
-      setEditableTranscript(prev => {
-        const separator = prev.trim() ? '\n\n' : '';
-        return prev + separator + newText;
-      });
-    }
-    
-    // Always clear the lock at the end of processing
-    processingLockRef.current = false;
-    }, 100); // 100ms debounce to prevent rapid duplicate triggers
-    
-    return () => {
-      clearTimeout(timeoutId);
-      processingLockRef.current = false; // Clear lock on cleanup
-    };
-  }, [transcriptionResult, localTranscript, recordingState.isRecording, lastRecordingSessionId]);
+  }, [transcriptionResult, recordingState.isRecording, editableTranscript]);
 
   // Render content based on active tab
   const renderContent = () => {
@@ -424,6 +325,12 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onProcessText={(instruction) => onProcessText?.(instruction, currentTranscript)}
             onClearAIError={onClearAIError}
             onClearHistory={onClearHistory}
+            onSwitchToHistory={() => {
+              // Switch to history view in AI tab by updating the view mode
+              console.log('🔄 Auto-switching to history view after diagnosis completion');
+              // This will trigger the view change inside AIProcessingContent
+            }}
+            onExpandChat={onExpandChat}
           />
         );
       
@@ -458,6 +365,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       <div className="flex-1 min-h-0 overflow-hidden">
         {renderContent()}
       </div>
+
     </div>
   );
 };

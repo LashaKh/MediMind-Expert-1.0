@@ -10,7 +10,8 @@ import {
   Plus,
   Search,
   Mic,
-  Square
+  Square,
+  Brain
 } from 'lucide-react';
 import { MedicalButton, MedicalCard, MedicalInput, MedicalLoading, MedicalBadge } from '../ui/MedicalDesignSystem';
 import { MedicalDrawer } from '../ui/MedicalDrawer';
@@ -22,6 +23,7 @@ import { useAIProcessing } from '../../hooks/useAIProcessing';
 import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
 import { useAudioFileUpload } from '../../hooks/useAudioFileUpload';
 import { useAuth } from '../../stores/useAppStore';
+import { isDiagnosisTemplate, extractDiagnosisFromInstruction, generateDiagnosisReport } from '../../services/diagnosisFlowiseService';
 
 // Import extracted components
 import { HeaderControls } from './components/HeaderControls';
@@ -44,6 +46,15 @@ export const GeorgianSTTApp: React.FC = () => {
   // Speaker diarization state
   const [enableSpeakerDiarization, setEnableSpeakerDiarization] = useState(false);
   const [speakerCount, setSpeakerCount] = useState(2);
+
+  // Store the expand chat function from AIProcessingContent
+  const [expandChatFunction, setExpandChatFunction] = useState<(() => void) | null>(null);
+
+  // Debug when expand function is set
+  const handleSetExpandChatFunction = useCallback((fn: () => void) => {
+    console.log('Setting expand chat function');
+    setExpandChatFunction(() => fn);
+  }, []);
   
   // Debug speaker diarization state changes
   useEffect(() => {
@@ -83,7 +94,7 @@ export const GeorgianSTTApp: React.FC = () => {
   const lastProcessedContentRef = useRef<string>('');
   const lastProcessedTimeRef = useRef<number>(0);
   
-  const handleLiveTranscriptUpdate = useCallback((newText: string, fullText: string, sessionId?: string) => {
+  const handleLiveTranscriptUpdate = useCallback(async (newText: string, fullText: string, sessionId?: string) => {
     // OPTIMISTIC UI: Update local state immediately for instant feedback
     if (newText.trim()) {
       const now = Date.now();
@@ -126,7 +137,7 @@ export const GeorgianSTTApp: React.FC = () => {
         // No session at all, create one
         console.warn(`⚠️ No session available for live update, creating one`);
         const newSession = createTemporarySession('Live Recording');
-        selectSession(newSession.id);
+        await selectSession(newSession.id);
         setTimeout(() => {
           appendToTranscript(newSession.id, newText.trim());
         }, 0);
@@ -203,7 +214,8 @@ export const GeorgianSTTApp: React.FC = () => {
     processingHistory,
     processText,
     clearError: clearAIError,
-    clearHistory
+    clearHistory,
+    addToHistory
   } = useAIProcessing({
     sessionProcessingResults: currentSession?.processingResults
   });
@@ -276,7 +288,7 @@ export const GeorgianSTTApp: React.FC = () => {
     
     // Create temporary session (not saved to DB until it has content)
     const newSession = createTemporarySession(title);
-    selectSession(newSession.id);
+    await selectSession(newSession.id);
   }, [createTemporarySession, selectSession, resetTranscript, clearTTSResult, recordingState.isRecording, stopRecording]);
 
   // Handle session deletion with confirmation
@@ -302,17 +314,101 @@ export const GeorgianSTTApp: React.FC = () => {
       return;
     }
 
+    // Check if this is a diagnosis request and route to specialized service
+    if (isDiagnosisTemplate(instruction)) {
+      console.log('🏥 Detected diagnosis request, routing to specialized Flowise service');
+      
+      const diagnosisInfo = extractDiagnosisFromInstruction(instruction);
+      if (diagnosisInfo) {
+        console.log('📋 Processing diagnosis:', {
+          diagnosis: diagnosisInfo.diagnosisEnglish,
+          icdCode: diagnosisInfo.icdCode,
+          transcriptLength: transcript.length
+        });
+
+        const startTime = Date.now();
+        const diagnosisResult = await generateDiagnosisReport(transcript, diagnosisInfo);
+        const processingTime = Date.now() - startTime;
+
+        if (diagnosisResult.success && currentSession) {
+          // Save diagnosis result to session with special metadata
+          const processingResultData = {
+            userInstruction: instruction,
+            aiResponse: diagnosisResult.report,
+            model: 'flowise-diagnosis-agent',
+            tokensUsed: Math.floor(diagnosisResult.report.length / 4), // Estimate tokens
+            processingTime
+          };
+          
+          const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
+          
+          if (saveSuccess) {
+            // Also add to the AI processing history for immediate UI update
+            addToHistory(
+              processingResultData.userInstruction,
+              processingResultData.aiResponse,
+              processingResultData.model,
+              processingResultData.tokensUsed,
+              processingResultData.processingTime
+            );
+            console.log('✅ Diagnosis report saved to session and added to UI history');
+          } else {
+            console.error('❌ Failed to save diagnosis report to session');
+          }
+        } else if (!diagnosisResult.success) {
+          console.error('❌ Diagnosis generation failed:', diagnosisResult.error);
+          // Fall back to regular processing if diagnosis service fails
+          const result = await processText(transcript, instruction);
+          if (result && currentSession) {
+            const processingResultData = {
+              userInstruction: instruction,
+              aiResponse: result.result,
+              model: result.model,
+              tokensUsed: result.tokensUsed,
+              processingTime: result.processingTime
+            };
+            
+            const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
+            if (saveSuccess) {
+              // Add to local history for immediate UI update  
+              addToHistory(
+                processingResultData.userInstruction,
+                processingResultData.aiResponse,
+                processingResultData.model,
+                processingResultData.tokensUsed,
+                processingResultData.processingTime
+              );
+            }
+          }
+        }
+        return;
+      }
+    }
+
+    // Regular AI processing for non-diagnosis requests
     const result = await processText(transcript, instruction);
     
     if (result && currentSession) {
       // Save processing result to session
-      await addProcessingResult(currentSession.id, {
+      const processingResultData = {
         userInstruction: instruction,
         aiResponse: result.result,
         model: result.model,
         tokensUsed: result.tokensUsed,
         processingTime: result.processingTime
-      });
+      };
+      
+      const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
+      if (saveSuccess) {
+        // Add to local history for immediate UI update
+        addToHistory(
+          processingResultData.userInstruction,
+          processingResultData.aiResponse,
+          processingResultData.model,
+          processingResultData.tokensUsed,
+          processingResultData.processingTime
+        );
+      }
     } else if (!currentSession) {
       console.error('❌ No current session to save result to - creating temp session');
       // Create a temporary session for the AI processing result with initial content
@@ -346,14 +442,29 @@ export const GeorgianSTTApp: React.FC = () => {
       // Clear recording session when switching
       setCurrentRecordingSessionId('');
       
-      // Load session transcript into local state immediately
+      // Load session transcript into local state immediately for instant UI feedback
       const sessionTranscript = selectedSession.transcript || '';
       setLocalTranscript(sessionTranscript);
       
-      // Switch session
-      selectSession(sessionId);
+      // Switch session (now async - will refresh with latest data from database)
+      await selectSession(sessionId);
     }
   }, [sessions, resetTranscript, clearTTSResult, selectSession, recordingState.isRecording, stopRecording]);
+
+  // Update localTranscript when currentSession changes (including fresh data from database)
+  useEffect(() => {
+    if (currentSession) {
+      const currentTranscript = currentSession.transcript || '';
+      // Only update if the transcript is different to avoid unnecessary re-renders
+      setLocalTranscript(prevTranscript => {
+        if (prevTranscript !== currentTranscript) {
+          console.log('📝 Local transcript updated with fresh session data');
+          return currentTranscript;
+        }
+        return prevTranscript;
+      });
+    }
+  }, [currentSession]);
 
   // Handle file upload
   const handleFileUpload = useCallback(async (file: File) => {
@@ -367,7 +478,7 @@ export const GeorgianSTTApp: React.FC = () => {
       const newSession = createTemporarySession(`File: ${file.name}`);
       resetTranscript(); // Reset transcript for new session
       clearTTSResult(); // Clear old transcription result
-      selectSession(newSession.id);
+      await selectSession(newSession.id);
     }
     
     // Reset any previous upload state
@@ -383,7 +494,7 @@ export const GeorgianSTTApp: React.FC = () => {
   }, [currentSession, createTemporarySession, selectSession, resetTranscript, clearTTSResult, canProcess, resetUploadState, processAudioFile]);
 
   // Handle transcript update (for editing existing transcript)
-  const handleTranscriptUpdate = useCallback((transcript: string, duration?: number) => {
+  const handleTranscriptUpdate = useCallback(async (transcript: string, duration?: number) => {
     if (currentSession) {
       updateTranscript(currentSession.id, transcript, duration);
     } else if (transcript.trim()) {
@@ -391,7 +502,7 @@ export const GeorgianSTTApp: React.FC = () => {
       const newSession = createTemporarySession('Manual Entry');
       // IMPORTANT: Update session with content BEFORE selecting it to avoid race conditions
       newSession.transcript = transcript; // Set initial content
-      selectSession(newSession.id);
+      await selectSession(newSession.id);
       // Also update in database/memory
       updateTranscript(newSession.id, transcript, duration);
     }
@@ -421,7 +532,7 @@ export const GeorgianSTTApp: React.FC = () => {
       clearTTSResult(); // Clear old transcription result
       
       const newSession = createTemporarySession('New Recording');
-      selectSession(newSession.id);
+      await selectSession(newSession.id);
     } else {
       // IMPORTANT: For existing session, we need to preserve the existing content
       // Don't call resetTranscript() as it clears the TTS hook's internal state
@@ -704,6 +815,7 @@ export const GeorgianSTTApp: React.FC = () => {
                 // Speaker diarization results from hook
                 hasSpeakers={hasSpeakerResults}
                 speakers={speakerSegments}
+                onExpandChat={handleSetExpandChatFunction}
               />
             </div>
           </div>
@@ -750,6 +862,7 @@ export const GeorgianSTTApp: React.FC = () => {
               // Speaker diarization results from hook
               hasSpeakers={hasSpeakerResults}
               speakers={speakerSegments}
+              onExpandChat={handleSetExpandChatFunction}
             />
           </div>
         </div>
@@ -794,6 +907,50 @@ export const GeorgianSTTApp: React.FC = () => {
         error={uploadState.error}
         onCancel={canCancel ? cancelProcessing : undefined}
       />
+
+      {/* AI BUTTON - ONLY VISIBLE ON AI PROCESSING TAB */}
+      {activeTab === 'ai' && (localTranscript || currentSession?.transcript) && (
+        <button
+          onClick={() => {
+            console.log('AI button clicked - expanding chat');
+            // Expand the chat since we're already on AI tab
+            if (expandChatFunction) {
+              expandChatFunction();
+            } else {
+              console.log('Expand chat function not available yet');
+            }
+          }}
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            right: '24px',
+            width: '64px',
+            height: '64px',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%)',
+            border: '2px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            zIndex: 999999,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.3s ease',
+            transform: 'scale(1)'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.transform = 'scale(1.1) translateY(-2px)';
+            e.target.style.boxShadow = '0 35px 60px -12px rgba(0, 0, 0, 0.35)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.transform = 'scale(1) translateY(0px)';
+            e.target.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+          }}
+          title="Ask AI about this transcript"
+        >
+          <Brain size={28} color="white" />
+        </button>
+      )}
     </div>
   );
 };

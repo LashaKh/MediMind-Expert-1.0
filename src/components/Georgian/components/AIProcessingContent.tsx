@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Brain,
   Sparkles,
@@ -11,9 +12,12 @@ import {
   Search,
   Grid3X3,
   List,
-  Zap
+  Zap,
+  HeartHandshake,
+  Activity
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
+import { isDiagnosisTemplate, extractDiagnosisFromInstruction } from '../../../services/diagnosisFlowiseService';
 
 // Import new components
 import { MedicalAnalysisCard } from './MedicalAnalysisCard';
@@ -37,6 +41,8 @@ interface AIProcessingContentProps {
   onProcessText?: (instruction: string) => void;
   onClearAIError?: () => void;
   onClearHistory?: () => void;
+  onSwitchToHistory?: () => void; // New callback for switching tabs
+  onExpandChat?: (expandFunction: () => void) => void; // Pass expand function to parent
 }
 
 type ViewMode = 'templates' | 'history';
@@ -50,14 +56,37 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   processingHistory = [],
   onProcessText,
   onClearAIError,
-  onClearHistory
+  onClearHistory,
+  onSwitchToHistory,
+  onExpandChat
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('templates');
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('grid');
   const [customInstruction, setCustomInstruction] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'processing-time'>('newest');
+  const [isChatExpanded, setIsChatExpanded] = useState(false);
+  const switchToHistoryRef = useRef<boolean>(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Debug logging
+  console.log('🔍 AIProcessingContent Debug:', {
+    hasTranscript,
+    transcriptLength: transcript?.length || 0,
+    transcriptPreview: transcript?.slice(0, 50) + '...',
+    isChatExpanded,
+    processing,
+    shouldShowButton: hasTranscript && !isChatExpanded && !processing
+  });
+
+  // Auto-switch to history when processing completes for diagnosis
+  useEffect(() => {
+    if (switchToHistoryRef.current && !processing && processingHistory.length > 0) {
+      console.log('🏥 Processing completed, switching to history view');
+      setViewMode('history');
+      switchToHistoryRef.current = false;
+    }
+  }, [processing, processingHistory.length]);
 
   const handleCustomSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,8 +96,72 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
     }
   };
 
+  // Enhanced keyboard shortcuts handler
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (customInstruction.trim() && onProcessText && !processing) {
+        onProcessText(customInstruction.trim());
+        setCustomInstruction('');
+        setIsChatExpanded(false);
+      }
+    }
+    if (e.key === 'Escape') {
+      setIsChatExpanded(false);
+    }
+  };
+
+  // Handle chat expansion
+  const handleExpandChat = useCallback(() => {
+    console.log('handleExpandChat called - expanding chat modal');
+    setIsChatExpanded(true);
+    // Debug viewport and elements
+    console.log('Chat expansion debug:', {
+      viewport: { width: window.innerWidth, height: window.innerHeight },
+      isChatExpanded: true,
+      hasTranscript: hasTranscript,
+      element: 'Should show modal now'
+    });
+    // Focus textarea after animation completes
+    setTimeout(() => {
+      textareaRef.current?.focus();
+    }, 200);
+  }, [hasTranscript]);
+
+  const handleCloseChat = () => {
+    setIsChatExpanded(false);
+  };
+
+  // Pass expand chat function to parent on mount
+  useEffect(() => {
+    if (onExpandChat) {
+      console.log('Passing handleExpandChat to parent');
+      onExpandChat(handleExpandChat);
+    }
+  }, [onExpandChat, handleExpandChat]);
+
+  const handleSubmitAndClose = () => {
+    if (customInstruction.trim() && onProcessText && !processing) {
+      onProcessText(customInstruction.trim());
+      setCustomInstruction('');
+      setIsChatExpanded(false);
+    }
+  };
+
   const handleTemplateSelect = (instruction: string) => {
     if (onProcessText) {
+      // Check if this is a diagnosis template for special handling
+      const diagnosisInfo = extractDiagnosisFromInstruction(instruction);
+      if (diagnosisInfo) {
+        console.log('🏥 Processing diagnosis template:', {
+          diagnosis: diagnosisInfo.diagnosisEnglish,
+          icdCode: diagnosisInfo.icdCode
+        });
+        
+        // Set flag to auto-switch to history after processing completes
+        switchToHistoryRef.current = true;
+      }
+      
       onProcessText(instruction);
     }
   };
@@ -97,36 +190,18 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
 
 
   return (
-    <div className="flex flex-col h-full max-h-full bg-gradient-to-br from-slate-50/80 via-white/90 to-blue-50/60 dark:from-slate-900/80 dark:via-slate-800/90 dark:to-blue-950/60">
+    <>
+    <div className="relative flex flex-col h-full max-h-full bg-gradient-to-br from-slate-50/80 via-white/90 to-blue-50/60 dark:from-slate-900/80 dark:via-slate-800/90 dark:to-blue-950/60 overflow-hidden">
       
-      {/* Modern Header */}
+      {/* Compact Header */}
       <div className="flex-shrink-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50">
-        <div className="px-6 py-4">
-          {/* Top Row - Title and Action Button */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-2.5 shadow-lg">
-                <Brain className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-                  AI Medical Analysis
-                </h2>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Professional clinical intelligence and insights
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-
+        <div className="px-4 py-3">
           {/* Navigation Tabs */}
           <div className="flex items-center justify-between">
             <div className="flex bg-slate-100 dark:bg-slate-800 rounded-xl p-1.5 shadow-inner">
               <button
                 onClick={() => setViewMode('templates')}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   viewMode === 'templates'
                     ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
@@ -137,7 +212,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
               </button>
               <button
                 onClick={() => setViewMode('history')}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   viewMode === 'history'
                     ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
@@ -150,11 +225,11 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
 
             {/* History View Controls */}
             {viewMode === 'history' && processingHistory.length > 0 && (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
                   <button
                     onClick={() => setLayoutMode('grid')}
-                    className={`p-2 rounded-md transition-all ${
+                    className={`p-1.5 rounded-md transition-all ${
                       layoutMode === 'grid'
                         ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
                         : 'text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
@@ -164,7 +239,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                   </button>
                   <button
                     onClick={() => setLayoutMode('list')}
-                    className={`p-2 rounded-md transition-all ${
+                    className={`p-1.5 rounded-md transition-all ${
                       layoutMode === 'list'
                         ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
                         : 'text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
@@ -176,24 +251,24 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
 
                 <div className="flex items-center space-x-2">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input
                       type="text"
-                      placeholder="Search analyses..."
+                      placeholder="Search..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-48 pl-10 pr-4 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-32 pl-9 pr-3 py-1.5 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
 
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="px-3 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="px-2 py-1.5 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    <option value="newest">Newest First</option>
-                    <option value="oldest">Oldest First</option>
-                    <option value="processing-time">Processing Time</option>
+                    <option value="newest">Newest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="processing-time">Time</option>
                   </select>
                 </div>
               </div>
@@ -236,70 +311,13 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
           {/* Templates View */}
           {viewMode === 'templates' && (
             <div className="space-y-6">
-              {/* Prominent Custom Input Section */}
-              {hasTranscript && (
-                <div className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200/50 dark:border-blue-700/50 p-6 shadow-sm">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg p-2">
-                      <Brain className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                        Custom Medical Analysis
-                      </h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">
-                        Ask any specific medical questions or request custom analysis
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <form onSubmit={handleCustomSubmit} className="space-y-4">
-                    <div className="relative">
-                      <textarea
-                        value={customInstruction}
-                        onChange={(e) => setCustomInstruction(e.target.value)}
-                        placeholder="Type your medical analysis request here... (e.g., 'Summarize key findings', 'Identify potential diagnoses', 'Suggest treatment options')"
-                        disabled={processing}
-                        rows={3}
-                        className="w-full resize-none rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm px-4 py-3 text-sm text-slate-800 dark:text-slate-200 placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 transition-all"
-                        maxLength={500}
-                      />
-                      <div className="absolute bottom-3 right-3 text-xs text-slate-500 dark:text-slate-500">
-                        {customInstruction.length}/500
-                      </div>
-                    </div>
-                    
-                    <div className="flex justify-end">
-                      <MedicalButton
-                        type="submit"
-                        variant="primary"
-                        size="lg"
-                        rightIcon={processing ? Sparkles : Send}
-                        disabled={processing || !customInstruction.trim()}
-                        loading={processing}
-                        className="min-w-[140px]"
-                      >
-                        {processing ? 'Analyzing...' : 'Start Analysis'}
-                      </MedicalButton>
-                    </div>
-                  </form>
-                </div>
-              )}
 
-              {/* Templates Section */}
-              <div>
-                <div className="flex items-center space-x-3 mb-4">
-                  <Stethoscope className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                    Quick Analysis Templates
-                  </h3>
-                </div>
-                <QuickActionTemplates
-                  onSelectTemplate={handleTemplateSelect}
-                  disabled={processing}
-                  hasTranscript={hasTranscript}
-                />
-              </div>
+              {/* Quick Analysis Templates */}
+              <QuickActionTemplates
+                onSelectTemplate={handleTemplateSelect}
+                disabled={processing}
+                hasTranscript={hasTranscript}
+              />
             </div>
           )}
 
@@ -351,17 +369,138 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
         </div>
       </div>
 
+    </div>
+
+
+      {/* Floating Chat Interface - Rendered as Portal */}
+      {hasTranscript && isChatExpanded && createPortal(
+        <div 
+          className="fixed"
+          style={{
+            top: '0',
+            left: '0',
+            right: '0',
+            bottom: '0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px',
+            zIndex: 9999999
+          }}
+        >
+          {/* Backdrop */}
+          <div 
+            className="absolute bg-black/20 dark:bg-black/40 backdrop-blur-sm animate-in fade-in duration-200"
+            style={{
+              top: '0',
+              left: '0',
+              right: '0',
+              bottom: '0'
+            }}
+            onClick={handleCloseChat}
+          />
+          
+          {/* Chat Container */}
+          <div 
+            className="relative animate-in slide-in-from-bottom-4 duration-300 ease-out"
+            style={{
+              width: '100%',
+              maxWidth: '32rem',
+              maxHeight: '80vh'
+            }}
+          >
+            <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-2xl overflow-hidden">
+              
+              {/* Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200/50 dark:border-slate-700/50">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                    <Brain className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-slate-900 dark:text-slate-100">AI Medical Assistant</h3>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">Ask me anything about your transcript</p>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={handleCloseChat}
+                  className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors duration-200 flex items-center justify-center"
+                >
+                  <X className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                </button>
+              </div>
+              
+              {/* Input Area */}
+              <form onSubmit={handleCustomSubmit} className="p-6">
+                <div className="relative">
+                  <div className="relative bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-200 dark:border-slate-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-all duration-200">
+                    <textarea
+                      ref={textareaRef}
+                      value={customInstruction}
+                      onChange={(e) => setCustomInstruction(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="✨ What would you like to know about this medical case?"
+                      disabled={processing}
+                      rows={4}
+                      className="w-full resize-none bg-transparent px-4 py-3 pr-20 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none disabled:opacity-60 font-medium leading-relaxed"
+                      maxLength={500}
+                    />
+                    
+                    {/* Controls */}
+                    <div className="absolute bottom-3 right-3 flex items-center space-x-2">
+                      {/* Character Counter */}
+                      <div className={`text-xs transition-colors duration-200 ${
+                        customInstruction.length > 450 ? 'text-red-500' : 
+                        customInstruction.length > 400 ? 'text-amber-500' : 
+                        'text-slate-400 dark:text-slate-500'
+                      }`}>
+                        <span className="tabular-nums">{customInstruction.length}</span>
+                        <span className="opacity-60">/500</span>
+                      </div>
+                      
+                      {/* Send Button */}
+                      <button
+                        type="submit"
+                        disabled={processing || !customInstruction.trim()}
+                        className="group/send relative flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-slate-300 disabled:to-slate-400 rounded-xl shadow-md hover:shadow-lg disabled:shadow-sm transition-all duration-200 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+                      >
+                        {processing ? (
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          <Send className="w-4 h-4 text-white transform group-hover/send:translate-x-0.5 group-hover/send:-translate-y-0.5 transition-transform duration-200" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Keyboard Shortcut */}
+                  <div className="flex items-center justify-between mt-3 text-xs text-slate-500 dark:text-slate-400">
+                    <div>Press <kbd className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">Esc</kbd> to close</div>
+                    <div><kbd className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘ Enter</kbd> to send</div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
       {/* Processing Indicator */}
       {processing && (
-        <div className="fixed bottom-6 right-6 z-50">
-          <div className="flex items-center space-x-3 bg-blue-600 text-white px-4 py-3 rounded-xl shadow-2xl">
-            <div className="animate-spin">
-              <Zap className="w-5 h-5" />
+        <div className="fixed bottom-6 right-6" style={{ zIndex: 9999998 }}>
+          <div className="flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-xl shadow-2xl backdrop-blur-sm">
+            <div className="animate-pulse">
+              <HeartHandshake className="w-5 h-5" />
             </div>
-            <span className="font-medium">Processing analysis...</span>
+            <div className="flex flex-col">
+              <span className="font-medium">Generating medical report...</span>
+              <span className="text-xs text-blue-200">Consulting specialized AI agent</span>
+            </div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };

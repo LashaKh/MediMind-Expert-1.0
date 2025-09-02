@@ -258,6 +258,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
           </div>
         </div>
         
+
         {/* Subtle Corner Accents */}
         <div className="absolute top-0 left-0 w-8 h-8 bg-gradient-to-br from-indigo-400/20 to-transparent rounded-3xl" />
         <div className="absolute bottom-0 right-0 w-8 h-8 bg-gradient-to-tl from-purple-400/20 to-transparent rounded-3xl" />

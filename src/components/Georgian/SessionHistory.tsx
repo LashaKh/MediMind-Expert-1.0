@@ -447,7 +447,9 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
           `}>
             <div className="flex items-center space-x-2 w-full">
               <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${categoryColor}`} />
-              <p className="font-medium truncate">{getSessionPreview(session)}</p>
+              <p className="font-medium truncate">
+                {isActive ? 'Currently active' : getSessionPreview(session)}
+              </p>
             </div>
           </div>
 

@@ -34,7 +34,7 @@ interface UseSessionManagementReturn {
   createSession: (title?: string, initialContent?: string) => Promise<GeorgianSession | null>;
   createTemporarySession: (title?: string) => GeorgianSession;
   saveTemporarySession: (session: GeorgianSession) => Promise<GeorgianSession | null>;
-  selectSession: (sessionId: string) => void;
+  selectSession: (sessionId: string) => Promise<void>;
   updateSession: (sessionId: string, updates: Partial<GeorgianSession>) => Promise<boolean>;
   deleteSession: (sessionId: string) => Promise<boolean>;
   duplicateSession: (sessionId: string) => Promise<GeorgianSession | null>;
@@ -257,13 +257,48 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     return savedSession;
   }, [user]);
 
-  // Select session
-  const selectSession = useCallback((sessionId: string) => {
-    const session = sessions.find(s => s.id === sessionId);
-    if (session) {
-      setCurrentSession(session);
+  // Select session with fresh data loading
+  const selectSession = useCallback(async (sessionId: string) => {
+    // First, set the session from existing data for immediate UI feedback
+    const existingSession = sessions.find(s => s.id === sessionId);
+    if (existingSession) {
+      setCurrentSession(existingSession);
     }
-  }, [sessions]);
+    
+    // For database sessions (not temporary), refresh the session data to ensure it's current
+    if (!sessionId.startsWith('temp_') && user) {
+      const [data, loadError] = await safeAsync(
+        () => (supabase as any)
+          .from('georgian_sessions')
+          .select('*')
+          .eq('id', sessionId)
+          .eq('user_id', user.id)
+          .eq('is_active', true)
+          .single()
+      );
+
+      if (!loadError && data?.data) {
+        const sessionData = data.data;
+        const freshSession: GeorgianSession = {
+          id: sessionData.id,
+          userId: sessionData.user_id,
+          title: sessionData.title,
+          transcript: sessionData.transcript || '',
+          durationMs: sessionData.duration_ms || 0,
+          audioFileUrl: sessionData.audio_file_url,
+          processingResults: sessionData.processing_results || [],
+          createdAt: sessionData.created_at,
+          updatedAt: sessionData.updated_at,
+          isActive: sessionData.is_active
+        };
+
+        // Update the sessions array with fresh data
+        setSessions(prev => prev.map(s => s.id === sessionId ? freshSession : s));
+        // Update current session with fresh data
+        setCurrentSession(freshSession);
+      }
+    }
+  }, [sessions, user]);
 
   // Update session
   const updateSession = useCallback(async (sessionId: string, updates: Partial<GeorgianSession>): Promise<boolean> => {
@@ -434,8 +469,23 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
 
     const updatedResults = [...(session.processingResults || []), newResult];
     
+    // If this is a temporary session, save it to the database first
+    if (session.isTemporary) {
+      console.log('💾 Converting temporary session to permanent before saving processing result');
+      const updatedTempSession = { ...session, processingResults: updatedResults };
+      const savedSession = await saveTemporarySession(updatedTempSession);
+      
+      if (!savedSession) {
+        setError('Failed to save temporary session before adding processing result');
+        return false;
+      }
+      
+      console.log('✅ Temporary session converted to permanent successfully');
+      return true;
+    }
+    
     return await updateSession(sessionId, { processingResults: updatedResults });
-  }, [sessions, updateSession]);
+  }, [sessions, updateSession, saveTemporarySession]);
 
   // Search sessions
   const searchSessions = useCallback((query: string): GeorgianSession[] => {

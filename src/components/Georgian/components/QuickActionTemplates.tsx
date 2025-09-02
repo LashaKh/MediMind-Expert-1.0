@@ -18,7 +18,8 @@ import {
   Target,
   CheckSquare,
   Calendar,
-  FileCheck
+  FileCheck,
+  HeartHandshake
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 
@@ -41,6 +42,18 @@ interface QuickActionTemplatesProps {
 }
 
 const MEDICAL_TEMPLATES: QuickActionTemplate[] = [
+  // High Priority - Diagnosis Template (FEATURED)
+  {
+    id: 'diagnosis-heart-failure',
+    category: 'Diagnosis & Assessment',
+    title: 'Diagnosis - (I50.0) გულის შეგუბებითი უკმარისობა',
+    instruction: 'Generate a comprehensive Cardiologist Emergency Room consultation report for Heart Failure diagnosis (I50.0 - Congestive Heart Failure / გულის შეგუბებითი უკმარისობა). Include clinical summary, diagnostic assessment, treatment plan, risk stratification, and disposition recommendations based on this medical transcript.',
+    description: 'ER Cardiologist consultation report for heart failure diagnosis',
+    icon: HeartHandshake,
+    color: 'from-rose-600 to-red-700',
+    priority: 'high',
+    estimatedTime: '45s'
+  },
   // High Priority - Clinical Assessment
   {
     id: 'clinical-summary',
@@ -188,6 +201,7 @@ const MEDICAL_TEMPLATES: QuickActionTemplate[] = [
 
 const getCategoryIcon = (category: string): React.ElementType => {
   switch (category) {
+    case 'Diagnosis & Assessment': return HeartHandshake;
     case 'Clinical Assessment': return Stethoscope;
     case 'Medication Management': return Shield;
     case 'Treatment Planning': return Activity;
@@ -200,6 +214,7 @@ const getCategoryIcon = (category: string): React.ElementType => {
 
 const getCategoryColor = (category: string): string => {
   switch (category) {
+    case 'Diagnosis & Assessment': return 'text-rose-700 bg-rose-100 dark:text-rose-300 dark:bg-rose-900/40 border border-rose-200 dark:border-rose-700';
     case 'Clinical Assessment': return 'text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30';
     case 'Medication Management': return 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30';
     case 'Treatment Planning': return 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30';
@@ -251,30 +266,7 @@ export const QuickActionTemplates: React.FC<QuickActionTemplatesProps> = ({
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-            Medical Analysis Templates
-          </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Choose from clinical analysis templates designed for medical professionals
-          </p>
-        </div>
-        
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search templates..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full sm:w-64 pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-      </div>
+    <div className="space-y-4">
 
       {/* Category Filter */}
       <div className="flex flex-wrap gap-2">
