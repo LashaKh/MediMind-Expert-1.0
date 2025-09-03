@@ -93,7 +93,7 @@ const copyToClipboard = async (content: string) => {
   try {
     await navigator.clipboard.writeText(content);
   } catch (error) {
-    console.error('Failed to copy to clipboard:', error);
+
   }
 };
 
@@ -188,7 +188,7 @@ Medical AI Processing System`;
         });
         onShare?.(analysis);
       } catch (error) {
-        console.error('Error sharing:', error);
+
       }
     }
   };

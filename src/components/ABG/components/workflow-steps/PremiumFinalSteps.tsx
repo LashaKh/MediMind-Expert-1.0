@@ -66,8 +66,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
   const finalResult = abgResult || completedResult || storeResult;
 
   // Debug logging
-  console.log('Final step debug:', {
-    hasActionPlan: !!(finalResult?.action_plan),
+  ,
     actionPlanLength: finalResult?.action_plan?.length || 0,
     actionPlanPreview: finalResult?.action_plan?.substring(0, 200),
     workflowStep: workflow?.currentStep,
@@ -108,8 +107,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
   };
 
   const handleSelectiveConsultation = () => {
-    console.log('Selective consultation triggered:', {
-      actionPlanPreview: finalResult?.action_plan?.substring(0, 500)
+
     });
     
     if (finalResult && finalResult.action_plan) {

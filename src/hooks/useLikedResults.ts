@@ -52,9 +52,7 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
   
   // Debug authentication state
   useEffect(() => {
-    console.log('Auth state check:', {
-      userId: user?.id,
-      timestamp: new Date().toISOString()
+    .toISOString()
     });
   }, [user, autoLoad]);
   
@@ -174,11 +172,6 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
 
       return false;
     }
-
-    console.log('Like result attempt:', {
-      hasUser: !!user,
-      userId: user.id
-    });
 
     const [response, error] = await safeAsync(async () => {
       return await likedResultsAPI.likeResult(result, originalQuery, searchFilters);

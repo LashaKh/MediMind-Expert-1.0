@@ -318,11 +318,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
     // });
 
     // Debug logging for parsed issues
-    console.log('Parsed issues info:', {
-      validIssuesCount: validIssues.length,
-      issues: validIssues.map(issue => ({
-        id: issue.id,
-        title: issue.title?.substring(0, 80),
+    ,
         priority: issue.priority,
         sectionsCount: issue.sections?.length || 0,
         contentPreview: issue.content?.substring(0, 100) + '...'
@@ -335,9 +331,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
   // Debug logging for medical issues
   useEffect(() => {
     if (medicalIssues.length > 0) {
-      console.log('Medical issues found:', {
-        count: medicalIssues.length,
-        issues: medicalIssues.map(issue => issue.id)
+
       });
     }
   }, [medicalIssues]);

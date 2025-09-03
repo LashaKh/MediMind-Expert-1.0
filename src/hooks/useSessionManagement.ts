@@ -83,7 +83,9 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     if (loadError) {
       setError(`Failed to load sessions: ${loadError.message}`);
     } else {
-      const formattedSessions: GeorgianSession[] = (data?.data || [])
+      // Extract sessions array from Supabase response
+      const dataArray = (data?.data || []) as any[];
+      const formattedSessions: GeorgianSession[] = dataArray
         .filter((session: any) => session !== null && session !== undefined) // Filter out null sessions
         .map((session: any) => ({
           id: session.id,
@@ -102,7 +104,7 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
       const uniqueSessions = formattedSessions.filter((session, index, arr) => 
         arr.findIndex(s => s.id === session.id) === index
       );
-      
+
       setSessions(uniqueSessions);
     }
 
@@ -137,13 +139,13 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
       return null;
     }
 
-    // Ensure data and data.data exist before accessing properties
-    if (!data || !(data as any)?.data) {
+    // Ensure data exists (Supabase client returns data directly)
+    if (!data) {
       setError('Failed to create session: Invalid response from database');
       return null;
     }
 
-    const sessionData = (data as any).data;
+    const sessionData = data as any;
     const newSession: GeorgianSession = {
       id: sessionData.id,
       userId: sessionData.user_id,
@@ -203,13 +205,13 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
   // Save temporary session to database (only if it has content)
   const saveTemporarySession = useCallback(async (session: GeorgianSession): Promise<GeorgianSession | null> => {
     if (!session.isTemporary) {
-      console.warn('Attempting to save non-temporary session');
+
       return session;
     }
 
     // Only save if session has actual content
     if (!session.transcript || session.transcript.trim() === '') {
-      console.log('Skipping save of empty temporary session');
+
       return null;
     }
 
@@ -238,16 +240,16 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     }
 
     const savedSession: GeorgianSession = {
-      id: data.data.id,
-      userId: data.data.user_id,
-      title: data.data.title,
-      transcript: data.data.transcript || '',
-      durationMs: data.data.duration_ms || 0,
-      audioFileUrl: data.data.audio_file_url,
-      processingResults: data.data.processing_results || [],
-      createdAt: data.data.created_at,
-      updatedAt: data.data.updated_at,
-      isActive: data.data.is_active,
+      id: (data as any).id,
+      userId: (data as any).user_id,
+      title: (data as any).title,
+      transcript: (data as any).transcript || '',
+      durationMs: (data as any).duration_ms || 0,
+      audioFileUrl: (data as any).audio_file_url,
+      processingResults: (data as any).processing_results || [],
+      createdAt: (data as any).created_at,
+      updatedAt: (data as any).updated_at,
+      isActive: (data as any).is_active,
       isTemporary: false
     };
 
@@ -259,10 +261,14 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
 
   // Select session with fresh data loading
   const selectSession = useCallback(async (sessionId: string) => {
+
     // First, set the session from existing data for immediate UI feedback
     const existingSession = sessions.find(s => s.id === sessionId);
     if (existingSession) {
+
       setCurrentSession(existingSession);
+    } else {
+
     }
     
     // For database sessions (not temporary), refresh the session data to ensure it's current
@@ -277,8 +283,10 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
           .single()
       );
 
-      if (!loadError && data?.data) {
-        const sessionData = data.data;
+      if (!loadError && data) {
+        // Handle Supabase response format
+        const sessionData = (data?.data ? data.data : data) as any;
+
         const freshSession: GeorgianSession = {
           id: sessionData.id,
           userId: sessionData.user_id,
@@ -296,12 +304,21 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
         setSessions(prev => prev.map(s => s.id === sessionId ? freshSession : s));
         // Update current session with fresh data
         setCurrentSession(freshSession);
+
+      } else if (loadError) {
+
       }
     }
   }, [sessions, user]);
 
   // Update session
   const updateSession = useCallback(async (sessionId: string, updates: Partial<GeorgianSession>): Promise<boolean> => {
+    // Safety check for undefined sessionId
+    if (!sessionId) {
+      setError('Cannot update session: Session ID is undefined');
+      return false;
+    }
+    
     // Handle temporary sessions (in-memory only)
     if (sessionId.startsWith('temp_')) {
       // Update local state only for temporary sessions
@@ -340,13 +357,13 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
       return false;
     }
 
-    // Ensure data and data.data exist before accessing properties
-    if (!data || !(data as any)?.data) {
+    // Ensure data exists (Supabase client returns data directly)
+    if (!data) {
       setError('Failed to update session: Invalid response from database');
       return false;
     }
 
-    const sessionData = (data as any).data;
+    const sessionData = data as any;
     // Update local state
     setSessions(prev => prev.map(session => 
       session.id === sessionId 
@@ -411,7 +428,7 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     const session = sessions.find(s => s.id === sessionId);
     if (!session) {
       // Silent failure - don't show UI error for background transcript updates during recording
-      console.warn(`📝 Session ${sessionId} not found for transcript append, skipping silently`);
+
       return false;
     }
 
@@ -456,6 +473,12 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     tokensUsed?: number;
     processingTime: number;
   }): Promise<boolean> => {
+    // Safety check for undefined sessionId
+    if (!sessionId) {
+      setError('Cannot add processing result: Session ID is undefined');
+      return false;
+    }
+    
     const session = sessions.find(s => s.id === sessionId);
     if (!session) {
       setError('Session not found');
@@ -471,7 +494,7 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     
     // If this is a temporary session, save it to the database first
     if (session.isTemporary) {
-      console.log('💾 Converting temporary session to permanent before saving processing result');
+
       const updatedTempSession = { ...session, processingResults: updatedResults };
       const savedSession = await saveTemporarySession(updatedTempSession);
       
@@ -479,8 +502,7 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
         setError('Failed to save temporary session before adding processing result');
         return false;
       }
-      
-      console.log('✅ Temporary session converted to permanent successfully');
+
       return true;
     }
     
@@ -513,7 +535,7 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
     setSessions(prev => prev.filter(session => {
       // Remove temporary sessions that don't have content
       if (session.isTemporary && (!session.transcript || session.transcript.trim() === '')) {
-        console.log('🧹 Cleaning up empty temporary session:', session.id);
+
         return false;
       }
       return true;

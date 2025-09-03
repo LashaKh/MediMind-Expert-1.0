@@ -42,7 +42,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  
 
   // Color mapping for dynamic gradients
   const getGradientColors = (colorString: string) => {
@@ -183,7 +182,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
   const isActive = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
-
 
   // Optimized hover handlers for instant navigation
   const handleMouseEnter = (path: string) => {

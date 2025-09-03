@@ -46,6 +46,9 @@ interface TranscriptContentProps {
   onToggleSpeakerDiarization?: (enabled: boolean) => void;
   speakerCount?: number;
   onSpeakerCountChange?: (count: number) => void;
+  // STT Model selection props
+  selectedSTTModel?: 'STT1' | 'STT2' | 'STT3';
+  onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
 }
 
 export const TranscriptContent: React.FC<TranscriptContentProps> = ({
@@ -59,6 +62,8 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   onToggleSpeakerDiarization,
   speakerCount = 2,
   onSpeakerCountChange,
+  selectedSTTModel = 'STT3',
+  onModelChange,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -95,7 +100,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
     });
     
     if (!hasSpeakers || !speakers || speakers.length === 0) {
-      console.log('🎭 TranscriptContent: No speakers to render - showing regular transcript');
+
       return null;
     }
 
@@ -142,61 +147,103 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         {/* Main Content Structure */}
         <div className="relative h-full flex flex-col p-1">
           
-          {/* Controls Row - Top */}
+          {/* Advanced Controls Row - Top */}
           <div className="relative mb-4 z-10 flex items-center justify-between px-4 pt-4">
             
-            {/* Speaker Diarization Controls - Left */}
-            {onToggleSpeakerDiarization && (
-              <div className="flex items-center space-x-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-600/50 rounded-xl px-4 py-2 shadow-lg">
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => {
-                      console.log('🎭 TranscriptContent: Speaker diarization toggle clicked:', {
-                        currentState: enableSpeakerDiarization,
-                        newState: !enableSpeakerDiarization,
-                        speakerCount,
-                        isRecording: recordingState.isRecording
-                      });
-                      onToggleSpeakerDiarization?.(!enableSpeakerDiarization);
-                    }}
-                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 medical-touch-target ${
-                      enableSpeakerDiarization
-                        ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
-                    }`}
-                    disabled={recordingState.isRecording}
-                    title="Toggle speaker separation for medical consultations"
-                  >
-                    <Brain className="w-4 h-4" />
-                    <span>Speakers</span>
-                  </button>
-                  
-                  {enableSpeakerDiarization && onSpeakerCountChange && (
+            {/* Left Controls Group - Production Ready Design */}
+            <div className="flex items-center space-x-3">
+              
+              {/* STT Model Selection - Premium Design */}
+              {onModelChange && (
+                <div className="flex items-center bg-gradient-to-r from-blue-50/95 to-indigo-50/95 dark:from-blue-900/40 dark:to-indigo-900/40 backdrop-blur-sm border border-blue-200/60 dark:border-blue-700/60 rounded-2xl px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2">
+                      <div className="relative">
+                        <Cpu className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        <div className="absolute inset-0 w-5 h-5 bg-blue-400/20 rounded-full animate-pulse" />
+                      </div>
+                      <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">Engine</span>
+                    </div>
+                    
                     <select
-                      value={speakerCount}
-                      onChange={(e) => {
-                        const newCount = parseInt(e.target.value);
-                        console.log('🎭 TranscriptContent: Speaker count changed:', {
-                          previousCount: speakerCount,
-                          newCount,
-                          enableSpeakerDiarization,
+                      value={selectedSTTModel}
+                      onChange={(e) => onModelChange(e.target.value as 'STT1' | 'STT2' | 'STT3')}
+                      className="bg-white/90 dark:bg-gray-800/90 border border-blue-200/50 dark:border-blue-600/50 rounded-xl px-3 py-2 text-sm font-medium text-blue-700 dark:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all duration-200 shadow-sm hover:shadow-md medical-touch-target cursor-pointer"
+                      disabled={recordingState.isRecording}
+                      title={recordingState.isRecording ? "Cannot change engine during recording" : "Select STT engine for transcription"}
+                    >
+                      <option value="STT1" className="py-2">⚡ STT1 (Fast)</option>
+                      <option value="STT2" className="py-2">⚖️ STT2 (Balanced)</option>
+                      <option value="STT3" className="py-2">🎯 STT3 (Accurate)</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {/* Speaker Diarization Controls - Enhanced Design */}
+              {onToggleSpeakerDiarization && (
+                <div className="flex items-center bg-gradient-to-r from-purple-50/95 to-indigo-50/95 dark:from-purple-900/40 dark:to-indigo-900/40 backdrop-blur-sm border border-purple-200/60 dark:border-purple-700/60 rounded-2xl px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => {
+                        console.log('🎭 TranscriptContent: Speaker diarization toggle clicked:', {
+                          currentState: enableSpeakerDiarization,
+                          newState: !enableSpeakerDiarization,
+                          speakerCount,
                           isRecording: recordingState.isRecording
                         });
-                        onSpeakerCountChange?.(newCount);
+                        onToggleSpeakerDiarization?.(!enableSpeakerDiarization);
                       }}
-                      className="bg-white dark:bg-gray-700 border border-indigo-200/50 dark:border-indigo-600/50 rounded-lg px-2 py-1 text-sm text-indigo-700 dark:text-indigo-300 medical-touch-target"
+                      className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-200 medical-touch-target transform hover:scale-105 ${
+                        enableSpeakerDiarization
+                          ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-lg shadow-purple-500/25'
+                          : 'bg-white/80 dark:bg-gray-700/80 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 border border-purple-200/50 dark:border-purple-600/50'
+                      }`}
                       disabled={recordingState.isRecording}
-                      title="Number of speakers to detect"
+                      title="Toggle speaker separation for doctor-patient conversations"
                     >
-                      <option value={2}>2 speakers</option>
-                      <option value={3}>3 speakers</option>
-                      <option value={4}>4 speakers</option>
-                      <option value={5}>5 speakers</option>
-                    </select>
-                  )}
+                      <div className="relative">
+                        <Brain className={`w-4 h-4 ${enableSpeakerDiarization ? 'text-white' : ''}`} />
+                        {enableSpeakerDiarization && (
+                          <div className="absolute inset-0 w-4 h-4 bg-white/30 rounded-full animate-pulse" />
+                        )}
+                      </div>
+                      <span>Speakers</span>
+                      {enableSpeakerDiarization && (
+                        <div className="w-2 h-2 bg-white rounded-full animate-bounce" />
+                      )}
+                    </button>
+                    
+                    {enableSpeakerDiarization && onSpeakerCountChange && (
+                      <div className="flex items-center space-x-2">
+                        <div className="w-px h-6 bg-purple-300/50 dark:bg-purple-600/50" />
+                        <select
+                          value={speakerCount}
+                          onChange={(e) => {
+                            const newCount = parseInt(e.target.value);
+                            console.log('🎭 TranscriptContent: Speaker count changed:', {
+                              previousCount: speakerCount,
+                              newCount,
+                              enableSpeakerDiarization,
+                              isRecording: recordingState.isRecording
+                            });
+                            onSpeakerCountChange?.(newCount);
+                          }}
+                          className="bg-white/90 dark:bg-gray-800/90 border border-purple-200/50 dark:border-purple-600/50 rounded-xl px-2 py-1.5 text-sm font-medium text-purple-700 dark:text-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-200 shadow-sm hover:shadow-md medical-touch-target cursor-pointer"
+                          disabled={recordingState.isRecording}
+                          title="Number of speakers to detect in conversation"
+                        >
+                          <option value={2}>👨‍⚕️👤 2</option>
+                          <option value={3}>👨‍⚕️👤👤 3</option>
+                          <option value={4}>👨‍⚕️👤👤👤 4</option>
+                          <option value={5}>👨‍⚕️👤👤👤👤 5</option>
+                        </select>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
             {/* Upload Button - Right */}
             {onFileUpload && (
@@ -260,7 +307,6 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             </div>
           </div>
         </div>
-        
 
         {/* Subtle Corner Accents */}
         <div className="absolute top-0 left-0 w-8 h-8 bg-gradient-to-br from-indigo-400/20 to-transparent rounded-3xl" />

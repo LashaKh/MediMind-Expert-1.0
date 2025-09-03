@@ -65,8 +65,7 @@ export const ContextContent: React.FC<ContextContentProps> = ({
         
         {/* Main Content Structure */}
         <div className="relative h-full flex flex-col p-1">
-          
-          
+
           {/* Attached Files Display */}
           {attachedFiles.length > 0 && (
             <div className="mb-4">

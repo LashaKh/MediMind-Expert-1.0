@@ -73,10 +73,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Debug logging (disabled in production)
-  // console.log('🔍 AIProcessingContent Debug:', {
-  //   hasTranscript,
-  //   transcriptLength: transcript?.length || 0,
-  //   transcriptPreview: transcript?.slice(0, 50) + '...',
+  // + '...',
   //   isChatExpanded,
   //   processing,
   //   shouldShowButton: hasTranscript && !isChatExpanded && !processing
@@ -85,7 +82,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   // Auto-switch to history when processing completes for diagnosis
   useEffect(() => {
     if (switchToHistoryRef.current && !processing && processingHistory.length > 0) {
-      console.log('🏥 Processing completed, switching to history view');
+
       setViewMode('history');
       switchToHistoryRef.current = false;
     }
@@ -116,15 +113,10 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
 
   // Handle chat expansion
   const handleExpandChat = useCallback(() => {
-    console.log('handleExpandChat called - expanding chat modal');
+
     setIsChatExpanded(true);
     // Debug viewport and elements
-    console.log('Chat expansion debug:', {
-      viewport: { width: window.innerWidth, height: window.innerHeight },
-      isChatExpanded: true,
-      hasTranscript: hasTranscript,
-      element: 'Should show modal now'
-    });
+
     // Focus textarea after animation completes
     setTimeout(() => {
       textareaRef.current?.focus();
@@ -138,7 +130,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   // Pass expand chat function to parent on mount
   useEffect(() => {
     if (onExpandChat) {
-      console.log('Passing handleExpandChat to parent');
+
       onExpandChat(handleExpandChat);
     }
   }, [onExpandChat, handleExpandChat]);
@@ -156,11 +148,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
       // Check if this is a diagnosis template for special handling
       const diagnosisInfo = extractDiagnosisFromInstruction(instruction);
       if (diagnosisInfo) {
-        console.log('🏥 Processing diagnosis template:', {
-          diagnosis: diagnosisInfo.diagnosisEnglish,
-          icdCode: diagnosisInfo.icdCode
-        });
-        
+
         // Set flag to auto-switch to history after processing completes
         switchToHistoryRef.current = true;
       }
@@ -190,7 +178,6 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
           return b.timestamp - a.timestamp;
       }
     });
-
 
   return (
     <>
@@ -374,7 +361,6 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
       </div>
 
     </div>
-
 
       {/* Floating Chat Interface - Rendered as Portal */}
       {hasTranscript && isChatExpanded && createPortal(

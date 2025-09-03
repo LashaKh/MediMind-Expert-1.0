@@ -63,16 +63,13 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Debug when expand function is set
   const handleSetExpandChatFunction = useCallback((fn: () => void) => {
-    console.log('Setting expand chat function');
+
     setExpandChatFunction(() => fn);
   }, []);
   
   // Debug speaker diarization state changes
   useEffect(() => {
-    console.log('🎭 GeorgianSTTApp speaker diarization state changed:', {
-      enableSpeakerDiarization,
-      speakerCount
-    });
+
   }, [enableSpeakerDiarization, speakerCount]);
   
   // Local transcript state - single source of truth for UI display
@@ -122,8 +119,7 @@ export const GeorgianSTTApp: React.FC = () => {
       
       // Only append NEW text, not full text - this prevents duplicates
       console.log(`📤 Live update received: "${newText.substring(0, 50)}..." (session: ${sessionId || 'no session'})`);
-      console.log(`📊 Current state: currentSession=${currentSession?.id || 'none'}, sessions.length=${sessions.length}`);
-      
+
       // Update local transcript immediately (optimistic UI)
       setLocalTranscript(prev => {
         const separator = prev ? '\n\n' : '';
@@ -133,27 +129,26 @@ export const GeorgianSTTApp: React.FC = () => {
       // Save to database in background - prioritize currentSession
       if (currentSession) {
         // Use the currently selected session
-        console.log(`📝 Appending to current session: ${currentSession.id}`);
+
         appendToTranscript(currentSession.id, newText.trim()).catch(error => {
           // Keep local state - user still sees the transcript
-          console.error('Failed to append to current session:', error);
+
         });
       } else {
         // No session selected, create one and ensure it's selected
-        console.warn(`⚠️ No session selected for live update, creating and selecting temporary session`);
+
         const newSession = createTemporarySession('Live Recording');
-        console.log(`🆕 Created temporary session: ${newSession.id}`);
-        
+
         // First select the session, then append the text
         try {
           await selectSession(newSession.id);
-          console.log(`✅ Selected session: ${newSession.id}`);
+
           // Use a small delay to ensure the session selection has propagated
           setTimeout(() => {
             appendToTranscript(newSession.id, newText.trim());
           }, 100);
         } catch (error) {
-          console.error('Failed to select new temporary session:', error);
+
           // Fallback: still try to append
           setTimeout(() => {
             appendToTranscript(newSession.id, newText.trim());
@@ -244,10 +239,7 @@ export const GeorgianSTTApp: React.FC = () => {
   });
   
   // Debug processing history updates (disabled in production)
-  // console.log('📋 Georgian App processingHistory:', {
-  //   count: processingHistory?.length || 0,
-  //   items: processingHistory?.map(item => ({
-  //     instruction: item.userInstruction?.slice(0, 30) + '...',
+  // + '...',
   //     responseLength: item.aiResponse?.length || 0,
   //     timestamp: item.timestamp
   //   })) || []
@@ -325,33 +317,26 @@ export const GeorgianSTTApp: React.FC = () => {
   // Handle AI text processing with direct transcript parameter
   const handleProcessText = useCallback(async (instruction: string, directTranscript?: string) => {
     // Debug info (disabled in production)
-    // console.log('🚀 handleProcessText called:', { ... });
-    
+
     // Use directTranscript first (passed from UI), then fallback to other sources
     const transcript = directTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
     
     // Debug transcript source (disabled in production)
     
     if (!transcript.trim()) {
-      console.error('❌ No transcript available for processing');
+
       return;
     }
 
     // Check if this is a diagnosis request and route to specialized service
     if (isDiagnosisTemplate(instruction)) {
-      console.log('🏥 Detected diagnosis request, routing to specialized Flowise service');
-      
+
       const diagnosisInfo = extractDiagnosisFromInstruction(instruction);
       if (diagnosisInfo) {
-        console.log('📋 Processing diagnosis:', {
-          diagnosis: diagnosisInfo.diagnosisEnglish,
-          icdCode: diagnosisInfo.icdCode,
-          transcriptLength: transcript.length
-        });
 
         // Manually manage processing state for diagnosis service
         // We can't use the regular processText as it goes to a different endpoint
-        console.log('⚡ Setting processing state for diagnosis generation');
+
         setProcessing(true);
         
         try {
@@ -380,12 +365,12 @@ export const GeorgianSTTApp: React.FC = () => {
                 processingResultData.tokensUsed,
                 processingResultData.processingTime
               );
-              console.log('✅ Diagnosis report saved to session and added to UI history');
+
             } else {
-              console.error('❌ Failed to save diagnosis report to session');
+
             }
           } else {
-            console.error('❌ Diagnosis generation failed:', diagnosisResult.error);
+
             // Fall back to regular processing if diagnosis service fails
             const result = await processText(transcript, instruction);
             if (result && currentSession) {
@@ -411,7 +396,7 @@ export const GeorgianSTTApp: React.FC = () => {
             }
           }
         } catch (error) {
-          console.error('❌ Exception during diagnosis processing:', error);
+
         } finally {
           // Always reset processing state
           setProcessing(false);
@@ -445,7 +430,7 @@ export const GeorgianSTTApp: React.FC = () => {
         );
       }
     } else if (!currentSession) {
-      console.error('❌ No current session to save result to - creating temp session');
+
       // Create a temporary session for the AI processing result with initial content
       const tempSession = await createSession('AI Analysis Session', transcript.substring(0, 100) + '...');
       if (tempSession && result) {
@@ -456,16 +441,14 @@ export const GeorgianSTTApp: React.FC = () => {
           tokensUsed: result.tokensUsed,
           processingTime: result.processingTime
         });
-        console.log('✅ Processing result saved to new session:', tempSession.id);
+
       }
     }
   }, [currentSession, transcriptionResult, localTranscript, processText, addProcessingResult, createSession, setProcessing]);
 
   // Handle report deletion with database sync
   const handleDeleteReport = useCallback(async (analysis: ProcessingHistory) => {
-    console.log('🗑️ Deleting report:', {
-      timestamp: analysis.timestamp,
-      instruction: analysis.userInstruction.slice(0, 50) + '...',
+    + '...',
       sessionId: currentSession?.id
     });
 
@@ -483,7 +466,7 @@ export const GeorgianSTTApp: React.FC = () => {
           .single();
 
         if (fetchError) {
-          console.error('❌ Error fetching session for deletion:', fetchError);
+
           throw fetchError;
         }
 
@@ -492,12 +475,6 @@ export const GeorgianSTTApp: React.FC = () => {
         const updatedResults = currentResults.filter(
           (result: any) => result.timestamp !== analysis.timestamp
         );
-
-        console.log('🔄 Updating session with filtered results:', {
-          originalCount: currentResults.length,
-          newCount: updatedResults.length,
-          removedTimestamp: analysis.timestamp
-        });
 
         // Update the session with the filtered results
         const { error: updateError } = await supabase
@@ -509,16 +486,14 @@ export const GeorgianSTTApp: React.FC = () => {
           .eq('id', currentSession.id);
 
         if (updateError) {
-          console.error('❌ Error updating session after deletion:', updateError);
+
           throw updateError;
         }
 
-        console.log('✅ Report deleted from database successfully');
-        
         // Refresh sessions to ensure UI shows updated data
         await refreshSessions();
       } catch (error) {
-        console.error('❌ Exception during report deletion:', error);
+
         // Re-add to local state if deletion failed
         addToHistory(
           analysis.userInstruction,
@@ -556,11 +531,10 @@ export const GeorgianSTTApp: React.FC = () => {
     }
   }, [sessions, resetTranscript, clearTTSResult, selectSession, recordingState.isRecording, stopRecording]);
 
-
   // Handle file upload
   const handleFileUpload = useCallback(async (file: File) => {
     if (!canProcess) {
-      console.warn('Cannot process file - upload already in progress');
+
       return;
     }
 
@@ -580,7 +554,7 @@ export const GeorgianSTTApp: React.FC = () => {
     if (result.success) {
       console.log(`✅ Audio file upload completed: ${result.chunksProcessed} chunks, ${Math.round(result.duration)}s audio`);
     } else {
-      console.error('❌ Audio file upload failed:', result.error);
+
     }
   }, [currentSession, createTemporarySession, selectSession, resetTranscript, clearTTSResult, canProcess, resetUploadState, processAudioFile]);
 
@@ -608,8 +582,7 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Handle recording start - create temporary session if needed
   const handleStartRecording = useCallback(async () => {
-    console.log(`🎙️ Recording start - Current session: ${currentSession?.id || 'none'}`);
-    
+
     // Generate new recording session ID for tracking
     const newRecordingSessionId = `rec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     setCurrentRecordingSessionId(newRecordingSessionId);
@@ -620,32 +593,31 @@ export const GeorgianSTTApp: React.FC = () => {
 
     if (!currentSession) {
       // Create temporary session when user starts recording - clear local state for fresh start
-      console.log(`🆕 No session exists, creating new session for recording`);
+
       setLocalTranscript(''); // Clear local transcript for new session
       resetTranscript(); // Reset TTS hook state for new session
       clearTTSResult(); // Clear old transcription result
       
       const newSession = createTemporarySession('New Recording');
-      console.log(`🆕 Created session: ${newSession.id}, now selecting it`);
+
       await selectSession(newSession.id);
-      console.log(`✅ Session selected: ${newSession.id}`);
+
     } else {
       // IMPORTANT: For existing session, we need to preserve the existing content
       // Don't call resetTranscript() as it clears the TTS hook's internal state
       // This preserves user's typed/pasted content when starting recording
-      console.log(`📋 Using existing session: ${currentSession.id}`);
+
       clearTTSResult(); // Just clear pending results, keep existing transcript state
       
       // CRITICAL: Initialize TTS hook's internal state with existing content
       // The TTS hook needs to know about existing content to properly append new transcriptions
       if (localTranscript.trim()) {
-        console.log(`📝 Existing local transcript found: ${localTranscript.length} chars`);
+
         // TODO: Add a way to initialize TTS hook with existing content
         // For now, we'll rely on the live update system to handle this
       }
     }
-    
-    console.log(`🎙️ Starting recording with session: ${currentSession?.id}`);
+
     startRecording();
   }, [currentSession, createTemporarySession, selectSession, startRecording, resetTranscript, clearTTSResult]);
 
@@ -710,7 +682,7 @@ export const GeorgianSTTApp: React.FC = () => {
             {/* Simplified Header Actions */}
             <div className="flex flex-col space-y-3">
               <button
-                onClick={handleCreateSession}
+                onClick={() => handleCreateSession()}
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
               >
                 <Plus className="w-4 h-4" />
@@ -973,7 +945,6 @@ export const GeorgianSTTApp: React.FC = () => {
 
       </div>
 
-
       {/* Enhanced Medical Security Warning */}
       {window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && (
         <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 max-w-lg bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-amber-200/50 dark:border-amber-700/50 rounded-xl p-6 shadow-2xl shadow-amber-500/10">
@@ -1016,12 +987,12 @@ export const GeorgianSTTApp: React.FC = () => {
       {activeTab === 'ai' && (localTranscript || currentSession?.transcript) && (
         <button
           onClick={() => {
-            console.log('AI button clicked - expanding chat');
+
             // Expand the chat since we're already on AI tab
             if (expandChatFunction) {
               expandChatFunction();
             } else {
-              console.log('Expand chat function not available yet');
+
             }
           }}
           style={{
