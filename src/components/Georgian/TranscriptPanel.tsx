@@ -133,6 +133,19 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const [editableTranscript, setEditableTranscript] = useState('');
   const [lastRecordingSessionId, setLastRecordingSessionId] = useState<string>('');
   
+  // Track user typing to prevent interference
+  const isUserTypingRef = useRef(false);
+  const typingTimeoutRef = useRef<NodeJS.Timeout>();
+  
+  // Cleanup typing timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  }, []);
+  
   // Use speaker diarization state from hook, fallback to local state
   const hasSpeakers = hasSpeakersFromHook;
   const speakerSegments = speakersFromHook;
@@ -186,12 +199,24 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     }
   }, [recordingState.isRecording, lastRecordingSessionId]);
 
-  // Load session transcript when session changes
+  // Load session transcript when session changes OR when localTranscript updates
   useEffect(() => {
-    // Always update editableTranscript when session changes to reflect the selected session
+    // Don't update if user is currently typing to prevent interference
+    if (isUserTypingRef.current) {
+      console.log('🚫 TranscriptPanel: Skipping update while user is typing');
+      return;
+    }
+    
+    // Use session transcript if it's longer (contains both typed + transcribed text)
+    // Otherwise use localTranscript (for fresh recordings without typed text)
     const sessionTranscript = currentSession?.transcript || '';
-    setEditableTranscript(sessionTranscript);
-  }, [currentSession?.id]); // Only depend on session ID change
+    const localLength = localTranscript?.length || 0;
+    const sessionLength = sessionTranscript.length;
+    
+    const transcript = sessionLength >= localLength ? sessionTranscript : localTranscript || '';
+    setEditableTranscript(transcript);
+    console.log(`📝 TranscriptPanel: Updated editableTranscript - localLength: ${localLength}, sessionLength: ${sessionLength}, using: ${transcript === sessionTranscript ? 'session' : 'local'}`);
+  }, [currentSession?.id, localTranscript, currentSession?.transcript]); // Depend on session changes and transcript updates
   
   // Sync context recording state with actual recording state
   useEffect(() => {
@@ -259,6 +284,20 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
 
   // Simple direct change handler that updates both local and parent state
   const handleTranscriptChange = (newTranscript: string) => {
+    // Mark that user is typing to prevent useEffect interference
+    isUserTypingRef.current = true;
+    
+    // Clear any existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    
+    // Set timeout to mark typing as finished after user stops typing for 500ms
+    typingTimeoutRef.current = setTimeout(() => {
+      isUserTypingRef.current = false;
+      console.log('⌨️ User stopped typing, enabling transcript updates');
+    }, 500);
+    
     setEditableTranscript(newTranscript);
     // Also update parent state so AI Processing can access the transcript
     if (onUpdateTranscript) {

@@ -121,7 +121,8 @@ export const GeorgianSTTApp: React.FC = () => {
       lastProcessedTimeRef.current = now;
       
       // Only append NEW text, not full text - this prevents duplicates
-      console.log(`📤 Live update received: "${newText.substring(0, 50)}..." (session: ${sessionId})`);
+      console.log(`📤 Live update received: "${newText.substring(0, 50)}..." (session: ${sessionId || 'no session'})`);
+      console.log(`📊 Current state: currentSession=${currentSession?.id || 'none'}, sessions.length=${sessions.length}`);
       
       // Update local transcript immediately (optimistic UI)
       setLocalTranscript(prev => {
@@ -129,30 +130,35 @@ export const GeorgianSTTApp: React.FC = () => {
         return prev + separator + newText.trim();
       });
       
-      // Save to database in background (if sessionId available)
-      if (sessionId) {
-        // Check if session exists, create if needed
-        const sessionExists = sessions.find(s => s.id === sessionId);
-        if (!sessionExists) {
-          console.warn(`⚠️ Session ${sessionId} not found, creating temporary session`);
-          const newSession = createTemporarySession('Live Recording');
-          // Update the session with the current transcript content
+      // Save to database in background - prioritize currentSession
+      if (currentSession) {
+        // Use the currently selected session
+        console.log(`📝 Appending to current session: ${currentSession.id}`);
+        appendToTranscript(currentSession.id, newText.trim()).catch(error => {
+          // Keep local state - user still sees the transcript
+          console.error('Failed to append to current session:', error);
+        });
+      } else {
+        // No session selected, create one and ensure it's selected
+        console.warn(`⚠️ No session selected for live update, creating and selecting temporary session`);
+        const newSession = createTemporarySession('Live Recording');
+        console.log(`🆕 Created temporary session: ${newSession.id}`);
+        
+        // First select the session, then append the text
+        try {
+          await selectSession(newSession.id);
+          console.log(`✅ Selected session: ${newSession.id}`);
+          // Use a small delay to ensure the session selection has propagated
           setTimeout(() => {
             appendToTranscript(newSession.id, newText.trim());
-          }, 0);
-        } else {
-          appendToTranscript(sessionId, newText.trim()).catch(error => {
-            // Keep local state - user still sees the transcript
-          });
+          }, 100);
+        } catch (error) {
+          console.error('Failed to select new temporary session:', error);
+          // Fallback: still try to append
+          setTimeout(() => {
+            appendToTranscript(newSession.id, newText.trim());
+          }, 100);
         }
-      } else if (!currentSession) {
-        // No session at all, create one
-        console.warn(`⚠️ No session available for live update, creating one`);
-        const newSession = createTemporarySession('Live Recording');
-        await selectSession(newSession.id);
-        setTimeout(() => {
-          appendToTranscript(newSession.id, newText.trim());
-        }, 0);
       }
     }
   }, [appendToTranscript, sessions, createTemporarySession, currentSession, selectSession]);
@@ -547,20 +553,6 @@ export const GeorgianSTTApp: React.FC = () => {
     }
   }, [sessions, resetTranscript, clearTTSResult, selectSession, recordingState.isRecording, stopRecording]);
 
-  // Update localTranscript when currentSession changes (including fresh data from database)
-  useEffect(() => {
-    if (currentSession) {
-      const currentTranscript = currentSession.transcript || '';
-      // Only update if the transcript is different to avoid unnecessary re-renders
-      setLocalTranscript(prevTranscript => {
-        if (prevTranscript !== currentTranscript) {
-          console.log('📝 Local transcript updated with fresh session data');
-          return currentTranscript;
-        }
-        return prevTranscript;
-      });
-    }
-  }, [currentSession]);
 
   // Handle file upload
   const handleFileUpload = useCallback(async (file: File) => {
@@ -613,6 +605,8 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Handle recording start - create temporary session if needed
   const handleStartRecording = useCallback(async () => {
+    console.log(`🎙️ Recording start - Current session: ${currentSession?.id || 'none'}`);
+    
     // Generate new recording session ID for tracking
     const newRecordingSessionId = `rec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     setCurrentRecordingSessionId(newRecordingSessionId);
@@ -623,25 +617,32 @@ export const GeorgianSTTApp: React.FC = () => {
 
     if (!currentSession) {
       // Create temporary session when user starts recording - clear local state for fresh start
+      console.log(`🆕 No session exists, creating new session for recording`);
       setLocalTranscript(''); // Clear local transcript for new session
       resetTranscript(); // Reset TTS hook state for new session
       clearTTSResult(); // Clear old transcription result
       
       const newSession = createTemporarySession('New Recording');
+      console.log(`🆕 Created session: ${newSession.id}, now selecting it`);
       await selectSession(newSession.id);
+      console.log(`✅ Session selected: ${newSession.id}`);
     } else {
       // IMPORTANT: For existing session, we need to preserve the existing content
       // Don't call resetTranscript() as it clears the TTS hook's internal state
       // This preserves user's typed/pasted content when starting recording
+      console.log(`📋 Using existing session: ${currentSession.id}`);
       clearTTSResult(); // Just clear pending results, keep existing transcript state
       
       // CRITICAL: Initialize TTS hook's internal state with existing content
       // The TTS hook needs to know about existing content to properly append new transcriptions
       if (localTranscript.trim()) {
+        console.log(`📝 Existing local transcript found: ${localTranscript.length} chars`);
         // TODO: Add a way to initialize TTS hook with existing content
         // For now, we'll rely on the live update system to handle this
       }
     }
+    
+    console.log(`🎙️ Starting recording with session: ${currentSession?.id}`);
     startRecording();
   }, [currentSession, createTemporarySession, selectSession, startRecording, resetTranscript, clearTTSResult]);
 
