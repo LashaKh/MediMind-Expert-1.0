@@ -17,7 +17,8 @@ import {
   Calendar,
   User,
   Shield,
-  HeartHandshake
+  HeartHandshake,
+  Trash2
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { formatMarkdown, extractCleanText, hasMarkdownFormatting } from '../../../utils/markdownFormatter';
@@ -38,6 +39,7 @@ interface MedicalAnalysisCardProps {
   onCopy?: (analysis: ProcessingHistory) => void;
   onDownload?: (analysis: ProcessingHistory) => void;
   onShare?: (analysis: ProcessingHistory) => void;
+  onDelete?: (analysis: ProcessingHistory) => void;
 }
 
 const formatProcessingTime = (milliseconds: number): string => {
@@ -51,13 +53,19 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
   // Check if this is a diagnosis report (either by model name or instruction content)
   const isDiagnosis = model === 'flowise-diagnosis-agent' || 
                       lower.includes('i50.0') || 
+                      lower.includes('i24.9') ||
                       lower.includes('heart failure') ||
+                      lower.includes('nstemi') ||
                       lower.includes('გულის შეგუბებითი უკმარისობა') ||
+                      lower.includes('გულის მწვავე იშემიური ავადმყოფობა') ||
                       (lower.includes('diagnosis') && lower.includes('emergency room'));
   
   if (isDiagnosis) {
     if (lower.includes('i50.0') || lower.includes('heart failure') || lower.includes('გულის შეგუბებითი უკმარისობა')) {
-      return { type: 'Heart Failure ER Report', icon: HeartHandshake, color: 'from-rose-600 to-red-700', isDiagnosis: true };
+      return { type: 'Heart Failure ER Report (I50.0)', icon: HeartHandshake, color: 'from-blue-600 to-indigo-700', isDiagnosis: true };
+    }
+    if (lower.includes('i24.9') || lower.includes('nstemi') || lower.includes('გულის მწვავე იშემიური ავადმყოფობა')) {
+      return { type: 'NSTEMI ER Report (I24.9)', icon: HeartHandshake, color: 'from-red-600 to-rose-700', isDiagnosis: true };
     }
     return { type: 'Diagnosis ER Report', icon: HeartHandshake, color: 'from-rose-600 to-red-700', isDiagnosis: true };
   }
@@ -107,7 +115,8 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
   totalCount,
   onCopy,
   onDownload,
-  onShare
+  onShare,
+  onDelete
 }) => {
   const [isExpanded, setIsExpanded] = useState(index === 0); // First card expanded by default
   const analysisType = getAnalysisType(analysis.userInstruction, analysis.model);
@@ -184,6 +193,12 @@ Medical AI Processing System`;
     }
   };
 
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this medical report? This action cannot be undone.')) {
+      onDelete?.(analysis);
+    }
+  };
+
   // Safety check for analysis data
   if (!analysis || !analysis.userInstruction || !analysis.aiResponse) {
     return (
@@ -204,7 +219,7 @@ Medical AI Processing System`;
     <div className="group medical-analysis-card bg-white dark:bg-slate-800 rounded-xl md:rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden w-full max-w-full">
       {/* Card Header */}
       <div className="relative bg-gradient-to-br from-slate-50/80 to-white dark:from-slate-800/80 dark:to-slate-900/80 border-b border-slate-200/50 dark:border-slate-700/50">
-        {/* Priority Badge */}
+        {/* Priority Badge and Delete Button */}
         <div className="absolute top-4 right-4 z-20">
           <div className="flex items-center space-x-2">
             <div className="bg-slate-100 dark:bg-slate-700 rounded-full px-3 py-1">
@@ -215,6 +230,15 @@ Medical AI Processing System`;
             <div className={`bg-gradient-to-r ${analysisType.color} rounded-full p-2 shadow-lg`}>
               <IconComponent className="w-4 h-4 text-white" />
             </div>
+            {onDelete && (
+              <button
+                onClick={handleDelete}
+                className="bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 rounded-full p-2 shadow-md hover:shadow-lg transition-all duration-200 group"
+                title="Delete Report"
+              >
+                <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400 group-hover:text-red-700 dark:group-hover:text-red-300" />
+              </button>
+            )}
           </div>
         </div>
 

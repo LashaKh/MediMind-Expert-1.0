@@ -24,12 +24,23 @@ import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
 import { useAudioFileUpload } from '../../hooks/useAudioFileUpload';
 import { useAuth } from '../../stores/useAppStore';
 import { isDiagnosisTemplate, extractDiagnosisFromInstruction, generateDiagnosisReport } from '../../services/diagnosisFlowiseService';
+import { supabase } from '../../lib/supabase';
 
 // Import extracted components
 import { HeaderControls } from './components/HeaderControls';
 import { MobileSessionHeader } from './components/MobileSessionHeader';
 import { AudioUploadProgress } from './components/AudioUploadProgress';
 import { formatTime } from './utils/transcriptUtils';
+
+// Types
+interface ProcessingHistory {
+  userInstruction: string;
+  aiResponse: string;
+  model: string;
+  tokensUsed?: number;
+  processingTime: number;
+  timestamp: number;
+}
 
 export const GeorgianSTTApp: React.FC = () => {
   useAuth(); // Authentication hook
@@ -86,6 +97,7 @@ export const GeorgianSTTApp: React.FC = () => {
     appendToTranscript,
     addProcessingResult,
     clearError: clearSessionError,
+    refreshSessions,
     searchSessions,
     cleanupEmptyTemporarySessions
   } = useSessionManagement();
@@ -215,7 +227,9 @@ export const GeorgianSTTApp: React.FC = () => {
     processText,
     clearError: clearAIError,
     clearHistory,
-    addToHistory
+    addToHistory,
+    deleteFromHistory,
+    setProcessing
   } = useAIProcessing({
     sessionProcessingResults: currentSession?.processingResults
   });
@@ -326,51 +340,30 @@ export const GeorgianSTTApp: React.FC = () => {
           transcriptLength: transcript.length
         });
 
-        const startTime = Date.now();
-        const diagnosisResult = await generateDiagnosisReport(transcript, diagnosisInfo);
-        const processingTime = Date.now() - startTime;
+        // Manually manage processing state for diagnosis service
+        // We can't use the regular processText as it goes to a different endpoint
+        console.log('⚡ Setting processing state for diagnosis generation');
+        setProcessing(true);
+        
+        try {
+          const startTime = Date.now();
+          const diagnosisResult = await generateDiagnosisReport(transcript, diagnosisInfo);
+          const processingTime = Date.now() - startTime;
 
-        if (diagnosisResult.success && currentSession) {
-          // Save diagnosis result to session with special metadata
-          const processingResultData = {
-            userInstruction: instruction,
-            aiResponse: diagnosisResult.report,
-            model: 'flowise-diagnosis-agent',
-            tokensUsed: Math.floor(diagnosisResult.report.length / 4), // Estimate tokens
-            processingTime
-          };
-          
-          const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
-          
-          if (saveSuccess) {
-            // Also add to the AI processing history for immediate UI update
-            addToHistory(
-              processingResultData.userInstruction,
-              processingResultData.aiResponse,
-              processingResultData.model,
-              processingResultData.tokensUsed,
-              processingResultData.processingTime
-            );
-            console.log('✅ Diagnosis report saved to session and added to UI history');
-          } else {
-            console.error('❌ Failed to save diagnosis report to session');
-          }
-        } else if (!diagnosisResult.success) {
-          console.error('❌ Diagnosis generation failed:', diagnosisResult.error);
-          // Fall back to regular processing if diagnosis service fails
-          const result = await processText(transcript, instruction);
-          if (result && currentSession) {
+          if (diagnosisResult.success && currentSession) {
+            // Save diagnosis result to session with special metadata
             const processingResultData = {
               userInstruction: instruction,
-              aiResponse: result.result,
-              model: result.model,
-              tokensUsed: result.tokensUsed,
-              processingTime: result.processingTime
+              aiResponse: diagnosisResult.report,
+              model: 'flowise-diagnosis-agent',
+              tokensUsed: Math.floor(diagnosisResult.report.length / 4), // Estimate tokens
+              processingTime
             };
             
             const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
+            
             if (saveSuccess) {
-              // Add to local history for immediate UI update  
+              // Also add to the AI processing history for immediate UI update
               addToHistory(
                 processingResultData.userInstruction,
                 processingResultData.aiResponse,
@@ -378,8 +371,41 @@ export const GeorgianSTTApp: React.FC = () => {
                 processingResultData.tokensUsed,
                 processingResultData.processingTime
               );
+              console.log('✅ Diagnosis report saved to session and added to UI history');
+            } else {
+              console.error('❌ Failed to save diagnosis report to session');
+            }
+          } else {
+            console.error('❌ Diagnosis generation failed:', diagnosisResult.error);
+            // Fall back to regular processing if diagnosis service fails
+            const result = await processText(transcript, instruction);
+            if (result && currentSession) {
+              const processingResultData = {
+                userInstruction: instruction,
+                aiResponse: result.result,
+                model: result.model,
+                tokensUsed: result.tokensUsed,
+                processingTime: result.processingTime
+              };
+              
+              const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
+              if (saveSuccess) {
+                // Add to local history for immediate UI update  
+                addToHistory(
+                  processingResultData.userInstruction,
+                  processingResultData.aiResponse,
+                  processingResultData.model,
+                  processingResultData.tokensUsed,
+                  processingResultData.processingTime
+                );
+              }
             }
           }
+        } catch (error) {
+          console.error('❌ Exception during diagnosis processing:', error);
+        } finally {
+          // Always reset processing state
+          setProcessing(false);
         }
         return;
       }
@@ -424,7 +450,77 @@ export const GeorgianSTTApp: React.FC = () => {
         console.log('✅ Processing result saved to new session:', tempSession.id);
       }
     }
-  }, [currentSession, transcriptionResult, localTranscript, processText, addProcessingResult, createSession]);
+  }, [currentSession, transcriptionResult, localTranscript, processText, addProcessingResult, createSession, setProcessing]);
+
+  // Handle report deletion with database sync
+  const handleDeleteReport = useCallback(async (analysis: ProcessingHistory) => {
+    console.log('🗑️ Deleting report:', {
+      timestamp: analysis.timestamp,
+      instruction: analysis.userInstruction.slice(0, 50) + '...',
+      sessionId: currentSession?.id
+    });
+
+    // Remove from local state immediately for responsive UI
+    deleteFromHistory(analysis.timestamp);
+
+    // Also remove from database if we have a current session
+    if (currentSession) {
+      try {
+        // First, fetch the current session data
+        const { data: sessionData, error: fetchError } = await supabase
+          .from('georgian_sessions')
+          .select('processing_results')
+          .eq('id', currentSession.id)
+          .single();
+
+        if (fetchError) {
+          console.error('❌ Error fetching session for deletion:', fetchError);
+          throw fetchError;
+        }
+
+        // Filter out the deleted report from the processing results
+        const currentResults = sessionData?.processing_results || [];
+        const updatedResults = currentResults.filter(
+          (result: any) => result.timestamp !== analysis.timestamp
+        );
+
+        console.log('🔄 Updating session with filtered results:', {
+          originalCount: currentResults.length,
+          newCount: updatedResults.length,
+          removedTimestamp: analysis.timestamp
+        });
+
+        // Update the session with the filtered results
+        const { error: updateError } = await supabase
+          .from('georgian_sessions')
+          .update({
+            processing_results: updatedResults,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', currentSession.id);
+
+        if (updateError) {
+          console.error('❌ Error updating session after deletion:', updateError);
+          throw updateError;
+        }
+
+        console.log('✅ Report deleted from database successfully');
+        
+        // Refresh sessions to ensure UI shows updated data
+        await refreshSessions();
+      } catch (error) {
+        console.error('❌ Exception during report deletion:', error);
+        // Re-add to local state if deletion failed
+        addToHistory(
+          analysis.userInstruction,
+          analysis.aiResponse,
+          analysis.model,
+          analysis.tokensUsed,
+          analysis.processingTime
+        );
+      }
+    }
+  }, [currentSession, deleteFromHistory, addToHistory, refreshSessions]);
 
   // Handle session selection with local transcript loading
   const handleSelectSession = useCallback(async (sessionId: string) => {
@@ -808,6 +904,7 @@ export const GeorgianSTTApp: React.FC = () => {
                 onProcessText={handleProcessText}
                 onClearAIError={clearAIError}
                 onClearHistory={clearHistory}
+                onDeleteReport={handleDeleteReport}
                 enableSpeakerDiarization={enableSpeakerDiarization}
                 onToggleSpeakerDiarization={setEnableSpeakerDiarization}
                 speakerCount={speakerCount}
@@ -853,6 +950,7 @@ export const GeorgianSTTApp: React.FC = () => {
               onProcessText={handleProcessText}
               onClearAIError={clearAIError}
               onClearHistory={clearHistory}
+              onDeleteReport={handleDeleteReport}
               activeTab={activeTab}
               onActiveTabChange={setActiveTab}
               enableSpeakerDiarization={enableSpeakerDiarization}

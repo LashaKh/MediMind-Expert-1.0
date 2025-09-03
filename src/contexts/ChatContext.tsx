@@ -382,7 +382,7 @@ interface ChatContextType {
   toggleDocumentSelection: (documentId: string) => void;
   selectAllDocuments: () => void;
   // Flowise conversation metadata methods
-  saveFlowiseConversationMetadata: (sessionId: string, messageText: string, knowledgeBaseType?: KnowledgeBaseType, specialty?: string, caseId?: string) => Promise<void>;
+  saveFlowiseConversationMetadata: (sessionId: string, messageText: string, knowledgeBaseType?: KnowledgeBaseType, specialty?: string, caseId?: string, conversationType?: 'general' | 'case-study') => Promise<void>;
   incrementFlowiseMessageCount: (sessionId: string) => Promise<void>;
 }
 
@@ -621,24 +621,28 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
       // Add Flowise conversations
       if (flowiseConversations && flowiseConversations.length > 0) {
         const curatedConversations = flowiseConversations
-          .map((conv: any) => ({
-            id: conv.session_id,
-            title: conv.conversation_title || `Curated KB - ${new Date(conv.created_at).toLocaleDateString()}`,
-            messages: [], // Messages are not stored locally for Flowise
-            createdAt: new Date(conv.created_at),
-            updatedAt: new Date(conv.updated_at),
-            type: 'general' as const,
-            knowledgeBaseType: conv.knowledge_base_type || 'curated',
-            specialty: conv.specialty,
-            caseId: conv.case_id,
-            metadata: {
-              messageCount: conv.message_count || 0,
-              lastActivity: new Date(conv.updated_at),
-              sessionId: conv.session_id,
-              backend: 'flowise',
-              lastMessagePreview: conv.last_message_preview
-            }
-          }));
+          .map((conv: any) => {
+            const conversationType = (conv.conversation_type || 'general') as ConversationType;
+            
+            return {
+              id: conv.session_id,
+              title: conv.conversation_title || `Curated KB - ${new Date(conv.created_at).toLocaleDateString()}`,
+              messages: [], // Messages are not stored locally for Flowise
+              createdAt: new Date(conv.created_at),
+              updatedAt: new Date(conv.updated_at),
+              type: conversationType,
+              knowledgeBaseType: conv.knowledge_base_type || 'curated',
+              specialty: conv.specialty,
+              caseId: conv.case_id,
+              metadata: {
+                messageCount: conv.message_count || 0,
+                lastActivity: new Date(conv.updated_at),
+                sessionId: conv.session_id,
+                backend: 'flowise',
+                lastMessagePreview: conv.last_message_preview
+              }
+            };
+          });
         conversations.push(...curatedConversations);
       }
 
@@ -1046,7 +1050,8 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
     messageText: string,
     knowledgeBaseType: KnowledgeBaseType = 'curated',
     specialty?: string,
-    caseId?: string
+    caseId?: string,
+    conversationType?: 'general' | 'case-study'
   ) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -1056,6 +1061,9 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
       const title = messageText.length > 50 
         ? `${messageText.substring(0, 50)}...` 
         : messageText;
+
+      // Determine conversation type from context if not explicitly provided
+      const type = conversationType || (caseId ? 'case-study' : 'general');
 
       // Use upsert to insert or update conversation metadata
       const { error } = await (supabase as any)
@@ -1067,6 +1075,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
           knowledge_base_type: knowledgeBaseType,
           specialty: specialty,
           case_id: caseId,
+          conversation_type: type, // Add conversation type to metadata
           message_count: 1, // This will be updated by increment function later
           last_message_preview: messageText.substring(0, 100),
           updated_at: new Date().toISOString()

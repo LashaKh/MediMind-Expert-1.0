@@ -54,8 +54,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   const [abgContext, setAbgContext] = useState<ABGResult | null>(null);
   const [abgContextType, setAbgContextType] = useState<string | null>(null);
   
-  // Generate and maintain sessionId for Flowise conversations
-  const [sessionId] = useState(() => uuidv4());
+  // Generate and maintain sessionId for Flowise conversations - allow regeneration on case reset
+  const [sessionId, setSessionId] = useState(() => uuidv4());
   
   // Debug the profile object
 
@@ -180,15 +180,23 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   // Check if we need to create a conversation when user sends first message
   const ensureConversationExists = useCallback(() => {
     if (!activeConversationId) {
+      // Determine conversation type based on current context
+      const conversationType = activeCase ? 'case-study' : 'general';
+      const title = activeCase 
+        ? `Case: ${activeCase.title}` 
+        : `Conversation ${new Date().toLocaleDateString()}`;
+      
       const newConversationId = createNewConversation(
-        `Conversation ${new Date().toLocaleDateString()}`,
-        profile?.medical_specialty as 'cardiology' | 'obgyn'
+        title,
+        profile?.medical_specialty as 'cardiology' | 'obgyn',
+        activeCase?.id,
+        conversationType
       );
       setActiveConversation(newConversationId);
       return newConversationId;
     }
     return activeConversationId;
-  }, [activeConversationId, createNewConversation, setActiveConversation, profile]);
+  }, [activeConversationId, createNewConversation, setActiveConversation, profile, activeCase]);
 
   // Enhanced animations and interactions - Further optimized for instant navigation
   useEffect(() => {
@@ -389,12 +397,16 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
         // Save Flowise conversation metadata for curated knowledge base conversations
         if (knowledgeBase === 'curated') {
+          // Determine conversation type based on whether there's an active case
+          const conversationType = activeCase ? 'case-study' : 'general';
+          
           await saveFlowiseConversationMetadata(
             sessionId, // Use the generated sessionId instead of activeConversationId
             content, // Save original content, not enhanced
             knowledgeBase,
             activeCase?.specialty,
-            activeCase?.id
+            activeCase?.id,
+            conversationType
           );
           
           // Increment message count (user message + AI response = 2)
@@ -442,6 +454,12 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     };
 
     addMessage(userMessage);
+    
+    // Save user message to database for Flowise conversations
+    if (sessionId && knowledgeBase === 'curated') {
+      saveFlowiseMessage(sessionId, userMessage);
+    }
+    
     setChatLoading(true);
 
     const [, error] = await safeAsync(
@@ -478,12 +496,16 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
         // Save Flowise conversation metadata for curated knowledge base conversations
         if (knowledgeBase === 'curated') {
+          // Determine conversation type based on whether there's an active case
+          const conversationType = activeCase ? 'case-study' : 'general';
+          
           await saveFlowiseConversationMetadata(
             sessionId, // Use the generated sessionId instead of activeConversationId
             content, // Save original content
             knowledgeBase,
             activeCase?.specialty,
-            activeCase?.id
+            activeCase?.id,
+            conversationType
           );
           
           // Increment message count (user message + AI response = 2)
@@ -511,12 +533,16 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     // Reload cases to ensure the list is up-to-date
     await loadCases();
     
-    // Create a new conversation for this case
-    createNewConversation(
+    // Create a new conversation for this case with proper type
+    const newConversationId = createNewConversation(
       `Case: ${newCase.title}`, 
       profile?.medical_specialty as 'cardiology' | 'obgyn',
-      newCase.id
+      newCase.id,
+      'case-study'
     );
+    
+    // Set the new conversation as active
+    setActiveConversation(newConversationId);
     
     // Add an initial AI message with case context
     const caseIntroMessage: Message = {
@@ -575,7 +601,14 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         // Step 2: Clear current messages
         clearMessages();
         
-        // Step 3: Force clear any lingering case references in localStorage
+        // Step 3: Clear active conversation to force new conversation creation
+        // This ensures when user sends next message, a separate general conversation is created
+        setActiveConversation(null);
+        
+        // Step 3.5: Generate a new sessionId to ensure completely separate conversation
+        setSessionId(uuidv4());
+        
+        // Step 4: Force clear any lingering case references in localStorage
         const [, localStorageError] = await safeAsync(
           async () => {
             const conversationsData = localStorage.getItem('medimind-conversations');
@@ -652,28 +685,19 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     // Clear current messages to start fresh with the new case
     clearMessages();
     
-    // Create a new conversation for the selected case
+    // Create a new conversation for the selected case with proper type
     const newConversationId = createNewConversation(
       `Case: ${selectedCase.title}`, 
       profile?.medical_specialty as 'cardiology' | 'obgyn',
-      selectedCase.id
+      selectedCase.id,
+      'case-study'
     );
     
     // Set the new conversation as active
     setActiveConversation(newConversationId);
     
-    // Add an initial AI message with case context
-    const caseIntroMessage: Message = {
-      id: uuidv4(),
-      content: t('chat.caseReceived', { title: selectedCase.title }) + 
-              '\n\n' + t('chat.caseSummary') + 
-              `\n${selectedCase.description}` +
-              '\n\n' + t('chat.caseDiscussionPrompt'),
-      type: 'ai',
-      timestamp: new Date(),
-    };
-    
-    addMessage(caseIntroMessage);
+    // Case context will be automatically included when user sends their first message
+    // No automatic AI response - user must initiate the conversation
     
     // Close the case list modal
     setShowCaseListModal(false);

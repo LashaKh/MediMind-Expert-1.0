@@ -115,8 +115,8 @@ async function fetchAIResponseDirect(
       type: knowledgeBaseType || 'curated'
     };
 
-    // Add case context if provided
-    if (caseContext) {
+    // Add case context if provided AND the message is a meaningful question
+    if (caseContext && message && message.trim().length > 0) {
       let caseString: string;
       
       // Check if enhanced context is available (includes attachment content)

@@ -11,6 +11,9 @@
 /* Import Advanced Animation System */
 @import './styles/advanced-animations.css';
 
+/* Import Premium Templates Animations */
+@import './styles/premium-animations.css';
+
 /* Import Premium Tour Animations */
 @import './styles/tour-animations.css';
 

@@ -548,9 +548,13 @@ export const useAppStore = create<AppStore>()(
           }
 
           // Always update local state even if database deletion fails
+          const { activeConversationId } = get();
+          const wasActiveConversation = activeConversationId === id;
+          
           set((state) => ({
             conversations: state.conversations.filter(conv => conv.id !== id),
-            activeConversationId: state.activeConversationId === id ? null : state.activeConversationId
+            activeConversationId: wasActiveConversation ? null : state.activeConversationId,
+            messages: wasActiveConversation ? [] : state.messages
           }));
         },
         
@@ -654,8 +658,9 @@ export const useAppStore = create<AppStore>()(
                   messages: [],
                   createdAt: new Date(conv.created_at),
                   updatedAt: new Date(conv.updated_at),
-                  type: 'general' as const,
+                  type: (conv.conversation_type || 'general') as 'general' | 'case-study',
                   specialty: conv.specialty as 'cardiology' | 'obgyn' | undefined,
+                  caseId: conv.case_id,
                   metadata: {
                     messageCount: conv.message_count || 0, // Use the stored message count!
                     lastActivity: new Date(conv.updated_at),

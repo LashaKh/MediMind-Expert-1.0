@@ -22,7 +22,11 @@ interface DiagnosisContext {
   specialty: string;
 }
 
-const DIAGNOSIS_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/89920f52-74cb-46bc-bf6c-b9099746dfe9";
+// Blue card (Heart Failure) endpoint
+const HEART_FAILURE_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/89920f52-74cb-46bc-bf6c-b9099746dfe9";
+
+// Red card (NSTEMI) endpoint  
+const NSTEMI_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4";
 
 /**
  * Formats the transcript with diagnosis context for the Flowise agent
@@ -88,6 +92,9 @@ export async function generateDiagnosisReport(
       };
     }
 
+    // Select the correct endpoint based on diagnosis type
+    const apiUrl = diagnosis.icdCode === 'I50.0' ? HEART_FAILURE_API_URL : NSTEMI_API_URL;
+
     const formattedRequest = formatDiagnosisRequest(transcript, diagnosis);
     
     const requestPayload: DiagnosisFlowiseRequest = {
@@ -97,10 +104,11 @@ export async function generateDiagnosisReport(
     console.log('🏥 Sending diagnosis request to Flowise agent:', {
       diagnosis: diagnosis.diagnosisEnglish,
       icdCode: diagnosis.icdCode,
+      endpoint: apiUrl,
       transcriptLength: transcript.length
     });
 
-    const response = await fetch(DIAGNOSIS_API_URL, {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -166,6 +174,16 @@ export const HEART_FAILURE_DIAGNOSIS: DiagnosisContext = {
 };
 
 /**
+ * NSTEMI diagnosis context
+ */
+export const NSTEMI_DIAGNOSIS: DiagnosisContext = {
+  icdCode: 'I24.9',
+  diagnosisGeorgian: 'გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი',
+  diagnosisEnglish: 'Non-ST elevation myocardial infarction',
+  specialty: 'Cardiology'
+};
+
+/**
  * Generate heart failure consultation report
  * Convenience function for the specific heart failure diagnosis
  */
@@ -174,11 +192,20 @@ export async function generateHeartFailureReport(transcript: string) {
 }
 
 /**
+ * Generate NSTEMI consultation report
+ * Convenience function for the specific NSTEMI diagnosis
+ */
+export async function generateNSTEMIReport(transcript: string) {
+  return generateDiagnosisReport(transcript, NSTEMI_DIAGNOSIS);
+}
+
+/**
  * Check if a template instruction is for diagnosis processing
  */
 export function isDiagnosisTemplate(instruction: string): boolean {
   return instruction.toLowerCase().includes('diagnosis') && 
-         instruction.toLowerCase().includes('i50.0');
+         (instruction.toLowerCase().includes('i50.0') || 
+          instruction.toLowerCase().includes('i24.9'));
 }
 
 /**
@@ -189,6 +216,12 @@ export function extractDiagnosisFromInstruction(instruction: string): DiagnosisC
       instruction.toLowerCase().includes('heart failure') ||
       instruction.toLowerCase().includes('გულის შეგუბებითი უკმარისობა')) {
     return HEART_FAILURE_DIAGNOSIS;
+  }
+  
+  if (instruction.toLowerCase().includes('i24.9') || 
+      instruction.toLowerCase().includes('nstemi') ||
+      instruction.toLowerCase().includes('გულის მწვავე იშემიური ავადმყოფობა')) {
+    return NSTEMI_DIAGNOSIS;
   }
   
   return null;

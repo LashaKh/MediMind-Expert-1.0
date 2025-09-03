@@ -75,6 +75,7 @@ interface TranscriptPanelProps {
   onProcessText?: (instruction: string, transcript?: string) => void;
   onClearAIError?: () => void;
   onClearHistory?: () => void;
+  onDeleteReport?: (analysis: ProcessingHistory) => void;
   onExpandChat?: (expandFunction: () => void) => void;
   
   // Speaker diarization props
@@ -114,6 +115,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   onProcessText,
   onClearAIError,
   onClearHistory,
+  onDeleteReport,
   onExpandChat,
   activeTab,
   onActiveTabChange,
@@ -325,6 +327,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onProcessText={(instruction) => onProcessText?.(instruction, currentTranscript)}
             onClearAIError={onClearAIError}
             onClearHistory={onClearHistory}
+            onDeleteReport={onDeleteReport}
             onSwitchToHistory={() => {
               // Switch to history view in AI tab by updating the view mode
               console.log('🔄 Auto-switching to history view after diagnosis completion');

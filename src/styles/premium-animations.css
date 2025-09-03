@@ -1,0 +1,287 @@
+/* Premium Medical Templates Animations */
+
+/* Shimmer Effect for Premium Cards */
+@keyframes premium-shimmer {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Subtle Pulse Animation for High Priority Items */
+@keyframes medical-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+/* Special Diagnosis Card Animation */
+@keyframes diagnosis-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 10px 25px -3px rgba(239, 68, 68, 0.1), 0 4px 6px -2px rgba(239, 68, 68, 0.05);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 20px 25px -5px rgba(239, 68, 68, 0.25), 0 10px 10px -5px rgba(239, 68, 68, 0.1);
+  }
+}
+
+/* Processing Indication Animation */
+@keyframes diagnosis-processing {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+}
+
+/* Smooth Accordion Animation */
+@keyframes accordion-slide-down {
+  from {
+    height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    height: var(--accordion-height);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes accordion-slide-up {
+  from {
+    height: var(--accordion-height);
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Floating Animation for Action Buttons */
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Glow Effect for Featured Cards */
+@keyframes medical-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.2), 0 0 40px rgba(239, 68, 68, 0.1);
+  }
+}
+
+/* Scale Animation for Hover States */
+@keyframes scale-hover {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}
+
+/* Stagger Animation for List Items */
+@keyframes stagger-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Elastic Scale for Buttons */
+@keyframes elastic-scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}
+
+/* Utility Classes */
+.premium-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all 0.6s ease;
+}
+
+.premium-shimmer:hover::before {
+  animation: premium-shimmer 0.8s ease-in-out;
+}
+
+.medical-pulse-high {
+  animation: medical-pulse 3s ease-in-out infinite;
+}
+
+.diagnosis-pulse {
+  animation: diagnosis-pulse 2s ease-in-out infinite;
+}
+
+.diagnosis-processing {
+  animation: diagnosis-processing 1.5s ease-in-out infinite;
+}
+
+.accordion-content {
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-expand {
+  animation: accordion-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-collapse {
+  animation: accordion-slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.float-gentle {
+  animation: float-gentle 3s ease-in-out infinite;
+}
+
+.medical-glow {
+  animation: medical-glow 4s ease-in-out infinite;
+}
+
+.scale-hover {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scale-hover:hover {
+  animation: elastic-scale 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stagger-item {
+  animation: stagger-fade-in 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0.1s; }
+.stagger-item:nth-child(2) { animation-delay: 0.2s; }
+.stagger-item:nth-child(3) { animation-delay: 0.3s; }
+.stagger-item:nth-child(4) { animation-delay: 0.4s; }
+.stagger-item:nth-child(5) { animation-delay: 0.5s; }
+
+/* Smooth transitions for all interactive elements */
+.premium-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus states for accessibility */
+.premium-focus:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Premium gradient backgrounds */
+.premium-gradient-red {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%);
+}
+
+.premium-gradient-blue {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+}
+
+.premium-gradient-purple {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
+}
+
+/* Glassmorphism effects */
+.glass-card {
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-card-dark {
+  backdrop-filter: blur(16px);
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive animations - reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .premium-shimmer::before,
+  .medical-pulse-high,
+  .float-gentle,
+  .medical-glow,
+  .scale-hover,
+  .stagger-item {
+    animation: none;
+  }
+  
+  .premium-transition {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass-card,
+  .glass-card-dark {
+    backdrop-filter: none;
+    background: var(--medical-gray-50);
+    border: 2px solid var(--medical-gray-900);
+  }
+  
+  .dark .glass-card,
+  .dark .glass-card-dark {
+    background: var(--medical-gray-900);
+    border: 2px solid var(--medical-gray-100);
+  }
+}

@@ -30,6 +30,8 @@ interface UseAIProcessingReturn {
   clearHistory: () => void;
   addToHistory: (instruction: string, response: string, model: string, tokensUsed?: number, processingTime?: number) => void;
   setProcessingHistory: (history: ProcessingHistory[]) => void;
+  deleteFromHistory: (timestamp: number) => void;
+  setProcessing: (processing: boolean) => void; // Add manual processing control
 }
 
 interface UseAIProcessingOptions {
@@ -210,6 +212,19 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
     setLastResult(null);
   }, []);
 
+  // Delete specific item from history
+  const deleteFromHistory = useCallback((timestamp: number) => {
+    setProcessingHistory(prev => {
+      const updated = prev.filter(item => item.timestamp !== timestamp);
+      console.log('🗑️ Deleted item from processing history:', {
+        originalCount: prev.length,
+        newCount: updated.length,
+        deletedTimestamp: timestamp
+      });
+      return updated;
+    });
+  }, []);
+
   return {
     processing,
     error,
@@ -220,6 +235,8 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
     clearError,
     clearHistory,
     addToHistory,
-    setProcessingHistory
+    setProcessingHistory,
+    deleteFromHistory,
+    setProcessing
   };
 };

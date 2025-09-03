@@ -22,6 +22,7 @@ import { isDiagnosisTemplate, extractDiagnosisFromInstruction } from '../../../s
 // Import new components
 import { MedicalAnalysisCard } from './MedicalAnalysisCard';
 import { QuickActionTemplates } from './QuickActionTemplates';
+import { PremiumTemplatesSection } from './PremiumTemplatesSection';
 
 interface ProcessingHistory {
   userInstruction: string;
@@ -41,6 +42,7 @@ interface AIProcessingContentProps {
   onProcessText?: (instruction: string) => void;
   onClearAIError?: () => void;
   onClearHistory?: () => void;
+  onDeleteReport?: (analysis: ProcessingHistory) => void;
   onSwitchToHistory?: () => void; // New callback for switching tabs
   onExpandChat?: (expandFunction: () => void) => void; // Pass expand function to parent
 }
@@ -57,6 +59,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   onProcessText,
   onClearAIError,
   onClearHistory,
+  onDeleteReport,
   onSwitchToHistory,
   onExpandChat
 }) => {
@@ -69,15 +72,15 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   const switchToHistoryRef = useRef<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Debug logging
-  console.log('🔍 AIProcessingContent Debug:', {
-    hasTranscript,
-    transcriptLength: transcript?.length || 0,
-    transcriptPreview: transcript?.slice(0, 50) + '...',
-    isChatExpanded,
-    processing,
-    shouldShowButton: hasTranscript && !isChatExpanded && !processing
-  });
+  // Debug logging (disabled in production)
+  // console.log('🔍 AIProcessingContent Debug:', {
+  //   hasTranscript,
+  //   transcriptLength: transcript?.length || 0,
+  //   transcriptPreview: transcript?.slice(0, 50) + '...',
+  //   isChatExpanded,
+  //   processing,
+  //   shouldShowButton: hasTranscript && !isChatExpanded && !processing
+  // });
 
   // Auto-switch to history when processing completes for diagnosis
   useEffect(() => {
@@ -312,8 +315,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
           {viewMode === 'templates' && (
             <div className="space-y-6">
 
-              {/* Quick Analysis Templates */}
-              <QuickActionTemplates
+              {/* Premium Templates Section */}
+              <PremiumTemplatesSection
                 onSelectTemplate={handleTemplateSelect}
                 disabled={processing}
                 hasTranscript={hasTranscript}
@@ -332,6 +335,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       analysis={analysis}
                       index={index}
                       totalCount={processingHistory.length}
+                      onDelete={onDeleteReport}
                     />
                   ))}
                 </div>
@@ -487,19 +491,55 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
         document.body
       )}
 
-      {/* Processing Indicator */}
+      {/* Enhanced Processing Indicator */}
       {processing && (
-        <div className="fixed bottom-6 right-6" style={{ zIndex: 9999998 }}>
-          <div className="flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-xl shadow-2xl backdrop-blur-sm">
-            <div className="animate-pulse">
-              <HeartHandshake className="w-5 h-5" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-medium">Generating medical report...</span>
-              <span className="text-xs text-blue-200">Consulting specialized AI agent</span>
+        <>
+          {/* Full-screen processing overlay for major visual feedback */}
+          <div className="fixed inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center animate-in fade-in duration-300">
+            <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-2xl p-8 mx-4 max-w-sm w-full text-center animate-in slide-in-from-bottom-4 duration-500">
+              {/* Animated medical icon */}
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg animate-pulse">
+                <HeartHandshake className="w-8 h-8 text-white animate-bounce" />
+              </div>
+              
+              {/* Processing text */}
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">
+                Generating Medical Report
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Our specialized AI is analyzing your transcript and preparing a comprehensive medical report...
+              </p>
+              
+              {/* Progress indicator */}
+              <div className="flex items-center justify-center space-x-2 text-xs text-slate-500 dark:text-slate-400">
+                <div className="flex space-x-1">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                </div>
+                <span className="ml-2">Processing...</span>
+              </div>
+              
+              {/* Estimated time */}
+              <div className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                Estimated time: 30-45 seconds
+              </div>
             </div>
           </div>
-        </div>
+          
+          {/* Alternative: Bottom notification for less intrusive feedback */}
+          {/* <div className="fixed bottom-6 right-6" style={{ zIndex: 9999998 }}>
+            <div className="flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-xl shadow-2xl backdrop-blur-sm animate-in slide-in-from-right duration-300">
+              <div className="animate-pulse">
+                <HeartHandshake className="w-5 h-5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-medium">Generating medical report...</span>
+                <span className="text-xs text-blue-200">Consulting specialized AI agent</span>
+              </div>
+            </div>
+          </div> */}
+        </>
       )}
     </>
   );

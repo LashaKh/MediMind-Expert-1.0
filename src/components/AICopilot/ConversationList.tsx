@@ -60,16 +60,18 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   }, [loadConversationsFromDatabase]);
 
   // Convert conversations to summaries format
-  const conversationSummaries: ConversationSummary[] = conversations.map((conv): ConversationSummary => ({
-    id: conv.id,
-    title: conv.title,
-    type: conv.type,
-    lastMessage: conv.messages?.[conv.messages.length - 1]?.content || undefined,
-    updatedAt: new Date(conv.updatedAt || conv.createdAt),
-    messageCount: conv.metadata?.messageCount || conv.messages?.length || 0,
-    specialty: conv.specialty,
-    caseId: conv.caseId
-  }));
+  const conversationSummaries: ConversationSummary[] = conversations.map((conv): ConversationSummary => {
+    return {
+      id: conv.id,
+      title: conv.title,
+      type: conv.type,
+      lastMessage: conv.messages?.[conv.messages.length - 1]?.content || undefined,
+      updatedAt: new Date(conv.updatedAt || conv.createdAt),
+      messageCount: conv.metadata?.messageCount || conv.messages?.length || 0,
+      specialty: conv.specialty,
+      caseId: conv.caseId
+    };
+  });
 
   // Filter and sort conversations
   const filteredConversations = conversationSummaries
