@@ -52,8 +52,7 @@ export function useLikedResults(options: UseLikedResultsOptions = {}): [UseLiked
   
   // Debug authentication state
   useEffect(() => {
-    .toISOString()
-    });
+    // Authentication state logging removed
   }, [user, autoLoad]);
   
   const [state, setState] = useState<UseLikedResultsState>({

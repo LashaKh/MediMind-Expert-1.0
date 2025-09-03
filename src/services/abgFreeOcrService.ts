@@ -115,11 +115,6 @@ function validateABGText(text: string): {
   );
 
   // Debug logging to understand fallback decisions
-  .length,
-    specialCharRatio: specialCharRatio.toFixed(2),
-    shouldFallback: shouldFallbackToGemini,
-    issues: issues.length > 0 ? issues : 'none'
-  });
 
   return {
     qualityScore,

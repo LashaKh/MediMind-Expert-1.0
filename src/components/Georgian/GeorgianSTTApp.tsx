@@ -330,19 +330,30 @@ export const GeorgianSTTApp: React.FC = () => {
 
     // Check if this is a diagnosis request and route to specialized service
     if (isDiagnosisTemplate(instruction)) {
-
+      console.log('🩺 Diagnosis template detected:', instruction);
+      
       const diagnosisInfo = extractDiagnosisFromInstruction(instruction);
       if (diagnosisInfo) {
-
+        console.log('🩺 Diagnosis info extracted:', diagnosisInfo);
+        console.log('📝 Transcript length:', transcript.length);
+        console.log('📝 Transcript preview:', transcript.substring(0, 200) + '...');
+        
         // Manually manage processing state for diagnosis service
         // We can't use the regular processText as it goes to a different endpoint
 
         setProcessing(true);
         
         try {
+          console.log('🚀 Starting diagnosis report generation...');
           const startTime = Date.now();
           const diagnosisResult = await generateDiagnosisReport(transcript, diagnosisInfo);
           const processingTime = Date.now() - startTime;
+          
+          console.log('✅ Diagnosis report completed:', {
+            success: diagnosisResult.success,
+            processingTime,
+            reportLength: diagnosisResult.success ? diagnosisResult.report?.length : 0
+          });
 
           if (diagnosisResult.success && currentSession) {
             // Save diagnosis result to session with special metadata
@@ -355,9 +366,11 @@ export const GeorgianSTTApp: React.FC = () => {
             };
             
             const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
+            console.log('💾 Session save result:', { saveSuccess, sessionId: currentSession.id });
             
             if (saveSuccess) {
               // Also add to the AI processing history for immediate UI update
+              console.log('📈 Adding diagnosis to UI history...');
               addToHistory(
                 processingResultData.userInstruction,
                 processingResultData.aiResponse,
@@ -365,9 +378,18 @@ export const GeorgianSTTApp: React.FC = () => {
                 processingResultData.tokensUsed,
                 processingResultData.processingTime
               );
-
+              console.log('✅ Diagnosis added to UI history');
             } else {
-
+              console.error('❌ Failed to save diagnosis to session - not adding to UI history');
+              // Still add to UI history even if session save failed
+              console.log('📈 Adding diagnosis to UI history anyway...');
+              addToHistory(
+                processingResultData.userInstruction,
+                processingResultData.aiResponse,
+                processingResultData.model,
+                processingResultData.tokensUsed,
+                processingResultData.processingTime
+              );
             }
           } else {
 
@@ -396,7 +418,12 @@ export const GeorgianSTTApp: React.FC = () => {
             }
           }
         } catch (error) {
-
+          console.error('🚨 Diagnosis processing failed:', error);
+          console.error('Diagnosis info:', diagnosisInfo);
+          console.error('Transcript length:', transcript.length);
+          
+          // Set error state for user feedback
+          setAIError('Failed to generate diagnosis report. Please try again.');
         } finally {
           // Always reset processing state
           setProcessing(false);
@@ -448,9 +475,6 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Handle report deletion with database sync
   const handleDeleteReport = useCallback(async (analysis: ProcessingHistory) => {
-    + '...',
-      sessionId: currentSession?.id
-    });
 
     // Remove from local state immediately for responsive UI
     deleteFromHistory(analysis.timestamp);
@@ -493,7 +517,10 @@ export const GeorgianSTTApp: React.FC = () => {
         // Refresh sessions to ensure UI shows updated data
         await refreshSessions();
       } catch (error) {
-
+        console.error('🚨 Failed to delete report from database:', error);
+        console.error('Session ID:', currentSession.id);
+        console.error('Report timestamp:', analysis.timestamp);
+        
         // Re-add to local state if deletion failed
         addToHistory(
           analysis.userInstruction,
@@ -889,6 +916,9 @@ export const GeorgianSTTApp: React.FC = () => {
                 onSpeakerCountChange={setSpeakerCount}
                 // Speaker diarization results from hook
                 hasSpeakers={hasSpeakerResults}
+                // STT Model selection props
+                selectedSTTModel={selectedSTTModel}
+                onModelChange={updateSelectedSTTModel}
                 speakers={speakerSegments}
                 onExpandChat={handleSetExpandChatFunction}
               />
@@ -938,6 +968,9 @@ export const GeorgianSTTApp: React.FC = () => {
               // Speaker diarization results from hook
               hasSpeakers={hasSpeakerResults}
               speakers={speakerSegments}
+              // STT Model selection props
+              selectedSTTModel={selectedSTTModel}
+              onModelChange={updateSelectedSTTModel}
               onExpandChat={handleSetExpandChatFunction}
             />
           </div>

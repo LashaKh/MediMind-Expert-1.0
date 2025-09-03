@@ -84,23 +84,35 @@ export async function generateDiagnosisReport(
   transcript: string,
   diagnosis: DiagnosisContext
 ): Promise<{ success: true; report: string } | { success: false; error: string }> {
+  console.log('🔬 Diagnosis service: Starting report generation');
+  console.log('📋 Input:', {
+    transcriptLength: transcript.length,
+    diagnosis: diagnosis.diagnosisEnglish,
+    icdCode: diagnosis.icdCode
+  });
+  
   try {
     if (!transcript.trim()) {
+      const error = 'Transcript is required for diagnosis report generation';
+      console.error('❌ Diagnosis service error:', error);
       return {
         success: false,
-        error: 'Transcript is required for diagnosis report generation'
+        error
       };
     }
 
     // Select the correct endpoint based on diagnosis type
     const apiUrl = diagnosis.icdCode === 'I50.0' ? HEART_FAILURE_API_URL : NSTEMI_API_URL;
+    console.log('🌐 API URL selected:', apiUrl);
 
     const formattedRequest = formatDiagnosisRequest(transcript, diagnosis);
+    console.log('📄 Formatted request length:', formattedRequest.length);
     
     const requestPayload: DiagnosisFlowiseRequest = {
       question: formattedRequest
     };
 
+    console.log('🚀 Making API request to diagnosis endpoint...');
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -112,7 +124,12 @@ export async function generateDiagnosisReport(
 
     if (!response.ok) {
       const errorText = await response.text();
-
+      console.error('❌ Diagnosis API request failed:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorText: errorText.substring(0, 500)
+      });
+      
       return {
         success: false,
         error: `API request failed: ${response.status} ${response.statusText}`
@@ -120,22 +137,34 @@ export async function generateDiagnosisReport(
     }
 
     const data: DiagnosisFlowiseResponse = await response.json();
+    console.log('📥 API Response received:', {
+      hasText: !!data.text,
+      textLength: data.text?.length || 0,
+      responseKeys: Object.keys(data)
+    });
     
     if (!data.text) {
-
+      console.error('❌ Invalid response format from diagnosis API:', data);
       return {
         success: false,
         error: 'Invalid response format from diagnosis API'
       };
     }
 
+    console.log('✅ Diagnosis report generated successfully');
     return {
       success: true,
       report: data.text
     };
 
   } catch (error) {
-
+    console.error('🚨 Fatal error in diagnosis service:', error);
+    console.error('Error details:', {
+      name: error instanceof Error ? error.name : 'Unknown',
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    
     return {
       success: false,
       error: error instanceof Error 

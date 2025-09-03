@@ -91,6 +91,10 @@ interface TranscriptPanelProps {
     StartSeconds: number;
     EndSeconds: number;
   }>;
+  
+  // STT Model selection props
+  selectedSTTModel?: 'STT1' | 'STT2' | 'STT3';
+  onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
 }
 
 export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
@@ -124,7 +128,10 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   onSpeakerCountChange,
   // Speaker diarization results
   hasSpeakers: hasSpeakersFromHook = false,
-  speakers: speakersFromHook = []
+  speakers: speakersFromHook = [],
+  // STT Model selection props
+  selectedSTTModel = 'STT3',
+  onModelChange
 }) => {
   const [contextText, setContextText] = useState('');
   const [isRecordingContext, setIsRecordingContext] = useState(false);
@@ -327,6 +334,8 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onToggleSpeakerDiarization={onToggleSpeakerDiarization}
             speakerCount={speakerCount}
             onSpeakerCountChange={onSpeakerCountChange}
+            selectedSTTModel={selectedSTTModel}
+            onModelChange={onModelChange}
           />
         );
       

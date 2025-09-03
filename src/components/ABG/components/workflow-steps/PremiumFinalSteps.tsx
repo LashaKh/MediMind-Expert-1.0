@@ -66,14 +66,6 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
   const finalResult = abgResult || completedResult || storeResult;
 
   // Debug logging
-  ,
-    actionPlanLength: finalResult?.action_plan?.length || 0,
-    actionPlanPreview: finalResult?.action_plan?.substring(0, 200),
-    workflowStep: workflow?.currentStep,
-    workflowStatus: workflow?.processingStatus,
-    hasWorkflowActionPlan: !!(workflow?.actionPlanResult?.data),
-    workflowActionPlanLength: workflow?.actionPlanResult?.data?.length || 0
-  });
 
   const handleSaveToProfile = async () => {
     setIsSaving(true);
@@ -107,8 +99,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
   };
 
   const handleSelectiveConsultation = () => {
-
-    });
+    // Debug logging removed
     
     if (finalResult && finalResult.action_plan) {
       setShowActionSelector(true);

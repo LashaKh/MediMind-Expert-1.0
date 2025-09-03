@@ -54,16 +54,14 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
   // Sync with session processing results when they change
   useEffect(() => {
     if (options?.sessionProcessingResults) {
-      + '...',
-          responseLength: r.aiResponse.length,
-          timestamp: r.timestamp
-        }))
+      console.log('🔄 Syncing processing history from session:', {
+        sessionResults: options.sessionProcessingResults.length,
+        currentHistory: processingHistory.length
       });
       setProcessingHistory(options.sessionProcessingResults);
-    } else {
-
-      setProcessingHistory([]);
     }
+    // Don't reset to empty array when sessionProcessingResults is undefined
+    // This preserves dynamically added items like diagnosis reports
   }, [options?.sessionProcessingResults]);
 
   // Process text with AI
@@ -72,10 +70,6 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
     userInstruction: string,
     model = 'gpt-4o-mini'
   ): Promise<ProcessingResult | null> => {
-    + '...',
-      userInstruction,
-      model
-    });
 
     if (!transcript.trim() || !userInstruction.trim()) {
       console.error('❌ Validation failed:', {
@@ -156,24 +150,21 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
       timestamp: Date.now()
     };
 
-    + '...',
-      responseLength: response.length,
+    console.log('📝 Adding to processing history:', {
       model,
-      tokensUsed,
-      processingTime,
-      timestamp: historyItem.timestamp
+      responseLength: response.length,
+      currentHistoryLength: processingHistory.length
     });
 
     setProcessingHistory(prev => {
       const newHistory = [historyItem, ...prev];
-      + '...',
-          responseLength: item.aiResponse.length,
-          timestamp: item.timestamp
-        }))
+      console.log('✅ Updated processing history:', {
+        previousLength: prev.length,
+        newLength: newHistory.length
       });
       return newHistory;
     });
-  }, []);
+  }, [processingHistory.length]);
 
   // Clear error
   const clearError = useCallback(() => {

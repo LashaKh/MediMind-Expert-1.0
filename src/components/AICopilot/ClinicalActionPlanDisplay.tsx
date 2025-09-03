@@ -318,12 +318,6 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
     // });
 
     // Debug logging for parsed issues
-    ,
-        priority: issue.priority,
-        sectionsCount: issue.sections?.length || 0,
-        contentPreview: issue.content?.substring(0, 100) + '...'
-      }))
-    });
 
     return validIssues;
   }, [actionPlan]);
@@ -331,8 +325,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
   // Debug logging for medical issues
   useEffect(() => {
     if (medicalIssues.length > 0) {
-
-      });
+      // Debug logging removed
     }
   }, [medicalIssues]);
 

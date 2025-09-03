@@ -81,10 +81,29 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
 
   // Auto-switch to history when processing completes for diagnosis
   useEffect(() => {
-    if (switchToHistoryRef.current && !processing && processingHistory.length > 0) {
-
-      setViewMode('history');
-      switchToHistoryRef.current = false;
+    if (switchToHistoryRef.current && !processing) {
+      console.log('🔄 Auto-switch check:', {
+        switchToHistoryRef: switchToHistoryRef.current,
+        processing,
+        historyLength: processingHistory.length,
+        shouldSwitch: processingHistory.length > 0
+      });
+      
+      if (processingHistory.length > 0) {
+        console.log('🎯 Auto-switching to history view after diagnosis completion');
+        setViewMode('history');
+        switchToHistoryRef.current = false;
+      } else {
+        // Wait a bit for processingHistory to update, then try again
+        console.log('⏳ Waiting for processingHistory to update...');
+        setTimeout(() => {
+          if (switchToHistoryRef.current && processingHistory.length > 0) {
+            console.log('🎯 Auto-switching to history view (delayed)');
+            setViewMode('history');
+            switchToHistoryRef.current = false;
+          }
+        }, 100);
+      }
     }
   }, [processing, processingHistory.length]);
 
