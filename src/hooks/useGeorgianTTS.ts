@@ -90,6 +90,13 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     email: null
   });
   
+  // STT model selection state
+  const [selectedSTTModel, setSelectedSTTModel] = useState<'STT1' | 'STT2' | 'STT3'>(() => {
+    // Load from localStorage or default to STT3
+    const saved = localStorage.getItem('medimind_stt_model');
+    return (saved === 'STT1' || saved === 'STT2' || saved === 'STT3') ? saved : 'STT3';
+  });
+  
   // Speaker diarization state
   const [speakerSegments, setSpeakerSegments] = useState<SpeakerSegment[]>([]);
   const [hasSpeakerResults, setHasSpeakerResults] = useState(false);
@@ -147,6 +154,12 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       const status = georgianTTSServiceRef.current.getAuthStatus();
       setAuthStatus(status);
     }
+  }, []);
+
+  const updateSelectedSTTModel = useCallback((model: 'STT1' | 'STT2' | 'STT3') => {
+    setSelectedSTTModel(model);
+    localStorage.setItem('medimind_stt_model', model);
+    console.log(`🎯 STT model changed to: ${model}`);
   }, []);
 
   // Initialize service and authenticate
@@ -436,6 +449,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         autocorrect,
         punctuation,
         digits,
+        engine: selectedSTTModel, // Use selected STT model
         enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
         speakers: optionsRef.current.speakers ?? 2, // Use current ref value
         maxRetries: 2 // Moderate retries for parallel chunks
@@ -630,6 +644,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               autocorrect,
               punctuation,
               digits,
+              engine: selectedSTTModel, // Use selected STT model
               enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
               speakers: optionsRef.current.speakers ?? 2, // Use current props value
               maxRetries: 2 // Moderate retries since this should work as "first request"
@@ -790,6 +805,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
           autocorrect,
           punctuation,
           digits,
+          engine: selectedSTTModel, // Use selected STT model
           enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
           speakers: optionsRef.current.speakers ?? 2, // Use current props value
           maxRetries: 2
@@ -889,6 +905,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
                 autocorrect, 
                 punctuation, 
                 digits, 
+                engine: selectedSTTModel, // Use selected STT model
                 enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
                 speakers: optionsRef.current.speakers ?? 2, // Use current props value
                 maxRetries: 2
@@ -956,6 +973,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               autocorrect, 
               punctuation, 
               digits, 
+              engine: selectedSTTModel, // Use selected STT model
               enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
               speakers: optionsRef.current.speakers ?? 2, // Use current props value
               maxRetries: 2
@@ -1281,6 +1299,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
           autocorrect,
           punctuation,
           digits,
+          engine: selectedSTTModel, // Use selected STT model
           enableSpeakerDiarization,
           speakers,
           onProgress: (progress) => {
@@ -1409,6 +1428,9 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     authStatus,
     isSupported,
     
+    // STT model selection state
+    selectedSTTModel,
+    
     // Speaker diarization state
     speakerSegments,
     hasSpeakerResults,
@@ -1423,6 +1445,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     clearResult,
     resetTranscript,
     updateAuthStatus,
+    updateSelectedSTTModel,
     
     // Computed values
     canRecord: isSupported && !recordingState.isRecording && !isTranscribing,

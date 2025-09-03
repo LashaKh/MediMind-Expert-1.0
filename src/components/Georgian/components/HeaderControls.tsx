@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Activity, Sparkles, Zap, Mic, Square, Stethoscope, FileText, Clock } from 'lucide-react';
+import { Shield, Activity, Sparkles, Zap, Mic, Square, Stethoscope, FileText, Clock, Settings } from 'lucide-react';
 
 interface AuthStatus {
   isAuthenticated: boolean;
@@ -21,6 +21,9 @@ interface HeaderControlsProps {
   canStop?: boolean;
   onStartRecording?: () => void;
   onStopRecording?: () => void;
+  // STT model selection
+  selectedSTTModel?: 'STT1' | 'STT2' | 'STT3';
+  onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
 }
 
 export const HeaderControls: React.FC<HeaderControlsProps> = ({
@@ -33,7 +36,9 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
   canRecord = false,
   canStop = false,
   onStartRecording,
-  onStopRecording
+  onStopRecording,
+  selectedSTTModel = 'STT3',
+  onModelChange
 }) => {
   return (
     <div className="relative overflow-hidden">
@@ -102,6 +107,23 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
 
           {/* Right Section - Mobile-Optimized Status */}
           <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 flex-shrink-0">
+            {/* STT Model Selector */}
+            {onModelChange && (
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <Settings className="w-3 h-3 sm:w-4 sm:h-4 text-slate-600 dark:text-slate-400" />
+                <select
+                  value={selectedSTTModel}
+                  onChange={(e) => onModelChange(e.target.value as 'STT1' | 'STT2' | 'STT3')}
+                  className="text-xs sm:text-sm font-medium bg-white/90 dark:bg-gray-800/90 border border-slate-300 dark:border-gray-600 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
+                  disabled={recordingState.isRecording}
+                  title={recordingState.isRecording ? "Cannot change model during recording" : "Select STT model"}
+                >
+                  <option value="STT1">STT1 (Fast)</option>
+                  <option value="STT2">STT2 (Balanced)</option>
+                  <option value="STT3">STT3 (Accurate)</option>
+                </select>
+              </div>
+            )}
             {/* Mobile Record Button - Only show on mobile when recording functions are available */}
             {activeTab === 'transcript' && (onStartRecording || onStopRecording) && (
               <button

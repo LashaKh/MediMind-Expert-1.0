@@ -130,7 +130,7 @@ export class GeorgianTTSService {
       Autocorrect: options.autocorrect ?? true,
       Punctuation: options.punctuation ?? true,
       Digits: options.digits ?? true,
-      ...(options.engine && { Engine: options.engine }),
+      Engine: options.engine, // Use the engine as provided, no default
       ...(options.model && { Model: options.model }),
       // Always include speaker diarization parameters for debugging
       enableSpeakerDiarization: options.enableSpeakerDiarization ?? false,
@@ -140,6 +140,7 @@ export class GeorgianTTSService {
     console.log('🎭 GeorgianTTSService: Sending request to Edge Function:', {
       enableSpeakerDiarization: options.enableSpeakerDiarization,
       speakers: options.speakers,
+      engine: options.engine,
       hasEngine: !!options.engine,
       language: request.Language,
       requestHasSpeakerParams: !!(request.enableSpeakerDiarization && request.Speakers)
@@ -148,6 +149,7 @@ export class GeorgianTTSService {
     console.log('🎭 GeorgianTTSService: Actual request object being sent:', {
       enableSpeakerDiarization: request.enableSpeakerDiarization,
       Speakers: request.Speakers,
+      Engine: request.Engine,
       Language: request.Language,
       audioDataLength: request.theAudioDataAsBase64?.length || 0
     });
@@ -158,14 +160,16 @@ export class GeorgianTTSService {
     console.log('🎭 GeorgianTTSService: JSON.stringify result check:', {
       originalRequest: {
         enableSpeakerDiarization: request.enableSpeakerDiarization,
-        Speakers: request.Speakers
+        Speakers: request.Speakers,
+        Engine: request.Engine
       },
       stringifiedAndParsed: {
         enableSpeakerDiarization: parsedBody.enableSpeakerDiarization,
-        Speakers: parsedBody.Speakers
+        Speakers: parsedBody.Speakers,
+        Engine: parsedBody.Engine
       },
       requestBodyLength: requestBody.length,
-      hasAllKeys: Object.keys(parsedBody).includes('enableSpeakerDiarization') && Object.keys(parsedBody).includes('Speakers')
+      hasAllKeys: Object.keys(parsedBody).includes('enableSpeakerDiarization') && Object.keys(parsedBody).includes('Speakers') && Object.keys(parsedBody).includes('Engine')
     });
 
     const [response, error] = await safeAsync(

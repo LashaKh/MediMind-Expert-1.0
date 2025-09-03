@@ -188,6 +188,9 @@ export const GeorgianSTTApp: React.FC = () => {
     // Speaker diarization state from hook
     speakerSegments,
     hasSpeakerResults,
+    // STT model selection
+    selectedSTTModel,
+    updateSelectedSTTModel,
     // service // Currently unused
   } = useGeorgianTTS({
     language: 'ka-GE',
@@ -684,6 +687,8 @@ export const GeorgianSTTApp: React.FC = () => {
         canStop={canStop}
         onStartRecording={handleStartRecording}
         onStopRecording={stopRecording}
+        selectedSTTModel={selectedSTTModel}
+        onModelChange={updateSelectedSTTModel}
       />
 
       {/* Mobile-First Responsive Layout */}
