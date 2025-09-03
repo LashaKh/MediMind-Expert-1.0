@@ -93,7 +93,6 @@ interface TranscriptPanelProps {
   }>;
 }
 
-
 export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   currentSession,
   localTranscript,
@@ -179,12 +178,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const hasTranscript = currentTranscript.length > 0;
   
   // Debug transcript resolution (disabled in production)
-  // console.log('🔍 Transcript resolution:', {
-  //   hasEditableTranscript: !!editableTranscript,
-  //   editableLength: editableTranscript?.length || 0,
-  //   hasLocalTranscript: !!localTranscript,
-  //   hasSessionTranscript: !!currentSession?.transcript,
-  //   finalTranscript: currentTranscript.slice(0, 100) + '...'
+  // + '...'
   // });
   
   // Track recording session changes for cleanup
@@ -203,7 +197,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   useEffect(() => {
     // Don't update if user is currently typing to prevent interference
     if (isUserTypingRef.current) {
-      console.log('🚫 TranscriptPanel: Skipping update while user is typing');
+
       return;
     }
     
@@ -215,7 +209,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     
     const transcript = sessionLength >= localLength ? sessionTranscript : localTranscript || '';
     setEditableTranscript(transcript);
-    console.log(`📝 TranscriptPanel: Updated editableTranscript - localLength: ${localLength}, sessionLength: ${sessionLength}, using: ${transcript === sessionTranscript ? 'session' : 'local'}`);
+
   }, [currentSession?.id, localTranscript, currentSession?.transcript]); // Depend on session changes and transcript updates
   
   // Sync context recording state with actual recording state
@@ -295,7 +289,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     // Set timeout to mark typing as finished after user stops typing for 500ms
     typingTimeoutRef.current = setTimeout(() => {
       isUserTypingRef.current = false;
-      console.log('⌨️ User stopped typing, enabling transcript updates');
+
     }, 500);
     
     setEditableTranscript(newTranscript);
@@ -311,7 +305,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       // Handle file upload transcription results only
       const newText = transcriptionResult.text.trim();
       if (newText && newText !== editableTranscript.trim()) {
-        console.log('📁 File upload transcription result processed');
+
         setEditableTranscript(newText);
       }
     }
@@ -369,7 +363,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onDeleteReport={onDeleteReport}
             onSwitchToHistory={() => {
               // Switch to history view in AI tab by updating the view mode
-              console.log('🔄 Auto-switching to history view after diagnosis completion');
+
               // This will trigger the view change inside AIProcessingContent
             }}
             onExpandChat={onExpandChat}

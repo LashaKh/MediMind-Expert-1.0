@@ -92,7 +92,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
     });
     
     if (!hasSpeakers || !speakers || speakers.length === 0) {
-      console.log('🎭 TranscriptContent: No speakers to render - showing regular transcript');
+
       return null;
     }
 
@@ -148,12 +148,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => {
-                      console.log('🎭 TranscriptContent: Speaker diarization toggle clicked:', {
-                        currentState: enableSpeakerDiarization,
-                        newState: !enableSpeakerDiarization,
-                        speakerCount,
-                        isRecording: recordingState.isRecording
-                      });
+
                       onToggleSpeakerDiarization?.(!enableSpeakerDiarization);
                     }}
                     className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 medical-touch-target ${
@@ -173,12 +168,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                       value={speakerCount}
                       onChange={(e) => {
                         const newCount = parseInt(e.target.value);
-                        console.log('🎭 TranscriptContent: Speaker count changed:', {
-                          previousCount: speakerCount,
-                          newCount,
-                          enableSpeakerDiarization,
-                          isRecording: recordingState.isRecording
-                        });
+
                         onSpeakerCountChange?.(newCount);
                       }}
                       className="bg-white dark:bg-gray-700 border border-indigo-200/50 dark:border-indigo-600/50 rounded-lg px-2 py-1 text-sm text-indigo-700 dark:text-indigo-300 medical-touch-target"
@@ -257,7 +247,6 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             </div>
           </div>
         </div>
-        
 
         {/* Subtle Corner Accents */}
         <div className="absolute top-0 left-0 w-8 h-8 bg-gradient-to-br from-indigo-400/20 to-transparent rounded-3xl" />

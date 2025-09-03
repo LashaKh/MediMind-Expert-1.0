@@ -229,9 +229,7 @@ serve(async (req) => {
       formData.append('Autocorrect', body.Autocorrect.toString())
       formData.append('Punctuation', body.Punctuation.toString())
       formData.append('Digits', body.Digits.toString())
-      if (body.Engine) {
-        formData.append('Engine', body.Engine)
-      }
+      formData.append('Engine', 'STT2') // Use STT2 model for speaker diarization
 
       console.log('🚀 Sending to Enagramm RecognizeSpeechFileSubmit with speaker diarization...', {
         Speakers: body.Speakers,
@@ -293,18 +291,18 @@ serve(async (req) => {
     // Fallback to regular speech recognition (no speaker diarization)
     console.log('🎤 Regular speech recognition requested...')
     
-    // Prepare the request (REMOVED STT1 ENGINE REQUIREMENT)
+    // Prepare the request with STT2 engine
     const speechRequest = {
       theAudioDataAsBase64: body.theAudioDataAsBase64,
+      Engine: 'STT2', // Use STT2 model
       Language: body.Language === 'ka-GE' ? 'ka' : body.Language, // Convert ka-GE to ka for compatibility
       Punctuation: body.Punctuation,
       Autocorrect: body.Autocorrect,
       Digits: body.Digits
-      // NOTE: Engine is NOT specified, letting Enagramm use default engine
     }
 
     console.log('🚀 Sending to Enagramm RecognizeSpeech endpoint...', {
-      Engine: 'DEFAULT (no engine specified)', // FIXED: Use default engine instead of STT1
+      Engine: 'STT2', // Using STT2 model
       Language: speechRequest.Language,
       Punctuation: speechRequest.Punctuation,
       Autocorrect: speechRequest.Autocorrect,

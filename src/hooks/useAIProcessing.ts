@@ -54,17 +54,14 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
   // Sync with session processing results when they change
   useEffect(() => {
     if (options?.sessionProcessingResults) {
-      console.log('🔄 Syncing processing history with session data:', {
-        sessionResultsCount: options.sessionProcessingResults.length,
-        results: options.sessionProcessingResults.map(r => ({
-          instruction: r.userInstruction.slice(0, 30) + '...',
+      + '...',
           responseLength: r.aiResponse.length,
           timestamp: r.timestamp
         }))
       });
       setProcessingHistory(options.sessionProcessingResults);
     } else {
-      console.log('🔄 No session processing results, clearing history');
+
       setProcessingHistory([]);
     }
   }, [options?.sessionProcessingResults]);
@@ -75,10 +72,7 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
     userInstruction: string,
     model = 'gpt-4o-mini'
   ): Promise<ProcessingResult | null> => {
-    console.log('🚀 AI Processing started:', {
-      hasTranscript: !!transcript,
-      transcriptLength: transcript?.length || 0,
-      transcriptPreview: transcript?.slice(0, 100) + '...',
+    + '...',
       userInstruction,
       model
     });
@@ -92,11 +86,9 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
       return null;
     }
 
-    console.log('✅ Validation passed, starting processing...');
     setProcessing(true);
     setError(null);
 
-    console.log('📡 Calling Supabase Edge Function...');
     const startTime = Date.now();
     
     const [result, processError] = await safeAsync(
@@ -110,23 +102,16 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
     );
     
     const callTime = Date.now() - startTime;
-    console.log('⏱️ Function call completed:', {
-      duration: callTime + 'ms',
-      hasResult: !!result,
-      hasError: !!processError
-    });
 
     if (processError) {
-      console.error('❌ Process error:', processError);
+
       setError(`Processing failed: ${processError.message}`);
       setProcessing(false);
       return null;
     }
 
-    console.log('📊 Raw result:', result);
-    
     if (result?.error) {
-      console.error('❌ Result error:', result.error);
+
       setError(`Processing error: ${result.error.message || result.error}`);
       setProcessing(false);
       return null;
@@ -138,13 +123,6 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
       tokensUsed: result.data?.tokensUsed,
       processingTime: result.data?.processingTime || callTime
     };
-
-    console.log('✅ Processing completed successfully:', {
-      resultLength: processedResult.result.length,
-      model: processedResult.model,
-      tokensUsed: processedResult.tokensUsed,
-      processingTime: processedResult.processingTime
-    });
 
     setLastResult(processedResult);
     
@@ -178,8 +156,7 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
       timestamp: Date.now()
     };
 
-    console.log('📋 Adding to processing history:', {
-      instruction: instruction.slice(0, 50) + '...',
+    + '...',
       responseLength: response.length,
       model,
       tokensUsed,
@@ -189,10 +166,7 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
 
     setProcessingHistory(prev => {
       const newHistory = [historyItem, ...prev];
-      console.log('📊 Updated processing history:', {
-        newCount: newHistory.length,
-        items: newHistory.map(item => ({
-          instruction: item.userInstruction.slice(0, 30) + '...',
+      + '...',
           responseLength: item.aiResponse.length,
           timestamp: item.timestamp
         }))
@@ -216,11 +190,7 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
   const deleteFromHistory = useCallback((timestamp: number) => {
     setProcessingHistory(prev => {
       const updated = prev.filter(item => item.timestamp !== timestamp);
-      console.log('🗑️ Deleted item from processing history:', {
-        originalCount: prev.length,
-        newCount: updated.length,
-        deletedTimestamp: timestamp
-      });
+
       return updated;
     });
   }, []);

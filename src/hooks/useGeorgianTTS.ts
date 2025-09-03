@@ -262,12 +262,10 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       const hasRecorder = !!mediaRecorderRef.current;
       const recorderState = mediaRecorderRef.current?.state;
       const isPending = pendingAutoRestartRef.current;
-      
-      console.log(`🛑 Audio monitoring stopped - MediaRecorder state: ${recorderState}, pending: ${isPending}`);
-      
+
       // Fix state mismatch: if MediaRecorder is still recording but monitoring stopped
       if (recorderState === 'recording' && !isPending) {
-        console.log('🔧 Fixing state mismatch - stopping orphaned MediaRecorder');
+
         mediaRecorderRef.current?.stop();
         mediaRecorderRef.current = null;
         setRecordingState(prev => ({ ...prev, isRecording: false }));
@@ -422,20 +420,13 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     }
 
     try {
-      console.log('🎭 useGeorgianTTS: Calling recognizeSpeech with options:', {
-        language,
-        enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
-        speakers: optionsRef.current.speakers ?? 2,
-        destructuredValues: { enableSpeakerDiarization, speakers },
-        currentOptions: { enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization, speakers: optionsRef.current.speakers },
-        usingCurrentOptions: true
-      });
-      
+
       const result = await georgianTTSServiceRef.current.recognizeSpeech(audioBlob, {
         language,
         autocorrect,
         punctuation,
         digits,
+        engine: 'STT2',
         enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
         speakers: optionsRef.current.speakers ?? 2, // Use current ref value
         maxRetries: 2 // Moderate retries for parallel chunks
@@ -443,7 +434,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       
       // Handle speaker diarization results
       if (typeof result === 'object' && result.hasSpeakers) {
-        console.log('🎭 Speaker diarization result received:', result);
+
         setSpeakerSegments(result.speakers || []);
         setHasSpeakerResults(true);
         totalProcessedChunksRef.current++;
@@ -617,19 +608,12 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             await freshService.logout(); // Clear any cached tokens
             await freshService.initialize(); // Force fresh login
 
-            console.log('🎭 Batch processing with speaker options:', {
-              enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
-              speakers: optionsRef.current.speakers ?? 2,
-              destructuredValues: { enableSpeakerDiarization, speakers },
-              currentOptions: { enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization, speakers: optionsRef.current.speakers },
-              usingCurrentOptions: true
-            });
-            
             const result = await freshService.recognizeSpeech(batchBlob, {
               language,
               autocorrect,
               punctuation,
               digits,
+              engine: 'STT2',
               enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
               speakers: optionsRef.current.speakers ?? 2, // Use current props value
               maxRetries: 2 // Moderate retries since this should work as "first request"
@@ -638,7 +622,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             // Handle speaker diarization results
             let chunkText = '';
             if (typeof result === 'object' && result.hasSpeakers) {
-              console.log('🎭 Batch speaker diarization result received:', result);
+
               setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
               setHasSpeakerResults(true);
               chunkText = result.text;
@@ -709,7 +693,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         // Update transcription result with accumulated text
         if (combinedTranscriptRef.current.trim()) {
           // DON'T set transcriptionResult on manual stop - live updates already handled everything
-          console.log('🚫 Skipping setTranscriptionResult for manual stop to prevent duplicates');
+
         }
 
         setRecordingState(prev => ({
@@ -776,20 +760,13 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
 
         await freshService.logout();
         await freshService.initialize();
-        
-        console.log('🎭 Manual stop processing with speaker options:', {
-          enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
-          speakers: optionsRef.current.speakers ?? 2,
-          destructuredValues: { enableSpeakerDiarization, speakers },
-          currentOptions: { enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization, speakers: optionsRef.current.speakers },
-          usingCurrentOptions: true
-        });
-        
+
         const result = await freshService.recognizeSpeech(combinedBlob, {
           language,
           autocorrect,
           punctuation,
           digits,
+          engine: 'STT2',
           enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
           speakers: optionsRef.current.speakers ?? 2, // Use current props value
           maxRetries: 2
@@ -798,7 +775,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         // Handle speaker diarization results for final processing
         let finalText = '';
         if (typeof result === 'object' && result.hasSpeakers) {
-          console.log('🎭 Final chunk speaker diarization result received:', result);
+
           setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
           setHasSpeakerResults(true);
           finalText = result.text;
@@ -826,7 +803,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
 
     // Final result - DON'T set transcriptionResult, live updates handled everything
     if (combinedTranscriptRef.current.trim()) {
-      console.log('🚫 Skipping final transcriptionResult to prevent duplicates');
+
     }
 
     setRecordingState(prev => ({
@@ -854,9 +831,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         // Get only the unprocessed chunks to prevent duplicates
         const processedChunkCount = processedSegmentsRef.current;
         const unprocessedChunks = audioChunksRef.current.slice(processedChunkCount);
-        
-        console.log(`🔍 DEBUG: processedChunkCount=${processedChunkCount}, totalChunks=${audioChunksRef.current.length}, unprocessedLength=${unprocessedChunks.length}`);
-        
+
         if (unprocessedChunks.length === 0) {
           console.log('🧹 No remaining chunks to process (already processed in auto-segment)');
           // Don't return here - continue with cleanup and state management
@@ -865,8 +840,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         const currentBlob = new Blob(unprocessedChunks, { type: 'audio/webm;codecs=opus' });
         const segmentDurationSeconds = unprocessedChunks.length * (chunkSize / 1000);
         console.log(`🎙️ Processing segment: ${Math.round(currentBlob.size/1024)}KB (${unprocessedChunks.length} chunks, ~${segmentDurationSeconds}s)`);
-        console.log(`📊 Chunk tracking: processed=${processedChunkCount}, total=${audioChunksRef.current.length}, unprocessed=${unprocessedChunks.length}`);
-        
+
         // For auto-restarts: process in background (non-blocking)
         // For manual stops: process synchronously (blocking)
         if (wasAutoSegmentation && !wasManualStop) {
@@ -876,19 +850,13 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               const { GeorgianTTSService } = await import('../lib/speech/georgianTTSService');
               const freshService = new GeorgianTTSService();
               await freshService.initialize();
-              
-              console.log('🎭 Auto-segment processing with speaker options:', {
-                enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
-                speakers: optionsRef.current.speakers ?? 2,
-                destructuredValues: { enableSpeakerDiarization, speakers },
-                usingCurrentOptions: true
-              });
-              
+
               const result = await freshService.recognizeSpeech(currentBlob, {
                 language, 
                 autocorrect, 
                 punctuation, 
                 digits, 
+                engine: 'STT2',
                 enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
                 speakers: optionsRef.current.speakers ?? 2, // Use current props value
                 maxRetries: 2
@@ -897,7 +865,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               // Handle speaker diarization results for manual stop processing
               let segmentText = '';
               if (typeof result === 'object' && result.hasSpeakers) {
-                console.log('🎭 Manual stop speaker diarization result received:', result);
+
                 setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
                 setHasSpeakerResults(true);
                 segmentText = result.text;
@@ -915,8 +883,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
                 lastProcessedTimeRef.current = Date.now();
                 
                 console.log(`📝 Auto-segment: "${segmentText.trim().substring(0, 50)}..."`);
-                console.log(`🚫 Skipping processed chunk update for auto-segment to prevent race condition`);
-                
+
                 if (onLiveTranscriptUpdate) {
                   const newText = combinedTranscriptRef.current.substring(previousLength);
                   onLiveTranscriptUpdate(newText, combinedTranscriptRef.current, sessionIdRef.current);
@@ -924,15 +891,14 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
                 
                 // DON'T set transcriptionResult for auto-segments - only use live updates
                 // This prevents the useEffect in TranscriptPanel from also processing the same content
-                console.log('🚫 Skipping setTranscriptionResult for auto-segment to prevent duplicates');
+
               }
             } catch (error) {
-              console.error('💥 Auto-segment processing failed:', error);
+
               setError(`Auto-segment processing failed: ${error instanceof Error ? error.message : String(error)}`);
               
               // DON'T update processed chunks for auto-segments to prevent race condition
-              console.log('🚫 Skipping processed chunk update for failed auto-segment');
-              
+
               // Continue recording despite error - don't break the flow
             }
           })();
@@ -942,20 +908,13 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             const { GeorgianTTSService } = await import('../lib/speech/georgianTTSService');
             const freshService = new GeorgianTTSService();
             await freshService.initialize();
-            
-            console.log('🎭 Manual stop segment processing with speaker options:', {
-              enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
-              speakers: optionsRef.current.speakers ?? 2,
-              destructuredValues: { enableSpeakerDiarization, speakers },
-              currentOptions: { enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization, speakers: optionsRef.current.speakers },
-              usingCurrentOptions: true
-            });
-            
+
             const result = await freshService.recognizeSpeech(currentBlob, {
               language, 
               autocorrect, 
               punctuation, 
               digits, 
+              engine: 'STT2',
               enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
               speakers: optionsRef.current.speakers ?? 2, // Use current props value
               maxRetries: 2
@@ -964,7 +923,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             // Handle speaker diarization results for auto-segmentation
             let segmentText = '';
             if (typeof result === 'object' && result.hasSpeakers) {
-              console.log('🎭 Auto-segment speaker diarization result received:', result);
+
               setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
               setHasSpeakerResults(true);
               segmentText = result.text;
@@ -991,7 +950,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               }
               
               // DON'T set transcriptionResult for final segments - keep using live updates only
-              console.log('🚫 Skipping setTranscriptionResult for final segment to prevent duplicates');
+
             }
             
             // CRITICAL FIX: Clear chunks after manual processing to prevent duplicate processing in cleanup
@@ -999,7 +958,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             audioChunksForProcessingRef.current = [];
 
           } catch (error) {
-            console.error('💥 Manual stop processing failed:', error);
+
             setError(`Final segment processing failed: ${error instanceof Error ? error.message : String(error)}`);
             
             // Still update processed chunks to prevent chunk tracking issues
@@ -1030,8 +989,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
           // CRITICAL FIX: Reset processed chunk counter for new segment
           const previousCount = processedSegmentsRef.current;
           processedSegmentsRef.current = 0;
-          console.log(`🔄 Auto-restart: Reset processed chunk counter from ${previousCount} to 0 for new segment`);
-          
+
           // Force garbage collection to prevent memory issues
           if (window.gc) window.gc();
           
@@ -1078,7 +1036,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             }, 10); // Ultra-minimal delay for instant restart
             
           } catch (error) {
-            console.error('💥 Auto-restart failed:', error);
+
             setError('Auto-restart failed. Please manually restart recording.');
             cleanupAudioResources();
           }
@@ -1106,7 +1064,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     try {
       // Prevent multiple recordings
       if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-        console.log('🚫 Recording already in progress, ignoring start request');
+
         return;
       }
       
@@ -1183,7 +1141,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       
       recorder.onerror = (event) => {
         const error = (event as any).error;
-        console.error('🚨 MediaRecorder error:', error);
+
         setError(`Recording error: ${error?.message || 'Unknown error'}`);
         setRecordingState(prev => ({ ...prev, isRecording: false }));
         cleanupAudioResources();
@@ -1312,7 +1270,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       // Handle speaker diarization results for file uploads
       let transcriptText = '';
       if (typeof transcriptResult === 'object' && transcriptResult.hasSpeakers) {
-        console.log('🎭 File upload speaker diarization result received:', transcriptResult);
+
         setSpeakerSegments(transcriptResult.speakers || []);
         setHasSpeakerResults(true);
         transcriptText = transcriptResult.text;

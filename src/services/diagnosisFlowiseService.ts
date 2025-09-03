@@ -101,13 +101,6 @@ export async function generateDiagnosisReport(
       question: formattedRequest
     };
 
-    console.log('🏥 Sending diagnosis request to Flowise agent:', {
-      diagnosis: diagnosis.diagnosisEnglish,
-      icdCode: diagnosis.icdCode,
-      endpoint: apiUrl,
-      transcriptLength: transcript.length
-    });
-
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -119,12 +112,7 @@ export async function generateDiagnosisReport(
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('❌ Flowise diagnosis API error:', {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorText
-      });
-      
+
       return {
         success: false,
         error: `API request failed: ${response.status} ${response.statusText}`
@@ -134,17 +122,12 @@ export async function generateDiagnosisReport(
     const data: DiagnosisFlowiseResponse = await response.json();
     
     if (!data.text) {
-      console.error('❌ Invalid response from diagnosis API:', data);
+
       return {
         success: false,
         error: 'Invalid response format from diagnosis API'
       };
     }
-
-    console.log('✅ Diagnosis report generated successfully:', {
-      reportLength: data.text.length,
-      hasSourceDocuments: !!data.sourceDocuments
-    });
 
     return {
       success: true,
@@ -152,8 +135,7 @@ export async function generateDiagnosisReport(
     };
 
   } catch (error) {
-    console.error('❌ Error generating diagnosis report:', error);
-    
+
     return {
       success: false,
       error: error instanceof Error 

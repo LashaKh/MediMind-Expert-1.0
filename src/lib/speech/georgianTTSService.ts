@@ -118,10 +118,7 @@ export class GeorgianTTSService {
     }
   ): Promise<string | SpeakerDiarizationResult> {
     // Add debug logging for speaker diarization options
-    console.log('🎭 GeorgianTTSService: Speaker diarization options received:', {
-      enableSpeakerDiarization: options.enableSpeakerDiarization,
-      speakers: options.speakers,
-      allOptions: Object.keys(options)
+
     });
     
     const request: SpeechRecognitionRequest = {
@@ -137,35 +134,12 @@ export class GeorgianTTSService {
       Speakers: options.speakers || 2
     };
 
-    console.log('🎭 GeorgianTTSService: Sending request to Edge Function:', {
-      enableSpeakerDiarization: options.enableSpeakerDiarization,
-      speakers: options.speakers,
-      hasEngine: !!options.engine,
-      language: request.Language,
-      requestHasSpeakerParams: !!(request.enableSpeakerDiarization && request.Speakers)
-    });
-    
-    console.log('🎭 GeorgianTTSService: Actual request object being sent:', {
-      enableSpeakerDiarization: request.enableSpeakerDiarization,
-      Speakers: request.Speakers,
-      Language: request.Language,
-      audioDataLength: request.theAudioDataAsBase64?.length || 0
     });
 
     // Debug the exact JSON being sent
     const requestBody = JSON.stringify(request);
     const parsedBody = JSON.parse(requestBody);
-    console.log('🎭 GeorgianTTSService: JSON.stringify result check:', {
-      originalRequest: {
-        enableSpeakerDiarization: request.enableSpeakerDiarization,
-        Speakers: request.Speakers
-      },
-      stringifiedAndParsed: {
-        enableSpeakerDiarization: parsedBody.enableSpeakerDiarization,
-        Speakers: parsedBody.Speakers
-      },
-      requestBodyLength: requestBody.length,
-      hasAllKeys: Object.keys(parsedBody).includes('enableSpeakerDiarization') && Object.keys(parsedBody).includes('Speakers')
+    .includes('enableSpeakerDiarization') && Object.keys(parsedBody).includes('Speakers')
     });
 
     const [response, error] = await safeAsync(
@@ -213,20 +187,14 @@ export class GeorgianTTSService {
     // Check if this is a speaker diarization response (JSON) or regular text response
     const contentType = response.headers.get('content-type');
     
-    console.log('🎭 GeorgianTTSService: Response received:', {
-      contentType,
-      status: response.status,
-      headers: Object.fromEntries(response.headers.entries()),
+    ),
       requestedSpeakerDiarization: options.enableSpeakerDiarization
     });
     
     if (contentType?.includes('application/json')) {
       // Speaker diarization response
       const speakerResult: SpeakerDiarizationResult = await response.json();
-      console.log('✅ Speaker diarization result:', {
-        hasSpeakers: speakerResult.hasSpeakers,
-        speakersCount: speakerResult.speakers?.length || 0,
-        preview: speakerResult.text?.substring(0, 100) + (speakerResult.text?.length > 100 ? '...' : '')
+      + (speakerResult.text?.length > 100 ? '...' : '')
       });
       return speakerResult;
     } else {
@@ -287,8 +255,7 @@ export class GeorgianTTSService {
 
     // For speaker diarization, process the entire file at once
     if (options.enableSpeakerDiarization && options.speakers && options.speakers > 1) {
-      console.log('🎭 Processing entire file with speaker diarization...');
-      
+
       // Convert file to blob for processing
       const fileBlob = new Blob([file], { type: file.type });
       
@@ -353,7 +320,7 @@ export class GeorgianTTSService {
           }
         }
       } catch (error) {
-        console.warn(`Chunk ${i + 1}/${totalChunks} processing failed:`, error);
+
         // Continue with other chunks instead of failing entirely
       }
 

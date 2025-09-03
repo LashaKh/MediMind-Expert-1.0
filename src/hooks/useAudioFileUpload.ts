@@ -160,6 +160,7 @@ export const useAudioFileUpload = (options: AudioUploadOptions = {}) => {
               autocorrect,
               punctuation,
               digits,
+              engine: 'STT2',
               enableSpeakerDiarization,
               speakers,
               maxRetries: 2
@@ -167,14 +168,14 @@ export const useAudioFileUpload = (options: AudioUploadOptions = {}) => {
           );
 
           if (error) {
-            console.error(`Chunk ${i + 1} processing failed, skipping:`, error.message);
+
             continue;
           }
 
           // Handle speaker diarization results
           let chunkText = '';
           if (typeof result === 'object' && result.hasSpeakers) {
-            console.log('🎭 AudioFileUpload: Speaker diarization result received for chunk:', i + 1);
+
             chunkText = result.text;
             // Note: Individual chunks with speaker diarization are handled by the full file processing in georgianTTSService
           } else {
@@ -195,7 +196,7 @@ export const useAudioFileUpload = (options: AudioUploadOptions = {}) => {
             }
           }
         } catch (chunkError) {
-          console.error(`Chunk ${i + 1} processing failed:`, chunkError);
+
           // Continue processing other chunks
         }
       }
@@ -219,8 +220,7 @@ export const useAudioFileUpload = (options: AudioUploadOptions = {}) => {
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      console.error('❌ Audio processing failed:', errorMessage);
-      
+
       updateState({
         error: errorMessage,
         processingStage: 'error',
