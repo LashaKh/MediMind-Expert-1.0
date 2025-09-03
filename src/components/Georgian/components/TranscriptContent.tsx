@@ -10,7 +10,10 @@ import {
   Zap, 
   Star,
   Mic,
-  Upload
+  Upload,
+  Settings,
+  Cpu,
+  Gauge
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 
