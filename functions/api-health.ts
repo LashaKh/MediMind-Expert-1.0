@@ -1,7 +1,7 @@
 import { Handler } from '@netlify/functions';
 
 // Simple health check for API endpoints
-export const handler: Handler = async (event, context) => {
+export const handler: Handler = async (event, _context) => {
   const origin = event.headers.origin || event.headers.Origin;
   
   // CORS headers

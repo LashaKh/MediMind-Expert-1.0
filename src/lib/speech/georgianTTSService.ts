@@ -83,13 +83,15 @@ export class GeorgianTTSService {
         const result = await this.performSpeechRecognition(base64Audio, options);
         
         if (attempt > 1) {
-
+          console.log('✅ STT retry successful on attempt', attempt);
         }
         
         return result;
       } catch (error) {
         lastError = error;
         const errorMessage = error instanceof Error ? error.message : String(error);
+        
+        console.log(`❌ STT attempt ${attempt} failed:`, errorMessage.substring(0, 100));
         
         // Don't retry on the last attempt
         if (attempt === maxRetries) {
@@ -118,10 +120,11 @@ export class GeorgianTTSService {
     }
   ): Promise<string | SpeakerDiarizationResult> {
     // Add debug logging for speaker diarization options
-    console.log('🎭 GeorgianTTSService: Speaker diarization options received:', {
+    console.log('🎤 Speaker diarization options:', { 
       enableSpeakerDiarization: options.enableSpeakerDiarization,
       speakers: options.speakers,
-      allOptions: Object.keys(options)
+      engine: options.engine,
+      willOmitEngine: options.engine === 'STT1'
     });
     
     const request: SpeechRecognitionRequest = {
@@ -130,46 +133,21 @@ export class GeorgianTTSService {
       Autocorrect: options.autocorrect ?? true,
       Punctuation: options.punctuation ?? true,
       Digits: options.digits ?? true,
-      Engine: options.engine, // Use the engine as provided, no default
+      // Only include Engine if it's not STT1 (let API use default for STT1)
+      ...(options.engine && options.engine !== 'STT1' && { Engine: options.engine }),
       ...(options.model && { Model: options.model }),
       // Always include speaker diarization parameters for debugging
       enableSpeakerDiarization: options.enableSpeakerDiarization ?? false,
       Speakers: options.speakers || 2
     };
 
-    console.log('🎭 GeorgianTTSService: Sending request to Edge Function:', {
-      enableSpeakerDiarization: options.enableSpeakerDiarization,
-      speakers: options.speakers,
-      engine: options.engine,
-      hasEngine: !!options.engine,
-      language: request.Language,
-      requestHasSpeakerParams: !!(request.enableSpeakerDiarization && request.Speakers)
-    });
-    
-    console.log('🎭 GeorgianTTSService: Actual request object being sent:', {
-      enableSpeakerDiarization: request.enableSpeakerDiarization,
-      Speakers: request.Speakers,
-      Engine: request.Engine,
-      Language: request.Language,
-      audioDataLength: request.theAudioDataAsBase64?.length || 0
-    });
-
     // Debug the exact JSON being sent
     const requestBody = JSON.stringify(request);
     const parsedBody = JSON.parse(requestBody);
-    console.log('🎭 GeorgianTTSService: JSON.stringify result check:', {
-      originalRequest: {
-        enableSpeakerDiarization: request.enableSpeakerDiarization,
-        Speakers: request.Speakers,
-        Engine: request.Engine
-      },
-      stringifiedAndParsed: {
-        enableSpeakerDiarization: parsedBody.enableSpeakerDiarization,
-        Speakers: parsedBody.Speakers,
-        Engine: parsedBody.Engine
-      },
-      requestBodyLength: requestBody.length,
-      hasAllKeys: Object.keys(parsedBody).includes('enableSpeakerDiarization') && Object.keys(parsedBody).includes('Speakers') && Object.keys(parsedBody).includes('Engine')
+    console.log('📨 Request validation:', {
+      hasEnableSpeakerDiarization: Object.keys(parsedBody).includes('enableSpeakerDiarization'),
+      hasSpeakers: Object.keys(parsedBody).includes('Speakers'),
+      hasEngine: Object.keys(parsedBody).includes('Engine')
     });
 
     const [response, error] = await safeAsync(
@@ -216,11 +194,8 @@ export class GeorgianTTSService {
 
     // Check if this is a speaker diarization response (JSON) or regular text response
     const contentType = response.headers.get('content-type');
-    
-    console.log('🎭 GeorgianTTSService: Response received:', {
+    console.log('🎯 Response analysis:', {
       contentType,
-      status: response.status,
-      headers: Object.fromEntries(response.headers.entries()),
       requestedSpeakerDiarization: options.enableSpeakerDiarization
     });
     
@@ -228,8 +203,7 @@ export class GeorgianTTSService {
       // Speaker diarization response
       const speakerResult: SpeakerDiarizationResult = await response.json();
       console.log('✅ Speaker diarization result:', {
-        hasSpeakers: speakerResult.hasSpeakers,
-        speakersCount: speakerResult.speakers?.length || 0,
+        textLength: speakerResult.text?.length,
         preview: speakerResult.text?.substring(0, 100) + (speakerResult.text?.length > 100 ? '...' : '')
       });
       return speakerResult;
@@ -291,8 +265,7 @@ export class GeorgianTTSService {
 
     // For speaker diarization, process the entire file at once
     if (options.enableSpeakerDiarization && options.speakers && options.speakers > 1) {
-      console.log('🎭 Processing entire file with speaker diarization...');
-      
+
       // Convert file to blob for processing
       const fileBlob = new Blob([file], { type: file.type });
       
@@ -357,7 +330,7 @@ export class GeorgianTTSService {
           }
         }
       } catch (error) {
-        console.warn(`Chunk ${i + 1}/${totalChunks} processing failed:`, error);
+
         // Continue with other chunks instead of failing entirely
       }
 

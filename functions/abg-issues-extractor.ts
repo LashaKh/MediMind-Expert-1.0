@@ -42,7 +42,7 @@ interface IssuesExtractionResponse {
  * ABG Issues Extraction using OpenAI GPT-4
  * Replicates the exact Make.com scenario for identifying clinical issues
  */
-const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
+const handler: Handler = async (event: HandlerEvent, _context: HandlerContext) => {
   const startTime = performance.now();
 
   try {

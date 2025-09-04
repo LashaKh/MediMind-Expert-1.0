@@ -204,20 +204,77 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   useEffect(() => {
     // Don't update if user is currently typing to prevent interference
     if (isUserTypingRef.current) {
-
+      console.log('🚫 User is typing, skipping transcript update to prevent interference');
       return;
     }
     
-    // Use session transcript if it's longer (contains both typed + transcribed text)
-    // Otherwise use localTranscript (for fresh recordings without typed text)
+    // Get current state
     const sessionTranscript = currentSession?.transcript || '';
     const localLength = localTranscript?.length || 0;
     const sessionLength = sessionTranscript.length;
+    const currentEditableLength = editableTranscript?.length || 0;
     
-    const transcript = sessionLength >= localLength ? sessionTranscript : localTranscript || '';
-    setEditableTranscript(transcript);
+    console.log('🔍 Transcript selection logic:', {
+      sessionId: currentSession?.id,
+      sessionLength,
+      localLength,
+      currentEditableLength,
+      isUserTyping: isUserTypingRef.current,
+      sessionTranscript: sessionTranscript.substring(0, 50) + (sessionTranscript.length > 50 ? '...' : ''),
+      localTranscript: (localTranscript || '').substring(0, 50) + ((localTranscript?.length || 0) > 50 ? '...' : ''),
+      currentEditable: (editableTranscript || '').substring(0, 50) + ((editableTranscript?.length || 0) > 50 ? '...' : ''),
+    });
+    
+    // Enhanced transcript selection logic with user edits preservation:
+    // 1. If user has typed content that's different from session, preserve user edits
+    // 2. If session transcript is longer (new transcription added), use session
+    // 3. Fall back to local/session/empty as before
+    let transcript = '';
+    
+    // Check if user has made manual edits that would be lost
+    const userHasEdits = currentEditableLength > 0 && 
+                        editableTranscript.trim() !== sessionTranscript.trim() &&
+                        editableTranscript.trim() !== (localTranscript || '').trim();
+    
+    if (userHasEdits) {
+      // User has made manual edits - preserve them
+      transcript = editableTranscript;
+      console.log('✏️ Preserving user edits (manual changes detected)');
+    } else if (sessionLength > currentEditableLength) {
+      // Session has more content (new transcription arrived) - use it
+      transcript = sessionTranscript;
+      console.log('📄 Using session transcript (new content available)');
+    } else if (localLength > currentEditableLength) {
+      // Local has more content - use local
+      transcript = localTranscript || '';
+      console.log('📝 Using local transcript (fresh recording)');
+    } else if (sessionLength > 0) {
+      // Session has content - use it
+      transcript = sessionTranscript;
+      console.log('📄 Using session transcript (most complete)');
+    } else if (localLength > 0) {
+      // No session but we have local content - use local
+      transcript = localTranscript || '';
+      console.log('📝 Using local transcript (available)');
+    } else if (currentEditableLength > 0) {
+      // Preserve any existing editable content
+      transcript = editableTranscript || '';
+      console.log('💾 Preserving current editable content');
+    } else {
+      // Nothing available - start fresh
+      transcript = '';
+      console.log('🆕 Starting with empty transcript');
+    }
+    
+    // Only update if the transcript actually changed
+    if (transcript !== editableTranscript) {
+      console.log('🔄 Updating editable transcript');
+      setEditableTranscript(transcript);
+    } else {
+      console.log('⏭️ Transcript unchanged, skipping update');
+    }
 
-  }, [currentSession?.id, localTranscript, currentSession?.transcript]); // Depend on session changes and transcript updates
+  }, [currentSession?.id, localTranscript, currentSession?.transcript]); // Remove editableTranscript to prevent infinite loop
   
   // Sync context recording state with actual recording state
   useEffect(() => {
@@ -283,7 +340,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     copyToClipboard(contextText);
   };
 
-  // Simple direct change handler that updates both local and parent state
+  // Enhanced transcript change handler that preserves typed text during live transcription
   const handleTranscriptChange = (newTranscript: string) => {
     // Mark that user is typing to prevent useEffect interference
     isUserTypingRef.current = true;
@@ -293,17 +350,20 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       clearTimeout(typingTimeoutRef.current);
     }
     
-    // Set timeout to mark typing as finished after user stops typing for 500ms
+    // Set timeout to mark typing as finished after user stops typing for 1 second
     typingTimeoutRef.current = setTimeout(() => {
       isUserTypingRef.current = false;
-
-    }, 500);
+      
+      // When user finishes typing, save their changes to the database
+      // This ensures manually typed text becomes part of the permanent transcript
+      if (onUpdateTranscript && newTranscript.trim()) {
+        console.log('💾 Saving user typed text to database:', newTranscript.substring(0, 50) + '...');
+        onUpdateTranscript(newTranscript);
+      }
+    }, 1000);
     
+    // Update local editable state immediately for responsive UI
     setEditableTranscript(newTranscript);
-    // Also update parent state so AI Processing can access the transcript
-    if (onUpdateTranscript) {
-      onUpdateTranscript(newTranscript);
-    }
   };
 
   // File upload transcription handling only (live updates are handled by parent component)

@@ -138,8 +138,8 @@ async function orchestrate3AgentPipeline(request: OrchestrationRequest): Promise
       .in('id', request.documentIds)
       .eq('user_id', request.userId);
 
-    let fileIds: string[] = [];
-    let docTitles: string[] = [];
+    const fileIds: string[] = [];
+    const docTitles: string[] = [];
     
     // Process podcast documents
     if (podcastDocs && podcastDocs.length > 0) {

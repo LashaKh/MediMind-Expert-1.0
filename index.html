@@ -23,9 +23,8 @@
     <meta name="application-name" content="MediMind Expert">
     <link rel="manifest" href="/manifest.json">
     
-    <!-- Preload critical resources -->
-    <link rel="preload" href="/src/styles/medical-design-tokens.css" as="style">
-    <link rel="preload" href="/src/main.tsx" as="script" crossorigin>
+    <!-- Import critical CSS directly instead of preloading -->
+    <link rel="stylesheet" href="/src/styles/medical-design-tokens.css">
     
     <!-- Mobile-Optimized Font Loading with Block Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -206,7 +206,7 @@ export const useRealtimeAnalytics = (
       updateBuffer = [];
 
       setData(prevData => {
-        let newData = { ...prevData };
+        const newData = { ...prevData };
         
         // Process all buffered updates
         updates.forEach(payload => {

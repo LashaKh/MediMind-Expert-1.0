@@ -315,9 +315,9 @@ async function collectNewsForSpecialty(specialty: string, supabase: any): Promis
   };
 
   const specialtyQueries = queries[specialty as keyof typeof queries] || queries.general;
-  let allArticles: any[] = [];
-  let providersUsed: string[] = [];
-  let errors: string[] = [];
+  const allArticles: any[] = [];
+  const providersUsed: string[] = [];
+  const errors: string[] = [];
 
   for (const query of specialtyQueries) {
     // Try Brave first (most reliable)

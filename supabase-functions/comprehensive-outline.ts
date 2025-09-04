@@ -418,7 +418,7 @@ async function generateComprehensiveOutline(
   console.log('🎬 Starting comprehensive 3-step outline generation...');
   
   const startTime = Date.now();
-  let timing = { step1: 0, step2: 0, step3: 0 };
+  const timing = { step1: 0, step2: 0, step3: 0 };
   
   try {
     // Step 1: Document Overview

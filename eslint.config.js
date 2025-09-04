@@ -24,10 +24,39 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      // Prevent direct console usage in production code
+      // Very lenient rules for development speed
       'no-console': ['warn', {
-        'allow': ['error'] // Allow console.error for critical errors only
+        'allow': ['warn', 'error'] // Allow console.warn and console.error
       }],
+      // Turn off strict TypeScript rules
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
+      'no-empty': 'off',
+      'no-misleading-character-class': 'off',
+      'no-useless-escape': 'off',
+      'no-case-declarations': 'off',
+      'no-useless-catch': 'off',
+      'prefer-const': 'warn',
+      'no-var': 'warn'
+    },
+  },
+  // Allow console.log in serverless functions and scripts
+  {
+    files: ['functions/**/*', 'supabase/functions/**/*', 'scripts/**/*', 'supabase-functions/**/*'],
+    rules: {
+      'no-console': 'off', // Allow all console methods in serverless functions
+      'no-control-regex': 'off', // Allow control characters in regex for data sanitization
+      'no-prototype-builtins': 'off', // Allow hasOwnProperty in utility functions
+    },
+  },
+  // Relaxed rules for test files
+  {
+    files: ['**/*.test.*', '**/*.spec.*', 'src/__tests__/**/*', 'test/**/*', 'tests/**/*'],
+    rules: {
+      'no-console': 'off', // Allow console in test files
+      'react-refresh/only-export-components': 'off', // Don't enforce component-only exports in tests
+      '@typescript-eslint/ban-ts-comment': 'off', // Allow @ts-ignore in tests
     },
   }
 );

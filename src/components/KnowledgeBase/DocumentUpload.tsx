@@ -452,7 +452,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       };
 
       // Enhanced progress simulation with status updates
-      let currentStatus: 'preparing' | 'chunking' | 'uploading' | 'reassembling' | 'processing' = 'uploading';
+      const currentStatus: 'preparing' | 'chunking' | 'uploading' | 'reassembling' | 'processing' = 'uploading';
       
       // Update status to uploading after vector store initialization
       setUploadedFiles(prev => prev.map(f => 
@@ -467,7 +467,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         setUploadedFiles(prev => prev.map(f => {
           if (f.id !== file.id) return f;
           
-          let newProgress = Math.min(85, (f.uploadProgress || 0) + Math.random() * 15);
+          const newProgress = Math.min(85, (f.uploadProgress || 0) + Math.random() * 15);
           let newStatus = f.uploadStatus;
           
           // Status progression for chunked uploads

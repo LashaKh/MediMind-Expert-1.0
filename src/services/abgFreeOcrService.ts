@@ -200,7 +200,7 @@ function formatBloodGasData(text: string): string {
     // Simple formatting - just clean up and add to current section
     if (line.match(/\d/)) { // Only process lines with numbers (actual data)
       // Clean up the line while preserving important symbols
-      let cleanedLine = line
+      const cleanedLine = line
         .replace(/\s+/g, ' ')
         .trim();
 

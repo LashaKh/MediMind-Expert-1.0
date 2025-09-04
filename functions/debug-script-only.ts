@@ -1318,8 +1318,8 @@ Deno.serve(async (req: Request) => {
       .in('id', documentIds)
       .eq('user_id', userId);
 
-    let fileIds: string[] = [];
-    let docTitles: string[] = [];
+    const fileIds: string[] = [];
+    const docTitles: string[] = [];
 
     if (podcastDocs && podcastDocs.length > 0) {
       podcastDocs.forEach((doc: any) => {

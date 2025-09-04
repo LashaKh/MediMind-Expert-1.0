@@ -186,12 +186,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                   <div className="flex items-center space-x-3">
                     <button
                       onClick={() => {
-                        console.log('🎭 TranscriptContent: Speaker diarization toggle clicked:', {
-                          currentState: enableSpeakerDiarization,
-                          newState: !enableSpeakerDiarization,
-                          speakerCount,
-                          isRecording: recordingState.isRecording
-                        });
+
                         onToggleSpeakerDiarization?.(!enableSpeakerDiarization);
                       }}
                       className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-200 medical-touch-target transform hover:scale-105 ${
@@ -221,12 +216,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                           value={speakerCount}
                           onChange={(e) => {
                             const newCount = parseInt(e.target.value);
-                            console.log('🎭 TranscriptContent: Speaker count changed:', {
-                              previousCount: speakerCount,
-                              newCount,
-                              enableSpeakerDiarization,
-                              isRecording: recordingState.isRecording
-                            });
+
                             onSpeakerCountChange?.(newCount);
                           }}
                           className="bg-white/90 dark:bg-gray-800/90 border border-purple-200/50 dark:border-purple-600/50 rounded-xl px-2 py-1.5 text-sm font-medium text-purple-700 dark:text-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-200 shadow-sm hover:shadow-md medical-touch-target cursor-pointer"

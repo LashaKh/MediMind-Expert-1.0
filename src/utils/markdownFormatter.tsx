@@ -149,27 +149,34 @@ function formatInlineText(text: string): React.ReactNode {
   let formatted: React.ReactNode = text;
   
   // Replace **bold** with <strong>
-  formatted = text.split(/(\*\*[^*]+\*\*)/g).map((part, index) => {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  const formattedParts: React.ReactNode[] = [];
+  
+  parts.forEach((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      return (
-        <strong key={index} className="font-semibold text-slate-900 dark:text-slate-100">
+      formattedParts.push(
+        <strong key={`bold-${index}`} className="font-semibold text-slate-900 dark:text-slate-100">
           {part.slice(2, -2)}
         </strong>
       );
+    } else {
+      // Handle *italic* within each part
+      const italicParts = part.split(/(\*[^*]+\*)/g);
+      italicParts.forEach((subpart, subindex) => {
+        if (subpart.startsWith('*') && subpart.endsWith('*') && !subpart.startsWith('**')) {
+          formattedParts.push(
+            <em key={`italic-${index}-${subindex}`} className="italic">
+              {subpart.slice(1, -1)}
+            </em>
+          );
+        } else if (subpart) {
+          formattedParts.push(subpart);
+        }
+      });
     }
-    
-    // Handle *italic* 
-    return part.split(/(\*[^*]+\*)/g).map((subpart, subindex) => {
-      if (subpart.startsWith('*') && subpart.endsWith('*') && !subpart.startsWith('**')) {
-        return (
-          <em key={`${index}-${subindex}`} className="italic">
-            {subpart.slice(1, -1)}
-          </em>
-        );
-      }
-      return subpart;
-    });
   });
+  
+  formatted = formattedParts;
 
   return formatted;
 }

@@ -252,8 +252,8 @@ serve(async (req) => {
         const messageContent = lastMessage.content[0];
         
         if (messageContent.type === 'text') {
-          let responseText = messageContent.text.value;
-          let sources: any[] = [];
+          const responseText = messageContent.text.value;
+          const sources: any[] = [];
 
           // Extract file citations and text content if any
           if (messageContent.text.annotations && messageContent.text.annotations.length > 0) {
