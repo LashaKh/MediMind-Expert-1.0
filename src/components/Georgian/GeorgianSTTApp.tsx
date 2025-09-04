@@ -84,8 +84,6 @@ export const GeorgianSTTApp: React.FC = () => {
     loading: sessionLoading,
     error: sessionError,
     createSession,
-    createTemporarySession,
-    saveTemporarySession,
     selectSession,
     // updateSession, // Currently unused
     deleteSession,
@@ -137,7 +135,8 @@ export const GeorgianSTTApp: React.FC = () => {
       } else {
         // No session selected, create one and ensure it's selected
 
-        const newSession = createTemporarySession('Live Recording');
+        const newSession = await createSession('Live Recording');
+        if (!newSession) return;
 
         // First select the session, then append the text
         try {
@@ -156,7 +155,7 @@ export const GeorgianSTTApp: React.FC = () => {
         }
       }
     }
-  }, [appendToTranscript, sessions, createTemporarySession, currentSession, selectSession]);
+  }, [appendToTranscript, sessions, createSession, currentSession, selectSession]);
 
   // Georgian TTS - Check support first
   const {
@@ -301,10 +300,12 @@ export const GeorgianSTTApp: React.FC = () => {
     setLocalTranscript('');
     setCurrentRecordingSessionId(''); // Clear recording session
     
-    // Create temporary session (not saved to DB until it has content)
-    const newSession = createTemporarySession(title);
-    await selectSession(newSession.id);
-  }, [createTemporarySession, selectSession, resetTranscript, clearTTSResult, recordingState.isRecording, stopRecording]);
+    // Create new session
+    const newSession = await createSession(title);
+    if (newSession) {
+      await selectSession(newSession.id);
+    }
+  }, [createSession, selectSession, resetTranscript, clearTTSResult, recordingState.isRecording, stopRecording]);
 
   // Handle session deletion with confirmation
   const handleDeleteSession = useCallback(async (sessionId: string) => {
@@ -566,8 +567,10 @@ export const GeorgianSTTApp: React.FC = () => {
     }
 
     if (!currentSession) {
-      // Create temporary session for file upload
-      const newSession = createTemporarySession(`File: ${file.name}`);
+      // Create new session for file upload
+      const newSession = await createSession(`File: ${file.name}`);
+      if (!newSession) return;
+      
       resetTranscript(); // Reset transcript for new session
       clearTTSResult(); // Clear old transcription result
       await selectSession(newSession.id);
@@ -583,7 +586,7 @@ export const GeorgianSTTApp: React.FC = () => {
     } else {
 
     }
-  }, [currentSession, createTemporarySession, selectSession, resetTranscript, clearTTSResult, canProcess, resetUploadState, processAudioFile]);
+  }, [currentSession, createSession, selectSession, resetTranscript, clearTTSResult, canProcess, resetUploadState, processAudioFile]);
 
   // Handle transcript update (for editing existing transcript)
   const handleTranscriptUpdate = useCallback(async (transcript: string, duration?: number) => {
@@ -591,14 +594,12 @@ export const GeorgianSTTApp: React.FC = () => {
       updateTranscript(currentSession.id, transcript, duration);
     } else if (transcript.trim()) {
       // Create a new session when user starts typing and no session exists
-      const newSession = createTemporarySession('Manual Entry');
-      // IMPORTANT: Update session with content BEFORE selecting it to avoid race conditions
-      newSession.transcript = transcript; // Set initial content
-      await selectSession(newSession.id);
-      // Also update in database/memory
-      updateTranscript(newSession.id, transcript, duration);
+      const newSession = await createSession('Manual Entry', transcript);
+      if (newSession) {
+        await selectSession(newSession.id);
+      }
     }
-  }, [currentSession, updateTranscript, createTemporarySession, selectSession]);
+  }, [currentSession, updateTranscript, createSession, selectSession]);
 
   // Handle transcript append (for new recordings)
   const handleTranscriptAppend = useCallback((newText: string, duration?: number) => {
@@ -619,15 +620,16 @@ export const GeorgianSTTApp: React.FC = () => {
     lastProcessedTimeRef.current = 0;
 
     if (!currentSession) {
-      // Create temporary session when user starts recording - clear local state for fresh start
+      // Create new session when user starts recording - clear local state for fresh start
 
       setLocalTranscript(''); // Clear local transcript for new session
       resetTranscript(); // Reset TTS hook state for new session
       clearTTSResult(); // Clear old transcription result
       
-      const newSession = createTemporarySession('New Recording');
-
-      await selectSession(newSession.id);
+      const newSession = await createSession('New Recording');
+      if (newSession) {
+        await selectSession(newSession.id);
+      }
 
     } else {
       // IMPORTANT: For existing session, we need to preserve the existing content
@@ -646,7 +648,7 @@ export const GeorgianSTTApp: React.FC = () => {
     }
 
     startRecording();
-  }, [currentSession, createTemporarySession, selectSession, startRecording, resetTranscript, clearTTSResult]);
+  }, [currentSession, createSession, selectSession, startRecording, resetTranscript, clearTTSResult]);
 
   // Clear all errors
   const clearAllErrors = useCallback(() => {
