@@ -124,30 +124,37 @@ export const GeorgianSTTApp: React.FC = () => {
         return prev + separator + newText.trim();
       });
       
-      // Save to database in background - prioritize currentSession
-      if (currentSession) {
-        // Use the currently selected session
-
-        appendToTranscript(currentSession.id, newText.trim()).catch(error => {
+      // Save to database in background - prioritize current recording session
+      // Use sessionId parameter (from useGeorgianTTS hook) if available, fallback to currentSession
+      const targetSessionId = sessionId || currentSession?.id;
+      
+      if (targetSessionId) {
+        // Use the session ID from the recording or current selection
+        console.log(`💾 Saving to session: ${targetSessionId} (from ${sessionId ? 'recording' : 'current'})`);
+        
+        appendToTranscript(targetSessionId, newText.trim()).catch(error => {
           // Keep local state - user still sees the transcript
-
+          console.error(`❌ Failed to append to session ${targetSessionId}:`, error);
         });
       } else {
-        // No session selected, create one and ensure it's selected
-
+        // Only create new session if we truly have no session context
+        console.log('🆕 No session available, creating new one');
+        
         const newSession = await createSession('Live Recording');
         if (!newSession) return;
 
         // First select the session, then append the text
         try {
           await selectSession(newSession.id);
+          console.log(`✅ Created and selected new session: ${newSession.id}`);
 
           // Use a small delay to ensure the session selection has propagated
           setTimeout(() => {
             appendToTranscript(newSession.id, newText.trim());
           }, 100);
         } catch (error) {
-
+          console.error(`❌ Failed to select new session ${newSession.id}:`, error);
+          
           // Fallback: still try to append
           setTimeout(() => {
             appendToTranscript(newSession.id, newText.trim());

@@ -41,16 +41,41 @@ createSession(title, initialContent) →
 #### Transcript Appending (CRITICAL)
 ```typescript
 appendToTranscript(sessionId, newText, duration) →
-  Find session (sessions array OR currentSession) →
+  Find session (3 levels: sessions array → currentSession → database fetch) →
   Fetch FRESH database data →
   Combine: existingTranscript + separator + newText →
   Update database →
   Return success
 ```
 
-**CRITICAL FIX**: Always fetch fresh database data before appending:
+**CRITICAL FIX**: Triple-fallback session finding with database fetch:
 ```typescript
-// Fetch fresh session data to prevent stale transcript issues
+// 1. First try to find in sessions array
+let session = sessions.find(s => s.id === sessionId);
+
+// 2. If not found, check if it's the current session
+if (!session && currentSession?.id === sessionId) {
+  session = currentSession;
+}
+
+// 3. If still not found, try to fetch directly from database (session might be newly created)
+if (!session && user) {
+  const [dbSession, dbError] = await safeAsync(
+    () => supabase.from('georgian_sessions')
+      .select('*')
+      .eq('id', sessionId)
+      .eq('user_id', user.id)
+      .eq('is_active', true)
+      .single()
+  );
+  
+  if (!dbError && dbSession) {
+    // Map database response to session object
+    session = { /* mapped session data */ };
+  }
+}
+
+// Always fetch fresh database data to prevent stale transcript issues
 const [freshData, fetchError] = await safeAsync(
   () => supabase.from('georgian_sessions')
     .select('transcript, duration_ms')
@@ -100,12 +125,15 @@ interface RecordingState {
 This is the most complex part - determines which transcript to display:
 
 ```typescript
-// Priority-based transcript selection
+// Priority-based transcript selection with smart user edit detection
 const transcriptSelectionLogic = () => {
-  // 1. Check if user has made manual edits
+  // 1. Smart check for user edits (not just live recording growth)
+  // During live recording, localTranscript grows with new segments, but that's not a "user edit"
+  const localStart = (localTranscript || '').substring(0, currentEditableLength);
   const userHasEdits = currentEditableLength > 0 && 
     editableTranscript.trim() !== sessionTranscript.trim() &&
-    editableTranscript.trim() !== (localTranscript || '').trim();
+    editableTranscript.trim() !== localStart.trim() &&
+    !(localTranscript || '').startsWith(editableTranscript.trim()); // Not just a prefix of live recording
     
   if (userHasEdits) {
     return editableTranscript; // PRESERVE USER EDITS
@@ -172,21 +200,37 @@ Trigger onLiveTranscriptUpdate callback
 
 ### 2. Live Update Handling
 ```typescript
-// In GeorgianSTTApp.tsx
-const handleLiveUpdate = (transcript: string, sessionId: string) => {
-  // Find current session
-  if (activeSession && activeSession.id) {
-    // Append to existing session
-    appendToTranscript(activeSession.id, newText.trim());
-  } else {
-    // Recovery: Use most recent session
-    const mostRecentSession = sessions[0];
-    await selectSession(mostRecentSession.id);
-    appendToTranscript(mostRecentSession.id, newText.trim());
+// In GeorgianSTTApp.tsx - UPDATED with session ID priority fix
+const handleLiveTranscriptUpdate = (newText: string, fullText: string, sessionId?: string) => {
+  // OPTIMISTIC UI: Update local state immediately for instant feedback
+  if (newText.trim()) {
+    // Update local transcript immediately
+    setLocalTranscript(prev => {
+      const separator = prev ? '\n\n' : '';
+      return prev + separator + newText.trim();
+    });
+    
+    // Save to database in background - prioritize current recording session
+    // Use sessionId parameter (from useGeorgianTTS hook) if available, fallback to currentSession
+    const targetSessionId = sessionId || currentSession?.id;
+    
+    if (targetSessionId) {
+      // Use the session ID from the recording or current selection
+      console.log(`💾 Saving to session: ${targetSessionId} (from ${sessionId ? 'recording' : 'current'})`);
+      
+      appendToTranscript(targetSessionId, newText.trim()).catch(error => {
+        // Keep local state - user still sees the transcript
+        console.error(`❌ Failed to append to session ${targetSessionId}:`, error);
+      });
+    } else {
+      // Only create new session if we truly have no session context
+      const newSession = await createSession('Live Recording');
+      if (newSession) {
+        await selectSession(newSession.id);
+        setTimeout(() => appendToTranscript(newSession.id, newText.trim()), 100);
+      }
+    }
   }
-  
-  // Update local transcript for immediate UI feedback
-  setLocalTranscript(prev => prev + ' ' + newText);
 };
 ```
 
@@ -245,13 +289,34 @@ const { text, speakers, hasSpeakers } = json;
 ```
 
 ### Issue 2: "Session not found for appendToTranscript"
-**Cause**: Session created but not yet in sessions array
-**Fix**: Check both sessions array AND currentSession
+**Cause**: Session created but not yet in sessions array, currentSession undefined
+**Fix**: Triple-fallback session finding with database fetch
 ```typescript
-// Fix in useSessionManagement.ts
+// Fix in useSessionManagement.ts - Three levels of session finding
 let session = sessions.find(s => s.id === sessionId);
+
+// Level 2: Check if it's the current session
 if (!session && currentSession?.id === sessionId) {
   session = currentSession;
+}
+
+// Level 3: If still not found, try to fetch directly from database
+if (!session && user) {
+  console.log('🔍 Session not in local state, fetching from database:', sessionId);
+  
+  const [dbSession, dbError] = await safeAsync(
+    () => supabase.from('georgian_sessions')
+      .select('*')
+      .eq('id', sessionId)
+      .eq('user_id', user.id)
+      .eq('is_active', true)
+      .single()
+  );
+  
+  if (!dbError && dbSession) {
+    session = { /* mapped session object */ };
+    console.log('✅ Found session in database:', sessionId);
+  }
 }
 ```
 
@@ -268,14 +333,30 @@ const [freshData] = await safeAsync(
 );
 ```
 
-### Issue 4: User typed text gets erased
-**Cause**: Live transcripts overwriting user input
-**Fix**: Smart transcript selection with user edit detection
+### Issue 4: User typed text gets erased during live recording
+**Cause**: Live transcripts overwriting user input, poor user edit detection
+**Fix**: Smart transcript selection that distinguishes live updates from user edits
 ```typescript
-const userHasEdits = editableTranscript.trim() !== sessionTranscript.trim();
+// Enhanced user edit detection - don't treat live recording growth as "user edits"
+const localStart = (localTranscript || '').substring(0, currentEditableLength);
+const userHasEdits = currentEditableLength > 0 && 
+  editableTranscript.trim() !== sessionTranscript.trim() &&
+  editableTranscript.trim() !== localStart.trim() &&
+  !(localTranscript || '').startsWith(editableTranscript.trim());
+
 if (userHasEdits) {
   transcript = editableTranscript; // Preserve user edits
+} else {
+  transcript = localTranscript; // Continue with live updates
 }
+```
+
+### Issue 5: Multiple chunks creating separate sessions
+**Cause**: currentSession becomes undefined between chunks
+**Fix**: Prioritize sessionId parameter from useGeorgianTTS hook
+```typescript
+// In GeorgianSTTApp.tsx - Use recording session ID consistently
+const targetSessionId = sessionId || currentSession?.id; // sessionId from hook takes priority
 ```
 
 ## Database Schema
@@ -340,24 +421,37 @@ const processAudioChunk = async (audioBlob: Blob) => {
 
 ### Key Test Scenarios
 1. **STT Engine Switching**: Test all three engines work
-2. **Long Recording**: Record >30 seconds, verify segments combine
-3. **User Typing**: Type during recording, verify text preserved
+2. **Long Recording**: Record >30 seconds, verify all chunks appear in UI and database
+3. **User Typing**: Type during recording, verify text preserved and live updates continue
 4. **Session Recovery**: Refresh page, verify sessions persist
-5. **Network Issues**: Test offline/online transitions
-6. **Mobile Performance**: Test on mobile devices
+5. **Multiple Chunks**: Record >60 seconds, verify no duplicate sessions created
+6. **Session State Sync**: Verify currentSession remains consistent during recording
+7. **Database Append**: Verify chunks append to database (not replace)
+8. **Network Issues**: Test offline/online transitions
+9. **Mobile Performance**: Test on mobile devices
 
 ### Debug Tools
 ```typescript
-// Session debugging
+// Session debugging - Enhanced with recording session tracking
+console.log('💾 Saving to session:', targetSessionId, '(from', sessionId ? 'recording' : 'current', ')');
+console.log('🔍 Session not in local state, fetching from database:', sessionId);
+console.log('✅ Found session in database:', sessionId);
 console.log('Available sessions:', sessions.map(s => s.id));
 console.log('Current session:', currentSession?.id);
 
-// Transcript debugging  
+// Transcript debugging - Enhanced with user edit detection
 console.log('Transcript selection:', {
   sessionLength,
   localLength,
   currentEditableLength,
-  userHasEdits
+  userHasEdits,
+  localStart: localStart.substring(0, 30) + '...'
+});
+console.log('🔄 Appending to transcript:', {
+  sessionId,
+  existingLength,
+  newTextLength,
+  combinedLength
 });
 ```
 

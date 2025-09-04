@@ -232,9 +232,13 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     let transcript = '';
     
     // Check if user has made manual edits that would be lost
+    // During live recording, localTranscript grows with new segments, but that's not a "user edit"
+    // Only consider it a user edit if the editable content differs from the START of local transcript
+    const localStart = (localTranscript || '').substring(0, currentEditableLength);
     const userHasEdits = currentEditableLength > 0 && 
                         editableTranscript.trim() !== sessionTranscript.trim() &&
-                        editableTranscript.trim() !== (localTranscript || '').trim();
+                        editableTranscript.trim() !== localStart.trim() &&
+                        !(localTranscript || '').startsWith(editableTranscript.trim()); // Not just a prefix of live recording
     
     if (userHasEdits) {
       // User has made manual edits - preserve them

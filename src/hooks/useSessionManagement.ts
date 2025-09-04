@@ -400,8 +400,40 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
       console.log('🔧 Using currentSession for appendToTranscript:', sessionId);
     }
     
+    // If still not found, try to fetch directly from database (session might be newly created)
+    if (!session && user) {
+      console.log('🔍 Session not in local state, fetching from database:', sessionId);
+      
+      const [dbSession, dbError] = await safeAsync(
+        () => (supabase as any)
+          .from('georgian_sessions')
+          .select('*')
+          .eq('id', sessionId)
+          .eq('user_id', user.id)
+          .eq('is_active', true)
+          .single()
+      );
+
+      if (!dbError && dbSession) {
+        const sessionData = dbSession?.data ? dbSession.data : dbSession;
+        session = {
+          id: sessionData.id,
+          userId: sessionData.user_id,
+          title: sessionData.title,
+          transcript: sessionData.transcript || '',
+          durationMs: sessionData.duration_ms || 0,
+          audioFileUrl: sessionData.audio_file_url,
+          processingResults: sessionData.processing_results || [],
+          createdAt: sessionData.created_at,
+          updatedAt: sessionData.updated_at,
+          isActive: sessionData.is_active
+        };
+        console.log('✅ Found session in database:', sessionId);
+      }
+    }
+    
     if (!session) {
-      console.log('❌ Session not found for appendToTranscript:', sessionId);
+      console.log('❌ Session not found anywhere for appendToTranscript:', sessionId);
       console.log('🔍 Available sessions:', sessions.map(s => s.id));
       console.log('🔍 Current session ID:', currentSession?.id);
       return false;
