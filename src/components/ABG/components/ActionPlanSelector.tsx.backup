@@ -109,6 +109,7 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
   useEffect(() => {
     if (!result.action_plan || !isOpen) return;
 
+    console.log('🔍 DEBUG: Action plan received (first 800 chars):', result.action_plan.substring(0, 800));
 
     // Extract actual issues from the action plan
     const items: ActionPlanItem[] = [];

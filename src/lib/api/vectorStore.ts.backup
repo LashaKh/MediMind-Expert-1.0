@@ -473,6 +473,7 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
     
     for (let i = 0; i < chunks.length; i++) {
       const chunk = chunks[i];
+      console.log(`🧩 Uploading chunk ${i + 1}/${chunks.length} (${formatFileSize(chunk.chunkSize)})`);
       
       // Update progress for current chunk (10% to 80% for chunk uploads)
       const chunkProgress = 10 + Math.round((i / chunks.length) * 70);
@@ -596,6 +597,7 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
         ` - Part ${i + 1}/${uploadedChunks.length}`;
 
       const chunkTitle = `${baseTitle}${partSuffix}`;
+      console.log(`📝 Generated chunk title (${chunkTitle.length} chars): ${chunkTitle}`);
       
       // Calculate file size based on chunk type (PDF page chunk vs binary chunk)
       const chunkFileSize = 'chunkSize' in chunk ? chunk.chunkSize : chunk.pdfBytes.length;
@@ -692,6 +694,7 @@ async function uploadFileInChunks(request: DocumentUploadRequest, onProgress?: U
 async function cleanupChunks(userId: string, sessionId: string, chunkPaths: string[]): Promise<void> {
   try {
 
+    console.log(`   📁 Removing temp files from: temp-chunks/chunks-${new Date().toISOString().split('T')[0]}/`);
     
     if (chunkPaths.length > 0) {
       const { error } = await supabase.storage
@@ -701,6 +704,7 @@ async function cleanupChunks(userId: string, sessionId: string, chunkPaths: stri
       if (error) {
 
       } else {
+        console.log('✅ Temporary chunks cleaned up successfully (final documents are in OpenAI Vector Store)');
       }
     }
   } catch (error) {

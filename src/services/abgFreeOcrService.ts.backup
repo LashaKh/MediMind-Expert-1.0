@@ -396,6 +396,10 @@ export async function extractABGTextWithFreeOCR(
 
     // Debug: Log the formatted text to see if our formatting is working
 
+    console.log('Original OCR text:', ocrResult.text.substring(0, 200) + '...');
+    console.log('After postProcessABGText:', cleanedText.substring(0, 200) + '...');
+    console.log('Original has', (ocrResult.text.match(/\n/g) || []).length, 'line breaks');
+    console.log('Cleaned has', (cleanedText.match(/\n/g) || []).length, 'line breaks');
 
     return {
       success: true,

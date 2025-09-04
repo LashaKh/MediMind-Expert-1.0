@@ -2,6 +2,26 @@
 
 Complete implementation guide for building a fully functional Georgian speech recognition system using Enagramm.com API with React, TypeScript, and Supabase.
 
+## ⚠️ IMPORTANT: CORRECT API ENDPOINTS AND PARAMETERS
+
+**Authentication (CORRECT):**
+- Endpoint: `https://enagramm.com/API/Account/Login`
+- Method: `POST`
+- Body: `{ Email, Password, RememberMe }`
+- Response: `{ Success, AccessToken, ... }`
+
+**Speech Recognition (CORRECT):**
+- Regular STT: `https://enagramm.com/API/STT/RecognizeSpeech`
+- Speaker Diarization: `https://enagramm.com/API/STT/RecognizeSpeechFileSubmit`
+- Authorization: `Bearer ${AccessToken}`
+
+**STT Models:**
+- STT1 (default): Regular speech recognition only, omit Engine parameter
+- STT2: Supports speaker diarization, include `Engine: "STT2"`
+- STT3: Supports speaker diarization, include `Engine: "STT3"`
+
+**IMPORTANT**: The code examples below may contain OUTDATED endpoints - use the correct ones above!
+
 ## Table of Contents
 
 1. [System Architecture Overview](#system-architecture-overview)
@@ -112,9 +132,14 @@ const corsHeaders = {
 }
 
 interface EnagrammAuthResponse {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
+  Success: boolean;
+  ErrorCode: string;
+  Error: string;
+  Message: string;
+  AccessToken: string;
+  RefreshToken: string;
+  Email: string;
+  PackageID: number;
 }
 
 interface EnagrammUploadResponse {
@@ -173,15 +198,16 @@ serve(async (req) => {
 })
 
 async function handleAuthentication(): Promise<Response> {
-  const authResponse = await fetch('https://api.enagramm.com/api/auth/login', {
+  // ⚠️  CORRECT ENAGRAMM API ENDPOINT AND PARAMETERS
+  const authResponse = await fetch('https://enagramm.com/API/Account/Login', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      email: Deno.env.get('ENAGRAMM_EMAIL'),
-      password: Deno.env.get('ENAGRAMM_PASSWORD')
+      Email: Deno.env.get('ENAGRAMM_EMAIL'),
+      Password: Deno.env.get('ENAGRAMM_PASSWORD'), 
+      RememberMe: true
     })
   })
 
@@ -191,13 +217,16 @@ async function handleAuthentication(): Promise<Response> {
   }
 
   const authData: EnagrammAuthResponse = await authResponse.json()
+  
+  if (!authData.Success || !authData.AccessToken) {
+    throw new Error(`Login failed: ${authData.Error || authData.Message || 'Unknown error'}`)
+  }
 
   return new Response(
     JSON.stringify({
       success: true,
-      access_token: authData.access_token,
-      token_type: authData.token_type,
-      expires_in: authData.expires_in
+      access_token: authData.AccessToken,
+      expires_in: 1800 // 30 minutes in seconds
     }),
     { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
   )
@@ -1644,6 +1673,101 @@ npm run dev:https
 - Background processing capabilities
 - Offline mode support
 - Mobile app integration
+
+---
+
+## ✅ TESTED & WORKING IMPLEMENTATION
+
+### Complete Edge Function (Georgian TTS Proxy)
+
+This is the **verified working** implementation as deployed in version 33:
+
+```typescript
+// CORRECT Authentication Function
+async function getValidToken(): Promise<string> {
+  if (cachedAccessToken && tokenExpiryTime && Date.now() < (tokenExpiryTime - 60000)) {
+    return cachedAccessToken
+  }
+
+  const loginResponse = await fetch('https://enagramm.com/API/Account/Login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      Email: Deno.env.get('ENAGRAMM_EMAIL') || 'your-email@gmail.com',
+      Password: Deno.env.get('ENAGRAMM_PASSWORD') || 'your-password',
+      RememberMe: true
+    })
+  })
+
+  const loginData: AuthResponse = await loginResponse.json()
+  
+  if (!loginData.Success || !loginData.AccessToken) {
+    throw new Error(`Login failed: ${loginData.Error}`)
+  }
+
+  cachedAccessToken = loginData.AccessToken
+  tokenExpiryTime = Date.now() + (29 * 60 * 1000) // 29 minutes
+  
+  return cachedAccessToken
+}
+
+// CORRECT STT Model Logic
+const isSTT1 = !body.Engine || body.Engine === 'STT1'
+const canUseSpeakerDiarization = !isSTT1 && (body.Engine === 'STT2' || body.Engine === 'STT3')
+
+// STT1: Regular speech recognition (no speaker diarization)
+if (!canUseSpeakerDiarization) {
+  const speechRequest = {
+    theAudioDataAsBase64: body.theAudioDataAsBase64,
+    Language: body.Language === 'ka-GE' ? 'ka' : body.Language,
+    Punctuation: body.Punctuation,
+    Autocorrect: body.Autocorrect,
+    Digits: body.Digits,
+    // Only include Engine if NOT STT1
+    ...(body.Engine && { Engine: body.Engine })
+  }
+  
+  const response = await fetch('https://enagramm.com/API/STT/RecognizeSpeech', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    body: JSON.stringify(speechRequest)
+  })
+}
+
+// STT2/STT3: Speaker diarization supported
+if (canUseSpeakerDiarization && body.enableSpeakerDiarization && body.Speakers >= 2) {
+  const formData = new FormData()
+  formData.append('AudioFile', audioBlob, 'audio.webm')
+  formData.append('Speakers', body.Speakers.toString())
+  formData.append('Language', body.Language === 'ka-GE' ? 'ka' : body.Language)
+  formData.append('Engine', body.Engine) // Required for STT2/STT3
+  
+  const response = await fetch('https://enagramm.com/API/STT/RecognizeSpeechFileSubmit', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${accessToken}` },
+    body: formData
+  })
+}
+```
+
+### Environment Variables (Supabase Secrets)
+
+```bash
+# Set in Supabase Dashboard > Settings > Edge Functions > Environment Variables
+ENAGRAMM_EMAIL=your-email@gmail.com  
+ENAGRAMM_PASSWORD=your-password
+```
+
+### Key Points
+
+1. **Authentication**: `Account/Login` endpoint with `Email/Password/RememberMe`
+2. **STT1**: Omit Engine parameter, use `RecognizeSpeech` endpoint
+3. **STT2/STT3**: Include Engine parameter, can use `RecognizeSpeechFileSubmit` for speaker diarization
+4. **Token Caching**: 29-minute cache prevents repeated auth calls
+5. **Error Handling**: 401 retry logic for token refresh
 
 ---
 

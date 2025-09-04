@@ -176,6 +176,7 @@ export const useRealtimeAnalytics = (
       
       if (!isVisible && subscriptionRef.current) {
         // Pause subscriptions when not visible
+        console.log('Pausing analytics subscriptions (tab hidden)');
         
         // On mobile, also clear the update buffer to save memory
         if (isMobile) {
@@ -187,6 +188,7 @@ export const useRealtimeAnalytics = (
         }
       } else if (isVisible && subscriptionRef.current && !wasVisible) {
         // Resume with mobile-aware refresh strategy
+        console.log('Resuming analytics subscriptions (tab visible)');
         
         // On mobile with slow connection, use longer delay before refresh
         const refreshDelay = (isMobile && isSlowConnection) ? 2000 : 500;
@@ -315,6 +317,7 @@ export const useRealtimeAnalytics = (
         // Add visibility change listener
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
+        console.log('Consolidated analytics subscription established (3→1 channels)');
         setConnected(true);
         
       } catch (err) {

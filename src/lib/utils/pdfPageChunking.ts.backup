@@ -47,6 +47,7 @@ export async function splitPDFIntoPageChunks(file: File): Promise<PDFPageChunk[]
     const totalPages = originalPdf.getPageCount();
     const totalChunks = Math.ceil(totalPages / PAGES_PER_CHUNK);
     
+    console.log(`📄 PDF has ${totalPages} pages, creating ${totalChunks} chunks (${PAGES_PER_CHUNK} pages per chunk)`);
     
     const chunks: PDFPageChunk[] = [];
     
@@ -85,6 +86,7 @@ export async function splitPDFIntoPageChunks(file: File): Promise<PDFPageChunk[]
         isLastChunk: chunkIndex === totalChunks - 1
       });
       
+      console.log(`✅ Created chunk ${chunkIndex + 1}: ${Math.round(chunkBytes.length / 1024)}KB`);
     }
 
     return chunks;

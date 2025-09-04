@@ -316,6 +316,13 @@ export class SearchOrchestrator {
         return await this.callProviderWithRetry(provider, query);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error(`💥 [${provider.id.toUpperCase()}] Provider completely failed:`, {
+          error: errorMessage,
+          errorType: error instanceof Error ? error.constructor.name : typeof error,
+          timeout: provider.timeout,
+          retryCount: provider.retryCount,
+          priority: provider.priority
+        });
         
         // Return structured error response for better debugging
         return {
@@ -423,12 +430,14 @@ export class SearchOrchestrator {
     
     for (let attempt = 0; attempt <= provider.retryCount; attempt++) {
       const attemptStartTime = Date.now();
+      console.log(`🎯 [${provider.id.toUpperCase()}] Attempt ${attempt + 1}/${provider.retryCount + 1}`);
       
       try {
         const response = await this.callProvider(provider, query);
         const totalTime = Date.now() - startTime;
         const attemptTime = Date.now() - attemptStartTime;
         
+        console.log(`✅ [${provider.id.toUpperCase()}] Success on attempt ${attempt + 1}`);
 
         console.groupEnd();
         
@@ -437,11 +446,18 @@ export class SearchOrchestrator {
         const attemptTime = Date.now() - attemptStartTime;
         lastError = error instanceof Error ? error : new Error('Unknown error');
         
+        console.error(`❌ [${provider.id.toUpperCase()}] Attempt ${attempt + 1} failed after ${attemptTime}ms:`, {
+          error: lastError.message,
+          stack: lastError.stack?.split('\n').slice(0, 3).join('\n'), // First 3 lines of stack
+          type: lastError.constructor.name
+        });
         
         if (attempt < provider.retryCount) {
           const delay = Math.min(1000 * Math.pow(2, attempt), 5000);
+          console.log(`⏳ [${provider.id.toUpperCase()}] Retrying in ${delay}ms...`);
           await new Promise(resolve => setTimeout(resolve, delay));
         } else {
+          console.error(`💥 [${provider.id.toUpperCase()}] All attempts failed. Total time: ${Date.now() - startTime}ms`);
         }
       }
     }
@@ -456,10 +472,12 @@ export class SearchOrchestrator {
   private async callProvider(provider: SearchProvider, query: SearchQuery): Promise<SearchResponse> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => {
+      console.warn(`⏰ [${provider.id.toUpperCase()}] Request timeout triggered after ${provider.timeout}ms`);
       controller.abort();
     }, provider.timeout);
 
     const requestStartTime = Date.now();
+    console.log(`🚀 [${provider.id.toUpperCase()}] Making API request...`);
 
     try {
       let response: SearchResponse;
@@ -490,6 +508,13 @@ export class SearchOrchestrator {
       const responseTime = Date.now() - requestStartTime;
       clearTimeout(timeoutId);
       
+      console.log(`✨ [${provider.id.toUpperCase()}] API response received:`, {
+        responseTime: `${responseTime}ms`,
+        resultsCount: response.results?.length || 0,
+        totalCount: response.totalCount,
+        status: response.status,
+        provider: response.provider
+      });
       
       return response;
     } catch (error) {
@@ -498,9 +523,18 @@ export class SearchOrchestrator {
       
       if (error instanceof Error && error.name === 'AbortError') {
         const timeoutError = new Error(`Provider ${provider.id} timed out after ${provider.timeout}ms`);
+        console.error(`⏰ [${provider.id.toUpperCase()}] Request timed out:`, {
+          timeout: `${provider.timeout}ms`,
+          actualTime: `${responseTime}ms`
+        });
         throw timeoutError;
       }
       
+      console.error(`💥 [${provider.id.toUpperCase()}] API request failed:`, {
+        responseTime: `${responseTime}ms`,
+        error: error instanceof Error ? error.message : String(error),
+        errorType: error instanceof Error ? error.constructor.name : typeof error
+      });
       
       throw error;
     }

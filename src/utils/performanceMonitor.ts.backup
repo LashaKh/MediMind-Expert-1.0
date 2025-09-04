@@ -129,6 +129,7 @@ class PerformanceMonitor {
       const recentRenders = existing.renderTimes.slice(-10);
       const timespan = recentRenders[recentRenders.length - 1] - recentRenders[0];
       if (timespan < 5000) { // 10 renders in less than 5 seconds
+        console.warn(`🔄 Excessive re-renders detected: ${componentName} rendered ${existing.renderCount} times (${recentRenders.length} in last ${(timespan/1000).toFixed(1)}s)`);
       }
     }
   }
@@ -188,6 +189,8 @@ class PerformanceMonitor {
     // Calculator loading performance
     if (summary.totalCalculatorsLoaded > 0) {
 
+      console.log(`- Average load time: ${summary.averageLoadTime.toFixed(2)}ms`);
+      console.log(`- Cache hit rate: ${summary.cacheHitRate.toFixed(1)}%`);
 
     }
     

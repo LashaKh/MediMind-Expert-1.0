@@ -198,26 +198,33 @@ serve(async (req) => {
     }
 
     // Check if speaker diarization is requested - with detailed debugging
+    // Note: STT1 doesn't support speaker diarization, only STT2 and STT3 do
+    const isSTT1 = !body.Engine || body.Engine === 'STT1'
+    const canUseSpeakerDiarization = !isSTT1 && (body.Engine === 'STT2' || body.Engine === 'STT3')
+    
     console.log('🎭 Speaker diarization condition check:', {
       enableSpeakerDiarization: body.enableSpeakerDiarization,
       speakersValue: body.Speakers,
       speakersType: typeof body.Speakers,
       speakersGreaterThan1: body.Speakers > 1,
       Engine: body.Engine,
+      isSTT1: isSTT1,
+      canUseSpeakerDiarization: canUseSpeakerDiarization,
       allConditions: {
         hasEnableSpeakerDiarization: !!body.enableSpeakerDiarization,
         hasSpeakers: !!body.Speakers,
-        speakersGreaterThan1: body.Speakers > 1
+        speakersGreaterThan1: body.Speakers > 1,
+        engineSupportsIt: canUseSpeakerDiarization
       },
-      finalCondition: body.enableSpeakerDiarization === true && body.Speakers && body.Speakers >= 2
+      finalCondition: body.enableSpeakerDiarization === true && body.Speakers && body.Speakers >= 2 && canUseSpeakerDiarization
     })
     
-    if (body.enableSpeakerDiarization === true && body.Speakers && body.Speakers >= 2) {
+    if (body.enableSpeakerDiarization === true && body.Speakers && body.Speakers >= 2 && canUseSpeakerDiarization) {
       console.log('🎭 Speaker diarization requested, using file upload endpoint...', {
         enableSpeakerDiarization: body.enableSpeakerDiarization,
         Speakers: body.Speakers,
         Language: body.Language,
-        Engine: body.Engine || 'STT3',
+        Engine: body.Engine || 'Default (STT1)',
         audioSize: body.theAudioDataAsBase64?.length || 0
       })
       
@@ -232,12 +239,15 @@ serve(async (req) => {
       formData.append('Autocorrect', body.Autocorrect.toString())
       formData.append('Punctuation', body.Punctuation.toString())
       formData.append('Digits', body.Digits.toString())
-      formData.append('Engine', body.Engine || 'STT3') // Use specified engine or default to STT3
+      // Only append Engine if one is specified (omit for default STT1)
+      if (body.Engine) {
+        formData.append('Engine', body.Engine)
+      }
 
       console.log('🚀 Sending to Enagramm RecognizeSpeechFileSubmit with speaker diarization...', {
         Speakers: body.Speakers,
         Language: body.Language === 'ka-GE' ? 'ka' : body.Language,
-        Engine: body.Engine || 'STT3',
+        Engine: body.Engine || 'Default (STT1)',
         Punctuation: body.Punctuation,
         Autocorrect: body.Autocorrect,
         Digits: body.Digits,
@@ -294,21 +304,22 @@ serve(async (req) => {
 
     // Fallback to regular speech recognition (no speaker diarization)
     console.log('🎤 Regular speech recognition requested...', {
-      Engine: body.Engine || 'STT3'
+      Engine: body.Engine || 'Default (STT1)'
     })
     
-    // Prepare the request with specified engine or default to STT3
+    // Prepare the request - only include Engine if specified (omit for default STT1)
     const speechRequest = {
       theAudioDataAsBase64: body.theAudioDataAsBase64,
       Language: body.Language === 'ka-GE' ? 'ka' : body.Language, // Convert ka-GE to ka for compatibility
       Punctuation: body.Punctuation,
       Autocorrect: body.Autocorrect,
       Digits: body.Digits,
-      Engine: body.Engine || 'STT3' // Use specified engine or default to STT3
+      // Only include Engine if one is specified (omit for default STT1)
+      ...(body.Engine && { Engine: body.Engine })
     }
 
     console.log('🚀 Sending to Enagramm RecognizeSpeech endpoint...', {
-      Engine: body.Engine || 'STT3', // Using specified engine or default to STT3
+      Engine: body.Engine || 'Default (STT1)',
       Language: speechRequest.Language,
       Punctuation: speechRequest.Punctuation,
       Autocorrect: speechRequest.Autocorrect,

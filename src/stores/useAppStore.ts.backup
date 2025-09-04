@@ -315,6 +315,7 @@ export const useAppStore = create<AppStore>()(
               }
               
               // For other errors, don't throw but log them
+              console.warn('Profile error (non-critical):', profileError);
               set({ profile: null });
               return;
             }

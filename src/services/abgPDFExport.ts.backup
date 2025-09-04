@@ -562,6 +562,7 @@ export const exportABGToPDF = (
     const filename = generatePDFFilename(results, options);
     downloadPDF(doc, filename);
     
+    console.log(`Exported ${results.length} ABG result(s) to PDF: ${filename}`);
   } catch (error) {
 
     throw error;

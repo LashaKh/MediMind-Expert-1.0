@@ -39,6 +39,7 @@ export const AppInitializer: React.FC<AppInitializerProps> = ({ children }) => {
       (window as any).clearLocalStorageAndReload = clearLocalStorageAndReload;
       (window as any).inspectLocalStorage = inspectLocalStorage;
       (window as any).nuclearReset = nuclearReset;
+      console.log('🔧 Debug functions available: debugUserAccess(), forceUserSessionRefresh(), testRLSEnforcement(), forceReloadCases(), clearLocalStorageAndReload(), inspectLocalStorage(), nuclearReset()');
     }
   }, []);
 

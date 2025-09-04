@@ -113,6 +113,7 @@ export async function monitorUserDocumentStatus(userId: string): Promise<FileSta
       continue;
     }
 
+    console.log(`🔍 Checking status for: "${doc.title}" (${Math.round((doc.file_size || 0) / 1024 / 1024)}MB)`);
 
     // Check actual OpenAI status
     const actualStatus = await checkVectorStoreFileStatus(
@@ -177,6 +178,7 @@ export async function monitorUserDocumentStatus(userId: string): Promise<FileSta
     }
   }
 
+  console.log(`📊 Monitoring complete. Updated ${results.filter(r => r.shouldUpdate).length} documents`);
   return results;
 }
 

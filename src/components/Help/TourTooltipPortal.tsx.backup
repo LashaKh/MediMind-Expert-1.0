@@ -118,6 +118,20 @@ export const TourTooltipPortal: React.FC<TourTooltipPortalProps> = ({
       const parentStyles = window.getComputedStyle(parent);
       const parentRect = parent.getBoundingClientRect();
       
+      console.log(`📊 Parent ${level + 1} (${parent.tagName}):`, {
+        element: parent,
+        rect: parentRect,
+        styles: {
+          overflow: parentStyles.overflow,
+          overflowX: parentStyles.overflowX,
+          overflowY: parentStyles.overflowY,
+          clipPath: parentStyles.clipPath,
+          clip: parentStyles.clip,
+          position: parentStyles.position,
+          zIndex: parentStyles.zIndex,
+          transform: parentStyles.transform
+        }
+      });
 
       parent = parent.parentElement;
       level++;

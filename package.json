@@ -28,7 +28,7 @@
     "test:e2e": "playwright test",
     "test:performance": "vitest run --reporter=verbose src/__tests__/performance",
     "test:accessibility": "vitest run --reporter=verbose src/__tests__/accessibility",
-    "cleanup:console": "node scripts/remove-console-logs.js",
+    "cleanup:console": "node scripts/remove-console-logs-safe.js",
     "cleanup:build": "rm -rf .netlify/functions-serve dist node_modules/.vite",
     "cleanup:ocr": "node scripts/migrate-ocr-imports.js",
     "cleanup:advanced": "npm run cleanup:console && npm run cleanup:ocr",

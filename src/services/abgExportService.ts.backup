@@ -311,6 +311,7 @@ export const exportAndDownload = async (
     }
 
   } catch (error) {
+    console.error(i18next.t('common.serviceErrors.failedToExportABGResults'), error);
     throw error;
   }
 };
@@ -383,6 +384,7 @@ export const getExportSummary = (
       estimatedFileSize
     };
   } catch (error) {
+    console.error(i18next.t('common.serviceErrors.failedToGetExportSummary'), error);
     throw error;
   }
 };

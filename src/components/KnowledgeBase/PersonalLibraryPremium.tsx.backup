@@ -174,6 +174,7 @@ const findDocumentGroupKey = (doc: DocumentWithMetadata, existingGroupKeys: stri
   // Check against all existing group keys
   for (const groupKey of existingGroupKeys) {
     const similarity = calculateSimilarity(cleanTitle, groupKey);
+    console.log(`🔍 Similarity check: "${cleanTitle}" vs "${groupKey}" = ${similarity.toFixed(3)}`);
     
     if (similarity > bestSimilarity && similarity >= SIMILARITY_THRESHOLD) {
       bestSimilarity = similarity;
@@ -182,6 +183,7 @@ const findDocumentGroupKey = (doc: DocumentWithMetadata, existingGroupKeys: stri
   }
   
   if (bestMatch) {
+    console.log(`✅ Found matching group: "${bestMatch}" (similarity: ${bestSimilarity.toFixed(3)})`);
   }
   
   return bestMatch;
@@ -242,6 +244,7 @@ const groupDocuments = (documents: DocumentWithMetadata[]): DocumentGroup[] => {
           const cleanTitle = extractCleanBaseTitle(doc.title);
           const similarity = calculateSimilarity(cleanTitle, groupKey);
           
+          console.log(`⏰ Time-based check: "${doc.title}" vs group "${groupKey}" - time diff: ${Math.abs(uploadTime - avgGroupUploadTime)}ms, similarity: ${similarity.toFixed(3)}`);
           
           if (similarity > bestSimilarity && similarity >= 0.6) { // Lower threshold for time-based grouping
             bestSimilarity = similarity;

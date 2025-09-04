@@ -54,6 +54,10 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
   // Sync with session processing results when they change
   useEffect(() => {
     if (options?.sessionProcessingResults) {
+      console.log('🔄 Syncing processing history from session:', {
+        sessionResults: options.sessionProcessingResults.length,
+        currentHistory: processingHistory.length
+      });
       setProcessingHistory(options.sessionProcessingResults);
     }
     // Don't reset to empty array when sessionProcessingResults is undefined
@@ -68,6 +72,10 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
   ): Promise<ProcessingResult | null> => {
 
     if (!transcript.trim() || !userInstruction.trim()) {
+      console.error('❌ Validation failed:', {
+        hasTranscript: !!transcript.trim(),
+        hasInstruction: !!userInstruction.trim()
+      });
       setError('Both transcript and instruction are required');
       return null;
     }
@@ -142,9 +150,18 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
       timestamp: Date.now()
     };
 
+    console.log('📝 Adding to processing history:', {
+      model,
+      responseLength: response.length,
+      currentHistoryLength: processingHistory.length
+    });
 
     setProcessingHistory(prev => {
       const newHistory = [historyItem, ...prev];
+      console.log('✅ Updated processing history:', {
+        previousLength: prev.length,
+        newLength: newHistory.length
+      });
       return newHistory;
     });
   }, [processingHistory.length]);

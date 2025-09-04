@@ -32,6 +32,7 @@ if (typeof window !== 'undefined') {
   
   // Strategy 3: Complete fallback - disable worker entirely (guaranteed to work)
   if (!workerConfigured) {
+    console.warn('🐌 All worker configurations failed, disabling worker (slower but bulletproof)');
     pdfjsLib.GlobalWorkerOptions.disableWorker = true;
     pdfjsLib.GlobalWorkerOptions.workerSrc = null;
   }

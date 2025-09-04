@@ -155,6 +155,7 @@ export const useABGWorkflow = ({
     setInterpretation('');
 
     try {
+      console.log('🤖 Starting unified BG analysis workflow (Premium)');
       
       // Start unified analysis with real-time progress
       const result = await processImageWithUnifiedAnalysis(
@@ -236,8 +237,10 @@ export const useABGWorkflow = ({
 
       setCompletedResult(partialABGResult);
       setCurrentProcessingStatus('Interpretation completed - Ready for action plan');
+      console.log('✅ Unified BG analysis completed successfully (Premium)');
 
     } catch (err) {
+      console.error('Unified ABG analysis failed (Premium):', err);
       
       let errorMessage = 'An unexpected error occurred during analysis';
       if (err instanceof Error) {
@@ -287,6 +290,7 @@ export const useABGWorkflow = ({
     clearError();
 
     try {
+      console.log('🔄 Re-analyzing with edited text (Premium)');
       
       const result = await reAnalyzeWithEditedText(editedText, abgType, (progress) => {
         setUnifiedProgress({
@@ -324,8 +328,10 @@ export const useABGWorkflow = ({
       });
 
       setCurrentProcessingStatus('Re-analysis completed successfully!');
+      console.log('✅ Re-analysis completed successfully (Premium)');
 
     } catch (err) {
+      console.error('Re-analysis failed (Premium):', err);
       const errorMessage = err instanceof Error ? err.message : 'Re-analysis failed';
       setError(errorMessage);
       setCurrentProcessingStatus('Re-analysis failed');

@@ -118,6 +118,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     let timeoutId: NodeJS.Timeout;
     
     if (state?.abgContext) {
+      console.log('ABG context received (passive loading):', state.abgContext);
 
       setIsContextLoading(true);
       setAbgContext(state.abgContext);
@@ -335,6 +336,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     let finalEnhancedContent = enhancedContent;
 
     if (abgContext) {
+      console.log('🔧 Enhancing message with ABG context (overriding any existing enhancement)');
       // Use enhanced context function based on context type
       const consultationType = abgContextType === 'interpretation-only' 
         ? 'interpretation-only' 
@@ -348,6 +350,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         consultationType
       );
       
+      console.log('✅ Enhanced ABG content created:', finalEnhancedContent?.substring(0, 200) + '...');
     } else {
 
     }

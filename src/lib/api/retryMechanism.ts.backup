@@ -122,6 +122,7 @@ export const retryWithBackoff = async <T>(
           });
         }
         
+        console.warn(`Retrying request (attempt ${attempt}/${config.maxAttempts}) after ${jitteredDelay}ms delay`, error);
         
         await sleep(jitteredDelay);
       }

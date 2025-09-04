@@ -110,6 +110,7 @@ Please extract ALL visible text and numerical values exactly as shown, maintaini
     
     // Debug logging for image processing
 
+    console.log('Base64 preview (first 100 chars):', base64Image.substring(0, 100));
 
     const apiResponse = await fetch(
       'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=' + 
@@ -173,6 +174,7 @@ Please extract ALL visible text and numerical values exactly as shown, maintaini
 
     // Debug logging to understand what Gemini is actually returning
 
+    console.log('Full API Response:', JSON.stringify(data, null, 2));
 
     if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
 

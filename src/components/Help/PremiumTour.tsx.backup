@@ -122,6 +122,7 @@ export const PremiumTour: React.FC<PremiumTourProps> = ({
           
           resolve(element);
         } else if (retriesLeft > 0) {
+          console.log(`⏳ Element ${selector} not found, retrying... (${retriesLeft} attempts left)`);
           setTimeout(() => attempt(retriesLeft - 1), 200);
         } else {
 
