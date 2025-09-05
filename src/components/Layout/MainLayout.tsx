@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
@@ -8,6 +8,7 @@ import { useTheme } from '../../hooks/useTheme';
 import { useTour } from '../../stores/useAppStore';
 import { PremiumTour } from '../Help/PremiumTour';
 import { useFontGuard } from '../../hooks/useFontGuard';
+import { PullToRefreshContainer } from '../ui/PullToRefreshContainer';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -85,6 +86,21 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     setIsSidebarOpen(false);
   };
 
+  // Handle pull-to-refresh with route-specific logic
+  const handleRefresh = useCallback(async () => {
+    // Add slight delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Route-specific refresh logic
+    if (isAICopilotPage) {
+      // For AI Copilot, we could refresh the conversation or clear it
+      window.location.reload();
+    } else {
+      // For other pages, simple page reload
+      window.location.reload();
+    }
+  }, [isAICopilotPage]);
+
   return (
     <div 
       className="min-h-screen flex flex-col bg-background safe-area-inset layout-container"
@@ -128,9 +144,15 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           }}
         >
           {/* Complete gap elimination - zero margin/padding wrapper */}
-          <div className="h-full w-full m-0 p-0 border-0 bg-transparent overflow-auto">
-            {children}
-          </div>
+          <PullToRefreshContainer
+            onRefresh={handleRefresh}
+            enabled={!isOnboardingPage && isMobile} // Only enable on mobile and not on onboarding
+            className="h-full w-full"
+          >
+            <div className="h-full w-full m-0 p-0 border-0 bg-transparent overflow-auto">
+              {children}
+            </div>
+          </PullToRefreshContainer>
         </main>
       </div>
       

@@ -1153,9 +1153,9 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       )}
 
       {/* Mobile-Optimized Chat Area */}
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative z-10">
+      <div className="flex-1 flex flex-col min-h-0 relative z-10">
         {/* Mobile-Enhanced Messages Display */}
-        <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
+        <div className="flex-1 flex flex-col min-h-0 relative">
           {messages.length === 0 ? (
             // Clinical Dashboard - Professional medical workflow interface
             <div className="flex-1 overflow-y-auto">

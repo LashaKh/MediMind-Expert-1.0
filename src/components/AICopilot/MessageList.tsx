@@ -71,6 +71,14 @@ export const MessageList: React.FC<MessageListProps> = ({
         role="log"
         aria-live="polite"
         aria-label="Chat messages"
+        style={{
+          WebkitOverflowScrolling: 'touch',
+          overscrollBehavior: 'contain',
+          touchAction: 'pan-y',
+          scrollBehavior: 'smooth',
+          willChange: 'scroll-position',
+          transform: 'translateZ(0)'
+        }}
       >
         {/* Render messages with modern spacing */}
         {messages.map((message, index) => (
