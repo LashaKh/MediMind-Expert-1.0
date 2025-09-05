@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy, Download, Edit3, Stethoscope, MessageSquare, Sparkles, Mic, Square } from 'lucide-react';
+import { Edit3, Stethoscope, MessageSquare, Sparkles, Mic, Square } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { TRANSCRIPT_TABS, TabId } from '../utils/uiConstants';
 
@@ -7,9 +7,6 @@ interface TabNavigationProps {
   activeTab: TabId;
   onTabChange: (tab: TabId) => void;
   hasTranscript: boolean;
-  onCopy?: () => void;
-  onDownload?: () => void;
-  onEdit?: () => void;
   // Recording controls
   canRecord?: boolean;
   canStop?: boolean;
@@ -31,9 +28,6 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
   activeTab,
   onTabChange,
   hasTranscript,
-  onCopy,
-  onDownload,
-  onEdit,
   canRecord = false,
   canStop = false,
   isRecording = false,
@@ -100,14 +94,14 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
           
           {/* Right Side Actions - Mobile Optimized */}
           <div className="flex items-center space-x-2 sm:space-x-3">
-            {/* Premium Record Button - Only show on transcript tab and hidden on mobile (FAB handles mobile) */}
+            {/* Premium Record Button - Mobile Optimized */}
             {activeTab === 'transcript' && (onStartRecording || onStopRecording) && (
               <button
                 onClick={isRecording ? (canStop ? onStopRecording : undefined) : (canRecord ? onStartRecording : undefined)}
                 disabled={isRecording ? !canStop : !canRecord}
                 className={`
-                  group relative overflow-hidden px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl flex items-center space-x-2.5 min-w-[120px] justify-center
-                  medical-primary-action medical-touch-target hidden sm:flex
+                  group relative overflow-hidden px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl flex items-center space-x-1 sm:space-x-2.5 min-w-[80px] sm:min-w-[120px] justify-center
+                  medical-primary-action medical-touch-target
                   ${isRecording 
                     ? (canStop 
                         ? 'bg-gradient-to-r from-red-500 via-rose-600 to-red-600 hover:from-red-600 hover:via-rose-700 hover:to-red-700 text-white shadow-red-500/40' 
@@ -140,33 +134,6 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
               </button>
             )}
 
-            {/* Action Buttons for Transcript - Mobile Friendly */}
-            {activeTab === 'transcript' && hasTranscript && (
-              <div className="flex items-center bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-xl p-1 shadow-lg">
-                {onCopy && (
-                  <button
-                    onClick={onCopy}
-                    className="flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium group"
-                    style={{ minWidth: 'var(--medical-mobile-touch-md)', minHeight: 'var(--medical-mobile-touch-md)' }}
-                  >
-                    <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform duration-200 flex-shrink-0" />
-                    <span className="hidden sm:inline">Copy</span>
-                  </button>
-                )}
-                
-                {onDownload && (
-                  <button
-                    onClick={onDownload}
-                    className="flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium group"
-                    style={{ minWidth: 'var(--medical-mobile-touch-md)', minHeight: 'var(--medical-mobile-touch-md)' }}
-                  >
-                    <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform duration-200 flex-shrink-0" />
-                    <span className="hidden sm:inline">Download</span>
-                  </button>
-                )}
-                
-              </div>
-            )}
           </div>
         </div>
       </div>
