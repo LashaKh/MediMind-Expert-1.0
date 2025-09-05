@@ -956,22 +956,42 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
 
   // Case management methods
   const createCase = async (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>): Promise<PatientCase> => {
+    console.log('🚨 CREATECASE FUNCTION CALLED - This should appear in console!');
     const now = new Date();
     const caseId = uuidv4();
-    const newCase: PatientCase = {
-      ...caseData,
-      id: caseId,
-      createdAt: now,
-      updatedAt: now
-    };
-
+    
     try {
+      // Get current user from Supabase auth
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('No authenticated user found for case creation');
+      }
+
+      const newCase: PatientCase = {
+        ...caseData,
+        id: caseId,
+        userId: user.id, // Set the user ID from auth
+        createdAt: now,
+        updatedAt: now
+      };
+
       // Save to Supabase database
+      console.log('Inserting case to database with data:', {
+        id: caseId,
+        user_id: user.id,
+        title: caseData.title,
+        description: caseData.description,
+        anonymized_info: caseData.anonymizedInfo,
+        specialty: caseData.specialty,
+        status: caseData.status || 'active',
+        metadata: caseData.metadata || {}
+      });
+      
       const { data, error } = await (supabase as any)
         .from('patient_cases')
         .insert({
           id: caseId,
-          user_id: caseData.userId,
+          user_id: user.id, // Use the authenticated user ID
           title: caseData.title,
           description: caseData.description,
           anonymized_info: caseData.anonymizedInfo,
@@ -982,16 +1002,38 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
         .select()
         .single();
 
+      console.log('Database insert result:', { data, error });
+
       if (error) {
+        console.error('Supabase error details:', error);
         logger.error('Error saving case to database', error, { component: 'ChatContext', action: 'saveCase' });
         throw error;
       }
 
+      if (!data) {
+        console.error('No data returned from database insert');
+        throw new Error('No data returned from database insert');
+      }
+
+      // Use the data returned from database instead of local newCase
+      const savedCase: PatientCase = {
+        id: data.id,
+        userId: data.user_id,
+        title: data.title,
+        description: data.description,
+        anonymizedInfo: data.anonymized_info,
+        specialty: data.specialty,
+        status: data.status,
+        metadata: data.metadata,
+        createdAt: new Date(data.created_at),
+        updatedAt: new Date(data.updated_at)
+      };
+
       // Update local state
-      dispatch({ type: 'ADD_CASE', payload: newCase });
-      dispatch({ type: 'SET_ACTIVE_CASE', payload: newCase });
+      dispatch({ type: 'ADD_CASE', payload: savedCase });
+      dispatch({ type: 'SET_ACTIVE_CASE', payload: savedCase });
       
-      return newCase;
+      return savedCase;
     } catch (error) {
       logger.error('Failed to create case', error, { component: 'ChatContext', action: 'createCase' });
       throw error;

@@ -74,7 +74,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     conversations,
     activeConversationId,
     setActiveConversation,
-    createCase,
     updateCase,
     activeCase,
     setActiveCase,
@@ -93,8 +92,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     loadFlowiseMessages
   } = useAppStore();
 
-  // Get Flowise metadata functions from ChatContext
-  const { saveFlowiseConversationMetadata, incrementFlowiseMessageCount, loadCases } = useChatContext();
+  // Get Flowise metadata functions and case management from ChatContext
+  const { saveFlowiseConversationMetadata, incrementFlowiseMessageCount, loadCases, createCase } = useChatContext();
 
   const navigate = useNavigate();
   const [showConversationList, setShowConversationList] = useState(false);
@@ -524,37 +523,48 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   }, [addMessage, sendToFlowise, activeConversationId, knowledgeBase, activeCase, setChatLoading, setChatError, ensureConversationExists, abgContext]);
 
   // Handle case creation
-  const handleCaseCreate = async (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newCase = await createCase(caseData);
-    
-    // Reload cases to ensure the list is up-to-date
-    await loadCases();
-    
-    // Create a new conversation for this case with proper type
-    const newConversationId = createNewConversation(
-      `Case: ${newCase.title}`, 
-      profile?.medical_specialty as 'cardiology' | 'obgyn',
-      newCase.id,
-      'case-study'
-    );
-    
-    // Set the new conversation as active
-    setActiveConversation(newConversationId);
-    
-    // Add an initial AI message with case context
-    const caseIntroMessage: Message = {
-      id: uuidv4(),
-      content: t('chat.caseReceived', { title: newCase.title }) + 
-              '\n\n' + t('chat.caseSummary') + 
-              `\n${newCase.description}` +
-              '\n\n' + t('chat.caseDiscussionPrompt'),
-      type: 'ai',
-      timestamp: new Date(),
-    };
-    
-    addMessage(caseIntroMessage);
-    
-    return newCase;
+  const handleCaseCreate = async (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>): Promise<PatientCase> => {
+    try {
+      console.log('Creating case with data:', caseData);
+      console.log('🔍 DEBUG: createCase function is:', createCase);
+      console.log('🔍 DEBUG: typeof createCase:', typeof createCase);
+      const newCase = await createCase(caseData);
+      console.log('Case created successfully:', newCase);
+      
+      // Reload cases to ensure the list is up-to-date
+      await loadCases();
+      
+      // Create a new conversation for this case with proper type
+      const newConversationId = createNewConversation(
+        `Case: ${newCase.title}`, 
+        profile?.medical_specialty as 'cardiology' | 'obgyn',
+        newCase.id,
+        'case-study'
+      );
+      
+      // Set the new conversation as active
+      setActiveConversation(newConversationId);
+      
+      // Add an initial AI message with case context
+      const caseIntroMessage: Message = {
+        id: uuidv4(),
+        content: t('chat.caseReceived', { title: newCase.title }) + 
+                '\n\n' + t('chat.caseSummary') + 
+                `\n${newCase.description}` +
+                '\n\n' + t('chat.caseDiscussionPrompt'),
+        type: 'ai',
+        timestamp: new Date(),
+        sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
+      };
+      
+      addMessage(caseIntroMessage);
+      
+      return newCase;
+    } catch (error) {
+      console.error('Failed to create case:', error);
+      setChatError('Failed to create case. Please try again.');
+      throw error; // Re-throw so the modal can handle it
+    }
   };
 
   // Handle case update
@@ -644,6 +654,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
             content: `Hello! I've cleared the previous case context and we're starting fresh. How can I assist you with your ${profile?.medical_specialty || 'medical'} practice today?`,
             type: 'ai' as const,
             timestamp: new Date(),
+            sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
           };
           addMessage(welcomeMessage);
         }, 100);
@@ -1230,8 +1241,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         </div>
       )}
 
-      {/* Desktop Input Area - Only show on desktop */}
-      <div className={`desktop-input-wrapper flex-shrink-0 relative z-20 ${shouldOptimize ? 'hidden md:hidden lg:hidden xl:hidden' : 'block'}`}>
+      {/* Desktop Input Area - Only show on desktop and when case modal is not open */}
+      <div className={`desktop-input-wrapper flex-shrink-0 relative z-20 ${shouldOptimize ? 'hidden md:hidden lg:hidden xl:hidden' : (showCaseModal ? 'hidden' : 'block')}`}>
         {/* Mobile-first glass morphism container */}
         <div className={`relative ${animationClasses.backdropBlur} bg-gradient-to-t from-white/95 via-white/90 to-white/95 border-t border-white/60 shadow-2xl shadow-slate-900/10`}>
           {/* Performance-optimized ambient glow effect */}
@@ -1295,8 +1306,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         </div>
       </div>
 
-      {/* Mobile Input Area - Fixed positioned for mobile only */}
-      {shouldOptimize && (
+      {/* Mobile Input Area - Fixed positioned for mobile only and when case modal is not open */}
+      {shouldOptimize && !showCaseModal && (
         <>
           {activeCase ? (
             <CaseContextProvider 
