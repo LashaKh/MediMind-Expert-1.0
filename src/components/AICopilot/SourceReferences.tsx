@@ -213,11 +213,11 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
                                 onClick={(e) => e.stopPropagation()}
                                 className="text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 font-medium text-sm flex items-center space-x-1 group flex-1 min-w-0 transition-colors duration-200"
                               >
-                                <span className="truncate">{source.title || 'Medical Source'}</span>
+                                <span className="break-words">{source.title || 'Medical Source'}</span>
                                 <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
                               </a>
                             ) : (
-                              <span className="text-gray-900 dark:text-gray-100 font-medium text-sm block truncate flex-1">
+                              <span className="text-gray-900 dark:text-gray-100 font-medium text-sm block break-words flex-1">
                                 {source.title || 'Medical Source'}
                               </span>
                             )}
@@ -225,19 +225,17 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
                           
                           {/* Enhanced action buttons */}
                           <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                            {/* View text chunk button */}
-                            {(source.excerpt || source.type === 'personal') && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setSelectedSource(source);
-                                }}
-                                className="p-2 text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 hover:shadow-sm"
-                                title="View full text content"
-                              >
-                                <Eye className="w-4 h-4" />
-                              </button>
-                            )}
+                            {/* View text chunk button - available for all sources */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedSource(source);
+                              }}
+                              className="p-2 text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 hover:shadow-sm"
+                              title="View full text content"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
                           </div>
                         </div>
 
@@ -484,7 +482,11 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
                 <div className="p-6">
                   <div className="prose prose-base dark:prose-invert max-w-none">
                     <div className="text-gray-800 dark:text-gray-200 leading-relaxed text-base whitespace-pre-wrap break-words">
-                      {selectedSource.excerpt || 'No text content available for this source.'}
+                      {selectedSource.excerpt || 
+                       selectedSource.content || 
+                       selectedSource.description || 
+                       selectedSource.text ||
+                       (selectedSource.title ? `This is a reference to: ${selectedSource.title}` : 'No text content available for this source.')}
                     </div>
                   </div>
                 </div>
