@@ -132,8 +132,9 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
     return null;
   }
 
-  const visibleSources = isExpanded ? sources : sources.slice(0, maxInitialDisplay);
-  const hasMoreSources = sources.length > maxInitialDisplay;
+  // Show all sources when section is open - no "Show more" needed
+  const visibleSources = sources;
+  const hasMoreSources = false; // Disable "Show more" functionality
 
   return (
     <>
@@ -161,19 +162,7 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
             </div>
             
             <div className="flex items-center space-x-2">
-              {/* Show More/Less button only when section is open and has more sources */}
-              {isSectionOpen && hasMoreSources && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent triggering the section toggle
-                    setIsExpanded(!isExpanded);
-                  }}
-                  className="flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-white/50 dark:bg-gray-800/50 hover:bg-white/80 dark:hover:bg-gray-700/80 border border-blue-200 dark:border-blue-700 rounded-lg transition-all duration-200 hover:shadow-sm"
-                >
-                  <span>{isExpanded ? t('chat.showLess') : t('chat.showMore')}</span>
-                  {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                </button>
-              )}
+              {/* Show More/Less button removed - all sources shown by default */}
               
               {/* Main expand/collapse indicator */}
               <div className="p-1 rounded-full hover:bg-white/50 dark:hover:bg-gray-700/50 transition-colors duration-200">

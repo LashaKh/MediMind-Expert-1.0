@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Bot, Clock, AlertCircle, CheckCircle, Sparkles, Brain } from 'lucide-react';
+import { User, Bot, Clock, AlertCircle, CheckCircle, Sparkles, Brain, Copy } from 'lucide-react';
 import { Message } from '../../types/chat';
 import { formatTimestamp } from '../../utils/chat/messageUtils';
 import { SourceReferences } from './SourceReferences';
@@ -64,10 +64,31 @@ export const UserMessageItem: React.FC<MessageItemProps> = ({ message, className
 export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className = '' }) => {
   const [highlightedSource, setHighlightedSource] = useState<number | null>(null);
   const [extractedSources, setExtractedSources] = useState<any[]>([]);
+  const [copied, setCopied] = useState(false);
 
   // Handle clicks on inline source references
   const handleSourceClick = (sourceNumber: number) => {
     setHighlightedSource(highlightedSource === sourceNumber ? null : sourceNumber);
+  };
+
+  // Handle copy to clipboard
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(message.content);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = message.content;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   // Check for extracted sources from MedicalMarkdownRenderer
@@ -143,10 +164,24 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
               </div>
             )}
             
-            {/* Message timestamp */}
-            <div className="text-xs text-gray-500 mt-3 flex items-center space-x-1">
-              <Clock className="w-3 h-3" />
-              <span>{formatTimestamp(message.timestamp)}</span>
+            {/* Copy button and timestamp */}
+            <div className="text-xs text-gray-500 mt-3 flex items-center justify-between">
+              <div className="flex items-center space-x-1">
+                <Clock className="w-3 h-3" />
+                <span>{formatTimestamp(message.timestamp)}</span>
+              </div>
+              
+              {/* Copy button */}
+              <button
+                onClick={handleCopy}
+                className="flex items-center space-x-1 px-2 py-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                title={copied ? "Copied!" : "Copy response"}
+              >
+                <Copy className="w-3 h-3" />
+                <span className="text-xs font-medium">
+                  {copied ? "Copied!" : "Copy"}
+                </span>
+              </button>
             </div>
           </div>
           
