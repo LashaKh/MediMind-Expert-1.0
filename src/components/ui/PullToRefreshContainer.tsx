@@ -46,8 +46,13 @@ export const PullToRefreshContainer: React.FC<PullToRefreshContainerProps> = ({
       {/* Pull-to-refresh indicator */}
       <PullToRefresh {...pullToRefreshState} />
       
-      {/* Main content */}
-      <div className="relative">
+      {/* Main content that moves down during pull */}
+      <div 
+        className="relative transition-transform duration-200 ease-out"
+        style={{
+          transform: `translateY(${pullToRefreshState.pullDistance}px)`
+        }}
+      >
         {children}
       </div>
     </div>

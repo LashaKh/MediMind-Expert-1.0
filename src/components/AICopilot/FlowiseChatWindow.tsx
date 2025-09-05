@@ -1171,7 +1171,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
               <MessageList 
                 messages={messages} 
                 isTyping={isTyping}
-                className={`flex-1 px-2 sm:px-4 py-4 sm:py-6 bg-gradient-to-b from-transparent via-white/20 to-transparent`}
+                className="flex-1 bg-gradient-to-b from-transparent via-white/20 to-transparent"
               />
             </div>
           )}

@@ -2621,8 +2621,8 @@ aside[id="sidebar"] {
 /* Mobile-first scroll optimizations */
 body, html {
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: none; /* Prevent pull-to-refresh on unsupported areas */
-  touch-action: pan-y; /* Allow vertical scrolling only */
+  /* overscroll-behavior-y: none; - Removed to allow normal scrolling */
+  /* touch-action: pan-y; - Removed to allow normal touch interactions */
 }
 
 /* Mobile touch optimizations for chat and main content areas */

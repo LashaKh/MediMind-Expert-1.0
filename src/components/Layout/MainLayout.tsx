@@ -33,6 +33,13 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   // Check if we're on the MediScribe page - hide bottom navigation for full screen transcription
   const isMediScribePage = location.pathname === '/mediscribe';
   
+  // Check if we're on pages that need normal scrolling (disable pull-to-refresh)
+  const isScrollablePage = location.pathname.includes('/knowledge-base') || 
+                          location.pathname.includes('/disease') || 
+                          location.pathname.includes('/calculator') ||
+                          location.pathname.includes('/medical-news') ||
+                          isMediScribePage;
+  
   // Initialize theme - this will force light mode
   useTheme();
 
@@ -146,7 +153,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           {/* Complete gap elimination - zero margin/padding wrapper */}
           <PullToRefreshContainer
             onRefresh={handleRefresh}
-            enabled={!isOnboardingPage && isMobile} // Only enable on mobile and not on onboarding
+            enabled={!isOnboardingPage && isMobile} // Enable on mobile except onboarding
             className="h-full w-full"
           >
             <div className="h-full w-full m-0 p-0 border-0 bg-transparent overflow-auto">

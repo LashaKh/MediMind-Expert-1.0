@@ -82,8 +82,10 @@ export const usePullToRefresh = ({
     const touchDistance = currentY - touchStartY.current;
     
     if (touchDistance > 0 && canInitiatePull()) {
-      // Prevent default to stop scrolling
-      e.preventDefault();
+      // Only prevent default if we're actually pulling (not just scrolling)
+      if (touchDistance > 10) { // Small threshold to allow normal scrolling
+        e.preventDefault();
+      }
       
       const pullDistance = calculatePullDistance(touchDistance);
       const canRefresh = pullDistance >= threshold;

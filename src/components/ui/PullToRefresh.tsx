@@ -29,95 +29,39 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 
   return (
     <div 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${className}`}
+      className={`absolute top-0 left-0 right-0 flex items-center justify-center transition-all duration-300 ease-out ${className}`}
       style={{
-        transform: `translateY(${Math.min(pullDistance * 0.5, 40)}px)`,
-        opacity: opacity
+        height: `${Math.max(pullDistance, 0)}px`,
+        opacity: opacity,
+        transform: `translateY(-${Math.max(pullDistance - 60, 0)}px)` // Keep indicator visible
       }}
     >
-      {/* Background with blur effect */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-slate-50/80 to-transparent backdrop-blur-lg" />
-      
-      {/* Indicator container */}
-      <div className="relative flex items-center justify-center pt-8 pb-4">
+      {/* Simple indicator that appears as page is pulled down */}
+      <div className="flex flex-col items-center justify-center">
         {/* Main indicator circle */}
         <div 
-          className="relative flex items-center justify-center w-12 h-12 transition-all duration-300 ease-out"
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 shadow-lg transition-all duration-300 ease-out"
           style={{
-            transform: `scale(${scale}) rotateZ(${rotation}deg)`,
+            transform: `scale(${scale}) rotate(${rotation}deg)`,
           }}
         >
-          {/* Background circle with medical gradient */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-lg">
-            {/* Pulse effect for refreshing state */}
-            {isRefreshing && (
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 animate-ping opacity-75" />
-            )}
-          </div>
-          
-          {/* Progress ring */}
-          <div className="absolute inset-1 rounded-full border-2 border-white/30">
-            <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 36 36">
-              {/* Background circle */}
-              <path
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                fill="none"
-                stroke="rgba(255, 255, 255, 0.2)"
-                strokeWidth="2"
-              />
-              {/* Progress arc */}
-              <path
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeDasharray={`${pullProgress * 100}, 100`}
-                className="transition-all duration-200 ease-out"
-              />
-            </svg>
-          </div>
-          
           {/* Icon */}
-          <div className="relative z-10 text-white">
+          <div className="text-white">
             {isRefreshing ? (
-              <RefreshCw 
-                className="w-5 h-5 animate-spin" 
-                style={{
-                  animationDuration: '1s'
-                }}
-              />
+              <RefreshCw className="w-4 h-4 animate-spin" />
             ) : (
-              <Stethoscope 
-                className="w-5 h-5 transition-transform duration-200"
-                style={{
-                  transform: `scale(${Math.min(pullProgress * 1.5, 1)})`
-                }}
-              />
+              <Stethoscope className="w-4 h-4" />
             )}
           </div>
         </div>
-      </div>
-      
-      {/* Status text */}
-      <div className="relative flex items-center justify-center pb-4">
-        <div className="px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200/60 shadow-sm">
-          <p className="text-sm font-medium text-slate-700 transition-all duration-200">
-            {isRefreshing ? (
-              <span className="flex items-center space-x-2">
-                <span>Refreshing...</span>
-              </span>
-            ) : pullProgress >= 1 ? (
-              <span className="text-blue-600 font-semibold">Release to refresh</span>
-            ) : (
-              <span>Pull to refresh</span>
-            )}
+        
+        {/* Status text */}
+        {pullDistance > 30 && (
+          <p className="text-xs font-medium text-slate-600 mt-2">
+            {isRefreshing ? 'Refreshing...' : pullProgress >= 1 ? 'Release to refresh' : 'Pull to refresh'}
           </p>
-        </div>
+        )}
       </div>
-      
-      {/* Subtle bottom gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-b from-transparent to-slate-50/20 pointer-events-none" />
     </div>
   );
 };
