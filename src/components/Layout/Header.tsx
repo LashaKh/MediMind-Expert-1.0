@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Stethoscope, Menu, ArrowUp } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -6,6 +6,7 @@ import { useAuth } from '../../stores/useAppStore';
 import { UserDropdown } from './UserDropdown';
 import { LanguageSelector } from '../ui/LanguageSelector';
 import { useTour } from '../../stores/useAppStore';
+import { useSmartPullToRefresh } from '../../hooks/useSmartPullToRefresh';
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -20,6 +21,17 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isCondensed, setIsCondensed] = useState(false);
   const { openTour } = useTour();
+  const headerRef = useRef<HTMLElement>(null);
+  const mobileButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Smart pull-to-refresh (only in header area, doesn't interfere with scrolling)
+  const { bindToElement } = useSmartPullToRefresh({
+    onRefresh: async () => {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      window.location.reload();
+    },
+    enabled: isMobile && !isOnboardingPage
+  });
 
   // Detect mobile and scroll behavior
   useEffect(() => {
@@ -50,6 +62,15 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
     };
   }, []);
 
+  // Bind pull-to-refresh to header element (desktop) or mobile button
+  useEffect(() => {
+    const element = isMobile ? mobileButtonRef.current : headerRef.current;
+    if (element) {
+      const cleanup = bindToElement(element);
+      return cleanup;
+    }
+  }, [bindToElement, isMobile]);
+
   // Back to top functionality
   const scrollToTop = () => {
     window.scrollTo({
@@ -63,6 +84,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
       {/* Floating Menu Button for Mobile - Edge Tab Style */}
       {isMobile && user && !isOnboardingPage && (
         <button
+          ref={mobileButtonRef}
           onClick={onMenuToggle}
           className="fixed left-0 top-1/2 -translate-y-1/2 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-lg hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 focus-enhanced active:scale-95 rounded-r-2xl"
           aria-label={t('navigation.toggleMenu')}
@@ -92,6 +114,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
 
       {/* Header - hidden on mobile */}
       <header 
+        ref={headerRef}
         className={`
           ${isMobile ? 'hidden' : 'fixed top-0 left-0 right-0 z-50'}
           bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm
