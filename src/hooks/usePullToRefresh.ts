@@ -81,11 +81,10 @@ export const usePullToRefresh = ({
     const currentY = e.touches[0].clientY;
     const touchDistance = currentY - touchStartY.current;
     
-    if (touchDistance > 0 && canInitiatePull()) {
-      // Only prevent default if we're actually pulling (not just scrolling)
-      if (touchDistance > 10) { // Small threshold to allow normal scrolling
-        e.preventDefault();
-      }
+    // Only handle downward pulls when we can actually pull
+    if (touchDistance > 20 && canInitiatePull()) { // Increased threshold to 20px
+      // Only prevent default if we're definitely pulling down significantly
+      e.preventDefault();
       
       const pullDistance = calculatePullDistance(touchDistance);
       const canRefresh = pullDistance >= threshold;
@@ -103,6 +102,14 @@ export const usePullToRefresh = ({
           navigator.vibrate(50);
         }
       }
+    } else if (touchDistance <= 0) {
+      // Reset state if user starts scrolling up
+      setState(prev => ({
+        ...prev,
+        isPulling: false,
+        pullDistance: 0,
+        canRefresh: false
+      }));
     }
   }, [enabled, state.isRefreshing, state.canRefresh, canInitiatePull, calculatePullDistance, threshold]);
 
@@ -166,11 +173,13 @@ export const usePullToRefresh = ({
   useEffect(() => {
     if (!safeDocument || !enabled) return;
 
-    const options = { passive: false };
+    // Use passive listeners for better performance and less interference
+    const passiveOptions = { passive: true };
+    const activeOptions = { passive: false };
     
-    safeDocument.addEventListener('touchstart', handleTouchStart, options);
-    safeDocument.addEventListener('touchmove', handleTouchMove, options);
-    safeDocument.addEventListener('touchend', handleTouchEnd, options);
+    safeDocument.addEventListener('touchstart', handleTouchStart, passiveOptions);
+    safeDocument.addEventListener('touchmove', handleTouchMove, activeOptions);
+    safeDocument.addEventListener('touchend', handleTouchEnd, passiveOptions);
     
     return () => {
       safeDocument.removeEventListener('touchstart', handleTouchStart);
