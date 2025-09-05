@@ -99,8 +99,8 @@ export const MessageList: React.FC<MessageListProps> = ({
           </div>
         )}
 
-        {/* Scroll anchor with spacing */}
-        <div ref={messagesEndRef} className="h-4" />
+        {/* Scroll anchor with sufficient spacing for mobile input area */}
+        <div ref={messagesEndRef} className="h-32 sm:h-24" />
       </div>
 
     </div>
