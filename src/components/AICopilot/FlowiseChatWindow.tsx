@@ -838,7 +838,12 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
               {/* Left: Brand Identity */}
               <div className="flex items-center space-x-2 sm:space-x-4 min-w-0">
                 {/* Mobile-optimized AI avatar with 44px touch target */}
-                <div className="relative group cursor-pointer flex-shrink-0">
+                <div 
+                  className="relative group cursor-pointer flex-shrink-0"
+                  onClick={() => navigate('/')}
+                  role="button"
+                  aria-label="Navigate to home"
+                >
                   <div className={`
                     relative p-2 sm:p-3 lg:p-4 rounded-xl sm:rounded-2xl
                     min-w-[44px] min-h-[44px] flex items-center justify-center
