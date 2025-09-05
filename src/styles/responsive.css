@@ -2614,51 +2614,16 @@ aside[id="sidebar"] {
 }
 
 /* =============================================================================
-   MOBILE SCROLL & TOUCH OPTIMIZATIONS
+   MOBILE SCROLL & TOUCH OPTIMIZATIONS - MINIMAL SAFE VERSION
    Enhanced mobile experience for medical applications
    ============================================================================= */
 
-/* Mobile-first scroll optimizations */
+/* Minimal mobile scroll optimizations - only iOS momentum scrolling */
 body, html {
   -webkit-overflow-scrolling: touch;
-  /* overscroll-behavior-y: none; - Removed to allow normal scrolling */
-  /* touch-action: pan-y; - Removed to allow normal touch interactions */
 }
 
-/* Mobile touch optimizations for chat and main content areas */
-.mobile-scroll-optimized {
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
-  scroll-behavior: smooth;
-  will-change: scroll-position;
-  transform: translateZ(0); /* Force GPU acceleration */
-}
-
-/* Enhanced scrollable containers */
-.mobile-scrollable {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
-  scrollbar-width: thin;
-}
-
-/* iOS-specific momentum scrolling fix */
-@supports (-webkit-touch-callout: none) {
-  .mobile-scroll-optimized {
-    -webkit-overflow-scrolling: touch;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-}
-
-/* Pull-to-refresh specific optimizations */
-.pull-to-refresh-enabled {
-  overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Touch-friendly interactive elements */
+/* Touch-friendly interactive elements - safe utilities */
 .mobile-touch-target {
   min-height: 44px; /* Apple HIG recommendation */
   min-width: 44px;
@@ -2667,82 +2632,11 @@ body, html {
   justify-content: center;
   position: relative;
   cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
-/* Enhanced touch feedback */
-.mobile-touch-feedback {
-  transition: all 0.15s ease;
-  transform: translateZ(0);
-}
-
-.mobile-touch-feedback:active {
-  transform: scale(0.97) translateZ(0);
-  opacity: 0.8;
-}
-
-/* Medical app specific touch optimizations */
+/* Medical app specific - prevent zoom on input focus */
 .medical-mobile-interface {
-  /* Prevent zooming on input focus (medical forms) */
   font-size: 16px; /* Prevents iOS zoom */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-}
-
-/* Chat interface mobile optimizations */
-.chat-mobile-container {
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-.chat-mobile-messages {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
-  scroll-behavior: smooth;
-  will-change: scroll-position;
-  transform: translateZ(0);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-/* Responsive breakpoint-specific optimizations */
-@media (max-width: 768px) {
-  /* Mobile-specific performance optimizations */
-  .mobile-performance-optimized * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    backface-visibility: hidden;
-    perspective: 1000px;
-  }
-  
-  /* Reduce animations on mobile for better performance */
-  .mobile-reduced-motion {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* PWA and mobile app specific styles */
-@media (display-mode: standalone) {
-  body {
-    overscroll-behavior: none;
-  }
-  
-  .pwa-mobile-header {
-    padding-top: env(safe-area-inset-top);
-  }
-}
-
-/* High DPI display optimizations */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .high-dpi-optimized {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-  }
 }
