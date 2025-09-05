@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Shield, Activity, Sparkles, Zap, Mic, Square, Stethoscope, FileText, Clock, Settings } from 'lucide-react';
 
 interface AuthStatus {
@@ -40,6 +41,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
   selectedSTTModel = 'STT3',
   onModelChange
 }) => {
+  const navigate = useNavigate();
   return (
     <div className="relative overflow-hidden">
       {/* Sophisticated Background with Layered Gradients */}
@@ -76,8 +78,13 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
             {/* Mobile-Optimized Brand Identity */}
             <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 min-w-0 flex-1">
               {/* Compact Logo Area */}
-              <div className="relative flex-shrink-0">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-medical-blue-600 via-medical-blue-700 to-medical-blue-800 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-medical-blue-500/25 dark:shadow-medical-blue-900/50 transition-all duration-300">
+              <div 
+                className="relative flex-shrink-0 cursor-pointer"
+                onClick={() => navigate('/')}
+                role="button"
+                aria-label="Navigate to home"
+              >
+                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-medical-blue-600 via-medical-blue-700 to-medical-blue-800 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-medical-blue-500/25 dark:shadow-medical-blue-900/50 transition-all duration-300 hover:scale-105 active:scale-95">
                   <FileText className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
                 </div>
                 {/* Subtle glow animation when active */}
@@ -89,7 +96,12 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
               {/* Mobile-Optimized Typography */}
               <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1">
                 <div className="flex items-center space-x-2 sm:space-x-3">
-                  <h1 className="text-lg sm:text-xl lg:text-3xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-white dark:via-slate-100 dark:to-white bg-clip-text text-transparent tracking-tight truncate">
+                  <h1 
+                    className="text-lg sm:text-xl lg:text-3xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-white dark:via-slate-100 dark:to-white bg-clip-text text-transparent tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity duration-200"
+                    onClick={() => navigate('/')}
+                    role="button"
+                    aria-label="Navigate to home"
+                  >
                     MediScribe
                   </h1>
                   {/* Compact Premium Badge */}
