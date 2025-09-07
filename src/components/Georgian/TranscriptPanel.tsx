@@ -95,6 +95,11 @@ interface TranscriptPanelProps {
   // STT Model selection props
   selectedSTTModel?: 'STT1' | 'STT2' | 'STT3';
   onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
+  
+  // History controls
+  isHistoryOpen?: boolean;
+  onToggleHistory?: () => void;
+  sessionCount?: number;
 }
 
 export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
@@ -131,7 +136,11 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   speakers: speakersFromHook = [],
   // STT Model selection props
   selectedSTTModel = 'STT3',
-  onModelChange
+  onModelChange,
+  // History controls
+  isHistoryOpen = false,
+  onToggleHistory,
+  sessionCount = 0
 }) => {
   const [contextText, setContextText] = useState('');
   const [isRecordingContext, setIsRecordingContext] = useState(false);
@@ -461,13 +470,14 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         activeTab={activeTab}
         onTabChange={onActiveTabChange}
         hasTranscript={hasTranscript}
-        onCopy={handleCopyToClipboard}
-        onDownload={handleDownloadTranscription}
         canRecord={canRecord}
         canStop={canStop}
         isRecording={recordingState.isRecording}
         onStartRecording={onStartRecording}
         onStopRecording={onStopRecording}
+        isHistoryOpen={isHistoryOpen}
+        onToggleHistory={onToggleHistory}
+        sessionCount={sessionCount}
       />
 
       {/* Content Area */}

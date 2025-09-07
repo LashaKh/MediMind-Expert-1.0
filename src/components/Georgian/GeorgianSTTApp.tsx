@@ -706,7 +706,7 @@ export const GeorgianSTTApp: React.FC = () => {
         <MedicalDrawer
           isOpen={isMobileDrawerOpen}
           onClose={closeMobileDrawer}
-          title="Medical Sessions"
+          title="Medical History"
           subtitle={`${sessions.length} recordings available`}
           icon={Stethoscope}
           maxHeight="85vh"
@@ -748,7 +748,7 @@ export const GeorgianSTTApp: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        No Sessions Yet
+                        No History Yet
                       </h3>
                       <p className="text-sm text-gray-600 mb-4 max-w-sm">
                         Create your first medical transcription session to begin capturing patient consultations.
@@ -871,21 +871,8 @@ export const GeorgianSTTApp: React.FC = () => {
             </div>
           )}
 
-          {/* Desktop Transcript Panel */}
+          {/* Desktop Transcript Panel - Full width when history is collapsed */}
           <div className="flex-1 flex flex-col min-h-0">
-            {/* Collapsed History Toggle - Show when history is collapsed */}
-            {isHistoryCollapsed && (
-              <div className="hidden lg:flex items-center justify-start p-4 bg-white/70 dark:bg-gray-800/80 backdrop-blur-sm border-b border-blue-200/30 dark:border-gray-700/50">
-                <button
-                  onClick={() => setIsHistoryCollapsed(false)}
-                  className="flex items-center space-x-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 text-sm font-medium"
-                  title="Show sessions"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                  <span>Sessions ({sessions.length})</span>
-                </button>
-              </div>
-            )}
             <div className="h-full bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm shadow-inner">
               <TranscriptPanel
                 currentSession={currentSession}
@@ -930,6 +917,10 @@ export const GeorgianSTTApp: React.FC = () => {
                 onModelChange={updateSelectedSTTModel}
                 speakers={speakerSegments}
                 onExpandChat={handleSetExpandChatFunction}
+                // History controls
+                isHistoryOpen={!isHistoryCollapsed}
+                onToggleHistory={() => setIsHistoryCollapsed(!isHistoryCollapsed)}
+                sessionCount={sessions.length}
               />
             </div>
           </div>
@@ -981,11 +972,14 @@ export const GeorgianSTTApp: React.FC = () => {
               selectedSTTModel={selectedSTTModel}
               onModelChange={updateSelectedSTTModel}
               onExpandChat={handleSetExpandChatFunction}
+              // History controls - pass sessionCount but no toggle for mobile (uses drawer)
+              sessionCount={sessions.length}
             />
           </div>
         </div>
 
       </div>
+
 
       {/* Enhanced Medical Security Warning */}
       {window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && (

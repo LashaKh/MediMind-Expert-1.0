@@ -491,7 +491,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             
             <div>
               <h2 className="text-lg font-bold text-medical-gray-900 dark:text-white">
-                Sessions
+                History
               </h2>
               <p className="text-sm text-medical-gray-600 dark:text-medical-gray-400">
                 {sessions.length} recordings

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edit3, Stethoscope, MessageSquare, Sparkles, Mic, Square } from 'lucide-react';
+import { Edit3, Stethoscope, MessageSquare, Sparkles, Mic, Square, History } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { TRANSCRIPT_TABS, TabId } from '../utils/uiConstants';
 
@@ -13,6 +13,10 @@ interface TabNavigationProps {
   isRecording?: boolean;
   onStartRecording?: () => void;
   onStopRecording?: () => void;
+  // History controls
+  isHistoryOpen?: boolean;
+  onToggleHistory?: () => void;
+  sessionCount?: number;
 }
 
 const tabs = TRANSCRIPT_TABS;
@@ -32,7 +36,10 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
   canStop = false,
   isRecording = false,
   onStartRecording,
-  onStopRecording
+  onStopRecording,
+  isHistoryOpen = false,
+  onToggleHistory,
+  sessionCount = 0
 }) => {
   return (
     <div className="relative overflow-hidden">
@@ -94,6 +101,29 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
           
           {/* Right Side Actions - Mobile Optimized */}
           <div className="flex items-center space-x-2 sm:space-x-3">
+            {/* History Toggle Button - Desktop only */}
+            {onToggleHistory && (
+              <button
+                onClick={onToggleHistory}
+                className={`
+                  group relative hidden lg:flex items-center space-x-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-300 
+                  ${isHistoryOpen 
+                    ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' 
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100/50 dark:hover:bg-slate-700/50'
+                  }
+                `}
+                title={`${isHistoryOpen ? 'Hide' : 'Show'} History (${sessionCount} recordings)`}
+              >
+                <History className="w-4 h-4" />
+                <span className="hidden xl:inline">History</span>
+                {sessionCount > 0 && !isHistoryOpen && (
+                  <div className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold min-w-5">
+                    {sessionCount > 99 ? '99+' : sessionCount}
+                  </div>
+                )}
+              </button>
+            )}
+            
             {/* Premium Record Button - Mobile Optimized */}
             {activeTab === 'transcript' && (onStartRecording || onStopRecording) && (
               <button
