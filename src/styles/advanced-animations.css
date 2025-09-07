@@ -1,5 +1,15 @@
 /* Case Library Revolutionary Animations - Mobile Optimized */
 
+/* Premium Shimmer Effect for TabNavigation */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
+}
+
 /* MOBILE-FIRST APPROACH: Disable GPU-intensive effects on mobile devices */
 @media (max-width: 768px), (prefers-reduced-motion: reduce) {
   /* Disable all backdrop-filter effects on mobile for GPU performance */

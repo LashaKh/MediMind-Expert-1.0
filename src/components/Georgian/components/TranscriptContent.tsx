@@ -16,6 +16,7 @@ import {
   Gauge
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
+import { ProductionControls } from './ProductionControls';
 
 interface RecordingState {
   isRecording: boolean;
@@ -147,111 +148,54 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         {/* Main Content Structure */}
         <div className="relative h-full flex flex-col p-1">
           
-          {/* Advanced Controls - Mobile-First Responsive Layout */}
-          <div className="relative mb-4 z-10 px-3 sm:px-4 pt-4">
+          {/* Compact Production Controls */}
+          <div className="relative mb-3 z-10 px-3 sm:px-4 pt-3">
             
-            {/* Mobile: Stacked Layout, Desktop: Horizontal */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0 sm:space-x-3">
+            {/* Compact Controls Row */}
+            <div className="flex flex-col sm:flex-row gap-3 items-center">
               
-              {/* Controls Group - Responsive Grid */}
-              <div className="flex flex-col sm:flex-row gap-3 flex-1">
-                
-                {/* STT Model Selection - Mobile Optimized */}
-                {onModelChange && (
-                  <div className="flex items-center bg-gradient-to-r from-blue-50/95 to-indigo-50/95 dark:from-blue-900/40 dark:to-indigo-900/40 backdrop-blur-sm border border-blue-200/60 dark:border-blue-700/60 rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-300 group w-full sm:w-auto">
-                    <div className="flex items-center justify-between sm:justify-start w-full space-x-2 sm:space-x-3">
-                      <div className="flex items-center space-x-2">
-                        <div className="relative">
-                          <Cpu className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
-                          <div className="absolute inset-0 w-4 h-4 sm:w-5 sm:h-5 bg-blue-400/20 rounded-full animate-pulse" />
-                        </div>
-                        <span className="text-xs sm:text-sm font-semibold text-blue-700 dark:text-blue-300">Engine</span>
-                      </div>
-                      
-                      <select
-                        value={selectedSTTModel}
-                        onChange={(e) => onModelChange(e.target.value as 'STT1' | 'STT2' | 'STT3')}
-                        className="bg-white/90 dark:bg-gray-800/90 border border-blue-200/50 dark:border-blue-600/50 rounded-xl px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-blue-700 dark:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all duration-200 shadow-sm hover:shadow-md medical-touch-target cursor-pointer flex-shrink-0"
-                        disabled={recordingState.isRecording}
-                        title={recordingState.isRecording ? "Cannot change engine during recording" : "Select STT engine for transcription"}
-                      >
-                        <option value="STT1" className="py-2">⚡ STT1 (Fast)</option>
-                        <option value="STT2" className="py-2">⚖️ STT2 (Balanced)</option>
-                        <option value="STT3" className="py-2">🎯 STT3 (Accurate)</option>
-                      </select>
-                    </div>
-                  </div>
-                )}
+              {/* Engine & Speaker Controls */}
+              <ProductionControls
+                selectedSTTModel={selectedSTTModel}
+                onModelChange={onModelChange}
+                recordingState={recordingState}
+                enableSpeakerDiarization={enableSpeakerDiarization}
+                onToggleSpeakerDiarization={onToggleSpeakerDiarization}
+                speakerCount={speakerCount}
+                onSpeakerCountChange={onSpeakerCountChange}
+              />
 
-                {/* Speaker Diarization Controls - Fully Mobile Optimized */}
-                {onToggleSpeakerDiarization && (
-                  <div className="bg-gradient-to-r from-purple-50/95 to-indigo-50/95 dark:from-purple-900/40 dark:to-indigo-900/40 backdrop-blur-sm border border-purple-200/60 dark:border-purple-700/60 rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-300 group w-full sm:w-auto">
-                    <div className="flex flex-col space-y-2">
-                      <button
-                        onClick={() => {
-
-                          onToggleSpeakerDiarization?.(!enableSpeakerDiarization);
-                        }}
-                        className={`flex items-center justify-center space-x-2 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 medical-touch-target transform hover:scale-105 w-full ${
-                          enableSpeakerDiarization
-                            ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-lg shadow-purple-500/25'
-                            : 'bg-white/80 dark:bg-gray-700/80 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 border border-purple-200/50 dark:border-purple-600/50'
-                        }`}
-                        disabled={recordingState.isRecording}
-                        title="Toggle speaker separation for doctor-patient conversations"
-                      >
-                        <div className="relative">
-                          <Brain className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${enableSpeakerDiarization ? 'text-white' : ''}`} />
-                          {enableSpeakerDiarization && (
-                            <div className="absolute inset-0 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-white/30 rounded-full animate-pulse" />
-                          )}
-                        </div>
-                        <span>Speaker Detection</span>
-                        {enableSpeakerDiarization && (
-                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-bounce" />
-                        )}
-                      </button>
-                      
-                      {enableSpeakerDiarization && onSpeakerCountChange && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs sm:text-sm font-medium text-purple-600 dark:text-purple-400">Speaker Count:</span>
-                          <select
-                            value={speakerCount}
-                            onChange={(e) => {
-                              const newCount = parseInt(e.target.value);
-
-                              onSpeakerCountChange?.(newCount);
-                            }}
-                            className="bg-white/90 dark:bg-gray-800/90 border border-purple-200/50 dark:border-purple-600/50 rounded-xl px-2 py-1.5 text-xs sm:text-sm font-medium text-purple-700 dark:text-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-400 transition-all duration-200 shadow-sm hover:shadow-md medical-touch-target cursor-pointer"
-                            disabled={recordingState.isRecording}
-                            title="Number of speakers to detect in conversation"
-                          >
-                            <option value={2}>👨‍⚕️👤 2</option>
-                            <option value={3}>👨‍⚕️👤👤 3</option>
-                            <option value={4}>👨‍⚕️👤👤👤 4</option>
-                            <option value={5}>👨‍⚕️👤👤👤👤 5</option>
-                          </select>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Upload Button - Mobile & Desktop Optimized */}
+              {/* Compact Upload Button */}
               {onFileUpload && (
                 <button
                   onClick={handleFileUploadClick}
-                  className="flex items-center justify-center w-full sm:w-12 sm:h-12 h-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-600/50 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all duration-200 shadow-lg hover:shadow-xl group medical-touch-target flex-shrink-0"
-                  title="Upload audio file"
+                  className="group relative overflow-hidden h-12 px-4 shrink-0"
                   disabled={recordingState.isRecording}
+                  title={recordingState.isRecording ? "Cannot upload files during recording" : "Upload an audio file (.wav, .mp3, .m4a, .ogg, .webm) for transcription"}
                 >
-                  <Upload className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-200 ${
-                    recordingState.isRecording 
-                      ? 'text-gray-400 dark:text-gray-500' 
-                      : 'text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 group-hover:scale-110'
-                  }`} />
-                  <span className="ml-2 text-xs font-medium sm:hidden">Upload</span>
+                  {/* Background */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-800 dark:to-blue-900/50 rounded-xl" />
+                  
+                  {/* Glass Effect */}
+                  <div className="absolute inset-0 bg-white/40 dark:bg-white/10 backdrop-blur-sm rounded-xl" />
+                  
+                  {/* Border */}
+                  <div className="absolute inset-0 border border-slate-200 dark:border-slate-600 rounded-xl group-hover:border-blue-400 dark:group-hover:border-blue-500 transition-all duration-200" />
+                  
+                  {/* Content */}
+                  <div className="relative flex items-center space-x-2 h-full">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-sm">
+                      <Upload className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <span className="text-sm font-bold text-slate-700 dark:text-slate-300 block">
+                        Upload
+                      </span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        Audio file
+                      </span>
+                    </div>
+                  </div>
                 </button>
               )}
             </div>
@@ -261,11 +205,12 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
           <input
             ref={fileInputRef}
             type="file"
-            accept="audio/*,.mp3,.wav,.m4a,.webm,.ogg"
+            accept="audio/*,.wav,.mp3,.m4a,.ogg,.webm"
             onChange={handleFileChange}
             className="hidden"
-            disabled={recordingState.isRecording}
+            multiple={false}
           />
+
           
           {/* Premium Text Area */}
           <div className="flex-1 relative overflow-hidden">
