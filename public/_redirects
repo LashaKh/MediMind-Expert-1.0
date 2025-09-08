@@ -1,1 +1,5 @@
+# Direct access to Netlify domain - serve from root but redirect /expert assets to assets
+/expert/assets/* /assets/:splat 200
+
+# SPA fallback
 /* /index.html 200

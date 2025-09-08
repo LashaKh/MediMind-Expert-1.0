@@ -42,12 +42,21 @@ import { RouteLoader } from './components/ui/RouteLoader';
 import { MedicalSpecialty } from './stores/useAppStore';
 
 function App() {
-  // Dynamically detect base path
+  // Dynamically detect base path based on actual URL structure
   const getBasename = () => {
     const pathname = window.location.pathname;
-    if (pathname.startsWith('/expert')) {
+    const hostname = window.location.hostname;
+    
+    // If we're on the proxy domain (medimind.md) or path starts with /expert
+    if (hostname === 'medimind.md' || pathname.startsWith('/expert')) {
       return '/expert';
     }
+    
+    // If we're on the direct netlify domain
+    if (hostname.includes('netlify.app')) {
+      return '/';
+    }
+    
     return '/';
   };
 
