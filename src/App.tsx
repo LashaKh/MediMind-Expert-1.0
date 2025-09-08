@@ -42,8 +42,17 @@ import { RouteLoader } from './components/ui/RouteLoader';
 import { MedicalSpecialty } from './stores/useAppStore';
 
 function App() {
+  // Dynamically detect base path
+  const getBasename = () => {
+    const pathname = window.location.pathname;
+    if (pathname.startsWith('/expert')) {
+      return '/expert';
+    }
+    return '/';
+  };
+
   return (
-    <Router basename="/expert" future={{ 
+    <Router basename={getBasename()} future={{ 
       v7_relativeSplatPath: true,
       v7_startTransition: true
     }}>
