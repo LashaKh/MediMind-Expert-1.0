@@ -525,11 +525,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   // Handle case creation
   const handleCaseCreate = async (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>): Promise<PatientCase> => {
     try {
-      console.log('Creating case with data:', caseData);
-      console.log('🔍 DEBUG: createCase function is:', createCase);
-      console.log('🔍 DEBUG: typeof createCase:', typeof createCase);
       const newCase = await createCase(caseData);
-      console.log('Case created successfully:', newCase);
       
       // Reload cases to ensure the list is up-to-date
       await loadCases();
@@ -561,7 +557,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       
       return newCase;
     } catch (error) {
-      console.error('Failed to create case:', error);
       setChatError('Failed to create case. Please try again.');
       throw error; // Re-throw so the modal can handle it
     }

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './MediScribeAnimations.css';
+import './styles/mediscribe-mobile.css';
 import { GeorgianSession } from '../../hooks/useSessionManagement';
 import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
 import { Brain } from 'lucide-react';
@@ -10,6 +11,7 @@ import { TranscriptContent } from './components/TranscriptContent';
 import { ContextContent } from './components/ContextContent';
 import { AIProcessingContent } from './components/AIProcessingContent';
 import { RecordingStatusIndicator } from './components/RecordingStatusIndicator';
+import MobileFloatingButton from './components/MobileFloatingButton';
 
 // Import utilities
 import { formatTime, copyToClipboard, downloadTranscription } from './utils/transcriptUtils';
@@ -458,7 +460,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50/30 via-white/80 to-blue-50/20 dark:from-gray-900/30 dark:via-gray-800/80 dark:to-blue-900/10 relative overflow-hidden">
+    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50/30 via-white/80 to-blue-50/20 dark:from-gray-900/30 dark:via-gray-800/80 dark:to-blue-900/10 relative overflow-hidden mediscribe-mobile-safe-bottom">
       {/* Recording Status Indicators */}
       <RecordingStatusIndicator 
         recordingState={recordingState}
@@ -481,9 +483,22 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       />
 
       {/* Content Area */}
-      <div className="flex-1 min-h-0 overflow-hidden">
+      <div className="flex-1 min-h-0 overflow-hidden mediscribe-mobile-keyboard-padding">
         {renderContent()}
       </div>
+
+      {/* Mobile-Only Floating Action Button */}
+      {activeTab === 'transcript' && (
+        <MobileFloatingButton
+          isRecording={recordingState.isRecording}
+          canRecord={canRecord}
+          canStop={canStop}
+          isProcessing={recordingState.isProcessingChunks}
+          onStartRecording={onStartRecording}
+          onStopRecording={onStopRecording}
+          disabled={false}
+        />
+      )}
 
     </div>
   );

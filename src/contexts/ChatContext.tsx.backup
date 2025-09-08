@@ -956,6 +956,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
 
   // Case management methods
   const createCase = async (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>): Promise<PatientCase> => {
+    console.log('🚨 CREATECASE FUNCTION CALLED - This should appear in console!');
     const now = new Date();
     const caseId = uuidv4();
     
@@ -975,6 +976,16 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
       };
 
       // Save to Supabase database
+      console.log('Inserting case to database with data:', {
+        id: caseId,
+        user_id: user.id,
+        title: caseData.title,
+        description: caseData.description,
+        anonymized_info: caseData.anonymizedInfo,
+        specialty: caseData.specialty,
+        status: caseData.status || 'active',
+        metadata: caseData.metadata || {}
+      });
       
       const { data, error } = await (supabase as any)
         .from('patient_cases')
@@ -991,13 +1002,16 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
         .select()
         .single();
 
+      console.log('Database insert result:', { data, error });
 
       if (error) {
+        console.error('Supabase error details:', error);
         logger.error('Error saving case to database', error, { component: 'ChatContext', action: 'saveCase' });
         throw error;
       }
 
       if (!data) {
+        console.error('No data returned from database insert');
         throw new Error('No data returned from database insert');
       }
 

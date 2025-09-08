@@ -84,10 +84,10 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
 
   return (
     <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
-      <div className="px-4 sm:px-6 py-3">
+      <div className="px-3 sm:px-6 py-2 sm:py-3 mediscribe-mobile-tabs lg:px-6 lg:py-3">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           {/* Compact Vibrant Tab System */}
-          <div className="flex space-x-2">
+          <div className="flex space-x-1 sm:space-x-2 mediscribe-mobile-tabs lg:space-x-2">
             {enhancedTabs.map((tab) => {
               const Icon = tab.icon;
               const ActiveIcon = tab.activeIcon;
@@ -99,7 +99,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                   key={tab.id}
                   onClick={() => onTabChange(tab.id as TabId)}
                   className={`
-                    group relative flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg
+                    group relative flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-4 py-2.5 sm:py-2.5 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg mediscribe-mobile-tab mediscribe-haptic-feedback lg:px-4 lg:py-2.5 lg:space-x-2
                     ${isActive 
                       ? `${tab.activeBg} ${tab.activeText} ${tab.shadowColor}` 
                       : `${tab.inactiveBg} ${tab.inactiveText} hover:${tab.hoverBg} hover:text-white shadow-slate-300/40 dark:shadow-slate-700/40`
@@ -108,21 +108,21 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 >
                   {/* Icon Container */}
                   <div className={`
-                    w-5 h-5 sm:w-6 sm:h-6 rounded-md flex items-center justify-center transition-all duration-300
+                    w-6 h-6 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-md flex items-center justify-center transition-all duration-300 mediscribe-mobile-tab-icon
                     ${isActive 
                       ? 'bg-white/20' 
                       : 'bg-slate-200 dark:bg-slate-600 group-hover:bg-white/20'
                     }
                   `}>
-                    <DisplayIcon className="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:scale-110" />
+                    <DisplayIcon className="w-4 h-4 sm:w-4 sm:h-4 lg:w-4 lg:h-4 transition-transform duration-300 group-hover:scale-110" />
                   </div>
                   
                   {/* Labels */}
                   <div className="flex flex-col items-start min-w-0">
-                    <span className="text-xs sm:text-sm font-bold leading-tight">
+                    <span className="text-xs sm:text-sm lg:text-sm font-bold leading-tight mediscribe-mobile-tab-label">
                       {tab.label}
                     </span>
-                    <span className={`text-[10px] sm:text-xs font-medium leading-tight opacity-80 ${
+                    <span className={`text-[11px] sm:text-xs lg:text-xs font-medium leading-tight opacity-80 mediscribe-mobile-tab-sublabel ${
                       isActive ? 'text-white/80' : 'text-slate-500 dark:text-slate-400'
                     }`}>
                       {tab.sublabel}
@@ -134,7 +134,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
           </div>
           
           {/* Compact Right Side Actions */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-3">
             {/* Compact History Button */}
             {onToggleHistory && (
               <button
@@ -171,13 +171,13 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
               </button>
             )}
             
-            {/* Compact Record Button */}
+            {/* Compact Record Button - Hidden on mobile (replaced by FAB) */}
             {activeTab === 'transcript' && (onStartRecording || onStopRecording) && (
               <button
                 onClick={isRecording ? (canStop ? onStopRecording : undefined) : (canRecord ? onStartRecording : undefined)}
                 disabled={isRecording ? !canStop : !canRecord}
                 className={`
-                  relative flex items-center space-x-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg min-w-[100px] justify-center
+                  relative hidden lg:flex items-center space-x-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg min-w-[100px] justify-center
                   ${isRecording 
                     ? (canStop 
                         ? 'bg-red-600 hover:bg-red-700 text-white shadow-red-600/40' 
