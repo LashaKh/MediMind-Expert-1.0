@@ -43,7 +43,7 @@ import { MedicalSpecialty } from './stores/useAppStore';
 
 function App() {
   return (
-    <Router future={{ 
+    <Router basename="/expert" future={{ 
       v7_relativeSplatPath: true,
       v7_startTransition: true
     }}>
