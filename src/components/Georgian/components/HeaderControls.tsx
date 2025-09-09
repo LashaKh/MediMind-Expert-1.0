@@ -103,11 +103,6 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                   >
                     MediScribe
                   </h1>
-                  {/* Compact Premium Badge */}
-                  <div className="hidden sm:flex items-center space-x-1 sm:space-x-1.5 px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 border border-amber-200/50 dark:border-amber-700/30 rounded-full flex-shrink-0">
-                    <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-600 dark:text-amber-400" />
-                    <span className="text-xs font-semibold text-amber-700 dark:text-amber-300 tracking-wide">PRO</span>
-                  </div>
                 </div>
                 <p className="text-xs sm:text-sm text-white/80 font-medium tracking-wide truncate">
                   AI Medical Transcription
@@ -118,11 +113,6 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
 
           {/* Right Section - Mobile-Optimized Status */}
           <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 flex-shrink-0">
-            {/* Mobile PRO Badge - Only show on smallest screens */}
-            <div className="sm:hidden flex items-center space-x-1 px-1.5 py-0.5 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 border border-amber-200/50 dark:border-amber-700/30 rounded-full">
-              <Sparkles className="w-2.5 h-2.5 text-amber-600 dark:text-amber-400" />
-              <span className="text-xs font-semibold text-amber-700 dark:text-amber-300">PRO</span>
-            </div>
 
             {/* Compact Connection Status */}
             <div className={`relative flex items-center space-x-1.5 sm:space-x-2 lg:space-x-3 px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 rounded-lg sm:rounded-xl transition-all duration-300 shadow-md ${

@@ -80,8 +80,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: 'MediScribe',
           subtitle: 'Voice transcription for medical notes',
           path: '/mediscribe',
-          color: 'from-emerald-600 to-teal-600',
-          shadowColor: 'shadow-emerald-500/30',
+          color: 'from-blue-600 to-cyan-600',
+          shadowColor: 'shadow-blue-500/30',
           importance: 'critical'
         }
       ]

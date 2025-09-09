@@ -1272,6 +1272,38 @@ html[data-font-loaded="true"] *::after {
   animation: glassRefraction 3s ease-in-out infinite;
 }
 
+/* FORCE MENU BUTTONS TO BLUE THEME - OVERRIDE GREEN STYLING */
+button[aria-label*="menu" i],
+button[aria-label*="Menu" i],
+button[aria-label*="toggle" i],
+button[title*="menu" i],
+button[title*="Menu" i],
+.hamburger-button,
+[class*="menu-button"],
+[class*="nav-button"],
+button:has(svg[data-testid*="menu"]),
+button:has(.lucide-menu) {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 50%, rgba(59, 130, 246, 0.1) 100%) !important;
+  color: rgb(37, 99, 235) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+}
+
+button[aria-label*="menu" i]:hover,
+button[aria-label*="Menu" i]:hover,
+button[aria-label*="toggle" i]:hover,
+button[title*="menu" i]:hover,
+button[title*="Menu" i]:hover,
+.hamburger-button:hover,
+[class*="menu-button"]:hover,
+[class*="nav-button"]:hover,
+button:has(svg[data-testid*="menu"]):hover,
+button:has(.lucide-menu):hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(6, 182, 212, 0.2) 50%, rgba(59, 130, 246, 0.2) 100%) !important;
+  color: rgb(29, 78, 216) !important;
+  border: 1px solid rgba(59, 130, 246, 0.5) !important;
+  transform: scale(1.05) !important;
+}
+
 /* Revolutionary Sidebar Design System */
 @keyframes spin-slow {
   0% {

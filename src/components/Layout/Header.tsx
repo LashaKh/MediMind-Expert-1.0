@@ -86,7 +86,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
         <button
           ref={mobileButtonRef}
           onClick={onMenuToggle}
-          className="fixed left-0 top-1/2 -translate-y-1/2 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-lg hover:shadow-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 focus-enhanced active:scale-95 rounded-r-2xl"
+          className="fixed left-0 top-1/2 -translate-y-1/2 z-50 bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 shadow-lg hover:shadow-xl border border-blue-400/50 transition-all duration-300 focus-enhanced active:scale-95 rounded-r-2xl hover:scale-105"
           aria-label={t('navigation.toggleMenu')}
           aria-expanded="false"
           style={{
@@ -100,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
         >
           <div className="flex items-center justify-center h-full pl-2">
             <svg 
-              className="w-3 h-3 text-gray-600 dark:text-gray-300" 
+              className="w-3 h-3 text-white" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
@@ -137,11 +137,11 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
             {user && !isOnboardingPage && (
               <button
                 onClick={onMenuToggle}
-                className="hidden lg:flex touch-target-md rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 focus-enhanced active:scale-95 p-2"
+                className="hidden lg:flex touch-target-md rounded-lg bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-blue-600/10 hover:from-blue-500/20 hover:via-cyan-500/20 hover:to-blue-600/20 border border-blue-400/20 hover:border-blue-400/40 transition-all duration-200 focus-enhanced active:scale-95 p-2"
                 aria-label={t('navigation.toggleMenu')}
                 aria-expanded="false"
               >
-                <Menu className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                <Menu className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </button>
             )}
 

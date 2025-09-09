@@ -221,7 +221,7 @@
   padding: 20px;
   font-size: 16px;
   line-height: 1.6;
-  color: var(--transcription-gray-800);
+  color: #000000;
   transition: all 0.2s ease;
   width: 100%;
   min-height: 200px;
@@ -385,6 +385,10 @@
     --transcription-gray-800: #F1F5F9;
     --transcription-gray-700: #E2E8F0;
     --transcription-gray-600: #CBD5E1;
+  }
+  
+  .transcription-textarea {
+    color: #000000 !important;
   }
   
   .transcription-card {

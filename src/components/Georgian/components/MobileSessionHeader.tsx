@@ -112,11 +112,6 @@ export const MobileSessionHeader: React.FC<MobileSessionHeaderProps> = ({
                     {currentSession.title}
                   </h3>
                   
-                  {/* Premium badge */}
-                  <div className="px-2 py-0.5 bg-gradient-to-r from-amber-400/20 to-yellow-400/20 text-amber-700 dark:text-amber-300 text-xs font-bold rounded-full border border-amber-300/30 dark:border-amber-500/30">
-                    <Crown className="w-3 h-3 inline mr-1" />
-                    PRO
-                  </div>
                 </div>
                 
                 <div className="flex items-center space-x-4 text-sm">
