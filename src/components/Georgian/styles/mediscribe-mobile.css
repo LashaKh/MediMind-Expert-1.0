@@ -24,7 +24,7 @@
     transform: scale(0.96);
   }
 
-  /* Mobile Tab Navigation Optimizations */
+  /* Mobile Tab Navigation Optimizations - Blue Theme */
   .mediscribe-mobile-tabs {
     gap: 8px;
     padding: 8px 12px;
@@ -36,6 +36,16 @@
     border-radius: 14px;
     flex: 1;
     max-width: none;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .mediscribe-mobile-tab.active {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--transcription-primary-start);
+    color: var(--transcription-primary-start);
   }
 
   .mediscribe-mobile-tab-icon {
@@ -131,10 +141,9 @@
     }
   }
 
-  /* Mobile Transcript Area */
+  /* Mobile Transcript Area - Blue Theme */
   .mediscribe-mobile-transcript {
     padding: 16px;
-    border-radius: 20px;
     min-height: 200px;
   }
 
@@ -145,7 +154,7 @@
     border-radius: 16px;
   }
 
-  /* Mobile Floating Action Button */
+  /* Mobile Floating Action Button - Updated for Blue Theme */
   .mediscribe-mobile-fab {
     position: fixed;
     bottom: 24px;
@@ -154,25 +163,11 @@
     height: 64px;
     border-radius: 50%;
     z-index: 1000;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
   }
 
   .mediscribe-mobile-fab:active {
     transform: scale(0.92);
-  }
-
-  .mediscribe-mobile-fab.recording {
-    animation: pulse-red 2s infinite;
-  }
-
-  @keyframes pulse-red {
-    0%, 100% {
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 0 0 rgba(239, 68, 68, 0.7);
-    }
-    50% {
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 0 8px rgba(239, 68, 68, 0);
-    }
   }
 
   /* Mobile Modal/Sheet Enhancements */

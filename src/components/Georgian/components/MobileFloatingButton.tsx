@@ -42,17 +42,9 @@ export const MobileFloatingButton: React.FC<MobileFloatingButtonProps> = ({
       onClick={handleClick}
       disabled={!isEnabled}
       className={`
-        fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full shadow-2xl transition-all duration-300 transform active:scale-95 mediscribe-mobile-fab mediscribe-touch-target mediscribe-haptic-feedback
-        ${isRecording 
-          ? (canStop && !disabled 
-              ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-500/40 mediscribe-mobile-fab recording' 
-              : 'bg-gray-300 cursor-not-allowed shadow-gray-300/40')
-          : (canRecord && !disabled 
-              ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-emerald-500/40' 
-              : 'bg-gray-300 cursor-not-allowed shadow-gray-300/40')
-        }
-        ${isEnabled ? 'hover:scale-110' : ''}
-        lg:hidden
+        transcription-record-btn fixed bottom-6 right-6 z-50 w-16 h-16 shadow-2xl mediscribe-mobile-fab mediscribe-touch-target mediscribe-haptic-feedback lg:hidden
+        ${isRecording ? 'recording' : ''}
+        ${!isEnabled ? 'opacity-60 cursor-not-allowed' : ''}
       `}
       title={
         disabled 
@@ -66,16 +58,6 @@ export const MobileFloatingButton: React.FC<MobileFloatingButtonProps> = ({
         WebkitBackdropFilter: 'blur(10px)',
       }}
     >
-      {/* Background Glow */}
-      <div className={`
-        absolute inset-0 rounded-full opacity-0 transition-opacity duration-300
-        ${isRecording 
-          ? 'bg-red-500/20 group-hover:opacity-100' 
-          : 'bg-emerald-500/20 group-hover:opacity-100'
-        }
-        ${isEnabled ? 'group-hover:opacity-100' : ''}
-      `} />
-
       {/* Icon Container */}
       <div className="relative w-full h-full flex items-center justify-center">
         {isProcessing ? (

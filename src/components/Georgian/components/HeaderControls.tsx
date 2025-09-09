@@ -44,9 +44,8 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
   const navigate = useNavigate();
   return (
     <div className="relative overflow-hidden">
-      {/* Sophisticated Background with Layered Gradients */}
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-50/95 via-white/98 to-blue-50/95 dark:from-slate-900/95 dark:via-gray-900/98 dark:to-blue-950/95" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100/20 via-transparent to-transparent dark:from-blue-900/10" />
+      {/* Transcription Theme Background */}
+      <div className="absolute inset-0 transcription-header-bg" />
       <div className="absolute inset-0 backdrop-blur-xl" />
       
       {/* Subtle Border with Shimmer Effect */}
@@ -60,7 +59,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
             {onOpenMobileSessions && (
               <button
                 onClick={onOpenMobileSessions}
-                className="lg:hidden flex items-center justify-center w-10 h-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-blue-200/50 dark:border-gray-600/50 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
+                className="lg:hidden transcription-btn-secondary flex items-center justify-center w-10 h-10 flex-shrink-0"
                 aria-label={`Open sessions (${sessionsCount})`}
                 style={{ minWidth: 'var(--medical-mobile-touch-md)', minHeight: 'var(--medical-mobile-touch-md)' }}
               >
@@ -84,7 +83,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                 role="button"
                 aria-label="Navigate to home"
               >
-                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-medical-blue-600 via-medical-blue-700 to-medical-blue-800 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-medical-blue-500/25 dark:shadow-medical-blue-900/50 transition-all duration-300 hover:scale-105 active:scale-95">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 transcription-primary-gradient rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 active:scale-95">
                   <FileText className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
                 </div>
                 {/* Subtle glow animation when active */}
@@ -97,7 +96,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
               <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1">
                 <div className="flex items-center space-x-2 sm:space-x-3">
                   <h1 
-                    className="text-lg sm:text-xl lg:text-3xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-white dark:via-slate-100 dark:to-white bg-clip-text text-transparent tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity duration-200"
+                    className="text-lg sm:text-xl lg:text-3xl font-bold text-white tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity duration-200"
                     onClick={() => navigate('/')}
                     role="button"
                     aria-label="Navigate to home"
@@ -110,7 +109,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                     <span className="text-xs font-semibold text-amber-700 dark:text-amber-300 tracking-wide">PRO</span>
                   </div>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium tracking-wide truncate">
+                <p className="text-xs sm:text-sm text-white/80 font-medium tracking-wide truncate">
                   AI Medical Transcription
                 </p>
               </div>

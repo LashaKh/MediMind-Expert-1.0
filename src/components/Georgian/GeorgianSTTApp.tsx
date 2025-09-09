@@ -16,6 +16,7 @@ import {
 import { MedicalButton, MedicalCard, MedicalInput, MedicalLoading, MedicalBadge } from '../ui/MedicalDesignSystem';
 import { MedicalDrawer } from '../ui/MedicalDrawer';
 import '../../styles/medical-design-tokens.css';
+import './styles/transcription-theme.css';
 import { SessionHistory } from './SessionHistory';
 import { TranscriptPanel } from './TranscriptPanel';
 import { useSessionManagement, GeorgianSession } from '../../hooks/useSessionManagement';
@@ -682,7 +683,7 @@ export const GeorgianSTTApp: React.FC = () => {
   // Browser support is checked in GeorgianSTTAppWrapper
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20 overflow-hidden">
+    <div className="h-screen transcription-bg overflow-hidden">
       {/* Enhanced Medical Professional Header */}
       <HeaderControls 
         authStatus={authStatus}
@@ -700,7 +701,7 @@ export const GeorgianSTTApp: React.FC = () => {
       />
 
       {/* Mobile-First Responsive Layout */}
-      <div className="flex flex-col h-[calc(100vh-64px)] bg-gradient-to-br from-slate-50/50 via-white to-blue-50/30 dark:from-gray-900/50 dark:via-gray-800 dark:to-blue-900/10">
+      <div className="flex flex-col h-[calc(100vh-64px)]">
         
         {/* Medical Session History Drawer */}
         <MedicalDrawer
@@ -854,8 +855,8 @@ export const GeorgianSTTApp: React.FC = () => {
         <div className="hidden lg:flex lg:flex-row h-full">
           {/* Desktop Session History Panel - Only show when not collapsed */}
           {!isHistoryCollapsed && (
-            <div className="w-80 xl:w-96 flex-shrink-0 border-r border-blue-200/30 dark:border-gray-700/50">
-              <div className="h-full bg-white/70 dark:bg-gray-800/80 backdrop-blur-sm">
+            <div className="w-80 xl:w-96 flex-shrink-0 border-r border-white/20">
+              <div className="h-full transcription-card-glass backdrop-blur-sm">
                 <SessionHistory
                   sessions={filteredSessions}
                   currentSession={currentSession}
@@ -873,7 +874,7 @@ export const GeorgianSTTApp: React.FC = () => {
 
           {/* Desktop Transcript Panel - Full width when history is collapsed */}
           <div className="flex-1 flex flex-col min-h-0">
-            <div className="h-full bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm shadow-inner">
+            <div className="h-full transcription-card backdrop-blur-sm shadow-inner m-4 ml-0">
               <TranscriptPanel
                 currentSession={currentSession}
                 localTranscript={localTranscript}
@@ -928,7 +929,7 @@ export const GeorgianSTTApp: React.FC = () => {
 
         {/* Mobile: Full-Screen Transcript Panel */}
         <div className="lg:hidden flex-1 flex flex-col min-h-0 relative">
-          <div className="h-full bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm">
+          <div className="h-full transcription-card backdrop-blur-sm m-4">
             <TranscriptPanel
               currentSession={currentSession}
               localTranscript={localTranscript}

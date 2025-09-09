@@ -31,14 +31,14 @@ export const FloatingRecordButton: React.FC<FloatingRecordButtonProps> = ({
               medical-touch-target-lg w-20 h-20 rounded-3xl shadow-2xl transform transition-all duration-300 
               premium-hover-lift active:scale-95 flex items-center justify-center relative overflow-hidden
               ${canRecord 
-                ? 'bg-gradient-to-br from-emerald-500 via-green-600 to-emerald-600 hover:from-emerald-600 hover:via-green-700 hover:to-emerald-700 text-white shadow-emerald-500/30' 
+                ? 'transcription-record-btn shadow-blue-500/30' 
                 : 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-gray-500 dark:text-gray-400 shadow-none'
               }
             `}
             style={{ minHeight: '80px', minWidth: '80px' }}
           >
             {canRecord && (
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-green-500/20 animate-premium-gradient" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-blue-500/20 animate-premium-gradient" />
             )}
             <Mic className="w-10 h-10 relative z-10" />
           </button>
