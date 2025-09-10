@@ -196,22 +196,22 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
             "bg-gradient-to-br", config.bgColor,
             "border", config.borderColor,
             "shadow-2xl animate-in fade-in-0 zoom-in-95 duration-300",
-            "mx-auto my-auto focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            "mx-auto my-auto focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:ring-offset-2"
           )}>
         <div className="p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center gap-4">
-              <div className={cn("p-3 rounded-full bg-white/80", config.iconColor)}>
+              <div className={cn("p-3 rounded-full bg-[var(--component-card)]/80", config.iconColor)}>
                 <AlertTriangle className="h-6 w-6" />
               </div>
               <div>
-                <h2 id="deletion-dialog-title" className="text-xl font-bold text-gray-900">
+                <h2 id="deletion-dialog-title" className="text-xl font-bold text-[var(--foreground)]">
                   {title || (resultIds.length > 1 
                     ? t('abg.delete.titleMany', 'Delete {{count}} ABG Results?', { count: resultIds.length })
                     : t('abg.delete.titleOne', 'Delete ABG Result?'))}
                 </h2>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-[var(--foreground-tertiary)] mt-1">
                   {t('abg.delete.cannotUndo', 'This action cannot be undone')}
                 </p>
               </div>
@@ -221,7 +221,7 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
               variant="ghost"
               size="sm"
               onClick={handleClose}
-              className="h-8 w-8 p-0 hover:bg-white/60"
+              className="h-8 w-8 p-0 hover:bg-[var(--component-card)]/60"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -231,14 +231,14 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
           {showProgress && (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)]">
                   {deletionResult?.success ? t('abg.delete.complete', 'Deletion Complete') : t('abg.delete.deleting', 'Deleting...')}
                 </span>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-[var(--foreground-tertiary)]">
                   {Math.round(progress)}%
                 </span>
               </div>
-              <div className="h-2 bg-white/60 rounded-full overflow-hidden">
+              <div className="h-2 bg-[var(--component-card)]/60 rounded-full overflow-hidden">
                 <div 
                   className={cn(
                     "h-full transition-all duration-500 ease-out rounded-full",
@@ -326,53 +326,53 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
 
           {/* Deletion Preview */}
           {deletionPreview && (
-            <div className="mb-6 bg-white/60 rounded-xl p-4 border border-white/80">
-              <h3 className="font-medium text-gray-900 mb-3">{t('abg.delete.previewTitle', 'What will be deleted:')}</h3>
+            <div className="mb-6 bg-[var(--component-card)]/60 rounded-xl p-4 border border-white/80">
+              <h3 className="font-medium text-[var(--foreground)] mb-3">{t('abg.delete.previewTitle', 'What will be deleted:')}</h3>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">{deletionPreview.results.length}</div>
-                  <div className="text-xs text-gray-600">{t('abg.delete.preview.results', 'Results')}</div>
+                  <div className="text-2xl font-bold text-[var(--foreground)]">{deletionPreview.results.length}</div>
+                  <div className="text-xs text-[var(--foreground-tertiary)]">{t('abg.delete.preview.results', 'Results')}</div>
                 </div>
                 
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className="text-2xl font-bold text-[var(--foreground)]">
                     {Math.round(deletionPreview.totalSize / 1024)}KB
                   </div>
-                  <div className="text-xs text-gray-600">{t('abg.delete.preview.dataSize', 'Data Size')}</div>
+                  <div className="text-xs text-[var(--foreground-tertiary)]">{t('abg.delete.preview.dataSize', 'Data Size')}</div>
                 </div>
                 
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className="text-2xl font-bold text-[var(--foreground)]">
                     {deletionPreview.results.filter((r: ABGResult) => r.image_url).length}
                   </div>
-                  <div className="text-xs text-gray-600">{t('abg.delete.preview.images', 'Images')}</div>
+                  <div className="text-xs text-[var(--foreground-tertiary)]">{t('abg.delete.preview.images', 'Images')}</div>
                 </div>
                 
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className="text-2xl font-bold text-[var(--foreground)]">
                     {Math.round((new Date(deletionPreview.newestDate).getTime() - new Date(deletionPreview.oldestDate).getTime()) / (1000 * 60 * 60 * 24))}
                   </div>
-                  <div className="text-xs text-gray-600">{t('abg.delete.preview.daySpan', 'Day Span')}</div>
+                  <div className="text-xs text-[var(--foreground-tertiary)]">{t('abg.delete.preview.daySpan', 'Day Span')}</div>
                 </div>
               </div>
               
               {deletionPreview.results.length <= 5 && (
                 <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-700">{t('abg.delete.preview.listTitle', 'Results to be deleted:')}</h4>
+                  <h4 className="text-sm font-medium text-[var(--foreground-tertiary)]">{t('abg.delete.preview.listTitle', 'Results to be deleted:')}</h4>
                   {deletionPreview.results.map((result: ABGResult) => (
-                    <div key={result.id} className="flex items-center gap-3 p-2 bg-white/40 rounded-lg">
-                      <FileText className="h-4 w-4 text-gray-500" />
+                    <div key={result.id} className="flex items-center gap-3 p-2 bg-[var(--component-card)]/40 rounded-lg">
+                      <FileText className="h-4 w-4 text-[var(--foreground-secondary)]" />
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-gray-900 truncate">
+                        <div className="text-sm font-medium text-[var(--foreground)] truncate">
                           {result.type || 'ABG Analysis'}
                         </div>
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-[var(--foreground-tertiary)]">
                           {new Date(result.created_at).toLocaleDateString()}
                         </div>
                       </div>
                       {result.image_url && (
-                        <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+                        <Badge variant="secondary" className="bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)]">
                           <Image className="h-3 w-3 mr-1" />
                           {t('abg.delete.preview.imageTag', 'Image')}
                         </Badge>
@@ -386,7 +386,7 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
 
           {/* Message */}
           {message && !showProgress && (
-            <p className="text-gray-700 mb-6">{message}</p>
+            <p className="text-[var(--foreground-tertiary)] mb-6">{message}</p>
           )}
 
           {/* Actions */}
@@ -395,7 +395,7 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
               <Button
                 variant="outline"
                 onClick={handleClose}
-                className="bg-white/80 hover:bg-white"
+                className="bg-[var(--component-card)]/80 hover:bg-[var(--component-card)]"
               >
                 {t('common.cancel', 'Cancel')}
               </Button>
@@ -404,7 +404,7 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
                 onClick={handleConfirm}
                 disabled={loading || !safetyCheck?.safe}
                 className={cn(
-                  "text-white font-medium px-6",
+                  "text-[var(--foreground)] font-medium px-6",
                   config.buttonColor,
                   !safetyCheck?.safe && "opacity-50 cursor-not-allowed"
                 )}

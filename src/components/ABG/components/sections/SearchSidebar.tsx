@@ -29,11 +29,11 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className="w-64 border-r border-slate-200/60 bg-gradient-to-br from-slate-50/80 to-white/60 backdrop-blur-xl">
+    <div className="w-64 border-r border-[var(--glass-border-light)]/60 bg-gradient-to-br from-slate-50/80 to-white/60 backdrop-blur-xl">
       <div className="p-4 space-y-2">
         <div className="mb-4">
-          <h3 className="font-semibold text-slate-800 mb-1">{t('abg.search.categories', 'Search Categories')}</h3>
-          <p className="text-xs text-slate-600">{t('abg.search.categoriesDesc', 'Explore different aspects of your ABG data')}</p>
+          <h3 className="font-semibold text-[var(--foreground)] mb-1">{t('abg.search.categories', 'Search Categories')}</h3>
+          <p className="text-xs text-[var(--foreground-tertiary)]">{t('abg.search.categoriesDesc', 'Explore different aspects of your ABG data')}</p>
         </div>
         
         {searchSections.map((section, index) => (
@@ -46,8 +46,8 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
             className={cn(
               "w-full text-left p-3 rounded-xl transition-all duration-300 group relative overflow-hidden",
               activeSection === section.id
-                ? "bg-white shadow-lg border border-slate-200/60 scale-[1.02]"
-                : "hover:bg-white/70 hover:shadow-md hover:scale-[1.01]"
+                ? "bg-[var(--component-card)] shadow-lg border border-[var(--glass-border-light)]/60 scale-[1.02]"
+                : "hover:bg-[var(--component-card)]/70 hover:shadow-md hover:scale-[1.01]"
             )}
           >
             {/* Background gradient when active */}
@@ -63,14 +63,14 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
               <div className={cn(
                 "p-2 rounded-lg transition-all duration-300 shadow-sm",
                 activeSection === section.id
-                  ? `${section.accent} text-white shadow-md`
+                  ? `${section.accent} text-[var(--foreground)] shadow-md`
                   : `bg-${section.color}-50 text-${section.color}-600 group-hover:shadow-md`
               )}>
                 {section.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-slate-900 mb-1 text-sm">{section.label}</div>
-                <div className="text-xs text-slate-600 leading-relaxed">{section.description}</div>
+                <div className="font-semibold text-[var(--foreground)] mb-1 text-sm">{section.label}</div>
+                <div className="text-xs text-[var(--foreground-tertiary)] leading-relaxed">{section.description}</div>
               </div>
               {activeSection === section.id && (
                 <motion.div
@@ -102,23 +102,23 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={onReset}
-                className="text-xs h-6 px-2 text-blue-600 hover:text-blue-700 hover:bg-blue-100"
+                className="text-xs h-6 px-2 text-[var(--cardiology-accent-blue-dark)] hover:text-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--cardiology-accent-blue-light)]"
               >
                 {t('common.clear', 'Clear')}
               </Button>
             </div>
             <div className="space-y-2 max-h-32 overflow-y-auto custom-scrollbar">
               {searchQuery && (
-                <div className="flex items-center justify-between text-xs p-2 bg-white/70 rounded-lg">
-                  <span className="text-slate-600 font-medium">{t('abg.search.query', 'Search Query')}</span>
+                <div className="flex items-center justify-between text-xs p-2 bg-[var(--component-card)]/70 rounded-lg">
+                  <span className="text-[var(--foreground-tertiary)] font-medium">{t('abg.search.query', 'Search Query')}</span>
                   <Badge variant="outline" className="text-xs max-w-32 truncate">
                     "{searchQuery}"
                   </Badge>
                 </div>
               )}
               {Object.entries(filters).map(([key, value]) => (
-                <div key={key} className="flex items-center justify-between text-xs p-2 bg-white/70 rounded-lg">
-                  <span className="text-slate-600 font-medium capitalize">
+                <div key={key} className="flex items-center justify-between text-xs p-2 bg-[var(--component-card)]/70 rounded-lg">
+                  <span className="text-[var(--foreground-tertiary)] font-medium capitalize">
                     {key.replace(/([A-Z])/g, ' $1').trim()}
                   </span>
                   <Button

@@ -261,7 +261,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
       case 'low': return 'text-green-600';
       case 'moderate': return 'text-yellow-600';
       case 'high': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-[var(--foreground-tertiary)]';
     }
   };
 
@@ -270,7 +270,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
       case 'low': return 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800';
       case 'moderate': return 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800';
       case 'high': return 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800';
-      default: return 'bg-gray-50 border-gray-200 dark:bg-gray-900/20 dark:border-gray-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] dark:bg-[var(--background-dark)]/20 dark:border-gray-800';
     }
   };
 
@@ -287,17 +287,17 @@ export const AtrialFibrillationCalculators: React.FC = () => {
         {/* Atrial Fibrillation Alert */}
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6">
           <div className="flex items-start space-x-4">
-            <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-              <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <div className="p-3 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-xl">
+              <Activity className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
             </div>
             <div className="flex-1">
               <h4 className="text-lg font-bold text-blue-800 dark:text-blue-200 mb-2">{t('calculators.cardiology.atrial_fibrillation.alert_title')}</h4>
-              <p className="text-blue-700 dark:text-blue-300 leading-relaxed">
+              <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed">
                 {t('calculators.cardiology.atrial_fibrillation.alert_description')}
               </p>
-              <div className="mt-3 inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg px-3 py-1">
-                <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">{t('calculators.cardiology.atrial_fibrillation.alert_badge')}</span>
+              <div className="mt-3 inline-flex items-center space-x-2 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-lg px-3 py-1">
+                <Award className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                <span className="text-xs font-semibold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">{t('calculators.cardiology.atrial_fibrillation.alert_badge')}</span>
               </div>
             </div>
           </div>
@@ -305,22 +305,22 @@ export const AtrialFibrillationCalculators: React.FC = () => {
 
         {/* Calculator Tabs */}
         <Tabs value={activeCalc} onValueChange={setActiveCalc} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-1">
+          <TabsList className="grid w-full grid-cols-2 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-xl p-1">
             <TabsTrigger 
               value="cha2ds2vasc" 
-              className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-blue-800 data-[state=active]:shadow-md transition-all duration-200"
+              className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-[var(--component-card)] dark:data-[state=active]:bg-[var(--cardiology-accent-blue-darker)] data-[state=active]:shadow-md transition-all duration-200"
             >
               <Heart className="w-4 h-4" />
               <span className="font-medium">{t('calculators.cardiology.atrial_fibrillation.tab_cha2ds2vasc')}</span>
-              <span className="text-xs text-gray-500">{t('calculators.cardiology.atrial_fibrillation.tab_cha2ds2vasc_subtitle')}</span>
+              <span className="text-xs text-[var(--foreground-secondary)]">{t('calculators.cardiology.atrial_fibrillation.tab_cha2ds2vasc_subtitle')}</span>
             </TabsTrigger>
             <TabsTrigger 
               value="hasbled" 
-              className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-red-800 data-[state=active]:shadow-md transition-all duration-200"
+              className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-[var(--component-card)] dark:data-[state=active]:bg-red-800 data-[state=active]:shadow-md transition-all duration-200"
             >
               <AlertTriangle className="w-4 h-4" />
               <span className="font-medium">{t('calculators.cardiology.atrial_fibrillation.tab_hasbled')}</span>
-              <span className="text-xs text-gray-500">{t('calculators.cardiology.atrial_fibrillation.tab_hasbled_subtitle')}</span>
+              <span className="text-xs text-[var(--foreground-secondary)]">{t('calculators.cardiology.atrial_fibrillation.tab_hasbled_subtitle')}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -333,19 +333,19 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-purple-950/30" />
                 
                 {/* Glassmorphism Effect */}
-                <div className="relative backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-2xl shadow-black/5 dark:shadow-black/20">
+                <div className="relative backdrop-blur-sm bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/50 shadow-2xl shadow-black/5 dark:shadow-black/20">
                   <div className="p-8">
                     {/* Header with Icon */}
                     <div className="text-center mb-8">
                       <div className="flex items-center justify-center mb-4">
                         <div className="relative p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg shadow-blue-500/25 transform hover:scale-105 transition-all duration-300">
-                          <Heart className="w-8 h-8 text-white animate-pulse" />
+                          <Heart className="w-8 h-8 text-[var(--foreground)] animate-pulse" />
                         </div>
                       </div>
                       <h3 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent mb-3">
                   {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.title')}
                 </h3>
-                      <p className="text-lg text-gray-600 dark:text-gray-300 font-medium">
+                      <p className="text-lg text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">
                   {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.description')}
                 </p>
               </div>
@@ -354,10 +354,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                     <div className="space-y-8">
                       {/* Basic Information Section */}
                       <div className="relative">
-                        <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40">
+                        <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/25">
-                              <User className="w-5 h-5 text-white" />
+                              <User className="w-5 h-5 text-[var(--foreground)]" />
                             </div>
                             <h4 className="text-xl font-bold text-blue-800 dark:text-blue-200">
                               Patient Information
@@ -367,12 +367,12 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Age */}
                             <div className="group">
-                              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                              <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3">
                                 <div className="flex items-center space-x-2">
-                                  <Clock className="w-4 h-4 text-blue-500" />
+                                  <Clock className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />
                                   <span>{t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.age_label')}</span>
                     <Tooltip content={t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.age_tooltip')}>
-                                    <Info className="w-4 h-4 text-gray-400 hover:text-blue-500 transition-colors cursor-help" />
+                                    <Info className="w-4 h-4 text-[var(--foreground-secondary)] hover:text-[var(--cardiology-accent-blue)] transition-colors cursor-help" />
                     </Tooltip>
                                 </div>
                   </label>
@@ -381,11 +381,11 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                     type="number"
                     value={cha2ds2vascData.age}
                     onChange={(e) => setCha2ds2vascData({ ...cha2ds2vascData, age: e.target.value })}
-                                  className={`w-full px-4 py-3 pl-12 border-2 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 ${
+                                  className={`w-full px-4 py-3 pl-12 border-2 rounded-xl focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/20 focus:border-[var(--cardiology-accent-blue)] transition-all duration-300 ${
                                     cha2ds2vascErrors.age 
                                       ? 'border-red-300 bg-red-50 dark:bg-red-900/20' 
-                                      : 'border-blue-200 dark:border-blue-700 bg-white/80 dark:bg-gray-800/80 hover:border-blue-300 dark:hover:border-blue-600'
-                                  } text-gray-900 dark:text-gray-100 font-medium backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500`}
+                                      : 'border-blue-200 dark:border-blue-700 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 hover:border-[var(--cardiology-accent-blue)] dark:hover:border-blue-600'
+                                  } text-[var(--foreground)] dark:text-[var(--foreground)] font-medium backdrop-blur-sm placeholder-gray-400 dark:placeholder-gray-500`}
                     placeholder={t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.age_placeholder')}
                     min="18"
                     max="120"
@@ -402,12 +402,12 @@ export const AtrialFibrillationCalculators: React.FC = () => {
 
                 {/* Sex */}
                             <div className="group">
-                              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                              <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3">
                                 <div className="flex items-center space-x-2">
-                                  <User className="w-4 h-4 text-blue-500" />
+                                  <User className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />
                                   <span>{t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.sex_label')}</span>
                     <Tooltip content={t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.sex_tooltip')}>
-                                    <Info className="w-4 h-4 text-gray-400 hover:text-blue-500 transition-colors cursor-help" />
+                                    <Info className="w-4 h-4 text-[var(--foreground-secondary)] hover:text-[var(--cardiology-accent-blue)] transition-colors cursor-help" />
                     </Tooltip>
                                 </div>
                   </label>
@@ -415,11 +415,11 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                   <select
                     value={cha2ds2vascData.sex}
                     onChange={(e) => setCha2ds2vascData({ ...cha2ds2vascData, sex: e.target.value as 'male' | 'female' })}
-                                  className={`w-full px-4 py-3 pl-12 border-2 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 ${
+                                  className={`w-full px-4 py-3 pl-12 border-2 rounded-xl focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/20 focus:border-[var(--cardiology-accent-blue)] transition-all duration-300 ${
                                     cha2ds2vascErrors.sex 
                                       ? 'border-red-300 bg-red-50 dark:bg-red-900/20' 
-                                      : 'border-blue-200 dark:border-blue-700 bg-white/80 dark:bg-gray-800/80 hover:border-blue-300 dark:hover:border-blue-600'
-                                  } text-gray-900 dark:text-gray-100 font-medium backdrop-blur-sm appearance-none cursor-pointer`}
+                                      : 'border-blue-200 dark:border-blue-700 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 hover:border-[var(--cardiology-accent-blue)] dark:hover:border-blue-600'
+                                  } text-[var(--foreground)] dark:text-[var(--foreground)] font-medium backdrop-blur-sm appearance-none cursor-pointer`}
                   >
                     <option value="">{t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.sex_placeholder')}</option>
                     <option value="male">{t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.sex_male')}</option>
@@ -445,10 +445,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
 
                       {/* Risk Factors Section */}
                       <div className="relative">
-                        <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40">
+                        <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl shadow-lg shadow-emerald-500/25">
-                              <Heart className="w-5 h-5 text-white" />
+                              <Heart className="w-5 h-5 text-[var(--foreground)]" />
                             </div>
                             <h4 className="text-xl font-bold text-emerald-800 dark:text-emerald-200">
                   {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.risk_factors_title')}
@@ -470,7 +470,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                   <div className={`relative p-4 rounded-xl border-2 transition-all duration-300 ${
                                     isChecked 
                                       ? 'border-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 shadow-lg shadow-emerald-500/20' 
-                                      : 'border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 hover:border-emerald-200 dark:hover:border-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/10'
+                                      : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 hover:border-emerald-200 dark:hover:border-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/10'
                                   } hover:scale-[1.02] backdrop-blur-sm`}>
                                     <div className="flex items-center space-x-3">
                                       <div className="relative">
@@ -483,10 +483,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                         <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
                                           isChecked 
                                             ? 'border-emerald-500 bg-emerald-500 shadow-lg shadow-emerald-500/30' 
-                                            : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                            : 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] bg-[var(--component-card)] dark:bg-[var(--card)]'
                                         }`}>
                                           {isChecked && (
-                                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg className="w-4 h-4 text-[var(--foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m5 13 4 4L19 7"></path>
                                             </svg>
                                           )}
@@ -495,14 +495,14 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                       <div className={`p-2 rounded-lg ${
                                         isChecked 
                                           ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
-                                          : 'bg-gray-100 dark:bg-gray-700 text-gray-500'
+                                          : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)]'
                                       } transition-colors duration-300`}>
                                         <IconComponent className="w-5 h-5" />
                                       </div>
                                       <span className={`text-sm font-medium transition-colors duration-300 ${
                                         isChecked 
                                           ? 'text-emerald-800 dark:text-emerald-200' 
-                                          : 'text-gray-700 dark:text-gray-300'
+                                          : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                                       }`}>
                                         {factor.label}
                     </span>
@@ -517,10 +517,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
 
                       {/* High-Risk Factor Section */}
                       <div className="relative">
-                        <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40">
+                        <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl shadow-lg shadow-red-500/25">
-                              <AlertTriangle className="w-5 h-5 text-white" />
+                              <AlertTriangle className="w-5 h-5 text-[var(--foreground)]" />
                             </div>
                             <h4 className="text-xl font-bold text-red-800 dark:text-red-200">
                   {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.high_risk_title')}
@@ -532,7 +532,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                             <div className={`relative p-4 rounded-xl border-2 transition-all duration-300 ${
                               cha2ds2vascData.stroke_tia 
                                 ? 'border-red-300 bg-red-50 dark:bg-red-900/20 shadow-lg shadow-red-500/20' 
-                                : 'border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 hover:border-red-200 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/10'
+                                : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 hover:border-red-200 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/10'
                             } hover:scale-[1.02] backdrop-blur-sm`}>
                               <div className="flex items-center space-x-3">
                                 <div className="relative">
@@ -545,10 +545,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                   <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
                                     cha2ds2vascData.stroke_tia 
                                       ? 'border-red-500 bg-red-500 shadow-lg shadow-red-500/30' 
-                                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                      : 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] bg-[var(--component-card)] dark:bg-[var(--card)]'
                                   }`}>
                                     {cha2ds2vascData.stroke_tia && (
-                                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <svg className="w-4 h-4 text-[var(--foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m5 13 4 4L19 7"></path>
                                       </svg>
                                     )}
@@ -557,14 +557,14 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                 <div className={`p-2 rounded-lg ${
                                   cha2ds2vascData.stroke_tia 
                                     ? 'bg-red-500/10 text-red-600 dark:text-red-400' 
-                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-500'
+                                    : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)]'
                                 } transition-colors duration-300`}>
                                   <Brain className="w-5 h-5" />
                                 </div>
                                 <span className={`text-sm font-medium transition-colors duration-300 ${
                                   cha2ds2vascData.stroke_tia 
                                     ? 'text-red-800 dark:text-red-200' 
-                                    : 'text-gray-700 dark:text-gray-300'
+                                    : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                                 }`}>
                     {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.stroke_tia_label')}
                   </span>
@@ -578,7 +578,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                       <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button
                   onClick={handleCHA2DS2VAScCalculate}
-                          className="flex-1 flex items-center justify-center space-x-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl shadow-blue-500/25 hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-[1.02]"
+                          className="flex-1 flex items-center justify-center space-x-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-[var(--foreground)] font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl shadow-blue-500/25 hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-[1.02]"
                 >
                           <Calculator className="w-5 h-5" />
                           <span className="text-lg">{t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.calculate_button')}</span>
@@ -586,7 +586,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                 <Button
                   onClick={resetCHA2DS2VASc}
                   variant="outline"
-                          className="flex-1 flex items-center justify-center space-x-3 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300 font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] backdrop-blur-sm bg-white/60 dark:bg-gray-800/60"
+                          className="flex-1 flex items-center justify-center space-x-3 border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] hover:border-[var(--border)] dark:hover:border-[var(--border)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] backdrop-blur-sm bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60"
                 >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
@@ -614,7 +614,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                     }`} />
                     
                     {/* Glassmorphism Effect */}
-                    <div className="relative backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-2xl shadow-black/5 dark:shadow-black/20">
+                    <div className="relative backdrop-blur-sm bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/50 shadow-2xl shadow-black/5 dark:shadow-black/20">
                       <div className="p-8">
                         {/* Header with animated icon */}
                         <div className="flex items-center justify-center mb-6">
@@ -625,7 +625,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                               ? 'bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/25'
                               : 'bg-gradient-to-br from-rose-500 to-red-600 shadow-lg shadow-rose-500/25'
                           } transform transition-all duration-300 hover:scale-105`}>
-                            <Heart className="w-8 h-8 text-white animate-pulse" />
+                            <Heart className="w-8 h-8 text-[var(--foreground)] animate-pulse" />
                       </div>
                         </div>
 
@@ -642,7 +642,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                 fill="transparent"
                                 stroke="currentColor"
                                 strokeWidth="8"
-                                className="text-gray-200 dark:text-gray-700"
+                                className="text-[var(--foreground)] dark:text-[var(--foreground-tertiary)]"
                               />
                               {/* Progress circle */}
                               <circle
@@ -675,14 +675,14 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                               }`}>
                         {cha2ds2vascResult.score}
                               </span>
-                              <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              <span className="text-xs font-medium text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] uppercase tracking-wider">
                                 Score
                               </span>
                       </div>
                           </div>
 
                           {/* Title */}
-                          <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-4 mb-2">
+                          <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mt-4 mb-2">
                             {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.score_label')}
                           </h3>
 
@@ -697,7 +697,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                             }`}>
                               {cha2ds2vascResult.annualStrokeRisk}%
                             </div>
-                            <p className="text-gray-600 dark:text-gray-300 font-medium">
+                            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">
                               {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.annual_stroke_risk')}
                             </p>
                           </div>
@@ -725,7 +725,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
 
                         {/* Recommendation Section */}
                         <div className="relative">
-                          <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/30 dark:border-gray-700/30">
+                          <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/30 dark:border-[var(--border-strong)]/30">
                             <div className="flex items-start space-x-3">
                               <div className={`p-2 rounded-lg ${
                                 cha2ds2vascResult.riskCategory === 'low' 
@@ -737,10 +737,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                 <Brain className="w-5 h-5" />
                               </div>
                               <div className="flex-1">
-                                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 text-lg">
+                                <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2 text-lg">
                         {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.recommendation')}
                       </h4>
-                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                         {cha2ds2vascResult.recommendation}
                       </p>
                               </div>
@@ -756,12 +756,12 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                     {/* Gradient Background */}
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/20 dark:via-indigo-950/20 dark:to-purple-950/20 rounded-2xl" />
                     
-                    <div className="relative backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-white/30 dark:border-gray-700/30 shadow-xl">
+                    <div className="relative backdrop-blur-sm bg-[var(--component-card)]/70 dark:bg-[var(--background-dark)]/70 rounded-2xl border border-white/30 dark:border-[var(--border-strong)]/30 shadow-xl">
                       <div className="p-8">
                         {/* Header */}
                         <div className="flex items-center space-x-3 mb-6">
                           <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/25">
-                            <FileText className="w-6 h-6 text-white" />
+                            <FileText className="w-6 h-6 text-[var(--foreground)]" />
                           </div>
                           <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
                       {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.evidence_title')}
@@ -770,48 +770,48 @@ export const AtrialFibrillationCalculators: React.FC = () => {
 
                         <div className="grid gap-6">
                           {/* Evidence Cards */}
-                          <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40 hover:shadow-lg transition-all duration-300">
+                          <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 hover:shadow-lg transition-all duration-300">
                             <div className="flex items-start space-x-3">
-                              <div className="p-2 bg-blue-500/10 rounded-lg">
-                                <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                              <div className="p-2 bg-[var(--cardiology-accent-blue)]/10 rounded-lg">
+                                <div className="w-2 h-2 bg-[var(--cardiology-accent-blue)] rounded-full" />
                               </div>
                       <div>
-                                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                           {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.evidence_origin_title')}
                         </h4>
-                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                           {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.evidence_origin_description')}
                         </p>
                               </div>
                             </div>
                       </div>
                       
-                          <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40 hover:shadow-lg transition-all duration-300">
+                          <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 hover:shadow-lg transition-all duration-300">
                             <div className="flex items-start space-x-3">
                               <div className="p-2 bg-indigo-500/10 rounded-lg">
                                 <div className="w-2 h-2 bg-indigo-500 rounded-full" />
                               </div>
                       <div>
-                                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                           {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.evidence_validation_title')}
                         </h4>
-                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                           {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.evidence_validation_description')}
                         </p>
                               </div>
                             </div>
                       </div>
 
-                          <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40 hover:shadow-lg transition-all duration-300">
+                          <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 hover:shadow-lg transition-all duration-300">
                             <div className="flex items-start space-x-3">
                               <div className="p-2 bg-purple-500/10 rounded-lg">
                                 <div className="w-2 h-2 bg-purple-500 rounded-full" />
                               </div>
                       <div>
-                                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                           {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.evidence_guidelines_title')}
                         </h4>
-                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                           {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.evidence_guidelines_description')}
                         </p>
                               </div>
@@ -819,9 +819,9 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                       </div>
 
                           {/* Reference Links */}
-                          <div className="bg-gradient-to-r from-gray-50/80 to-white/80 dark:from-gray-800/80 dark:to-gray-700/80 backdrop-blur-sm rounded-xl p-6 border border-gray-200/50 dark:border-gray-600/50">
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                              <BookOpen className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
+                          <div className="bg-gradient-to-r from-gray-50/80 to-white/80 dark:from-gray-800/80 dark:to-gray-700/80 backdrop-blur-sm rounded-xl p-6 border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50">
+                            <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4 flex items-center">
+                              <BookOpen className="w-5 h-5 mr-2 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                               References
                             </h4>
                             <div className="space-y-3">
@@ -829,22 +829,22 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                           href="https://www.ahajournals.org/doi/10.1161/CIR.0000000000001193"
                           target="_blank"
                           rel="noopener noreferrer"
-                                className="group flex items-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg border border-white/50 dark:border-gray-700/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                                className="group flex items-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-lg border border-white/50 dark:border-[var(--border-strong)]/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
                         >
-                                <div className="p-2 bg-blue-500/10 rounded-lg mr-3 group-hover:bg-blue-500/20 transition-colors">
-                                  <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                <div className="p-2 bg-[var(--cardiology-accent-blue)]/10 rounded-lg mr-3 group-hover:bg-[var(--cardiology-accent-blue)]/20 transition-colors">
+                                  <FileText className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                                 </div>
-                                <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300">
+                                <span className="font-medium text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-300">
                           {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.evidence_link_guidelines')}
                                 </span>
-                                <ExternalLink className="w-4 h-4 ml-auto text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
+                                <ExternalLink className="w-4 h-4 ml-auto text-[var(--foreground-secondary)] group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-400" />
                         </a>
                               
                         <a 
                           href="https://pubmed.ncbi.nlm.nih.gov/20299623/"
                           target="_blank"
                           rel="noopener noreferrer"
-                                className="group flex items-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg border border-white/50 dark:border-gray-700/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                                className="group flex items-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-lg border border-white/50 dark:border-[var(--border-strong)]/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
                         >
                                 <div className="p-2 bg-indigo-500/10 rounded-lg mr-3 group-hover:bg-indigo-500/20 transition-colors">
                                   <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -852,7 +852,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                 <span className="font-medium text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300">
                           {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.evidence_link_original')}
                                 </span>
-                                <ExternalLink className="w-4 h-4 ml-auto text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400" />
+                                <ExternalLink className="w-4 h-4 ml-auto text-[var(--foreground-secondary)] group-hover:text-indigo-600 dark:group-hover:text-indigo-400" />
                         </a>
                             </div>
                           </div>
@@ -866,12 +866,12 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                     {/* Gradient Background */}
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-emerald-950/20 dark:via-teal-950/20 dark:to-cyan-950/20 rounded-2xl" />
                     
-                    <div className="relative backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-white/30 dark:border-gray-700/30 shadow-xl">
+                    <div className="relative backdrop-blur-sm bg-[var(--component-card)]/70 dark:bg-[var(--background-dark)]/70 rounded-2xl border border-white/30 dark:border-[var(--border-strong)]/30 shadow-xl">
                       <div className="p-8">
                         {/* Header */}
                         <div className="flex items-center space-x-3 mb-6">
                           <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl shadow-lg shadow-emerald-500/25">
-                            <Brain className="w-6 h-6 text-white" />
+                            <Brain className="w-6 h-6 text-[var(--foreground)]" />
                           </div>
                           <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
                       {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.clinical_pearls_title')}
@@ -887,7 +887,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                           ].map((item, index) => {
                             const IconComponent = item.icon;
                             return (
-                              <div key={index} className="group bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                              <div key={index} className="group bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
                                 <div className="flex items-start space-x-4">
                                   <div className={`p-3 bg-gradient-to-br ${
                                     item.color === 'emerald' ? 'from-emerald-500 to-green-600 shadow-emerald-500/25' :
@@ -895,10 +895,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                     item.color === 'cyan' ? 'from-cyan-500 to-blue-600 shadow-cyan-500/25' :
                                     'from-blue-500 to-indigo-600 shadow-blue-500/25'
                                   } rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                                    <IconComponent className="w-5 h-5 text-white" />
+                                    <IconComponent className="w-5 h-5 text-[var(--foreground)]" />
                                   </div>
                                   <div className="flex-1">
-                                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
+                                    <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed font-medium">
                                       {t(`calculators.cardiology.atrial_fibrillation.cha2ds2vasc.${item.pearl}`)}
                                     </p>
                                   </div>
@@ -924,19 +924,19 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-red-50 via-rose-50 to-pink-50 dark:from-red-950/30 dark:via-rose-950/30 dark:to-pink-950/30" />
                 
                 {/* Glassmorphism Effect */}
-                <div className="relative backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-2xl shadow-black/5 dark:shadow-black/20">
+                <div className="relative backdrop-blur-sm bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/50 shadow-2xl shadow-black/5 dark:shadow-black/20">
                   <div className="p-8">
                     {/* Header with Icon */}
                     <div className="text-center mb-8">
                       <div className="flex items-center justify-center mb-4">
                         <div className="relative p-4 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl shadow-lg shadow-red-500/25 transform hover:scale-105 transition-all duration-300">
-                          <AlertTriangle className="w-8 h-8 text-white animate-pulse" />
+                          <AlertTriangle className="w-8 h-8 text-[var(--foreground)] animate-pulse" />
                         </div>
                       </div>
                       <h3 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-rose-600 dark:from-red-400 dark:to-rose-400 bg-clip-text text-transparent mb-3">
                   {t('calculators.cardiology.atrial_fibrillation.hasbled.title')}
                 </h3>
-                      <p className="text-lg text-gray-600 dark:text-gray-300 font-medium">
+                      <p className="text-lg text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">
                   {t('calculators.cardiology.atrial_fibrillation.hasbled.description')}
                 </p>
               </div>
@@ -945,10 +945,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                     <div className="space-y-8">
                       {/* Bleeding Risk Factors Section */}
                       <div className="relative">
-                        <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40">
+                        <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl shadow-lg shadow-red-500/25">
-                              <AlertTriangle className="w-5 h-5 text-white" />
+                              <AlertTriangle className="w-5 h-5 text-[var(--foreground)]" />
                             </div>
                             <h4 className="text-xl font-bold text-red-800 dark:text-red-200">
                   {t('calculators.cardiology.atrial_fibrillation.hasbled.risk_factors_title')}
@@ -975,7 +975,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                   <div className={`relative p-4 rounded-xl border-2 transition-all duration-300 ${
                                     isChecked 
                                       ? 'border-red-300 bg-red-50 dark:bg-red-900/20 shadow-lg shadow-red-500/20' 
-                                      : 'border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 hover:border-red-200 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/10'
+                                      : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 hover:border-red-200 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/10'
                                   } hover:scale-[1.02] backdrop-blur-sm min-h-[120px]`}>
                                     <div className="flex flex-col h-full">
                                       <div className="flex items-start space-x-3 mb-2">
@@ -989,10 +989,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                           <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
                                             isChecked 
                                               ? 'border-red-500 bg-red-500 shadow-lg shadow-red-500/30' 
-                                              : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                                              : 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] bg-[var(--component-card)] dark:bg-[var(--card)]'
                                           }`}>
                                             {isChecked && (
-                                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                              <svg className="w-4 h-4 text-[var(--foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m5 13 4 4L19 7"></path>
                                               </svg>
                                             )}
@@ -1001,7 +1001,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                         <div className={`p-2 rounded-lg ${
                                           isChecked 
                                             ? 'bg-red-500/10 text-red-600 dark:text-red-400' 
-                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-500'
+                                            : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)]'
                                         } transition-colors duration-300`}>
                                           <IconComponent className="w-5 h-5" />
                                         </div>
@@ -1010,14 +1010,14 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                         <h5 className={`text-sm font-semibold mb-1 transition-colors duration-300 ${
                                           isChecked 
                                             ? 'text-red-800 dark:text-red-200' 
-                                            : 'text-gray-700 dark:text-gray-300'
+                                            : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                                         }`}>
                                           {factor.label}
                                         </h5>
                                         <p className={`text-xs transition-colors duration-300 ${
                                           isChecked 
                                             ? 'text-red-600 dark:text-red-300' 
-                                            : 'text-gray-500 dark:text-gray-400'
+                                            : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                                         }`}>
                                           {factor.description}
                                         </p>
@@ -1035,7 +1035,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                       <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button
                   onClick={handleHASBLEDCalculate}
-                          className="flex-1 flex items-center justify-center space-x-3 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl shadow-red-500/25 hover:shadow-red-500/30 transition-all duration-300 transform hover:scale-[1.02]"
+                          className="flex-1 flex items-center justify-center space-x-3 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-[var(--foreground)] font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl shadow-red-500/25 hover:shadow-red-500/30 transition-all duration-300 transform hover:scale-[1.02]"
                 >
                           <Calculator className="w-5 h-5" />
                           <span className="text-lg">{t('calculators.cardiology.atrial_fibrillation.hasbled.calculate_button')}</span>
@@ -1043,7 +1043,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                 <Button
                   onClick={resetHASBLED}
                   variant="outline"
-                          className="flex-1 flex items-center justify-center space-x-3 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-700 dark:text-gray-300 font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] backdrop-blur-sm bg-white/60 dark:bg-gray-800/60"
+                          className="flex-1 flex items-center justify-center space-x-3 border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] hover:border-[var(--border)] dark:hover:border-[var(--border)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] backdrop-blur-sm bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60"
                 >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
@@ -1071,7 +1071,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                     }`} />
                     
                     {/* Glassmorphism Effect */}
-                    <div className="relative backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-2xl shadow-black/5 dark:shadow-black/20">
+                    <div className="relative backdrop-blur-sm bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/50 shadow-2xl shadow-black/5 dark:shadow-black/20">
                       <div className="p-8">
                         {/* Header with animated icon */}
                         <div className="flex items-center justify-center mb-6">
@@ -1082,7 +1082,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                               ? 'bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/25'
                               : 'bg-gradient-to-br from-rose-500 to-red-600 shadow-lg shadow-rose-500/25'
                           } transform transition-all duration-300 hover:scale-105`}>
-                            <AlertTriangle className="w-8 h-8 text-white animate-pulse" />
+                            <AlertTriangle className="w-8 h-8 text-[var(--foreground)] animate-pulse" />
                     </div>
                         </div>
 
@@ -1099,7 +1099,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                 fill="transparent"
                                 stroke="currentColor"
                                 strokeWidth="8"
-                                className="text-gray-200 dark:text-gray-700"
+                                className="text-[var(--foreground)] dark:text-[var(--foreground-tertiary)]"
                               />
                               {/* Progress circle */}
                               <circle
@@ -1132,14 +1132,14 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                               }`}>
                       {hasbledResult.score}
                               </span>
-                              <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              <span className="text-xs font-medium text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] uppercase tracking-wider">
                                 Score
                               </span>
                     </div>
                           </div>
 
                           {/* Title */}
-                          <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-4 mb-2">
+                          <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mt-4 mb-2">
                             {t('calculators.cardiology.atrial_fibrillation.hasbled.score_label')}
                           </h3>
 
@@ -1154,7 +1154,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                             }`}>
                               {hasbledResult.annualBleedingRisk}%
                             </div>
-                            <p className="text-gray-600 dark:text-gray-300 font-medium">
+                            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">
                               {t('calculators.cardiology.atrial_fibrillation.hasbled.annual_bleeding_risk')}
                             </p>
                           </div>
@@ -1182,7 +1182,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
 
                         {/* Recommendation Section */}
                         <div className="relative">
-                          <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/30 dark:border-gray-700/30">
+                          <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/30 dark:border-[var(--border-strong)]/30">
                             <div className="flex items-start space-x-3">
                               <div className={`p-2 rounded-lg ${
                                 hasbledResult.riskCategory === 'low' 
@@ -1194,10 +1194,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                 <Shield className="w-5 h-5" />
                               </div>
                               <div className="flex-1">
-                                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 text-lg">
+                                <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2 text-lg">
                       {t('calculators.cardiology.atrial_fibrillation.hasbled.recommendation')}
                     </h4>
-                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                       {hasbledResult.recommendation}
                     </p>
                               </div>
@@ -1218,16 +1218,16 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                     {/* Gradient Background */}
                     <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 dark:from-violet-950/20 dark:via-purple-950/20 dark:to-indigo-950/20 rounded-2xl" />
                     
-                    <div className="relative backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-white/30 dark:border-gray-700/30 shadow-xl">
+                    <div className="relative backdrop-blur-sm bg-[var(--component-card)]/70 dark:bg-[var(--background-dark)]/70 rounded-2xl border border-white/30 dark:border-[var(--border-strong)]/30 shadow-xl">
                       <div className="p-8">
                         {/* Header */}
                         <div className="flex items-center space-x-4 mb-6">
                           <div className="relative">
                             <div className="w-16 h-16 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl shadow-xl shadow-violet-500/25 flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
-                              <span className="text-white font-bold text-xl">RP</span>
+                              <span className="text-[var(--foreground)] font-bold text-xl">RP</span>
                             </div>
                             <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full border-2 border-white dark:border-gray-900 flex items-center justify-center">
-                              <User className="w-3 h-3 text-white" />
+                              <User className="w-3 h-3 text-[var(--foreground)]" />
                             </div>
                           </div>
                           <div>
@@ -1241,23 +1241,23 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                         </div>
 
                         {/* Bio */}
-                        <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40 mb-6">
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
+                        <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 mb-6">
+                          <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed font-medium">
                             {t('calculators.cardiology.atrial_fibrillation.hasbled.author_bio')}
                           </p>
                         </div>
                         
                         {/* Key Message */}
-                        <div className="group bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40 hover:shadow-lg transition-all duration-300 mb-6">
+                        <div className="group bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 hover:shadow-lg transition-all duration-300 mb-6">
                           <div className="flex items-start space-x-4">
                             <div className="p-2 bg-gradient-to-br from-violet-500 to-purple-600 shadow-violet-500/25 rounded-lg shadow-lg group-hover:scale-110 transition-transform duration-300">
-                              <Target className="w-5 h-5 text-white" />
+                              <Target className="w-5 h-5 text-[var(--foreground)]" />
                             </div>
                             <div className="flex-1">
-                              <h6 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                              <h6 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                                 {t('calculators.cardiology.atrial_fibrillation.hasbled.author_key_message_title')}
                               </h6>
-                              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                              <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                                 {t('calculators.cardiology.atrial_fibrillation.hasbled.author_key_message')}
                               </p>
                             </div>
@@ -1270,9 +1270,9 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                             href="https://pubmed.ncbi.nlm.nih.gov/?term=Pisters+R%5BAuthor%5D"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group inline-flex items-center p-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 rounded-xl text-white font-medium shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-[1.02]"
+                            className="group inline-flex items-center p-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 rounded-xl text-[var(--foreground)] font-medium shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-[1.02]"
                           >
-                            <div className="p-2 bg-white/20 rounded-lg mr-3 group-hover:bg-white/30 transition-colors">
+                            <div className="p-2 bg-[var(--component-card)]/20 rounded-lg mr-3 group-hover:bg-[var(--component-card)]/30 transition-colors">
                               <BookOpen className="w-5 h-5" />
                             </div>
                             <span>{t('calculators.cardiology.atrial_fibrillation.hasbled.author_pubmed_link')}</span>
@@ -1292,14 +1292,14 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                           <Calculator className="w-6 h-6 text-teal-600 dark:text-teal-400" />
                         </div>
                         <div>
-                          <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                          <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                             {t('calculators.cardiology.atrial_fibrillation.hasbled.formula_title')}
                           </h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">HAS-BLED Point System</p>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">HAS-BLED Point System</p>
                         </div>
                       </div>
                       
-                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                         {t('calculators.cardiology.atrial_fibrillation.hasbled.formula_description')}
                       </p>
                       
@@ -1311,8 +1311,8 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                             { label: "Liver disease", value: "1" },
                             { label: "Stroke history", value: "1" }
                           ].map((item, index) => (
-                            <div key={index} className="group flex justify-between items-center p-3 bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl border border-white/40 dark:border-gray-700/40 hover:scale-[1.02] transition-all duration-300">
-                              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.label}</span>
+                            <div key={index} className="group flex justify-between items-center p-3 bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl border border-white/40 dark:border-[var(--border-strong)]/40 hover:scale-[1.02] transition-all duration-300">
+                              <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{item.label}</span>
                               <span className="px-3 py-1 bg-teal-500/20 text-teal-700 dark:text-teal-300 rounded-lg font-bold text-sm">{item.value}</span>
                             </div>
                           ))}
@@ -1324,8 +1324,8 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                             { label: "Elderly (age > 65)", value: "1" },
                             { label: "Medication/Alcohol usage", value: "1" }
                           ].map((item, index) => (
-                            <div key={index} className="group flex justify-between items-center p-3 bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl border border-white/40 dark:border-gray-700/40 hover:scale-[1.02] transition-all duration-300">
-                              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.label}</span>
+                            <div key={index} className="group flex justify-between items-center p-3 bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl border border-white/40 dark:border-[var(--border-strong)]/40 hover:scale-[1.02] transition-all duration-300">
+                              <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{item.label}</span>
                               <span className="px-3 py-1 bg-teal-500/20 text-teal-700 dark:text-teal-300 rounded-lg font-bold text-sm">{item.value}</span>
                             </div>
                           ))}
@@ -1336,8 +1336,8 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                         <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-blue-500/10"></div>
                         <div className="relative p-4">
                           <div className="flex items-start space-x-3">
-                            <div className="w-8 h-8 rounded-lg bg-blue-500/30 flex items-center justify-center">
-                              <Info className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                            <div className="w-8 h-8 rounded-lg bg-[var(--cardiology-accent-blue)]/30 flex items-center justify-center">
+                              <Info className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                             </div>
                             <div>
                               <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
@@ -1359,33 +1359,33 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                           <BarChart3 className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                         </div>
                         <div>
-                          <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                          <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                             {t('calculators.cardiology.atrial_fibrillation.hasbled.facts_figures_title')}
                           </h4>
-                          <h5 className="text-sm text-gray-600 dark:text-gray-400">
+                          <h5 className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                             {t('calculators.cardiology.atrial_fibrillation.hasbled.risk_table_title')}
                           </h5>
                         </div>
                       </div>
                       
-                      <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm border border-white/40 dark:border-gray-700/40">
+                      <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm border border-white/40 dark:border-[var(--border-strong)]/40">
                         <div className="overflow-x-auto">
                           <table className="min-w-full table-auto">
                             <thead>
                               <tr className="bg-gradient-to-r from-indigo-500/20 via-indigo-400/10 to-purple-500/20 backdrop-blur-sm">
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-800 dark:text-gray-200">
+                                <th className="px-6 py-4 text-left text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                                   {t('calculators.cardiology.atrial_fibrillation.hasbled.risk_table_score')}
                                 </th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-800 dark:text-gray-200">
+                                <th className="px-6 py-4 text-left text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                                   {t('calculators.cardiology.atrial_fibrillation.hasbled.risk_table_group')}
                                 </th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-800 dark:text-gray-200">
+                                <th className="px-6 py-4 text-left text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                                   {t('calculators.cardiology.atrial_fibrillation.hasbled.risk_table_major_bleeding')}
                                 </th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-800 dark:text-gray-200">
+                                <th className="px-6 py-4 text-left text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                                   {t('calculators.cardiology.atrial_fibrillation.hasbled.risk_table_bleeds_per_100')}
                                 </th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-800 dark:text-gray-200">
+                                <th className="px-6 py-4 text-left text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                                   {t('calculators.cardiology.atrial_fibrillation.hasbled.risk_table_recommendation')}
                                 </th>
                               </tr>
@@ -1420,10 +1420,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                                       {row.score}
                                     </span>
                                   </td>
-                                  <td className="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-300">{row.risk}</td>
-                                  <td className="px-6 py-4 text-sm font-semibold text-gray-800 dark:text-gray-200">{row.bleeding}</td>
-                                  <td className="px-6 py-4 text-sm font-semibold text-gray-800 dark:text-gray-200">{row.bleeds}</td>
-                                  <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">{row.rec}</td>
+                                  <td className="px-6 py-4 text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{row.risk}</td>
+                                  <td className="px-6 py-4 text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{row.bleeding}</td>
+                                  <td className="px-6 py-4 text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{row.bleeds}</td>
+                                  <td className="px-6 py-4 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{row.rec}</td>
                                 </tr>
                               ))}
                             </tbody>
@@ -1432,14 +1432,14 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 bg-gradient-to-r from-white/40 to-white/20 dark:from-gray-800/40 dark:to-gray-800/20 backdrop-blur-sm rounded-xl border border-white/30 dark:border-gray-700/30">
-                          <p className="text-xs text-gray-600 dark:text-gray-400 flex items-center">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                        <div className="p-4 bg-gradient-to-r from-white/40 to-white/20 dark:from-gray-800/40 dark:to-gray-800/20 backdrop-blur-sm rounded-xl border border-white/30 dark:border-[var(--border-strong)]/30">
+                          <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] flex items-center">
+                            <span className="w-2 h-2 bg-[var(--cardiology-accent-blue)] rounded-full mr-2"></span>
                             **Risk figures from Lip 2011.
                           </p>
                         </div>
-                        <div className="p-4 bg-gradient-to-r from-white/40 to-white/20 dark:from-gray-800/40 dark:to-gray-800/20 backdrop-blur-sm rounded-xl border border-white/30 dark:border-gray-700/30">
-                          <p className="text-xs text-gray-600 dark:text-gray-400 flex items-center">
+                        <div className="p-4 bg-gradient-to-r from-white/40 to-white/20 dark:from-gray-800/40 dark:to-gray-800/20 backdrop-blur-sm rounded-xl border border-white/30 dark:border-[var(--border-strong)]/30">
+                          <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] flex items-center">
                             <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
                             ***Risk figures from Pisters 2010.
                           </p>
@@ -1457,10 +1457,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                           <Award className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                         </div>
                         <div>
-                          <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                          <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                             {t('calculators.cardiology.atrial_fibrillation.hasbled.evidence_title')}
                           </h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Scientific Validation & Guidelines</p>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Scientific Validation & Guidelines</p>
                         </div>
                       </div>
                       
@@ -1491,26 +1491,26 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                             color: "amber"
                           }
                         ].map((item, index) => (
-                          <div key={index} className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm border border-white/40 dark:border-gray-700/40 hover:scale-[1.02] transition-all duration-300">
+                          <div key={index} className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm border border-white/40 dark:border-[var(--border-strong)]/40 hover:scale-[1.02] transition-all duration-300">
                             <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/5"></div>
                             <div className="relative p-5 space-y-3">
                               <div className="flex items-center space-x-3">
                                 <div className={`w-10 h-10 rounded-xl ${
-                                  item.color === 'blue' ? 'bg-blue-500/20' :
+                                  item.color === 'blue' ? 'bg-[var(--cardiology-accent-blue)]/20' :
                                   item.color === 'green' ? 'bg-green-500/20' :
                                   item.color === 'purple' ? 'bg-purple-500/20' :
                                   'bg-amber-500/20'
                                 } flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                                   <item.icon className={`w-5 h-5 ${
-                                    item.color === 'blue' ? 'text-blue-600 dark:text-blue-400' :
+                                    item.color === 'blue' ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' :
                                     item.color === 'green' ? 'text-green-600 dark:text-green-400' :
                                     item.color === 'purple' ? 'text-purple-600 dark:text-purple-400' :
                                     'text-amber-600 dark:text-amber-400'
                                   }`} />
                                 </div>
-                                <h5 className="font-bold text-gray-900 dark:text-gray-100">{item.title}</h5>
+                                <h5 className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{item.title}</h5>
                               </div>
-                              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                              <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                                 {item.content}
                               </p>
                             </div>
@@ -1518,14 +1518,14 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                         ))}
                       </div>
                       
-                      <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-slate-500/20 via-slate-400/10 to-gray-500/20 border border-slate-200/50 dark:border-slate-400/30 backdrop-blur-sm">
+                      <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-slate-500/20 via-slate-400/10 to-gray-500/20 border border-[var(--glass-border-light)]/50 dark:border-slate-400/30 backdrop-blur-sm">
                         <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-slate-500/10"></div>
                         <div className="relative p-6 space-y-4">
                           <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-xl bg-slate-500/20 flex items-center justify-center">
-                              <BookOpen className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                            <div className="w-10 h-10 rounded-xl bg-[var(--muted-foreground)]/20 flex items-center justify-center">
+                              <BookOpen className="w-5 h-5 text-[var(--foreground-tertiary)] dark:text-slate-400" />
                             </div>
-                            <h5 className="text-lg font-bold text-gray-900 dark:text-gray-100">Key References</h5>
+                            <h5 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">Key References</h5>
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {[
@@ -1534,11 +1534,11 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                               t('calculators.cardiology.atrial_fibrillation.hasbled.reference_guidelines_2020'),
                               t('calculators.cardiology.atrial_fibrillation.hasbled.reference_guidelines_2023')
                             ].map((ref, index) => (
-                              <div key={index} className="flex items-start space-x-3 p-3 bg-gradient-to-r from-white/40 to-white/20 dark:from-gray-800/40 dark:to-gray-800/20 backdrop-blur-sm rounded-lg border border-white/30 dark:border-gray-700/30">
-                                <div className="w-6 h-6 rounded-full bg-slate-500/20 flex items-center justify-center mt-0.5">
-                                  <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{index + 1}</span>
+                              <div key={index} className="flex items-start space-x-3 p-3 bg-gradient-to-r from-white/40 to-white/20 dark:from-gray-800/40 dark:to-gray-800/20 backdrop-blur-sm rounded-lg border border-white/30 dark:border-[var(--border-strong)]/30">
+                                <div className="w-6 h-6 rounded-full bg-[var(--muted-foreground)]/20 flex items-center justify-center mt-0.5">
+                                  <span className="text-xs font-bold text-[var(--foreground-tertiary)] dark:text-slate-400">{index + 1}</span>
                                 </div>
-                                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1">
+                                <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed flex-1">
                                   {ref}
                                 </p>
                               </div>
@@ -1565,9 +1565,9 @@ export const AtrialFibrillationCalculators: React.FC = () => {
               <div className="text-center">
                 <div className="flex items-center space-x-2 mb-1">
                   <Info className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-sm font-bold text-gray-900 dark:text-gray-100">Clinical Guidelines Compliance</span>
+                  <span className="text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">Clinical Guidelines Compliance</span>
                 </div>
-                <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
+                <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">
                   Based on 2023 ACC/AHA/ACCP/HRS Guideline for the Diagnosis and Management of Atrial Fibrillation
                 </p>
               </div>

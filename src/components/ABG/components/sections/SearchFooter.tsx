@@ -23,19 +23,19 @@ export const SearchFooter: React.FC<SearchFooterProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className="border-t border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-white/60 backdrop-blur-xl px-6 py-4">
+    <div className="border-t border-[var(--glass-border-light)]/60 bg-gradient-to-r from-slate-50/80 to-white/60 backdrop-blur-xl px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
             onClick={onReset}
             disabled={!hasChanges}
-            className="bg-white/70 border-slate-200 hover:bg-slate-50 flex items-center gap-2"
+            className="bg-[var(--component-card)]/70 border-[var(--glass-border-light)] hover:bg-[var(--component-surface-primary)] flex items-center gap-2"
           >
             <RotateCcw className="h-4 w-4" />
             {t('abg.search.resetAll', 'Reset All Filters')}
           </Button>
-          <div className="text-sm text-slate-600 flex items-center gap-2">
+          <div className="text-sm text-[var(--foreground-tertiary)] flex items-center gap-2">
             {activeFiltersCount > 0 ? (
               <>
                 <div className="flex items-center gap-1">
@@ -57,7 +57,7 @@ export const SearchFooter: React.FC<SearchFooterProps> = ({
           <Button 
             variant="ghost" 
             onClick={onClose}
-            className="hover:bg-slate-100/70"
+            className="hover:bg-[var(--component-surface-secondary)]/70"
           >
             {t('common.cancel', 'Cancel')}
           </Button>
@@ -65,7 +65,7 @@ export const SearchFooter: React.FC<SearchFooterProps> = ({
             <Button
               onClick={onSearch}
               disabled={isSearching}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg px-6 py-2 h-auto"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-[var(--foreground)] shadow-lg px-6 py-2 h-auto"
             >
               {isSearching ? (
                 <>
@@ -91,17 +91,17 @@ export const SearchFooter: React.FC<SearchFooterProps> = ({
       </div>
 
       {/* Keyboard Shortcuts */}
-      <div className="mt-3 pt-3 border-t border-slate-200/60">
-        <div className="flex items-center justify-center gap-6 text-xs text-slate-500">
+      <div className="mt-3 pt-3 border-t border-[var(--glass-border-light)]/60">
+        <div className="flex items-center justify-center gap-6 text-xs text-[var(--foreground-secondary)]">
           <div className="flex items-center gap-1">
             <div className="flex gap-1">
-              <kbd className="px-1.5 py-0.5 bg-slate-200 rounded text-xs font-medium">⌘</kbd>
-              <kbd className="px-1.5 py-0.5 bg-slate-200 rounded text-xs font-medium">⏎</kbd>
+              <kbd className="px-1.5 py-0.5 bg-[var(--component-surface-tertiary)] rounded text-xs font-medium">⌘</kbd>
+              <kbd className="px-1.5 py-0.5 bg-[var(--component-surface-tertiary)] rounded text-xs font-medium">⏎</kbd>
             </div>
             <span>{t('abg.search.quick', 'Quick Search')}</span>
           </div>
           <div className="flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 bg-slate-200 rounded text-xs font-medium">Esc</kbd>
+            <kbd className="px-1.5 py-0.5 bg-[var(--component-surface-tertiary)] rounded text-xs font-medium">Esc</kbd>
             <span>{t('abg.search.close', 'Close Modal')}</span>
           </div>
           <div className="flex items-center gap-1 text-amber-600">

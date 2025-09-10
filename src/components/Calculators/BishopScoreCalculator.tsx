@@ -137,7 +137,7 @@ const BishopScoreCalculatorComponent: React.FC = () => {
     if (score <= 3) return 'text-red-600 bg-red-50 border-red-200';
     if (score <= 6) return 'text-yellow-600 bg-yellow-50 border-yellow-200';
     if (score <= 8) return 'text-green-600 bg-green-50 border-green-200';
-    return 'text-blue-600 bg-blue-50 border-blue-200';
+    return 'text-[var(--cardiology-accent-blue-dark)] bg-[var(--cardiology-accent-blue-light)] border-blue-200';
   }, []);
 
   const getSuccessBgColor = useMemo(() => (success: string) => {
@@ -145,8 +145,8 @@ const BishopScoreCalculatorComponent: React.FC = () => {
       case 'unlikely': return 'bg-red-50 border-red-200 text-red-800';
       case 'possible': return 'bg-orange-50 border-orange-200 text-orange-800';
       case 'likely': return 'bg-green-50 border-green-200 text-green-800';
-      case 'very-likely': return 'bg-blue-50 border-blue-200 text-blue-800';
-      default: return 'bg-gray-50 border-gray-200 text-gray-800';
+      case 'very-likely': return 'bg-[var(--cardiology-accent-blue-light)] border-blue-200 text-blue-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] text-[var(--foreground)]';
     }
   }, []);
 
@@ -191,22 +191,22 @@ const BishopScoreCalculatorComponent: React.FC = () => {
                 <div className="flex items-center justify-center space-x-4 mb-8">
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 1 ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 1 ? 'bg-pink-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       1
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.bishop_score.cervical_assessment')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.bishop_score.cervical_assessment')}</span>
                   </div>
                   <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                    currentStep >= 2 ? 'bg-rose-500' : 'bg-gray-200'
+                    currentStep >= 2 ? 'bg-rose-500' : 'bg-[var(--component-surface-tertiary)]'
                   }`}></div>
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 3 ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 3 ? 'bg-purple-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       3
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('common.results')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('common.results')}</span>
                   </div>
                 </div>
 
@@ -216,16 +216,16 @@ const BishopScoreCalculatorComponent: React.FC = () => {
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-2xl border border-pink-200 dark:border-pink-800">
                         <Activity className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.bishop_score.cervical_parameters_section')}</h3>
+                        <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.bishop_score.cervical_parameters_section')}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.bishop_score.cervical_parameters_description')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.bishop_score.cervical_parameters_description')}</p>
                     </div>
 
                     <div className={`grid gap-6 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
                       {/* Cervical Dilation */}
                       <div className={`${isMobile ? 'p-4' : 'p-4 sm:p-6'} bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl`}>
                         <div className="flex items-center space-x-3 mb-4">
-                          <BarChart3 className="w-5 h-5 text-blue-600" />
+                          <BarChart3 className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                           <h4 className="font-semibold text-blue-800 dark:text-blue-200">{t('calculators.bishop_score.cervical_dilation_label')}</h4>
                         </div>
                         
@@ -244,9 +244,9 @@ const BishopScoreCalculatorComponent: React.FC = () => {
                           icon={BarChart3}
                         />
 
-                        <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg">
+                        <div className="mt-4 p-4 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 border border-blue-200 dark:border-blue-700 rounded-lg">
                           <h5 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">{t('calculators.bishop_score.scoring_system')}</h5>
-                          <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                          <div className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 space-y-1">
                             <p>• {t('calculators.bishop_score.dilation_score_0')}</p>
                             <p>• {t('calculators.bishop_score.dilation_score_1')}</p>
                             <p>• {t('calculators.bishop_score.dilation_score_2')}</p>
@@ -373,9 +373,9 @@ const BishopScoreCalculatorComponent: React.FC = () => {
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-rose-50 to-purple-50 dark:from-rose-900/20 dark:to-purple-900/20 rounded-2xl border border-rose-200 dark:border-rose-800">
                         <Baby className="w-6 h-6 text-rose-600 dark:text-rose-400" />
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.bishop_score.fetal_station_label')} {t('calculators.bishop_score.assessment_tool')}</h3>
+                        <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.bishop_score.fetal_station_label')} {t('calculators.bishop_score.assessment_tool')}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.bishop_score.fetal_station_help')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.bishop_score.fetal_station_help')}</p>
                     </div>
 
                     {/* Fetal Station */}
@@ -474,11 +474,11 @@ const BishopScoreCalculatorComponent: React.FC = () => {
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
                     <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
                       <div className="flex items-center space-x-3 mb-3">
-                        <Target className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                        <Target className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                         <h4 className="font-semibold text-blue-800 dark:text-blue-200">{t('calculators.bishop_score.induction_success')}</h4>
                       </div>
                       <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{result.successLabels?.[result.inductionSuccess.replace('-', '_') as keyof typeof result.successLabels] || result.inductionSuccess.charAt(0).toUpperCase() + result.inductionSuccess.slice(1).replace('-', ' ')}</p>
-                      <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">{t('calculators.bishop_score.labor_likelihood')}</p>
+                      <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mt-1">{t('calculators.bishop_score.labor_likelihood')}</p>
                     </div>
 
                     <div className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl">
@@ -494,8 +494,8 @@ const BishopScoreCalculatorComponent: React.FC = () => {
                   {/* Induction Recommendations */}
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
-                      <Stethoscope className="w-5 h-5 text-blue-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.bishop_score.clinical_recommendation')}</h4>
+                      <Stethoscope className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.bishop_score.clinical_recommendation')}</h4>
                     </div>
                     <div className={`p-6 rounded-2xl border-2 ${getSuccessBgColor(result.inductionSuccess)}`}>
                       <div className="space-y-3">
@@ -503,7 +503,7 @@ const BishopScoreCalculatorComponent: React.FC = () => {
                         {result.recommendations.map((rec, index) => (
                           <div key={index} className="flex items-start space-x-2">
                             <div className="w-2 h-2 bg-current rounded-full mt-2 flex-shrink-0"></div>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">{rec}</p>
+                            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{rec}</p>
                           </div>
                         ))}
                       </div>
@@ -563,7 +563,7 @@ const BishopScoreCalculatorComponent: React.FC = () => {
 
             {/* Footer Information */}
             <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-              <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 <Info className="w-4 h-4" />
                 <span>{t('calculators.bishop_score.based_on_bishop')}</span>
                 <div className="flex items-center space-x-1">
@@ -605,14 +605,14 @@ const BishopScoreCalculatorComponent: React.FC = () => {
               <Card className="border-2 border-blue-200 dark:border-blue-800">
                 <CardHeader>
                   <div className="flex items-center space-x-3">
-                    <BarChart3 className="w-6 h-6 text-blue-600" />
+                    <BarChart3 className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)]" />
                     <CardTitle className="text-blue-800 dark:text-blue-200">{t('calculators.bishop_score.scoring_parameters')}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-2">{t('calculators.bishop_score.five_assessment_parameters')}</h4>
-                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                    <h4 className="font-semibold text-sm text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.bishop_score.five_assessment_parameters')}</h4>
+                    <ul className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] space-y-1">
                       <li>• {t('calculators.bishop_score.cervical_dilation_points')}</li>
                       <li>• {t('calculators.bishop_score.cervical_effacement_points')}</li>
                       <li>• {t('calculators.bishop_score.cervical_consistency_points')}</li>
@@ -632,8 +632,8 @@ const BishopScoreCalculatorComponent: React.FC = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-2">{t('calculators.bishop_score.induction_success_prediction')}</h4>
-                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                    <h4 className="font-semibold text-sm text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.bishop_score.induction_success_prediction')}</h4>
+                    <ul className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] space-y-1">
                       <li>• {t('calculators.bishop_score.score_unfavorable')}</li>
                       <li>• {t('calculators.bishop_score.score_intermediate')}</li>
                       <li>• {t('calculators.bishop_score.score_favorable')}</li>
@@ -655,20 +655,20 @@ const BishopScoreCalculatorComponent: React.FC = () => {
               <CardContent>
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                   <div>
-                    <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-2">{t('calculators.bishop_score.labor_induction_planning')}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <h4 className="font-semibold text-sm text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.bishop_score.labor_induction_planning')}</h4>
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.bishop_score.labor_induction_description')}
                     </p>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-2">{t('calculators.bishop_score.delivery_planning')}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <h4 className="font-semibold text-sm text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.bishop_score.delivery_planning')}</h4>
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.bishop_score.delivery_planning_description')}
                     </p>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-2">{t('calculators.bishop_score.clinical_documentation')}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <h4 className="font-semibold text-sm text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.bishop_score.clinical_documentation')}</h4>
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.bishop_score.clinical_documentation_description')}
                     </p>
                   </div>
@@ -687,16 +687,16 @@ const BishopScoreCalculatorComponent: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-2">{t('calculators.bishop_score.professional_guidelines')}</h4>
-                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                    <h4 className="font-semibold text-sm text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.bishop_score.professional_guidelines')}</h4>
+                    <ul className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] space-y-1">
                       <li>• {t('calculators.bishop_score.acog_practice_bulletin')}</li>
                       <li>• {t('calculators.bishop_score.maternal_fetal_medicine')}</li>
                       <li>• {t('calculators.bishop_score.validation_studies')}</li>
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-2">{t('calculators.bishop_score.clinical_validation')}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <h4 className="font-semibold text-sm text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.bishop_score.clinical_validation')}</h4>
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.bishop_score.clinical_validation_description')}
                     </p>
                   </div>

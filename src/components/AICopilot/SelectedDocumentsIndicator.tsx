@@ -37,17 +37,17 @@ export const SelectedDocumentsIndicator: React.FC<SelectedDocumentsIndicatorProp
 
   if (selectedDocuments.length === 0) {
     return (
-      <div className={`flex items-center justify-center p-3 bg-gray-50 border border-gray-200 rounded-lg ${className}`}>
+      <div className={`flex items-center justify-center p-3 bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] rounded-lg ${className}`}>
         <div className="text-center">
-          <FileText className="w-5 h-5 text-gray-400 mx-auto mb-1" />
-          <p className="text-xs text-gray-500">
+          <FileText className="w-5 h-5 text-[var(--foreground-secondary)] mx-auto mb-1" />
+          <p className="text-xs text-[var(--foreground-secondary)]">
             No documents selected
           </p>
           <Button
             variant="ghost"
             size="sm"
             onClick={onOpenSelector}
-            className="text-xs text-blue-600 hover:text-blue-700 h-auto p-1 mt-1"
+            className="text-xs text-[var(--cardiology-accent-blue-dark)] hover:text-[var(--cardiology-accent-blue-dark)] h-auto p-1 mt-1"
           >
             Select documents
           </Button>
@@ -57,10 +57,10 @@ export const SelectedDocumentsIndicator: React.FC<SelectedDocumentsIndicatorProp
   }
 
   return (
-    <div className={`bg-blue-50 border border-blue-200 rounded-lg p-3 ${className}`}>
+    <div className={`bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg p-3 ${className}`}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
-          <FileText className="w-4 h-4 text-blue-600" />
+          <FileText className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
           <span className="text-sm font-medium text-blue-900">
             {selectedDocuments.length} document{selectedDocuments.length > 1 ? 's' : ''} selected
           </span>
@@ -70,7 +70,7 @@ export const SelectedDocumentsIndicator: React.FC<SelectedDocumentsIndicatorProp
             variant="ghost"
             size="sm"
             onClick={onOpenSelector}
-            className="text-xs text-blue-600 hover:text-blue-700 h-6 px-2"
+            className="text-xs text-[var(--cardiology-accent-blue-dark)] hover:text-[var(--cardiology-accent-blue-dark)] h-6 px-2"
           >
             <Eye className="w-3 h-3 mr-1" />
             Manage
@@ -91,9 +91,9 @@ export const SelectedDocumentsIndicator: React.FC<SelectedDocumentsIndicatorProp
         {selectedDocs.map((doc) => (
           <div
             key={doc.id}
-            className="flex items-center space-x-1 bg-white border border-blue-200 rounded-md px-2 py-1 group hover:bg-blue-50 transition-colors"
+            className="flex items-center space-x-1 bg-[var(--component-card)] border border-blue-200 rounded-md px-2 py-1 group hover:bg-[var(--cardiology-accent-blue-light)] transition-colors"
           >
-            <div className="flex items-center space-x-1 text-blue-700">
+            <div className="flex items-center space-x-1 text-[var(--cardiology-accent-blue-dark)]">
               {getFileIcon(doc.fileType)}
               <span className="text-xs font-medium">
                 {truncateFileName(doc.fileName)}
@@ -103,7 +103,7 @@ export const SelectedDocumentsIndicator: React.FC<SelectedDocumentsIndicatorProp
               variant="ghost"
               size="sm"
               onClick={() => onRemoveDocument(doc.id)}
-              className="h-4 w-4 p-0 text-blue-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="h-4 w-4 p-0 text-[var(--cardiology-accent-blue)] hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <X className="w-3 h-3" />
             </Button>
@@ -113,7 +113,7 @@ export const SelectedDocumentsIndicator: React.FC<SelectedDocumentsIndicatorProp
 
       {selectedDocuments.length > 3 && (
         <div className="mt-2 pt-2 border-t border-blue-200">
-          <p className="text-xs text-blue-600">
+          <p className="text-xs text-[var(--cardiology-accent-blue-dark)]">
             Documents will be included in your chat context for more relevant responses
           </p>
         </div>

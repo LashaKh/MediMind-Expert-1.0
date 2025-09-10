@@ -149,11 +149,11 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
             <CheckCircle2 className="h-5 w-5 text-emerald-600" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-[var(--foreground)] flex items-center gap-2">
               {t('abg.workflow.completeTitle', 'Analysis Complete!')}
               <Sparkles className="h-4 w-4 text-amber-500" />
             </h3>
-            <p className="text-sm text-slate-600">{t('abg.final.comprehensiveInsights', 'Your ABG analysis is ready with comprehensive insights')}</p>
+            <p className="text-sm text-[var(--foreground-tertiary)]">{t('abg.final.comprehensiveInsights', 'Your ABG analysis is ready with comprehensive insights')}</p>
           </div>
           <div className="flex items-center gap-1 px-3 py-1.5 bg-amber-100 rounded-full">
             <Star className="h-3 w-3 text-amber-600" />
@@ -164,10 +164,10 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
         {/* AI Consultation Section - Integrated within the green box */}
         {/* Test: Always render to debug */}
         <div className="mb-6 space-y-4">
-          <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-emerald-200/70">
+          <div className="bg-[var(--component-card)]/60 backdrop-blur-sm rounded-xl p-4 border border-emerald-200/70">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-6 h-6 bg-emerald-500 rounded-lg flex items-center justify-center">
-                <Brain className="h-3 w-3 text-white" />
+                <Brain className="h-3 w-3 text-[var(--foreground)]" />
               </div>
               <h4 className="text-sm font-semibold text-emerald-800">{t('abg.final.aiClinicalConsultation', 'AI Clinical Consultation')}</h4>
             </div>
@@ -187,7 +187,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
                     });
                   }
                 }}
-                className="group relative overflow-hidden bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-0 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-out flex items-center gap-3 justify-center text-sm font-medium"
+                className="group relative overflow-hidden bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-[var(--foreground)] border-0 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-out flex items-center gap-3 justify-center text-sm font-medium"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-300/20 to-emerald-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <Stethoscope className="h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
@@ -198,7 +198,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
               {/* Select Action Plan - Opens selection window */}
               <Button
                 onClick={handleSelectiveConsultation}
-                className="group relative overflow-hidden bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-0 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-out flex items-center gap-3 justify-center text-sm font-medium"
+                className="group relative overflow-hidden bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-[var(--foreground)] border-0 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-out flex items-center gap-3 justify-center text-sm font-medium"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <Target className="h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
@@ -215,7 +215,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
           <Button
             onClick={handleSaveToProfile}
             disabled={isSaving}
-            className="flex flex-col items-center gap-2 h-auto py-4 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-800"
+            className="flex flex-col items-center gap-2 h-auto py-4 bg-[var(--component-card)] hover:bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] text-[var(--foreground)] hover:text-[var(--foreground)]"
             variant="outline"
           >
             <Bookmark className="h-4 w-4" />
@@ -227,7 +227,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
           {/* Export Report */}
           <Button
             onClick={() => window.print()}
-            className="flex flex-col items-center gap-2 h-auto py-4 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-800"
+            className="flex flex-col items-center gap-2 h-auto py-4 bg-[var(--component-card)] hover:bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] text-[var(--foreground)] hover:text-[var(--foreground)]"
             variant="outline"
           >
             <Download className="h-4 w-4" />
@@ -238,7 +238,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
           <Button
             onClick={handleShareAnalysis}
             disabled={isSharing}
-            className="flex flex-col items-center gap-2 h-auto py-4 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-800"
+            className="flex flex-col items-center gap-2 h-auto py-4 bg-[var(--component-card)] hover:bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] text-[var(--foreground)] hover:text-[var(--foreground)]"
             variant="outline"
           >
             <Share2 className="h-4 w-4" />
@@ -250,7 +250,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
           {/* New Analysis */}
           <Button
             onClick={onRestartWorkflow}
-            className="flex flex-col items-center gap-2 h-auto py-4 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-800"
+            className="flex flex-col items-center gap-2 h-auto py-4 bg-[var(--component-card)] hover:bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] text-[var(--foreground)] hover:text-[var(--foreground)]"
             variant="outline"
           >
             <RefreshCw className="h-4 w-4" />
@@ -260,7 +260,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
           {/* AI Insights */}
           <Button
             onClick={() => navigate('/ai-assistant')}
-            className="flex flex-col items-center gap-2 h-auto py-4 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-800"
+            className="flex flex-col items-center gap-2 h-auto py-4 bg-[var(--component-card)] hover:bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] text-[var(--foreground)] hover:text-[var(--foreground)]"
             variant="outline"
           >
             <Brain className="h-4 w-4" />
@@ -270,7 +270,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
           {/* View Details */}
           <Button
             onClick={handleGoToInterpretation}
-            className="flex flex-col items-center gap-2 h-auto py-4 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-800"
+            className="flex flex-col items-center gap-2 h-auto py-4 bg-[var(--component-card)] hover:bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] text-[var(--foreground)] hover:text-[var(--foreground)]"
             variant="outline"
           >
             <FileText className="h-4 w-4" />
@@ -279,8 +279,8 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
         </div>
 
         {/* Quick Stats */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-200/50">
-          <div className="flex items-center gap-4 text-xs text-slate-600">
+        <div className="flex items-center justify-between pt-4 border-t border-[var(--glass-border-light)]/50">
+          <div className="flex items-center gap-4 text-xs text-[var(--foreground-tertiary)]">
             <div className="flex items-center gap-1">
               <Activity className="h-3 w-3" />
               <span>{t('abg.final.analysisComplete', 'Analysis: Complete')}</span>
@@ -299,7 +299,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
               e.stopPropagation();
               handleGoToInterpretation();
             }}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 text-sm cursor-pointer"
+            className="bg-emerald-600 hover:bg-emerald-700 text-[var(--foreground)] px-4 py-2 text-sm cursor-pointer"
             style={{ pointerEvents: 'auto', zIndex: 1000 }}
           >
             <ChevronLeft className="h-3 w-3 mr-1" />

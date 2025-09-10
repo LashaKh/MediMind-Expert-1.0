@@ -21,10 +21,10 @@ export const AnalysisSection: React.FC<AnalysisSectionProps> = ({
     <div className="space-y-8">
       <div className="text-center mb-8">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-500 rounded-2xl mb-4">
-          <Brain className="h-8 w-8 text-white" />
+          <Brain className="h-8 w-8 text-[var(--foreground)]" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">AI Analysis Results</h2>
-        <p className="text-slate-600 max-w-md mx-auto">
+        <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">AI Analysis Results</h2>
+        <p className="text-[var(--foreground-tertiary)] max-w-md mx-auto">
           Filter by AI interpretations, confidence levels, and clinical assessments
         </p>
       </div>
@@ -32,7 +32,7 @@ export const AnalysisSection: React.FC<AnalysisSectionProps> = ({
       {/* Interpretation Types */}
       <div className="space-y-6">
         <div>
-          <Label className="text-lg font-bold text-slate-800 mb-4 block flex items-center gap-2">
+          <Label className="text-lg font-bold text-[var(--foreground)] mb-4 block flex items-center gap-2">
             <Lightbulb className="h-5 w-5 text-amber-500" />
             Primary Interpretation
           </Label>
@@ -49,21 +49,21 @@ export const AnalysisSection: React.FC<AnalysisSectionProps> = ({
                   "p-5 rounded-2xl border transition-all text-left group relative overflow-hidden",
                   filters.interpretation === option.value
                     ? `bg-${option.color}-50 border-${option.color}-300 shadow-lg scale-105`
-                    : "bg-white/70 border-slate-200/60 hover:bg-slate-50 hover:shadow-md"
+                    : "bg-[var(--component-card)]/70 border-[var(--glass-border-light)]/60 hover:bg-[var(--component-surface-primary)] hover:shadow-md"
                 )}
               >
                 <div className="flex items-start gap-4">
                   <div className={cn(
                     "p-3 rounded-xl transition-all",
                     filters.interpretation === option.value
-                      ? `bg-${option.color}-500 text-white shadow-lg`
+                      ? `bg-${option.color}-500 text-[var(--foreground)] shadow-lg`
                       : `bg-${option.color}-50 text-${option.color}-600 group-hover:bg-${option.color}-100`
                   )}>
                     {option.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-bold text-sm text-slate-900 mb-1">{option.label}</div>
-                    <div className="text-xs text-slate-600 leading-relaxed">{option.description}</div>
+                    <div className="font-bold text-sm text-[var(--foreground)] mb-1">{option.label}</div>
+                    <div className="text-xs text-[var(--foreground-tertiary)] leading-relaxed">{option.description}</div>
                   </div>
                 </div>
                 {filters.interpretation === option.value && (
@@ -79,14 +79,14 @@ export const AnalysisSection: React.FC<AnalysisSectionProps> = ({
         </div>
 
         {/* Severity Levels */}
-        <Card className="p-6 bg-gradient-to-br from-slate-50 to-gray-50 border border-slate-200/60">
+        <Card className="p-6 bg-gradient-to-br from-slate-50 to-gray-50 border border-[var(--glass-border-light)]/60">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-3 bg-gradient-to-br from-slate-600 to-gray-700 rounded-xl">
-              <BarChart3 className="h-6 w-6 text-white" />
+              <BarChart3 className="h-6 w-6 text-[var(--foreground)]" />
             </div>
             <div>
-              <Label className="text-lg font-bold text-slate-800">Severity Classification</Label>
-              <p className="text-sm text-slate-600">Filter by clinical severity level</p>
+              <Label className="text-lg font-bold text-[var(--foreground)]">Severity Classification</Label>
+              <p className="text-sm text-[var(--foreground-tertiary)]">Filter by clinical severity level</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
@@ -100,13 +100,13 @@ export const AnalysisSection: React.FC<AnalysisSectionProps> = ({
                   "p-4 rounded-xl border transition-all text-center group",
                   filters.severity === severity.value
                     ? `bg-${severity.color}-50 border-${severity.color}-300 text-${severity.color}-800 shadow-lg`
-                    : "bg-white/70 border-slate-200/60 hover:bg-slate-50 hover:shadow-md"
+                    : "bg-[var(--component-card)]/70 border-[var(--glass-border-light)]/60 hover:bg-[var(--component-surface-primary)] hover:shadow-md"
                 )}
               >
                 <div className={cn(
                   "p-2 rounded-lg mx-auto mb-2 w-fit transition-colors",
                   filters.severity === severity.value
-                    ? `bg-${severity.color}-500 text-white`
+                    ? `bg-${severity.color}-500 text-[var(--foreground)]`
                     : `bg-${severity.color}-50 text-${severity.color}-600 group-hover:bg-${severity.color}-100`
                 )}>
                   {severity.icon}
@@ -123,9 +123,9 @@ export const AnalysisSection: React.FC<AnalysisSectionProps> = ({
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg">
-                  <CheckCircle2 className="h-5 w-5 text-white" />
+                  <CheckCircle2 className="h-5 w-5 text-[var(--foreground)]" />
                 </div>
-                <Label className="text-base font-bold text-slate-800">Analysis Features</Label>
+                <Label className="text-base font-bold text-[var(--foreground)]">Analysis Features</Label>
               </div>
               <div className="space-y-3">
                 <label className="flex items-center gap-3 p-3 rounded-lg hover:bg-green-100/50 transition-colors cursor-pointer">
@@ -160,16 +160,16 @@ export const AnalysisSection: React.FC<AnalysisSectionProps> = ({
           <Card className="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200/60">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
-                <Gauge className="h-5 w-5 text-white" />
+                <Gauge className="h-5 w-5 text-[var(--foreground)]" />
               </div>
               <div>
-                <Label className="text-base font-bold text-slate-800">AI Confidence</Label>
-                <p className="text-xs text-slate-600">Analysis certainty level</p>
+                <Label className="text-base font-bold text-[var(--foreground)]">AI Confidence</Label>
+                <p className="text-xs text-[var(--foreground-tertiary)]">Analysis certainty level</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-700">Min %</label>
+                <label className="text-xs font-medium text-[var(--foreground)]">Min %</label>
                 <Input
                   type="number"
                   min="0"
@@ -179,11 +179,11 @@ export const AnalysisSection: React.FC<AnalysisSectionProps> = ({
                   onChange={(e) => updateFilter('confidenceMin', 
                     e.target.value ? parseFloat(e.target.value) / 100 : undefined
                   )}
-                  className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                  className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-700">Max %</label>
+                <label className="text-xs font-medium text-[var(--foreground)]">Max %</label>
                 <Input
                   type="number"
                   min="0"
@@ -193,7 +193,7 @@ export const AnalysisSection: React.FC<AnalysisSectionProps> = ({
                   onChange={(e) => updateFilter('confidenceMax', 
                     e.target.value ? parseFloat(e.target.value) / 100 : undefined
                   )}
-                  className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                  className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
                 />
               </div>
             </div>

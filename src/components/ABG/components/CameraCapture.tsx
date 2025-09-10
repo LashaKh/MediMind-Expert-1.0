@@ -272,7 +272,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
                     variant="secondary"
                     size="sm"
                     onClick={toggleFlash}
-                    className="bg-black/50 hover:bg-black/70 text-white border-0"
+                    className="bg-black/50 hover:bg-black/70 text-[var(--foreground)] border-0"
                   >
                     {flashEnabled ? (
                       <Zap className="h-4 w-4" />
@@ -286,7 +286,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
                     size="lg"
                     onClick={capturePhoto}
                     disabled={isCapturing}
-                    className="bg-white hover:bg-gray-100 text-black border-0 rounded-full h-16 w-16"
+                    className="bg-[var(--component-card)] hover:bg-[var(--component-surface-secondary)] text-black border-0 rounded-full h-16 w-16"
                   >
                     {isCapturing ? (
                       <Loader2 className="h-6 w-6 animate-spin" />
@@ -315,7 +315,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
                   variant="secondary"
                   size="sm"
                   onClick={retakePhoto}
-                  className="bg-black/50 hover:bg-black/70 text-white border-0"
+                  className="bg-black/50 hover:bg-black/70 text-[var(--foreground)] border-0"
                 >
                   <RotateCcw className="h-4 w-4 mr-2" />
                   Retake
@@ -324,7 +324,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
                 <Button
                   size="sm"
                   onClick={confirmCapture}
-                  className="bg-green-600 hover:bg-green-700 text-white border-0"
+                  className="bg-green-600 hover:bg-green-700 text-[var(--foreground)] border-0"
                 >
                   <CheckCircle2 className="h-4 w-4 mr-2" />
                   Use Photo

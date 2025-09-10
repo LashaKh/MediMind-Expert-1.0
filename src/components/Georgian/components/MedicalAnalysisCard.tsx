@@ -216,19 +216,19 @@ Medical AI Processing System`;
   }
 
   return (
-    <div className="group medical-analysis-card bg-white dark:bg-slate-800 rounded-xl md:rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden w-full max-w-full">
+    <div className="group medical-analysis-card bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl md:rounded-2xl border border-[var(--glass-border-light)]/60 dark:border-slate-700/60 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden w-full max-w-full">
       {/* Card Header */}
-      <div className="relative bg-gradient-to-br from-slate-50/80 to-white dark:from-slate-800/80 dark:to-slate-900/80 border-b border-slate-200/50 dark:border-slate-700/50">
+      <div className="relative bg-gradient-to-br from-slate-50/80 to-white dark:from-slate-800/80 dark:to-slate-900/80 border-b border-[var(--glass-border-light)]/50 dark:border-slate-700/50">
         {/* Priority Badge and Delete Button */}
         <div className="absolute top-4 right-4 z-20">
           <div className="flex items-center space-x-2">
-            <div className="bg-slate-100 dark:bg-slate-700 rounded-full px-3 py-1">
-              <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+            <div className="bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] rounded-full px-3 py-1">
+              <span className="text-xs font-semibold text-[var(--foreground-tertiary)] dark:text-slate-300">
                 #{totalCount - index}
               </span>
             </div>
             <div className={`bg-gradient-to-r ${analysisType.color} rounded-full p-2 shadow-lg`}>
-              <IconComponent className="w-4 h-4 text-white" />
+              <IconComponent className="w-4 h-4 text-[var(--foreground)]" />
             </div>
             {onDelete && (
               <button
@@ -246,13 +246,13 @@ Medical AI Processing System`;
           {/* Analysis Type & Status */}
           <div className="flex items-center space-x-3 mb-3">
             <div className={`bg-gradient-to-r ${analysisType.color} rounded-xl p-2.5 shadow-lg`}>
-              <IconComponent className="w-5 h-5 text-white" />
+              <IconComponent className="w-5 h-5 text-[var(--foreground)]" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+              <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-slate-100">
                 {analysisType.type}
               </h3>
-              <div className="flex items-center space-x-3 text-sm text-slate-500 dark:text-slate-400">
+              <div className="flex items-center space-x-3 text-sm text-[var(--foreground-secondary)] dark:text-slate-400">
                 <div className="flex items-center space-x-1">
                   <Calendar className="w-3 h-3" />
                   <span>{new Date(analysis.timestamp).toLocaleDateString()}</span>
@@ -277,7 +277,7 @@ Medical AI Processing System`;
                 size="sm"
                 leftIcon={Copy}
                 onClick={handleCopy}
-                className="text-slate-600 dark:text-slate-400 hover:text-emerald-600"
+                className="text-[var(--foreground-tertiary)] dark:text-slate-400 hover:text-emerald-600"
               >
                 Copy
               </MedicalButton>
@@ -286,7 +286,7 @@ Medical AI Processing System`;
                 size="sm"
                 leftIcon={Download}
                 onClick={handleDownload}
-                className="text-slate-600 dark:text-slate-400 hover:text-blue-600"
+                className="text-[var(--foreground-tertiary)] dark:text-slate-400 hover:text-[var(--cardiology-accent-blue-dark)]"
               >
                 Export
               </MedicalButton>
@@ -296,7 +296,7 @@ Medical AI Processing System`;
                   size="sm"
                   leftIcon={Share2}
                   onClick={handleShare}
-                  className="text-slate-600 dark:text-slate-400 hover:text-purple-600"
+                  className="text-[var(--foreground-tertiary)] dark:text-slate-400 hover:text-purple-600"
                 >
                   Share
                 </MedicalButton>
@@ -308,7 +308,7 @@ Medical AI Processing System`;
               size="sm"
               rightIcon={isExpanded ? ChevronUp : ChevronDown}
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-slate-600 dark:text-slate-400"
+              className="text-[var(--foreground-tertiary)] dark:text-slate-400"
             >
               {isExpanded ? 'Collapse' : 'Expand'}
             </MedicalButton>
@@ -321,16 +321,16 @@ Medical AI Processing System`;
         <div className="p-4 space-y-4 md:p-6 md:space-y-6">
           {/* User Request - Hide for diagnosis reports */}
           {!analysisType.isDiagnosis && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 border border-slate-200/50 dark:border-slate-700/50">
+            <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]/50 rounded-xl p-4 border border-[var(--glass-border-light)]/50 dark:border-slate-700/50">
               <div className="flex items-start space-x-3">
-                <div className="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-2 flex-shrink-0">
-                  <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-lg p-2 flex-shrink-0">
+                  <User className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                  <h4 className="text-sm font-semibold text-[var(--foreground)] dark:text-slate-100 mb-2">
                     Analysis Request
                   </h4>
-                  <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                  <p className="text-sm text-[var(--foreground)] dark:text-slate-300 leading-relaxed">
                     {analysis.userInstruction}
                   </p>
                 </div>
@@ -349,7 +349,7 @@ Medical AI Processing System`;
                 )}
               </div>
               <div className="flex-1">
-                <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                <h4 className="text-sm font-semibold text-[var(--foreground)] dark:text-slate-100 mb-2">
                   {analysisType.isDiagnosis ? 'Medical Report' : 'AI Clinical Analysis'}
                 </h4>
                 <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -358,7 +358,7 @@ Medical AI Processing System`;
                     formatMarkdown(analysis.aiResponse)
                   ) : (
                     // Render as plain text for regular reports
-                    <div className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
+                    <div className="text-sm text-[var(--foreground)] dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
                       {analysis.aiResponse}
                     </div>
                   )}
@@ -368,8 +368,8 @@ Medical AI Processing System`;
           </div>
 
           {/* Metadata Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-200/50 dark:border-slate-700/50">
-            <div className="flex items-center space-x-4 text-xs text-slate-500 dark:text-slate-400">
+          <div className="flex items-center justify-between pt-4 border-t border-[var(--glass-border-light)]/50 dark:border-slate-700/50">
+            <div className="flex items-center space-x-4 text-xs text-[var(--foreground-secondary)] dark:text-slate-400">
               <div className="flex items-center space-x-1">
                 <Zap className="w-3 h-3" />
                 <span className="font-medium">{analysis.model}</span>

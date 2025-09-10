@@ -61,7 +61,7 @@ function App() {
   };
 
   return (
-    <Router basename={getBasename()} future={{ 
+    <Router basename={getBasename()} future={{
       v7_relativeSplatPath: true,
       v7_startTransition: true
     }}>

@@ -49,7 +49,7 @@ const PROVIDER_CONFIGS = {
     description: 'AI-powered search for high-quality medical content',
     icon: CpuChipIcon,
     badge: 'AI-Powered',
-    badgeColor: 'bg-blue-500',
+    badgeColor: 'bg-[var(--cardiology-accent-blue)]',
     features: ['Quality ranking', 'Domain filtering', 'Semantic search']
   },
   perplexity: {
@@ -108,12 +108,12 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
       {/* Collapsed Header with Floating Button */}
       {isCollapsed ? (
         <div className="relative">
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <div className="flex items-center justify-between p-4 bg-[var(--component-surface-primary)] rounded-lg border border-[var(--glass-border-light)]">
+            <h3 className="text-lg font-semibold text-[var(--foreground)] flex items-center gap-2">
               <ChartBarIcon className="w-5 h-5 text-indigo-600" />
               {t('search.providers.title', 'Search Providers')}
             </h3>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-[var(--foreground-secondary)]">
               {selectedProviders.length} {t('search.providers.of', 'of')} {Object.keys(PROVIDER_CONFIGS).length} {t('search.providers.selected', 'selected')}
             </span>
           </div>
@@ -121,7 +121,7 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
           {/* Floating Expand Button */}
           <button
             onClick={() => setIsCollapsed(false)}
-            className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-10"
+            className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-indigo-600 hover:bg-indigo-700 text-[var(--foreground)] p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-10"
             title={t('search.providers.expand', 'Expand search providers')}
           >
             <ChevronDownIcon className="w-5 h-5" />
@@ -131,17 +131,17 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
         // Expanded View
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-[var(--foreground)] flex items-center gap-2">
               <ChartBarIcon className="w-5 h-5 text-indigo-600" />
               {t('search.providers.title', 'Search Providers')}
             </h3>
             <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-[var(--foreground-secondary)]">
                 {selectedProviders.length} {t('search.providers.of', 'of')} {Object.keys(PROVIDER_CONFIGS).length} {t('search.providers.selected', 'selected')}
               </span>
               <button
                 onClick={() => setIsCollapsed(true)}
-                className="p-1 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                className="p-1 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] transition-colors duration-200"
                 title={t('search.providers.collapse', 'Collapse search providers')}
               >
                 <ChevronUpIcon className="w-5 h-5" />
@@ -163,30 +163,30 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
                   className={`relative p-4 rounded-xl border-2 transition-all duration-200 ${
                     isSelected
                       ? 'border-indigo-300 bg-indigo-50 shadow-md'
-                      : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+                      : 'border-[var(--glass-border-light)] bg-[var(--component-card)] hover:border-[var(--glass-border-medium)] hover:shadow-sm'
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3 flex-1">
-                      <div className={`p-2 rounded-lg ${isSelected ? 'bg-indigo-100' : 'bg-gray-100'}`}>
-                        <IconComponent className={`w-5 h-5 ${isSelected ? 'text-indigo-600' : 'text-gray-600'}`} />
+                      <div className={`p-2 rounded-lg ${isSelected ? 'bg-indigo-100' : 'bg-[var(--component-surface-secondary)]'}`}>
+                        <IconComponent className={`w-5 h-5 ${isSelected ? 'text-indigo-600' : 'text-[var(--foreground-tertiary)]'}`} />
                       </div>
                       
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-semibold text-gray-900">{config.name}</h4>
-                          <span className={`px-2 py-1 text-xs font-medium text-white rounded-full ${config.badgeColor}`}>
+                          <h4 className="font-semibold text-[var(--foreground)]">{config.name}</h4>
+                          <span className={`px-2 py-1 text-xs font-medium text-[var(--foreground)] rounded-full ${config.badgeColor}`}>
                             {config.badge}
                           </span>
                         </div>
                         
-                        <p className="text-sm text-gray-600 mb-2">{config.description}</p>
+                        <p className="text-sm text-[var(--foreground-tertiary)] mb-2">{config.description}</p>
                         
                         <div className="flex flex-wrap gap-1 mb-3">
                           {config.features.map((feature, index) => (
                             <span
                               key={index}
-                              className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md"
+                              className="px-2 py-1 text-xs bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-md"
                             >
                               {feature}
                             </span>
@@ -195,7 +195,7 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
 
                         {/* Performance Metrics */}
                         {metrics && (
-                          <div className="flex items-center gap-4 text-xs text-gray-600">
+                          <div className="flex items-center gap-4 text-xs text-[var(--foreground-tertiary)]">
                             <div className="flex items-center gap-1">
                               <CheckIcon className={`w-3 h-3 ${getPerformanceColor(metrics.successRate)}`} />
                                <span>{metrics.successRate.toFixed(1)}% {t('search.providers.metrics.success', 'success')}</span>
@@ -225,8 +225,8 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
                       disabled={isLastProvider}
                       className={`flex items-center justify-center w-6 h-6 rounded-full border-2 transition-all duration-200 ${
                         isSelected
-                          ? 'bg-indigo-600 border-indigo-600 text-white'
-                          : 'border-gray-300 hover:border-gray-400'
+                          ? 'bg-indigo-600 border-indigo-600 text-[var(--foreground)]'
+                          : 'border-[var(--glass-border-medium)] hover:border-[var(--border)]'
                       } ${
                         isLastProvider ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                       }`}
@@ -235,7 +235,7 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
                       {isSelected ? (
                         <CheckIcon className="w-4 h-4" />
                       ) : (
-                        <div className="w-2 h-2 bg-gray-400 rounded-full" />
+                        <div className="w-2 h-2 bg-[var(--muted)] rounded-full" />
                       )}
                     </button>
                   </div>
@@ -245,7 +245,7 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
           </div>
 
           {/* Selection Summary */}
-          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+          <div className="mt-4 p-3 bg-[var(--component-surface-primary)] rounded-lg">
             {selectedProviders.length === 0 ? (
               <div className="flex items-center gap-2 text-sm text-amber-700">
                 <ExclamationTriangleIcon className="w-4 h-4 text-amber-500" />
@@ -253,7 +253,7 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
               </div>
             ) : (
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-700">
+                <span className="text-[var(--foreground-tertiary)]">
                   {t('search.providers.summary', 'Selected providers will search in parallel for comprehensive results')}
                 </span>
                 <span className="font-medium text-indigo-600">

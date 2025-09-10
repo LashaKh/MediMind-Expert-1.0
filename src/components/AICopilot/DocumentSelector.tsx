@@ -122,8 +122,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
     };
     if (fileType.includes('word') || fileType.includes('doc')) return {
       bg: 'from-blue-500 to-indigo-600',
-      text: 'text-blue-600',
-      lightBg: 'bg-blue-50',
+      text: 'text-[var(--cardiology-accent-blue-dark)]',
+      lightBg: 'bg-[var(--cardiology-accent-blue-light)]',
       border: 'border-blue-200',
       glow: 'shadow-blue-500/20'
     };
@@ -136,9 +136,9 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
     };
     return {
       bg: 'from-gray-500 to-slate-600',
-      text: 'text-gray-600',
-      lightBg: 'bg-gray-50',
-      border: 'border-gray-200',
+      text: 'text-[var(--foreground-tertiary)]',
+      lightBg: 'bg-[var(--component-surface-primary)]',
+      border: 'border-[var(--glass-border-light)]',
       glow: 'shadow-gray-500/20'
     };
   };
@@ -196,7 +196,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                   {/* Animated Icon Container */}
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl blur-xl opacity-50 animate-pulse" />
-                    <div className="relative p-3 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl text-white shadow-lg">
+                    <div className="relative p-3 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl text-[var(--foreground)] shadow-lg">
                       <Files className="w-6 h-6" />
                     </div>
                   </div>
@@ -206,7 +206,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                     <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                       Document Library
                     </h2>
-                    <p className="text-sm text-gray-600 mt-1 font-medium">
+                    <p className="text-sm text-[var(--foreground-tertiary)] mt-1 font-medium">
                       Enhance your AI conversation with relevant medical documents
                     </p>
                   </div>
@@ -215,9 +215,9 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                 {/* Action Section */}
                 <div className="flex items-center gap-4">
                   {/* Selection Counter */}
-                  <div className="flex items-center gap-2 px-4 py-2 bg-white/50 backdrop-blur-sm rounded-2xl border border-white/30 shadow-sm">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-[var(--component-card)]/50 backdrop-blur-sm rounded-2xl border border-white/30 shadow-sm">
                     <CheckCircle2 className="w-4 h-4 text-green-600" />
-                    <span className="text-sm font-semibold text-gray-700">
+                    <span className="text-sm font-semibold text-[var(--foreground-tertiary)]">
                       {selectedDocuments.length} of {documents.length} selected
                     </span>
                   </div>
@@ -225,11 +225,11 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                   {/* Close Button */}
                   <button
                     onClick={onClose}
-                    className="group p-3 bg-white/50 backdrop-blur-sm rounded-2xl border border-white/30 
-                             hover:bg-white/70 hover:border-gray-300/50 hover:shadow-lg
+                    className="group p-3 bg-[var(--component-card)]/50 backdrop-blur-sm rounded-2xl border border-white/30 
+                             hover:bg-[var(--component-card)]/70 hover:border-[var(--glass-border-medium)]/50 hover:shadow-lg
                              transition-all duration-300 ease-out"
                   >
-                    <X className="w-5 h-5 text-gray-600 group-hover:text-gray-900 transition-colors" />
+                    <X className="w-5 h-5 text-[var(--foreground-tertiary)] group-hover:text-[var(--foreground)] transition-colors" />
                   </button>
                 </div>
               </div>
@@ -237,13 +237,13 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
           </div>
 
           {/* Search & Filter Section - Premium Design */}
-          <div className="px-8 py-6 bg-gradient-to-b from-gray-50/50 to-white/50 border-b border-gray-200/20">
+          <div className="px-8 py-6 bg-gradient-to-b from-gray-50/50 to-white/50 border-b border-[var(--glass-border-light)]/20">
             {/* Search Bar */}
             <div className="relative mb-4">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <div className="relative">
-                  <Search className="w-5 h-5 text-gray-400" />
-                  <div className="absolute inset-0 w-5 h-5 bg-blue-500/20 blur-xl" />
+                  <Search className="w-5 h-5 text-[var(--foreground-secondary)]" />
+                  <div className="absolute inset-0 w-5 h-5 bg-[var(--cardiology-accent-blue)]/20 blur-xl" />
                 </div>
               </div>
               <input
@@ -252,18 +252,18 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                 placeholder="Search by name, type, or content..."
                 value={searchTerm}
                 onChange={(E) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 text-base border-2 border-gray-200/50 rounded-2xl 
-                         focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300
-                         bg-white/80 backdrop-blur-sm hover:border-gray-300/50 hover:shadow-lg
+                className="w-full pl-12 pr-4 py-3.5 text-base border-2 border-[var(--glass-border-light)]/50 rounded-2xl 
+                         focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/20 focus:border-[var(--cardiology-accent-blue)]/50 transition-all duration-300
+                         bg-[var(--component-card)]/80 backdrop-blur-sm hover:border-[var(--glass-border-medium)]/50 hover:shadow-lg
                          placeholder-gray-400 font-medium"
               />
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg
-                           hover:bg-gray-100 transition-all duration-200 group"
+                           hover:bg-[var(--component-surface-secondary)] transition-all duration-200 group"
                 >
-                  <XCircle className="w-4 h-4 text-gray-400 group-hover:text-gray-600" />
+                  <XCircle className="w-4 h-4 text-[var(--foreground-secondary)] group-hover:text-[var(--foreground-tertiary)]" />
                 </button>
               )}
             </div>
@@ -274,7 +274,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
               <div className="flex items-center gap-3">
                 <button
                   onClick={onSelectAll}
-                  className="group relative px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white 
+                  className="group relative px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-[var(--foreground)] 
                            rounded-xl font-medium text-sm shadow-lg shadow-blue-500/25
                            hover:shadow-xl hover:shadow-blue-500/30 hover:scale-105
                            transition-all duration-300 ease-out overflow-hidden"
@@ -289,9 +289,9 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                 {selectedDocuments.length > 0 && (
                   <button
                     onClick={onClearAll}
-                    className="group px-4 py-2.5 bg-white/80 backdrop-blur-sm border-2 border-gray-200/50 
-                             text-gray-700 rounded-xl font-medium text-sm shadow-sm
-                             hover:bg-gray-50 hover:border-gray-300/50 hover:shadow-md hover:scale-105
+                    className="group px-4 py-2.5 bg-[var(--component-card)]/80 backdrop-blur-sm border-2 border-[var(--glass-border-light)]/50 
+                             text-[var(--foreground-tertiary)] rounded-xl font-medium text-sm shadow-sm
+                             hover:bg-[var(--component-surface-primary)] hover:border-[var(--glass-border-medium)]/50 hover:shadow-md hover:scale-105
                              transition-all duration-300 ease-out"
                   >
                     <span className="flex items-center gap-2">
@@ -308,25 +308,25 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                 <div className="relative">
                   <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-white/80 backdrop-blur-sm 
-                             border-2 border-gray-200/50 rounded-xl hover:border-gray-300/50
+                    className="flex items-center gap-2 px-4 py-2.5 bg-[var(--component-card)]/80 backdrop-blur-sm 
+                             border-2 border-[var(--glass-border-light)]/50 rounded-xl hover:border-[var(--glass-border-medium)]/50
                              hover:shadow-md transition-all duration-300 group"
                   >
-                    <SortAsc className="w-4 h-4 text-gray-600 group-hover:text-gray-800" />
-                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                    <SortAsc className="w-4 h-4 text-[var(--foreground-tertiary)] group-hover:text-[var(--foreground)]" />
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] group-hover:text-[var(--foreground)]">
                       Sort by {sortBy}
                     </span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${showFilters ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-4 h-4 text-[var(--foreground-secondary)] transition-transform duration-300 ${showFilters ? 'rotate-180' : ''}`} />
                   </button>
                 </div>
 
                 {/* View Mode Toggle */}
-                <div className="flex items-center bg-white/80 backdrop-blur-sm border-2 border-gray-200/50 rounded-xl p-1">
+                <div className="flex items-center bg-[var(--component-card)]/80 backdrop-blur-sm border-2 border-[var(--glass-border-light)]/50 rounded-xl p-1">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'grid' 
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25' 
-                      : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-[var(--foreground)] shadow-lg shadow-blue-500/25' 
+                      : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-surface-secondary)]'
                     }`}
                   >
                     <LayoutGrid className="w-4 h-4" />
@@ -334,8 +334,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                   <button
                     onClick={() => setViewMode('list')}
                     className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'list' 
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25' 
-                      : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-[var(--foreground)] shadow-lg shadow-blue-500/25' 
+                      : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-surface-secondary)]'
                     }`}
                   >
                     <LayoutList className="w-4 h-4" />
@@ -347,15 +347,15 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
             {/* Document Stats */}
             <div className="mt-4 flex items-center justify-center gap-6">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                <span className="text-sm font-medium text-gray-600">
+                <div className="w-2 h-2 bg-[var(--cardiology-accent-blue)] rounded-full animate-pulse" />
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)]">
                   {filteredDocuments.length} documents found
                 </span>
               </div>
               {searchTerm && (
                 <div className="flex items-center gap-2">
                   <Zap className="w-4 h-4 text-amber-500" />
-                  <span className="text-sm font-medium text-gray-600">
+                  <span className="text-sm font-medium text-[var(--foreground-tertiary)]">
                     Filtered by "{searchTerm}"
                   </span>
                 </div>
@@ -390,8 +390,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                       {/* Card Container */}
                       <div className={`relative h-full p-6 rounded-2xl border-2 overflow-hidden
                                       ${isSelected 
-                                        ? 'border-blue-500/50 bg-gradient-to-br from-blue-50 to-indigo-50' 
-                                        : 'border-gray-200/50 bg-white hover:border-gray-300/50'
+                                        ? 'border-[var(--cardiology-accent-blue)]/50 bg-gradient-to-br from-blue-50 to-indigo-50' 
+                                        : 'border-[var(--glass-border-light)]/50 bg-[var(--component-card)] hover:border-[var(--glass-border-medium)]/50'
                                       }
                                       shadow-lg hover:shadow-2xl transition-all duration-500`}
                       >
@@ -399,11 +399,11 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                         <div className={`absolute top-4 right-4 w-6 h-6 rounded-full border-2 
                                        flex items-center justify-center transition-all duration-300
                                        ${isSelected 
-                                         ? 'border-blue-500 bg-blue-500 scale-110' 
-                                         : 'border-gray-300 bg-white group-hover:border-blue-400'
+                                         ? 'border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue)] scale-110' 
+                                         : 'border-[var(--glass-border-medium)] bg-[var(--component-card)] group-hover:border-blue-400'
                                        }`}>
                           {isSelected && (
-                            <Check className="w-3 h-3 text-white animate-checkIn" />
+                            <Check className="w-3 h-3 text-[var(--foreground)] animate-checkIn" />
                           )}
                         </div>
 
@@ -413,7 +413,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                                          rounded-2xl blur-2xl opacity-20 group-hover:opacity-30 
                                          transition-opacity duration-500`} />
                           <div className={`relative w-14 h-14 bg-gradient-to-br ${fileStyles.bg} 
-                                         rounded-2xl flex items-center justify-center text-white
+                                         rounded-2xl flex items-center justify-center text-[var(--foreground)]
                                          shadow-lg ${fileStyles.glow} group-hover:shadow-xl
                                          transition-all duration-500`}>
                             {getFileIcon(doc.fileType)}
@@ -422,8 +422,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
 
                         {/* Document Info */}
                         <div className="space-y-2">
-                          <h4 className="font-semibold text-gray-900 text-base line-clamp-2 
-                                       group-hover:text-gray-800 transition-colors duration-300">
+                          <h4 className="font-semibold text-[var(--foreground)] text-base line-clamp-2 
+                                       group-hover:text-[var(--foreground)] transition-colors duration-300">
                             {doc.fileName}
                           </h4>
                           
@@ -434,14 +434,14 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                                            rounded-lg font-medium`}>
                               {doc.fileType.split('/')[1]?.toUpperCase() || 'FILE'}
                             </span>
-                            <span className="text-gray-500 font-medium">
+                            <span className="text-[var(--foreground-secondary)] font-medium">
                               {getFileSize(doc.fileSize)}
                             </span>
                           </div>
 
                           {/* Extract Preview if available */}
                           {doc.extractedText && (
-                            <p className="text-xs text-gray-600 line-clamp-2 mt-2">
+                            <p className="text-xs text-[var(--foreground-tertiary)] line-clamp-2 mt-2">
                               {doc.extractedText.slice(0, 100)}...
                             </p>
                           )}
@@ -475,8 +475,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                     >
                       <div className={`relative flex items-center gap-4 p-5 rounded-2xl border-2
                                       ${isSelected 
-                                        ? 'border-blue-500/50 bg-gradient-to-r from-blue-50 to-indigo-50' 
-                                        : 'border-gray-200/50 bg-white hover:border-gray-300/50'
+                                        ? 'border-[var(--cardiology-accent-blue)]/50 bg-gradient-to-r from-blue-50 to-indigo-50' 
+                                        : 'border-[var(--glass-border-light)]/50 bg-[var(--component-card)] hover:border-[var(--glass-border-medium)]/50'
                                       }
                                       shadow-md hover:shadow-xl transition-all duration-300`}
                       >
@@ -485,7 +485,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                           <div className={`absolute inset-0 bg-gradient-to-br ${fileStyles.bg} 
                                          rounded-xl blur-xl opacity-20 group-hover:opacity-30`} />
                           <div className={`relative w-12 h-12 bg-gradient-to-br ${fileStyles.bg} 
-                                         rounded-xl flex items-center justify-center text-white
+                                         rounded-xl flex items-center justify-center text-[var(--foreground)]
                                          shadow-lg ${fileStyles.glow}`}>
                             {getFileIcon(doc.fileType)}
                           </div>
@@ -495,8 +495,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex-1">
-                              <h4 className="font-semibold text-gray-900 text-base truncate
-                                           group-hover:text-gray-800 transition-colors">
+                              <h4 className="font-semibold text-[var(--foreground)] text-base truncate
+                                           group-hover:text-[var(--foreground)] transition-colors">
                                 {doc.fileName}
                               </h4>
                               <div className="flex items-center gap-3 mt-1">
@@ -505,11 +505,11 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                                                rounded-md text-xs font-medium`}>
                                   {doc.fileType.split('/')[1]?.toUpperCase() || 'FILE'}
                                 </span>
-                                <span className="text-sm text-gray-500">
+                                <span className="text-sm text-[var(--foreground-secondary)]">
                                   {getFileSize(doc.fileSize)}
                                 </span>
                                 {doc.category && (
-                                  <span className="flex items-center gap-1 text-sm text-gray-500">
+                                  <span className="flex items-center gap-1 text-sm text-[var(--foreground-secondary)]">
                                     <Folder className="w-3 h-3" />
                                     {doc.category}
                                   </span>
@@ -521,18 +521,18 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                             <div className={`w-6 h-6 rounded-full border-2 flex-shrink-0
                                            flex items-center justify-center transition-all duration-300
                                            ${isSelected 
-                                             ? 'border-blue-500 bg-blue-500 scale-110' 
-                                             : 'border-gray-300 bg-white group-hover:border-blue-400'
+                                             ? 'border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue)] scale-110' 
+                                             : 'border-[var(--glass-border-medium)] bg-[var(--component-card)] group-hover:border-blue-400'
                                            }`}>
                               {isSelected && (
-                                <Check className="w-3 h-3 text-white animate-checkIn" />
+                                <Check className="w-3 h-3 text-[var(--foreground)] animate-checkIn" />
                               )}
                             </div>
                           </div>
                           
                           {/* Preview Text */}
                           {doc.extractedText && (
-                            <p className="text-sm text-gray-600 line-clamp-1 mt-2">
+                            <p className="text-sm text-[var(--foreground-tertiary)] line-clamp-1 mt-2">
                               {doc.extractedText.slice(0, 150)}...
                             </p>
                           )}
@@ -548,22 +548,22 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
           {/* Premium Footer with Actions */}
           <div className="relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-t from-gray-50/80 to-white/50" />
-            <div className="relative px-8 py-6 border-t border-gray-200/20">
+            <div className="relative px-8 py-6 border-t border-[var(--glass-border-light)]/20">
               <div className="flex items-center justify-between gap-6">
                 {/* Selection Summary */}
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <div className="relative">
-                      <Activity className="w-5 h-5 text-blue-600" />
-                      <div className="absolute inset-0 w-5 h-5 bg-blue-600/20 blur-lg" />
+                      <Activity className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
+                      <div className="absolute inset-0 w-5 h-5 bg-[var(--cardiology-accent-blue-dark)]/20 blur-lg" />
                     </div>
-                    <span className="text-base font-semibold text-gray-800">
+                    <span className="text-base font-semibold text-[var(--foreground)]">
                       {selectedDocuments.length} document{selectedDocuments.length !== 1 ? 's' : ''} selected
                     </span>
                   </div>
                   
                   {selectedDocuments.length > 0 && (
-                    <div className="h-4 w-px bg-gray-300" />
+                    <div className="h-4 w-px bg-[var(--component-panel)]" />
                   )}
                   
                   {selectedDocuments.length > 0 && (
@@ -576,7 +576,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                           <div
                             key={docId}
                             className={`w-8 h-8 rounded-full bg-gradient-to-br ${styles.bg} 
-                                       flex items-center justify-center text-white text-xs
+                                       flex items-center justify-center text-[var(--foreground)] text-xs
                                        border-2 border-white shadow-md`}
                             style={{ zIndex: 3 - idx }}
                           >
@@ -585,8 +585,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                         );
                       })}
                       {selectedDocuments.length > 3 && (
-                        <div className="w-8 h-8 rounded-full bg-gray-400 flex items-center 
-                                       justify-center text-white text-xs font-bold
+                        <div className="w-8 h-8 rounded-full bg-[var(--muted)] flex items-center 
+                                       justify-center text-[var(--foreground)] text-xs font-bold
                                        border-2 border-white shadow-md">
                           +{selectedDocuments.length - 3}
                         </div>
@@ -599,9 +599,9 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                 <div className="flex items-center gap-3">
                   <button
                     onClick={onClose}
-                    className="group px-6 py-3 bg-white/80 backdrop-blur-sm border-2 border-gray-200/50 
-                             text-gray-700 rounded-2xl font-semibold text-sm shadow-sm
-                             hover:bg-gray-50 hover:border-gray-300/50 hover:shadow-md
+                    className="group px-6 py-3 bg-[var(--component-card)]/80 backdrop-blur-sm border-2 border-[var(--glass-border-light)]/50 
+                             text-[var(--foreground-tertiary)] rounded-2xl font-semibold text-sm shadow-sm
+                             hover:bg-[var(--component-surface-primary)] hover:border-[var(--glass-border-medium)]/50 hover:shadow-md
                              transition-all duration-300 ease-out"
                   >
                     Cancel
@@ -611,7 +611,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                     onClick={onClose}
                     disabled={selectedDocuments.length === 0}
                     className="group relative px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 
-                             text-white rounded-2xl font-semibold text-sm shadow-lg
+                             text-[var(--foreground)] rounded-2xl font-semibold text-sm shadow-lg
                              shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30
                              hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed
                              disabled:hover:scale-100 disabled:hover:shadow-lg
@@ -621,7 +621,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                       <Brain className="w-4 h-4" />
                       Enhance AI Context
                       {selectedDocuments.length > 0 && (
-                        <span className="ml-1 px-2 py-0.5 bg-white/20 rounded-lg text-xs">
+                        <span className="ml-1 px-2 py-0.5 bg-[var(--component-card)]/20 rounded-lg text-xs">
                           {selectedDocuments.length}
                         </span>
                       )}
@@ -639,26 +639,26 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
       {/* Document Preview Modal */}
       {previewDocument && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[10000] flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[70vh] overflow-hidden">
-            <div className="flex items-center justify-between p-3 border-b border-gray-200">
-              <h3 className="text-sm font-semibold text-gray-900">Preview</h3>
+          <div className="bg-[var(--component-card)] rounded-xl shadow-2xl max-w-md w-full max-h-[70vh] overflow-hidden">
+            <div className="flex items-center justify-between p-3 border-b border-[var(--glass-border-light)]">
+              <h3 className="text-sm font-semibold text-[var(--foreground)]">Preview</h3>
               <button
                 onClick={() => setPreviewDocument(null)}
-                className="p-1 hover:bg-gray-100 rounded transition-colors duration-200"
+                className="p-1 hover:bg-[var(--component-surface-secondary)] rounded transition-colors duration-200"
               >
-                <X className="w-3 h-3 text-gray-500" />
+                <X className="w-3 h-3 text-[var(--foreground-secondary)]" />
               </button>
             </div>
             <div className="p-4 overflow-y-auto max-h-[50vh]">
-              <h4 className="font-medium text-gray-900 mb-1 text-sm">{previewDocument.fileName}</h4>
-              <p className="text-xs text-gray-600 mb-3">
+              <h4 className="font-medium text-[var(--foreground)] mb-1 text-sm">{previewDocument.fileName}</h4>
+              <p className="text-xs text-[var(--foreground-tertiary)] mb-3">
                 {getFileSize(previewDocument.fileSize)}
               </p>
-              <div className="text-xs text-gray-700 leading-relaxed">
+              <div className="text-xs text-[var(--foreground-tertiary)] leading-relaxed">
                 {previewDocument.extractedText ? (
                   <p className="whitespace-pre-wrap">{previewDocument.extractedText.slice(0, 500)}...</p>
                 ) : (
-                  <p className="text-gray-500 italic">No preview available</p>
+                  <p className="text-[var(--foreground-secondary)] italic">No preview available</p>
                 )}
               </div>
             </div>

@@ -494,7 +494,7 @@ function getStatusColor(status: string): string {
     case 'completed': return 'text-green-600 bg-green-100';
     case 'processing': return 'text-yellow-600 bg-yellow-100';
     case 'failed': return 'text-red-600 bg-red-100';
-    case 'pending': return 'text-blue-600 bg-blue-100';
-    default: return 'text-gray-600 bg-gray-100';
+    case 'pending': return 'text-[var(--cardiology-accent-blue-dark)] bg-[var(--cardiology-accent-blue-light)]';
+    default: return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-secondary)]';
   }
 } 

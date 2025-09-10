@@ -215,9 +215,9 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
   if (selectedResults.length === 0) {
     return (
       <Card className={cn("p-8 text-center", className)}>
-        <GitCompareArrows className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Results Selected</h3>
-        <p className="text-gray-600 mb-4">
+        <GitCompareArrows className="h-12 w-12 text-[var(--foreground-secondary)] mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">No Results Selected</h3>
+        <p className="text-[var(--foreground-tertiary)] mb-4">
           Select 2 or more ABG results to compare them side by side
         </p>
         <Button variant="outline" onClick={onClose}>
@@ -233,14 +233,14 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
       <Card className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <GitCompareArrows className="h-5 w-5 text-blue-600" />
+            <div className="p-2 bg-[var(--cardiology-accent-blue-light)] rounded-lg">
+              <GitCompareArrows className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-[var(--foreground)]">
                 Results Comparison
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[var(--foreground-tertiary)]">
                 Comparing {selectedResults.length} ABG analyses
               </p>
             </div>
@@ -248,7 +248,7 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
 
           <div className="flex items-center gap-2">
             {/* View Mode Toggle */}
-            <div className="flex bg-gray-100 rounded-lg p-1">
+            <div className="flex bg-[var(--component-surface-secondary)] rounded-lg p-1">
               <Button
                 variant={comparisonMode === 'side-by-side' ? 'default' : 'ghost'}
                 size="sm"
@@ -300,10 +300,10 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
               {/* Result Header */}
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-gray-900">
+                  <h3 className="font-semibold text-[var(--foreground)]">
                     Analysis #{index + 1}
                   </h3>
-                  <p className="text-xs text-gray-500">ID: {result.id.substring(0, 8)}...</p>
+                  <p className="text-xs text-[var(--foreground-secondary)]">ID: {result.id.substring(0, 8)}...</p>
                 </div>
                 <Button
                   variant="ghost"
@@ -322,21 +322,21 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
                   const value = metric.getValue(result);
                   const formattedValue = metric.format ? metric.format(value) : String(value);
 
-                  let valueColor = 'text-gray-900';
+                  let valueColor = 'text-[var(--foreground)]';
                   if (metric.type === 'confidence') {
                     const conf = value as number;
                     if (conf >= 0.8) valueColor = 'text-green-600';
                     else if (conf >= 0.6) valueColor = 'text-yellow-600';
                     else valueColor = 'text-red-600';
                   } else if (metric.type === 'boolean') {
-                    valueColor = value ? 'text-green-600' : 'text-gray-500';
+                    valueColor = value ? 'text-green-600' : 'text-[var(--foreground-secondary)]';
                   }
 
                   return (
                     <div key={metric.label} className="flex items-start gap-2">
-                      <Icon className="h-4 w-4 text-gray-500 mt-0.5 flex-shrink-0" />
+                      <Icon className="h-4 w-4 text-[var(--foreground-secondary)] mt-0.5 flex-shrink-0" />
                       <div className="min-w-0 flex-1">
-                        <div className="text-xs text-gray-500">{metric.label}</div>
+                        <div className="text-xs text-[var(--foreground-secondary)]">{metric.label}</div>
                         <div className={cn("text-sm font-medium", valueColor)}>
                           {formattedValue}
                         </div>
@@ -349,10 +349,10 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
               {/* Analysis Preview */}
               <div className="border-t pt-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <FileText className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-700">Analysis Preview</span>
+                  <FileText className="h-4 w-4 text-[var(--foreground-secondary)]" />
+                  <span className="text-sm font-medium text-[var(--foreground-tertiary)]">Analysis Preview</span>
                 </div>
-                <div className="text-xs text-gray-600 line-clamp-3 bg-gray-50 p-2 rounded">
+                <div className="text-xs text-[var(--foreground-tertiary)] line-clamp-3 bg-[var(--component-surface-primary)] p-2 rounded">
                   {result.raw_analysis?.substring(0, 150)}...
                 </div>
               </div>
@@ -368,7 +368,7 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
                 </Badge>
                 <Badge
                   variant={result.action_plan ? 'default' : 'secondary'}
-                  className={result.action_plan ? 'bg-blue-100 text-blue-800' : ''}
+                  className={result.action_plan ? 'bg-[var(--cardiology-accent-blue-light)] text-blue-800' : ''}
                 >
                   <Activity className="h-3 w-3 mr-1" />
                   {result.action_plan ? 'Action Plan' : 'No Plan'}
@@ -382,13 +382,13 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
         <Card className="overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-[var(--component-surface-primary)]">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-[var(--foreground-secondary)] uppercase tracking-wider">
                     Metric
                   </th>
                   {selectedResults.map((result, index) => (
-                    <th key={result.id} className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th key={result.id} className="px-4 py-3 text-left text-xs font-medium text-[var(--foreground-secondary)] uppercase tracking-wider">
                       <div className="flex items-center justify-between">
                         Analysis #{index + 1}
                         <Button
@@ -404,15 +404,15 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
                   ))}
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-[var(--component-card)] divide-y divide-gray-200">
                 {COMPARISON_METRICS.map(metric => {
                   const Icon = metric.icon || FileText;
                   return (
                     <tr key={metric.label}>
                       <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
-                          <Icon className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm font-medium text-gray-900">
+                          <Icon className="h-4 w-4 text-[var(--foreground-secondary)]" />
+                          <span className="text-sm font-medium text-[var(--foreground)]">
                             {metric.label}
                           </span>
                         </div>
@@ -421,14 +421,14 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
                         const value = metric.getValue(result);
                         const formattedValue = metric.format ? metric.format(value) : String(value);
 
-                        let valueColor = 'text-gray-900';
+                        let valueColor = 'text-[var(--foreground)]';
                         if (metric.type === 'confidence') {
                           const conf = value as number;
                           if (conf >= 0.8) valueColor = 'text-green-600';
                           else if (conf >= 0.6) valueColor = 'text-yellow-600';
                           else valueColor = 'text-red-600';
                         } else if (metric.type === 'boolean') {
-                          valueColor = value ? 'text-green-600' : 'text-gray-500';
+                          valueColor = value ? 'text-green-600' : 'text-[var(--foreground-secondary)]';
                         }
 
                         return (
@@ -454,16 +454,16 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
         <Card>
           <button
             onClick={() => toggleSection('analysis')}
-            className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-50"
+            className="w-full p-4 flex items-center justify-between text-left hover:bg-[var(--component-surface-primary)]"
           >
             <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-gray-600" />
-              <h3 className="font-semibold text-gray-900">Analysis Details</h3>
+              <FileText className="h-5 w-5 text-[var(--foreground-tertiary)]" />
+              <h3 className="font-semibold text-[var(--foreground)]">Analysis Details</h3>
             </div>
             {expandedSections.has('analysis') ? (
-              <ChevronUp className="h-5 w-5 text-gray-500" />
+              <ChevronUp className="h-5 w-5 text-[var(--foreground-secondary)]" />
             ) : (
-              <ChevronDown className="h-5 w-5 text-gray-500" />
+              <ChevronDown className="h-5 w-5 text-[var(--foreground-secondary)]" />
             )}
           </button>
           
@@ -471,10 +471,10 @@ export const ResultsComparison: React.FC<ResultsComparisonProps> = ({
             <div className="p-4 border-t space-y-4">
               {selectedResults.map((result, index) => (
                 <div key={result.id} className="border rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-2">
+                  <h4 className="font-medium text-[var(--foreground)] mb-2">
                     Analysis #{index + 1} - Full Text
                   </h4>
-                  <div className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-3 rounded max-h-40 overflow-y-auto">
+                  <div className="text-sm text-[var(--foreground-tertiary)] whitespace-pre-wrap bg-[var(--component-surface-primary)] p-3 rounded max-h-40 overflow-y-auto">
                     {result.raw_analysis}
                   </div>
                 </div>

@@ -432,19 +432,19 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       ref={containerRef}
       className={`
         flex flex-col safe-bottom
-        ${(isMobile && !disableInternalMobilePositioning) || forceMobileLayout ? 'fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-gray-900/98 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-700/50 shadow-xl mobile-input-container' : 'relative'}
+        ${(isMobile && !disableInternalMobilePositioning) || forceMobileLayout ? 'fixed bottom-0 left-0 right-0 z-40 bg-[var(--component-card)]/98 dark:bg-[var(--background-dark)]/98 backdrop-blur-md border-t border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 shadow-xl mobile-input-container' : 'relative'}
         ${className}
       `}
       data-tour="message-input"
     >
       {/* Knowledge Base Indicator - Hidden to prevent overlap */}
       {/* {selectedKnowledgeBase && (
-        <div className="flex items-center px-6 py-3 bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm border-b border-white/10 dark:border-gray-700/20">
+        <div className="flex items-center px-6 py-3 bg-[var(--component-card)]/40 dark:bg-[var(--background)]/40 backdrop-blur-sm border-b border-white/10 dark:border-[var(--border-strong)]/20">
           <div className="flex items-center space-x-3 flex-1 min-w-0">
             {React.createElement(getKnowledgeBaseIcon(), { 
-              className: "w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" 
+              className: "w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 flex-shrink-0" 
             })}
-            <span className="text-sm text-blue-700 dark:text-blue-300 font-medium truncate">
+            <span className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 font-medium truncate">
               {getKnowledgeBaseInfo()}
             </span>
           </div>
@@ -453,24 +453,24 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
       {/* Mobile-Optimized Processing Progress */}
       {processingProgress && (
-        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-sm border-b border-blue-200/50 dark:border-blue-800/30">
+        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-[var(--cardiology-accent-blue-light)]/80 dark:bg-[var(--cardiology-accent-blue-darker)]/20 backdrop-blur-sm border-b border-blue-200/50 dark:border-blue-800/30">
           <div className="flex items-center space-x-2 sm:space-x-3">
-            <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400 animate-spin flex-shrink-0" />
+            <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 animate-spin flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs sm:text-sm font-medium text-blue-700 dark:text-blue-300 truncate">
+                <span className="text-xs sm:text-sm font-medium text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 truncate">
                   {t('chat.processingFile', { fileName: processingProgress.fileName })}
                 </span>
-                <span className="text-xs text-blue-600 dark:text-blue-400 ml-2 flex-shrink-0">
+                <span className="text-xs text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 ml-2 flex-shrink-0">
                   {Math.round(processingProgress.progress.percentage || 0)}%
                 </span>
               </div>
-              <div className="text-xs text-blue-600 dark:text-blue-400 mb-2 truncate">
+              <div className="text-xs text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mb-2 truncate">
                 {processingProgress.progress.stageDescription}
               </div>
-              <div className="w-full bg-blue-200 dark:bg-blue-800 rounded-full h-1.5">
+              <div className="w-full bg-[var(--cardiology-accent-blue-medium)] dark:bg-[var(--cardiology-accent-blue-darker)] rounded-full h-1.5">
                 <div 
-                  className="bg-blue-600 dark:bg-blue-400 h-1.5 rounded-full transition-all duration-300" 
+                  className="bg-[var(--cardiology-accent-blue-dark)] dark:bg-[var(--cardiology-accent-blue)] h-1.5 rounded-full transition-all duration-300" 
                   style={{ width: `${processingProgress.progress.percentage}%` }}
                 />
               </div>
@@ -481,7 +481,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
       {/* Mobile-Optimized Attachments Preview */}
       {attachments.length > 0 && (
-        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-white/20 dark:bg-gray-800/20 backdrop-blur-sm border-b border-white/10 dark:border-gray-700/20">
+        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-[var(--component-card)]/20 dark:bg-[var(--background)]/20 backdrop-blur-sm border-b border-white/10 dark:border-[var(--border-strong)]/20">
           <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3">
             {attachments.map((attachment) => {
               const IconComponent = getFileIcon(attachment.type);
@@ -496,22 +496,22 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                     flex items-center space-x-2 sm:space-x-3 backdrop-blur-sm rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-sm border shadow-sm w-full sm:w-auto sm:max-w-full transition-all duration-200
                     ${hasError 
                       ? 'bg-red-50/60 dark:bg-red-900/20 border-red-200/50 dark:border-red-800/30' 
-                      : 'bg-white/60 dark:bg-gray-800/60 border-white/20 dark:border-gray-700/20 hover:bg-white/80 dark:hover:bg-gray-800/80'
+                      : 'bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 border-white/20 dark:border-[var(--border-strong)]/20 hover:bg-[var(--component-card)]/80 dark:hover:bg-[var(--background)]/80'
                     }
                   `}
                 >
                   <div className="flex items-center space-x-1.5 sm:space-x-2 flex-shrink-0">
-                    <IconComponent className={`w-4 h-4 flex-shrink-0 ${hasError ? 'text-red-500' : 'text-gray-600 dark:text-gray-400'}`} />
+                    <IconComponent className={`w-4 h-4 flex-shrink-0 ${hasError ? 'text-red-500' : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'}`} />
                     {hasExtractedText && !hasError && (
                       <Zap className="w-3 h-3 text-green-500" />
                     )}
                     {isProcessing && (
-                      <Loader2 className="w-3 h-3 text-blue-500 animate-spin" />
+                      <Loader2 className="w-3 h-3 text-[var(--cardiology-accent-blue)] animate-spin" />
                     )}
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <span className={`block truncate font-medium ${hasError ? 'text-red-700 dark:text-red-300' : 'text-gray-700 dark:text-gray-300'}`}>
+                    <span className={`block truncate font-medium ${hasError ? 'text-red-700 dark:text-red-300' : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'}`}>
                       {attachment.name}
                     </span>
                     {hasExtractedText && !hasError && (
@@ -532,7 +532,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
                     className="min-h-[36px] min-w-[36px] p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-all duration-200 focus-enhanced group flex items-center justify-center"
                     aria-label={t('chat.removeAttachment')}
                   >
-                    <X className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors" />
+                    <X className="w-3.5 h-3.5 text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors" />
                   </button>
                 </div>
               );
@@ -576,7 +576,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
       {/* Mobile-Optimized Selected Documents Indicator */}
       {showDocumentSelector && selectedDocuments.length > 0 && (
-        <div className="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm border-b border-white/10 dark:border-gray-700/20">
+        <div className="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 bg-[var(--component-card)]/10 dark:bg-[var(--background)]/10 backdrop-blur-sm border-b border-white/10 dark:border-[var(--border-strong)]/20">
           <SelectedDocumentsIndicator
             selectedDocuments={selectedDocuments}
             allDocuments={caseDocuments}
@@ -591,7 +591,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       <div 
         className={`
           flex items-end space-x-2 sm:space-x-3 lg:space-x-4 p-3 sm:p-4 lg:p-6
-          ${isDragOver ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''}
+          ${isDragOver ? 'bg-[var(--cardiology-accent-blue-light)]/50 dark:bg-[var(--cardiology-accent-blue-darker)]/20' : ''}
           transition-all duration-300
         `}
         onDragOver={handleDragOver}
@@ -605,11 +605,11 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             <button
               onClick={() => setShowDocumentSelection(true)}
               disabled={disabled}
-              className="min-h-[44px] min-w-[44px] p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-white/60 dark:bg-gray-800/60 hover:bg-white/80 dark:hover:bg-gray-800/80 active:bg-white/90 backdrop-blur-sm border border-white/20 dark:border-gray-700/20 transition-all duration-200 disabled:opacity-50 focus-enhanced shadow-sm hover:shadow-md"
+              className="min-h-[44px] min-w-[44px] p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 hover:bg-[var(--component-card)]/80 dark:hover:bg-[var(--background)]/80 active:bg-[var(--component-card)]/90 backdrop-blur-sm border border-white/20 dark:border-[var(--border-strong)]/20 transition-all duration-200 disabled:opacity-50 focus-enhanced shadow-sm hover:shadow-md"
               aria-label={t('chat.selectCaseDocuments')}
               title={t('chat.selectFromCaseDocuments', { count: String(caseDocuments.length) })}
             >
-              <Files className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
+              <Files className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
             </button>
           )}
 
@@ -618,11 +618,11 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={disabled}
-              className="min-h-[44px] min-w-[44px] p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-white/60 dark:bg-gray-800/60 hover:bg-white/80 dark:hover:bg-gray-800/80 active:bg-white/90 backdrop-blur-sm border border-white/20 dark:border-gray-700/20 transition-all duration-200 disabled:opacity-50 focus-enhanced shadow-sm hover:shadow-md"
+              className="min-h-[44px] min-w-[44px] p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 hover:bg-[var(--component-card)]/80 dark:hover:bg-[var(--background)]/80 active:bg-[var(--component-card)]/90 backdrop-blur-sm border border-white/20 dark:border-[var(--border-strong)]/20 transition-all duration-200 disabled:opacity-50 focus-enhanced shadow-sm hover:shadow-md"
               aria-label={t('chat.attachFile')}
               data-tour="file-upload"
             >
-              <Paperclip className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
+              <Paperclip className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" />
             </button>
           )}
         </div>
@@ -648,8 +648,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               className={`
                 w-full resize-none border-none outline-none bg-transparent
                 focus:outline-none focus:ring-0 focus:border-none
-                placeholder:text-gray-500 dark:placeholder:text-gray-400
-                text-gray-900 dark:text-white
+                placeholder:text-[var(--foreground-secondary)] dark:placeholder:text-[var(--foreground-secondary)]
+                text-[var(--foreground)] dark:text-[var(--foreground)]
                 leading-6
                 ${className || ''}
               `}
@@ -679,13 +679,13 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           <button
             onClick={handleSendMessage}
             disabled={!canSend}
-            className="min-h-[44px] min-w-[44px] p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-gray-300 dark:disabled:bg-gray-600 transition-all duration-200 disabled:opacity-50 focus-enhanced shadow-sm hover:shadow-md flex items-center justify-center"
+            className="min-h-[44px] min-w-[44px] p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--cardiology-accent-blue-dark)] active:bg-[var(--cardiology-accent-blue-darker)] disabled:bg-[var(--component-panel)] dark:disabled:bg-[var(--border)] transition-all duration-200 disabled:opacity-50 focus-enhanced shadow-sm hover:shadow-md flex items-center justify-center"
             aria-label={t('chat.send')}
           >
             {disabled || isSubmitting ? (
-              <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-spin" />
+              <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--foreground)] animate-spin" />
             ) : (
-              <Send className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              <Send className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--foreground)]" />
             )}
           </button>
         </div>

@@ -219,11 +219,11 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
 
   if (loading) {
     return (
-      <div className={`bg-white rounded-xl shadow-lg p-6 ${className}`}>
+      <div className={`bg-[var(--component-card)] rounded-xl shadow-lg p-6 ${className}`}>
         <div className="flex items-center justify-center h-64">
           <div className="flex items-center space-x-3">
-            <RefreshCw className="w-5 h-5 animate-spin text-blue-600" />
-            <span className="text-gray-600">Loading content performance data...</span>
+            <RefreshCw className="w-5 h-5 animate-spin text-[var(--cardiology-accent-blue-dark)]" />
+            <span className="text-[var(--foreground-tertiary)]">Loading content performance data...</span>
           </div>
         </div>
       </div>
@@ -232,15 +232,15 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
 
   if (error) {
     return (
-      <div className={`bg-white rounded-xl shadow-lg p-6 ${className}`}>
+      <div className={`bg-[var(--component-card)] rounded-xl shadow-lg p-6 ${className}`}>
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-2" />
             <div className="text-red-500 mb-2">Error loading data</div>
-            <p className="text-gray-600 text-sm">{error}</p>
+            <p className="text-[var(--foreground-tertiary)] text-sm">{error}</p>
             <button 
               onClick={fetchContentPerformanceData}
-              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="mt-3 px-4 py-2 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] rounded-lg hover:bg-[var(--cardiology-accent-blue-dark)] transition-colors"
             >
               Retry
             </button>
@@ -251,24 +251,24 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
   }
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg overflow-hidden ${className}`}>
+    <div className={`bg-[var(--component-card)] rounded-xl shadow-lg overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="p-6 border-b border-gray-200">
+      <div className="p-6 border-b border-[var(--glass-border-light)]">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-indigo-100 rounded-lg">
               <FileText className="w-5 h-5 text-indigo-600" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Content Performance Analytics</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="text-lg font-semibold text-[var(--foreground)]">Content Performance Analytics</h3>
+              <p className="text-sm text-[var(--foreground-tertiary)]">
                 Article lifecycle, source credibility, and optimization insights
               </p>
             </div>
           </div>
           <button
             onClick={fetchContentPerformanceData}
-            className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] transition-colors"
           >
             <RefreshCw className="w-5 h-5" />
           </button>
@@ -276,7 +276,7 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
 
         {/* Controls */}
         <div className="flex items-center justify-between">
-          <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+          <div className="flex space-x-1 bg-[var(--component-surface-secondary)] rounded-lg p-1">
             {[
               { id: 'performance', label: 'Performance', icon: BarChart3 },
               { id: 'sources', label: 'Sources', icon: Award },
@@ -288,8 +288,8 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
                 onClick={() => setViewType(id as any)}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   viewType === id
-                    ? 'bg-white text-indigo-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-[var(--component-card)] text-indigo-600 shadow-sm'
+                    : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -299,11 +299,11 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
           </div>
 
           <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">Metric:</label>
+            <label className="text-sm font-medium text-[var(--foreground-tertiary)]">Metric:</label>
             <select
               value={selectedMetric}
               onChange={(e) => setSelectedMetric(e.target.value as any)}
-              className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-1 border border-[var(--glass-border-medium)] rounded-lg text-sm focus:ring-2 focus:ring-indigo-500"
             >
               <option value="engagement">Engagement Score</option>
               <option value="credibility">Credibility Score</option>
@@ -321,7 +321,7 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
           <div className="space-y-6">
             {/* Content Performance Scatter Plot */}
             <div className="h-80">
-              <h4 className="text-sm font-semibold text-gray-900 mb-3">Content Performance Analysis</h4>
+              <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">Content Performance Analysis</h4>
               <ResponsiveContainer width="100%" height="100%">
                 <ScatterChart data={contentData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
@@ -366,22 +366,22 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
 
             {/* Top Performing Content */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-900 mb-3">Top Performing Content</h4>
+              <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">Top Performing Content</h4>
               <div className="space-y-3">
                 {contentData
                   .sort((a, b) => b.engagementScore - a.engagementScore)
                   .slice(0, 5)
                   .map((content, index) => (
-                    <div key={content.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div key={content.id} className="flex items-center justify-between p-4 bg-[var(--component-surface-primary)] rounded-lg">
                       <div className="flex items-center space-x-4">
-                        <div className={`flex items-center justify-center w-8 h-8 rounded-full text-white text-sm font-bold ${
-                          index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : index === 2 ? 'bg-yellow-600' : 'bg-gray-300'
+                        <div className={`flex items-center justify-center w-8 h-8 rounded-full text-[var(--foreground)] text-sm font-bold ${
+                          index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-[var(--muted)]' : index === 2 ? 'bg-yellow-600' : 'bg-[var(--component-panel)]'
                         }`}>
                           {index + 1}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{content.title}</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-[var(--foreground)]">{content.title}</p>
+                          <p className="text-sm text-[var(--foreground-tertiary)]">
                             {content.category} • {content.specialty} • {content.evidenceLevel}
                           </p>
                         </div>
@@ -389,15 +389,15 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
                       <div className="text-right">
                         <div className="flex items-center space-x-4">
                           <div className="text-sm">
-                            <span className="text-gray-600">Engagement: </span>
+                            <span className="text-[var(--foreground-tertiary)]">Engagement: </span>
                             <span className="font-bold text-indigo-600">{Math.round(content.engagementScore)}</span>
                           </div>
                           <div className="text-sm">
-                            <span className="text-gray-600">Views: </span>
+                            <span className="text-[var(--foreground-tertiary)]">Views: </span>
                             <span className="font-bold">{content.views.toLocaleString()}</span>
                           </div>
                           <div className="text-sm">
-                            <span className="text-gray-600">Read Time: </span>
+                            <span className="text-[var(--foreground-tertiary)]">Read Time: </span>
                             <span className="font-bold">{formatTime(content.avgReadTime)}</span>
                           </div>
                         </div>
@@ -413,7 +413,7 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
         {viewType === 'sources' && (
           <div className="space-y-6">
             <div className="h-64">
-              <h4 className="text-sm font-semibold text-gray-900 mb-3">Source Credibility Impact on Engagement</h4>
+              <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">Source Credibility Impact on Engagement</h4>
               <ResponsiveContainer width="100%" height="100%">
                 <ScatterChart data={sourcePerformance}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
@@ -456,26 +456,26 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
 
             {/* Source Performance Table */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-900 mb-3">Source Performance Rankings</h4>
+              <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">Source Performance Rankings</h4>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-[var(--component-surface-primary)]">
                     <tr>
-                      <th className="px-4 py-3 text-left font-medium text-gray-900">Source</th>
-                      <th className="px-4 py-3 text-center font-medium text-gray-900">Credibility</th>
-                      <th className="px-4 py-3 text-center font-medium text-gray-900">Engagement Impact</th>
-                      <th className="px-4 py-3 text-center font-medium text-gray-900">Articles</th>
-                      <th className="px-4 py-3 text-center font-medium text-gray-900">Avg Read Time</th>
-                      <th className="px-4 py-3 text-center font-medium text-gray-900">User Rating</th>
+                      <th className="px-4 py-3 text-left font-medium text-[var(--foreground)]">Source</th>
+                      <th className="px-4 py-3 text-center font-medium text-[var(--foreground)]">Credibility</th>
+                      <th className="px-4 py-3 text-center font-medium text-[var(--foreground)]">Engagement Impact</th>
+                      <th className="px-4 py-3 text-center font-medium text-[var(--foreground)]">Articles</th>
+                      <th className="px-4 py-3 text-center font-medium text-[var(--foreground)]">Avg Read Time</th>
+                      <th className="px-4 py-3 text-center font-medium text-[var(--foreground)]">User Rating</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {sourcePerformance.slice(0, 8).map((source, index) => (
-                      <tr key={source.sourceName} className="hover:bg-gray-50">
+                      <tr key={source.sourceName} className="hover:bg-[var(--component-surface-primary)]">
                         <td className="px-4 py-3">
                           <div className="flex items-center space-x-2">
                             <div className={`w-3 h-3 rounded-full ${
-                              index < 3 ? 'bg-green-500' : index < 6 ? 'bg-yellow-500' : 'bg-gray-400'
+                              index < 3 ? 'bg-green-500' : index < 6 ? 'bg-yellow-500' : 'bg-[var(--muted)]'
                             }`} />
                             <span className="font-medium">{source.sourceName}</span>
                           </div>
@@ -500,7 +500,7 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
                               <Star 
                                 key={i} 
                                 className={`w-3 h-3 ${
-                                  i < Math.floor(source.userRating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                                  i < Math.floor(source.userRating) ? 'text-yellow-400 fill-current' : 'text-[var(--foreground-secondary)]'
                                 }`} 
                               />
                             ))}
@@ -519,12 +519,12 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
         {viewType === 'timing' && (
           <div className="space-y-6">
             <div>
-              <h4 className="text-sm font-semibold text-gray-900 mb-3">Optimal Posting Times Heatmap</h4>
-              <div className="bg-gray-50 rounded-lg p-4">
+              <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">Optimal Posting Times Heatmap</h4>
+              <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
                 <div className="grid grid-cols-24 gap-1">
                   {Array.from({ length: 24 }, (_, hour) => (
                     <div key={hour} className="text-center">
-                      <div className="text-xs text-gray-500 mb-2">{hour}</div>
+                      <div className="text-xs text-[var(--foreground-secondary)] mb-2">{hour}</div>
                       {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => {
                         const timeData = postingAnalysis.find(p => p.hour === hour && p.day === day);
                         const engagement = timeData?.avgEngagement || 0;
@@ -548,7 +548,7 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
                     </div>
                   ))}
                 </div>
-                <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
+                <div className="flex items-center justify-between mt-4 text-xs text-[var(--foreground-secondary)]">
                   <span>Lower engagement</span>
                   <div className="flex items-center space-x-2">
                     <div className="flex items-center space-x-1">
@@ -589,24 +589,24 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
                 </div>
               </div>
 
-              <div className="bg-blue-50 rounded-lg p-4">
+              <div className="bg-[var(--cardiology-accent-blue-light)] rounded-lg p-4">
                 <h5 className="font-medium text-blue-900 mb-3 flex items-center">
                   <Calendar className="w-4 h-4 mr-2" />
                   Posting Frequency Analysis
                 </h5>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Articles per day</span>
+                    <span className="text-sm text-[var(--foreground-tertiary)]">Articles per day</span>
                     <span className="font-semibold">
                       {Math.round(contentData.length / (timeRange === '24h' ? 1 : timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 90))}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Peak posting day</span>
+                    <span className="text-sm text-[var(--foreground-tertiary)]">Peak posting day</span>
                     <span className="font-semibold">Wednesday</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Optimal frequency</span>
+                    <span className="text-sm text-[var(--foreground-tertiary)]">Optimal frequency</span>
                     <span className="font-semibold text-green-600">8-10 articles/day</span>
                   </div>
                 </div>
@@ -625,16 +625,16 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
                 const percentage = (count / contentData.length) * 100;
                 
                 return (
-                  <div key={stage} className="bg-gray-50 rounded-lg p-4">
+                  <div key={stage} className="bg-[var(--component-surface-primary)] rounded-lg p-4">
                     <div className="flex items-center space-x-3 mb-2">
                       <div 
                         className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: color }}
                       />
-                      <span className="font-medium text-gray-900 capitalize">{stage}</span>
+                      <span className="font-medium text-[var(--foreground)] capitalize">{stage}</span>
                     </div>
-                    <div className="text-2xl font-bold text-gray-900">{count}</div>
-                    <div className="text-sm text-gray-600">{percentage.toFixed(1)}% of content</div>
+                    <div className="text-2xl font-bold text-[var(--foreground)]">{count}</div>
+                    <div className="text-sm text-[var(--foreground-tertiary)]">{percentage.toFixed(1)}% of content</div>
                   </div>
                 );
               })}
@@ -642,7 +642,7 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
 
             {/* Content Lifecycle Chart */}
             <div className="h-64">
-              <h4 className="text-sm font-semibold text-gray-900 mb-3">Content Lifecycle Performance</h4>
+              <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">Content Lifecycle Performance</h4>
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={contentData.slice(0, 20)}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
@@ -689,7 +689,7 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
       </div>
 
       {/* Recommendations Footer */}
-      <div className="px-6 py-4 bg-indigo-50 border-t border-gray-200">
+      <div className="px-6 py-4 bg-indigo-50 border-t border-[var(--glass-border-light)]">
         <h5 className="font-medium text-indigo-900 mb-2 flex items-center">
           <Zap className="w-4 h-4 mr-2" />
           Performance Recommendations
@@ -697,19 +697,19 @@ export const ContentPerformanceDashboard: React.FC<ContentPerformanceDashboardPr
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
           <div className="flex items-start space-x-2">
             <TrendingUp className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-            <span className="text-gray-700">
+            <span className="text-[var(--foreground-tertiary)]">
               Focus on high-credibility sources (>90%) for 23% better engagement
             </span>
           </div>
           <div className="flex items-start space-x-2">
-            <Clock className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-            <span className="text-gray-700">
+            <Clock className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] mt-0.5 flex-shrink-0" />
+            <span className="text-[var(--foreground-tertiary)]">
               Post during 10-11 AM and 2-3 PM for optimal engagement
             </span>
           </div>
           <div className="flex items-start space-x-2">
             <Award className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-            <span className="text-gray-700">
+            <span className="text-[var(--foreground-tertiary)]">
               Systematic reviews drive 40% higher user engagement
             </span>
           </div>

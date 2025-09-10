@@ -131,7 +131,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
               delay: Math.random() * 5,
               ease: "easeInOut"
             }}
-            className="absolute w-2 h-2 bg-white/30 rounded-full"
+            className="absolute w-2 h-2 bg-[var(--component-card)]/30 rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -166,7 +166,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-3xl blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-600 rounded-3xl blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-300" />
                 <div className="relative flex items-center justify-center w-16 h-16 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-600 rounded-3xl shadow-2xl border border-white/20">
-                  <Radio className="w-9 h-9 text-white" />
+                  <Radio className="w-9 h-9 text-[var(--foreground)]" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl" />
                 </div>
               </motion.div>
@@ -183,7 +183,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="text-sm text-white/80 font-medium tracking-wide"
+                  className="text-sm text-[var(--foreground)]/80 font-medium tracking-wide"
                 >
                   Transform your {specialty} knowledge into engaging audio experiences
                 </motion.p>
@@ -200,8 +200,8 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                 className={`
                   relative p-3 rounded-2xl font-bold text-sm transition-all duration-300 overflow-hidden
                   ${showDebugTracker || debugInfo
-                    ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
-                    : 'bg-white/10 backdrop-blur-xl border border-white/20 text-white/70 hover:text-white hover:bg-white/20'
+                    ? 'bg-gradient-to-r from-orange-500 to-red-500 text-[var(--foreground)] shadow-lg'
+                    : 'bg-[var(--component-card)]/10 backdrop-blur-xl border border-white/20 text-[var(--foreground)]/70 hover:text-[var(--foreground)] hover:bg-[var(--component-card)]/20'
                   }
                 `}
                 title={showDebugTracker ? "Hide Debug Tracker" : "Show Debug Tracker"}
@@ -296,7 +296,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative p-3 rounded-2xl font-bold text-sm transition-all duration-300 overflow-hidden bg-green-500 text-white hover:bg-green-600"
+                className="relative p-3 rounded-2xl font-bold text-sm transition-all duration-300 overflow-hidden bg-green-500 text-[var(--foreground)] hover:bg-green-600"
                 title="Load Test Debug Data"
               >
                 🧪
@@ -304,7 +304,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
 
               {/* Tab Navigation */}
               <div className="relative">
-                <div className="absolute inset-0 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20" />
+                <div className="absolute inset-0 bg-[var(--component-card)]/10 backdrop-blur-xl rounded-3xl border border-white/20" />
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-3xl" />
                 
                 <div className="relative flex items-center p-2 space-x-2">
@@ -333,12 +333,12 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                         initial={false}
                         animate={{ opacity: isActive ? 0 : 0 }}
                         whileHover={{ opacity: isActive ? 0 : 0.5 }}
-                        className="absolute inset-0 bg-white/20 rounded-2xl"
+                        className="absolute inset-0 bg-[var(--component-card)]/20 rounded-2xl"
                       />
                       
                       <div className={`
                         relative flex items-center space-x-3 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300
-                        ${isActive ? 'text-white' : 'text-white/70 hover:text-white'}
+                        ${isActive ? 'text-[var(--foreground)]' : 'text-[var(--foreground)]/70 hover:text-[var(--foreground)]'}
                       `}>
                         <Icon className="w-5 h-5" />
                         <span>{tab.label}</span>
@@ -425,7 +425,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                       
                       {/* Main icon container */}
                       <div className="relative w-40 h-40 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-600 rounded-[3rem] shadow-2xl flex items-center justify-center border border-white/20">
-                        <Headphones className="w-20 h-20 text-white drop-shadow-lg" />
+                        <Headphones className="w-20 h-20 text-[var(--foreground)] drop-shadow-lg" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 rounded-[3rem]" />
                         
                         {/* Prismatic edge highlights */}
@@ -455,7 +455,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7, duration: 0.6 }}
-                    className="text-xl text-white/80 leading-relaxed max-w-3xl mx-auto mb-10 font-medium"
+                    className="text-xl text-[var(--foreground)]/80 leading-relaxed max-w-3xl mx-auto mb-10 font-medium"
                   >
                     Transform your medical documents into captivating, professional podcasts 
                     with revolutionary AI technology and studio-quality natural voices.
@@ -484,9 +484,9 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                           className="group relative"
                         >
                           <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-opacity duration-300`} />
-                          <div className="relative flex items-center space-x-3 px-6 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl">
-                            <Icon className="w-5 h-5 text-white" />
-                            <span className="text-white font-semibold">{feature.label}</span>
+                          <div className="relative flex items-center space-x-3 px-6 py-3 bg-[var(--component-card)]/10 backdrop-blur-xl border border-white/20 rounded-2xl">
+                            <Icon className="w-5 h-5 text-[var(--foreground)]" />
+                            <span className="text-[var(--foreground)] font-semibold">{feature.label}</span>
                           </div>
                         </motion.div>
                       );
@@ -505,8 +505,8 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                       className="flex flex-col items-center space-y-2"
                     >
-                      <span className="text-white/60 text-sm font-medium">Get Started</span>
-                      <ChevronRight className="w-6 h-6 text-white/60 rotate-90" />
+                      <span className="text-[var(--foreground)]/60 text-sm font-medium">Get Started</span>
+                      <ChevronRight className="w-6 h-6 text-[var(--foreground)]/60 rotate-90" />
                     </motion.div>
                   </motion.div>
                 </motion.div>
@@ -552,8 +552,8 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                                   <div className={`
                                     relative w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500
                                     ${isCompleted || isNext
-                                      ? 'bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-600 text-white shadow-xl border border-white/20'
-                                      : 'bg-white/10 backdrop-blur-sm text-white/60 border border-white/20'
+                                      ? 'bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-600 text-[var(--foreground)] shadow-xl border border-white/20'
+                                      : 'bg-[var(--component-card)]/10 backdrop-blur-sm text-[var(--foreground)]/60 border border-white/20'
                                     }
                                   `}>
                                     <Icon className="w-7 h-7" />
@@ -563,12 +563,12 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                                 {/* Step label */}
                                 <div className="text-center">
                                   <div className={`text-sm font-bold transition-colors duration-300 ${
-                                    isCompleted || isNext ? 'text-white' : 'text-white/60'
+                                    isCompleted || isNext ? 'text-[var(--foreground)]' : 'text-[var(--foreground)]/60'
                                   }`}>
                                     {step.label}
                                   </div>
                                   <div className={`text-xs transition-colors duration-300 ${
-                                    isCompleted ? 'text-cyan-400' : isNext ? 'text-purple-400' : 'text-white/40'
+                                    isCompleted ? 'text-cyan-400' : isNext ? 'text-purple-400' : 'text-[var(--foreground)]/40'
                                   }`}>
                                     Step {step.number}
                                   </div>
@@ -584,7 +584,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                                   className="flex items-center"
                                 >
                                   <ChevronRight className={`w-6 h-6 transition-colors duration-300 ${
-                                    isCompleted ? 'text-cyan-400' : 'text-white/40'
+                                    isCompleted ? 'text-cyan-400' : 'text-[var(--foreground)]/40'
                                   }`} />
                                 </motion.div>
                               )}
@@ -678,7 +678,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                 >
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-purple-600/20 rounded-3xl blur-2xl" />
-                    <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-100/50 p-12 max-w-2xl">
+                    <div className="relative bg-[var(--component-card)]/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-100/50 p-12 max-w-2xl">
                       <GenerationProgress
                         podcast={currentPodcast}
                         queueStatus={queueStatus}
@@ -717,10 +717,10 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                       className="relative z-10"
                     >
                       <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full mb-4">
-                        <Sparkles className="w-10 h-10 text-white" />
+                        <Sparkles className="w-10 h-10 text-[var(--foreground)]" />
                       </div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">Podcast Generated Successfully!</h3>
-                      <p className="text-gray-600">Your AI-powered podcast is ready to play</p>
+                      <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">Podcast Generated Successfully!</h3>
+                      <p className="text-[var(--foreground-tertiary)]">Your AI-powered podcast is ready to play</p>
                     </motion.div>
                   </motion.div>
 
@@ -732,7 +732,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                     className="relative"
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-pink-600/10 rounded-3xl blur-xl" />
-                    <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-100/50 overflow-hidden">
+                    <div className="relative bg-[var(--component-card)]/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-100/50 overflow-hidden">
                       <PodcastPlayer
                         podcast={currentPodcast}
                         onNewGeneration={() => {
@@ -755,7 +755,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setActiveTab('history')}
-                      className="group relative px-8 py-4 rounded-2xl font-semibold text-white overflow-hidden transition-all duration-300 shadow-lg hover:shadow-xl"
+                      className="group relative px-8 py-4 rounded-2xl font-semibold text-[var(--foreground)] overflow-hidden transition-all duration-300 shadow-lg hover:shadow-xl"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600" />
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -773,10 +773,10 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                         setSelectedDocuments([]);
                         setShowWelcome(false);
                       }}
-                      className="group relative px-8 py-4 rounded-2xl font-semibold overflow-hidden transition-all duration-300 shadow-lg hover:shadow-xl bg-white border-2 border-gray-200 hover:border-purple-300"
+                      className="group relative px-8 py-4 rounded-2xl font-semibold overflow-hidden transition-all duration-300 shadow-lg hover:shadow-xl bg-[var(--component-card)] border-2 border-[var(--glass-border-light)] hover:border-purple-300"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-purple-50 to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <div className="relative flex items-center space-x-3 text-gray-700">
+                      <div className="relative flex items-center space-x-3 text-[var(--foreground-tertiary)]">
                         <Sparkles className="w-5 h-5" />
                         <span>Generate Another</span>
                       </div>
@@ -818,7 +818,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                 className="relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-600/5 to-gray-700/5 rounded-3xl blur-3xl" />
-                <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-100/50 p-8">
+                <div className="relative bg-[var(--component-card)]/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-100/50 p-8">
                   <PodcastDebug />
                 </div>
               </motion.div>
@@ -850,7 +850,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                   Why Choose AI Podcast Studio?
                 </span>
               </h3>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-[var(--foreground-tertiary)] max-w-3xl mx-auto">
                 Experience the future of medical content creation with our advanced AI technology
               </p>
             </motion.div>
@@ -904,15 +904,15 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                         className="inline-block mb-6"
                       >
                         <div className={`w-20 h-20 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center shadow-lg`}>
-                          <Icon className="w-10 h-10 text-white" />
+                          <Icon className="w-10 h-10 text-[var(--foreground)]" />
                         </div>
                       </motion.div>
                       
                       {/* Text */}
-                      <h4 className="text-xl font-bold text-gray-900 mb-3">
+                      <h4 className="text-xl font-bold text-[var(--foreground)] mb-3">
                         {feature.title}
                       </h4>
-                      <p className="text-gray-600 leading-relaxed">
+                      <p className="text-[var(--foreground-tertiary)] leading-relaxed">
                         {feature.description}
                       </p>
                     </div>
@@ -942,7 +942,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                   <div className={`text-4xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mb-2`}>
                     {stat.value}
                   </div>
-                  <div className="text-sm text-gray-600 font-medium">
+                  <div className="text-sm text-[var(--foreground-tertiary)] font-medium">
                     {stat.label}
                   </div>
                 </motion.div>

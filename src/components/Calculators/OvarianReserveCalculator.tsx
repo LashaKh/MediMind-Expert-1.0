@@ -141,8 +141,8 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
     switch (level) {
       case 'low': return 'text-red-600';
       case 'normal': return 'text-green-600';
-      case 'high': return 'text-blue-600';
-      default: return 'text-gray-600';
+      case 'high': return 'text-[var(--cardiology-accent-blue-dark)]';
+      default: return 'text-[var(--foreground-tertiary)]';
     }
   }, []);
 
@@ -194,10 +194,10 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
               <div className="grid xl:grid-cols-2 gap-4 sm:gap-6">
                 {/* Primary Markers */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900">{getOvarianText('primaryMarkersTitle')}</h3>
+                  <h3 className="text-lg font-semibold text-[var(--foreground)]">{getOvarianText('primaryMarkersTitle')}</h3>
                   
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)]">
                       {getOvarianText('ageLabel')}
                     </label>
                     <input
@@ -205,13 +205,13 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
                       value={formData.age}
                       onChange={(e) => handleInputChange('age', e.target.value)}
                       placeholder={getOvarianText('agePlaceholder')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                     />
-                    <p className="text-xs text-gray-500">{getOvarianText('ageDescription')}</p>
+                    <p className="text-xs text-[var(--foreground-secondary)]">{getOvarianText('ageDescription')}</p>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)]">
                       {getOvarianText('amhLabel')}
                     </label>
                     <input
@@ -220,13 +220,13 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
                       value={formData.amh}
                       onChange={(e) => handleInputChange('amh', e.target.value)}
                       placeholder={getOvarianText('amhPlaceholder')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                     />
-                    <p className="text-xs text-gray-500">{getOvarianText('amhDescription')}</p>
+                    <p className="text-xs text-[var(--foreground-secondary)]">{getOvarianText('amhDescription')}</p>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)]">
                       {getOvarianText('antralFollicleCountLabel')}
                     </label>
                     <input
@@ -234,18 +234,18 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
                       value={formData.antalFolicleCount}
                       onChange={(e) => handleInputChange('antalFolicleCount', e.target.value)}
                       placeholder={getOvarianText('antralFollicleCountPlaceholder')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                     />
-                    <p className="text-xs text-gray-500">{getOvarianText('antralFollicleCountDescription')}</p>
+                    <p className="text-xs text-[var(--foreground-secondary)]">{getOvarianText('antralFollicleCountDescription')}</p>
                   </div>
                 </div>
 
                 {/* Secondary Markers */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900">{getOvarianText('secondaryMarkersTitle')}</h3>
+                  <h3 className="text-lg font-semibold text-[var(--foreground)]">{getOvarianText('secondaryMarkersTitle')}</h3>
                   
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)]">
                       {getOvarianText('fshLabel')}
                     </label>
                     <input
@@ -254,13 +254,13 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
                       value={formData.fsh}
                       onChange={(e) => handleInputChange('fsh', e.target.value)}
                       placeholder={getOvarianText('fshPlaceholder')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                     />
-                    <p className="text-xs text-gray-500">{getOvarianText('fshDescription')}</p>
+                    <p className="text-xs text-[var(--foreground-secondary)]">{getOvarianText('fshDescription')}</p>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)]">
                       {getOvarianText('estradiolLabel')}
                     </label>
                     <input
@@ -268,13 +268,13 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
                       value={formData.estradiol}
                       onChange={(e) => handleInputChange('estradiol', e.target.value)}
                       placeholder={getOvarianText('estradiolPlaceholder')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                     />
-                    <p className="text-xs text-gray-500">{getOvarianText('estradiolDescription')}</p>
+                    <p className="text-xs text-[var(--foreground-secondary)]">{getOvarianText('estradiolDescription')}</p>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)]">
                       {getOvarianText('inhibinBLabel')}
                     </label>
                     <input
@@ -282,9 +282,9 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
                       value={formData.inhibinB}
                       onChange={(e) => handleInputChange('inhibinB', e.target.value)}
                       placeholder={getOvarianText('inhibinBPlaceholder')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                     />
-                    <p className="text-xs text-gray-500">{getOvarianText('inhibinBDescription')}</p>
+                    <p className="text-xs text-[var(--foreground-secondary)]">{getOvarianText('inhibinBDescription')}</p>
                   </div>
                 </div>
               </div>
@@ -315,38 +315,38 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
 
               {/* Results */}
               {result && (
-                <div className="mt-6 p-6 bg-gray-50 rounded-lg">
+                <div className="mt-6 p-6 bg-[var(--component-surface-primary)] rounded-lg">
                   <div className="flex items-center gap-2 mb-4">
                     <CheckCircle className="w-5 h-5 text-green-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">{getOvarianText('resultsTitle')}</h3>
+                    <h3 className="text-lg font-semibold text-[var(--foreground)]">{getOvarianText('resultsTitle')}</h3>
                   </div>
                   
                   <div className="grid xl:grid-cols-2 gap-4 sm:gap-6">
                     <div>
-                      <h4 className="font-medium text-gray-700 mb-2">{getOvarianText('reserveCategory')}</h4>
+                      <h4 className="font-medium text-[var(--foreground-tertiary)] mb-2">{getOvarianText('reserveCategory')}</h4>
                       <p className="text-lg font-semibold">{result.reproductivePotential}</p>
                       
-                      <h4 className="font-medium text-gray-700 mt-4 mb-2">{getOvarianText('interpretationTitle')}</h4>
-                      <p className="text-gray-600">{result.interpretation}</p>
+                      <h4 className="font-medium text-[var(--foreground-tertiary)] mt-4 mb-2">{getOvarianText('interpretationTitle')}</h4>
+                      <p className="text-[var(--foreground-tertiary)]">{result.interpretation}</p>
                     </div>
                     
                     <div>
-                      <h4 className="font-medium text-gray-700 mb-2">{getOvarianText('treatmentOptionsTitle')}</h4>
+                      <h4 className="font-medium text-[var(--foreground-tertiary)] mb-2">{getOvarianText('treatmentOptionsTitle')}</h4>
                       <ul className="space-y-1">
                         {result.treatmentOptions.map((option, index) => (
                           <li key={index} className="flex items-start gap-2">
                             <span className="w-1.5 h-1.5 bg-pink-500 rounded-full mt-2 flex-shrink-0"></span>
-                            <span className="text-sm text-gray-600">{option}</span>
+                            <span className="text-sm text-[var(--foreground-tertiary)]">{option}</span>
                           </li>
                         ))}
                       </ul>
                       
-                      <h4 className="font-medium text-gray-700 mt-4 mb-2">{getOvarianText('recommendationsTitle')}</h4>
+                      <h4 className="font-medium text-[var(--foreground-tertiary)] mt-4 mb-2">{getOvarianText('recommendationsTitle')}</h4>
                       <ul className="space-y-1">
                         {result.recommendations.map((rec, index) => (
                           <li key={index} className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></span>
-                            <span className="text-sm text-gray-600">{rec}</span>
+                            <span className="w-1.5 h-1.5 bg-[var(--cardiology-accent-blue)] rounded-full mt-2 flex-shrink-0"></span>
+                            <span className="text-sm text-[var(--foreground-tertiary)]">{rec}</span>
                           </li>
                         ))}
                       </ul>
@@ -369,7 +369,7 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
             <CardContent className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold mb-2">{getOvarianText('purposeTitle')}</h3>
-                <p className="text-gray-600">{getOvarianText('purposeText')}</p>
+                <p className="text-[var(--foreground-tertiary)]">{getOvarianText('purposeText')}</p>
               </div>
 
               <div>
@@ -378,7 +378,7 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
                   {getOvarianArray('parameters').map((param, index) => (
                     <li key={index} className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 bg-pink-500 rounded-full mt-2 flex-shrink-0"></span>
-                      <span className="text-gray-600">{param}</span>
+                      <span className="text-[var(--foreground-tertiary)]">{param}</span>
                     </li>
                   ))}
                 </ul>
@@ -411,7 +411,7 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
                   {getOvarianArray('limitations').map((limitation, index) => (
                     <li key={index} className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></span>
-                      <span className="text-gray-600">{limitation}</span>
+                      <span className="text-[var(--foreground-tertiary)]">{limitation}</span>
                     </li>
                   ))}
                 </ul>
@@ -421,7 +421,7 @@ const OvarianReserveCalculatorComponent: React.FC = () => {
                 <h3 className="text-lg font-semibold mb-2">{getOvarianText('referencesTitle')}</h3>
                 <ul className="space-y-2">
                   {getOvarianArray('references').map((reference, index) => (
-                    <li key={index} className="text-sm text-gray-600">
+                    <li key={index} className="text-sm text-[var(--foreground-tertiary)]">
                       {index + 1}. {reference}
                     </li>
                   ))}

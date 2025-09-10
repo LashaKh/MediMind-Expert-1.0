@@ -131,14 +131,14 @@ export const ProfileStatsDashboard: React.FC = () => {
         <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-80 group-hover:opacity-90 transition-opacity duration-500 animate-professional-gradient`} />
         
         {/* Glass Morphism Layer */}
-        <div className="relative h-full w-full rounded-3xl bg-white/10 dark:bg-gray-900/20 backdrop-blur-xl border border-white/20 dark:border-gray-700/30 p-6 hover:bg-white/15 dark:hover:bg-gray-900/25 transition-all duration-500">
+        <div className="relative h-full w-full rounded-3xl bg-[var(--component-card)]/10 dark:bg-[var(--background-dark)]/20 backdrop-blur-xl border border-white/20 dark:border-[var(--border-strong)]/30 p-6 hover:bg-[var(--component-card)]/15 dark:hover:bg-[var(--background-dark)]/25 transition-all duration-500">
           
           {/* Medical Particle Effects */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             {[...Array(3)].map((_, i) => (
               <div
                 key={i}
-                className={`absolute w-1 h-1 bg-white/20 rounded-full animate-medical-particle`}
+                className={`absolute w-1 h-1 bg-[var(--component-card)]/20 rounded-full animate-medical-particle`}
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
@@ -157,7 +157,7 @@ export const ProfileStatsDashboard: React.FC = () => {
           <div className="flex items-center justify-between mb-4">
               <div 
                 ref={magneticRef as React.RefObject<HTMLDivElement>}
-                className="p-3 bg-white/20 backdrop-blur-sm rounded-2xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 filter-glow-blue"
+                className="p-3 bg-[var(--component-card)]/20 backdrop-blur-sm rounded-2xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 filter-glow-blue"
               >
               {icon}
             </div>
@@ -165,7 +165,7 @@ export const ProfileStatsDashboard: React.FC = () => {
                 <div className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm transition-all duration-300 ${
                   trend === 'up' ? 'bg-emerald-500/30 text-emerald-100 shadow-medical-glow-success' :
                   trend === 'down' ? 'bg-red-500/30 text-red-100' :
-                  'bg-gray-500/30 text-gray-100'
+                  'bg-[var(--muted-foreground)]/30 text-[var(--foreground)]'
                 } group-hover:scale-110`}>
                   {trend === 'up' ? (
                     <ChevronUp className="w-3 h-3 animate-bounce" />
@@ -180,17 +180,17 @@ export const ProfileStatsDashboard: React.FC = () => {
           </div>
           
             <div className="space-y-3">
-              <h3 className="text-white/90 text-sm font-medium leading-tight group-hover:text-white transition-colors duration-300">
+              <h3 className="text-[var(--foreground)]/90 text-sm font-medium leading-tight group-hover:text-[var(--foreground)] transition-colors duration-300">
                 {title}
               </h3>
               <div ref={counterRef as React.RefObject<HTMLDivElement>}>
-                <p className="text-white text-3xl font-bold tracking-tight group-hover:scale-110 transition-transform duration-300 animate-stats-counter">
+                <p className="text-[var(--foreground)] text-3xl font-bold tracking-tight group-hover:scale-110 transition-transform duration-300 animate-stats-counter">
                   {typeof value === 'number' ? currentValue.toLocaleString() : value}
                   {isAnimating && <Sparkles className="inline w-4 h-4 ml-1 text-yellow-300 animate-pulse" />}
                 </p>
               </div>
             {subtitle && (
-                <p className="text-white/70 text-xs leading-relaxed group-hover:text-white/80 transition-colors duration-300">
+                <p className="text-[var(--foreground)]/70 text-xs leading-relaxed group-hover:text-[var(--foreground)]/80 transition-colors duration-300">
                   {subtitle}
                 </p>
             )}
@@ -226,7 +226,7 @@ export const ProfileStatsDashboard: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-purple-800 to-indigo-900 opacity-90 animate-professional-gradient" />
         
         {/* Glass Morphism Layer */}
-        <div className="relative h-full w-full rounded-3xl bg-white/5 dark:bg-gray-900/10 backdrop-blur-xl border border-white/10 dark:border-gray-700/20 p-6 hover:bg-white/10 transition-all duration-500">
+        <div className="relative h-full w-full rounded-3xl bg-[var(--component-card)]/5 dark:bg-[var(--background-dark)]/10 backdrop-blur-xl border border-white/10 dark:border-[var(--border-strong)]/20 p-6 hover:bg-[var(--component-card)]/10 transition-all duration-500">
           
           {/* Medical Activity Particles */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -246,14 +246,14 @@ export const ProfileStatsDashboard: React.FC = () => {
 
           {/* Header Section */}
         <div className="flex items-center justify-between mb-6">
-            <h3 className="text-white text-lg font-semibold flex items-center space-x-3 group">
-              <div className="p-2 bg-white/20 backdrop-blur-sm rounded-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
-                <BarChart3 className="w-5 h-5 text-white" />
+            <h3 className="text-[var(--foreground)] text-lg font-semibold flex items-center space-x-3 group">
+              <div className="p-2 bg-[var(--component-card)]/20 backdrop-blur-sm rounded-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
+                <BarChart3 className="w-5 h-5 text-[var(--foreground)]" />
               </div>
               <span className="group-hover:text-purple-200 transition-colors duration-300">Weekly Activity</span>
           </h3>
             <div className="flex items-center space-x-3">
-          <div className="text-white/70 text-sm">Last 7 days</div>
+          <div className="text-[var(--foreground)]/70 text-sm">Last 7 days</div>
               <div className="w-2 h-2 bg-green-400 rounded-full animate-live-pulse" />
             </div>
         </div>
@@ -261,7 +261,7 @@ export const ProfileStatsDashboard: React.FC = () => {
           {/* Enhanced Chart */}
           <div 
             ref={containerRef as React.RefObject<HTMLDivElement>}
-            className="flex items-end justify-between h-40 space-x-3 p-4 bg-white/5 rounded-2xl backdrop-blur-sm"
+            className="flex items-end justify-between h-40 space-x-3 p-4 bg-[var(--component-card)]/5 rounded-2xl backdrop-blur-sm"
           >
           {stats.weeklyActivity.map((value, index) => (
               <div key={index} className="flex flex-col items-center space-y-3 flex-1 group">
@@ -277,12 +277,12 @@ export const ProfileStatsDashboard: React.FC = () => {
                 }}
               >
                     {/* Shimmer Effect */}
-                    <div className="absolute inset-0 bg-white/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-loading-shimmer" />
+                    <div className="absolute inset-0 bg-[var(--component-card)]/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-loading-shimmer" />
                     
                     {/* Value Tooltip */}
-                    <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900/90 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl border border-white/10">
+                    <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-[var(--background-dark)]/90 backdrop-blur-sm text-[var(--foreground)] text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl border border-white/10">
                       <span className="font-semibold">{value}</span>
-                      <div className="text-xs text-gray-300">sessions</div>
+                      <div className="text-xs text-[var(--foreground-secondary)]">sessions</div>
                       <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900/90" />
                     </div>
 
@@ -296,7 +296,7 @@ export const ProfileStatsDashboard: React.FC = () => {
                 </div>
                 
                 {/* Day Labels */}
-                <span className="text-white/60 text-xs font-medium group-hover:text-white/80 transition-colors duration-300">
+                <span className="text-[var(--foreground)]/60 text-xs font-medium group-hover:text-[var(--foreground)]/80 transition-colors duration-300">
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][index]}
               </span>
             </div>
@@ -308,14 +308,14 @@ export const ProfileStatsDashboard: React.FC = () => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-purple-400 rounded-full" />
-                <span className="text-white/70">Avg: {Math.round(stats.weeklyActivity.reduce((a, b) => a + b, 0) / 7)} sessions</span>
+                <span className="text-[var(--foreground)]/70">Avg: {Math.round(stats.weeklyActivity.reduce((a, b) => a + b, 0) / 7)} sessions</span>
       </div>
               <div className="flex items-center space-x-2">
                 <TrendingUp className="w-3 h-3 text-green-400" />
                 <span className="text-green-400 font-medium">+15% vs last week</span>
               </div>
             </div>
-            <div className="text-white/50">
+            <div className="text-[var(--foreground)]/50">
               Total: {stats.weeklyActivity.reduce((a, b) => a + b, 0)} sessions
             </div>
           </div>
@@ -337,7 +337,7 @@ export const ProfileStatsDashboard: React.FC = () => {
         <div className={`absolute inset-0 bg-gradient-to-br ${getProfessionalLevelColor(stats.professionalLevel)} opacity-80 animate-professional-gradient`} />
         
         {/* Glass Morphism Layer */}
-        <div className="relative h-full w-full rounded-3xl bg-white/10 dark:bg-gray-900/20 backdrop-blur-xl border border-white/20 dark:border-gray-700/30 p-6 hover:bg-white/15 transition-all duration-500">
+        <div className="relative h-full w-full rounded-3xl bg-[var(--component-card)]/10 dark:bg-[var(--background-dark)]/20 backdrop-blur-xl border border-white/20 dark:border-[var(--border-strong)]/30 p-6 hover:bg-[var(--component-card)]/15 transition-all duration-500">
           
           {/* Professional Achievement Particles */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -401,21 +401,21 @@ export const ProfileStatsDashboard: React.FC = () => {
 
               {/* Professional Avatar */}
               <div className={`relative w-20 h-20 mx-auto rounded-full bg-gradient-to-br ${getProfessionalLevelColor(stats.professionalLevel)} p-1 shadow-2xl group-hover:scale-110 transition-all duration-500`}>
-                <div className="w-full h-full rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center relative overflow-hidden">
-                  <Stethoscope className="w-8 h-8 text-white group-hover:rotate-12 transition-transform duration-500" />
+                <div className="w-full h-full rounded-full bg-[var(--component-card)]/20 backdrop-blur-sm flex items-center justify-center relative overflow-hidden">
+                  <Stethoscope className="w-8 h-8 text-[var(--foreground)] group-hover:rotate-12 transition-transform duration-500" />
                   {/* Shimmer Effect */}
-                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-loading-shimmer rounded-full" />
+                  <div className="absolute inset-0 bg-[var(--component-card)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-loading-shimmer rounded-full" />
                 </div>
               </div>
               
               {/* Achievement Badge */}
               <div className="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center shadow-lg animate-medical-badge-glow">
-                <Star className="w-4 h-4 text-white fill-current" />
+                <Star className="w-4 h-4 text-[var(--foreground)] fill-current" />
               </div>
 
               {/* Professional Score */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-white text-xs font-bold mt-1">
+                <span className="text-[var(--foreground)] text-xs font-bold mt-1">
                   {stats.specialtyScore}%
                 </span>
               </div>
@@ -423,20 +423,20 @@ export const ProfileStatsDashboard: React.FC = () => {
             
             {/* Professional Information */}
             <div className="space-y-2">
-              <h3 className="text-white text-xl font-bold group-hover:text-yellow-200 transition-colors duration-300">
+              <h3 className="text-[var(--foreground)] text-xl font-bold group-hover:text-yellow-200 transition-colors duration-300">
                 {stats.professionalLevel}
               </h3>
-              <p className="text-white/70 text-sm font-medium">Medical Professional</p>
+              <p className="text-[var(--foreground)]/70 text-sm font-medium">Medical Professional</p>
             </div>
             
             {/* Enhanced Score Display */}
             <div className="space-y-3">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/20">
-                <div className="text-white text-sm font-semibold mb-1">Specialty Score</div>
+              <div className="bg-[var(--component-card)]/10 backdrop-blur-sm rounded-2xl p-3 border border-white/20">
+                <div className="text-[var(--foreground)] text-sm font-semibold mb-1">Specialty Score</div>
                 <div className="flex items-center justify-between">
-                  <div className="text-white/80 text-xs">Professional Rating</div>
+                  <div className="text-[var(--foreground)]/80 text-xs">Professional Rating</div>
                   <div className="flex items-center space-x-2">
-                    <div className="text-white text-lg font-bold">{stats.specialtyScore}%</div>
+                    <div className="text-[var(--foreground)] text-lg font-bold">{stats.specialtyScore}%</div>
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-live-pulse" />
                   </div>
                 </div>
@@ -444,11 +444,11 @@ export const ProfileStatsDashboard: React.FC = () => {
 
               {/* Professional Badges */}
               <div className="flex items-center justify-center space-x-2">
-                <div className="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-lg text-white text-xs font-medium border border-white/10">
+                <div className="px-2 py-1 bg-[var(--component-card)]/20 backdrop-blur-sm rounded-lg text-[var(--foreground)] text-xs font-medium border border-white/10">
                   <ShieldCheck className="w-3 h-3 inline mr-1" />
                   Verified
                 </div>
-                <div className="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-lg text-white text-xs font-medium border border-white/10">
+                <div className="px-2 py-1 bg-[var(--component-card)]/20 backdrop-blur-sm rounded-lg text-[var(--foreground)] text-xs font-medium border border-white/10">
                   <Award className="w-3 h-3 inline mr-1" />
                   Expert
                 </div>
@@ -465,7 +465,7 @@ export const ProfileStatsDashboard: React.FC = () => {
       {/* Main Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
         <StatCard
-          icon={<Target className="w-5 h-5 text-white animate-live-pulse" />}
+          icon={<Target className="w-5 h-5 text-[var(--foreground)] animate-live-pulse" />}
           title="Profile Complete"
           value={`${stats.profileCompletion}%`}
           subtitle="Almost there! Add more details"
@@ -478,7 +478,7 @@ export const ProfileStatsDashboard: React.FC = () => {
         />
         
         <StatCard
-          icon={<Calendar className="w-5 h-5 text-white animate-pulse" />}
+          icon={<Calendar className="w-5 h-5 text-[var(--foreground)] animate-pulse" />}
           title="Member Since"
           value={`${stats.accountAge} days`}
           subtitle={`Last active ${formatLastActive(stats.lastActiveDate)}`}
@@ -489,7 +489,7 @@ export const ProfileStatsDashboard: React.FC = () => {
         />
         
         <StatCard
-          icon={<Zap className="w-5 h-5 text-white animate-bounce" />}
+          icon={<Zap className="w-5 h-5 text-[var(--foreground)] animate-bounce" />}
           title="Calculations Used"
           value={stats.calculationsUsed}
           subtitle="Medical calculators accessed"
@@ -502,7 +502,7 @@ export const ProfileStatsDashboard: React.FC = () => {
         />
         
         <StatCard
-          icon={<Brain className="w-5 h-5 text-white animate-pulse" />}
+          icon={<Brain className="w-5 h-5 text-[var(--foreground)] animate-pulse" />}
           title="AI Consultations"
           value={stats.aiConsultations}
           subtitle="Expert AI conversations"
@@ -518,7 +518,7 @@ export const ProfileStatsDashboard: React.FC = () => {
       {/* Extended Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 lg:gap-6">
         <StatCard
-          icon={<BookOpen className="w-5 h-5 text-white animate-float" />}
+          icon={<BookOpen className="w-5 h-5 text-[var(--foreground)] animate-float" />}
           title="Documents"
           value={stats.documentsProcessed}
           subtitle="Files processed"
@@ -529,7 +529,7 @@ export const ProfileStatsDashboard: React.FC = () => {
         />
         
         <StatCard
-          icon={<Award className="w-5 h-5 text-white animate-medical-badge-glow" />}
+          icon={<Award className="w-5 h-5 text-[var(--foreground)] animate-medical-badge-glow" />}
           title="Achievements"
           value={stats.achievements}
           subtitle="Professional badges"

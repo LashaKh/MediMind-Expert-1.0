@@ -21,28 +21,28 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
   const { t } = useTranslation();
 
   return (
-    <div className={`p-4 sm:p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200 group ${isChunkItem ? 'pl-8 bg-gray-25 dark:bg-gray-800' : ''}`}>
+    <div className={`p-4 sm:p-6 hover:bg-[var(--component-surface-primary)] dark:hover:bg-[var(--card)]/50 transition-all duration-200 group ${isChunkItem ? 'pl-8 bg-gray-25 dark:bg-[var(--background)]' : ''}`}>
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-3 sm:space-x-4 flex-1 min-w-0">
           {/* File Icon */}
           <div className="flex-shrink-0 mt-1">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex items-center justify-center group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors duration-200">
-              <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 rounded-lg flex items-center justify-center group-hover:bg-[var(--cardiology-accent-blue-light)] dark:group-hover:bg-[var(--cardiology-accent-blue-darker)]/30 transition-colors duration-200">
+              <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
             </div>
           </div>
 
           {/* Document Info */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-primary transition-colors duration-200">
+            <h3 className="text-base sm:text-lg font-medium text-[var(--foreground)] dark:text-[var(--foreground)] truncate group-hover:text-primary transition-colors duration-200">
               {document.title}
             </h3>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 break-all sm:break-normal">
+            <p className="text-xs sm:text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mt-1 break-all sm:break-normal">
               <span className="font-medium">{document.file_name}</span>
               <span className="hidden sm:inline"> • </span>
               <span className="block sm:inline">{document.formattedSize} • {document.formattedDate}</span>
             </p>
             {document.description && (
-              <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 line-clamp-2">
+              <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2 line-clamp-2">
                 {document.description}
               </p>
             )}
@@ -53,13 +53,13 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
                 {document.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors duration-150"
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[var(--cardiology-accent-blue-light)] text-blue-800 dark:bg-[var(--cardiology-accent-blue-darker)] dark:text-blue-200 hover:bg-[var(--cardiology-accent-blue-medium)] dark:hover:bg-[var(--cardiology-accent-blue-darker)] transition-colors duration-150"
                   >
                     {tag}
                   </span>
                 ))}
                 {document.tags.length > 3 && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] dark:bg-[var(--card)] dark:text-[var(--foreground-secondary)]">
                     {t('documents.item.moreTagsIndicator', { count: (document.tags.length - 3).toString() })}
                   </span>
                 )}
@@ -100,7 +100,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
               title={t('documents.item.viewDetails')}
               onClick={onView}
               disabled={document.processing_status === 'processing'}
-              className="p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+              className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--cardiology-accent-blue-dark)] dark:hover:text-blue-400 hover:bg-[var(--cardiology-accent-blue-light)] dark:hover:bg-[var(--cardiology-accent-blue-darker)]/20 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:ring-offset-1"
               aria-label={t('documents.item.viewDetails')}
             >
               <Eye className="w-4 h-4" />
@@ -109,7 +109,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
               title={t('documents.item.downloadDocument')}
               onClick={onDownload}
               disabled={document.processing_status === 'processing'}
-              className="p-2 text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1"
+              className="p-2 text-[var(--foreground-secondary)] hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1"
               aria-label={t('documents.item.downloadDocument')}
             >
               <Download className="w-4 h-4" />
@@ -118,7 +118,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
               title={t('documents.item.deleteDocument')}
               onClick={onDelete}
               disabled={!document.canDelete}
-              className="p-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1"
+              className="p-2 text-[var(--foreground-secondary)] hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1"
               aria-label={t('documents.item.deleteDocument')}
             >
               <Trash2 className="w-4 h-4" />

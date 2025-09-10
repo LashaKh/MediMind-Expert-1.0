@@ -310,7 +310,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
           width: 320px !important;
           max-width: calc(100vw - 40px) !important;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-          color: #ffffff !important;
+          color: var(--foreground) !important;
           z-index: 999999999 !important;
           padding: 16px !important;
           font-size: 14px !important;
@@ -660,7 +660,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
             <div className="relative p-6">
               {/* Decorative element */}
               <div className="absolute top-4 right-4 opacity-20">
-                <Sparkles className="w-6 h-6 text-blue-500" />
+                <Sparkles className="w-6 h-6 text-[var(--cardiology-accent-blue)]" />
               </div>
 
               {/* Header */}
@@ -668,12 +668,12 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
                 <div className="flex-1">
                   <h3 
                     id="tour-title"
-                    className="text-xl font-bold text-gray-900 dark:text-white mb-2 leading-tight"
+                    className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2 leading-tight"
                   >
                     {title}
                   </h3>
                   <div className="flex items-center space-x-3">
-                    <span className="tour-step-counter inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
+                    <span className="tour-step-counter inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 text-blue-800 dark:text-blue-200">
                       {t('tour.tooltip.stepCounter', { current: currentStep + 1, total: totalSteps })}
                     </span>
                     <div className="tour-progress-dots">
@@ -691,7 +691,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
                 
                 <button
                   onClick={onClose}
-                  className="tour-button p-2 rounded-full text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                  className="tour-button p-2 rounded-full text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] dark:hover:text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--background)] transition-all duration-200"
                   aria-label={t('tour.tooltip.close', 'Close tour')}
                 >
                   <X className="w-5 h-5" />
@@ -701,20 +701,20 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
               {/* Content */}
               <div 
                 id="tour-content"
-                className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed text-base"
+                className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-6 leading-relaxed text-base"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
 
               {/* Mobile swipe hint */}
               {isMobile && (
-                <div className="flex items-center justify-center mb-4 py-2 px-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <svg className="w-4 h-4 text-blue-600 dark:text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center justify-center mb-4 py-2 px-3 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 rounded-lg">
+                  <svg className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
                   </svg>
-                  <span className="text-xs text-blue-700 dark:text-blue-300 font-medium">
+                  <span className="text-xs text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 font-medium">
                     {t('tour.tooltip.swipeHint', 'Swipe left/right to navigate')}
                   </span>
-                  <svg className="w-4 h-4 text-blue-600 dark:text-blue-400 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </div>
@@ -722,12 +722,12 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
 
               {/* Enhanced Progress Bar */}
               <div className="mb-6">
-                <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
+                <div className="flex justify-between items-center text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mb-3">
                   <span className="font-medium">{t('tour.tooltip.progressLabel', 'Progress')}</span>
                   <span className="font-bold">{Math.round(progress)}%</span>
                 </div>
                 <div className="relative">
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                  <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-3 overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${progress}%` }}
@@ -748,7 +748,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={onPrevious}
-                      className="tour-button flex items-center px-4 py-2.5 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all duration-200 font-medium"
+                      className="tour-button flex items-center px-4 py-2.5 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:text-[var(--foreground)] dark:hover:text-[var(--foreground)] hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--background)] rounded-xl transition-all duration-200 font-medium"
                     >
                       <ArrowLeft className="w-4 h-4 mr-2" />
                       {t('tour.tooltip.previous', 'Previous')}
@@ -762,7 +762,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={onSkip}
-                      className="tour-button px-4 py-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-all duration-200 font-medium"
+                      className="tour-button px-4 py-2.5 text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] dark:hover:text-[var(--foreground)] transition-all duration-200 font-medium"
                     >
                       {t('tour.tooltip.skip', 'Skip Tour')}
                     </motion.button>
@@ -772,7 +772,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={onNext}
-                    className="tour-button flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
+                    className="tour-button flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-[var(--foreground)] rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
                   >
                     {isLastStep ? (
                       <>

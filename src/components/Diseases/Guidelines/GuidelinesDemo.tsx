@@ -57,29 +57,29 @@ The following guidelines are sourced from multiple international cardiology soci
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
           Guidelines Renderer Demo
         </h1>
-        <p className="text-gray-600 dark:text-gray-300">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           Showcasing the enhanced guidelines section rendering with beautiful UI/UX
         </p>
       </div>
 
       <div className="space-y-8">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+          <h2 className="text-2xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
             User's Actual Content Format (Fixed)
           </h2>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <div className="border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-lg p-4">
             <GuidelinesRenderer content={userActualContent} />
           </div>
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+          <h2 className="text-2xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
             Enhanced Guidelines Example
           </h2>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <div className="border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-lg p-4">
             <GuidelinesRenderer content={markdownContent} />
           </div>
         </div>

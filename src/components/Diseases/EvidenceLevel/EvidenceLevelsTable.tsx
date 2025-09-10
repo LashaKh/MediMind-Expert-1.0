@@ -53,7 +53,7 @@ const evidenceLevelsData: EvidenceLevelData[] = [
     clinicalApplication: 'Moderate recommendations with clinical judgment',
     color: 'text-blue-800',
     bgColor: 'from-blue-50 to-sky-50',
-    borderColor: 'border-blue-300',
+    borderColor: 'border-[var(--cardiology-accent-blue)]',
     icon: CheckCircle
   },
   {
@@ -87,9 +87,9 @@ const evidenceLevelsData: EvidenceLevelData[] = [
     description: 'A preponderance of evidence from animal or cadaver studies, conceptual models/principles, or basic sciences/bench research.',
     studyTypes: 'Animal studies, theoretical models, bench research',
     clinicalApplication: 'Guidance only, requires clinical validation',
-    color: 'text-slate-800',
+    color: 'text-[var(--foreground)]',
     bgColor: 'from-slate-50 to-gray-50',
-    borderColor: 'border-slate-300',
+    borderColor: 'border-[var(--glass-border-medium)]',
     icon: Lightbulb
   },
   {
@@ -194,20 +194,20 @@ const EvidenceLevelsTable: React.FC = () => {
       {/* Collapsible Header */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 rounded-xl p-4 text-white hover:from-indigo-700 hover:via-purple-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 rounded-xl p-4 text-[var(--foreground)] hover:from-indigo-700 hover:via-purple-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         aria-expanded={isOpen}
         aria-controls="evidence-levels-content"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-white/20 rounded-lg">
+            <div className="p-2 bg-[var(--component-card)]/20 rounded-lg">
               <Info className="w-5 h-5" />
             </div>
             <div className="text-left">
               <h2 className="text-xl font-bold">
                 {isOpen ? slides[currentSlide].title : 'Evidence-Based Medicine Reference'}
               </h2>
-              <p className="text-white/80 text-sm">
+              <p className="text-[var(--foreground)]/80 text-sm">
                 {isOpen 
                   ? `${slides[currentSlide].subtitle} - Click to hide` 
                   : 'Click to view evidence levels, Oxford CEBM standards & clinical guidelines'
@@ -217,11 +217,11 @@ const EvidenceLevelsTable: React.FC = () => {
           </div>
           
           <div className="flex items-center space-x-2">
-            <div className="text-right text-xs text-white/70">
+            <div className="text-right text-xs text-[var(--foreground)]/70">
               <div>6 Evidence Levels</div>
               <div>3 Reference Tables</div>
             </div>
-            <div className="p-2 bg-white/20 rounded-lg">
+            <div className="p-2 bg-[var(--component-card)]/20 rounded-lg">
               {isOpen ? (
                 <ChevronUp className="w-5 h-5 transition-transform duration-200" />
               ) : (
@@ -240,13 +240,13 @@ const EvidenceLevelsTable: React.FC = () => {
         }`}
       >
         {isOpen && (
-          <div className="bg-white border-x border-b border-indigo-200 rounded-b-xl shadow-xl">
+          <div className="bg-[var(--component-card)] border-x border-b border-indigo-200 rounded-b-xl shadow-xl">
             {/* Navigation Header for Slides */}
-            <div className={`bg-gradient-to-r ${slides[currentSlide].color} p-4 text-white relative overflow-hidden border-b border-white/20`}>
+            <div className={`bg-gradient-to-r ${slides[currentSlide].color} p-4 text-[var(--foreground)] relative overflow-hidden border-b border-white/20`}>
               <div className="flex items-center justify-between">
                 {/* Icon Section */}
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-white/20 rounded-lg">
+                  <div className="p-2 bg-[var(--component-card)]/20 rounded-lg">
                     {React.createElement(slides[currentSlide].icon, { className: "w-5 h-5" })}
                   </div>
                 </div>
@@ -255,7 +255,7 @@ const EvidenceLevelsTable: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={prevSlide}
-                    className="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-all duration-200 hover:scale-105"
+                    className="p-2 bg-[var(--component-card)]/20 hover:bg-[var(--component-card)]/30 rounded-lg transition-all duration-200 hover:scale-105"
                     aria-label="Previous slide"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -269,8 +269,8 @@ const EvidenceLevelsTable: React.FC = () => {
                         onClick={() => goToSlide(index)}
                         className={`w-2 h-2 rounded-full transition-all duration-200 ${
                           index === currentSlide 
-                            ? 'bg-white scale-125' 
-                            : 'bg-white/50 hover:bg-white/70'
+                            ? 'bg-[var(--component-card)] scale-125' 
+                            : 'bg-[var(--component-card)]/50 hover:bg-[var(--component-card)]/70'
                         }`}
                         aria-label={`Go to slide ${index + 1}`}
                       />
@@ -279,7 +279,7 @@ const EvidenceLevelsTable: React.FC = () => {
                   
                   <button
                     onClick={nextSlide}
-                    className="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-all duration-200 hover:scale-105"
+                    className="p-2 bg-[var(--component-card)]/20 hover:bg-[var(--component-card)]/30 rounded-lg transition-all duration-200 hover:scale-105"
                     aria-label="Next slide"
                   >
                     <ChevronRight className="w-5 h-5" />
@@ -288,16 +288,16 @@ const EvidenceLevelsTable: React.FC = () => {
               </div>
 
               {/* Progress Bar */}
-              <div className="absolute bottom-0 left-0 h-1 bg-white/20 w-full">
+              <div className="absolute bottom-0 left-0 h-1 bg-[var(--component-card)]/20 w-full">
                 <div 
-                  className="h-full bg-white transition-all duration-300 ease-out"
+                  className="h-full bg-[var(--component-card)] transition-all duration-300 ease-out"
                   style={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }}
                 />
               </div>
             </div>
 
       {/* Sliding Content Container */}
-      <div className="bg-white rounded-b-xl shadow-xl overflow-hidden border border-indigo-200 relative">
+      <div className="bg-[var(--component-card)] rounded-b-xl shadow-xl overflow-hidden border border-indigo-200 relative">
         <div className="overflow-hidden">
           <div 
             className="flex transition-transform duration-500 ease-in-out"
@@ -308,7 +308,7 @@ const EvidenceLevelsTable: React.FC = () => {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-gradient-to-r from-gray-800 to-slate-700 text-white">
+                    <tr className="bg-gradient-to-r from-gray-800 to-slate-700 text-[var(--foreground)]">
                       <th className="px-4 py-3 text-left font-bold text-sm uppercase tracking-wider">
                         Evidence Level
                       </th>
@@ -330,7 +330,7 @@ const EvidenceLevelsTable: React.FC = () => {
                         <tr 
                           key={evidence.level}
                           className={`group hover:shadow-lg transition-all duration-300 ${
-                            index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+                            index % 2 === 0 ? 'bg-[var(--component-surface-primary)]' : 'bg-[var(--component-card)]'
                           } hover:bg-gradient-to-r hover:${evidence.bgColor}`}
                         >
                           <td className="px-4 py-4">
@@ -359,16 +359,16 @@ const EvidenceLevelsTable: React.FC = () => {
                           </td>
                           <td className="px-4 py-4">
                             <div className="space-y-2">
-                              <p className="text-gray-800 font-medium leading-relaxed">
+                              <p className="text-[var(--foreground)] font-medium leading-relaxed">
                                 {evidence.studyTypes}
                               </p>
-                              <p className="text-gray-600 text-sm leading-relaxed">
+                              <p className="text-[var(--foreground-tertiary)] text-sm leading-relaxed">
                                 {evidence.description}
                               </p>
                             </div>
                           </td>
                           <td className="px-4 py-4">
-                            <p className="text-gray-700 font-medium leading-relaxed">
+                            <p className="text-[var(--foreground-tertiary)] font-medium leading-relaxed">
                               {evidence.clinicalApplication}
                             </p>
                           </td>
@@ -387,7 +387,7 @@ const EvidenceLevelsTable: React.FC = () => {
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
+                        <tr className="bg-gradient-to-r from-blue-700 to-indigo-700 text-[var(--foreground)]">
                           <th className="px-4 py-3 text-left font-bold text-sm">Level</th>
                           <th className="px-4 py-3 text-left font-bold text-sm">Therapy/Prevention</th>
                           <th className="px-4 py-3 text-left font-bold text-sm">Prognosis</th>
@@ -398,20 +398,20 @@ const EvidenceLevelsTable: React.FC = () => {
                         {oxfordLevelsData.map((level, index) => (
                           <tr 
                             key={level.level}
-                            className={`${index % 2 === 0 ? 'bg-white' : 'bg-blue-50/50'} hover:bg-blue-100 transition-colors`}
+                            className={`${index % 2 === 0 ? 'bg-[var(--component-card)]' : 'bg-[var(--cardiology-accent-blue-light)]/50'} hover:bg-[var(--cardiology-accent-blue-light)] transition-colors`}
                           >
                             <td className="px-4 py-4">
-                              <span className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-lg shadow-md">
+                              <span className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 text-[var(--foreground)] font-bold rounded-lg shadow-md">
                                 {level.level}
                               </span>
                             </td>
-                            <td className="px-4 py-4 text-gray-800 leading-relaxed">
+                            <td className="px-4 py-4 text-[var(--foreground)] leading-relaxed">
                               {level.therapy}
                             </td>
-                            <td className="px-4 py-4 text-gray-800 leading-relaxed">
+                            <td className="px-4 py-4 text-[var(--foreground)] leading-relaxed">
                               {level.prognosis}
                             </td>
-                            <td className="px-4 py-4 text-gray-800 leading-relaxed">
+                            <td className="px-4 py-4 text-[var(--foreground)] leading-relaxed">
                               {level.diagnosis}
                             </td>
                           </tr>
@@ -431,35 +431,35 @@ const EvidenceLevelsTable: React.FC = () => {
                   <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-200 p-6 shadow-lg">
                     <div className="flex items-center space-x-3 mb-4">
                       <div className="p-2 bg-indigo-600 rounded-lg">
-                        <BookOpen className="w-6 h-6 text-white" />
+                        <BookOpen className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <h3 className="text-xl font-bold text-indigo-900">Clinical Significance</h3>
                     </div>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-[var(--foreground-tertiary)] leading-relaxed">
                       Levels of evidence help target your search at the type of evidence most likely to provide a reliable answer. 
                       Designed as a shortcut for busy clinicians, researchers, and patients to find the likely best evidence.
                     </p>
                   </div>
 
                   {/* Abbreviations */}
-                  <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl border border-gray-200 p-6 shadow-lg">
+                  <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl border border-[var(--glass-border-light)] p-6 shadow-lg">
                     <div className="flex items-center space-x-3 mb-4">
-                      <div className="p-2 bg-gray-600 rounded-lg">
-                        <FileText className="w-6 h-6 text-white" />
+                      <div className="p-2 bg-[var(--border)] rounded-lg">
+                        <FileText className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
-                      <h3 className="text-xl font-bold text-gray-900">Key Abbreviations</h3>
+                      <h3 className="text-xl font-bold text-[var(--foreground)]">Key Abbreviations</h3>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <p className="text-gray-700"><strong>SR:</strong> Systematic Review</p>
-                        <p className="text-gray-700"><strong>RCT:</strong> Randomised Controlled Trial</p>
-                        <p className="text-gray-700"><strong>CDR:</strong> Clinical Decision Rule</p>
-                        <p className="text-gray-700"><strong>CI:</strong> Confidence Interval</p>
+                        <p className="text-[var(--foreground-tertiary)]"><strong>SR:</strong> Systematic Review</p>
+                        <p className="text-[var(--foreground-tertiary)]"><strong>RCT:</strong> Randomised Controlled Trial</p>
+                        <p className="text-[var(--foreground-tertiary)]"><strong>CDR:</strong> Clinical Decision Rule</p>
+                        <p className="text-[var(--foreground-tertiary)]"><strong>CI:</strong> Confidence Interval</p>
                       </div>
                       <div className="space-y-2">
-                        <p className="text-gray-700"><strong>SpPin:</strong> Specific test rules in</p>
-                        <p className="text-gray-700"><strong>SnNout:</strong> Sensitive test rules out</p>
-                        <p className="text-gray-700"><strong>CEBM:</strong> Centre for Evidence-based Medicine</p>
+                        <p className="text-[var(--foreground-tertiary)]"><strong>SpPin:</strong> Specific test rules in</p>
+                        <p className="text-[var(--foreground-tertiary)]"><strong>SnNout:</strong> Sensitive test rules out</p>
+                        <p className="text-[var(--foreground-tertiary)]"><strong>CEBM:</strong> Centre for Evidence-based Medicine</p>
                       </div>
                     </div>
                   </div>
@@ -468,11 +468,11 @@ const EvidenceLevelsTable: React.FC = () => {
                   <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200 p-6 shadow-lg">
                     <div className="flex items-center space-x-3 mb-4">
                       <div className="p-2 bg-amber-600 rounded-lg">
-                        <Activity className="w-6 h-6 text-white" />
+                        <Activity className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <h3 className="text-xl font-bold text-amber-900">Clinical Application</h3>
                     </div>
-                    <blockquote className="text-gray-700 italic leading-relaxed border-l-4 border-amber-400 pl-4">
+                    <blockquote className="text-[var(--foreground-tertiary)] italic leading-relaxed border-l-4 border-amber-400 pl-4">
                       "What are we to do when the irresistible force of the need to offer clinical advice meets 
                       the immovable object of flawed evidence? All we can do is our best: give the advice, but alert 
                       the advisees to the flaws in the evidence on which it is based."

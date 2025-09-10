@@ -42,7 +42,7 @@ export const CaseIndicator: React.FC<CaseIndicatorProps> = ({
       case 'high':
         return 'bg-red-100 text-red-800 border-red-200';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-[var(--component-surface-secondary)] text-[var(--foreground)] border-[var(--glass-border-light)]';
     }
   };
 
@@ -66,7 +66,7 @@ export const CaseIndicator: React.FC<CaseIndicatorProps> = ({
       <div className="relative z-10 flex items-start justify-between">
         <div className="flex items-start space-x-3 flex-1">
           <div className="relative">
-            <FileText className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <FileText className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] mt-0.5 flex-shrink-0" />
             <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
           </div>
           
@@ -85,17 +85,17 @@ export const CaseIndicator: React.FC<CaseIndicatorProps> = ({
               )}
             </div>
             
-            <p className="text-xs text-blue-700/80 line-clamp-2 mb-3">
+            <p className="text-xs text-[var(--cardiology-accent-blue-dark)]/80 line-clamp-2 mb-3">
               {activeCase.description}
             </p>
             
             {/* Progress indicator */}
             <div className="mb-3">
-              <div className="flex items-center justify-between text-xs text-blue-600 mb-1">
+              <div className="flex items-center justify-between text-xs text-[var(--cardiology-accent-blue-dark)] mb-1">
                 <span className="font-medium">Case Progress</span>
                 <span>{progress}%</span>
               </div>
-              <div className="w-full bg-blue-100 rounded-full h-1.5">
+              <div className="w-full bg-[var(--cardiology-accent-blue-light)] rounded-full h-1.5">
                 <div 
                   className="bg-gradient-to-r from-blue-500 to-indigo-500 h-1.5 rounded-full transition-all duration-1000"
                   style={{ width: `${progress}%` }}
@@ -109,7 +109,7 @@ export const CaseIndicator: React.FC<CaseIndicatorProps> = ({
                   <Badge 
                     key={index} 
                     variant="outline" 
-                    className="text-xs bg-blue-100/50 text-blue-700 border-blue-300/50 backdrop-blur-sm"
+                    className="text-xs bg-[var(--cardiology-accent-blue-light)]/50 text-[var(--cardiology-accent-blue-dark)] border-[var(--cardiology-accent-blue)]/50 backdrop-blur-sm"
                   >
                     {tag}
                   </Badge>
@@ -117,7 +117,7 @@ export const CaseIndicator: React.FC<CaseIndicatorProps> = ({
                 {activeCase.metadata.tags.length > 3 && (
                   <Badge 
                     variant="outline" 
-                    className="text-xs bg-blue-100/50 text-blue-700 border-blue-300/50 backdrop-blur-sm"
+                    className="text-xs bg-[var(--cardiology-accent-blue-light)]/50 text-[var(--cardiology-accent-blue-dark)] border-[var(--cardiology-accent-blue)]/50 backdrop-blur-sm"
                   >
                     +{activeCase.metadata.tags.length - 3}
                   </Badge>
@@ -143,9 +143,9 @@ export const CaseIndicator: React.FC<CaseIndicatorProps> = ({
               }}
               className="
                 group relative p-2 h-9 w-9 rounded-xl 
-                bg-blue-100/50 hover:bg-blue-200/70 
-                text-blue-600 hover:text-blue-800 
-                border border-blue-200/50 hover:border-blue-300
+                bg-[var(--cardiology-accent-blue-light)]/50 hover:bg-[var(--cardiology-accent-blue-medium)]/70 
+                text-[var(--cardiology-accent-blue-dark)] hover:text-blue-800 
+                border border-blue-200/50 hover:border-[var(--cardiology-accent-blue)]
                 transition-all duration-200 hover:scale-105
                 backdrop-blur-sm shadow-lg hover:shadow-xl
               "
@@ -184,7 +184,7 @@ export const CaseIndicator: React.FC<CaseIndicatorProps> = ({
       </div>
       
       {/* Case metadata footer */}
-      <div className="relative z-10 mt-3 pt-3 border-t border-blue-200/30 text-xs text-blue-600/80">
+      <div className="relative z-10 mt-3 pt-3 border-t border-blue-200/30 text-xs text-[var(--cardiology-accent-blue-dark)]/80">
         <div className="flex items-center justify-between">
           <span className="font-medium">{t('case.activeCase')}</span>
           <span>Created {activeCase.createdAt.toLocaleDateString()}</span>

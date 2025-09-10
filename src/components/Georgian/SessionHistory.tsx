@@ -258,10 +258,10 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'complete': return 'text-emerald-500';
-      case 'transcribed': return 'text-blue-500';
-      case 'recent': return 'text-amber-500';
-      default: return 'text-slate-400';
+      case 'complete': return 'text-[var(--cardiology-accent-emerald)]';
+      case 'transcribed': return 'text-[var(--cardiology-accent-blue)]';
+      case 'recent': return 'text-[var(--cardiology-accent-orange)]';
+      default: return 'text-[var(--foreground-secondary)]';
     }
   };
 
@@ -337,7 +337,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
               <div className={`
                 relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200
                 ${isActive 
-                  ? 'bg-medical-blue-600 text-white' 
+                  ? 'bg-medical-blue-600 text-[var(--foreground)]' 
                   : 'bg-medical-gray-100 dark:bg-medical-gray-600 text-medical-gray-600 dark:text-medical-gray-300 group-hover:bg-medical-blue-100 dark:group-hover:bg-medical-blue-900/30'
                 }
               `}>
@@ -345,13 +345,13 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 
                 {/* Active indicator */}
                 {isActive && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white dark:border-medical-gray-800" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[var(--cardiology-accent-emerald)] rounded-full border-2 border-white dark:border-[var(--foreground-secondary)]" />
                 )}
                 
                 {/* Favorite star */}
                 {isFavorite && (
                   <div className="absolute -top-1 -left-1 w-4 h-4 bg-amber-500 rounded-full flex items-center justify-center">
-                    <Star className="w-2 h-2 text-white fill-current" />
+                    <Star className="w-2 h-2 text-[var(--foreground)] fill-current" />
                   </div>
                 )}
               </div>
@@ -380,7 +380,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 {/* Compact status badges */}
                 <div className="flex items-center space-x-1 mt-2">
                   {session.transcript && (
-                    <span className="px-2 py-0.5 text-xs font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-lg">
+                    <span className="px-2 py-0.5 text-xs font-medium bg-[var(--badge-success)] text-[var(--badge-success-foreground)] rounded-lg">
                       Transcribed
                     </span>
                   )}
@@ -468,7 +468,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   return (
     <div className="h-full flex flex-col overflow-hidden bg-gradient-to-br from-slate-50/50 via-white to-blue-50/30 dark:from-gray-900/50 dark:via-gray-800 dark:to-blue-900/10">
       {/* Clean Compact Header */}
-      <div className="relative bg-white/90 dark:bg-medical-gray-800/90 backdrop-blur-xl border-b border-medical-gray-200/50 dark:border-medical-gray-700/50 p-4 shadow-sm">
+      <div className="relative bg-[var(--component-card)]/90 dark:bg-medical-gray-800/90 backdrop-blur-xl border-b border-medical-gray-200/50 dark:border-medical-gray-700/50 p-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
@@ -476,8 +476,8 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
               className={`
                 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md
                 ${isHistoryCollapsed 
-                  ? 'bg-medical-gray-600 text-white hover:bg-medical-gray-700' 
-                  : 'bg-medical-blue-600 text-white hover:bg-medical-blue-700'
+                  ? 'bg-medical-gray-600 text-[var(--foreground)] hover:bg-medical-gray-700' 
+                  : 'bg-medical-blue-600 text-[var(--foreground)] hover:bg-medical-blue-700'
                 }
               `}
               title={isHistoryCollapsed ? "Expand sessions" : "Collapse sessions"}
@@ -490,7 +490,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             </button>
             
             <div>
-              <h2 className="text-lg font-bold text-medical-gray-900 dark:text-white">
+              <h2 className="text-lg font-bold text-medical-gray-900 dark:text-[var(--foreground)]">
                 History
               </h2>
               <p className="text-sm text-medical-gray-600 dark:text-medical-gray-400">
@@ -526,7 +526,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   placeholder="Search sessions..."
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
-                  className="pl-10 pr-10 h-10 bg-white/80 dark:bg-medical-gray-700/80 border-medical-gray-200 dark:border-medical-gray-600 rounded-xl text-sm"
+                  className="pl-10 pr-10 h-10 bg-[var(--component-card)]/80 dark:bg-medical-gray-700/80 border-medical-gray-200 dark:border-medical-gray-600 rounded-xl text-sm"
                   size="sm"
                 />
                 {searchQuery && (
@@ -548,7 +548,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                     className={`
                       px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 capitalize
                       ${filterBy === filter
-                        ? 'bg-medical-blue-600 text-white shadow-sm'
+                        ? 'bg-medical-blue-600 text-[var(--foreground)] shadow-sm'
                         : 'text-medical-gray-600 dark:text-medical-gray-400 hover:text-medical-blue-600 dark:hover:text-medical-blue-400 hover:bg-medical-blue-50 dark:hover:bg-medical-blue-900/30'
                       }
                     `}
@@ -585,11 +585,11 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   <Stethoscope className="w-12 h-12 text-medical-blue-600 dark:text-medical-blue-400" />
                 </div>
                 <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-white" />
+                  <Sparkles className="w-4 h-4 text-[var(--foreground)]" />
                 </div>
               </div>
               
-              <h3 className="text-2xl font-bold text-medical-gray-900 dark:text-white mb-3">
+              <h3 className="text-2xl font-bold text-medical-gray-900 dark:text-[var(--foreground)] mb-3">
                 {searchQuery || filterBy !== 'all' ? 'No Sessions Found' : 'Ready to Begin'}
               </h3>
               <p className="text-medical-gray-600 dark:text-medical-gray-400 text-center mb-8 max-w-md leading-relaxed">
@@ -617,7 +617,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 <div key={groupName}>
                   {/* Compact Group Header */}
                   <div className="flex items-center space-x-3 mb-3">
-                    <h4 className="text-sm font-bold text-medical-gray-900 dark:text-white">
+                    <h4 className="text-sm font-bold text-medical-gray-900 dark:text-[var(--foreground)]">
                       {groupName}
                     </h4>
                     <div className="h-px flex-1 bg-gradient-to-r from-medical-gray-300 via-medical-gray-200 to-transparent dark:from-medical-gray-600 dark:via-medical-gray-700 dark:to-transparent" />
@@ -644,7 +644,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
 
       {/* Compact Footer - Only show when expanded */}
       {!isHistoryCollapsed && (
-        <div className="relative px-4 py-2 bg-white/80 dark:bg-medical-gray-800/80 border-t border-medical-gray-200/50 dark:border-medical-gray-700/50">
+        <div className="relative px-4 py-2 bg-[var(--component-card)]/80 dark:bg-medical-gray-800/80 border-t border-medical-gray-200/50 dark:border-medical-gray-700/50">
           <div className="flex items-center justify-center text-xs text-medical-gray-500 dark:text-medical-gray-400">
             <span>{sessions.length} sessions • </span>
             <Shield className="w-3 h-3 mx-1 text-emerald-500" />
@@ -664,7 +664,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             }} 
           />
           <div 
-            className="fixed z-[10000] w-48 bg-white dark:bg-medical-gray-800 border border-medical-gray-200 dark:border-medical-gray-700 rounded-xl shadow-2xl"
+            className="fixed z-[10000] w-48 bg-[var(--component-card)] dark:bg-medical-gray-800 border border-medical-gray-200 dark:border-medical-gray-700 rounded-xl shadow-2xl"
             style={{
               top: dropdownPosition.top,
               left: dropdownPosition.left
@@ -694,7 +694,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   setActiveDropdown(null);
                   setDropdownPosition(null);
                 }}
-                className="w-full px-3 py-2 text-left text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 flex items-center space-x-2"
+                className="w-full px-3 py-2 text-left text-sm font-medium text-[var(--error-text)] hover:bg-[var(--error-background)] rounded-lg transition-all duration-200 flex items-center space-x-2"
               >
                 <Trash2 className="w-3 h-3" />
                 <span>Delete</span>
@@ -714,11 +714,11 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+          background: var(--gradient-premium-purple);
           border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #2563eb, #7c3aed);
+          background: var(--gradient-premium-purple);
         }
         
         @keyframes shimmer {

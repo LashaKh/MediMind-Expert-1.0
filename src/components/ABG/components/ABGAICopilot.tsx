@@ -98,7 +98,7 @@ export const ABGAICopilot: React.FC<ABGAICopilotProps> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center">
-                  <TestTube2 className="h-5 w-5 text-white" />
+                  <TestTube2 className="h-5 w-5 text-[var(--foreground)]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -160,7 +160,7 @@ export const ABGAICopilot: React.FC<ABGAICopilotProps> = ({
               <Button
                 variant="outline"
                 size="sm"
-                className="text-xs bg-white/50 border-red-200 text-red-700 hover:bg-red-100"
+                className="text-xs bg-[var(--component-card)]/50 border-red-200 text-red-700 hover:bg-red-100"
                 onClick={() => {
                   // This would trigger a pre-filled message
                   const contextMessage = "Please provide a clinical interpretation of these ABG results.";
@@ -172,7 +172,7 @@ export const ABGAICopilot: React.FC<ABGAICopilotProps> = ({
               <Button
                 variant="outline"
                 size="sm"
-                className="text-xs bg-white/50 border-red-200 text-red-700 hover:bg-red-100"
+                className="text-xs bg-[var(--component-card)]/50 border-red-200 text-red-700 hover:bg-red-100"
                 onClick={() => {
                   const contextMessage = "What are the next steps based on this ABG analysis?";
                   // Implementation would depend on the chat system's API
@@ -183,7 +183,7 @@ export const ABGAICopilot: React.FC<ABGAICopilotProps> = ({
               <Button
                 variant="outline"
                 size="sm"
-                className="text-xs bg-white/50 border-red-200 text-red-700 hover:bg-red-100"
+                className="text-xs bg-[var(--component-card)]/50 border-red-200 text-red-700 hover:bg-red-100"
                 onClick={() => {
                   const contextMessage = "Are there any concerning findings in this blood gas analysis?";
                   // Implementation would depend on the chat system's API
@@ -225,7 +225,7 @@ export const ABGAIChat: React.FC<{
   if (results.length === 0) {
     return (
       <Card className="p-8 text-center">
-        <TestTube2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+        <TestTube2 className="h-12 w-12 text-[var(--foreground-secondary)] mx-auto mb-4" />
         <h3 className="font-semibold mb-2">No ABG Results</h3>
         <p className="text-muted-foreground">
           No blood gas analysis results available for AI consultation.
@@ -273,7 +273,7 @@ export const ABGAIConsultButton: React.FC<{
       <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer" onClick={handleConsult}>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
-            <Sparkles className="h-5 w-5 text-white" />
+            <Sparkles className="h-5 w-5 text-[var(--foreground)]" />
           </div>
           <div className="flex-1">
             <div className="font-medium">
@@ -298,7 +298,7 @@ export const ABGAIConsultButton: React.FC<{
   return (
     <Button
       onClick={handleConsult}
-      className="bg-white hover:bg-gray-50 text-indigo-700 hover:text-indigo-800 border-2 border-white/20 hover:border-white/40 shadow-lg hover:shadow-xl transition-all duration-200 font-semibold px-6 py-3 text-base flex items-center gap-2"
+      className="bg-[var(--component-card)] hover:bg-[var(--component-surface-primary)] text-indigo-700 hover:text-indigo-800 border-2 border-white/20 hover:border-white/40 shadow-lg hover:shadow-xl transition-all duration-200 font-semibold px-6 py-3 text-base flex items-center gap-2"
     >
       <MessageSquare className="h-5 w-5" />
       AI Consult

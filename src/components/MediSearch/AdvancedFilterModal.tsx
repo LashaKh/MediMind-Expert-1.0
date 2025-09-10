@@ -220,9 +220,9 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
 
       {/* Modal - Mobile responsive */}
       <div className={`fixed inset-0 flex items-center justify-center z-50 p-2 sm:p-4 ${className}`}>
-        <div className="w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] bg-white shadow-2xl rounded-lg transform transition-transform duration-300 flex flex-col">
+        <div className="w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] bg-[var(--component-card)] shadow-2xl rounded-lg transform transition-transform duration-300 flex flex-col">
         {/* Header - Mobile responsive */}
-        <div className="flex-shrink-0 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-t-lg">
+        <div className="flex-shrink-0 bg-gradient-to-r from-indigo-600 to-purple-600 text-[var(--foreground)] rounded-t-lg">
           <div className="flex items-center justify-between p-4 sm:p-6">
             <div className="flex items-center gap-3">
               <FunnelIcon className="w-6 h-6" />
@@ -237,14 +237,14 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors duration-200 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center"
+              className="p-2 hover:bg-[var(--component-card)]/10 rounded-lg transition-colors duration-200 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center"
             >
               <XMarkIcon className="w-6 h-6" />
             </button>
           </div>
 
           {/* Stats bar - Mobile responsive */}
-          <div className="bg-white/10 backdrop-blur-sm px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 text-sm">
+          <div className="bg-[var(--component-card)]/10 backdrop-blur-sm px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 text-sm">
             <div className="flex flex-wrap items-center gap-3 sm:gap-6">
               <div className="flex items-center gap-2">
                 <CheckCircleIcon className="w-4 h-4" />
@@ -266,7 +266,7 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setPreviewMode(!previewMode)}
-                className="px-3 py-1 bg-white/20 hover:bg-white/30 rounded-md transition-colors duration-200 text-xs min-h-[36px] touch-manipulation"
+                className="px-3 py-1 bg-[var(--component-card)]/20 hover:bg-[var(--component-card)]/30 rounded-md transition-colors duration-200 text-xs min-h-[36px] touch-manipulation"
               >
                 <span className="hidden sm:inline">{previewMode ? t('filters.preview.exit', 'Exit Preview') : t('filters.preview.results', 'Preview Results')}</span>
                 <span className="sm:hidden">{previewMode ? t('filters.preview.exitShort', 'Exit') : t('filters.preview.previewShort', 'Preview')}</span>
@@ -276,7 +276,7 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
         </div>
 
         {/* Category Navigation - Mobile scrollable */}
-        <div className="flex-shrink-0 border-b border-gray-200 overflow-x-auto">
+        <div className="flex-shrink-0 border-b border-[var(--glass-border-light)] overflow-x-auto">
           <FilterCategoryTabs
             activeCategory={activeCategory}
             onCategoryChange={setActiveCategory}
@@ -294,13 +294,13 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
         </div>
 
         {/* Footer Actions - Mobile responsive */}
-        <div className="flex-shrink-0 bg-gray-50 border-t border-gray-200">
+        <div className="flex-shrink-0 bg-[var(--component-surface-primary)] border-t border-[var(--glass-border-light)]">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-4 sm:p-6 gap-4 sm:gap-0">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4">
               <button
                 onClick={handleClear}
                 disabled={totalActiveFilters === 0}
-                className="flex items-center justify-center sm:justify-start gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-h-[44px] touch-manipulation"
+                className="flex items-center justify-center sm:justify-start gap-2 px-4 py-2 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-h-[44px] touch-manipulation"
               >
                 <ArrowPathIcon className="w-4 h-4" />
                 <span>{t('filters.clearAll', 'Clear All Filters')}</span>
@@ -316,19 +316,19 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <button
                 onClick={onClose}
-                className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 min-h-[44px] touch-manipulation order-2 sm:order-1"
+                className="px-6 py-2 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] transition-colors duration-200 min-h-[44px] touch-manipulation order-2 sm:order-1"
               >
                 {t('common.cancel', 'Cancel')}
               </button>
               <button
                 onClick={handleSaveFilters}
                 disabled={isLoading}
-                className="flex items-center justify-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-h-[44px] touch-manipulation order-1 sm:order-2"
+                className="flex items-center justify-center gap-2 px-6 py-2 bg-indigo-600 text-[var(--foreground)] rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-h-[44px] touch-manipulation order-1 sm:order-2"
               >
                 <CheckCircleIcon className="w-4 h-4" />
                 {t('filters.save', 'Save Filters')}
                 {totalActiveFilters > 0 && (
-                  <span className="ml-1 px-2 py-0.5 bg-white/20 rounded-full text-xs">
+                  <span className="ml-1 px-2 py-0.5 bg-[var(--component-card)]/20 rounded-full text-xs">
                     {totalActiveFilters}
                   </span>
                 )}

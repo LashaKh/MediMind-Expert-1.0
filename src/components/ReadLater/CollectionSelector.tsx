@@ -95,12 +95,12 @@ export function CollectionSelector({
   // Get theme classes
   const getThemeClasses = (theme: string, isActive: boolean) => {
     const themes = {
-      blue: isActive ? 'bg-blue-100 text-blue-800 border-blue-200' : 'hover:bg-blue-50',
+      blue: isActive ? 'bg-[var(--cardiology-accent-blue-light)] text-blue-800 border-blue-200' : 'hover:bg-[var(--cardiology-accent-blue-light)]',
       green: isActive ? 'bg-green-100 text-green-800 border-green-200' : 'hover:bg-green-50',
       purple: isActive ? 'bg-purple-100 text-purple-800 border-purple-200' : 'hover:bg-purple-50',
       red: isActive ? 'bg-red-100 text-red-800 border-red-200' : 'hover:bg-red-50',
       yellow: isActive ? 'bg-yellow-100 text-yellow-800 border-yellow-200' : 'hover:bg-yellow-50',
-      gray: isActive ? 'bg-gray-100 text-gray-800 border-gray-200' : 'hover:bg-gray-50'
+      gray: isActive ? 'bg-[var(--component-surface-secondary)] text-[var(--foreground)] border-[var(--glass-border-light)]' : 'hover:bg-[var(--component-surface-primary)]'
     };
     return themes[theme as keyof typeof themes] || themes.blue;
   };
@@ -113,12 +113,12 @@ export function CollectionSelector({
         className={cn(
           "w-full flex items-center justify-between p-3 rounded-lg transition-colors text-left",
           currentCollection === 'all' 
-            ? "bg-blue-100 text-blue-800 border border-blue-200"
-            : "hover:bg-gray-50 dark:hover:bg-gray-700"
+            ? "bg-[var(--cardiology-accent-blue-light)] text-blue-800 border border-blue-200"
+            : "hover:bg-[var(--component-surface-primary)] dark:hover:bg-[var(--card)]"
         )}
       >
         <div className="flex items-center space-x-3">
-          <FolderOpen className="h-4 w-4 text-gray-500" />
+          <FolderOpen className="h-4 w-4 text-[var(--foreground-secondary)]" />
           <span className="font-medium">{t('readLater.allArticles', 'All Articles')}</span>
         </div>
         <Badge variant="secondary" className="ml-2">
@@ -139,7 +139,7 @@ export function CollectionSelector({
               className={cn(
                 "flex items-center justify-between p-3 rounded-lg transition-colors border",
                 getThemeClasses(collection.color_theme, isActive),
-                isActive ? "border" : "border-transparent hover:border-gray-200"
+                isActive ? "border" : "border-transparent hover:border-[var(--glass-border-light)]"
               )}
             >
               <button
@@ -148,14 +148,14 @@ export function CollectionSelector({
               >
                 <IconComponent className={cn(
                   "h-4 w-4",
-                  isActive ? "text-current" : "text-gray-500 dark:text-gray-400"
+                  isActive ? "text-current" : "text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]"
                 )} />
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
                     <span className={cn(
                       "font-medium truncate",
-                      isActive ? "text-current" : "text-gray-900 dark:text-white"
+                      isActive ? "text-current" : "text-[var(--foreground)] dark:text-[var(--foreground)]"
                     )}>
                       {collection.name}
                     </span>
@@ -169,7 +169,7 @@ export function CollectionSelector({
                   {collection.description && (
                     <p className={cn(
                       "text-xs truncate mt-0.5",
-                      isActive ? "text-current opacity-80" : "text-gray-500 dark:text-gray-400"
+                      isActive ? "text-current opacity-80" : "text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]"
                     )}>
                       {collection.description}
                     </p>
@@ -232,10 +232,10 @@ export function CollectionSelector({
       {/* Add Collection Button */}
       <button
         onClick={onCreate}
-        className="w-full flex items-center justify-center space-x-2 p-3 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+        className="w-full flex items-center justify-center space-x-2 p-3 rounded-lg border-2 border-dashed border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] hover:border-blue-400 hover:bg-[var(--cardiology-accent-blue-light)] dark:hover:bg-[var(--cardiology-accent-blue-darker)]/20 transition-colors"
       >
-        <Plus className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-        <span className="text-gray-600 dark:text-gray-300 font-medium">
+        <Plus className="h-4 w-4 text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]" />
+        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">
           {t('readLater.addCollection', 'Add Collection')}
         </span>
       </button>
@@ -250,7 +250,7 @@ export function CollectionSelector({
           <div className="space-y-4">
             {/* Collection Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">
                 {t('readLater.collectionName', 'Collection Name')}
               </label>
               <Input
@@ -262,7 +262,7 @@ export function CollectionSelector({
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">
                 {t('readLater.description', 'Description')} ({t('common.optional', 'Optional')})
               </label>
               <Textarea
@@ -275,7 +275,7 @@ export function CollectionSelector({
 
             {/* Icon Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-2">
                 {t('readLater.icon', 'Icon')}
               </label>
               <div className="grid grid-cols-4 gap-2">
@@ -287,8 +287,8 @@ export function CollectionSelector({
                     className={cn(
                       "p-3 rounded-lg border-2 transition-colors flex items-center justify-center",
                       editForm.icon === iconKey
-                        ? "border-blue-500 bg-blue-50 text-blue-600"
-                        : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                        ? "border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)]"
+                        : "border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]"
                     )}
                   >
                     <IconComponent className="h-5 w-5" />
@@ -299,7 +299,7 @@ export function CollectionSelector({
 
             {/* Color Theme */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-2">
                 {t('readLater.colorTheme', 'Color Theme')}
               </label>
               <div className="grid grid-cols-6 gap-2">
@@ -312,14 +312,14 @@ export function CollectionSelector({
                       "w-10 h-10 rounded-lg border-2 transition-colors",
                       editForm.color_theme === color
                         ? "border-gray-800 dark:border-white"
-                        : "border-gray-200 hover:border-gray-300",
+                        : "border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)]",
                       {
-                        blue: "bg-blue-200",
+                        blue: "bg-[var(--cardiology-accent-blue-medium)]",
                         green: "bg-green-200",
                         purple: "bg-purple-200",
                         red: "bg-red-200",
                         yellow: "bg-yellow-200",
-                        gray: "bg-gray-200"
+                        gray: "bg-[var(--component-surface-tertiary)]"
                       }[color]
                     )}
                   />

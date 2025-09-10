@@ -47,7 +47,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.researchLiterature.options.studies.label', 'Clinical Studies'),
         description: t('filters.contentFormat.sections.researchLiterature.options.studies.description', 'Observational and interventional studies'),
         icon: DocumentTextIcon,
-        color: 'text-blue-600',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         tKey: 'studies'
       },
       {
@@ -89,7 +89,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.clinicalGuidelines.options.diagnosticProtocols.label', 'Diagnostic Protocols'),
         description: t('filters.contentFormat.sections.clinicalGuidelines.options.diagnosticProtocols.description', 'Standardized diagnostic procedures'),
         icon: ClipboardDocumentCheckIcon,
-        color: 'text-blue-600',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         tKey: 'diagnosticProtocols'
       },
       {
@@ -159,7 +159,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.regulatoryDocs.options.fdaApprovals.label', 'FDA Approvals'),
         description: t('filters.contentFormat.sections.regulatoryDocs.options.fdaApprovals.description', 'Drug and device approval documents'),
         icon: DocumentIcon,
-        color: 'text-blue-700',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         tKey: 'fdaApprovals'
       },
       {
@@ -193,7 +193,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.patientResources.options.factSheets.label', 'Fact Sheets'),
         description: t('filters.contentFormat.sections.patientResources.options.factSheets.description', 'Quick reference information sheets'),
         icon: UserIcon,
-        color: 'text-blue-600',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         tKey: 'factSheets'
       },
       {
@@ -221,14 +221,14 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
       label: t('filters.fileFormats.options.html.label', 'Web Pages'),
       description: t('filters.fileFormats.options.html.description', 'HTML web content'),
       icon: DocumentTextIcon,
-      color: 'text-blue-600'
+      color: 'text-[var(--cardiology-accent-blue-dark)]'
     },
     {
       id: 'doc',
       label: t('filters.fileFormats.options.doc.label', 'Word Documents'),
       description: t('filters.fileFormats.options.doc.description', 'Microsoft Word documents'),
       icon: DocumentIcon,
-      color: 'text-blue-700'
+      color: 'text-[var(--cardiology-accent-blue-dark)]'
     },
     {
       id: 'ppt',
@@ -285,8 +285,8 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
 
     return (
       <div key={categoryKey} className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-          {options[0] && React.createElement(options[0].icon, { className: "w-5 h-5 text-gray-600" })}
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+          {options[0] && React.createElement(options[0].icon, { className: "w-5 h-5 text-[var(--foreground-tertiary)]" })}
           {categoryTitle}
           {selectedTypes.length > 0 && (
             <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
@@ -305,21 +305,21 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 min-h-[60px] touch-manipulation active:scale-98 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleContentTypeChange(categoryKey, option.id, e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mt-0.5 min-h-[20px] min-w-[20px] touch-manipulation"
+                  className="w-5 h-5 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500 mt-0.5 min-h-[20px] min-w-[20px] touch-manipulation"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <IconComponent className={`w-4 h-4 ${option.color}`} />
-                    <span className="font-medium text-gray-900">{option.label}</span>
+                    <span className="font-medium text-[var(--foreground)]">{option.label}</span>
                   </div>
-                  <p className="text-sm text-gray-600">{option.description}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">{option.description}</p>
                 </div>
               </label>
             );
@@ -332,11 +332,11 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-[var(--foreground)] mb-6 flex items-center gap-2">
           <DocumentTextIcon className="w-6 h-6 text-indigo-600" />
           {t('filters.contentFormat.title', 'Content Type & Format')}
         </h3>
-        <p className="text-gray-600 mb-6">
+        <p className="text-[var(--foreground-tertiary)] mb-6">
           {t('filters.contentFormat.description', 'Filter by specific types of medical content and file formats')}
         </p>
       </div>
@@ -353,8 +353,8 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
 
       {/* File Formats */}
       <div className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-          <DocumentArrowDownIcon className="w-5 h-5 text-gray-600" />
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+          <DocumentArrowDownIcon className="w-5 h-5 text-[var(--foreground-tertiary)]" />
           {t('filters.fileFormats.title', 'File Formats')}
           {filters.fileFormats && filters.fileFormats.length > 0 && (
             <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
@@ -373,19 +373,19 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
                 className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 min-h-[56px] touch-manipulation active:scale-98 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleFileFormatChange(option.id, e.target.checked)}
-                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 min-h-[16px] min-w-[16px] touch-manipulation"
+                  className="w-4 h-4 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500 min-h-[16px] min-w-[16px] touch-manipulation"
                 />
                 <IconComponent className={`w-5 h-5 ${option.color}`} />
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-gray-900 text-sm leading-tight">{option.label}</div>
-                  <div className="text-xs text-gray-600 mt-1">{option.description}</div>
+                  <div className="font-medium text-[var(--foreground)] text-sm leading-tight">{option.label}</div>
+                  <div className="text-xs text-[var(--foreground-tertiary)] mt-1">{option.description}</div>
                 </div>
               </label>
             );
@@ -395,9 +395,9 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
 
       {/* Summary */}
       {(filters.contentTypes || filters.fileFormats) && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h5 className="font-medium text-gray-900 mb-2">{t('filters.summary.title', 'Filter Summary')}</h5>
-          <div className="text-sm text-gray-600 space-y-1">
+        <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
+          <h5 className="font-medium text-[var(--foreground)] mb-2">{t('filters.summary.title', 'Filter Summary')}</h5>
+          <div className="text-sm text-[var(--foreground-tertiary)] space-y-1">
             {filters.contentTypes && Object.entries(filters.contentTypes).map(([category, types]) => 
               types && types.length > 0 && (
                 <div key={category}>

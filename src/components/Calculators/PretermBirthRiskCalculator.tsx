@@ -148,7 +148,7 @@ const PretermBirthRiskCalculatorComponent: React.FC = () => {
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'high': return 'text-orange-600 bg-orange-50 border-orange-200';
       case 'very-high': return 'text-red-600 bg-red-50 border-red-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      default: return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-primary)] border-[var(--glass-border-light)]';
     }
   }, []);
 
@@ -158,7 +158,7 @@ const PretermBirthRiskCalculatorComponent: React.FC = () => {
       case 'moderate': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
       case 'high': return 'bg-orange-50 border-orange-200 text-orange-800';
       case 'very-high': return 'bg-red-50 border-red-200 text-red-800';
-      default: return 'bg-gray-50 border-gray-200 text-gray-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] text-[var(--foreground)]';
     }
   }, []);
 
@@ -203,33 +203,33 @@ const PretermBirthRiskCalculatorComponent: React.FC = () => {
                 <div className="flex items-center justify-center space-x-4 mb-8">
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 1 ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 1 ? 'bg-pink-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       1
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.preterm_birth_risk.clinical_assessment')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.preterm_birth_risk.clinical_assessment')}</span>
                   </div>
                   <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                    currentStep >= 2 ? 'bg-rose-500' : 'bg-gray-200'
+                    currentStep >= 2 ? 'bg-rose-500' : 'bg-[var(--component-surface-tertiary)]'
                   }`}></div>
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 2 ? 'bg-rose-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 2 ? 'bg-rose-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       2
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.preterm_birth_risk.risk_factors')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.preterm_birth_risk.risk_factors')}</span>
                   </div>
                   <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                    currentStep >= 3 ? 'bg-purple-500' : 'bg-gray-200'
+                    currentStep >= 3 ? 'bg-purple-500' : 'bg-[var(--component-surface-tertiary)]'
                   }`}></div>
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 3 ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 3 ? 'bg-purple-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       3
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.preterm_birth_risk.assessment')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.preterm_birth_risk.assessment')}</span>
                   </div>
                 </div>
 
@@ -239,17 +239,17 @@ const PretermBirthRiskCalculatorComponent: React.FC = () => {
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-2xl border border-pink-200 dark:border-pink-800">
                         <Stethoscope className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.preterm_birth_risk.clinical_assessment')}</h3>
+                        <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.preterm_birth_risk.clinical_assessment')}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.preterm_birth_risk.clinical_assessment_description')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.preterm_birth_risk.clinical_assessment_description')}</p>
                     </div>
 
                     <div className="space-y-6">
                       {/* Current Pregnancy Assessment */}
-                      <div className="p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl">
+                      <div className="p-6 bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl">
                         <div className="flex items-center space-x-3 mb-4">
-                          <Clock className="w-5 h-5 text-blue-600" />
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.preterm_birth_risk.current_pregnancy')}</h4>
+                          <Clock className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.preterm_birth_risk.current_pregnancy')}</h4>
                         </div>
                         
                         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -288,7 +288,7 @@ const PretermBirthRiskCalculatorComponent: React.FC = () => {
                       {/* Cervical Assessment */}
                       <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl">
                         <div className="flex items-center space-x-3 mb-4">
-                          <Monitor className="w-5 h-5 text-blue-600" />
+                          <Monitor className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                           <h4 className="font-semibold text-blue-800 dark:text-blue-200">{t('calculators.preterm_birth_risk.cervical_length_assessment')}</h4>
                         </div>
                         
@@ -308,20 +308,20 @@ const PretermBirthRiskCalculatorComponent: React.FC = () => {
                         />
 
                         {/* Cervical Length Interpretation */}
-                        <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg">
+                        <div className="mt-4 p-4 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 border border-blue-200 dark:border-blue-700 rounded-lg">
                           <h5 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">{t('calculators.preterm_birth_risk.cervical_length_reference')}</h5>
                           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 text-sm">
                             <div className="flex items-center space-x-2">
                               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                              <span className="text-blue-700 dark:text-blue-300">{t('calculators.preterm_birth_risk.normal_length')}</span>
+                              <span className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">{t('calculators.preterm_birth_risk.normal_length')}</span>
                             </div>
                             <div className="flex items-center space-x-2">
                               <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                              <span className="text-blue-700 dark:text-blue-300">{t('calculators.preterm_birth_risk.short_length')}</span>
+                              <span className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">{t('calculators.preterm_birth_risk.short_length')}</span>
                             </div>
                             <div className="flex items-center space-x-2">
                               <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                              <span className="text-blue-700 dark:text-blue-300">{t('calculators.preterm_birth_risk.very_short_length')}</span>
+                              <span className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">{t('calculators.preterm_birth_risk.very_short_length')}</span>
                             </div>
                           </div>
                         </div>
@@ -370,9 +370,9 @@ const PretermBirthRiskCalculatorComponent: React.FC = () => {
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-rose-50 to-purple-50 dark:from-rose-900/20 dark:to-purple-900/20 rounded-2xl border border-rose-200 dark:border-rose-800">
                         <AlertTriangle className="w-6 h-6 text-rose-600 dark:text-rose-400" />
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.preterm_birth_risk.risk_factors')}</h3>
+                        <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.preterm_birth_risk.risk_factors')}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.preterm_birth_risk.risk_factors_description')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.preterm_birth_risk.risk_factors_description')}</p>
                     </div>
 
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
@@ -506,11 +506,11 @@ const PretermBirthRiskCalculatorComponent: React.FC = () => {
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
                     <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
                       <div className="flex items-center space-x-3 mb-3">
-                        <Baby className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                        <Baby className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                         <h4 className="font-semibold text-blue-800 dark:text-blue-200">{t('calculators.preterm_birth_risk.risk_assessment')}</h4>
                       </div>
                       <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{formatRiskPercentage(parseFloat(result.value.toString()))}</p>
-                      <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">{t('calculators.preterm_birth_risk.spontaneous_preterm_birth_risk')}</p>
+                      <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mt-1">{t('calculators.preterm_birth_risk.spontaneous_preterm_birth_risk')}</p>
                     </div>
 
                     <div className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl">
@@ -528,15 +528,15 @@ const PretermBirthRiskCalculatorComponent: React.FC = () => {
                   {/* Clinical Recommendations */}
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
-                      <Stethoscope className="w-5 h-5 text-blue-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.preterm_birth_risk.clinical_recommendations')}</h4>
+                      <Stethoscope className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.preterm_birth_risk.clinical_recommendations')}</h4>
                     </div>
                     <div className={`p-6 rounded-2xl border-2 ${getRiskBgColor(result.category)}`}>
                       <div className="space-y-3">
                         {result.recommendations.map((rec, index) => (
                           <div key={index} className="flex items-start space-x-2">
                             <div className="w-2 h-2 bg-current rounded-full mt-2 flex-shrink-0"></div>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">{rec}</p>
+                            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{rec}</p>
                           </div>
                         ))}
                       </div>
@@ -596,7 +596,7 @@ const PretermBirthRiskCalculatorComponent: React.FC = () => {
 
             {/* Footer Information */}
             <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-              <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 <Info className="w-4 h-4" />
                 <span>{t('calculators.preterm_birth_risk.acog_guidelines_footer')} • {t('calculators.preterm_birth_risk.educational_purposes')}</span>
                 <div className="flex items-center space-x-1">

@@ -227,10 +227,10 @@ export const ClinicalPathways: React.FC<ClinicalPathwaysProps> = ({
             <div className="flex items-center space-x-2">
               {getPriorityIcon(pathway.priority)}
               <div>
-                <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                <h4 className="text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">
                   {pathway.title}
                 </h4>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
+                <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                   {pathway.description} • {pathway.timeframe}
                 </p>
               </div>
@@ -255,24 +255,24 @@ export const ClinicalPathways: React.FC<ClinicalPathwaysProps> = ({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
-                    <h5 className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                    <h5 className="text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">
                       {index + 1}. {step.title}
                     </h5>
                     {step.timeframe && (
-                      <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded">
+                      <span className="text-xs text-[var(--foreground-secondary)] bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] px-2 py-0.5 rounded">
                         {step.timeframe}
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                     {step.action}
                   </p>
                   
                   {/* Related Calculators */}
                   {step.calculators && step.calculators.length > 0 && (
                     <div className="flex items-center space-x-2 mt-2">
-                      <Lightbulb className="w-3 h-3 text-blue-600" />
-                      <span className="text-xs text-blue-600 dark:text-blue-400">
+                      <Lightbulb className="w-3 h-3 text-[var(--cardiology-accent-blue-dark)]" />
+                      <span className="text-xs text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">
                         Suggested calculators:
                       </span>
                       {step.calculators.map((calcId) => {
@@ -283,7 +283,7 @@ export const ClinicalPathways: React.FC<ClinicalPathwaysProps> = ({
                             variant="ghost"
                             size="sm"
                             onClick={() => onCalculatorSelect?.(calcId)}
-                            className="h-6 px-2 text-xs text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900"
+                            className="h-6 px-2 text-xs text-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--cardiology-accent-blue-light)] dark:hover:bg-[var(--cardiology-accent-blue-darker)]"
                           >
                             {calc.name}
                           </Button>
@@ -293,7 +293,7 @@ export const ClinicalPathways: React.FC<ClinicalPathwaysProps> = ({
                   )}
                 </div>
                 {index < pathway.steps.length - 1 && (
-                  <ArrowRight className="w-4 h-4 text-gray-400 mt-1" />
+                  <ArrowRight className="w-4 h-4 text-[var(--foreground-secondary)] mt-1" />
                 )}
               </div>
             ))}
@@ -303,9 +303,9 @@ export const ClinicalPathways: React.FC<ClinicalPathwaysProps> = ({
 
       {/* Related Calculators */}
       {relatedCalculators.length > 0 && (
-        <div className="border border-blue-200 dark:border-blue-800 rounded-lg p-4 bg-blue-50/50 dark:bg-blue-900/10">
+        <div className="border border-blue-200 dark:border-blue-800 rounded-lg p-4 bg-[var(--cardiology-accent-blue-light)]/50 dark:bg-[var(--cardiology-accent-blue-darker)]/10">
           <div className="flex items-center space-x-2 mb-3">
-            <Lightbulb className="w-4 h-4 text-blue-600" />
+            <Lightbulb className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
             <h4 className="text-sm font-semibold text-blue-800 dark:text-blue-200">
               Related Clinical Calculators
             </h4>
@@ -317,15 +317,15 @@ export const ClinicalPathways: React.FC<ClinicalPathwaysProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={() => onCalculatorSelect?.(calc.id)}
-                className="justify-start text-left h-auto py-2 px-3 bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                className="justify-start text-left h-auto py-2 px-3 bg-[var(--component-card)] dark:bg-[var(--background)] hover:bg-[var(--cardiology-accent-blue-light)] dark:hover:bg-[var(--cardiology-accent-blue-darker)]/20"
               >
                 <div className="flex items-start space-x-2">
-                  <span className="text-blue-600 mt-0.5">🧮</span>
+                  <span className="text-[var(--cardiology-accent-blue-dark)] mt-0.5">🧮</span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                    <p className="text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)] truncate">
                       {calc.name}
                     </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                    <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {calc.description}
                     </p>
                   </div>

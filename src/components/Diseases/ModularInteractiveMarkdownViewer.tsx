@@ -317,13 +317,13 @@ export const ModularInteractiveMarkdownViewer: React.FC<InteractiveMarkdownViewe
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 flex items-center justify-center">
-        <div className="text-center bg-white p-8 rounded-2xl shadow-xl border border-blue-100">
+        <div className="text-center bg-[var(--component-card)] p-8 rounded-2xl shadow-xl border border-blue-100">
           <div className="relative">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-6"></div>
-            <Stethoscope className="w-6 h-6 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            <Stethoscope className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           </div>
-          <p className="text-lg font-semibold text-gray-700 mb-2">Loading medical content...</p>
-          <p className="text-sm text-gray-500">Please wait while we prepare the information</p>
+          <p className="text-lg font-semibold text-[var(--foreground-tertiary)] mb-2">Loading medical content...</p>
+          <p className="text-sm text-[var(--foreground-secondary)]">Please wait while we prepare the information</p>
         </div>
       </div>
     );
@@ -333,13 +333,13 @@ export const ModularInteractiveMarkdownViewer: React.FC<InteractiveMarkdownViewe
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-100 flex items-center justify-center">
-        <div className="text-center p-8 bg-white rounded-2xl shadow-xl border border-red-200 max-w-md">
+        <div className="text-center p-8 bg-[var(--component-card)] rounded-2xl shadow-xl border border-red-200 max-w-md">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Error Loading Content</h3>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <h3 className="text-xl font-bold text-[var(--foreground)] mb-2">Error Loading Content</h3>
+          <p className="text-[var(--foreground-tertiary)] mb-4">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            className="px-4 py-2 bg-red-500 text-[var(--foreground)] rounded-lg hover:bg-red-600 transition-colors"
           >
             Try Again
           </button>
@@ -376,18 +376,18 @@ export const ModularInteractiveMarkdownViewer: React.FC<InteractiveMarkdownViewe
         {/* Main Content */}
         <div className="flex-1 min-w-0">
           {/* Header Controls */}
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 mb-8">
+          <div className="bg-[var(--component-card)] rounded-2xl shadow-xl border border-[var(--glass-border-light)] p-6 mb-8">
             <div className="flex flex-col lg:flex-row gap-4">
               {/* Search */}
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--foreground-secondary)]" />
                   <input
                     type="text"
                     placeholder="Search within document..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-3 border border-[var(--glass-border-medium)] rounded-xl focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent transition-all"
                   />
                 </div>
               </div>
@@ -397,7 +397,7 @@ export const ModularInteractiveMarkdownViewer: React.FC<InteractiveMarkdownViewe
                 {!showTOC && (
                   <button
                     onClick={() => setShowTOC(true)}
-                    className="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors flex items-center space-x-2"
+                    className="px-4 py-3 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-xl hover:bg-[var(--component-surface-tertiary)] transition-colors flex items-center space-x-2"
                   >
                     <Menu className="w-4 h-4" />
                     <span className="hidden sm:inline">TOC</span>
@@ -407,7 +407,7 @@ export const ModularInteractiveMarkdownViewer: React.FC<InteractiveMarkdownViewe
                 {/* Expand/Collapse All Sections */}
                 <button
                   onClick={toggleAllSections}
-                  className="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors flex items-center space-x-2"
+                  className="px-4 py-3 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-xl hover:bg-[var(--component-surface-tertiary)] transition-colors flex items-center space-x-2"
                   title={sections.some(s => s.isCollapsed) ? 'Expand all sections' : 'Collapse all sections'}
                 >
                   {sections.some(s => s.isCollapsed) ? (
@@ -425,26 +425,26 @@ export const ModularInteractiveMarkdownViewer: React.FC<InteractiveMarkdownViewe
                   className={`px-4 py-3 rounded-xl transition-colors flex items-center space-x-2 ${
                     bookmarked 
                       ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' 
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-tertiary)]'
                   }`}
                 >
                   <Bookmark className={`w-4 h-4 ${bookmarked ? 'fill-current' : ''}`} />
                 </button>
                 <button
                   onClick={handleShare}
-                  className="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors flex items-center space-x-2"
+                  className="px-4 py-3 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-xl hover:bg-[var(--component-surface-tertiary)] transition-colors flex items-center space-x-2"
                 >
                   <Share2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={handleDownload}
-                  className="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors flex items-center space-x-2"
+                  className="px-4 py-3 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-xl hover:bg-[var(--component-surface-tertiary)] transition-colors flex items-center space-x-2"
                 >
                   <Download className="w-4 h-4" />
                 </button>
                 <button
                   onClick={handlePrint}
-                  className="px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  className="px-4 py-3 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] rounded-xl hover:bg-[var(--cardiology-accent-blue-dark)] transition-colors flex items-center space-x-2"
                 >
                   <Printer className="w-4 h-4" />
                   <span className="hidden sm:inline">Print</span>
@@ -459,32 +459,32 @@ export const ModularInteractiveMarkdownViewer: React.FC<InteractiveMarkdownViewe
               <div
                 key={section.id}
                 data-section-id={section.id}
-                className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden"
+                className="bg-[var(--component-card)] rounded-2xl shadow-xl border border-[var(--glass-border-light)] overflow-hidden"
               >
                 {/* Section Header */}
                 <div 
                   id={section.id}
-                  className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200 cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-all duration-200"
+                  className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-[var(--glass-border-light)] cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-all duration-200"
                   onClick={() => toggleSection(section.id)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       {section.level === 1 ? (
-                        <div className="p-3 bg-blue-600 rounded-xl">
-                          <Stethoscope className="w-6 h-6 text-white" />
+                        <div className="p-3 bg-[var(--cardiology-accent-blue-dark)] rounded-xl">
+                          <Stethoscope className="w-6 h-6 text-[var(--foreground)]" />
                         </div>
                       ) : (
                         <div className="p-2 bg-indigo-500 rounded-lg">
-                          <Heart className="w-5 h-5 text-white" />
+                          <Heart className="w-5 h-5 text-[var(--foreground)]" />
                         </div>
                       )}
                       <div>
-                        <h2 className={`font-bold text-gray-900 ${
+                        <h2 className={`font-bold text-[var(--foreground)] ${
                           section.level === 1 ? 'text-2xl' : 'text-xl'
                         }`}>
                           {section.title}
                         </h2>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-sm text-[var(--foreground-tertiary)] mt-1">
                           {section.level === 1 ? 'Main Section' : 'Subsection'} • 
                           {section.isCollapsed ? ' Collapsed' : ' Expanded'}
                         </p>
@@ -492,11 +492,11 @@ export const ModularInteractiveMarkdownViewer: React.FC<InteractiveMarkdownViewe
                     </div>
                     
                     <div className="flex items-center space-x-2">
-                      <div className="p-2 bg-white rounded-lg shadow-sm">
+                      <div className="p-2 bg-[var(--component-card)] rounded-lg shadow-sm">
                         {section.isCollapsed ? (
-                          <ChevronRight className="w-5 h-5 text-gray-600" />
+                          <ChevronRight className="w-5 h-5 text-[var(--foreground-tertiary)]" />
                         ) : (
-                          <ChevronDown className="w-5 h-5 text-gray-600" />
+                          <ChevronDown className="w-5 h-5 text-[var(--foreground-tertiary)]" />
                         )}
                       </div>
                     </div>

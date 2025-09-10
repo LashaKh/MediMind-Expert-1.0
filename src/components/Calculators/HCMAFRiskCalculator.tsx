@@ -340,7 +340,7 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
       case 'low': return 'text-green-600';
       case 'intermediate': return 'text-yellow-600';
       case 'high': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-[var(--foreground-tertiary)]';
     }
   }, []);
 
@@ -349,7 +349,7 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
       case 'low': return 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800';
       case 'intermediate': return 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800';
       case 'high': return 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800';
-      default: return 'bg-gray-50 border-gray-200 dark:bg-gray-900/20 dark:border-gray-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] dark:bg-[var(--background-dark)]/20 dark:border-gray-800';
     }
   }, []);
 
@@ -387,44 +387,44 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
             <div className="flex items-center justify-center space-x-4 mb-8">
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 1 ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 1 ? 'bg-orange-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   1
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.hcm_af_risk.demographics')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.hcm_af_risk.demographics')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 2 ? 'bg-yellow-500' : 'bg-gray-200'
+                currentStep >= 2 ? 'bg-yellow-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 2 ? 'bg-yellow-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 2 ? 'bg-yellow-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   2
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.hcm_af_risk.clinical_measurements')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.hcm_af_risk.clinical_measurements')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 3 ? 'bg-green-500' : 'bg-gray-200'
+                currentStep >= 3 ? 'bg-green-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 3 ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 3 ? 'bg-green-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   3
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.hcm_af_risk.risk_factors')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.hcm_af_risk.risk_factors')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 4 ? 'bg-blue-500' : 'bg-gray-200'
+                currentStep >= 4 ? 'bg-[var(--cardiology-accent-blue)]' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 4 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 4 ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   4
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.hcm_af_risk.exclusions')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.hcm_af_risk.exclusions')}</span>
               </div>
             </div>
 
@@ -434,9 +434,9 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-2xl border border-orange-200 dark:border-orange-800">
                     <User className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.hcm_af_risk.demographics')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_af_risk.demographics')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.hcm_af_risk.demographics_info')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.hcm_af_risk.demographics_info')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 max-w-2xl mx-auto">
@@ -496,9 +496,9 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-yellow-50 to-green-50 dark:from-yellow-900/20 dark:to-green-900/20 rounded-2xl border border-yellow-200 dark:border-yellow-800">
                     <BarChart3 className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.hcm_af_risk.clinical_measurements')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_af_risk.clinical_measurements')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.hcm_af_risk.measurement_guidelines')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.hcm_af_risk.measurement_guidelines')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
@@ -598,14 +598,14 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-2xl border border-green-200 dark:border-green-800">
                     <Heart className="w-6 h-6 text-green-600 dark:text-green-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.hcm_af_risk.risk_factors')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_af_risk.risk_factors')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.hcm_af_risk.risk_factor_considerations')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.hcm_af_risk.risk_factor_considerations')}</p>
                 </div>
 
                 <div className="space-y-6">
                   <div className="space-y-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
                       <Heart className="w-5 h-5 text-green-600" />
                       <span>{t('calculators.hcm_af_risk.risk_factors')}</span>
                     </h4>
@@ -664,15 +664,15 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
               <div className="space-y-6 animate-fadeIn">
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
-                    <AlertTriangle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.hcm_af_risk.exclusions')}</h3>
+                    <AlertTriangle className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_af_risk.exclusions')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.hcm_af_risk.exclusion_notes')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.hcm_af_risk.exclusion_notes')}</p>
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
-                    <AlertCircle className="w-5 h-5 text-blue-600" />
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
+                    <AlertCircle className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                     <span>{t('calculators.hcm_af_risk.calculator_exclusions')}</span>
                   </h4>
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -702,12 +702,12 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
                   <div className="flex items-center space-x-3 mb-3">
-                    <Info className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <Info className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                     <h4 className="font-semibold text-blue-800 dark:text-blue-200">{t('calculators.hcm_af_risk.exclusion_notes')}</h4>
                   </div>
-                  <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                  <div className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 space-y-1">
                     <p>• {t('calculators.hcm_af_risk.exclusion_new_onset')}</p>
                     <p>• {t('calculators.hcm_af_risk.exclusion_existing_af')}</p>
                     <p>• {t('calculators.hcm_af_risk.exclusion_specialist')}</p>
@@ -750,7 +750,7 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
                       <AlertCircle className="w-5 h-5 text-yellow-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.hcm_af_risk.exclusion_present')}</h4>
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_af_risk.exclusion_present')}</h4>
                     </div>
                     <div className="p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
                       <ul className="space-y-2">
@@ -765,15 +765,15 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
 
                     <div className="space-y-4">
                       <div className="flex items-center space-x-3">
-                        <Stethoscope className="w-5 h-5 text-blue-500" />
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.hcm_af_risk.management_recommendations')}</h4>
+                        <Stethoscope className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_af_risk.management_recommendations')}</h4>
                       </div>
-                      <div className="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+                      <div className="p-6 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-xl">
                         <div className="space-y-3">
                           {result.recommendations.map((rec, index) => (
                             <div key={index} className="flex items-start space-x-2">
-                              <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                              <p className="text-sm text-blue-700 dark:text-blue-300">{rec}</p>
+                              <div className="w-2 h-2 bg-[var(--cardiology-accent-blue-dark)] rounded-full mt-2 flex-shrink-0"></div>
+                              <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">{rec}</p>
                             </div>
                           ))}
                         </div>
@@ -794,7 +794,7 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3 mb-4">
                       <Target className="w-5 h-5 text-orange-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.hcm_af_risk.af_risk_prediction')}</h4>
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_af_risk.af_risk_prediction')}</h4>
                     </div>
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                       <div className="p-6 bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/30 rounded-2xl border border-orange-200 dark:border-orange-800">
@@ -816,7 +816,7 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
                       <Shield className="w-5 h-5 text-purple-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.hcm_af_risk.risk_stratification_categories')}</h4>
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_af_risk.risk_stratification_categories')}</h4>
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
                       <div className={`p-4 rounded-xl border-2 transition-all ${
@@ -851,14 +851,14 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
                     <div className="space-y-4">
                       <div className="flex items-center space-x-3">
                         <Activity className="w-5 h-5 text-green-500" />
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.hcm_af_risk.af_monitoring_strategy')}</h4>
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_af_risk.af_monitoring_strategy')}</h4>
                       </div>
                       <div className={`p-6 rounded-2xl border-2 ${getRiskBgColor(result.riskCategory)}`}> 
                         <div className="space-y-3">
                           {result.monitoringGuidance.map((guidance, index) => (
                             <div key={index} className="flex items-start space-x-2">
                               <div className="w-2 h-2 bg-current rounded-full mt-2 flex-shrink-0"></div>
-                              <p className="text-sm text-gray-700 dark:text-gray-300">{guidance}</p>
+                              <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{guidance}</p>
                             </div>
                           ))}
                         </div>
@@ -870,14 +870,14 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
                       <Stethoscope className="w-5 h-5 text-indigo-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.hcm_af_risk.management_recommendations')}</h4>
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_af_risk.management_recommendations')}</h4>
                     </div>
                     <div className={`p-6 rounded-2xl border-2 ${getRiskBgColor(result.riskCategory)}`}> 
                       <div className="space-y-3">
                         {result.recommendations.map((rec, index) => (
                           <div key={index} className="flex items-start space-x-2">
                             <div className="w-2 h-2 bg-current rounded-full mt-2 flex-shrink-0"></div>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">{rec}</p>
+                            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{rec}</p>
                           </div>
                         ))}
                       </div>
@@ -885,12 +885,12 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
                   </div>
 
                   {/* Algorithm Validation Status */}
-                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                  <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
                     <div className="flex items-center space-x-3 mb-3">
-                      <Award className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                      <Award className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                       <h4 className="font-semibold text-blue-800 dark:text-blue-200">{t('calculators.hcm_af_risk.validation_status')}</h4>
                     </div>
-                    <div className="text-sm text-blue-700 dark:text-blue-300">
+                    <div className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">
                       {t('calculators.hcm_af_risk.validation_status_desc')}
                     </div>
                   </div>
@@ -921,7 +921,7 @@ const HCMAFRiskCalculatorComponent: React.FC = () => {
 
         {/* Footer Information */}
         <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-          <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <Info className="w-4 h-4" />
             <span>{t('calculators.hcm_af_risk.based_on_model')}</span>
             <div className="flex items-center space-x-1">

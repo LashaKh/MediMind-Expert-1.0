@@ -80,7 +80,7 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
   return (
     <div
       className={cn(
-        "border-b border-gray-200 dark:border-gray-700",
+        "border-b border-[var(--glass-border-light)] dark:border-[var(--border-strong)]",
         className
       )}
       {...props}

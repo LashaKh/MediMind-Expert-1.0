@@ -67,7 +67,7 @@ export const MobileSessionHeader: React.FC<MobileSessionHeaderProps> = ({
     <div className="lg:hidden relative overflow-hidden">
       {currentSession ? (
         // Active session header with premium animations and micro-interactions
-        <div className="relative h-16 bg-white/95 dark:bg-medical-gray-800/95 backdrop-blur-2xl border-b border-medical-gray-200/50 dark:border-medical-gray-700/50 shadow-lg">
+        <div className="relative h-16 bg-[var(--component-card)]/95 dark:bg-medical-gray-800/95 backdrop-blur-2xl border-b border-medical-gray-200/50 dark:border-medical-gray-700/50 shadow-lg">
           {/* Animated background gradient */}
           <div className="absolute inset-0 bg-gradient-to-r from-medical-blue-500/10 via-purple-500/5 to-medical-blue-500/10 animate-pulse" />
           
@@ -84,18 +84,18 @@ export const MobileSessionHeader: React.FC<MobileSessionHeaderProps> = ({
               {/* Dynamic session icon with status indicators */}
               <div className="relative">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-medical-blue-600 to-medical-blue-700 flex items-center justify-center shadow-lg shadow-medical-blue-500/30">
-                  <Stethoscope className="w-6 h-6 text-white" />
+                  <Stethoscope className="w-6 h-6 text-[var(--foreground)]" />
                   
                   {/* Active recording indicator */}
                   {recordingDuration > 0 && (
                     <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-red-500 to-pink-600 rounded-full border-2 border-white dark:border-medical-gray-800 flex items-center justify-center">
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                      <div className="w-2 h-2 bg-[var(--component-card)] rounded-full animate-pulse" />
                     </div>
                   )}
                   
                   {/* Quality indicator */}
                   <div className="absolute -bottom-1 -left-1 w-5 h-5 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full border-2 border-white dark:border-medical-gray-800 flex items-center justify-center">
-                    <CheckCircle2 className="w-2.5 h-2.5 text-white" />
+                    <CheckCircle2 className="w-2.5 h-2.5 text-[var(--foreground)]" />
                   </div>
                 </div>
                 
@@ -108,7 +108,7 @@ export const MobileSessionHeader: React.FC<MobileSessionHeaderProps> = ({
               {/* Session details with animations */}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center space-x-2 mb-1">
-                  <h3 className="text-lg font-bold text-medical-gray-900 dark:text-white truncate animate-in slide-in-from-left-3 duration-300">
+                  <h3 className="text-lg font-bold text-medical-gray-900 dark:text-[var(--foreground)] truncate animate-in slide-in-from-left-3 duration-300">
                     {currentSession.title}
                   </h3>
                   
@@ -164,7 +164,7 @@ export const MobileSessionHeader: React.FC<MobileSessionHeaderProps> = ({
               {/* Ripple effect */}
               {rippleStyle && (
                 <span 
-                  className="absolute w-0 h-0 bg-white/30 rounded-full animate-ping"
+                  className="absolute w-0 h-0 bg-[var(--component-card)]/30 rounded-full animate-ping"
                   style={{ 
                     left: rippleStyle.left, 
                     top: rippleStyle.top,
@@ -174,10 +174,10 @@ export const MobileSessionHeader: React.FC<MobileSessionHeaderProps> = ({
               )}
               
               {/* Button icon with micro-animation */}
-              <ChevronDown className={`w-5 h-5 text-white transition-transform duration-300 ${isPressed ? 'rotate-180 scale-90' : 'rotate-0 scale-100'}`} />
+              <ChevronDown className={`w-5 h-5 text-[var(--foreground)] transition-transform duration-300 ${isPressed ? 'rotate-180 scale-90' : 'rotate-0 scale-100'}`} />
               
               {/* Hover glow effect */}
-              <div className="absolute inset-0 rounded-2xl bg-white/10 opacity-0 hover:opacity-100 transition-opacity duration-200" />
+              <div className="absolute inset-0 rounded-2xl bg-[var(--component-card)]/10 opacity-0 hover:opacity-100 transition-opacity duration-200" />
             </button>
           </div>
 
@@ -186,7 +186,7 @@ export const MobileSessionHeader: React.FC<MobileSessionHeaderProps> = ({
         </div>
       ) : (
         // No active session - premium empty state
-        <div className="relative h-16 bg-white/95 dark:bg-medical-gray-800/95 backdrop-blur-2xl border-b border-medical-gray-200/50 dark:border-medical-gray-700/50 shadow-lg">
+        <div className="relative h-16 bg-[var(--component-card)]/95 dark:bg-medical-gray-800/95 backdrop-blur-2xl border-b border-medical-gray-200/50 dark:border-medical-gray-700/50 shadow-lg">
           {/* Subtle background animation */}
           <div className="absolute inset-0 bg-gradient-to-r from-medical-gray-500/5 via-medical-blue-500/5 to-medical-gray-500/5" />
           
@@ -202,7 +202,7 @@ export const MobileSessionHeader: React.FC<MobileSessionHeaderProps> = ({
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-medical-gray-900 dark:text-white">
+                <h3 className="text-lg font-bold text-medical-gray-900 dark:text-[var(--foreground)]">
                   Ready to Begin
                 </h3>
                 <p className="text-sm text-medical-gray-600 dark:text-medical-gray-400 flex items-center space-x-2">
@@ -237,7 +237,7 @@ export const MobileSessionHeader: React.FC<MobileSessionHeaderProps> = ({
               {/* Ripple effect */}
               {rippleStyle && (
                 <span 
-                  className="absolute w-0 h-0 bg-white/30 rounded-full animate-ping"
+                  className="absolute w-0 h-0 bg-[var(--component-card)]/30 rounded-full animate-ping"
                   style={{ 
                     left: rippleStyle.left, 
                     top: rippleStyle.top,
@@ -247,11 +247,11 @@ export const MobileSessionHeader: React.FC<MobileSessionHeaderProps> = ({
               )}
               
               {/* Button content */}
-              <Stethoscope className={`w-4 h-4 text-white transition-transform duration-200 ${isPressed ? 'scale-90' : 'scale-100'}`} />
-              <span className="text-white text-sm">Sessions</span>
+              <Stethoscope className={`w-4 h-4 text-[var(--foreground)] transition-transform duration-200 ${isPressed ? 'scale-90' : 'scale-100'}`} />
+              <span className="text-[var(--foreground)] text-sm">Sessions</span>
               
               {/* Hover glow effect */}
-              <div className="absolute inset-0 rounded-2xl bg-white/10 opacity-0 hover:opacity-100 transition-opacity duration-200" />
+              <div className="absolute inset-0 rounded-2xl bg-[var(--component-card)]/10 opacity-0 hover:opacity-100 transition-opacity duration-200" />
               
               {/* Premium shine effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />

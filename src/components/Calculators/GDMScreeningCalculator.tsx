@@ -130,7 +130,7 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
       case 'moderate': return 'text-yellow-700 bg-yellow-50 border-yellow-200';
       case 'high': return 'text-orange-700 bg-orange-50 border-orange-200';
       case 'very-high': return 'text-red-700 bg-red-50 border-red-200';
-      default: return 'text-gray-700 bg-gray-50 border-gray-200';
+      default: return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-primary)] border-[var(--glass-border-light)]';
     }
   }, []);
 
@@ -140,7 +140,7 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
       case 'moderate': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
       case 'high': return 'bg-orange-50 border-orange-200 text-orange-800';
       case 'very-high': return 'bg-red-50 border-red-200 text-red-800';
-      default: return 'bg-gray-50 border-gray-200 text-gray-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] text-[var(--foreground)]';
     }
   }, []);
 
@@ -189,33 +189,33 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                 <div className="flex items-center justify-center space-x-4 mb-8">
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 1 ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 1 ? 'bg-pink-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       1
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.gdm_screening.risk_assessment')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.gdm_screening.risk_assessment')}</span>
                   </div>
                   <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                    currentStep >= 2 ? 'bg-rose-500' : 'bg-gray-200'
+                    currentStep >= 2 ? 'bg-rose-500' : 'bg-[var(--component-surface-tertiary)]'
                   }`}></div>
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 2 ? 'bg-rose-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 2 ? 'bg-rose-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       2
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.gdm_screening.demographics_history')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.gdm_screening.demographics_history')}</span>
                   </div>
                   <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                    currentStep >= 3 ? 'bg-purple-500' : 'bg-gray-200'
+                    currentStep >= 3 ? 'bg-purple-500' : 'bg-[var(--component-surface-tertiary)]'
                   }`}></div>
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 3 ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 3 ? 'bg-purple-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       3
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.gdm_screening.screening_recommendations')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.gdm_screening.screening_recommendations')}</span>
                   </div>
                 </div>
 
@@ -225,17 +225,17 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/20 dark:to-purple-900/20 rounded-2xl border border-pink-200 dark:border-pink-800">
                         <User className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.gdm_screening.patient_demographics')}</h3>
+                        <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.gdm_screening.patient_demographics')}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.gdm_screening.basic_demographics_description')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.gdm_screening.basic_demographics_description')}</p>
                     </div>
 
                     <div className="space-y-6">
                       {/* Patient Demographics */}
-                      <div className="p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl">
+                      <div className="p-6 bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl">
                         <div className="flex items-center space-x-3 mb-4">
-                          <User className="w-5 h-5 text-blue-600" />
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.gdm_screening.basic_demographics')}</h4>
+                          <User className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.gdm_screening.basic_demographics')}</h4>
                         </div>
                         
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -273,7 +273,7 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                       {/* Race/Ethnicity Assessment */}
                       <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl">
                         <div className="flex items-center space-x-3 mb-4">
-                          <BarChart3 className="w-5 h-5 text-blue-600" />
+                          <BarChart3 className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                           <h4 className="font-semibold text-blue-800 dark:text-blue-200">{t('calculators.gdm_screening.race_ethnicity')}</h4>
                         </div>
                         
@@ -293,9 +293,9 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                           icon={BarChart3}
                         />
 
-                        <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg">
+                        <div className="mt-4 p-4 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 border border-blue-200 dark:border-blue-700 rounded-lg">
                           <h5 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">{t('calculators.gdm_screening.high_risk_ethnic_groups')}</h5>
-                          <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                          <div className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 space-y-1">
                             <p>{t('calculators.gdm_screening.hispanic_risk')}</p>
                             <p>{t('calculators.gdm_screening.asian_risk')}</p>
                             <p>{t('calculators.gdm_screening.african_american_risk')}</p>
@@ -322,9 +322,9 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-rose-50 to-purple-50 dark:from-rose-900/20 dark:to-purple-900/20 rounded-2xl border border-rose-200 dark:border-rose-800">
                         <Calendar className="w-6 h-6 text-rose-600 dark:text-rose-400" />
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.gdm_screening.clinical_history')}</h3>
+                        <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.gdm_screening.clinical_history')}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.gdm_screening.clinical_history_description')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.gdm_screening.clinical_history_description')}</p>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
@@ -438,7 +438,7 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
               /* Results Display */
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.gdm_screening.gdm_screening_assessment')}</h3>
+                  <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.gdm_screening.gdm_screening_assessment')}</h3>
                   <div className="flex items-center space-x-4">
                     <div className={`inline-flex items-center space-x-1 rounded-lg px-3 py-1 ${getRiskColor(result.riskLevel)}`}>
                       <span className="text-xs font-semibold">{t('calculators.gdm_screening.risk_level')} {t(`calculators.gdm_screening.result_values.risk_levels.${result.riskLevel}`)}</span>
@@ -454,7 +454,7 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                   {/* Screening Timing Card */}
                   <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-2xl border border-blue-200 dark:border-blue-700">
                     <h4 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">{t('calculators.gdm_screening.screening_timing')}</h4>
-                    <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">{t('calculators.gdm_screening.recommended_timing')}</p>
+                    <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 mb-3">{t('calculators.gdm_screening.recommended_timing')}</p>
                     <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{t(`calculators.gdm_screening.result_values.screening_recommendations.${result.screeningRecommendation}`)}</p>
                   </div>
 
@@ -470,7 +470,7 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                 <div className={`p-6 rounded-2xl border-2 ${getRiskBgColor(result.riskLevel)}`}>
                   <h4 className="text-lg font-semibold mb-3">{t('calculators.gdm_screening.clinical_recommendations')}</h4>
                   <div className="space-y-3">
-                    <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+                    <p className="text-[var(--foreground)] dark:text-[var(--foreground)] leading-relaxed">
                       {t(`calculators.gdm_screening.interpretations.${result.riskLevel}`).replace('{score}', String(result.value))}
                     </p>
                     
@@ -507,8 +507,8 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                         
                         return allRecommendations.map((rec: string, index: number) => (
                           <div key={index} className="flex items-start space-x-2">
-                            <span className="text-gray-500 dark:text-gray-400 mt-1.5">•</span>
-                            <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{rec}</p>
+                            <span className="text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mt-1.5">•</span>
+                            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-sm leading-relaxed">{rec}</p>
                           </div>
                         ));
                       })()}
@@ -517,8 +517,8 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                 </div>
 
                 {/* Evidence Base */}
-                <div className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-200 dark:border-gray-700">
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{t('calculators.gdm_screening.evidence_base')}</h4>
+                <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--background)]/50 p-6 rounded-2xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
+                  <h4 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">{t('calculators.gdm_screening.evidence_base')}</h4>
                   <div className="space-y-2">
                     {/* Use translated references */}
                     {(() => {
@@ -537,8 +537,8 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                       
                       return references.map((ref: string, index: number) => (
                         <div key={index} className="flex items-start space-x-2">
-                          <span className="text-gray-500 dark:text-gray-400 mt-1.5">•</span>
-                          <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{ref}</p>
+                          <span className="text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mt-1.5">•</span>
+                          <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-sm leading-relaxed">{ref}</p>
                         </div>
                       ));
                     })()}
@@ -549,14 +549,14 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={handleReset}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    className="flex-1 bg-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] px-6 py-3 rounded-xl font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:ring-offset-2"
                   >
                     {t('calculators.gdm_screening.new_assessment')}
                   </button>
                   
                   <button
                     onClick={() => setResult(null)}
-                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    className="flex-1 bg-[var(--border)] hover:bg-[var(--card)] text-[var(--foreground)] px-6 py-3 rounded-xl font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                   >
                     {t('calculators.gdm_screening.modify_inputs')}
                   </button>
@@ -607,7 +607,7 @@ const GDMScreeningCalculatorComponent: React.FC = () => {
 
             {/* Footer Information */}
             <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-              <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 <Info className="w-4 h-4" />
                 <span>{t('calculators.gdm_screening.footer_info')}</span>
                 <div className="flex items-center space-x-1">

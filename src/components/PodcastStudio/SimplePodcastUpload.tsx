@@ -218,9 +218,9 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
               <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-2">
                   <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-lg shadow-lg border border-white/20">
-                    <Upload className="w-4 h-4 text-white" />
+                    <Upload className="w-4 h-4 text-[var(--foreground)]" />
                   </div>
-                  <h2 className="text-base font-bold text-white">
+                  <h2 className="text-base font-bold text-[var(--foreground)]">
                     Upload Document
                   </h2>
                 </div>
@@ -228,9 +228,9 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
                 {/* Close Button */}
                 <button
                   onClick={onClose}
-                  className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-[var(--component-card)]/10 rounded-lg transition-colors"
                 >
-                  <X className="w-4 h-4 text-white/60 hover:text-white" />
+                  <X className="w-4 h-4 text-[var(--foreground)]/60 hover:text-[var(--foreground)]" />
                 </button>
               </div>
             </div>
@@ -239,7 +239,7 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
             <div className="relative px-3 pb-3 space-y-3">
               {/* Revolutionary File Upload Zone */}
               <div>
-                <label className="block text-sm font-bold text-white mb-2">
+                <label className="block text-sm font-bold text-[var(--foreground)] mb-2">
                   Select Your Document
                 </label>
                 <div className="relative">
@@ -281,7 +281,7 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
                         ? 'border-emerald-400/50 bg-emerald-500/10' 
                         : isDragging
                         ? 'border-purple-400/70 bg-purple-500/20'
-                        : 'border-white/30 bg-white/5 hover:border-white/50 hover:bg-white/10'
+                        : 'border-white/30 bg-[var(--component-card)]/5 hover:border-white/50 hover:bg-[var(--component-card)]/10'
                       }
                     `}>
                       <AnimatePresence mode="wait">
@@ -298,7 +298,7 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
                                 const Icon = getFileIcon(file.type);
                                 return <Icon className="w-5 h-5 text-emerald-400" />;
                               })()}
-                              <p className="text-xs font-medium text-white truncate max-w-[150px]">
+                              <p className="text-xs font-medium text-[var(--foreground)] truncate max-w-[150px]">
                                 {file.name}
                               </p>
                             </div>
@@ -314,11 +314,11 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
                             exit={{ scale: 0.8, opacity: 0 }}
                             className="space-y-1"
                           >
-                            <Cloud className="w-6 h-6 text-white/60 mx-auto mb-1" />
-                            <p className="text-xs font-medium text-white">
+                            <Cloud className="w-6 h-6 text-[var(--foreground)]/60 mx-auto mb-1" />
+                            <p className="text-xs font-medium text-[var(--foreground)]">
                               {isDragging ? 'Drop your file here' : 'Choose or drag document'}
                             </p>
-                            <p className="text-xs text-white/50">
+                            <p className="text-xs text-[var(--foreground)]/50">
                               PDF, DOC, DOCX, TXT, MD • Max 50MB
                             </p>
                           </motion.div>
@@ -331,14 +331,14 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
 
               {/* Title Field */}
               <div>
-                <label className="block text-xs font-medium text-white mb-1">
+                <label className="block text-xs font-medium text-[var(--foreground)] mb-1">
                   Document Title *
                 </label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-2.5 py-1.5 bg-white/10 border border-white/20 rounded-lg focus:ring-1 focus:ring-purple-400/50 focus:border-purple-400/50 transition-all placeholder-white/40 text-white text-sm"
+                  className="w-full px-2.5 py-1.5 bg-[var(--component-card)]/10 border border-white/20 rounded-lg focus:ring-1 focus:ring-purple-400/50 focus:border-purple-400/50 transition-all placeholder-white/40 text-[var(--foreground)] text-sm"
                   placeholder="Enter title..."
                   disabled={isUploading}
                   required
@@ -347,14 +347,14 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
 
               {/* Description Field */}
               <div>
-                <label className="block text-xs font-medium text-white mb-1">
+                <label className="block text-xs font-medium text-[var(--foreground)] mb-1">
                   Description (Optional)
                 </label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={2}
-                  className="w-full px-2.5 py-1.5 bg-white/10 border border-white/20 rounded-lg focus:ring-1 focus:ring-pink-400/50 focus:border-pink-400/50 transition-all resize-none placeholder-white/40 text-white text-sm"
+                  className="w-full px-2.5 py-1.5 bg-[var(--component-card)]/10 border border-white/20 rounded-lg focus:ring-1 focus:ring-pink-400/50 focus:border-pink-400/50 transition-all resize-none placeholder-white/40 text-[var(--foreground)] text-sm"
                   placeholder="Add context..."
                   disabled={isUploading}
                 />
@@ -396,7 +396,7 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
                 <button
                   onClick={resetForm}
                   disabled={isUploading}
-                  className="px-3 py-1.5 bg-white/10 hover:bg-white/15 border border-white/20 rounded-lg text-white/80 hover:text-white font-medium text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-3 py-1.5 bg-[var(--component-card)]/10 hover:bg-[var(--component-card)]/15 border border-white/20 rounded-lg text-[var(--foreground)]/80 hover:text-[var(--foreground)] font-medium text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Reset
                 </button>
@@ -408,8 +408,8 @@ const SimplePodcastUpload: React.FC<SimplePodcastUploadProps> = ({
                   className={`
                     flex-1 px-3 py-1.5 rounded-lg font-medium text-xs transition-all flex items-center justify-center space-x-1
                     ${!file || !title.trim() || isUploading 
-                      ? 'bg-gray-600 text-gray-300 cursor-not-allowed' 
-                      : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700'
+                      ? 'bg-[var(--border)] text-[var(--foreground-secondary)] cursor-not-allowed' 
+                      : 'bg-gradient-to-r from-purple-600 to-pink-600 text-[var(--foreground)] hover:from-purple-700 hover:to-pink-700'
                     }
                   `}
                 >

@@ -61,7 +61,7 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({
             <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-600 rounded-[3rem] blur-2xl opacity-50 scale-125" />
             
             <div className="relative w-32 h-32 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-600 rounded-[3rem] shadow-2xl flex items-center justify-center border border-white/20">
-              <Construction className="w-16 h-16 text-white drop-shadow-lg" />
+              <Construction className="w-16 h-16 text-[var(--foreground)] drop-shadow-lg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 rounded-[3rem]" />
             </div>
           </motion.div>
@@ -82,7 +82,7 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6 }}
-            className="text-xl text-white/80 leading-relaxed max-w-2xl mx-auto mb-8"
+            className="text-xl text-[var(--foreground)]/80 leading-relaxed max-w-2xl mx-auto mb-8"
           >
             {description}
           </motion.p>
@@ -92,7 +92,7 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8, duration: 0.6 }}
-            className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-full font-semibold text-lg shadow-lg mb-12"
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 text-[var(--foreground)] px-6 py-3 rounded-full font-semibold text-lg shadow-lg mb-12"
           >
             <Clock className="w-5 h-5" />
             <span>Coming Soon</span>
@@ -106,7 +106,7 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({
               transition={{ delay: 0.9, duration: 0.6 }}
               className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-3xl p-8 max-w-2xl mx-auto"
             >
-              <h3 className="text-2xl font-bold text-white mb-6">What's Coming:</h3>
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-6">What's Coming:</h3>
               <div className="space-y-4">
                 {features.map((feature, index) => (
                   <motion.div
@@ -117,7 +117,7 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({
                     className="flex items-center space-x-3"
                   >
                     <Star className="w-5 h-5 text-yellow-400 flex-shrink-0" />
-                    <span className="text-white/90">{feature}</span>
+                    <span className="text-[var(--foreground)]/90">{feature}</span>
                   </motion.div>
                 ))}
               </div>

@@ -57,18 +57,18 @@ export const ParameterCard: React.FC<ParameterCardProps> = ({
           "p-2 bg-gradient-to-br rounded-lg",
           `from-${color}-500 to-${color}-500`
         )}>
-          <div className="text-white">
+          <div className="text-[var(--foreground)]">
             {icon}
           </div>
         </div>
         <div>
-          <Label className="text-sm font-bold text-slate-800">{title}</Label>
-          <p className="text-xs text-slate-600">{description}</p>
+          <Label className="text-sm font-bold text-[var(--foreground)]">{title}</Label>
+          <p className="text-xs text-[var(--foreground-tertiary)]">{description}</p>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-700">Minimum</label>
+          <label className="text-xs font-medium text-[var(--foreground)]">Minimum</label>
           <Input
             type="number"
             step={step}
@@ -76,14 +76,14 @@ export const ParameterCard: React.FC<ParameterCardProps> = ({
             value={minValue || ''}
             onChange={handleMinChange}
             className={cn(
-              "bg-white/80 border focus:ring",
+              "bg-[var(--component-card)]/80 border focus:ring",
               `border-${color}-200 focus:border-${color}-300 focus:ring-${color}-200`
             )}
             {...inputProps}
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-700">Maximum</label>
+          <label className="text-xs font-medium text-[var(--foreground)]">Maximum</label>
           <Input
             type="number"
             step={step}
@@ -91,7 +91,7 @@ export const ParameterCard: React.FC<ParameterCardProps> = ({
             value={maxValue || ''}
             onChange={handleMaxChange}
             className={cn(
-              "bg-white/80 border focus:ring",
+              "bg-[var(--component-card)]/80 border focus:ring",
               `border-${color}-200 focus:border-${color}-300 focus:ring-${color}-200`
             )}
             {...inputProps}

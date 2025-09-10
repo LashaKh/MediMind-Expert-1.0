@@ -42,11 +42,11 @@ export const AnalyticsPage: React.FC<AnalyticsPageProps> = () => {
   // Redirect non-admin users
   if (user?.medical_specialty !== 'admin') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--component-surface-primary)] flex items-center justify-center">
         <div className="text-center">
-          <Shield className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Restricted</h1>
-          <p className="text-gray-600">Analytics dashboard is available to administrators only.</p>
+          <Shield className="w-16 h-16 text-[var(--foreground-secondary)] mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2">Access Restricted</h1>
+          <p className="text-[var(--foreground-tertiary)]">Analytics dashboard is available to administrators only.</p>
         </div>
       </div>
     );
@@ -88,9 +88,9 @@ export const AnalyticsPage: React.FC<AnalyticsPageProps> = () => {
 
   return (
     <FeatureFlagProvider>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[var(--component-surface-primary)]">
         {/* Header */}
-        <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="bg-[var(--component-card)] shadow-sm border-b border-[var(--glass-border-light)]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-4">
@@ -98,19 +98,19 @@ export const AnalyticsPage: React.FC<AnalyticsPageProps> = () => {
                   <BarChart3 className="w-6 h-6 text-violet-600" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-semibold text-gray-900">Analytics Dashboard</h1>
-                  <p className="text-sm text-gray-600">Medical news engagement and system monitoring</p>
+                  <h1 className="text-xl font-semibold text-[var(--foreground)]">Analytics Dashboard</h1>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">Medical news engagement and system monitoring</p>
                 </div>
               </div>
               
               <div className="flex items-center space-x-4">
                 {/* Time Range Selector */}
                 <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4 text-gray-500" />
+                  <Calendar className="w-4 h-4 text-[var(--foreground-secondary)]" />
                   <select
                     value={timeRange}
                     onChange={(e) => setTimeRange(e.target.value as TimeRange)}
-                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                    className="px-3 py-2 border border-[var(--glass-border-medium)] rounded-lg text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
                   >
                     <option value="24h">Last 24 Hours</option>
                     <option value="7d">Last 7 Days</option>
@@ -121,11 +121,11 @@ export const AnalyticsPage: React.FC<AnalyticsPageProps> = () => {
 
                 {/* Specialty Filter */}
                 <div className="flex items-center space-x-2">
-                  <Filter className="w-4 h-4 text-gray-500" />
+                  <Filter className="w-4 h-4 text-[var(--foreground-secondary)]" />
                   <select
                     value={specialtyFilter}
                     onChange={(e) => setSpecialtyFilter(e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                    className="px-3 py-2 border border-[var(--glass-border-medium)] rounded-lg text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
                   >
                     {specialtyOptions.map(option => (
                       <option key={option.value} value={option.value}>
@@ -136,7 +136,7 @@ export const AnalyticsPage: React.FC<AnalyticsPageProps> = () => {
                 </div>
 
                 {/* Export Button */}
-                <button className="flex items-center space-x-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors">
+                <button className="flex items-center space-x-2 px-4 py-2 bg-violet-600 text-[var(--foreground)] rounded-lg hover:bg-violet-700 transition-colors">
                   <Download className="w-4 h-4" />
                   <span>Export</span>
                 </button>
@@ -146,7 +146,7 @@ export const AnalyticsPage: React.FC<AnalyticsPageProps> = () => {
         </div>
 
         {/* View Navigation */}
-        <div className="bg-white border-b border-gray-200">
+        <div className="bg-[var(--component-card)] border-b border-[var(--glass-border-light)]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex space-x-1 py-4">
               {viewOptions.map(option => {
@@ -158,7 +158,7 @@ export const AnalyticsPage: React.FC<AnalyticsPageProps> = () => {
                     className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       selectedView === option.id
                         ? 'bg-violet-100 text-violet-700 border border-violet-200'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                        : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-surface-secondary)]'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -176,25 +176,25 @@ export const AnalyticsPage: React.FC<AnalyticsPageProps> = () => {
             <div className="space-y-8">
               {/* Quick Stats */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="bg-[var(--component-card)] rounded-xl shadow-lg p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Total Articles</p>
-                      <p className="text-2xl font-bold text-gray-900">1,247</p>
+                      <p className="text-sm font-medium text-[var(--foreground-tertiary)]">Total Articles</p>
+                      <p className="text-2xl font-bold text-[var(--foreground)]">1,247</p>
                       <p className="text-sm text-green-600 flex items-center mt-1">
                         <TrendingUp className="w-3 h-3 mr-1" />
                         +12% from last period
                       </p>
                     </div>
-                    <Eye className="w-8 h-8 text-blue-500" />
+                    <Eye className="w-8 h-8 text-[var(--cardiology-accent-blue)]" />
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="bg-[var(--component-card)] rounded-xl shadow-lg p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Total Engagement</p>
-                      <p className="text-2xl font-bold text-gray-900">8,942</p>
+                      <p className="text-sm font-medium text-[var(--foreground-tertiary)]">Total Engagement</p>
+                      <p className="text-2xl font-bold text-[var(--foreground)]">8,942</p>
                       <p className="text-sm text-green-600 flex items-center mt-1">
                         <TrendingUp className="w-3 h-3 mr-1" />
                         +8% from last period
@@ -204,12 +204,12 @@ export const AnalyticsPage: React.FC<AnalyticsPageProps> = () => {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="bg-[var(--component-card)] rounded-xl shadow-lg p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Avg Read Time</p>
-                      <p className="text-2xl font-bold text-gray-900">3:42</p>
-                      <p className="text-sm text-blue-600 flex items-center mt-1">
+                      <p className="text-sm font-medium text-[var(--foreground-tertiary)]">Avg Read Time</p>
+                      <p className="text-2xl font-bold text-[var(--foreground)]">3:42</p>
+                      <p className="text-sm text-[var(--cardiology-accent-blue-dark)] flex items-center mt-1">
                         <Clock className="w-3 h-3 mr-1" />
                         +15s from last period
                       </p>
@@ -218,11 +218,11 @@ export const AnalyticsPage: React.FC<AnalyticsPageProps> = () => {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="bg-[var(--component-card)] rounded-xl shadow-lg p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">API Health</p>
-                      <p className="text-2xl font-bold text-gray-900">98.7%</p>
+                      <p className="text-sm font-medium text-[var(--foreground-tertiary)]">API Health</p>
+                      <p className="text-2xl font-bold text-[var(--foreground)]">98.7%</p>
                       <p className="text-sm text-green-600 flex items-center mt-1">
                         <Shield className="w-3 h-3 mr-1" />
                         All systems operational

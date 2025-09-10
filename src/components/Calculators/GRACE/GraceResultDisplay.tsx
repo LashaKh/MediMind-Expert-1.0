@@ -75,7 +75,7 @@ export const GraceResultDisplay: React.FC<GraceResultDisplayProps> = ({ result }
   return (
     <div className="space-y-10 animate-fade-in">
       {/* Hero Results Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/95 to-gray-50/95 dark:from-gray-800/95 dark:to-gray-900/95 backdrop-blur-xl border border-white/20 dark:border-gray-700/50 shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/95 to-gray-50/95 dark:from-gray-800/95 dark:to-gray-900/95 backdrop-blur-xl border border-white/20 dark:border-[var(--border-strong)]/50 shadow-2xl">
         {/* Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-indigo-500/5 animate-pulse" />
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500" />
@@ -84,12 +84,12 @@ export const GraceResultDisplay: React.FC<GraceResultDisplayProps> = ({ result }
         <div className="relative p-8 md:p-12">
           <div className="text-center mb-12">
             <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-red-500 via-pink-500 to-rose-600 shadow-2xl shadow-red-500/25 mb-8 animate-pulse">
-              <Heart className="w-12 h-12 text-white" />
+              <Heart className="w-12 h-12 text-[var(--foreground)]" />
             </div>
             <h2 className="text-5xl font-black bg-gradient-to-r from-gray-900 via-red-600 to-rose-800 dark:from-white dark:via-red-300 dark:to-rose-200 bg-clip-text text-transparent mb-4">
               {t('calculators.cardiology.grace.results_title')}
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300">
+            <p className="text-xl text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               {t('calculators.cardiology.grace.results_description')}
             </p>
           </div>
@@ -98,12 +98,12 @@ export const GraceResultDisplay: React.FC<GraceResultDisplayProps> = ({ result }
           <div className="flex justify-center mb-12">
             <div className="relative">
               <div className="w-48 h-48 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 shadow-2xl shadow-blue-500/25 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-2 rounded-full bg-white/10 backdrop-blur-sm" />
+                <div className="absolute inset-2 rounded-full bg-[var(--component-card)]/10 backdrop-blur-sm" />
                 <div className="relative z-10 text-center">
-                  <div className="text-5xl font-black text-white mb-2">
+                  <div className="text-5xl font-black text-[var(--foreground)] mb-2">
                     {result.score}
                   </div>
-                  <div className="text-sm font-semibold text-white/90 uppercase tracking-wider">
+                  <div className="text-sm font-semibold text-[var(--foreground)]/90 uppercase tracking-wider">
                     {t('calculators.cardiology.grace.grace_score')}
                   </div>
                 </div>
@@ -225,20 +225,20 @@ export const GraceResultDisplay: React.FC<GraceResultDisplayProps> = ({ result }
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5" />
             <div className="relative">
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mr-4">
-                  <Stethoscope className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <div className="w-12 h-12 rounded-xl bg-[var(--cardiology-accent-blue)]/20 flex items-center justify-center mr-4">
+                  <Stethoscope className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                 </div>
                 <h4 className="text-2xl font-bold text-blue-800 dark:text-blue-200">
                   {t('calculators.cardiology.grace.clinical_recommendations_title')}
                 </h4>
               </div>
-              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-6 space-y-4">
+              <div className="bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm rounded-xl p-6 space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
-                      <Check className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <div className="w-6 h-6 rounded-full bg-[var(--cardiology-accent-blue)]/20 flex items-center justify-center mt-0.5">
+                      <Check className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                     </div>
-                    <p className="text-gray-800 dark:text-gray-200 font-medium">
+                    <p className="text-[var(--foreground)] dark:text-[var(--foreground)] font-medium">
                       {result.invasiveStrategy}
                     </p>
                   </div>
@@ -246,7 +246,7 @@ export const GraceResultDisplay: React.FC<GraceResultDisplayProps> = ({ result }
                     <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center mt-0.5">
                       <Check className="w-4 h-4 text-green-600 dark:text-green-400" />
                     </div>
-                    <p className="text-gray-800 dark:text-gray-200 font-medium">
+                    <p className="text-[var(--foreground)] dark:text-[var(--foreground)] font-medium">
                       {result.recommendation}
                     </p>
                   </div>
@@ -254,7 +254,7 @@ export const GraceResultDisplay: React.FC<GraceResultDisplayProps> = ({ result }
                     <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center mt-0.5">
                       <Clock className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <p className="text-gray-800 dark:text-gray-200 font-medium">
+                    <p className="text-[var(--foreground)] dark:text-[var(--foreground)] font-medium">
                       {t('calculators.cardiology.grace.intervention_window')}: {result.riskDetails.interventionWindow}
                     </p>
                   </div>
@@ -270,8 +270,8 @@ export const GraceResultDisplay: React.FC<GraceResultDisplayProps> = ({ result }
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-blue-500/10"></div>
         <div className="relative p-6 space-y-6">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center backdrop-blur-sm">
-              <Brain className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+            <div className="w-12 h-12 rounded-2xl bg-[var(--cardiology-accent-blue)]/20 flex items-center justify-center backdrop-blur-sm">
+              <Brain className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300" />
             </div>
             <h3 className="text-2xl font-bold text-blue-900 dark:text-blue-100">
               {t('calculators.cardiology.grace.expert_insights')}
@@ -284,18 +284,18 @@ export const GraceResultDisplay: React.FC<GraceResultDisplayProps> = ({ result }
               return (
                 <div
                   key={index}
-                  className="relative overflow-hidden rounded-xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/20 dark:border-gray-700/30 p-6 hover:scale-105 transition-all duration-300"
+                  className="relative overflow-hidden rounded-xl bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm border border-white/20 dark:border-[var(--border-strong)]/30 p-6 hover:scale-105 transition-all duration-300"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5"></div>
                   <div className="relative flex items-start space-x-4">
-                    <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                      <IconComponent className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <div className="w-10 h-10 rounded-xl bg-[var(--cardiology-accent-blue)]/20 flex items-center justify-center flex-shrink-0">
+                      <IconComponent className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
                         {insight.title}
                       </h4>
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                      <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                         {insight.content}
                       </p>
                     </div>
@@ -326,7 +326,7 @@ export const GraceResultDisplay: React.FC<GraceResultDisplayProps> = ({ result }
               return (
                 <div
                   key={index}
-                  className="relative overflow-hidden rounded-xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/20 dark:border-gray-700/30 p-6 hover:scale-105 transition-all duration-300"
+                  className="relative overflow-hidden rounded-xl bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm border border-white/20 dark:border-[var(--border-strong)]/30 p-6 hover:scale-105 transition-all duration-300"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5"></div>
                   <div className="relative flex items-start space-x-4">
@@ -337,7 +337,7 @@ export const GraceResultDisplay: React.FC<GraceResultDisplayProps> = ({ result }
                       <h4 className="font-semibold text-emerald-800 dark:text-emerald-200 mb-2">
                         {pearl.title}
                       </h4>
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                      <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                         {pearl.content}
                       </p>
                     </div>

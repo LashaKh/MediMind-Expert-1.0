@@ -153,7 +153,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex flex-col gap-2 mb-2">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-tight line-clamp-2 group-hover:text-indigo-900 transition-colors">
+                <h3 className="text-base sm:text-lg font-semibold text-[var(--foreground)] leading-tight line-clamp-2 group-hover:text-indigo-900 transition-colors">
                   {article.title}
                 </h3>
                 <div className="flex gap-1 justify-end flex-shrink-0">
@@ -165,7 +165,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                         onClick={(e) => { e.stopPropagation(); handleLike(); }}
                         className={cn(
                           "p-1.5 h-auto min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center",
-                          isLiked ? "text-red-500 hover:text-red-600" : "text-gray-400 hover:text-red-500"
+                          isLiked ? "text-red-500 hover:text-red-600" : "text-[var(--foreground-secondary)] hover:text-red-500"
                         )}
                       >
                         {isLiked ? <HeartSolid className="w-4 h-4" /> : <HeartIcon className="w-4 h-4" />}
@@ -176,7 +176,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                         onClick={(e) => { e.stopPropagation(); handleBookmark(); }}
                         className={cn(
                           "p-1.5 h-auto min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center",
-                          isBookmarked ? "text-blue-500 hover:text-blue-600" : "text-gray-400 hover:text-blue-500"
+                          isBookmarked ? "text-[var(--cardiology-accent-blue)] hover:text-[var(--cardiology-accent-blue-dark)]" : "text-[var(--foreground-secondary)] hover:text-[var(--cardiology-accent-blue)]"
                         )}
                       >
                         {isBookmarked ? <BookmarkSolid className="w-4 h-4" /> : <BookmarkIcon className="w-4 h-4" />}
@@ -187,7 +187,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                     variant="ghost"
                     size="sm"
                     onClick={(e) => { e.stopPropagation(); setShareModalOpen(true); }}
-                    className="p-1.5 h-auto min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center text-gray-400 hover:text-gray-600"
+                    className="p-1.5 h-auto min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)]"
                     title="Share article"
                   >
                     <ShareIcon className="w-4 h-4" />
@@ -195,12 +195,12 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                 </div>
               </div>
               
-              <p className="text-gray-600 text-sm line-clamp-2 mb-3 leading-relaxed text-base">
+              <p className="text-[var(--foreground-tertiary)] text-sm line-clamp-2 mb-3 leading-relaxed text-base">
                 {article.summary}
               </p>
               
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+                <div className="flex items-center gap-2 text-xs text-[var(--foreground-secondary)]">
                   <span className="font-medium truncate">{article.sourceName}</span>
                   <span className="hidden sm:inline">•</span>
                   <span className="whitespace-nowrap">{formatDate(article.publishedDate)}</span>
@@ -235,20 +235,20 @@ export const NewsCard: React.FC<NewsCardProps> = ({
       <CardHeader className="relative z-10">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-4 mb-4">
           <div className="flex-1 w-full">
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight mb-3 group-hover:text-indigo-900 transition-colors duration-200 line-clamp-3">
+            <h3 className="text-lg sm:text-xl font-bold text-[var(--foreground)] leading-tight mb-3 group-hover:text-indigo-900 transition-colors duration-200 line-clamp-3">
               {article.title}
             </h3>
             
             <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-3 mb-4">
-              <div className={`inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r ${evidence.gradient} text-white rounded-full text-sm font-semibold shadow-lg ${evidence.glow}`}>
+              <div className={`inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r ${evidence.gradient} text-[var(--foreground)] rounded-full text-sm font-semibold shadow-lg ${evidence.glow}`}>
                 <EvidenceIcon className="w-4 h-4" />
                 <span>{evidence.level}</span>
-                <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                <span className="bg-[var(--component-card)]/20 px-2 py-0.5 rounded-full text-xs">
                   {Math.round(article.relevanceScore * 100)}%
                 </span>
               </div>
               
-              <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <div className="flex items-center gap-2 text-[var(--foreground-secondary)] text-sm">
                 <CalendarIcon className="w-4 h-4" />
                 <span>{formatDate(article.publishedDate)}</span>
               </div>
@@ -267,7 +267,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                     "p-2 transition-all duration-200 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center",
                     isLiked 
                       ? "text-red-500 bg-red-50 hover:bg-red-100" 
-                      : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+                      : "text-[var(--foreground-secondary)] hover:text-red-500 hover:bg-red-50"
                   )}
                   title={isLiked ? 'Remove from favorites' : 'Add to favorites'}
                 >
@@ -281,8 +281,8 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                   className={cn(
                     "p-2 transition-all duration-200 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center",
                     isBookmarked 
-                      ? "text-blue-500 bg-blue-50 hover:bg-blue-100" 
-                      : "text-gray-400 hover:text-blue-500 hover:bg-blue-50"
+                      ? "text-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)] hover:bg-[var(--cardiology-accent-blue-light)]" 
+                      : "text-[var(--foreground-secondary)] hover:text-[var(--cardiology-accent-blue)] hover:bg-[var(--cardiology-accent-blue-light)]"
                   )}
                   title={isBookmarked ? 'Remove bookmark' : 'Bookmark article'}
                 >
@@ -295,7 +295,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
               variant="ghost"
               size="sm"
               onClick={(e) => { e.stopPropagation(); setShareModalOpen(true); }}
-              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all duration-200 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center"
+              className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-secondary)] transition-all duration-200 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center"
               title="Share article"
             >
               <ShareIcon className="w-5 h-5" />
@@ -306,7 +306,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
       
       <CardContent className="relative z-10 pt-0">
         {/* Content */}
-        <p className="text-gray-700 leading-relaxed mb-6 text-sm sm:text-base line-clamp-3">
+        <p className="text-[var(--foreground-tertiary)] leading-relaxed mb-6 text-sm sm:text-base line-clamp-3">
           {article.summary}
         </p>
         
@@ -332,7 +332,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
           )}
           
           {article.engagementScore > 0 && (
-            <div className="flex items-center gap-1 text-xs text-gray-500">
+            <div className="flex items-center gap-1 text-xs text-[var(--foreground-secondary)]">
               <ArrowTrendingUpIcon className="w-3 h-3" />
               <span>{Math.round(article.engagementScore)} engagement</span>
             </div>
@@ -342,14 +342,14 @@ export const NewsCard: React.FC<NewsCardProps> = ({
         {/* Footer */}
         <div className="pt-4 border-t border-gray-100">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-            <div className="flex items-center gap-3 text-gray-600 text-sm min-w-0 flex-1">
+            <div className="flex items-center gap-3 text-[var(--foreground-tertiary)] text-sm min-w-0 flex-1">
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <LinkIcon className="w-4 h-4 flex-shrink-0" />
-                <span className="font-medium text-gray-900 truncate">{article.sourceName}</span>
+                <span className="font-medium text-[var(--foreground)] truncate">{article.sourceName}</span>
               </div>
               
               {article.clickCount > 0 && (
-                <div className="flex items-center gap-1 text-xs text-gray-500">
+                <div className="flex items-center gap-1 text-xs text-[var(--foreground-secondary)]">
                   <EyeIcon className="w-3 h-3" />
                   <span>{article.clickCount}</span>
                 </div>
@@ -357,7 +357,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             </div>
             
             <button
-              className="sm:ml-3 p-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 flex-shrink-0 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center"
+              className="sm:ml-3 p-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-[var(--foreground)] rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 flex-shrink-0 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center"
               onClick={(e) => { e.stopPropagation(); handleClick(); }}
               title="Read full article"
             >

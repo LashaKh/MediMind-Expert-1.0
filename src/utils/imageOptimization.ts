@@ -220,11 +220,11 @@ class ImageOptimizationManager {
     // Generate a simple SVG placeholder
     const svg = `
       <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" aria-label="${alt}">
-        <rect width="100%" height="100%" fill="#f3f4f6"/>
-        <rect x="20%" y="20%" width="60%" height="60%" fill="#e5e7eb" rx="4"/>
-        <circle cx="35%" cy="35%" r="8%" fill="#d1d5db"/>
-        <polygon points="45%,50% 55%,40% 65%,50% 75%,60% 45%,60%" fill="#d1d5db"/>
-        <text x="50%" y="75%" text-anchor="middle" fill="#9ca3af" font-size="12" font-family="sans-serif">
+        <rect width="100%" height="100%" fill="var(--background)"/>
+        <rect x="20%" y="20%" width="60%" height="60%" fill="var(--muted)" rx="4"/>
+        <circle cx="35%" cy="35%" r="8%" fill="var(--muted-foreground)"/>
+        <polygon points="45%,50% 55%,40% 65%,50% 75%,60% 45%,60%" fill="var(--muted-foreground)"/>
+        <text x="50%" y="75%" text-anchor="middle" fill="var(--foreground-secondary)" font-size="12" font-family="sans-serif">
           Medical Image
         </text>
       </svg>
@@ -617,7 +617,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   if (loading) {
     return (
       <div 
-        className={`bg-gray-200 animate-pulse ${className}`}
+        className={`bg-[var(--component-surface-tertiary)] animate-pulse ${className}`}
         style={{ width, height }}
         aria-label="Loading image..."
       />
@@ -627,10 +627,10 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   if (error) {
     return (
       <div 
-        className={`bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center ${className}`}
+        className={`bg-[var(--component-surface-secondary)] border-2 border-dashed border-[var(--glass-border-medium)] flex items-center justify-center ${className}`}
         style={{ width, height }}
       >
-        <span className="text-gray-500 text-sm">Failed to load image</span>
+        <span className="text-[var(--foreground-secondary)] text-sm">Failed to load image</span>
       </div>
     );
   }

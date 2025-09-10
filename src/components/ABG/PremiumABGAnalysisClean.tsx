@@ -149,7 +149,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
                 
                 {/* Helpful suggestions for API errors */}
                 {(error.includes('503') || error.includes('temporarily unavailable')) && (
-                  <div className="bg-white/70 rounded-lg p-4 mb-4">
+                  <div className="bg-[var(--component-card)]/70 rounded-lg p-4 mb-4">
                     <h5 className="font-medium text-red-900 mb-2 flex items-center gap-2">
                       <Clock className="h-4 w-4" />
                       What you can do:
@@ -163,7 +163,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
                 )}
                 
                 {error.includes('quota') && (
-                  <div className="bg-white/70 rounded-lg p-4 mb-4">
+                  <div className="bg-[var(--component-card)]/70 rounded-lg p-4 mb-4">
                     <h5 className="font-medium text-red-900 mb-2">Daily limit reached:</h5>
                     <ul className="text-sm text-red-800 space-y-1">
                       <li>• Try again tomorrow</li>
@@ -175,7 +175,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={() => window.location.reload()}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-[var(--foreground)] rounded-lg font-medium transition-colors"
                   >
                     <RefreshCw className="h-4 w-4" />
                     Try Again
@@ -185,7 +185,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
                     href="https://status.google.com/products/ai"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-red-300 hover:border-red-400 text-red-700 rounded-lg font-medium transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-[var(--component-card)] border border-red-300 hover:border-red-400 text-red-700 rounded-lg font-medium transition-colors"
                   >
                     <ExternalLink className="h-4 w-4" />
                     Check AI Status
@@ -193,7 +193,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
                   
                   {/* Show fallback option if Gemini is failing */}
                   {(error.includes('503') || error.includes('Gemini')) && (
-                    <div className="text-xs text-red-600 mt-2 p-2 bg-white/50 rounded">
+                    <div className="text-xs text-red-600 mt-2 p-2 bg-[var(--component-card)]/50 rounded">
                       💡 <strong>Alternative:</strong> Your system supports Flowise AI as backup. 
                       Contact support to enable fallback processing.
                     </div>

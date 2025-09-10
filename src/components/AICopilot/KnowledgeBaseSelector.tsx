@@ -80,7 +80,7 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
         gradient: 'from-blue-500 to-indigo-600',
         bg: 'from-blue-500/10 to-indigo-500/10',
         border: 'border-blue-200/50',
-        text: 'text-blue-700',
+        text: 'text-[var(--cardiology-accent-blue-dark)]',
         hover: 'hover:from-blue-500/20 hover:to-indigo-500/20'
       },
       badge: t('knowledgeBase.badgeVerified'),
@@ -146,7 +146,7 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
   // Use tabs instead of dropdown for better UX
   if (isMobile) {
     return (
-      <div className={`flex bg-white/90 backdrop-blur-xl rounded-xl shadow-md border border-slate-200/60 overflow-hidden ${className}`}>
+      <div className={`flex bg-[var(--component-card)]/90 backdrop-blur-xl rounded-xl shadow-md border border-[var(--glass-border-light)]/60 overflow-hidden ${className}`}>
         {knowledgeBaseOptions.map((option) => {
           const Icon = option.icon;
           const isSelected = option.type === selectedKnowledgeBase;
@@ -161,15 +161,15 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                 group relative flex-1 min-h-[56px] px-3 py-3 transition-all duration-200
                 ${isSelected 
                   ? `bg-gradient-to-br ${option.color.bg} ${option.color.border} border-2` 
-                  : 'border-2 border-transparent hover:bg-white/60'
+                  : 'border-2 border-transparent hover:bg-[var(--component-card)]/60'
                 }
                 ${disabled || isDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-95'}
-                focus:outline-none focus:ring-2 focus:ring-blue-500/20
+                focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/20
               `}
               title={`${option.label} - ${option.badge}`}
             >
               <div className="flex flex-col items-center space-y-1">
-                <Icon className={`w-5 h-5 ${isSelected ? option.color.text : 'text-slate-600'} transition-colors duration-200`} />
+                <Icon className={`w-5 h-5 ${isSelected ? option.color.text : 'text-[var(--foreground-tertiary)]'} transition-colors duration-200`} />
                 {isSelected && (
                   <div className="w-2 h-2 rounded-full bg-current opacity-60" />
                 )}
@@ -180,7 +180,7 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                 <div className={`
                   w-3 h-3 rounded-full border-2 border-white shadow-sm
                   ${option.type === 'curated' 
-                    ? 'bg-blue-500' 
+                    ? 'bg-[var(--cardiology-accent-blue)]' 
                     : personalDocumentCount > 0
                       ? 'bg-emerald-500'
                       : 'bg-amber-500'
@@ -197,7 +197,7 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
   return (
     <div className={`relative z-[100] ${className}`} ref={dropdownRef}>
       {/* Desktop: Clear tab-style selector */}
-      <div className="flex bg-white/95 backdrop-blur-xl rounded-xl shadow-md border border-slate-200/60 overflow-hidden">
+      <div className="flex bg-[var(--component-card)]/95 backdrop-blur-xl rounded-xl shadow-md border border-[var(--glass-border-light)]/60 overflow-hidden">
         {knowledgeBaseOptions.map((option) => {
           const Icon = option.icon;
           const isSelected = option.type === selectedKnowledgeBase;
@@ -214,10 +214,10 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                 group relative flex-1 min-h-[56px] px-6 py-4 transition-all duration-200
                 ${isSelected 
                   ? `bg-gradient-to-br ${option.color.bg} border-b-4 ${option.color.border}` 
-                  : 'border-b-4 border-transparent hover:bg-white/60 hover:border-b-slate-200'
+                  : 'border-b-4 border-transparent hover:bg-[var(--component-card)]/60 hover:border-b-slate-200'
                 }
                 ${disabled || isDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-95'}
-                focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-inset
+                focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/20 focus:ring-inset
               `}
             >
               <div className="flex items-center space-x-4">
@@ -226,29 +226,29 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                   p-2.5 rounded-xl transition-all duration-300
                   ${isSelected 
                     ? `bg-gradient-to-br ${option.color.bg} border ${option.color.border} shadow-md` 
-                    : 'bg-slate-100 border border-slate-200'
+                    : 'bg-[var(--component-surface-secondary)] border border-[var(--glass-border-light)]'
                   }
                 `}>
-                  <Icon className={`w-5 h-5 ${isSelected ? option.color.text : 'text-slate-600'} transition-colors duration-200`} />
+                  <Icon className={`w-5 h-5 ${isSelected ? option.color.text : 'text-[var(--foreground-tertiary)]'} transition-colors duration-200`} />
                 </div>
                 
                 {/* Content */}
                 <div className="flex flex-col items-start min-w-0">
                   <div className="flex items-center space-x-3">
-                    <span className={`text-sm font-bold ${isSelected ? option.color.text : 'text-slate-700'} transition-colors duration-200`}>
+                    <span className={`text-sm font-bold ${isSelected ? option.color.text : 'text-[var(--foreground)]'} transition-colors duration-200`}>
                       {option.label}
                     </span>
                     <div className={`
                       px-2.5 py-1 rounded-full text-xs font-bold shadow-sm border
                       ${isSelected 
-                        ? `bg-gradient-to-r ${option.color.gradient.replace('from-', 'from-').replace('to-', '/20 to-')} text-white border-white/20`
-                        : 'bg-slate-100 text-slate-600 border-slate-200'
+                        ? `bg-gradient-to-r ${option.color.gradient.replace('from-', 'from-').replace('to-', '/20 to-')} text-[var(--foreground)] border-white/20`
+                        : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] border-[var(--glass-border-light)]'
                       }
                     `}>
                       {option.badge}
                     </div>
                   </div>
-                  <span className="text-xs text-slate-500 font-medium mt-1">
+                  <span className="text-xs text-[var(--foreground-secondary)] font-medium mt-1">
                     {option.count}
                   </span>
                 </div>
@@ -276,11 +276,11 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
           <div className="relative">
             {/* Arrow */}
             <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-              <div className="w-4 h-4 rotate-45 bg-white border-l border-t border-slate-200/60"></div>
+              <div className="w-4 h-4 rotate-45 bg-[var(--component-card)] border-l border-t border-[var(--glass-border-light)]/60"></div>
             </div>
             
             {/* Tooltip Card */}
-            <div className="bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/60 shadow-2xl shadow-slate-900/20 p-6">
+            <div className="bg-[var(--component-card)]/95 backdrop-blur-xl rounded-2xl border border-[var(--glass-border-light)]/60 shadow-2xl shadow-slate-900/20 p-6">
               {(() => {
                 const option = knowledgeBaseOptions.find(opt => opt.type === hoveredOption);
                 if (!option) return null;
@@ -292,15 +292,15 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                     {/* Header */}
                     <div className="flex items-center space-x-3">
                       <div className={`p-3 rounded-xl bg-gradient-to-br ${option.color.gradient} shadow-md`}>
-                        <Icon className="w-6 h-6 text-white" />
+                        <Icon className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-slate-900 text-lg">
+                        <h3 className="font-bold text-[var(--foreground)] text-lg">
                           {option.tooltipTitle}
                         </h3>
                         <div className={`
                           inline-flex px-3 py-1 rounded-full text-xs font-bold
-                          bg-gradient-to-r ${option.color.gradient} text-white shadow-sm
+                          bg-gradient-to-r ${option.color.gradient} text-[var(--foreground)] shadow-sm
                         `}>
                           {option.badge}
                         </div>
@@ -308,13 +308,13 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                     </div>
                     
                     {/* Description */}
-                    <div className="text-sm text-slate-600 leading-relaxed">
+                    <div className="text-sm text-[var(--foreground-tertiary)] leading-relaxed">
                       {option.tooltipDesc}
                     </div>
                     
                     {/* Footer */}
                     <div className="pt-2 border-t border-slate-100">
-                      <p className="text-xs text-slate-500 font-medium">
+                      <p className="text-xs text-[var(--foreground-secondary)] font-medium">
                         {option.count}
                       </p>
                     </div>

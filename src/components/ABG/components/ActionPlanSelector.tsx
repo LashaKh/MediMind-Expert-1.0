@@ -55,7 +55,7 @@ const categoryConfig = {
     label: 'Monitoring Plan',
     icon: Monitor,
     gradient: 'from-blue-500 to-blue-600',
-    bgColor: 'bg-blue-50',
+    bgColor: 'bg-[var(--cardiology-accent-blue-light)]',
     borderColor: 'border-blue-200',
     textColor: 'text-blue-800'
   },
@@ -360,17 +360,17 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
         )}
       >
         {/* Header */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b border-[var(--glass-border-light)]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
-                <Sparkles className="h-5 w-5 text-white" />
+                <Sparkles className="h-5 w-5 text-[var(--foreground)]" />
               </div>
               <div>
                 <h2 className="text-xl font-semibold">{t('abg.selector.title', 'Select Action Plans for AI Consultation')}</h2>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[var(--foreground-tertiary)]">
                   {t('abg.selector.subtitle', 'Choose which action plans to include in your AI consultation')}
-                  <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-1 rounded">v2.0</span>
+                  <span className="ml-2 text-xs bg-[var(--cardiology-accent-blue-light)] text-blue-800 px-1 rounded">v2.0</span>
                 </p>
               </div>
             </div>
@@ -402,7 +402,7 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
                   </>
                 )}
               </Button>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-[var(--foreground-tertiary)]">
                 {t('abg.selector.selectedCount', '{{selected}} of {{total}} selected', { selected: selectedItems.size, total: parsedItems.length })}
               </span>
             </div>
@@ -421,8 +421,8 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
                   className={cn(
                     "p-4 border-2 cursor-pointer transition-all",
                     isSelected 
-                      ? "border-blue-300 bg-blue-50" 
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)]" 
+                      : "border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)]"
                   )}
                   onClick={() => toggleItem(item.id)}
                 >
@@ -436,8 +436,8 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-2">
-                        <config.icon className="h-4 w-4 text-gray-500" />
-                        <h3 className="font-medium text-gray-900">{item.title}</h3>
+                        <config.icon className="h-4 w-4 text-[var(--foreground-secondary)]" />
+                        <h3 className="font-medium text-[var(--foreground)]">{item.title}</h3>
                         <Badge 
                           variant="secondary" 
                           className={cn("text-xs", config.textColor, config.bgColor)}
@@ -451,7 +451,7 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
                           {item.priority}
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-600 line-clamp-3">
+                      <p className="text-sm text-[var(--foreground-tertiary)] line-clamp-3">
                         {item.content.substring(0, 200)}
                         {item.content.length > 200 ? '...' : ''}
                       </p>
@@ -464,15 +464,15 @@ export const ActionPlanSelector: React.FC<ActionPlanSelectorProps> = ({
 
           {parsedItems.length === 0 && (
             <div className="text-center py-8">
-              <p className="text-gray-500">{t('abg.selector.noItems', 'No action plan items found')}</p>
+              <p className="text-[var(--foreground-secondary)]">{t('abg.selector.noItems', 'No action plan items found')}</p>
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-200">
+        <div className="p-6 border-t border-[var(--glass-border-light)]">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-[var(--foreground-tertiary)]">
               {selectedItems.size > 0 
                 ? t('abg.selector.selectedForConsult', '{{count}} item(s) selected for AI consultation', { count: selectedItems.size })
                 : t('abg.selector.selectForConsult', 'Select action plans to include in your consultation')

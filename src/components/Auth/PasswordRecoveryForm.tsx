@@ -65,7 +65,7 @@ export const PasswordRecoveryForm: React.FC = () => {
     return (
       <AuthLayout title="Check your email">
         <div className="text-center">
-          <p className="text-white">
+          <p className="text-[var(--foreground)]">
             If an account exists for the email address you entered, you will receive a password reset link shortly.
           </p>
           <div className="mt-6">
@@ -119,7 +119,7 @@ export const PasswordRecoveryForm: React.FC = () => {
         <div className="text-sm text-center">
           <Link
             to="/signin"
-            className="font-medium text-white hover:text-gray-200 dark:text-accent dark:hover:text-accent/90 touch-target-sm inline-block py-2 px-4 rounded-lg transition-colors hover:bg-white/10"
+            className="font-medium text-[var(--foreground)] hover:text-[var(--foreground)] dark:text-accent dark:hover:text-accent/90 touch-target-sm inline-block py-2 px-4 rounded-lg transition-colors hover:bg-[var(--component-card)]/10"
           >
             Back to Sign In
           </Link>

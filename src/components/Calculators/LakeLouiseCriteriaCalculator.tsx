@@ -182,11 +182,11 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
       default: 
         return {
           color: 'from-gray-500 to-gray-600',
-          bg: 'bg-gray-50',
-          border: 'border-gray-200',
-          text: 'text-gray-800',
+          bg: 'bg-[var(--component-surface-primary)]',
+          border: 'border-[var(--glass-border-light)]',
+          text: 'text-[var(--foreground)]',
           icon: Info,
-          badge: 'bg-gray-100 text-gray-800 border-gray-300'
+          badge: 'bg-[var(--component-surface-secondary)] text-[var(--foreground)] border-[var(--glass-border-medium)]'
         };
     }
   }, []);
@@ -205,20 +205,20 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
           <CardHeader className="pb-8 pt-8 text-center relative">
             <div className="flex items-center justify-center mb-6">
               <div className="relative">
-                <div className="absolute inset-0 bg-white/20 rounded-full blur-xl"></div>
-                <div className="relative bg-white/10 backdrop-blur-sm p-4 rounded-full border border-white/20">
-                  <Heart className="h-10 w-10 text-white drop-shadow-lg" />
+                <div className="absolute inset-0 bg-[var(--component-card)]/20 rounded-full blur-xl"></div>
+                <div className="relative bg-[var(--component-card)]/10 backdrop-blur-sm p-4 rounded-full border border-white/20">
+                  <Heart className="h-10 w-10 text-[var(--foreground)] drop-shadow-lg" />
                 </div>
               </div>
             </div>
             
-            <CardTitle className="text-3xl font-bold text-gray-900 mb-3 tracking-tight">
+            <CardTitle className="text-3xl font-bold text-[var(--foreground)] mb-3 tracking-tight">
               Lake Louise Criteria
             </CardTitle>
-            <CardDescription className="text-xl text-gray-800 font-medium mb-4">
+            <CardDescription className="text-xl text-[var(--foreground)] font-medium mb-4">
               MRI Diagnosis of Myocarditis
             </CardDescription>
-            <p className="text-gray-700 text-sm max-w-2xl mx-auto leading-relaxed">
+            <p className="text-[var(--foreground-tertiary)] text-sm max-w-2xl mx-auto leading-relaxed">
               Advanced cardiac magnetic resonance imaging diagnostic criteria for standardized myocarditis assessment
             </p>
           </CardHeader>
@@ -233,18 +233,18 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
             className="w-full flex items-center justify-between text-left group transition-all duration-300 hover:scale-[1.02]"
           >
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-xl group-hover:bg-blue-200 transition-colors">
-                <Info className="h-5 w-5 text-blue-600" />
+              <div className="p-2 bg-[var(--cardiology-accent-blue-light)] rounded-xl group-hover:bg-[var(--cardiology-accent-blue-medium)] transition-colors">
+                <Info className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900">When to Use</h3>
-                <p className="text-sm text-gray-600">Clinical application and criteria</p>
+                <h3 className="text-lg font-bold text-[var(--foreground)]">When to Use</h3>
+                <p className="text-sm text-[var(--foreground-tertiary)]">Clinical application and criteria</p>
               </div>
             </div>
-            <div className="p-2 rounded-lg bg-white/50 group-hover:bg-white transition-colors">
+            <div className="p-2 rounded-lg bg-[var(--component-card)]/50 group-hover:bg-[var(--component-card)] transition-colors">
               {showWhenToUse ? 
-                <ChevronUp className="h-5 w-5 text-gray-600" /> : 
-                <ChevronDown className="h-5 w-5 text-gray-600" />
+                <ChevronUp className="h-5 w-5 text-[var(--foreground-tertiary)]" /> : 
+                <ChevronDown className="h-5 w-5 text-[var(--foreground-tertiary)]" />
               }
             </div>
           </button>
@@ -252,12 +252,12 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
           <div className={`mt-6 space-y-4 transition-all duration-500 ease-in-out overflow-hidden ${
             showWhenToUse ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
           }`}>
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 space-y-4">
+            <div className="bg-[var(--component-card)]/70 backdrop-blur-sm rounded-2xl p-6 space-y-4">
               <div className="flex items-start space-x-3">
-                <Brain className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" />
+                <Brain className="h-6 w-6 text-[var(--cardiology-accent-blue-dark)] mt-1 flex-shrink-0" />
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Clinical Application</h4>
-                  <p className="text-gray-700 leading-relaxed">
+                  <h4 className="font-semibold text-[var(--foreground)] mb-2">Clinical Application</h4>
+                  <p className="text-[var(--foreground-tertiary)] leading-relaxed">
                     The Lake Louise Criteria for Magnetic Resonance Imaging Diagnosis of Myocarditis is a diagnostic tool used specifically in the field of cardiology. This calculator is applied to patients suspected of having myocarditis, an inflammation of the heart muscle. The Lake Louise Criteria utilizes cardiac magnetic resonance imaging (MRI) findings to aid in the diagnosis of myocarditis.
                   </p>
                 </div>
@@ -266,8 +266,8 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <Stethoscope className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Clinical Utility</h4>
-                  <p className="text-gray-700 leading-relaxed">
+                  <h4 className="font-semibold text-[var(--foreground)] mb-2">Clinical Utility</h4>
+                  <p className="text-[var(--foreground-tertiary)] leading-relaxed">
                     The clinical utility of this calculator lies in its ability to provide a standardized approach to the interpretation of cardiac MRI findings in suspected myocarditis, thereby aiding in the accurate diagnosis and subsequent management of this condition.
                   </p>
                 </div>
@@ -276,8 +276,8 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <AlertTriangle className="h-6 w-6 text-amber-600 mt-1 flex-shrink-0" />
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Exclusion Criteria</h4>
-                  <p className="text-gray-700 leading-relaxed">
+                  <h4 className="font-semibold text-[var(--foreground)] mb-2">Exclusion Criteria</h4>
+                  <p className="text-[var(--foreground-tertiary)] leading-relaxed">
                     Exclusion criteria for the use of the Lake Louise Criteria include patients who are contraindicated for MRI such as those with certain types of implanted medical devices (e.g., certain pacemakers or neurostimulators), severe kidney disease, or claustrophobia. Additionally, it may not be applicable in cases where myocarditis is not the primary differential diagnosis.
                   </p>
                 </div>
@@ -292,18 +292,18 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
         <CardContent className="p-8">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">MRI Criteria Assessment</h3>
-              <p className="text-gray-600">Evaluate each cardiac MRI finding</p>
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">MRI Criteria Assessment</h3>
+              <p className="text-[var(--foreground-tertiary)]">Evaluate each cardiac MRI finding</p>
             </div>
             
             {/* Live Score Display */}
             <div className="flex items-center space-x-3">
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-600">Current Score</p>
+                <p className="text-sm font-medium text-[var(--foreground-tertiary)]">Current Score</p>
                 <div className={`text-3xl font-bold transition-all duration-500 ${
                   animationPhase === 'calculating' ? 'scale-110' : 'scale-100'
                 } ${
-                  currentScore === 0 ? 'text-gray-400' :
+                  currentScore === 0 ? 'text-[var(--foreground-secondary)]' :
                   currentScore === 1 ? 'text-amber-600' :
                   currentScore === 2 ? 'text-orange-600' : 'text-red-600'
                 }`}>
@@ -311,7 +311,7 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
                 </div>
               </div>
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                <Heart className="h-6 w-6 text-white" />
+                <Heart className="h-6 w-6 text-[var(--foreground)]" />
               </div>
             </div>
           </div>
@@ -330,12 +330,12 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
                   } ${isSelected ? 'hover:scale-[1.02]' : 'hover:scale-[1.01]'}`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className={`relative bg-white rounded-2xl border-2 transition-all duration-300 ${
+                  <div className={`relative bg-[var(--component-card)] rounded-2xl border-2 transition-all duration-300 ${
                     isSelected 
                       ? isPositive 
                         ? 'border-red-200 bg-red-50/50' 
                         : 'border-green-200 bg-green-50/50'
-                      : 'border-gray-200 hover:border-blue-300 hover:shadow-md'
+                      : 'border-[var(--glass-border-light)] hover:border-[var(--cardiology-accent-blue)] hover:shadow-md'
                   } p-6 shadow-sm hover:shadow-lg`}>
                     
                     {/* Criterion Header */}
@@ -346,19 +346,19 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
                             ? isPositive
                               ? 'bg-red-100 text-red-600'
                               : 'bg-green-100 text-green-600'
-                            : 'bg-blue-100 text-blue-600 group-hover:bg-blue-200'
+                            : 'bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)] group-hover:bg-[var(--cardiology-accent-blue-medium)]'
                         }`}>
                           <IconComponent className="h-6 w-6" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="text-lg font-bold text-gray-900 mb-1">{param.title}</h4>
-                          <p className="text-gray-700 text-sm font-medium mb-2">{param.label}</p>
-                          <p className="text-gray-600 text-sm leading-relaxed">{param.description}</p>
+                          <h4 className="text-lg font-bold text-[var(--foreground)] mb-1">{param.title}</h4>
+                          <p className="text-[var(--foreground-tertiary)] text-sm font-medium mb-2">{param.label}</p>
+                          <p className="text-[var(--foreground-tertiary)] text-sm leading-relaxed">{param.description}</p>
                         </div>
                       </div>
                       
                       <div className="flex flex-col items-end space-y-2">
-                        <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">
+                        <Badge variant="secondary" className="bg-[var(--cardiology-accent-blue-light)] text-blue-800 border-blue-200">
                           {param.points} point
                         </Badge>
                         {isSelected && (
@@ -386,8 +386,8 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
                         onClick={() => handleInputChange(param.key, true)}
                         className={`flex-1 px-6 py-4 rounded-xl text-sm font-semibold transition-all duration-300 border-2 ${
                           data[param.key] === true
-                            ? 'bg-gradient-to-br from-red-500 to-rose-600 border-red-400 text-white shadow-lg transform scale-105'
-                            : 'bg-white border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 hover:shadow-md'
+                            ? 'bg-gradient-to-br from-red-500 to-rose-600 border-red-400 text-[var(--foreground)] shadow-lg transform scale-105'
+                            : 'bg-[var(--component-card)] border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 hover:shadow-md'
                         } focus:outline-none focus:ring-4 focus:ring-red-200`}
                       >
                         <div className="flex items-center justify-center space-x-2">
@@ -401,8 +401,8 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
                         onClick={() => handleInputChange(param.key, false)}
                         className={`flex-1 px-6 py-4 rounded-xl text-sm font-semibold transition-all duration-300 border-2 ${
                           data[param.key] === false
-                            ? 'bg-gradient-to-br from-green-500 to-emerald-600 border-green-400 text-white shadow-lg transform scale-105'
-                            : 'bg-white border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 hover:shadow-md'
+                            ? 'bg-gradient-to-br from-green-500 to-emerald-600 border-green-400 text-[var(--foreground)] shadow-lg transform scale-105'
+                            : 'bg-[var(--component-card)] border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 hover:shadow-md'
                         } focus:outline-none focus:ring-4 focus:ring-green-200`}
                       >
                         <div className="flex items-center justify-center space-x-2">
@@ -429,7 +429,7 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
               className={`flex-1 h-14 text-lg font-semibold transition-all duration-300 ${
                 allFieldsFilled 
                   ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transform hover:scale-[1.02] shadow-lg hover:shadow-xl' 
-                  : 'bg-gray-300 cursor-not-allowed'
+                  : 'bg-[var(--component-panel)] cursor-not-allowed'
               } ${animationPhase === 'calculating' ? 'animate-pulse' : ''}`}
             >
               {animationPhase === 'calculating' ? (
@@ -448,7 +448,7 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
             <Button 
               variant="outline" 
               onClick={handleReset}
-              className="h-14 px-8 border-2 hover:border-gray-400 transition-all duration-300 hover:scale-105 hover:shadow-md"
+              className="h-14 px-8 border-2 hover:border-[var(--border)] transition-all duration-300 hover:scale-105 hover:shadow-md"
             >
               <div className="flex items-center space-x-2">
                 <RotateCcw className="h-5 w-5" />
@@ -474,7 +474,7 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
                   <div className={`inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br ${getRiskConfig(result.riskLevel).color} shadow-2xl transform transition-all duration-500 ${
                     animationPhase === 'complete' ? 'scale-100 rotate-0' : 'scale-0 -rotate-180'
                   }`}>
-                    <span className="text-3xl font-bold text-white">
+                    <span className="text-3xl font-bold text-[var(--foreground)]">
                       {result.score}
                     </span>
                   </div>
@@ -488,27 +488,27 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
                     </Badge>
                   </div>
                   
-                  <h3 className="text-2xl font-bold text-gray-900">
+                  <h3 className="text-2xl font-bold text-[var(--foreground)]">
                     Score: {result.score}/3 Points
                   </h3>
                 </div>
                 
                 {/* Interpretation */}
                 <div className="grid xl:grid-cols-2 gap-6 mt-8">
-                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 text-left">
+                  <div className="bg-[var(--component-card)]/70 backdrop-blur-sm rounded-2xl p-6 text-left">
                     <div className="flex items-start space-x-3 mb-3">
                       <Brain className={`h-6 w-6 mt-1 ${getRiskConfig(result.riskLevel).text}`} />
-                      <h4 className="font-bold text-gray-900 text-lg">Clinical Interpretation</h4>
+                      <h4 className="font-bold text-[var(--foreground)] text-lg">Clinical Interpretation</h4>
                     </div>
-                    <p className="text-gray-700 leading-relaxed">{result.interpretation}</p>
+                    <p className="text-[var(--foreground-tertiary)] leading-relaxed">{result.interpretation}</p>
                   </div>
                   
-                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 text-left">
+                  <div className="bg-[var(--component-card)]/70 backdrop-blur-sm rounded-2xl p-6 text-left">
                     <div className="flex items-start space-x-3 mb-3">
                       <Stethoscope className={`h-6 w-6 mt-1 ${getRiskConfig(result.riskLevel).text}`} />
-                      <h4 className="font-bold text-gray-900 text-lg">Clinical Recommendation</h4>
+                      <h4 className="font-bold text-[var(--foreground)] text-lg">Clinical Recommendation</h4>
                     </div>
-                    <p className="text-gray-700 leading-relaxed">{result.recommendation}</p>
+                    <p className="text-[var(--foreground-tertiary)] leading-relaxed">{result.recommendation}</p>
                   </div>
                 </div>
               </div>
@@ -521,7 +521,7 @@ const LakeLouiseCriteriaCalculatorComponent: React.FC = () => {
       <Card className="shadow-lg border-0 bg-gradient-to-br from-blue-50 to-indigo-50">
         <CardContent className="p-6">
           <div className="flex items-start space-x-3">
-            <Info className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" />
+            <Info className="h-6 w-6 text-[var(--cardiology-accent-blue-dark)] mt-1 flex-shrink-0" />
             <div>
               <h4 className="font-bold text-blue-900 mb-2">Clinical Advisory</h4>
               <p className="text-blue-800 text-sm leading-relaxed">

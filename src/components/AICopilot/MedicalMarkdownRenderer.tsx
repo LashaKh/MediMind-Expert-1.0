@@ -17,8 +17,8 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
 }) => {
   // Enhanced medical-specific table renderer
   const TableRenderer = ({ children, ...props }: any) => (
-    <div className="table-container overflow-x-auto rounded-lg shadow-lg my-6 border border-gray-200 dark:border-gray-700">
-      <table className="w-full border-collapse bg-white dark:bg-gray-800" {...props}>
+    <div className="table-container overflow-x-auto rounded-lg shadow-lg my-6 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
+      <table className="w-full border-collapse bg-[var(--component-card)] dark:bg-[var(--background)]" {...props}>
         {children}
       </table>
     </div>
@@ -29,7 +29,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     <thead {...props}>
       {React.Children.map(children, (child, index) => 
         React.cloneElement(child, {
-          className: "bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+          className: "bg-gradient-to-r from-blue-600 to-indigo-600 text-[var(--foreground)]"
         })
       )}
     </thead>
@@ -38,7 +38,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
   // Medical table header cell renderer
   const TableHeaderCellRenderer = ({ children, ...props }: any) => (
     <th 
-      className="px-4 py-3 text-left font-semibold text-sm uppercase tracking-wide border-b border-blue-500"
+      className="px-4 py-3 text-left font-semibold text-sm uppercase tracking-wide border-b border-[var(--cardiology-accent-blue)]"
       {...props}
     >
       {children}
@@ -52,8 +52,8 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
         React.cloneElement(child, {
           className: `transition-colors duration-200 ${
             rowIndex % 2 === 0 
-              ? 'bg-gray-50 dark:bg-gray-700/50 hover:bg-blue-50 dark:hover:bg-blue-900/20' 
-              : 'bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+              ? 'bg-[var(--component-surface-primary)] dark:bg-[var(--card)]/50 hover:bg-[var(--cardiology-accent-blue-light)] dark:hover:bg-[var(--cardiology-accent-blue-darker)]/20' 
+              : 'bg-[var(--component-card)] dark:bg-[var(--background)] hover:bg-[var(--cardiology-accent-blue-light)] dark:hover:bg-[var(--cardiology-accent-blue-darker)]/20'
           }`
         })
       )}
@@ -63,7 +63,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
   // Medical table cell renderer
   const TableCellRenderer = ({ children, ...props }: any) => (
     <td 
-      className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 text-sm"
+      className="px-4 py-3 border-b border-gray-100 dark:border-[var(--border-strong)] text-sm"
       {...props}
     >
       {children}
@@ -72,14 +72,14 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
 
   // Enhanced heading renderer for medical sections
   const HeadingRenderer = ({ level, children, ...props }: any) => {
-    const baseClasses = "font-semibold text-gray-900 dark:text-white border-b-2 pb-2 mb-4";
+    const baseClasses = "font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] border-b-2 pb-2 mb-4";
     const levelClasses = {
-      1: "text-3xl mt-8 mb-6 border-blue-500 text-blue-900 dark:text-blue-100",
+      1: "text-3xl mt-8 mb-6 border-[var(--cardiology-accent-blue)] text-blue-900 dark:text-blue-100",
       2: "text-2xl mt-6 mb-4 border-blue-400 text-blue-800 dark:text-blue-200", 
-      3: "text-xl mt-5 mb-3 border-blue-300 text-blue-700 dark:text-blue-300",
-      4: "text-lg mt-4 mb-2 border-gray-300 text-gray-800 dark:text-gray-200",
-      5: "text-base mt-3 mb-2 border-gray-200 text-gray-700 dark:text-gray-300",
-      6: "text-sm mt-2 mb-1 border-gray-100 text-gray-600 dark:text-gray-400"
+      3: "text-xl mt-5 mb-3 border-[var(--cardiology-accent-blue)] text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300",
+      4: "text-lg mt-4 mb-2 border-[var(--glass-border-medium)] text-[var(--foreground)] dark:text-[var(--foreground)]",
+      5: "text-base mt-3 mb-2 border-[var(--glass-border-light)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]",
+      6: "text-sm mt-2 mb-1 border-gray-100 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]"
     };
 
     const Tag = `h${level}` as keyof JSX.IntrinsicElements;
@@ -111,7 +111,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
             if (child.toLowerCase().includes('treatment') || child.toLowerCase().includes('management')) {
               return (
                 <span className="flex items-center gap-2">
-                  <span className="text-blue-500">💊</span>
+                  <span className="text-[var(--cardiology-accent-blue)]">💊</span>
                   {child}
                 </span>
               );
@@ -147,10 +147,10 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
   // Medical list item renderer
   const ListItemRenderer = ({ children, ...props }: any) => (
     <li 
-      className="relative pl-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300"
+      className="relative pl-2 text-sm leading-relaxed text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]"
       {...props}
     >
-      <span className="absolute left-[-1rem] text-blue-500 font-bold">•</span>
+      <span className="absolute left-[-1rem] text-[var(--cardiology-accent-blue)] font-bold">•</span>
       {children}
     </li>
   );
@@ -163,7 +163,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     if (textContent.includes('**Pathophysiology') || textContent.includes('**Background')) {
       return (
         <div className="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border-l-4 border-red-500 p-4 rounded-r-lg my-4 shadow-sm">
-          <p className="text-sm leading-7 text-gray-800 dark:text-gray-200 mb-0" {...props}>
+          <p className="text-sm leading-7 text-[var(--foreground)] dark:text-[var(--foreground)] mb-0" {...props}>
             {children}
           </p>
         </div>
@@ -173,7 +173,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     if (textContent.includes('**Clinical') || textContent.includes('**Findings') || textContent.includes('**Symptoms')) {
       return (
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-l-4 border-green-500 p-4 rounded-r-lg my-4 shadow-sm">
-          <p className="text-sm leading-7 text-gray-800 dark:text-gray-200 mb-0" {...props}>
+          <p className="text-sm leading-7 text-[var(--foreground)] dark:text-[var(--foreground)] mb-0" {...props}>
             {children}
           </p>
         </div>
@@ -182,8 +182,8 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     
     if (textContent.includes('**Treatment') || textContent.includes('**Management') || textContent.includes('**Therapy')) {
       return (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg my-4 shadow-sm">
-          <p className="text-sm leading-7 text-gray-800 dark:text-gray-200 mb-0" {...props}>
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-l-4 border-[var(--cardiology-accent-blue)] p-4 rounded-r-lg my-4 shadow-sm">
+          <p className="text-sm leading-7 text-[var(--foreground)] dark:text-[var(--foreground)] mb-0" {...props}>
             {children}
           </p>
         </div>
@@ -193,7 +193,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     if (textContent.includes('**Score') || textContent.includes('**Calculation') || textContent.includes('**Risk')) {
       return (
         <div className="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 border-l-4 border-purple-500 p-4 rounded-r-lg my-4 shadow-sm">
-          <p className="text-sm leading-7 text-gray-800 dark:text-gray-200 mb-0" {...props}>
+          <p className="text-sm leading-7 text-[var(--foreground)] dark:text-[var(--foreground)] mb-0" {...props}>
             {children}
           </p>
         </div>
@@ -201,7 +201,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     }
     
     return (
-      <p className="mb-4 text-sm leading-7 text-gray-700 dark:text-gray-300" {...props}>
+      <p className="mb-4 text-sm leading-7 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" {...props}>
         {children}
       </p>
     );
@@ -210,7 +210,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
   // Enhanced strong text renderer for medical terms
   const StrongRenderer = ({ children, ...props }: any) => (
     <strong 
-      className="font-semibold text-gray-900 dark:text-white bg-yellow-100 dark:bg-yellow-900/30 px-1 py-0.5 rounded"
+      className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] bg-yellow-100 dark:bg-yellow-900/30 px-1 py-0.5 rounded"
       {...props}
     >
       {children}
@@ -238,7 +238,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     
     return (
       <code 
-        className="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-2 py-1 rounded text-sm font-mono border"
+        className="bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] text-red-600 dark:text-red-400 px-2 py-1 rounded text-sm font-mono border"
         {...props}
       >
         {children}
@@ -249,7 +249,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
   // Blockquote renderer for medical guidelines
   const BlockquoteRenderer = ({ children, ...props }: any) => (
     <blockquote 
-      className="border-l-4 border-amber-500 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 pl-4 py-3 my-4 italic text-gray-700 dark:text-gray-300 rounded-r-lg shadow-sm"
+      className="border-l-4 border-amber-500 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 pl-4 py-3 my-4 italic text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] rounded-r-lg shadow-sm"
       {...props}
     >
       <div className="flex items-start gap-2">
@@ -383,7 +383,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
                 <span
                   dangerouslySetInnerHTML={{
                     __html: children.replace(/\[(\d+)\]/g, (match, num) => {
-                      return `<span class="inline-source-ref cursor-pointer text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-1 py-0.5 rounded transition-colors" data-source-number="${num}" title="Click to highlight source ${num}">[${num}]</span>`;
+                      return `<span class="inline-source-ref cursor-pointer text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 hover:bg-[var(--cardiology-accent-blue-light)] dark:hover:bg-[var(--cardiology-accent-blue-darker)]/20 px-1 py-0.5 rounded transition-colors" data-source-number="${num}" title="Click to highlight source ${num}">[${num}]</span>`;
                     })
                   }}
                 />

@@ -68,7 +68,7 @@ export const PersonalKBGuidance: React.FC<PersonalKBGuidanceProps> = ({
       id: 'query-tips',
       title: 'How to Query Effectively',
       description: 'For best results, be specific about what you\'re looking for. Reference document types, patient conditions, or specific topics.',
-      icon: <Target className="w-6 h-6 text-blue-600" />,
+      icon: <Target className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)]" />,
       examples: [
         'What does my cardiology protocol say about hypertension?',
         'Find information about diabetes management in my guidelines',
@@ -95,7 +95,7 @@ export const PersonalKBGuidance: React.FC<PersonalKBGuidanceProps> = ({
       id: 'be-specific',
       title: 'Be Specific in Your Queries',
       description: 'The more specific your question, the better the AI can find relevant information in your documents.',
-      icon: <Target className="w-5 h-5 text-blue-600" />,
+      icon: <Target className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />,
       examples: [
         'What does my protocol say about ACE inhibitor dosing?',
         'Find the contraindications for beta-blockers in my guidelines',
@@ -183,22 +183,22 @@ export const PersonalKBGuidance: React.FC<PersonalKBGuidanceProps> = ({
     
     return (
       <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${className}`}>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md mx-4 border border-emerald-200 dark:border-emerald-700">
+        <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-xl p-6 max-w-md mx-4 border border-emerald-200 dark:border-emerald-700">
           <div className="flex items-start space-x-4">
             <div className="flex-shrink-0">
               {currentStepData.icon}
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+              <h3 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                 {currentStepData.title}
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
+              <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-4">
                 {currentStepData.description}
               </p>
               
               {currentStepData.examples && (
                 <div className="mb-4">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  <p className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground)] mb-2">
                     Example queries:
                   </p>
                   <ul className="space-y-1">
@@ -221,7 +221,7 @@ export const PersonalKBGuidance: React.FC<PersonalKBGuidanceProps> = ({
                           ? 'bg-emerald-600'
                           : index < currentStep
                           ? 'bg-emerald-300'
-                          : 'bg-gray-300'
+                          : 'bg-[var(--component-panel)]'
                       }`}
                     />
                   ))}
@@ -258,12 +258,12 @@ export const PersonalKBGuidance: React.FC<PersonalKBGuidanceProps> = ({
   if (showTipsPanel) {
     return (
       <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${className}`}>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl mx-4 max-h-[80vh] overflow-y-auto">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-xl max-w-2xl mx-4 max-h-[80vh] overflow-y-auto">
+          <div className="p-6 border-b border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Lightbulb className="w-6 h-6 text-emerald-600" />
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                <h2 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">
                   Personal Knowledge Base Tips
                 </h2>
               </div>
@@ -275,7 +275,7 @@ export const PersonalKBGuidance: React.FC<PersonalKBGuidanceProps> = ({
                 <X className="w-4 h-4" />
               </Button>
             </div>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">
+            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">
               Get the most out of your personal medical documents with these expert tips.
             </p>
           </div>
@@ -288,16 +288,16 @@ export const PersonalKBGuidance: React.FC<PersonalKBGuidanceProps> = ({
                     {tip.icon}
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    <h3 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                       {tip.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-3">
+                    <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3">
                       {tip.description}
                     </p>
                     
                     {tip.examples && (
-                      <div className="bg-gray-50 dark:bg-gray-700 rounded-md p-3">
-                        <p className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                      <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--card)] rounded-md p-3">
+                        <p className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground)] mb-2">
                           Examples:
                         </p>
                         <ul className="space-y-1">
@@ -314,9 +314,9 @@ export const PersonalKBGuidance: React.FC<PersonalKBGuidanceProps> = ({
               </div>
             ))}
             
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <Info className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] flex-shrink-0 mt-0.5" />
                 <div>
                   <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-1">
                     Pro Tip
@@ -331,7 +331,7 @@ export const PersonalKBGuidance: React.FC<PersonalKBGuidanceProps> = ({
             </div>
           </div>
           
-          <div className="p-6 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+          <div className="p-6 bg-[var(--component-surface-primary)] dark:bg-[var(--card)] border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
             <Button
               onClick={() => setShowTipsPanel(false)}
               className="w-full bg-emerald-600 hover:bg-emerald-700"

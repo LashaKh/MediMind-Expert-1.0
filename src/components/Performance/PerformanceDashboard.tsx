@@ -146,10 +146,10 @@ export const PerformanceDashboard: React.FC = () => {
    */
   const getAlertColorClass = (type: PerformanceAlert['type']) => {
     switch (type) {
-      case 'critical': return 'bg-red-100 border-red-500 text-red-800';
-      case 'error': return 'bg-orange-100 border-orange-500 text-orange-800';
-      case 'warning': return 'bg-yellow-100 border-yellow-500 text-yellow-800';
-      default: return 'bg-blue-100 border-blue-500 text-blue-800';
+      case 'critical': return 'bg-[var(--error-background)] border-[var(--error-text)] text-[var(--error-text)]';
+      case 'error': return 'bg-[var(--badge-warning)] border-[var(--cardiology-accent-orange)] text-[var(--badge-warning-foreground)]';
+      case 'warning': return 'bg-[var(--badge-warning)] border-[var(--cardiology-accent-orange)] text-[var(--badge-warning-foreground)]';
+      default: return 'bg-[var(--badge-info)] border-[var(--cardiology-accent-blue)] text-[var(--badge-info-foreground)]';
     }
   };
 
@@ -158,10 +158,10 @@ export const PerformanceDashboard: React.FC = () => {
    */
   const getVitalRatingColor = (rating: WebVital['rating']) => {
     switch (rating) {
-      case 'good': return 'text-green-600';
-      case 'needs-improvement': return 'text-yellow-600';
-      case 'poor': return 'text-red-600';
-      default: return 'text-gray-600';
+      case 'good': return 'text-[var(--cardiology-accent-emerald)]';
+      case 'needs-improvement': return 'text-[var(--cardiology-accent-orange)]';
+      case 'poor': return 'text-[var(--error-text)]';
+      default: return 'text-[var(--foreground-secondary)]';
     }
   };
 
@@ -201,10 +201,10 @@ export const PerformanceDashboard: React.FC = () => {
 
   if (!stats || !report) {
     return (
-      <div className="fixed bottom-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4">
+      <div className="fixed bottom-4 right-4 theme-card rounded-lg shadow-lg p-4">
         <div className="flex items-center space-x-2">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-          <span className="text-sm text-gray-600">Loading performance data...</span>
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[var(--cardiology-accent-blue)]"></div>
+          <span className="text-sm text-[var(--foreground-tertiary)]">Loading performance data...</span>
         </div>
       </div>
     );
@@ -229,7 +229,7 @@ export const PerformanceDashboard: React.FC = () => {
                 </div>
                 <button
                   onClick={() => setAlerts(alerts.filter(a => a.id !== alert.id))}
-                  className="ml-2 text-gray-400 hover:text-gray-600"
+                  className="ml-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)]"
                 >
                   ×
                 </button>
@@ -240,29 +240,29 @@ export const PerformanceDashboard: React.FC = () => {
       )}
 
       {/* Main Dashboard */}
-      <div className="bg-white border border-gray-200 rounded-lg shadow-lg">
+      <div className="theme-card rounded-lg shadow-lg">
         {/* Header */}
         <div 
           className="p-4 cursor-pointer flex items-center justify-between"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <div className="flex items-center space-x-3">
-            <div className={`w-3 h-3 rounded-full ${stats.isMonitoring ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+            <div className={`w-3 h-3 rounded-full ${stats.isMonitoring ? 'bg-[var(--cardiology-accent-emerald)]' : 'bg-[var(--foreground-tertiary)]'}`}></div>
             <div>
-              <h3 className="font-medium text-gray-900">Performance</h3>
-              <p className="text-xs text-gray-500">
+              <h3 className="font-medium text-[var(--foreground)]">Performance</h3>
+              <p className="text-xs text-[var(--foreground-secondary)]">
                 {stats.medicalContentMetrics} medical metrics tracked
               </p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             {alerts.length > 0 && (
-              <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+              <span className="bg-[var(--error-background)] text-[var(--error-text)] text-xs px-2 py-1 rounded-full">
                 {alerts.length}
               </span>
             )}
             <svg 
-              className={`w-4 h-4 text-gray-400 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+              className={`w-4 h-4 text-[var(--foreground-secondary)] transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
@@ -274,11 +274,11 @@ export const PerformanceDashboard: React.FC = () => {
 
         {/* Expanded Content */}
         {isExpanded && (
-          <div className="border-t border-gray-200 p-4 max-w-md">
+          <div className="border-t border-[var(--glass-border-light)] p-4 max-w-md">
             {/* Session Info */}
             <div className="mb-4">
-              <h4 className="font-medium text-gray-900 mb-2">Session</h4>
-              <div className="text-sm text-gray-600 space-y-1">
+              <h4 className="font-medium text-[var(--foreground)] mb-2">Session</h4>
+              <div className="text-sm text-[var(--foreground-tertiary)] space-y-1">
                 <p>ID: {stats.sessionId.split('_')[2]}</p>
                 <p>Total Metrics: {stats.metricsCount}</p>
                 <p>Medical Content: {stats.medicalContentMetrics}</p>
@@ -289,11 +289,11 @@ export const PerformanceDashboard: React.FC = () => {
             {/* Web Vitals */}
             {report.webVitals.length > 0 && (
               <div className="mb-4">
-                <h4 className="font-medium text-gray-900 mb-2">Web Vitals</h4>
+                <h4 className="font-medium text-[var(--foreground)] mb-2">Web Vitals</h4>
                 <div className="space-y-2">
                   {report.webVitals.map(vital => (
                     <div key={vital.id} className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">{vital.name}</span>
+                      <span className="text-sm text-[var(--foreground-tertiary)]">{vital.name}</span>
                       <div className="text-right">
                         <span className={`text-sm font-medium ${getVitalRatingColor(vital.rating)}`}>
                           {vital.name === 'CLS' ? vital.value.toFixed(3) : formatDuration(vital.value)}
@@ -310,11 +310,11 @@ export const PerformanceDashboard: React.FC = () => {
 
             {/* Medical Content Performance */}
             <div className="mb-4">
-              <h4 className="font-medium text-gray-900 mb-2">Medical Content</h4>
+              <h4 className="font-medium text-[var(--foreground)] mb-2">Medical Content</h4>
               <div className="space-y-2 text-sm">
                 {report.medicalContentPerformance.newsLoadTime > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-gray-600">News Load</span>
+                    <span className="text-[var(--foreground-tertiary)]">News Load</span>
                     <span className="font-medium">
                       {formatDuration(report.medicalContentPerformance.newsLoadTime)}
                     </span>
@@ -322,7 +322,7 @@ export const PerformanceDashboard: React.FC = () => {
                 )}
                 {report.medicalContentPerformance.calculatorResponseTime > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Calculator</span>
+                    <span className="text-[var(--foreground-tertiary)]">Calculator</span>
                     <span className="font-medium">
                       {formatDuration(report.medicalContentPerformance.calculatorResponseTime)}
                     </span>
@@ -330,7 +330,7 @@ export const PerformanceDashboard: React.FC = () => {
                 )}
                 {report.medicalContentPerformance.searchResultsTime > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Search</span>
+                    <span className="text-[var(--foreground-tertiary)]">Search</span>
                     <span className="font-medium">
                       {formatDuration(report.medicalContentPerformance.searchResultsTime)}
                     </span>
@@ -338,7 +338,7 @@ export const PerformanceDashboard: React.FC = () => {
                 )}
                 {report.medicalContentPerformance.imageLoadTime > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Images</span>
+                    <span className="text-[var(--foreground-tertiary)]">Images</span>
                     <span className="font-medium">
                       {formatDuration(report.medicalContentPerformance.imageLoadTime)}
                     </span>
@@ -349,8 +349,8 @@ export const PerformanceDashboard: React.FC = () => {
 
             {/* Network & Device Info */}
             <div className="mb-4">
-              <h4 className="font-medium text-gray-900 mb-2">Environment</h4>
-              <div className="text-sm text-gray-600 space-y-1">
+              <h4 className="font-medium text-[var(--foreground)] mb-2">Environment</h4>
+              <div className="text-sm text-[var(--foreground-tertiary)] space-y-1">
                 <p>Connection: {report.networkInfo.effectiveType}</p>
                 <p>RTT: {report.networkInfo.rtt}ms</p>
                 {report.deviceInfo.memory && (
@@ -367,7 +367,7 @@ export const PerformanceDashboard: React.FC = () => {
             <div className="flex space-x-2">
               <button
                 onClick={refreshData}
-                className="flex-1 bg-blue-600 text-white text-sm py-2 px-3 rounded hover:bg-blue-700 transition-colors"
+                className="flex-1 bg-[var(--cardiology-accent-blue)] text-[var(--foreground)] text-sm py-2 px-3 rounded hover:bg-[var(--cardiology-accent-blue)]/90 transition-colors"
               >
                 Refresh
               </button>
@@ -376,7 +376,7 @@ export const PerformanceDashboard: React.FC = () => {
                   performanceMonitor.reportMetrics();
                   setAlerts([]);
                 }}
-                className="flex-1 bg-gray-600 text-white text-sm py-2 px-3 rounded hover:bg-gray-700 transition-colors"
+                className="flex-1 bg-[var(--foreground-secondary)] text-[var(--foreground)] text-sm py-2 px-3 rounded hover:bg-[var(--foreground-secondary)]/90 transition-colors"
               >
                 Report
               </button>

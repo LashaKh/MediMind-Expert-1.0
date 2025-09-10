@@ -44,7 +44,7 @@ export const CalculatorContainer = forwardRef<HTMLDivElement, CalculatorContaine
             <div className="relative">
               {!compact && <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-600 rounded-2xl blur-xl opacity-30 animate-pulse"></div>}
               <div className={`relative ${compact ? 'p-2' : 'p-4'} bg-gradient-to-r from-blue-500 to-indigo-600 ${compact ? 'rounded-xl' : 'rounded-2xl'} shadow-lg`}>
-                <Icon className={`${compact ? 'w-5 h-5' : 'w-8 h-8'} text-white`} />
+                <Icon className={`${compact ? 'w-5 h-5' : 'w-8 h-8'} text-[var(--foreground)]`} />
               </div>
               {!compact && <Sparkles className="absolute -top-2 -right-2 w-6 h-6 text-yellow-400 animate-bounce" />}
             </div>
@@ -55,7 +55,7 @@ export const CalculatorContainer = forwardRef<HTMLDivElement, CalculatorContaine
                 {title}
               </h1>
               {subtitle && (
-                <p className={`${compact ? 'text-sm' : 'text-lg'} text-gray-600 dark:text-gray-300 mt-1 font-medium`}>
+                <p className={`${compact ? 'text-sm' : 'text-lg'} text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1 font-medium`}>
                   {subtitle}
                 </p>
               )}
@@ -115,8 +115,8 @@ export const CalculatorInput = forwardRef<HTMLInputElement, CalculatorInputProps
       <div className="space-y-2">
         {/* Label with Help Icon */}
         <div className="flex items-center justify-between">
-          <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-            {Icon && <Icon className="w-4 h-4 text-blue-500" />}
+          <label className="flex items-center space-x-2 text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
+            {Icon && <Icon className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />}
             <span>{label}</span>
             {required && <span className="text-red-500 text-xs">*</span>}
           </label>
@@ -125,13 +125,13 @@ export const CalculatorInput = forwardRef<HTMLInputElement, CalculatorInputProps
               <button
                 type="button"
                 onClick={() => setShowHelp(!showHelp)}
-                className="w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors min-h-[44px] min-w-[44px] touch-manipulation"
+                className="w-6 h-6 rounded-full bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--card)] flex items-center justify-center transition-colors min-h-[44px] min-w-[44px] touch-manipulation"
               >
-                <Info className="w-4 h-4 text-gray-400 hover:text-blue-500 transition-colors" />
+                <Info className="w-4 h-4 text-[var(--foreground-secondary)] hover:text-[var(--cardiology-accent-blue)] transition-colors" />
               </button>
               {showHelp && (
                 <div className="absolute bottom-full right-0 mb-2 z-[70] animate-fadeIn">
-                  <div className="bg-gray-900/95 dark:bg-gray-100/95 backdrop-blur-xl text-white dark:text-gray-900 text-xs rounded-xl py-3 px-4 max-w-xs shadow-2xl border border-gray-700 dark:border-gray-300">
+                  <div className="bg-[var(--background-dark)]/95 dark:bg-[var(--component-surface-secondary)]/95 backdrop-blur-xl text-[var(--foreground)] dark:text-[var(--foreground)] text-xs rounded-xl py-3 px-4 max-w-xs shadow-2xl border border-[var(--border-strong)] dark:border-[var(--glass-border-medium)]">
                     {helpText}
                     <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900/95 dark:border-t-gray-100/95"></div>
                   </div>
@@ -154,15 +154,15 @@ export const CalculatorInput = forwardRef<HTMLInputElement, CalculatorInputProps
             autoComplete={type === 'email' ? 'email' : type === 'number' ? 'off' : 'on'}
             className={cn(
               "w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 font-medium min-h-[44px]",
-              "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm",
-              "focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500",
-              "placeholder:text-gray-400 dark:placeholder:text-gray-500 text-base",
+              "bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm",
+              "focus:outline-none focus:ring-4 focus:ring-[var(--input-focus-ring)]/20 focus:border-[var(--input-focus-ring)]",
+              "placeholder:text-[var(--foreground-secondary)] dark:placeholder:text-[var(--foreground-secondary)] text-base",
               "touch-manipulation", // Improves touch responsiveness
               unit && "pr-16",
               error && "border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-500/20",
               !error && isValid && "border-green-300 dark:border-green-600",
-              !error && !isValid && isFocused && "border-blue-300 dark:border-blue-600",
-              !error && !isValid && !isFocused && "border-gray-300 dark:border-gray-600",
+              !error && !isValid && isFocused && "border-[var(--cardiology-accent-blue)] dark:border-blue-600",
+              !error && !isValid && !isFocused && "border-[var(--glass-border-medium)] dark:border-[var(--border-strong)]",
               className
             )}
             {...props}
@@ -170,7 +170,7 @@ export const CalculatorInput = forwardRef<HTMLInputElement, CalculatorInputProps
 
           {/* Unit Display */}
           {unit && (
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm font-medium text-gray-500 dark:text-gray-400">
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm font-medium text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
               {unit}
             </div>
           )}
@@ -188,13 +188,13 @@ export const CalculatorInput = forwardRef<HTMLInputElement, CalculatorInputProps
 
           {/* Focus Ring Animation */}
           {isFocused && (
-            <div className="absolute inset-0 rounded-xl border-2 border-blue-500 animate-pulse"></div>
+            <div className="absolute inset-0 rounded-xl border-2 border-[var(--cardiology-accent-blue)] animate-pulse"></div>
           )}
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="flex items-center space-x-2 text-sm text-red-600 dark:text-red-400 animate-shake">
+          <div className="flex items-center space-x-2 text-sm text-[var(--error-text)] animate-shake">
             <AlertCircle className="w-4 h-4" />
             <span>{error}</span>
           </div>
@@ -332,8 +332,8 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
       <div className="space-y-2" ref={ref} {...props}>
         {/* Label */}
         <div className="flex items-center justify-between">
-          <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-            {Icon && <Icon className="w-4 h-4 text-blue-500" />}
+          <label className="flex items-center space-x-2 text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
+            {Icon && <Icon className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />}
             <span>{label}</span>
             {required && <span className="text-red-500 text-xs">*</span>}
           </label>
@@ -342,13 +342,13 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
               <button
                 type="button"
                 onClick={() => setShowHelp(!showHelp)}
-                className="w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors min-h-[44px] min-w-[44px] touch-manipulation"
+                className="w-6 h-6 rounded-full bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--card)] flex items-center justify-center transition-colors min-h-[44px] min-w-[44px] touch-manipulation"
               >
-                <Info className="w-4 h-4 text-gray-400 hover:text-blue-500 transition-colors" />
+                <Info className="w-4 h-4 text-[var(--foreground-secondary)] hover:text-[var(--cardiology-accent-blue)] transition-colors" />
               </button>
               {showHelp && (
                 <div className="absolute bottom-full right-0 mb-2 z-[70] animate-fadeIn">
-                  <div className="bg-gray-900/95 dark:bg-gray-100/95 backdrop-blur-xl text-white dark:text-gray-900 text-xs rounded-xl py-3 px-4 max-w-xs shadow-2xl border border-gray-700 dark:border-gray-300">
+                  <div className="bg-[var(--background-dark)]/95 dark:bg-[var(--component-surface-secondary)]/95 backdrop-blur-xl text-[var(--foreground)] dark:text-[var(--foreground)] text-xs rounded-xl py-3 px-4 max-w-xs shadow-2xl border border-[var(--border-strong)] dark:border-[var(--glass-border-medium)]">
                     {helpText}
                     <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900/95 dark:border-t-gray-100/95"></div>
                   </div>
@@ -364,17 +364,17 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
           <div
             className={cn(
               "relative group cursor-pointer",
-              "bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg",
+              "bg-[var(--component-card)]/95 dark:bg-[var(--background)]/95 backdrop-blur-lg",
               "border-2 rounded-2xl transition-all duration-300",
-              "hover:bg-white dark:hover:bg-gray-800",
+              "hover:bg-[var(--component-card)] dark:hover:bg-[var(--background)]",
               "hover:shadow-lg hover:shadow-blue-500/10",
-              "focus-within:ring-4 focus-within:ring-blue-500/20",
+              "focus-within:ring-4 focus-within:ring-[var(--cardiology-accent-blue)]/20",
               "min-h-[72px]", // Consistent height
               error && "border-red-300 dark:border-red-600 hover:border-red-400",
               !error && isValid && "border-green-300 dark:border-green-600 hover:border-green-400",
-              !error && !isValid && (isFocused || isOpen) && "border-blue-300 dark:border-blue-600",
-              !error && !isValid && !isFocused && !isOpen && "border-gray-300 dark:border-gray-600",
-              isOpen && "ring-4 ring-blue-500/20 border-blue-500 shadow-xl",
+              !error && !isValid && (isFocused || isOpen) && "border-[var(--cardiology-accent-blue)] dark:border-blue-600",
+              !error && !isValid && !isFocused && !isOpen && "border-[var(--glass-border-medium)] dark:border-[var(--border-strong)]",
+              isOpen && "ring-4 ring-[var(--cardiology-accent-blue)]/20 border-[var(--cardiology-accent-blue)] shadow-xl",
               className
             )}
             onClick={() => setIsOpen(!isOpen)}
@@ -387,17 +387,17 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
               <div className="flex-1 min-w-0">
                 {selectedOption ? (
                   <div className="space-y-1.5">
-                    <div className="font-semibold text-[15px] text-gray-900 dark:text-gray-100 leading-tight">
+                    <div className="font-semibold text-[15px] text-[var(--foreground)] dark:text-[var(--foreground)] leading-tight">
                       {selectedOption.label}
                     </div>
                     {selectedOption.description && (
-                      <div className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2">
+                      <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] leading-relaxed line-clamp-2">
                         {selectedOption.description}
                       </div>
                     )}
                   </div>
                 ) : (
-                  <span className="text-gray-500 dark:text-gray-400 font-medium text-[15px]">
+                  <span className="text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] font-medium text-[15px]">
                     {placeholder || 'Select an option...'}
                   </span>
                 )}
@@ -410,22 +410,22 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
                   <div className="transition-all duration-200">
                     {isValid ? (
                       <div className="w-6 h-6 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center shadow-lg">
-                        <Check className="w-3.5 h-3.5 text-white" />
+                        <Check className="w-3.5 h-3.5 text-[var(--foreground)]" />
                       </div>
                     ) : (
                       <div className="w-6 h-6 rounded-full bg-gradient-to-r from-red-500 to-pink-600 flex items-center justify-center shadow-lg">
-                        <AlertCircle className="w-3.5 h-3.5 text-white" />
+                        <AlertCircle className="w-3.5 h-3.5 text-[var(--foreground)]" />
                       </div>
                     )}
                   </div>
                 )}
                 
                 {/* Dropdown Arrow */}
-                <div className="w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center group-hover:bg-gray-200 dark:group-hover:bg-gray-600 transition-colors duration-200">
+                <div className="w-6 h-6 rounded-full bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] flex items-center justify-center group-hover:bg-[var(--component-surface-tertiary)] dark:group-hover:bg-[var(--border)] transition-colors duration-200">
                   <ChevronDown 
                     className={cn(
-                      "w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-300",
-                      isOpen && "transform rotate-180 text-blue-500"
+                      "w-4 h-4 text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] transition-transform duration-300",
+                      isOpen && "transform rotate-180 text-[var(--cardiology-accent-blue)]"
                     )} 
                   />
                 </div>
@@ -447,12 +447,12 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
                 dropdownPosition === 'bottom' ? "top-full mt-2" : "bottom-full mb-2"
               )}
             >
-              <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-200/30 dark:border-gray-700/30 overflow-hidden">
+              <div className="bg-[var(--component-card)]/95 dark:bg-[var(--background)]/95 backdrop-blur-lg rounded-2xl shadow-2xl border border-[var(--glass-border-light)]/30 dark:border-[var(--border-strong)]/30 overflow-hidden">
                 {/* Search Input */}
                 {searchable && (
-                  <div className="p-4 border-b border-gray-200/30 dark:border-gray-700/30 bg-gray-50/50 dark:bg-gray-900/50">
+                  <div className="p-4 border-b border-[var(--glass-border-light)]/30 dark:border-[var(--border-strong)]/30 bg-[var(--component-surface-primary)]/50 dark:bg-[var(--background-dark)]/50">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--foreground-secondary)]" />
                       <input
                         ref={searchRef}
                         type="text"
@@ -464,7 +464,7 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
                         placeholder="Search options..."
                         inputMode="search"
                         autoComplete="off"
-                        className="w-full pl-10 pr-4 py-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 transition-all duration-200 min-h-[44px] touch-manipulation"
+                        className="w-full pl-10 pr-4 py-3 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/30 focus:border-[var(--cardiology-accent-blue)]/50 transition-all duration-200 min-h-[44px] touch-manipulation"
                       />
                     </div>
                   </div>
@@ -473,7 +473,7 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
                 {/* Options List */}
                 <div className="max-h-80 overflow-y-auto py-1">
                   {filteredOptions.length === 0 ? (
-                    <div className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                    <div className="px-6 py-8 text-center text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                       <Search className="w-10 h-10 mx-auto mb-3 opacity-50" />
                       <div className="font-semibold text-sm">No options found</div>
                       <div className="text-xs mt-1">Try adjusting your search</div>
@@ -486,7 +486,7 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
                           "relative mx-2 my-1 rounded-xl transition-all duration-200 cursor-pointer group",
                           "hover:bg-gradient-to-r hover:from-blue-50/90 hover:to-indigo-50/90 dark:hover:from-blue-900/30 dark:hover:to-indigo-900/30",
                           "hover:shadow-sm hover:shadow-blue-500/10",
-                          "focus:outline-none focus:ring-2 focus:ring-blue-500/30",
+                          "focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/30",
                           highlightedIndex === index && "bg-gradient-to-r from-blue-50/90 to-indigo-50/90 dark:from-blue-900/30 dark:to-indigo-900/30 shadow-sm shadow-blue-500/10",
                           option.disabled && "opacity-50 cursor-not-allowed",
                           option.value === value && "bg-gradient-to-r from-blue-100/90 to-indigo-100/90 dark:from-blue-800/40 dark:to-indigo-800/40 font-medium shadow-md shadow-blue-500/20"
@@ -503,11 +503,11 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
                       >
                         <div className="flex items-center justify-between px-4 py-4 min-h-[60px]">
                           <div className="flex-1 space-y-1.5">
-                            <div className="font-semibold text-[15px] text-gray-900 dark:text-gray-100 leading-tight">
+                            <div className="font-semibold text-[15px] text-[var(--foreground)] dark:text-[var(--foreground)] leading-tight">
                               {option.label}
                             </div>
                             {option.description && (
-                              <div className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed pr-2">
+                              <div className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed pr-2">
                                 {option.description}
                               </div>
                             )}
@@ -516,7 +516,7 @@ export const CalculatorSelect = forwardRef<HTMLDivElement, CalculatorSelectProps
                           {option.value === value && (
                             <div className="ml-3 flex-shrink-0">
                               <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                                <Check className="w-3.5 h-3.5 text-white" />
+                                <Check className="w-3.5 h-3.5 text-[var(--foreground)]" />
                               </div>
                             </div>
                           )}
@@ -565,7 +565,7 @@ interface CalculatorCheckboxProps extends Omit<HTMLAttributes<HTMLInputElement>,
 export const CalculatorCheckbox = forwardRef<HTMLInputElement, CalculatorCheckboxProps>(
   ({ label, checked, onChange, description, icon: Icon, ...props }, ref) => (
     <div className="group">
-      <label className="flex items-start space-x-3 cursor-pointer p-4 rounded-xl hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-200 min-h-[44px] touch-manipulation">
+      <label className="flex items-start space-x-3 cursor-pointer p-4 rounded-xl hover:bg-[var(--component-card)]/50 dark:hover:bg-[var(--background)]/50 transition-all duration-200 min-h-[44px] touch-manipulation">
         <div className="relative">
           <input
             ref={ref}
@@ -578,20 +578,20 @@ export const CalculatorCheckbox = forwardRef<HTMLInputElement, CalculatorCheckbo
           <div className={cn(
             "w-6 h-6 rounded-lg border-2 transition-all duration-200 flex items-center justify-center",
             checked 
-              ? "bg-gradient-to-r from-blue-500 to-indigo-600 border-blue-500 shadow-lg" 
-              : "border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-800/50 group-hover:border-blue-300"
+              ? "bg-gradient-to-r from-blue-500 to-indigo-600 border-[var(--cardiology-accent-blue)] shadow-lg" 
+              : "border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 group-hover:border-[var(--cardiology-accent-blue)]"
           )}>
-            {checked && <Check className="w-4 h-4 text-white" />}
+            {checked && <Check className="w-4 h-4 text-[var(--foreground)]" />}
           </div>
         </div>
         
         <div className="flex-1">
           <div className="flex items-center space-x-2">
-            {Icon && <Icon className="w-4 h-4 text-blue-500" />}
-            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{label}</span>
+            {Icon && <Icon className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />}
+            <span className="text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{label}</span>
           </div>
           {description && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{description}</p>
+            <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">{description}</p>
           )}
         </div>
       </label>
@@ -618,11 +618,11 @@ export const CalculatorButton = forwardRef<HTMLButtonElement, CalculatorButtonPr
         "relative overflow-hidden font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none min-h-[44px] touch-manipulation",
         
         // Variants
-        variant === 'primary' && "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl focus:ring-blue-500/30",
-        variant === 'secondary' && "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white shadow-lg hover:shadow-xl focus:ring-gray-500/30",
-        variant === 'success' && "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl focus:ring-green-500/30",
-        variant === 'danger' && "bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white shadow-lg hover:shadow-xl focus:ring-red-500/30",
-        variant === 'outline' && "border-2 border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-gray-500/30",
+        variant === 'primary' && "bg-gradient-to-r from-[var(--cardiology-accent-blue)] to-[var(--cardiology-accent-purple)] hover:from-[var(--cardiology-accent-blue)]/90 hover:to-[var(--cardiology-accent-purple)]/90 text-[var(--foreground)] shadow-lg hover:shadow-xl focus:ring-[var(--focus-ring-primary)]/30",
+        variant === 'secondary' && "bg-gradient-to-r from-[var(--foreground-secondary)] to-[var(--foreground-tertiary)] hover:from-[var(--foreground-tertiary)] hover:to-[var(--foreground-secondary)] text-[var(--foreground)] shadow-lg hover:shadow-xl focus:ring-[var(--focus-ring-primary)]/30",
+        variant === 'success' && "bg-gradient-to-r from-[var(--cardiology-accent-emerald)] to-[var(--cardiology-accent-emerald)]/80 hover:from-[var(--cardiology-accent-emerald)]/90 hover:to-[var(--cardiology-accent-emerald)]/70 text-[var(--foreground)] shadow-lg hover:shadow-xl focus:ring-[var(--focus-ring-primary)]/30",
+        variant === 'danger' && "bg-gradient-to-r from-[var(--error-text)] to-[var(--error-text)]/80 hover:from-[var(--error-text)]/90 hover:to-[var(--error-text)]/70 text-[var(--foreground)] shadow-lg hover:shadow-xl focus:ring-[var(--focus-ring-primary)]/30",
+        variant === 'outline' && "border-2 border-border bg-background/50 hover:bg-muted text-foreground focus:ring-[var(--focus-ring-primary)]/30",
         
         // Sizes
         size === 'sm' && "px-4 py-2 text-sm",
@@ -648,7 +648,7 @@ export const CalculatorButton = forwardRef<HTMLButtonElement, CalculatorButtonPr
       </div>
       
       {/* Hover Effect */}
-      <div className="absolute inset-0 bg-white/20 opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
+      <div className="absolute inset-0 bg-[var(--component-card)]/20 opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
     </button>
   )
 );
@@ -710,10 +710,10 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
         };
       default:
         return {
-          color: 'text-blue-600 dark:text-blue-400',
+          color: 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400',
           bg: 'bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20',
           border: 'border-blue-200 dark:border-blue-800',
-          badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+          badge: 'bg-[var(--cardiology-accent-blue-light)] text-blue-800 dark:bg-[var(--cardiology-accent-blue-darker)]/30 dark:text-blue-300'
         };
     }
   };
@@ -740,7 +740,7 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
             <div className={cn("p-3 rounded-xl", config.badge)}>
               <Icon className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{title}</h3>
+            <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{title}</h3>
           </div>
           <div className={cn("px-4 py-2 rounded-full text-sm font-bold", config.badge)}>
             {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -754,7 +754,7 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
             {unit && <span className="text-2xl ml-1 opacity-80">{unit}</span>}
           </div>
           {interpretation && (
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="mt-6 p-4 bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg">
               <h3 className="font-semibold text-blue-900 mb-2">
                 {t('common.detailed_analysis') || 'Detailed Analysis'}
               </h3>
@@ -768,13 +768,13 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
           <div className="border-t border-white/20 dark:border-gray-800/20 pt-4">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-white/30 dark:hover:bg-gray-800/30 transition-colors min-h-[44px] touch-manipulation"
+              className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-[var(--component-card)]/30 dark:hover:bg-[var(--background)]/30 transition-colors min-h-[44px] touch-manipulation"
             >
-              <span className="font-semibold text-gray-900 dark:text-gray-100">{t('common.detailed_analysis') || 'Detailed Analysis'}</span>
+              <span className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('common.detailed_analysis') || 'Detailed Analysis'}</span>
               {isExpanded ? (
-                <ChevronUp className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <ChevronUp className="w-5 h-5 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" />
               ) : (
-                <ChevronDown className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <ChevronDown className="w-5 h-5 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" />
               )}
             </button>
             

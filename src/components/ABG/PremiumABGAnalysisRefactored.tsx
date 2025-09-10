@@ -240,8 +240,8 @@ export const PremiumABGAnalysis: React.FC<PremiumABGAnalysisProps> = ({
           <div className="abg-card p-6 sm:p-8 rounded-2xl">
             <div className="flex items-center justify-between mb-5">
               <div className="inline-flex items-center gap-2 abg-hero-badge">
-                <Sparkles className="h-3.5 w-3.5 text-blue-600" />
-                <span className="text-xs font-medium text-slate-700">Medical‑grade AI</span>
+                <Sparkles className="h-3.5 w-3.5 text-[var(--cardiology-accent-blue-dark)]" />
+                <span className="text-xs font-medium text-[var(--foreground)]">Medical‑grade AI</span>
               </div>
               <Button
                 onClick={() => navigate('/abg-history')}
@@ -251,7 +251,7 @@ export const PremiumABGAnalysis: React.FC<PremiumABGAnalysisProps> = ({
                   relative group overflow-hidden
                   bg-gradient-to-r from-blue-500 to-purple-600 
                   hover:from-blue-600 hover:to-purple-700
-                  border-0 text-white
+                  border-0 text-[var(--foreground)]
                   shadow-lg hover:shadow-xl hover:shadow-blue-500/25
                   transition-all duration-300 ease-in-out
                   transform hover:scale-105 hover:-translate-y-0.5
@@ -284,13 +284,13 @@ export const PremiumABGAnalysis: React.FC<PremiumABGAnalysisProps> = ({
 
             <div className="flex items-start sm:items-center gap-4 sm:gap-5">
               <div className="abg-hero-icon">
-                <Brain className="h-6 w-6 text-white" />
+                <Brain className="h-6 w-6 text-[var(--foreground)]" />
               </div>
               <div className="flex-1 min-w-0">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-700 via-purple-700 to-emerald-600 bg-clip-text text-transparent">
                   Blood Gas Analysis
                 </h1>
-                <p className="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed max-w-3xl">
+                <p className="mt-2 text-[var(--foreground-tertiary)] text-sm sm:text-base leading-relaxed max-w-3xl">
                   Upload a blood gas report for instant AI vision, verified interpretation, and a clinician‑ready action plan.
                 </p>
               </div>

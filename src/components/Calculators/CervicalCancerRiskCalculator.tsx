@@ -180,7 +180,7 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
       case 'very-high':
         return 'bg-red-50 border-red-200 text-red-800';
       default:
-        return 'bg-gray-50 border-gray-200 text-gray-800';
+        return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] text-[var(--foreground)]';
     }
   }, []);
 
@@ -195,7 +195,7 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
       case 'very-high':
         return <AlertCircle className="w-6 h-6 text-red-600" />;
       default:
-        return <Info className="w-6 h-6 text-gray-600" />;
+        return <Info className="w-6 h-6 text-[var(--foreground-tertiary)]" />;
     }
   }, []);
 
@@ -222,11 +222,11 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
     >
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'calculator' | 'about')} className="w-full space-y-6">
         <TabsList className="grid w-full grid-cols-2 bg-purple-50 border border-purple-200">
-          <TabsTrigger value="calculator" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+          <TabsTrigger value="calculator" className="data-[state=active]:bg-purple-600 data-[state=active]:text-[var(--foreground)]">
             <Calculator className="w-4 h-4 mr-2" />
             {t('calculators.obgyn.cervical_cancer_risk.calculator_tab')}
           </TabsTrigger>
-          <TabsTrigger value="about" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+          <TabsTrigger value="about" className="data-[state=active]:bg-purple-600 data-[state=active]:text-[var(--foreground)]">
             <Info className="w-4 h-4 mr-2" />
             {t('calculators.obgyn.cervical_cancer_risk.about_tab')}
           </TabsTrigger>
@@ -248,8 +248,8 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
                   <div className={`
                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors
                     ${step >= i 
-                      ? 'bg-purple-600 border-purple-600 text-white' 
-                      : 'bg-white border-purple-300 text-purple-400'
+                      ? 'bg-purple-600 border-purple-600 text-[var(--foreground)]' 
+                      : 'bg-[var(--component-card)] border-purple-300 text-purple-400'
                     }
                   `}>
                     {getStepIcon(i)}
@@ -327,7 +327,7 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
                   <CalculatorButton
                     onClick={handleNext}
                     disabled={!formData.age}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8"
+                    className="bg-purple-600 hover:bg-purple-700 text-[var(--foreground)] px-8"
                   >
                     {t('calculators.obgyn.cervical_cancer_risk.demographics.next_button')}
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -351,7 +351,7 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
               </CardHeader>
               <CardContent className="p-6 space-y-6">
                 {/* HPV Testing */}
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <div className="bg-[var(--cardiology-accent-blue-light)] p-4 rounded-lg border border-blue-200">
                   <h4 className="font-semibold text-blue-800 mb-4 flex items-center gap-2">
                     <Dna className="w-5 h-5" />
                     {t('calculators.obgyn.cervical_cancer_risk.test_results.hpv_test.title')}
@@ -433,7 +433,7 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
                   </CalculatorButton>
                   <CalculatorButton
                     onClick={handleNext}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 flex-1"
+                    className="bg-purple-600 hover:bg-purple-700 text-[var(--foreground)] px-8 flex-1"
                   >
                     {t('calculators.obgyn.cervical_cancer_risk.test_results.next_button')}
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -506,7 +506,7 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
                   <CalculatorButton
                     onClick={handleCalculate}
                     disabled={isLoading}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 flex-1"
+                    className="bg-purple-600 hover:bg-purple-700 text-[var(--foreground)] px-8 flex-1"
                   >
                     {isLoading ? (
                       <>
@@ -563,12 +563,12 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
 
                 {/* Management Strategy Grid */}
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg p-4">
                     <div className="flex items-center gap-3 mb-3">
-                      <Stethoscope className="w-5 h-5 text-blue-600" />
+                      <Stethoscope className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                       <h4 className="font-semibold text-blue-800">{t('calculators.obgyn.cervical_cancer_risk.results.management.title')}</h4>
                     </div>
-                    <p className="text-sm text-blue-700">
+                    <p className="text-sm text-[var(--cardiology-accent-blue-dark)]">
                       {result.managementRecommendation}
                     </p>
                   </div>
@@ -687,7 +687,7 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <div className="bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-blue-800 mb-4 flex items-center gap-2">
                   <Shield className="w-5 h-5" />
                   {t('calculators.obgyn.cervical_cancer_risk.about.asccp_management.title')}
@@ -696,7 +696,7 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-medium text-blue-800 mb-2">{t('calculators.obgyn.cervical_cancer_risk.about.asccp_management.immediate_risk.title')}</h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
+                    <ul className="text-sm text-[var(--cardiology-accent-blue-dark)] space-y-1">
                       {(t('calculators.obgyn.cervical_cancer_risk.about.asccp_management.immediate_risk.items', { returnObjects: true }) as string[]).map((item: string, index: number) => (
                         <li key={index}>• {item}</li>
                       ))}
@@ -705,7 +705,7 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
                   
                   <div>
                     <h4 className="font-medium text-blue-800 mb-2">{t('calculators.obgyn.cervical_cancer_risk.about.asccp_management.management_strategies.title')}</h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
+                    <ul className="text-sm text-[var(--cardiology-accent-blue-dark)] space-y-1">
                       {(t('calculators.obgyn.cervical_cancer_risk.about.asccp_management.management_strategies.items', { returnObjects: true }) as string[]).map((item: string, index: number) => (
                         <li key={index}>• {item}</li>
                       ))}
@@ -741,12 +741,12 @@ const CervicalCancerRiskCalculatorComponent: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <div className="bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-3 flex items-center gap-2">
                   <FileText className="w-5 h-5" />
                   {t('calculators.obgyn.cervical_cancer_risk.about.clinical_guidelines.title')}
                 </h3>
-                <ul className="text-sm text-gray-700 space-y-2">
+                <ul className="text-sm text-[var(--foreground-tertiary)] space-y-2">
                   {(t('calculators.obgyn.cervical_cancer_risk.about.clinical_guidelines.items', { returnObjects: true }) as string[]).map((item: string, index: number) => (
                     <li key={index}>{item}</li>
                   ))}

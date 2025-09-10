@@ -125,7 +125,7 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
         ref={drawerRef}
         className={`
           absolute bottom-0 left-0 right-0 
-          bg-white dark:bg-gray-800 
+          bg-[var(--component-card)] dark:bg-[var(--background)] 
           rounded-t-3xl shadow-2xl 
           transform transition-all duration-300 ease-out
           ${isDragging ? 'transition-none' : ''}
@@ -135,33 +135,33 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
         style={{ 
           maxHeight,
           transform: `translateY(${dragOffset}px)`,
-          boxShadow: '0 -20px 60px rgba(0, 0, 0, 0.3)'
+          boxShadow: 'var(--shadow-glass-negative)'
         }}
       >
         {/* Drag Handle */}
         <div 
-          className="flex items-center justify-center py-4 cursor-pointer active:bg-gray-50 dark:active:bg-gray-700 rounded-t-3xl"
+          className="flex items-center justify-center py-4 cursor-pointer active:bg-[var(--component-surface-primary)] dark:active:bg-[var(--card)] rounded-t-3xl"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           onClick={onClose}
         >
-          <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full transition-all duration-200" />
+          <div className="w-12 h-1.5 bg-[var(--component-panel)] dark:bg-[var(--border)] rounded-full transition-all duration-200" />
         </div>
         
         {/* Medical Header */}
-        <div className="px-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="px-6 pb-4 border-b border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                <FileText className="w-5 h-5 text-white" />
+                <FileText className="w-5 h-5 text-[var(--foreground)]" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white medical-mobile-text-xl">
+                <h2 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] medical-mobile-text-xl">
                   {title}
                 </h2>
                 {subtitle && (
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-medium medical-mobile-text-sm">
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium medical-mobile-text-sm">
                     {subtitle}
                   </p>
                 )}
@@ -172,7 +172,7 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
               {actions}
               <button
                 onClick={onClose}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 premium-hover-scale medical-touch-target medical-drawer-item"
+                className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] dark:hover:text-[var(--foreground-secondary)] rounded-xl hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] transition-all duration-200 premium-hover-scale medical-touch-target medical-drawer-item"
                 aria-label="Close drawer"
               >
                 <X className="w-6 h-6" />
@@ -184,7 +184,7 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
           {showSearch && (
             <div className="relative">
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                <Search className="text-gray-400 w-5 h-5" />
+                <Search className="text-[var(--foreground-secondary)] w-5 h-5" />
               </div>
               <input
                 type="text"
@@ -193,12 +193,12 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
                 onChange={(e) => handleSearchChange(e.target.value)}
                 className="
                   w-full pl-12 pr-4 py-4 text-base rounded-2xl border-2 
-                  border-gray-200 dark:border-gray-600 
-                  bg-gray-50 dark:bg-gray-700 
-                  text-gray-900 dark:text-white 
+                  border-[var(--glass-border-light)] dark:border-[var(--border-strong)] 
+                  bg-[var(--component-surface-primary)] dark:bg-[var(--card)] 
+                  text-[var(--foreground)] dark:text-[var(--foreground)] 
                   placeholder-gray-500 dark:placeholder-gray-400 
-                  focus:outline-none focus:ring-4 focus:ring-blue-500/20 
-                  focus:border-blue-500 dark:focus:border-blue-400
+                  focus:outline-none focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/20 
+                  focus:border-[var(--cardiology-accent-blue)] dark:focus:border-blue-400
                   transition-all duration-200 premium-focus
                   touch-manipulation
                   medical-input medical-mobile-touch-md
@@ -215,7 +215,7 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
           style={{ 
             maxHeight: `calc(${maxHeight} - 160px)`,
             scrollbarWidth: 'thin',
-            scrollbarColor: '#3B82F6 #F3F4F6'
+            scrollbarColor: 'var(--primary) var(--background)'
           }}
         >
           <div className="px-6 py-4">
@@ -262,8 +262,8 @@ export const MedicalSessionItem: React.FC<SessionItemProps> = ({
         relative p-5 rounded-2xl cursor-pointer transition-all duration-300 border-2 
         premium-hover-lift touch-manipulation
         ${isActive
-          ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-600 shadow-lg shadow-blue-500/10' 
-          : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:border-blue-200 dark:hover:border-blue-700 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 hover:shadow-lg'
+          ? 'bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border-[var(--cardiology-accent-blue)] dark:border-blue-600 shadow-lg shadow-blue-500/10' 
+          : 'bg-[var(--component-card)] dark:bg-[var(--card)] border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:border-blue-200 dark:hover:border-blue-700 hover:bg-[var(--cardiology-accent-blue-light)]/50 dark:hover:bg-[var(--cardiology-accent-blue-darker)]/10 hover:shadow-lg'
         }
         ${className}
       `}
@@ -274,21 +274,21 @@ export const MedicalSessionItem: React.FC<SessionItemProps> = ({
         <div className="flex items-center space-x-3 flex-1 min-w-0">
           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md ${
             isActive 
-              ? 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white' 
-              : 'bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
+              ? 'bg-gradient-to-br from-blue-600 to-indigo-700 text-[var(--foreground)]' 
+              : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--border)] text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
           }`}>
             <FileText className="w-6 h-6" />
           </div>
           
           <div className="flex-1 min-w-0">
             <h3 className={`text-lg font-bold truncate mb-1 ${
-              isActive ? 'text-blue-900 dark:text-blue-100' : 'text-gray-900 dark:text-white'
+              isActive ? 'text-blue-900 dark:text-blue-100' : 'text-[var(--foreground)] dark:text-[var(--foreground)]'
             }`}>
               {session.title}
             </h3>
             
             <div className="flex items-center space-x-4 text-sm">
-              <span className={`font-medium ${isActive ? 'text-blue-600 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400'}`}>
+              <span className={`font-medium ${isActive ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300' : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'}`}>
                 {new Date(session.createdAt).toLocaleDateString('en-US', { 
                   month: 'short', 
                   day: 'numeric',
@@ -297,7 +297,7 @@ export const MedicalSessionItem: React.FC<SessionItemProps> = ({
                 })}
               </span>
               {session.durationMs > 0 && (
-                <span className={`font-medium ${isActive ? 'text-blue-600 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400'}`}>
+                <span className={`font-medium ${isActive ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300' : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'}`}>
                   {formatTime(session.durationMs)}
                 </span>
               )}
@@ -308,7 +308,7 @@ export const MedicalSessionItem: React.FC<SessionItemProps> = ({
         {hasTranscript && (
           <div className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm ${
             isActive 
-              ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700'
+              ? 'bg-[var(--drawer-success)] text-[var(--drawer-success-foreground)] border border-green-200 dark:border-green-700'
               : 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border border-green-100 dark:border-green-800'
           }`}>
             Transcribed
@@ -319,8 +319,8 @@ export const MedicalSessionItem: React.FC<SessionItemProps> = ({
       {session.transcript && (
         <div className={`text-sm leading-relaxed line-clamp-2 font-medium ${
           isActive 
-            ? 'text-blue-800 dark:text-blue-200'
-            : 'text-gray-600 dark:text-gray-300'
+            ? 'text-[var(--drawer-active)]'
+            : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
         }`}>
           {session.transcript.length > 120 
             ? session.transcript.substring(0, 120) + '...'
@@ -357,14 +357,14 @@ export const MedicalEmptyState: React.FC<MedicalEmptyStateProps> = ({
   return (
     <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
       <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-3xl flex items-center justify-center mb-6 shadow-lg">
-        <Icon className="w-10 h-10 text-gray-400 dark:text-gray-500" />
+        <Icon className="w-10 h-10 text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]" />
       </div>
       
-      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+      <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">
         {title}
       </h3>
       
-      <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-8 max-w-sm">
+      <p className="text-base text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed mb-8 max-w-sm">
         {description}
       </p>
       
@@ -374,7 +374,7 @@ export const MedicalEmptyState: React.FC<MedicalEmptyStateProps> = ({
           className="
             px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 
             hover:from-blue-700 hover:to-indigo-700 
-            text-white font-bold rounded-2xl 
+            text-[var(--foreground)] font-bold rounded-2xl 
             shadow-lg shadow-blue-500/25 
             hover:shadow-xl hover:shadow-blue-500/30
             transition-all duration-300 

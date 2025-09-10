@@ -72,7 +72,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
         {[...Array(2)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-blue-400/20 rounded-full animate-medical-particle"
+            className="absolute w-1 h-1 bg-[var(--cardiology-accent-blue)]/20 rounded-full animate-medical-particle"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -84,7 +84,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
       </div>
 
       {/* Label */}
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+      <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-2 group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-400 transition-colors duration-300">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -94,7 +94,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
         {/* Background Glow Effect */}
         <div className={`absolute inset-0 rounded-xl transition-all duration-300 ${
           isFocused 
-            ? 'bg-blue-500/10 shadow-medical-glow-blue' 
+            ? 'bg-[var(--cardiology-accent-blue)]/10 shadow-medical-glow-blue' 
             : error 
             ? 'bg-red-500/5' 
             : success 
@@ -106,7 +106,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
         <div className="relative medical-glass">
           {/* Icon */}
           {icon && (
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-blue-500 transition-colors duration-300">
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[var(--foreground-secondary)] group-hover:text-[var(--cardiology-accent-blue)] transition-colors duration-300">
               {icon}
             </div>
           )}
@@ -123,7 +123,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
               icon ? 'pl-12' : 'pl-4'
             } ${
               type === 'password' ? 'pr-12' : 'pr-4'
-            } py-4 bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-smart-input-focus`}
+            } py-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl text-[var(--foreground)] dark:text-[var(--foreground)] placeholder-gray-400 dark:placeholder-gray-500 focus:border-[var(--cardiology-accent-blue)] focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-smart-input-focus`}
           />
 
           {/* Password Toggle */}
@@ -132,7 +132,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
               ref={magneticRef as React.RefObject<HTMLButtonElement>}
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 transition-all duration-300 animate-magnetic-hover"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[var(--foreground-secondary)] hover:text-[var(--cardiology-accent-blue)] transition-all duration-300 animate-magnetic-hover"
             >
               {showPassword ? (
                 <EyeOff className="w-5 h-5" />
@@ -155,7 +155,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
 
           {/* Floating Label Effect */}
           {(isFocused || hasValue) && (
-            <div className="absolute -top-2 left-3 px-2 bg-white dark:bg-gray-800 text-xs font-medium text-blue-600 dark:text-blue-400 animate-scale-in">
+            <div className="absolute -top-2 left-3 px-2 bg-[var(--component-card)] dark:bg-[var(--background)] text-xs font-medium text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 animate-scale-in">
               {label}
             </div>
           )}
@@ -242,7 +242,7 @@ export const MedicalSelect: React.FC<MedicalSelectProps> = ({
       </div>
 
       {/* Label */}
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
+      <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -254,7 +254,7 @@ export const MedicalSelect: React.FC<MedicalSelectProps> = ({
           type="button"
           onClick={() => !disabled && setIsOpen(!isOpen)}
           disabled={disabled}
-          className="medical-input w-full pl-4 pr-12 py-4 bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-left text-gray-900 dark:text-gray-100 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-magnetic-hover"
+          className="medical-input w-full pl-4 pr-12 py-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl text-left text-[var(--foreground)] dark:text-[var(--foreground)] focus:border-teal-500 focus:ring-4 focus:ring-teal-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-magnetic-hover"
         >
           <div className="flex items-center space-x-3">
             {selectedOption?.icon && (
@@ -262,7 +262,7 @@ export const MedicalSelect: React.FC<MedicalSelectProps> = ({
                 {selectedOption.icon}
               </div>
             )}
-            <span className={selectedOption ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400 dark:text-gray-500'}>
+            <span className={selectedOption ? 'text-[var(--foreground)] dark:text-[var(--foreground)]' : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'}>
               {selectedOption?.label || placeholder || 'Select an option'}
             </span>
           </div>
@@ -270,14 +270,14 @@ export const MedicalSelect: React.FC<MedicalSelectProps> = ({
 
         {/* Dropdown Arrow */}
         <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-          <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${
+          <ChevronDown className={`w-5 h-5 text-[var(--foreground-secondary)] transition-transform duration-300 ${
             isOpen ? 'rotate-180' : 'rotate-0'
           }`} />
         </div>
 
         {/* Dropdown Menu */}
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 mt-2 medical-glass bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-white/20 dark:border-gray-700/30 rounded-xl shadow-2xl z-50 overflow-hidden animate-scale-in">
+          <div className="absolute top-full left-0 right-0 mt-2 medical-glass bg-[var(--component-card)]/90 dark:bg-[var(--background)]/90 backdrop-blur-xl border border-white/20 dark:border-[var(--border-strong)]/30 rounded-xl shadow-2xl z-50 overflow-hidden animate-scale-in">
             {options.map((option, index) => (
               <button
                 key={option.value}
@@ -294,7 +294,7 @@ export const MedicalSelect: React.FC<MedicalSelectProps> = ({
                     {option.icon}
                   </div>
                 )}
-                <span className="text-gray-900 dark:text-gray-100 group-hover/option:text-teal-600 dark:group-hover/option:text-teal-400 transition-colors duration-200">
+                <span className="text-[var(--foreground)] dark:text-[var(--foreground)] group-hover/option:text-teal-600 dark:group-hover/option:text-teal-400 transition-colors duration-200">
                   {option.label}
                 </span>
               </button>
@@ -376,14 +376,14 @@ export const MedicalTextarea: React.FC<MedicalTextareaProps> = ({
 
       {/* Label */}
       <div className="flex items-center justify-between mb-2">
-        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+        <label className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
         {maxLength && (
           <div 
             ref={counterRef as React.RefObject<HTMLDivElement>}
-            className="text-xs text-gray-500 dark:text-gray-400"
+            className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]"
           >
             {currentValue}/{maxLength}
           </div>
@@ -411,7 +411,7 @@ export const MedicalTextarea: React.FC<MedicalTextareaProps> = ({
             rows={rows}
             maxLength={maxLength}
             disabled={disabled}
-            className="medical-input w-full px-4 py-4 bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed resize-none animate-smart-input-focus"
+            className="medical-input w-full px-4 py-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl text-[var(--foreground)] dark:text-[var(--foreground)] placeholder-gray-400 dark:placeholder-gray-500 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed resize-none animate-smart-input-focus"
           />
 
           {/* Character Count Indicator */}
@@ -419,10 +419,10 @@ export const MedicalTextarea: React.FC<MedicalTextareaProps> = ({
             <div className="absolute bottom-3 right-3">
               <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
                 value.length >= maxLength 
-                  ? 'bg-red-500 text-white animate-pulse' 
+                  ? 'bg-red-500 text-[var(--foreground)] animate-pulse' 
                   : value.length > maxLength * 0.9 
-                  ? 'bg-yellow-500 text-white' 
-                  : 'bg-blue-500 text-white'
+                  ? 'bg-yellow-500 text-[var(--foreground)]' 
+                  : 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]'
               }`}>
                 {maxLength - value.length}
               </div>
@@ -477,11 +477,11 @@ export const MedicalButton: React.FC<MedicalButtonProps> = ({
   const touchRippleRef = useTouchRipple();
 
   const variantStyles = {
-    primary: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-medical-lg hover:shadow-medical-glow-blue',
-    secondary: 'bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700',
-    success: 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-medical-lg hover:shadow-medical-glow-success',
-    danger: 'bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white shadow-medical-lg',
-    ghost: 'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
+    primary: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-[var(--foreground)] shadow-medical-lg hover:shadow-medical-glow-blue',
+    secondary: 'bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-primary)] dark:hover:bg-[var(--card)]',
+    success: 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-[var(--foreground)] shadow-medical-lg hover:shadow-medical-glow-success',
+    danger: 'bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-[var(--foreground)] shadow-medical-lg',
+    ghost: 'bg-transparent hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--background)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
   };
 
   const sizeStyles = {
@@ -510,7 +510,7 @@ export const MedicalButton: React.FC<MedicalButtonProps> = ({
       <div ref={touchRippleRef as React.RefObject<HTMLDivElement>} className="absolute inset-0 overflow-hidden rounded-2xl" />
 
       {/* Shimmer Effect */}
-      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-loading-shimmer" />
+      <div className="absolute inset-0 bg-[var(--component-card)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-loading-shimmer" />
 
       {/* Content */}
       <div className="relative z-10 flex items-center justify-center space-x-2">
@@ -578,16 +578,16 @@ export const MedicalFormSection: React.FC<MedicalFormSectionProps> = ({
       {/* Section Header */}
       <div className="flex items-center space-x-4 mb-6 p-6 pb-0">
         {icon && (
-          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center text-[var(--foreground)] shadow-lg group-hover:scale-110 transition-transform duration-300">
             {icon}
           </div>
         )}
         <div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+          <h3 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-400 transition-colors duration-300">
             {title}
           </h3>
           {subtitle && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
               {subtitle}
             </p>
           )}

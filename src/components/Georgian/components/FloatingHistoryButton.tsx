@@ -20,10 +20,10 @@ export const FloatingHistoryButton: React.FC<FloatingHistoryButtonProps> = ({
       className="fixed top-1/2 left-0 transform -translate-y-1/2 z-50 
         bg-gradient-to-r from-blue-600 to-blue-700 
         hover:from-blue-700 hover:to-blue-800 
-        text-white shadow-lg hover:shadow-xl 
+        text-[var(--foreground)] shadow-lg hover:shadow-xl 
         transition-all duration-300 ease-in-out
         rounded-r-xl px-4 py-6 
-        group border-r border-blue-500"
+        group border-r border-[var(--cardiology-accent-blue)]"
       style={{
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
@@ -36,7 +36,7 @@ export const FloatingHistoryButton: React.FC<FloatingHistoryButtonProps> = ({
         
         {/* Session count badge */}
         {sessionCount > 0 && (
-          <div className="bg-white/20 backdrop-blur-sm rounded-full px-2 py-1 min-w-6 h-6 
+          <div className="bg-[var(--component-card)]/20 backdrop-blur-sm rounded-full px-2 py-1 min-w-6 h-6 
             flex items-center justify-center text-xs font-semibold">
             {sessionCount > 99 ? '99+' : sessionCount}
           </div>

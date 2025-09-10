@@ -46,7 +46,7 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
       label: 'Last 3 Months',
       description: 'Published within the last 90 days',
       icon: ClockIcon,
-      color: 'text-blue-600',
+      color: 'text-[var(--cardiology-accent-blue-dark)]',
       value: { from: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), to: new Date() }
     },
     {
@@ -99,9 +99,9 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
       label: 'Subscription Required',
       description: 'Requires institutional or personal subscription',
       icon: LockClosedIcon,
-      color: 'text-blue-600',
+      color: 'text-[var(--cardiology-accent-blue-dark)]',
       badge: 'Subscription',
-      badgeColor: 'bg-blue-100 text-blue-800'
+      badgeColor: 'bg-[var(--cardiology-accent-blue-light)] text-blue-800'
     },
     {
       id: 'pay-per-view',
@@ -176,19 +176,19 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-[var(--foreground)] mb-6 flex items-center gap-2">
           <CalendarSolid className="w-6 h-6 text-indigo-600" />
           {t('filters.publicationAccess.title', 'Publication & Access')}
         </h3>
-        <p className="text-gray-600 mb-6">
+        <p className="text-[var(--foreground-tertiary)] mb-6">
           {t('filters.publicationAccess.description', 'Filter by publication date, access type, and availability')}
         </p>
       </div>
 
       {/* Publication Date Range */}
       <div className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-          <CalendarIcon className="w-5 h-5 text-gray-600" />
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+          <CalendarIcon className="w-5 h-5 text-[var(--foreground-tertiary)]" />
           {t('filters.publicationAccess.publicationDate', 'Publication Date')}
           {filters.publicationDateRange && filters.publicationDateRange.length > 0 && (
             <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
@@ -207,21 +207,21 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleDateRangeChange(option.id, e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mt-0.5"
+                  className="w-5 h-5 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500 mt-0.5"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <IconComponent className={`w-4 h-4 ${option.color}`} />
-                    <span className="font-medium text-gray-900">{option.label}</span>
+                    <span className="font-medium text-[var(--foreground)]">{option.label}</span>
                   </div>
-                  <p className="text-sm text-gray-600">{option.description}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">{option.description}</p>
                 </div>
               </label>
             );
@@ -231,8 +231,8 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
 
       {/* Access Type */}
       <div className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-          <LockClosedIcon className="w-5 h-5 text-gray-600" />
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+          <LockClosedIcon className="w-5 h-5 text-[var(--foreground-tertiary)]" />
           {t('filters.publicationAccess.accessType', 'Access Type')}
           {filters.accessType && filters.accessType.length > 0 && (
             <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
@@ -251,24 +251,24 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleAccessTypeChange(option.id, e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mt-0.5"
+                  className="w-5 h-5 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500 mt-0.5"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <IconComponent className={`w-4 h-4 ${option.color}`} />
-                    <span className="font-medium text-gray-900">{option.label}</span>
+                    <span className="font-medium text-[var(--foreground)]">{option.label}</span>
                     <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${option.badgeColor}`}>
                       {option.badge}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">{option.description}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">{option.description}</p>
                 </div>
               </label>
             );
@@ -278,8 +278,8 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
 
       {/* Language */}
       <div className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-          <GlobeAltIcon className="w-5 h-5 text-gray-600" />
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+          <GlobeAltIcon className="w-5 h-5 text-[var(--foreground-tertiary)]" />
           {t('filters.publicationAccess.language', 'Language')}
           {filters.language && filters.language.length > 0 && (
             <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
@@ -297,17 +297,17 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
                 className={`flex items-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleLanguageChange(option.id, e.target.checked)}
-                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                  className="w-4 h-4 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500"
                 />
                 <span className="text-lg">{option.flag}</span>
-                <span className="text-sm font-medium text-gray-900">{option.label}</span>
+                <span className="text-sm font-medium text-[var(--foreground)]">{option.label}</span>
               </label>
             );
           })}
@@ -315,9 +315,9 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
       </div>
 
       {/* Access Tips */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <ExclamationTriangleIcon className="w-5 h-5 text-blue-600 mt-0.5" />
+          <ExclamationTriangleIcon className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] mt-0.5" />
           <div>
             <h5 className="font-medium text-blue-900 mb-1">{t('filters.publicationAccess.tips.title', 'Access & Publication Tips')}</h5>
             <ul className="text-sm text-blue-800 space-y-1">
@@ -332,9 +332,9 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
 
       {/* Summary */}
       {(filters.publicationDateRange || filters.accessType || filters.language) && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h5 className="font-medium text-gray-900 mb-2">{t('filters.publicationAccess.summary', 'Publication & Access Summary')}</h5>
-          <div className="text-sm text-gray-600 space-y-1">
+        <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
+          <h5 className="font-medium text-[var(--foreground)] mb-2">{t('filters.publicationAccess.summary', 'Publication & Access Summary')}</h5>
+          <div className="text-sm text-[var(--foreground-tertiary)] space-y-1">
             {filters.publicationDateRange && filters.publicationDateRange.length > 0 && (
               <div>
                 <strong>{t('filters.publicationAccess.summaryRanges', 'Date ranges:')}</strong> {filters.publicationDateRange.join(', ')}

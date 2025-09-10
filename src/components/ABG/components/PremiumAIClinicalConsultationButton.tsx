@@ -231,7 +231,7 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
           {ripples.map(ripple => (
             <div
               key={ripple.id}
-              className="absolute rounded-full bg-white/20 animate-ping pointer-events-none"
+              className="absolute rounded-full bg-[var(--component-card)]/20 animate-ping pointer-events-none"
               style={{
                 left: ripple.x - 20,
                 top: ripple.y - 20,
@@ -251,11 +251,11 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
                   <div className={cn(
                     "w-20 h-20 bg-gradient-to-br rounded-3xl flex items-center justify-center",
                     "shadow-xl backdrop-blur-sm border border-white/20 transition-all duration-500",
-                    "bg-white/10",
+                    "bg-[var(--component-card)]/10",
                     isHovered && "scale-110 rotate-6 shadow-2xl"
                   )}>
                     <IconComponent className={cn(
-                      "h-10 w-10 text-white transition-all duration-500",
+                      "h-10 w-10 text-[var(--foreground)] transition-all duration-500",
                       isHovered && "scale-125"
                     )} />
                   </div>
@@ -267,31 +267,31 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
                     content.accentColor,
                     isHovered && "scale-125 -translate-y-1 rotate-12"
                   )}>
-                    <AccentIconComponent className="h-4 w-4 text-white" />
+                    <AccentIconComponent className="h-4 w-4 text-[var(--foreground)]" />
                   </div>
                 </div>
                 
                 {/* Enhanced content area */}
-                <div className="text-white flex-1 min-w-0">
+                <div className="text-[var(--foreground)] flex-1 min-w-0">
                   <h3 className="text-2xl sm:text-3xl font-bold mb-3 tracking-tight leading-tight">
                     {content.title}
                   </h3>
-                  <p className="text-white/95 text-base sm:text-lg leading-relaxed mb-3 font-medium">
+                  <p className="text-[var(--foreground)]/95 text-base sm:text-lg leading-relaxed mb-3 font-medium">
                     {content.subtitle}
                   </p>
-                  <p className="text-white/80 text-sm sm:text-base leading-relaxed mb-4">
+                  <p className="text-[var(--foreground)]/80 text-sm sm:text-base leading-relaxed mb-4">
                     {content.description}
                   </p>
                   
                   {/* Context information panel */}
-                  <div className="bg-white/10 rounded-xl p-4 border border-white/20 backdrop-blur-sm">
+                  <div className="bg-[var(--component-card)]/10 rounded-xl p-4 border border-white/20 backdrop-blur-sm">
                     <div className="flex items-start gap-3">
-                      <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Heart className="h-2.5 w-2.5 text-white" />
+                      <div className="w-5 h-5 bg-[var(--component-card)]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Heart className="h-2.5 w-2.5 text-[var(--foreground)]" />
                       </div>
                       <div>
-                        <p className="text-white/90 text-sm font-medium mb-1">What to expect:</p>
-                        <p className="text-white/75 text-xs leading-relaxed">
+                        <p className="text-[var(--foreground)]/90 text-sm font-medium mb-1">What to expect:</p>
+                        <p className="text-[var(--foreground)]/75 text-xs leading-relaxed">
                           {content.contextInfo}
                         </p>
                       </div>
@@ -301,8 +301,8 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
                 
                 {/* Enhanced floating action indicator */}
                 <div className={cn(
-                  "flex flex-col items-center gap-2 text-white/80 transition-all duration-500",
-                  isHovered && "text-white transform translate-x-1 -translate-y-1"
+                  "flex flex-col items-center gap-2 text-[var(--foreground)]/80 transition-all duration-500",
+                  isHovered && "text-[var(--foreground)] transform translate-x-1 -translate-y-1"
                 )}>
                   <ArrowUpRight className="h-8 w-8" />
                   <span className="text-xs font-medium">Launch</span>
@@ -316,9 +316,9 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
                 <div 
                   key={feature}
                   className={cn(
-                    "flex items-center gap-2 text-white/80 text-sm transition-all duration-500",
-                    "bg-white/5 rounded-lg p-3 border border-white/10",
-                    isHovered && "text-white/95 bg-white/10 border-white/20 transform scale-105"
+                    "flex items-center gap-2 text-[var(--foreground)]/80 text-sm transition-all duration-500",
+                    "bg-[var(--component-card)]/5 rounded-lg p-3 border border-white/10",
+                    isHovered && "text-[var(--foreground)]/95 bg-[var(--component-card)]/10 border-white/20 transform scale-105"
                   )}
                   style={{ 
                     transitionDelay: `${index * 100}ms` 
@@ -334,15 +334,15 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               {/* Enhanced trust indicators */}
               <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2 text-white/80 text-sm">
+                <div className="flex items-center gap-2 text-[var(--foreground)]/80 text-sm">
                   <Shield className="h-4 w-4 text-emerald-300" />
                   <span className="font-medium">Medical Grade AI</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/80 text-sm">
+                <div className="flex items-center gap-2 text-[var(--foreground)]/80 text-sm">
                   <Users className="h-4 w-4 text-blue-300" />
                   <span className="font-medium">Expert Curated</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/80 text-sm">
+                <div className="flex items-center gap-2 text-[var(--foreground)]/80 text-sm">
                   <Microscope className="h-4 w-4 text-purple-300" />
                   <span className="font-medium">Evidence Based</span>
                 </div>
@@ -350,11 +350,11 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
               
               {/* Enhanced primary action button */}
               <div className={cn(
-                "bg-white/15 hover:bg-white/25 border border-white/30 rounded-2xl px-8 py-4",
-                "flex items-center gap-4 text-white font-bold text-base",
+                "bg-[var(--component-card)]/15 hover:bg-[var(--component-card)]/25 border border-white/30 rounded-2xl px-8 py-4",
+                "flex items-center gap-4 text-[var(--foreground)] font-bold text-base",
                 "transition-all duration-500 backdrop-blur-sm shadow-xl",
                 "hover:border-white/40 hover:shadow-2xl",
-                isHovered && "bg-white/25 border-white/40 transform scale-110 shadow-2xl"
+                isHovered && "bg-[var(--component-card)]/25 border-white/40 transform scale-110 shadow-2xl"
               )}>
                 <MessageSquare className="h-5 w-5" />
                 <span>Start Clinical Consultation</span>
@@ -412,7 +412,7 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
         {ripples.map(ripple => (
           <div
             key={ripple.id}
-            className="absolute rounded-full bg-white/20 animate-ping pointer-events-none"
+            className="absolute rounded-full bg-[var(--component-card)]/20 animate-ping pointer-events-none"
             style={{
               left: ripple.x - 15,
               top: ripple.y - 15,
@@ -424,13 +424,13 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
         ))}
         
         {/* Enhanced content with sophisticated layout */}
-        <div className="relative flex items-center gap-4 text-white w-full">
+        <div className="relative flex items-center gap-4 text-[var(--foreground)] w-full">
           {/* Enhanced icon with advanced styling */}
           <div className="relative flex-shrink-0">
             <div className={cn(
-              "w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center",
+              "w-10 h-10 bg-[var(--component-card)]/15 rounded-xl flex items-center justify-center",
               "transition-all duration-500 backdrop-blur-sm border border-white/20",
-              isHovered && "scale-125 rotate-12 bg-white/25 border-white/30 shadow-lg"
+              isHovered && "scale-125 rotate-12 bg-[var(--component-card)]/25 border-white/30 shadow-lg"
             )}>
               <IconComponent className={cn(
                 "h-5 w-5 transition-all duration-500",
@@ -445,14 +445,14 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
               content.accentColor,
               isHovered && "scale-125 -translate-y-0.5 rotate-12"
             )}>
-              <AccentIconComponent className="h-2 w-2 text-white" />
+              <AccentIconComponent className="h-2 w-2 text-[var(--foreground)]" />
             </div>
           </div>
           
           {/* Enhanced text content */}
           <div className="flex-1 min-w-0">
             <div className="font-bold text-base sm:text-lg mb-1">{content.title}</div>
-            <div className="text-white/80 text-xs sm:text-sm font-medium truncate">
+            <div className="text-[var(--foreground)]/80 text-xs sm:text-sm font-medium truncate">
               {content.subtitle.length > 60 ? content.subtitle.substring(0, 60) + '...' : content.subtitle}
             </div>
           </div>
@@ -460,9 +460,9 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
           {/* Enhanced action indicator */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <div className={cn(
-              "bg-white/15 rounded-xl px-3 py-2 transition-all duration-500 border border-white/20",
+              "bg-[var(--component-card)]/15 rounded-xl px-3 py-2 transition-all duration-500 border border-white/20",
               "flex items-center gap-2 backdrop-blur-sm",
-              isHovered && "bg-white/25 border-white/30 scale-105 shadow-lg"
+              isHovered && "bg-[var(--component-card)]/25 border-white/30 scale-105 shadow-lg"
             )}>
               <MessageSquare className="h-4 w-4" />
               <span className="hidden sm:inline text-sm font-medium">Launch</span>

@@ -633,7 +633,7 @@ const RiskVisualizationChart: React.FC<{
     <div className="bg-gradient-to-br from-white/90 via-blue-50/80 to-indigo-50/90 dark:from-gray-900/90 dark:via-blue-950/80 dark:to-indigo-950/90 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-800/20 shadow-2xl p-8">
       {/* Chart Header */}
       <div className="text-center mb-8">
-        <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-2xl shadow-xl mb-4">
+        <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-[var(--foreground)] rounded-2xl shadow-xl mb-4">
           <BarChart3 className="w-6 h-6" />
           <span className="font-bold text-lg">
             {timeframe === '10' ? 
@@ -642,7 +642,7 @@ const RiskVisualizationChart: React.FC<{
             }
           </span>
         </div>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           {t('calculators.cardiology.prevent.risk_by_age_description')}
         </p>
       </div>
@@ -868,14 +868,14 @@ const RiskVisualizationChart: React.FC<{
         {/* Tooltip */}
         {hoveredPoint && (
           <div 
-            className="absolute bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-4 border border-gray-200 dark:border-gray-700 z-10 pointer-events-none transition-all duration-200"
+            className="absolute bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl shadow-2xl p-4 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] z-10 pointer-events-none transition-all duration-200"
             style={{
               left: `${((hoveredPoint.age - ageRange[0]) / (ageRange[1] - ageRange[0])) * 100}%`,
               top: '20px',
               transform: 'translateX(-50%)'
             }}
           >
-            <div className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-2">
+            <div className="text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
               {t('calculators.cardiology.prevent.age')}: {hoveredPoint.age} {t('calculators.cardiology.prevent.years')}
             </div>
             {chartLines.map(line => (
@@ -885,9 +885,9 @@ const RiskVisualizationChart: React.FC<{
                     className="w-3 h-3 rounded-full" 
                     style={{ backgroundColor: line.color }}
                   ></div>
-                  <span className="text-xs text-gray-700 dark:text-gray-300">{line.label}</span>
+                  <span className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{line.label}</span>
                 </div>
-                <span className="text-xs font-bold text-gray-900 dark:text-gray-100">
+                <span className="text-xs font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                   {hoveredPoint.risks[line.key].toFixed(1)}%
                 </span>
               </div>
@@ -905,11 +905,11 @@ const RiskVisualizationChart: React.FC<{
                 className="w-4 h-4 rounded-full shadow-lg"
                 style={{ backgroundColor: line.color }}
               ></div>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 {line.label}
               </span>
             </div>
-            <div className="px-3 py-1 bg-white/60 dark:bg-gray-800/60 rounded-lg border border-white/50 dark:border-gray-700/50">
+            <div className="px-3 py-1 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-lg border border-white/50 dark:border-[var(--border-strong)]/50">
               <span className="text-sm font-bold" style={{ color: line.color }}>
                 {line.value.toFixed(1)}%
               </span>
@@ -921,33 +921,33 @@ const RiskVisualizationChart: React.FC<{
       {/* Chart Insights */}
       <div className="mt-8 p-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/40 dark:to-indigo-950/40 rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
         <div className="flex items-center space-x-3 mb-4">
-          <div className="p-2 bg-blue-500/20 rounded-lg">
-            <TrendingUp className="w-5 h-5 text-blue-600" />
+          <div className="p-2 bg-[var(--cardiology-accent-blue)]/20 rounded-lg">
+            <TrendingUp className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
           </div>
           <h4 className="font-bold text-blue-800 dark:text-blue-300">
             {t('calculators.cardiology.prevent.risk_insights')}
           </h4>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-4 sm:gap-6">
-          <div className="text-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg">
-            <div className="text-lg font-bold text-blue-600 mb-1">{patientAge}</div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">
+          <div className="text-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-lg">
+            <div className="text-lg font-bold text-[var(--cardiology-accent-blue-dark)] mb-1">{patientAge}</div>
+            <div className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               {t('calculators.cardiology.prevent.current_age')}
             </div>
           </div>
-          <div className="text-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+          <div className="text-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-lg">
             <div className="text-lg font-bold text-green-600 mb-1">
               {chartLines.find(l => l.key === 'totalCVD')?.value.toFixed(1)}%
             </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">
+            <div className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               {timeframe}-{t('calculators.cardiology.prevent.year_total_risk')}
             </div>
           </div>
-          <div className="text-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+          <div className="text-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-lg">
             <div className="text-lg font-bold text-amber-600 mb-1">
               {timeframe === '10' ? '2x' : '3x'}
             </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">
+            <div className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               {t('calculators.cardiology.prevent.risk_increase_decade')}
             </div>
           </div>
@@ -1511,7 +1511,7 @@ const PREVENTCalculator: React.FC = () => {
             <div className="relative mb-24">
               <div className="flex items-center justify-between flex-wrap">
                 {/* The connecting line */}
-                <div className="absolute top-8 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700" style={{ zIndex: 1 }}></div>
+                <div className="absolute top-8 left-0 w-full h-1 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)]" style={{ zIndex: 1 }}></div>
                 <div 
                   className="absolute top-8 left-0 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 transition-all duration-1000 ease-out" 
                   style={{ 
@@ -1543,25 +1543,25 @@ const PREVENTCalculator: React.FC = () => {
                         {/* Step Circle */}
                         <div className={`
                           w-full h-full rounded-full flex items-center justify-center font-bold text-2xl transition-all duration-500 shadow-lg
-                          ${isCompleted ? `bg-gradient-to-br ${step.color} text-white` : 
-                            isActive ? `bg-gradient-to-br ${step.color} text-white` : 
-                            `bg-gradient-to-br ${step.color} opacity-60 text-white`}
+                          ${isCompleted ? `bg-gradient-to-br ${step.color} text-[var(--foreground)]` : 
+                            isActive ? `bg-gradient-to-br ${step.color} text-[var(--foreground)]` : 
+                            `bg-gradient-to-br ${step.color} opacity-60 text-[var(--foreground)]`}
                           ${isActive ? `shadow-2xl ring-4 ring-offset-4 ring-offset-white dark:ring-offset-gray-900 ring-purple-500` : ''}
                         `}>
                           {isCompleted && !isActive ? (
-                            <CheckCircle className="w-8 h-8 text-white" />
+                            <CheckCircle className="w-8 h-8 text-[var(--foreground)]" />
                           ) : (
-                            <step.icon className="w-8 h-8 text-white" />
+                            <step.icon className="w-8 h-8 text-[var(--foreground)]" />
                           )}
                         </div>
                       </div>
                       
                       {/* Step Label */}
                       <div className={`mt-5 w-32 transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>
-                        <div className={`font-bold transition-colors duration-300 ${isActive ? `text-transparent bg-clip-text bg-gradient-to-r ${step.color}` : 'text-gray-800 dark:text-gray-200'}`}>
+                        <div className={`font-bold transition-colors duration-300 ${isActive ? `text-transparent bg-clip-text bg-gradient-to-r ${step.color}` : 'text-[var(--foreground)] dark:text-[var(--foreground)]'}`}>
                           {step.title}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mt-1">
                           {step.description}
                         </div>
                       </div>
@@ -1573,21 +1573,21 @@ const PREVENTCalculator: React.FC = () => {
 
             {/* Progress Percentage with Animation */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center flex-wrap gap-2 space-x-4 px-8 py-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-700/20 shadow-2xl max-w-full">
+              <div className="inline-flex items-center justify-center flex-wrap gap-2 space-x-4 px-8 py-4 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-[var(--border-strong)]/20 shadow-2xl max-w-full">
                 <div className="relative">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                    <Target className="w-6 h-6 text-white" />
+                    <Target className="w-6 h-6 text-[var(--foreground)]" />
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
                   <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     {Math.round((completedSteps.size / 4) * 100)}%
                   </span>
-                  <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                  <span className="text-lg font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     {t('calculators.cardiology.prevent.progress_complete')}
                   </span>
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                   {completedSteps.size} {t('calculators.cardiology.prevent.progress_of_steps')}
                 </div>
               </div>
@@ -1597,23 +1597,23 @@ const PREVENTCalculator: React.FC = () => {
             {(realTimeCalculations.bmi > 0 || realTimeCalculations.eGFR > 0) && (
               <div className="mb-8 p-8 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 rounded-3xl border border-blue-200 dark:border-blue-800 backdrop-blur-sm shadow-xl">
                 <div className="text-center mb-6">
-                  <h4 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">Live Calculations</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Values update automatically as you enter data</p>
+                  <h4 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">Live Calculations</h4>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Values update automatically as you enter data</p>
                 </div>
                 <div className="flex items-center justify-center space-x-12">
                   {realTimeCalculations.bmi > 0 && (
                     <div className="text-center group">
                       <div className="relative">
                         <div className="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/40 dark:to-blue-800/40 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                          <Activity className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+                          <Activity className="w-10 h-10 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                         </div>
-                        <div className="absolute inset-0 rounded-full bg-blue-500 opacity-20 blur-xl scale-125 group-hover:scale-150 transition-transform duration-300"></div>
+                        <div className="absolute inset-0 rounded-full bg-[var(--cardiology-accent-blue)] opacity-20 blur-xl scale-125 group-hover:scale-150 transition-transform duration-300"></div>
                       </div>
-                      <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                      <div className="text-3xl font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mb-2">
                         {realTimeCalculations.bmi}
                       </div>
-                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">BMI (kg/m²)</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                      <div className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">BMI (kg/m²)</div>
+                      <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mt-1">
                         {realTimeCalculations.bmi < 18.5 ? 'Underweight' :
                          realTimeCalculations.bmi < 25 ? 'Normal' :
                          realTimeCalculations.bmi < 30 ? 'Overweight' : 'Obese'}
@@ -1631,8 +1631,8 @@ const PREVENTCalculator: React.FC = () => {
                       <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">
                         {realTimeCalculations.eGFR}
                       </div>
-                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400">eGFR (mL/min/1.73m²)</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                      <div className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">eGFR (mL/min/1.73m²)</div>
+                      <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mt-1">
                         {realTimeCalculations.eGFR >= 90 ? 'Normal' :
                          realTimeCalculations.eGFR >= 60 ? 'Mild decrease' :
                          realTimeCalculations.eGFR >= 30 ? 'Moderate decrease' : 'Severe decrease'}
@@ -1649,9 +1649,9 @@ const PREVENTCalculator: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-2xl border border-purple-200 dark:border-purple-800">
                     <User className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.prevent.demographics_title')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.prevent.demographics_title')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.cardiology.prevent.demographics_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.cardiology.prevent.demographics_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
@@ -1727,9 +1727,9 @@ const PREVENTCalculator: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl border border-emerald-200 dark:border-teal-800">
                     <BarChart3 className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.prevent.lab_title')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.prevent.lab_title')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.cardiology.prevent.lab_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.cardiology.prevent.lab_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
@@ -1795,9 +1795,9 @@ const PREVENTCalculator: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-2xl border border-purple-200 dark:border-purple-800">
                     <Stethoscope className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.prevent.clinical_title')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.prevent.clinical_title')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.cardiology.prevent.clinical_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.cardiology.prevent.clinical_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
@@ -1831,7 +1831,7 @@ const PREVENTCalculator: React.FC = () => {
 
                 {/* Clinical Risk Factors */}
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
                     <Stethoscope className="w-5 h-5 text-purple-600" />
                     <span>{t('calculators.cardiology.prevent.clinical_risk_factors_title')}</span>
                   </h4>
@@ -1892,10 +1892,10 @@ const PREVENTCalculator: React.FC = () => {
               <div className="space-y-6 animate-fadeIn">
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
-                    <Star className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.prevent.ckm_e_title')}</h3>
+                    <Star className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.prevent.ckm_e_title')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.cardiology.prevent.ckm_e_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.cardiology.prevent.ckm_e_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
@@ -1936,10 +1936,10 @@ const PREVENTCalculator: React.FC = () => {
           /* Results Display */
           results && (
             <div className="space-y-8 animate-scaleIn">
-              <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/20 rounded-2xl p-6">
+              <div className="bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 backdrop-blur-sm border border-white/20 dark:border-[var(--border-strong)]/20 rounded-2xl p-6">
                 <div className="flex items-center space-x-3 mb-6">
                   <Star className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.prevent.results_title')}</h3>
+                  <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.prevent.results_title')}</h3>
                   {results.hasEnhancedCKM && (
                     <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium">
                       CKM-Enhanced
@@ -1950,26 +1950,26 @@ const PREVENTCalculator: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3 mb-4">
                     <BarChart3 className="w-5 h-5 text-purple-500" />
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">Calculated Values</h4>
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Calculated Values</h4>
                   </div>
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-                    <div className="p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/20 dark:border-gray-700/20">
+                    <div className="p-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/20">
                       <div className="text-center">
-                        <div className="text-xl font-bold text-blue-600 dark:text-blue-400 mb-1">{results.bmi}</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">BMI (kg/m²)</div>
+                        <div className="text-xl font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mb-1">{results.bmi}</div>
+                        <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">BMI (kg/m²)</div>
                       </div>
                     </div>
-                    <div className="p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/20 dark:border-gray-700/20">
+                    <div className="p-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/20">
                       <div className="text-center">
                         <div className="text-xl font-bold text-green-600 dark:text-green-400 mb-1">{results.eGFR}</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">eGFR (mL/min/1.73m²)</div>
+                        <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">eGFR (mL/min/1.73m²)</div>
                       </div>
                     </div>
                     {results.sdiGroup && (
-                      <div className="p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/20 dark:border-gray-700/20">
+                      <div className="p-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/20">
                         <div className="text-center">
                           <div className="text-xl font-bold text-orange-600 dark:text-orange-400 mb-1">{results.sdiGroup}</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">SDI Group</div>
+                          <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">SDI Group</div>
                         </div>
                       </div>
                     )}
@@ -1980,14 +1980,14 @@ const PREVENTCalculator: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3 mb-4">
                     <Target className="w-5 h-5 text-indigo-500" />
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.prevent.ten_year_predictions_title')}</h4>
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.prevent.ten_year_predictions_title')}</h4>
                   </div>
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-                    <div className="p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/20 dark:border-gray-700/20">
+                    <div className="p-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/20">
                       <div className="text-center">
                         <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">{results.tenYearRisk.totalCVD}%</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('calculators.cardiology.prevent.total_cvd')}</div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">{t('calculators.cardiology.prevent.total_cvd')}</div>
+                        <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-2">
                           <div 
                             className="bg-purple-500 h-2 rounded-full transition-all duration-1000"
                             style={{ width: `${Math.min(results.tenYearRisk.totalCVD * 2, 100)}%` }}
@@ -1995,11 +1995,11 @@ const PREVENTCalculator: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/20 dark:border-gray-700/20">
+                    <div className="p-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/20">
                       <div className="text-center">
                         <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-1">{results.tenYearRisk.ascvd}%</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('calculators.cardiology.prevent.ascvd')}</div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">{t('calculators.cardiology.prevent.ascvd')}</div>
+                        <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-2">
                           <div 
                             className="bg-indigo-500 h-2 rounded-full transition-all duration-1000"
                             style={{ width: `${Math.min(results.tenYearRisk.ascvd * 2, 100)}%` }}
@@ -2007,11 +2007,11 @@ const PREVENTCalculator: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/20 dark:border-gray-700/20">
+                    <div className="p-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/20">
                       <div className="text-center">
                         <div className="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-1">{results.tenYearRisk.heartFailure}%</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('calculators.cardiology.prevent.heart_failure')}</div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">{t('calculators.cardiology.prevent.heart_failure')}</div>
+                        <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-2">
                           <div 
                             className="bg-pink-500 h-2 rounded-full transition-all duration-1000"
                             style={{ width: `${Math.min(results.tenYearRisk.heartFailure * 2, 100)}%` }}
@@ -2026,8 +2026,8 @@ const PREVENTCalculator: React.FC = () => {
                 {results.thirtyYearRisk && (
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3 mb-4">
-                      <Clock className="w-5 h-5 text-blue-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.prevent.thirty_year_predictions_title')}</h4>
+                      <Clock className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.prevent.thirty_year_predictions_title')}</h4>
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                       <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-900/30 rounded-xl border border-purple-200 dark:border-purple-800">
@@ -2086,14 +2086,14 @@ const PREVENTCalculator: React.FC = () => {
                 )}
 
                 {/* Algorithm Information */}
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
                   <div className="flex items-center space-x-3 mb-3">
-                    <Award className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <Award className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                     <h4 className="font-semibold text-blue-800 dark:text-blue-200">{t('calculators.cardiology.prevent.algorithm_2023_title')}</h4>
                   </div>
-                  <div className="text-sm text-blue-700 dark:text-blue-300 space-y-2">
+                  <div className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 space-y-2">
                     <p>This calculator implements the official American Heart Association PREVENT™ equations (2023):</p>
-                    <ul className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                    <ul className="space-y-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
                     <span>{t('calculators.cardiology.prevent.algorithm_2023_feature_1')}</span>
@@ -2143,7 +2143,7 @@ const PREVENTCalculator: React.FC = () => {
 
         {/* Footer Information */}
         <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-          <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <Info className="w-4 h-4" />
             <span>{t('calculators.cardiology.prevent.footer_description')}</span>
             <div className="flex items-center space-x-1">

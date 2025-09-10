@@ -88,7 +88,7 @@ export const UpdatedEvidenceSection: React.FC<UpdatedEvidenceSectionProps> = ({
                 
                 {/* Icon */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <TrendingUp className="w-7 h-7 text-white drop-shadow-lg transform group-hover/icon:scale-110 transition-transform duration-300" />
+                  <TrendingUp className="w-7 h-7 text-[var(--foreground)] drop-shadow-lg transform group-hover/icon:scale-110 transition-transform duration-300" />
                 </div>
                 
                 {/* Sparkle Effect */}
@@ -127,7 +127,7 @@ export const UpdatedEvidenceSection: React.FC<UpdatedEvidenceSectionProps> = ({
               
               {/* Description */}
               <div className="prose prose-gray max-w-none">
-                <p className="text-gray-700 leading-relaxed text-base font-medium tracking-wide">
+                <p className="text-[var(--foreground-tertiary)] leading-relaxed text-base font-medium tracking-wide">
                   {cleanDescription}
                 </p>
               </div>
@@ -139,14 +139,14 @@ export const UpdatedEvidenceSection: React.FC<UpdatedEvidenceSectionProps> = ({
                   <div className="relative bg-gradient-to-r from-emerald-50/80 to-teal-50/80 border border-emerald-200/60 rounded-2xl p-4 backdrop-blur-sm">
                     <div className="flex items-start gap-3">
                       <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg shadow-lg flex-shrink-0">
-                        <BookOpen className="w-4 h-4 text-white" />
+                        <BookOpen className="w-4 h-4 text-[var(--foreground)]" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-xs font-semibold tracking-wider text-emerald-700 uppercase">Reference</span>
                           <div className="w-1 h-1 bg-emerald-400 rounded-full"></div>
                         </div>
-                        <cite className="text-sm text-gray-700 font-medium leading-relaxed italic block">
+                        <cite className="text-sm text-[var(--foreground-tertiary)] font-medium leading-relaxed italic block">
                           {finalCitation}
                         </cite>
                       </div>
@@ -162,7 +162,7 @@ export const UpdatedEvidenceSection: React.FC<UpdatedEvidenceSectionProps> = ({
                      href={finalPubmedLink}
                      target="_blank"
                      rel="noopener noreferrer"
-                     className="group/link relative inline-flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white text-sm font-bold rounded-2xl shadow-[0_6px_20px_rgba(16,185,129,0.35)] hover:shadow-[0_12px_32px_rgba(16,185,129,0.45)] transform hover:scale-105 hover:-translate-y-1 transition-all duration-400 ease-out overflow-hidden"
+                     className="group/link relative inline-flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-[var(--foreground)] text-sm font-bold rounded-2xl shadow-[0_6px_20px_rgba(16,185,129,0.35)] hover:shadow-[0_12px_32px_rgba(16,185,129,0.45)] transform hover:scale-105 hover:-translate-y-1 transition-all duration-400 ease-out overflow-hidden"
                    >
                      {/* Dynamic Glow Effect */}
                      <div className="absolute inset-0 bg-gradient-to-r from-white/25 via-white/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-400" />
@@ -170,7 +170,7 @@ export const UpdatedEvidenceSection: React.FC<UpdatedEvidenceSectionProps> = ({
                      {/* Icon with Animation */}
                      <div className="relative">
                        <ExternalLink className="w-5 h-5 transform group-hover/link:scale-110 group-hover/link:rotate-12 transition-all duration-400" />
-                       <div className="absolute -inset-1 bg-white/30 rounded-full opacity-0 group-hover/link:opacity-100 group-hover/link:animate-ping" />
+                       <div className="absolute -inset-1 bg-[var(--component-card)]/30 rounded-full opacity-0 group-hover/link:opacity-100 group-hover/link:animate-ping" />
                      </div>
                      
                      <span className="tracking-wide font-bold">Access PubMed</span>

@@ -101,14 +101,14 @@ export const CalculatorResultShare = React.memo<CalculatorResultShareProps>(({
       {/* Mobile-first responsive header */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 space-y-4 sm:space-y-0">
         <div className="flex items-start space-x-3">
-          <div className="flex-shrink-0 p-2 rounded-xl bg-white/50 dark:bg-gray-800/50">
+          <div className="flex-shrink-0 p-2 rounded-xl bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50">
             {getRiskIcon()}
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">
+            <h4 className="text-base sm:text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)] leading-tight">
               {t('calculators.common.calculator_results_summary')}
             </h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
               {calculatorName} • {new Date().toLocaleDateString()}
             </p>
           </div>
@@ -148,8 +148,8 @@ export const CalculatorResultShare = React.memo<CalculatorResultShareProps>(({
       <div className="space-y-3">
         {/* Key Results - Mobile-optimized layout */}
         <div>
-          <h5 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center">
-            <FileText className="w-4 h-4 mr-2 text-blue-600" />
+          <h5 className="text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center">
+            <FileText className="w-4 h-4 mr-2 text-[var(--cardiology-accent-blue-dark)]" />
             {t('calculators.common.key_results')}
           </h5>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -191,11 +191,11 @@ export const CalculatorResultShare = React.memo<CalculatorResultShareProps>(({
               };
               
               return (
-                <div key={key} className="flex items-center justify-between p-3 bg-white/60 dark:bg-gray-800/40 rounded-xl border border-gray-200/50 dark:border-gray-600/30 min-h-[44px]">
-                  <span className="text-gray-600 dark:text-gray-400 text-sm font-medium flex-1 pr-3">
+                <div key={key} className="flex items-center justify-between p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/40 rounded-xl border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/30 min-h-[44px]">
+                  <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-sm font-medium flex-1 pr-3">
                     {getTranslatedFieldName(key)}
                   </span>
-                  <span className="font-bold text-gray-900 dark:text-gray-100 text-sm flex-shrink-0">
+                  <span className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)] text-sm flex-shrink-0">
                     {typeof value === 'number' ? value.toFixed(1) : value}
                     {key.includes('percentage') || key.includes('risk') || key.includes('Rate') ? '%' : ''}
                   </span>
@@ -207,12 +207,12 @@ export const CalculatorResultShare = React.memo<CalculatorResultShareProps>(({
 
         {/* Clinical Interpretation - Mobile-optimized */}
         <div>
-          <h5 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center">
+          <h5 className="text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center">
             <AlertTriangle className="w-4 h-4 mr-2 text-orange-600" />
             {t('calculators.common.clinical_interpretation_label')}
           </h5>
-          <div className="p-4 bg-white/60 dark:bg-gray-800/40 rounded-xl border border-gray-200/50 dark:border-gray-600/30">
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+          <div className="p-4 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/40 rounded-xl border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/30">
+            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
               {interpretation}
             </p>
           </div>
@@ -221,22 +221,22 @@ export const CalculatorResultShare = React.memo<CalculatorResultShareProps>(({
         {/* Recommendations - Mobile-friendly list */}
         {recommendations.length > 0 && (
           <div>
-            <h5 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center">
+            <h5 className="text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center">
               <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
               {t('calculators.common.recommendations_label')}
             </h5>
             <div className="space-y-3">
               {recommendations.slice(0, 3).map((rec, index) => (
-                <div key={index} className="flex items-start p-3 bg-white/60 dark:bg-gray-800/40 rounded-xl border border-gray-200/50 dark:border-gray-600/30 min-h-[44px]">
+                <div key={index} className="flex items-start p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/40 rounded-xl border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/30 min-h-[44px]">
                   <div className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mr-3 mt-0.5">
                     <span className="text-xs font-bold text-green-600 dark:text-green-400">{index + 1}</span>
                   </div>
-                  <span className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{rec}</span>
+                  <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">{rec}</span>
                 </div>
               ))}
               {recommendations.length > 3 && (
-                <div className="p-3 bg-blue-50/80 dark:bg-blue-900/20 rounded-xl border border-blue-200/50 dark:border-blue-600/30 text-center">
-                  <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                <div className="p-3 bg-[var(--cardiology-accent-blue-light)]/80 dark:bg-[var(--cardiology-accent-blue-darker)]/20 rounded-xl border border-blue-200/50 dark:border-blue-600/30 text-center">
+                  <span className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 font-medium">
                     +{recommendations.length - 3} {t('calculators.common.more_recommendations')}
                   </span>
                 </div>
@@ -246,10 +246,10 @@ export const CalculatorResultShare = React.memo<CalculatorResultShareProps>(({
         )}
 
         {/* Share Information - Mobile-optimized footer */}
-        <div className="pt-4 border-t-2 border-dashed border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-center p-3 bg-gray-50/80 dark:bg-gray-800/50 rounded-xl">
-            <Share2 className="w-4 h-4 mr-2 text-gray-400 flex-shrink-0" />
-            <p className="text-xs text-gray-500 dark:text-gray-400 text-center leading-relaxed">
+        <div className="pt-4 border-t-2 border-dashed border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
+          <div className="flex items-center justify-center p-3 bg-[var(--component-surface-primary)]/80 dark:bg-[var(--background)]/50 rounded-xl">
+            <Share2 className="w-4 h-4 mr-2 text-[var(--foreground-secondary)] flex-shrink-0" />
+            <p className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] text-center leading-relaxed">
               {t('calculators.common.share_results_description')}
             </p>
           </div>

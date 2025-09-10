@@ -114,7 +114,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
             <div className="flex items-center space-x-2">
               {/* Icon */}
               <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
-                <CurrentEngineIcon className="w-4 h-4 text-white" />
+                <CurrentEngineIcon className="w-4 h-4 text-[var(--foreground)]" />
               </div>
               
               {/* Text */}
@@ -159,8 +159,8 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                       className={`
                         w-full p-4 rounded-2xl text-left transition-all duration-200 ease-out group/item
                         ${isSelected 
-                          ? 'bg-blue-50 border-2 border-blue-200' 
-                          : 'hover:bg-gray-50 border-2 border-transparent hover:border-gray-200'
+                          ? 'bg-[var(--cardiology-accent-blue-light)] border-2 border-blue-200' 
+                          : 'hover:bg-[var(--component-surface-primary)] border-2 border-transparent hover:border-[var(--glass-border-light)]'
                         }
                       `}
                     >
@@ -168,24 +168,24 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                         
                         {/* Icon */}
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md group-hover/item:scale-110 transition-all duration-200">
-                          <EngineIcon className="w-5 h-5 text-white" />
+                          <EngineIcon className="w-5 h-5 text-[var(--foreground)]" />
                         </div>
                         
                         {/* Content */}
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
-                            <h4 className="font-bold text-gray-700">
+                            <h4 className="font-bold text-[var(--foreground-tertiary)]">
                               {engine.name}
                             </h4>
                             
                             {isSelected && (
                               <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
-                                <Check className="w-3 h-3 text-white" />
+                                <Check className="w-3 h-3 text-[var(--foreground)]" />
                               </div>
                             )}
                           </div>
                           
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-[var(--foreground-secondary)]">
                             {engine.description}
                           </p>
                         </div>
@@ -208,18 +208,18 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
               
               {/* Mobile Bottom Sheet */}
               <div className="fixed bottom-0 left-0 right-0 z-50 animate-in slide-in-from-bottom duration-300 md:hidden">
-                <div className="bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-gray-700 p-6">
+                <div className="bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-t-3xl shadow-2xl border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)] p-6">
                   
                   {/* Handle */}
-                  <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-6" />
+                  <div className="w-12 h-1 bg-[var(--component-panel)] dark:bg-[var(--border)] rounded-full mx-auto mb-6" />
                   
                   {/* Header */}
                   <div className="text-center mb-6">
-                    <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center justify-center space-x-2">
+                    <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center justify-center space-x-2">
                       <Settings className="w-5 h-5" />
                       <span>Select Transcription Quality</span>
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">
                       Choose the quality mode for medical transcription
                     </p>
                   </div>
@@ -242,7 +242,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                             w-full p-4 rounded-2xl transition-all duration-200 flex items-center space-x-4
                             ${isSelected
                               ? 'bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border-2 border-violet-500'
-                              : 'bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-violet-300'
+                              : 'bg-[var(--component-surface-primary)] dark:bg-[var(--background)] border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:border-violet-300'
                             }
                           `}
                         >
@@ -251,18 +251,18 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                             w-12 h-12 rounded-xl flex items-center justify-center shadow-sm
                             ${isSelected 
                               ? 'bg-gradient-to-br from-blue-500 to-blue-600' 
-                              : 'bg-gray-200 dark:bg-gray-700'
+                              : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)]'
                             }
                           `}>
-                            <EngineIcon className={`w-6 h-6 ${isSelected ? 'text-white' : 'text-gray-600 dark:text-gray-300'}`} />
+                            <EngineIcon className={`w-6 h-6 ${isSelected ? 'text-[var(--foreground)]' : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'}`} />
                           </div>
                           
                           {/* Text */}
                           <div className="flex-1 text-left">
-                            <div className="font-bold text-gray-800 dark:text-gray-200">
+                            <div className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                               {engine.name}
                             </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                            <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                               {engine.description}
                             </div>
                           </div>
@@ -270,7 +270,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                           {/* Checkmark */}
                           {isSelected && (
                             <div className="w-6 h-6 rounded-full bg-violet-500 flex items-center justify-center">
-                              <Check className="w-4 h-4 text-white" />
+                              <Check className="w-4 h-4 text-[var(--foreground)]" />
                             </div>
                           )}
                         </button>
@@ -281,7 +281,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                   {/* Close Button */}
                   <button
                     onClick={() => setEngineDropdownOpen(false)}
-                    className="w-full py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-medium transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    className="w-full py-3 bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] rounded-xl font-medium transition-all duration-200 hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--card)]"
                   >
                     Close
                   </button>
@@ -321,7 +321,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
               <div className="flex items-center space-x-2">
                 {/* Icon */}
                 <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
-                  <Brain className="w-4 h-4 text-white" />
+                  <Brain className="w-4 h-4 text-[var(--foreground)]" />
                 </div>
                 
                 {/* Text */}
@@ -357,7 +357,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                         }
                       }
                     }}
-                    className="px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-white text-xs font-semibold flex items-center space-x-1 hover:bg-white/30 transition-all duration-200 cursor-pointer"
+                    className="px-2 py-1 rounded-lg bg-[var(--component-card)]/20 border border-white/30 text-[var(--foreground)] text-xs font-semibold flex items-center space-x-1 hover:bg-[var(--component-card)]/30 transition-all duration-200 cursor-pointer"
                   >
                     <Users className="w-3 h-3" />
                     <span>{speakerCount}</span>
@@ -369,15 +369,15 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                 <div className={`
                   w-10 h-5 rounded-full border p-0.5 transition-all duration-200 
                   ${enableSpeakerDiarization 
-                    ? 'bg-white/20 border-white/30' 
-                    : 'bg-gray-200 border-gray-300'
+                    ? 'bg-[var(--component-card)]/20 border-white/30' 
+                    : 'bg-[var(--component-surface-tertiary)] border-[var(--glass-border-medium)]'
                   }
                 `}>
                   <div className={`
                     w-4 h-4 rounded-full shadow-sm transition-all duration-200
                     ${enableSpeakerDiarization 
-                      ? 'bg-white translate-x-4' 
-                      : 'bg-white dark:bg-gray-300 translate-x-0'
+                      ? 'bg-[var(--component-card)] translate-x-4' 
+                      : 'bg-[var(--component-card)] dark:bg-[var(--component-panel)] translate-x-0'
                     }
                   `} />
                 </div>
@@ -391,23 +391,23 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-sm transition-all duration-200
                     ${enableSpeakerDiarization 
                       ? 'bg-gradient-to-br from-violet-500 to-purple-600' 
-                      : 'bg-gray-400 dark:bg-gray-600'
+                      : 'bg-[var(--muted)] dark:bg-[var(--border)]'
                     }`}>
-                    <Brain className="w-4 h-4 text-white" />
+                    <Brain className="w-4 h-4 text-[var(--foreground)]" />
                   </div>
                   
                   <div className="flex flex-col items-start">
                     <div className={`text-xs font-bold leading-tight transition-all duration-200
                       ${enableSpeakerDiarization 
                         ? 'text-violet-700 dark:text-violet-300' 
-                        : 'text-gray-600 dark:text-gray-400'
+                        : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                       }`}>
                       Speakers
                     </div>
                     <div className={`text-[10px] leading-tight transition-all duration-200
                       ${enableSpeakerDiarization 
                         ? 'text-violet-600 dark:text-violet-400' 
-                        : 'text-gray-500 dark:text-gray-500'
+                        : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                       }`}>
                       {enableSpeakerDiarization ? `${speakerCount} voices` : 'OFF'}
                     </div>
@@ -454,20 +454,20 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
           {/* Mobile Bottom Sheet */}
           <div className="fixed bottom-0 left-0 right-0 z-50 animate-in slide-in-from-bottom duration-300 md:hidden">
             <div 
-              className="bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-gray-700 p-6"
+              className="bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-t-3xl shadow-2xl border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)] p-6"
               onClick={(e) => e.stopPropagation()}
             >
               
               {/* Handle */}
-              <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-6" />
+              <div className="w-12 h-1 bg-[var(--component-panel)] dark:bg-[var(--border)] rounded-full mx-auto mb-6" />
               
               {/* Header */}
               <div className="text-center mb-6">
-                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center justify-center space-x-2">
+                <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center justify-center space-x-2">
                   <Users className="w-5 h-5" />
                   <span>Select Voice Count</span>
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">
                   Choose how many speakers to detect in the conversation
                 </p>
               </div>
@@ -504,7 +504,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                       border-2 min-h-[80px] cursor-pointer active:scale-95 touch-manipulation select-none
                       ${speakerCount === count 
                         ? 'bg-violet-100 dark:bg-violet-900/40 border-violet-400 dark:border-violet-500 shadow-lg' 
-                        : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:border-violet-300'
+                        : 'bg-[var(--component-surface-primary)] dark:bg-[var(--background)] border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:border-violet-300'
                       }
                     `}
                   >
@@ -517,7 +517,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                             w-2 h-2 rounded-full
                             ${speakerCount === count 
                               ? 'bg-violet-500' 
-                              : 'bg-gray-400 dark:bg-gray-600'
+                              : 'bg-[var(--muted)] dark:bg-[var(--border)]'
                             }
                           `}
                         />
@@ -529,7 +529,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                       text-2xl font-bold
                       ${speakerCount === count 
                         ? 'text-violet-700 dark:text-violet-300' 
-                        : 'text-gray-700 dark:text-gray-300'
+                        : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                       }
                     `}>
                       {count}
@@ -540,7 +540,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                       text-xs font-medium mt-1
                       ${speakerCount === count 
                         ? 'text-violet-600 dark:text-violet-400' 
-                        : 'text-gray-500 dark:text-gray-500'
+                        : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                       }
                     `}>
                       {count === 2 ? 'Doctor + Patient' : 'Voices'}
@@ -549,7 +549,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                     {/* Selected Indicator */}
                     {speakerCount === count && (
                       <div className="absolute -top-2 -right-2 w-6 h-6 bg-violet-500 rounded-full flex items-center justify-center shadow-lg">
-                        <Check className="w-4 h-4 text-white" />
+                        <Check className="w-4 h-4 text-[var(--foreground)]" />
                       </div>
                     )}
                   </button>
@@ -559,7 +559,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
               {/* Close Button */}
               <button
                 onClick={() => setSpeakerDropdownOpen(false)}
-                className="w-full py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-medium transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                className="w-full py-3 bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] rounded-xl font-medium transition-all duration-200 hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--card)]"
               >
                 Close
               </button>

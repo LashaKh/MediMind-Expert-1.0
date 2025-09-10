@@ -72,10 +72,10 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
   ];
 
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-gray-200 p-6 ${className}`}>
+    <div className={`bg-[var(--component-card)] rounded-lg shadow-sm border border-[var(--glass-border-light)] p-6 ${className}`}>
       <div className="flex items-center gap-2 mb-6">
-        <FunnelIcon className="w-5 h-5 text-blue-600" />
-        <h3 className="text-lg font-semibold text-gray-900">
+        <FunnelIcon className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
+        <h3 className="text-lg font-semibold text-[var(--foreground)]">
           {t('search.clinicalTrials.filters', 'Clinical Trial Filters')}
         </h3>
       </div>
@@ -83,7 +83,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
       <div className="space-y-6">
         {/* Location Filter */}
         <div>
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
             <MapPinIcon className="w-4 h-4" />
             {t('search.clinicalTrials.locationFilter', 'Location')}
           </label>
@@ -94,7 +94,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
               onChange={(e) => setLocationAddress(e.target.value)}
               onBlur={handleLocationChange}
               placeholder={t('search.clinicalTrials.locationPlaceholder', 'City, State or ZIP')}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="flex-1 px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)] text-sm"
             />
             <select
               value={locationRadius}
@@ -102,7 +102,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
                 setLocationRadius(Number(e.target.value));
                 if (locationAddress) handleLocationChange();
               }}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)] text-sm"
             >
               <option value={10}>10 miles</option>
               <option value={25}>25 miles</option>
@@ -115,7 +115,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
 
         {/* Recruitment Status */}
         <div>
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
             <UserGroupIcon className="w-4 h-4" />
             {t('search.clinicalTrials.recruitmentStatus', 'Recruitment Status')}
           </label>
@@ -133,9 +133,9 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
                       : current.filter(s => s !== option.value);
                     handleFilterChange({ recruitmentStatus: updated });
                   }}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] border-[var(--glass-border-medium)] rounded focus:ring-[var(--cardiology-accent-blue)]"
                 />
-                <span className="ml-2 text-sm text-gray-700">{option.label}</span>
+                <span className="ml-2 text-sm text-[var(--foreground-tertiary)]">{option.label}</span>
               </label>
             ))}
           </div>
@@ -143,7 +143,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
 
         {/* Phase Filter */}
         <div>
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
             <BeakerIcon className="w-4 h-4" />
             {t('search.clinicalTrials.phase', 'Phase')}
           </label>
@@ -161,9 +161,9 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
                       : current.filter(p => p !== option.value);
                     handleFilterChange({ phase: updated });
                   }}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] border-[var(--glass-border-medium)] rounded focus:ring-[var(--cardiology-accent-blue)]"
                 />
-                <span className="ml-2 text-sm text-gray-700">{option.label}</span>
+                <span className="ml-2 text-sm text-[var(--foreground-tertiary)]">{option.label}</span>
               </label>
             ))}
           </div>
@@ -171,7 +171,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
 
         {/* Age Range */}
         <div>
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
             <CalendarIcon className="w-4 h-4" />
             {t('search.clinicalTrials.ageRange', 'Age Range')}
           </label>
@@ -188,7 +188,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
                   }
                 });
               }}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="flex-1 px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)] text-sm"
               min="0"
               max="120"
             />
@@ -204,7 +204,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
                   }
                 });
               }}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="flex-1 px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)] text-sm"
               min="0"
               max="120"
             />
@@ -213,14 +213,14 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
 
         {/* Gender Filter */}
         <div>
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
             <UserGroupIcon className="w-4 h-4" />
             {t('search.clinicalTrials.gender', 'Gender')}
           </label>
           <select
             value={filters.gender || 'all'}
             onChange={(e) => handleFilterChange({ gender: e.target.value as any })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+            className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)] text-sm"
           >
             {genderOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -238,7 +238,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
             setLocationRadius(50);
             onFiltersChange({ recruitmentStatus: ['recruiting'], phase: [], gender: 'all' });
           }}
-          className="w-full px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+          className="w-full px-4 py-2 text-sm text-[var(--foreground-tertiary)] bg-[var(--component-surface-secondary)] rounded-md hover:bg-[var(--component-surface-tertiary)] transition-colors"
         >
           {t('search.clinicalTrials.clearFilters', 'Clear Filters')}
         </button>

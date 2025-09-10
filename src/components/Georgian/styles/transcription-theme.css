@@ -3,23 +3,23 @@
 
 :root {
   /* Primary Blue Gradient Colors */
-  --transcription-primary-start: #4A9EFF;
-  --transcription-primary-end: #87BFFF;
-  --transcription-primary-light: #B8D4FF;
-  --transcription-primary-dark: #2B7FFF;
+  --transcription-primary-start: var(--transcription-primary);
+  --transcription-primary-end: var(--transcription-primary-hover);
+  --transcription-primary-light: var(--transcription-primary-light);
+  --transcription-primary-dark: var(--transcription-primary-dark);
   
   /* Supporting Colors */
-  --transcription-white: #FFFFFF;
-  --transcription-gray-50: #F8FAFC;
-  --transcription-gray-100: #F1F5F9;
-  --transcription-gray-200: #E2E8F0;
-  --transcription-gray-300: #CBD5E1;
-  --transcription-gray-400: #94A3B8;
-  --transcription-gray-500: #64748B;
-  --transcription-gray-600: #475569;
-  --transcription-gray-700: #334155;
-  --transcription-gray-800: #1E293B;
-  --transcription-gray-900: #0F172A;
+  --transcription-white: var(--transcription-white);
+  --transcription-gray-50: var(--transcription-gray-50);
+  --transcription-gray-100: var(--transcription-gray-100);
+  --transcription-gray-200: var(--transcription-gray-200);
+  --transcription-gray-300: var(--transcription-gray-300);
+  --transcription-gray-400: var(--transcription-gray-400);
+  --transcription-gray-500: var(--transcription-gray-500);
+  --transcription-gray-600: var(--transcription-gray-600);
+  --transcription-gray-700: var(--transcription-gray-700);
+  --transcription-gray-800: var(--transcription-gray-800);
+  --transcription-gray-900: var(--transcription-gray-900);
   
   /* Card and Surface Styles */
   --transcription-card-radius: 20px;
@@ -27,10 +27,10 @@
   --transcription-small-radius: 12px;
   
   /* Shadows */
-  --transcription-shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --transcription-shadow-button: 0 4px 6px -1px rgba(74, 158, 255, 0.2), 0 2px 4px -1px rgba(74, 158, 255, 0.06);
-  --transcription-shadow-hover: 0 12px 32px -8px rgba(74, 158, 255, 0.25);
-  --transcription-shadow-active: 0 2px 4px -1px rgba(74, 158, 255, 0.15);
+  --transcription-shadow-card: var(--shadow-transcription-card);
+  --transcription-shadow-button: var(--shadow-transcription-button);
+  --transcription-shadow-hover: var(--shadow-transcription-hover);
+  --transcription-shadow-active: var(--shadow-transcription-active);
   
   /* Gradients */
   --transcription-bg-gradient: linear-gradient(135deg, var(--transcription-primary-start) 0%, var(--transcription-primary-end) 100%);

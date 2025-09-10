@@ -21,7 +21,7 @@ export const TOCToggleButton: React.FC<TOCToggleButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`fixed top-4 left-4 z-50 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all duration-200 hover:scale-105 ${className}`}
+      className={`fixed top-4 left-4 z-50 p-3 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] rounded-full shadow-lg hover:bg-[var(--cardiology-accent-blue-dark)] transition-all duration-200 hover:scale-105 ${className}`}
       title="Show table of contents"
     >
       <Menu className="w-5 h-5" />

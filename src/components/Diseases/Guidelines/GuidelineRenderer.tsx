@@ -41,21 +41,21 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
   
   if (!hasAsPerPattern) {
           return (
-        <div ref={containerRef} className="prose dark:prose-invert text-gray-800 dark:text-gray-200">
+        <div ref={containerRef} className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)]">
           <ReactMarkdown 
             remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}
             components={{
-              p: ({ children }) => <p className="text-gray-800 dark:text-gray-200">{children}</p>,
-              strong: ({ children }) => <strong className="text-gray-900 dark:text-white font-semibold">{children}</strong>,
-              h1: ({ children }) => <h1 className="text-gray-900 dark:text-white">{children}</h1>,
-              h2: ({ children }) => <h2 className="text-gray-900 dark:text-white">{children}</h2>,
-              h3: ({ children }) => <h3 className="text-gray-900 dark:text-white">{children}</h3>,
-              h4: ({ children }) => <h4 className="text-gray-900 dark:text-white">{children}</h4>,
-              h5: ({ children }) => <h5 className="text-gray-900 dark:text-white">{children}</h5>,
-              h6: ({ children }) => <h6 className="text-gray-900 dark:text-white">{children}</h6>,
-              ul: ({ children }) => <ul className="text-gray-800 dark:text-gray-200">{children}</ul>,
-              ol: ({ children }) => <ol className="text-gray-800 dark:text-gray-200">{children}</ol>,
-              li: ({ children }) => <li className="text-gray-800 dark:text-gray-200">{children}</li>,
+              p: ({ children }) => <p className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</p>,
+              strong: ({ children }) => <strong className="text-[var(--foreground)] dark:text-[var(--foreground)] font-semibold">{children}</strong>,
+              h1: ({ children }) => <h1 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h1>,
+              h2: ({ children }) => <h2 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h2>,
+              h3: ({ children }) => <h3 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h3>,
+              h4: ({ children }) => <h4 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h4>,
+              h5: ({ children }) => <h5 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h5>,
+              h6: ({ children }) => <h6 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h6>,
+              ul: ({ children }) => <ul className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</ul>,
+              ol: ({ children }) => <ol className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</ol>,
+              li: ({ children }) => <li className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</li>,
             }}
           >
             {content}
@@ -130,12 +130,12 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
           return (
             <div key={index}>
               {title && (
-                <div className="prose dark:prose-invert text-gray-800 dark:text-gray-200">
+                <div className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)]">
                   <ReactMarkdown 
                     remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}
                     components={{
                       h3: ({children}) => (
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-8 mb-4 border-b-2 border-blue-200 dark:border-blue-800 pb-2">
+                        <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mt-8 mb-4 border-b-2 border-blue-200 dark:border-blue-800 pb-2">
                           {children}
                         </h3>
                       )
@@ -157,12 +157,12 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
           return (
             <div key={index}>
               {title && (
-                <div className="prose dark:prose-invert text-gray-800 dark:text-gray-200">
+                <div className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)]">
                   <ReactMarkdown 
                     remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}
                     components={{
                       h3: ({children}) => (
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-8 mb-4 border-b-2 border-blue-200 dark:border-blue-800 pb-2">
+                        <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mt-8 mb-4 border-b-2 border-blue-200 dark:border-blue-800 pb-2">
                           {children}
                         </h3>
                       )
@@ -188,12 +188,12 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
         return (
           <div key={index}>
             {title && (
-              <div className="prose dark:prose-invert text-gray-800 dark:text-gray-200 mb-4">
+              <div className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}
                   components={{
                     h3: ({children}) => (
-                      <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-8 mb-4 border-b-2 border-blue-200 dark:border-blue-800 pb-2">
+                      <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mt-8 mb-4 border-b-2 border-blue-200 dark:border-blue-800 pb-2">
                         {children}
                       </h3>
                     )
@@ -204,7 +204,7 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
               </div>
             )}
             {description && (
-              <div className="prose dark:prose-invert text-gray-800 dark:text-gray-200 mb-6">
+              <div className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)] mb-6">
                 <ReactMarkdown remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}>
                   {description}
                 </ReactMarkdown>
@@ -223,12 +223,12 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
           return (
             <div key={index}>
               {title && (
-                <div className="prose dark:prose-invert text-gray-800 dark:text-gray-200">
+                <div className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)]">
                   <ReactMarkdown 
                     remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}
                     components={{
                       h3: ({children}) => (
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-8 mb-4 border-b-2 border-blue-200 dark:border-blue-800 pb-2">
+                        <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mt-8 mb-4 border-b-2 border-blue-200 dark:border-blue-800 pb-2">
                           {children}
                         </h3>
                       )
@@ -252,12 +252,12 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
       if (isH3) {
         // Render ### headers with bigger, bolder styling
         return (
-          <div key={index} className="prose dark:prose-invert text-gray-800 dark:text-gray-200">
+          <div key={index} className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)]">
             <ReactMarkdown 
               remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}
               components={{
                 h3: ({children}) => (
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-8 mb-4 border-b-2 border-blue-200 dark:border-blue-800 pb-2">
+                  <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mt-8 mb-4 border-b-2 border-blue-200 dark:border-blue-800 pb-2">
                     {children}
                   </h3>
                 )
@@ -270,12 +270,12 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
       } else if (isH4) {
         // Render #### headers with standard subtitle styling
         return (
-          <div key={index} className="prose dark:prose-invert text-gray-800 dark:text-gray-200">
+          <div key={index} className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)]">
             <ReactMarkdown 
               remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}
               components={{
                 h4: ({children}) => (
-                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">
+                  <h4 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mt-6 mb-3">
                     {children}
                   </h4>
                 )
@@ -288,7 +288,7 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
       } else {
         // Fallback for other subtitle types
         return (
-          <div key={index} className="prose dark:prose-invert text-gray-800 dark:text-gray-200">
+          <div key={index} className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)]">
             <ReactMarkdown remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}>
               {part.content}
             </ReactMarkdown>
@@ -372,7 +372,7 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
        } else {
          // Not a recognized guideline, render as regular content
          return (
-           <div key={index} className="prose dark:prose-invert text-gray-800 dark:text-gray-200">
+           <div key={index} className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)]">
              <ReactMarkdown remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}>
                {part.content}
              </ReactMarkdown>
@@ -383,7 +383,7 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
      
      // Regular content parts
      return (
-       <div key={index} className="prose dark:prose-invert text-gray-800 dark:text-gray-200">
+       <div key={index} className="prose dark:prose-invert text-[var(--foreground)] dark:text-[var(--foreground)]">
          <ReactMarkdown 
            remarkPlugins={[remarkGfm, remarkLikelihoodRatios]}
            components={{
@@ -435,7 +435,7 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
                     return (
                       <div className="my-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-200 shadow-xl overflow-hidden">
                         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
-                          <h3 className="text-white font-bold text-xl flex items-center space-x-3">
+                          <h3 className="text-[var(--foreground)] font-bold text-xl flex items-center space-x-3">
                             <span>🧮</span>
                             <span>CHA₂DS₂-VASc Calculator</span>
                           </h3>
@@ -449,22 +449,22 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
                   }
                 }
                
-               return <p className="text-gray-800 dark:text-gray-200">{children}</p>;
+               return <p className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</p>;
              },
-             strong: ({ children }) => <strong className="text-gray-900 dark:text-white font-semibold">{children}</strong>,
-             h1: ({ children }) => <h1 className="text-gray-900 dark:text-white">{children}</h1>,
-             h2: ({ children }) => <h2 className="text-gray-900 dark:text-white">{children}</h2>,
-             h3: ({ children }) => <h3 className="text-gray-900 dark:text-white">{children}</h3>,
-             h4: ({ children }) => <h4 className="text-gray-900 dark:text-white">{children}</h4>,
-             h5: ({ children }) => <h5 className="text-gray-900 dark:text-white">{children}</h5>,
-             h6: ({ children }) => <h6 className="text-gray-900 dark:text-white">{children}</h6>,
-             ul: ({ children }) => <ul className="text-gray-800 dark:text-gray-200">{children}</ul>,
-             ol: ({ children }) => <ol className="text-gray-800 dark:text-gray-200">{children}</ol>,
-             li: ({ children }) => <li className="text-gray-800 dark:text-gray-200">{children}</li>,
+             strong: ({ children }) => <strong className="text-[var(--foreground)] dark:text-[var(--foreground)] font-semibold">{children}</strong>,
+             h1: ({ children }) => <h1 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h1>,
+             h2: ({ children }) => <h2 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h2>,
+             h3: ({ children }) => <h3 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h3>,
+             h4: ({ children }) => <h4 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h4>,
+             h5: ({ children }) => <h5 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h5>,
+             h6: ({ children }) => <h6 className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</h6>,
+             ul: ({ children }) => <ul className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</ul>,
+             ol: ({ children }) => <ol className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</ol>,
+             li: ({ children }) => <li className="text-[var(--foreground)] dark:text-[var(--foreground)]">{children}</li>,
              // Professional table components for medical guidelines
              table: ({ children, ...props }) => (
-               <div className="overflow-x-auto my-6 rounded-lg shadow-md border border-gray-200">
-                 <table className="w-full border-collapse bg-white" {...props}>
+               <div className="overflow-x-auto my-6 rounded-lg shadow-md border border-[var(--glass-border-light)]">
+                 <table className="w-full border-collapse bg-[var(--component-card)]" {...props}>
                    {children}
                  </table>
                </div>
@@ -480,17 +480,17 @@ export const GuidelineRenderer: React.FC<GuidelineRendererProps> = ({ content })
                </tbody>
              ),
              tr: ({ children, ...props }) => (
-               <tr className="border-b border-gray-100 hover:bg-gray-50 transition-colors" {...props}>
+               <tr className="border-b border-gray-100 hover:bg-[var(--component-surface-primary)] transition-colors" {...props}>
                  {children}
                </tr>
              ),
              th: ({ children, ...props }) => (
-               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 border-b-2 border-blue-200" {...props}>
+               <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--foreground)] border-b-2 border-blue-200" {...props}>
                  {children}
                </th>
              ),
              td: ({ children, ...props }) => (
-               <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100" {...props}>
+               <td className="px-4 py-3 text-sm text-[var(--foreground-tertiary)] border-b border-gray-100" {...props}>
                  {children}
                </td>
              ),

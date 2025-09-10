@@ -15,7 +15,7 @@ export const UserMessageItem: React.FC<MessageItemProps> = ({ message, className
     <div className={`flex justify-end group ${className}`}>
       <div className="flex items-end space-x-3 max-w-2xl lg:max-w-3xl">
         <div className="relative">
-          <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 text-white rounded-2xl rounded-br-md px-6 py-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 text-[var(--foreground)] rounded-2xl rounded-br-md px-6 py-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <div className="text-sm whitespace-pre-wrap break-words leading-relaxed">
               {message.content}
             </div>
@@ -52,7 +52,7 @@ export const UserMessageItem: React.FC<MessageItemProps> = ({ message, className
         {/* Enhanced User avatar */}
         <div className="relative flex-shrink-0">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center shadow-md">
-            <User className="w-5 h-5 text-blue-600" />
+            <User className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
           </div>
           <div className="absolute -inset-1 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
@@ -114,12 +114,12 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
         {/* Enhanced AI avatar */}
         <div className="relative flex-shrink-0">
           <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl flex items-center justify-center">
-            <Brain className="w-5 h-5 text-white relative z-10" />
+            <Brain className="w-5 h-5 text-[var(--foreground)] relative z-10" />
           </div>
         </div>
         
         <div className="relative flex-1 w-full">
-          <div className="bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-xl text-gray-900 rounded-2xl rounded-bl-md px-6 py-4 shadow-lg border border-white/30 hover:shadow-xl transition-all duration-300 hover:border-white/50 w-full">
+          <div className="bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-xl text-[var(--foreground)] rounded-2xl rounded-bl-md px-6 py-4 shadow-lg border border-white/30 hover:shadow-xl transition-all duration-300 hover:border-white/50 w-full">
             <MedicalMarkdownRenderer 
               content={message.content}
               className="text-sm leading-relaxed"
@@ -133,7 +133,7 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
               const allSources = [...vectorSources, ...markdownSources];
               
               return allSources.length > 0 && (
-                <div className="mt-4 pt-3 border-t border-gray-200/50">
+                <div className="mt-4 pt-3 border-t border-[var(--glass-border-light)]/50">
                   <SourceReferences 
                     sources={allSources}
                     maxInitialDisplay={3}
@@ -147,17 +147,17 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
             
             {/* Attachments */}
             {message.attachments && message.attachments.length > 0 && (
-              <div className="mt-4 pt-3 border-t border-gray-200/50">
-                <div className="text-xs font-medium text-gray-600 mb-2 flex items-center space-x-1">
+              <div className="mt-4 pt-3 border-t border-[var(--glass-border-light)]/50">
+                <div className="text-xs font-medium text-[var(--foreground-tertiary)] mb-2 flex items-center space-x-1">
                   <Sparkles className="w-3 h-3" />
                   <span>Attachments:</span>
                 </div>
                 <div className="space-y-2">
                   {message.attachments.map((attachment) => (
-                    <div key={attachment.id} className="flex items-center space-x-2 p-2 bg-gray-50/80 rounded-lg border border-gray-200/50">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full" />
-                      <span className="text-xs font-medium text-gray-700">{attachment.name}</span>
-                      <span className="text-xs text-gray-500">({(attachment.size / 1024).toFixed(1)} KB)</span>
+                    <div key={attachment.id} className="flex items-center space-x-2 p-2 bg-[var(--component-surface-primary)]/80 rounded-lg border border-[var(--glass-border-light)]/50">
+                      <div className="w-2 h-2 bg-[var(--cardiology-accent-blue)] rounded-full" />
+                      <span className="text-xs font-medium text-[var(--foreground-tertiary)]">{attachment.name}</span>
+                      <span className="text-xs text-[var(--foreground-secondary)]">({(attachment.size / 1024).toFixed(1)} KB)</span>
                     </div>
                   ))}
                 </div>
@@ -165,7 +165,7 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
             )}
             
             {/* Copy button and timestamp */}
-            <div className="text-xs text-gray-500 mt-3 flex items-center justify-between">
+            <div className="text-xs text-[var(--foreground-secondary)] mt-3 flex items-center justify-between">
               <div className="flex items-center space-x-1">
                 <Clock className="w-3 h-3" />
                 <span>{formatTimestamp(message.timestamp)}</span>
@@ -174,7 +174,7 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
               {/* Copy button */}
               <button
                 onClick={handleCopy}
-                className="flex items-center space-x-1 px-2 py-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="flex items-center space-x-1 px-2 py-1 rounded-lg text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-secondary)]/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/20"
                 title={copied ? "Copied!" : "Copy response"}
               >
                 <Copy className="w-3 h-3" />

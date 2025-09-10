@@ -35,9 +35,9 @@ export const SkipLink: React.FC<{ targetId: string; text: string }> = ({ targetI
     <a
       href={`#${targetId}`}
       className={`
-        fixed top-4 left-4 z-[9999] px-4 py-2 bg-blue-600 text-white rounded-lg
+        fixed top-4 left-4 z-[9999] px-4 py-2 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] rounded-lg
         transform transition-transform duration-200 font-medium
-        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+        focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:ring-offset-2
         ${isVisible ? 'translate-y-0' : '-translate-y-16'}
       `}
       onFocus={() => setIsVisible(true)}
@@ -144,20 +144,20 @@ export const AccessibleModal: React.FC<{
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className={`bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden ${className}`}
+        className={`bg-[var(--component-card)] dark:bg-[var(--background)] rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden ${className}`}
       >
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="p-6 border-b border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
           <h2
             ref={titleRef}
             id="modal-title"
             tabIndex={-1}
-            className="text-2xl font-bold text-gray-900 dark:text-gray-100 focus:outline-none"
+            className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] focus:outline-none"
           >
             {title}
           </h2>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="absolute top-4 right-4 p-2 rounded-xl hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]"
             aria-label="Close modal"
           >
             <span className="sr-only">Close</span>
@@ -195,9 +195,9 @@ export const AccessibleButton: React.FC<{
   className = ""
 }) => {
   const variantClasses = {
-    primary: 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 text-white',
-    secondary: 'bg-gray-200 hover:bg-gray-300 focus:ring-gray-500 text-gray-900',
-    danger: 'bg-red-600 hover:bg-red-700 focus:ring-red-500 text-white'
+    primary: 'bg-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--cardiology-accent-blue-dark)] focus:ring-[var(--cardiology-accent-blue)] text-[var(--foreground)]',
+    secondary: 'bg-[var(--component-surface-tertiary)] hover:bg-[var(--component-panel)] focus:ring-gray-500 text-[var(--foreground)]',
+    danger: 'bg-red-600 hover:bg-red-700 focus:ring-red-500 text-[var(--foreground)]'
   };
 
   const sizeClasses = {
@@ -249,7 +249,7 @@ export const AccessibleFormField: React.FC<{
     <div className="space-y-2">
       <label
         htmlFor={id}
-        className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+        className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]"
       >
         {label}
         {required && (
@@ -260,7 +260,7 @@ export const AccessibleFormField: React.FC<{
       </label>
       
       {description && (
-        <p id={descriptionId} className="text-sm text-gray-600 dark:text-gray-400">
+        <p id={descriptionId} className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           {description}
         </p>
       )}
@@ -321,14 +321,14 @@ export const AccessibleTooltip: React.FC<{
           id={tooltipId}
           role="tooltip"
           className={`
-            absolute z-50 px-3 py-2 text-sm text-white bg-gray-900 rounded-lg shadow-lg
+            absolute z-50 px-3 py-2 text-sm text-[var(--foreground)] bg-[var(--background-dark)] rounded-lg shadow-lg
             max-w-xs whitespace-nowrap
             ${placementClasses[placement]}
           `}
         >
           {content}
           <div className={`
-            absolute w-2 h-2 bg-gray-900 rotate-45
+            absolute w-2 h-2 bg-[var(--background-dark)] rotate-45
             ${placement === 'top' ? 'top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2' : ''}
             ${placement === 'bottom' ? 'bottom-full left-1/2 transform -translate-x-1/2 translate-y-1/2' : ''}
             ${placement === 'left' ? 'left-full top-1/2 transform -translate-x-1/2 -translate-y-1/2' : ''}

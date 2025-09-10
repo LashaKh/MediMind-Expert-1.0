@@ -62,10 +62,10 @@ const issueConfig = {
   },
   medium: {
     icon: Stethoscope,
-    color: 'text-blue-700',
-    bgColor: 'bg-blue-50',
+    color: 'text-[var(--cardiology-accent-blue-dark)]',
+    bgColor: 'bg-[var(--cardiology-accent-blue-light)]',
     borderColor: 'border-blue-200',
-    dotColor: 'bg-blue-500'
+    dotColor: 'bg-[var(--cardiology-accent-blue)]'
   },
   low: {
     icon: CheckCircle2,
@@ -373,9 +373,9 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
   if (!actionPlan || medicalIssues.length === 0) {
     return (
       <Card className={cn("p-8 text-center", className)}>
-        <FileText className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-        <h3 className="text-lg font-medium text-gray-600 mb-2">{t('chat.actionPlan.noActionPlan')}</h3>
-        <p className="text-sm text-gray-500">{t('chat.actionPlan.noActionPlanDesc')}</p>
+        <FileText className="h-16 w-16 mx-auto mb-4 text-[var(--foreground-secondary)]" />
+        <h3 className="text-lg font-medium text-[var(--foreground-tertiary)] mb-2">{t('chat.actionPlan.noActionPlan')}</h3>
+        <p className="text-sm text-[var(--foreground-secondary)]">{t('chat.actionPlan.noActionPlanDesc')}</p>
       </Card>
     );
   }
@@ -398,16 +398,16 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
             {/* Left Section - Icon and Title */}
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/30">
-                  <FileText className="h-7 w-7 text-white" />
+                <div className="w-14 h-14 bg-[var(--component-card)]/20 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/30">
+                  <FileText className="h-7 w-7 text-[var(--foreground)]" />
                 </div>
                 {/* Success indicator */}
                 <div className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-400 rounded-full flex items-center justify-center border-2 border-white">
-                  <CheckCircle2 className="h-3 w-3 text-white" />
+                  <CheckCircle2 className="h-3 w-3 text-[var(--foreground)]" />
                 </div>
               </div>
               
-              <div className="text-white">
+              <div className="text-[var(--foreground)]">
                 <h2 className="text-2xl font-bold mb-1 flex items-center gap-2">
                   {t('chat.actionPlan.title')}
                   <div className="flex items-center gap-1 px-2 py-0.5 bg-amber-400/20 rounded-full border border-amber-300/30">
@@ -425,7 +425,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
             <div className="flex items-center gap-3">
               <Button
                 onClick={handleCopy}
-                className="bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/30 backdrop-blur-sm transition-all duration-200 h-9 px-4"
+                className="bg-[var(--component-card)]/10 hover:bg-[var(--component-card)]/20 text-[var(--foreground)] border border-white/20 hover:border-white/30 backdrop-blur-sm transition-all duration-200 h-9 px-4"
                 size="sm"
               >
                 {copySuccess ? (
@@ -440,7 +440,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
 
               <Button
                 onClick={() => window.print()}
-                className="bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/30 backdrop-blur-sm transition-all duration-200 h-9 px-4"
+                className="bg-[var(--component-card)]/10 hover:bg-[var(--component-card)]/20 text-[var(--foreground)] border border-white/20 hover:border-white/30 backdrop-blur-sm transition-all duration-200 h-9 px-4"
                 size="sm"
               >
                 <Download className="h-4 w-4 mr-2" />
@@ -449,7 +449,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
               
               <Button
                 onClick={() => setShowRawContent(!showRawContent)}
-                className="bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/30 backdrop-blur-sm transition-all duration-200 h-9 px-4"
+                className="bg-[var(--component-card)]/10 hover:bg-[var(--component-card)]/20 text-[var(--foreground)] border border-white/20 hover:border-white/30 backdrop-blur-sm transition-all duration-200 h-9 px-4"
                 size="sm"
               >
                 {showRawContent ? (
@@ -477,8 +477,8 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-              <pre className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300 font-mono">
+            <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)] p-4 rounded-lg">
+              <pre className="whitespace-pre-wrap text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-mono">
                 {actionPlan}
               </pre>
             </div>
@@ -498,7 +498,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
             <Card key={issue.id} className={cn("overflow-hidden", config.borderColor, isCompleted && "opacity-75")}>
               {/* Issue Header */}
               <CardHeader 
-                className={cn("cursor-pointer hover:bg-gray-50 transition-colors", config.bgColor)}
+                className={cn("cursor-pointer hover:bg-[var(--component-surface-primary)] transition-colors", config.bgColor)}
                 onClick={() => toggleIssue(issue.id)}
               >
                 <div className="flex items-center justify-between">
@@ -507,9 +507,9 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
                     <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center", 
                       issue.priority === 'critical' ? 'bg-red-500' :
                       issue.priority === 'high' ? 'bg-orange-500' :
-                      issue.priority === 'medium' ? 'bg-blue-500' : 'bg-green-500'
+                      issue.priority === 'medium' ? 'bg-[var(--cardiology-accent-blue)]' : 'bg-green-500'
                     )}>
-                      <Icon className="h-6 w-6 text-white" />
+                      <Icon className="h-6 w-6 text-[var(--foreground)]" />
                     </div>
                     
                     {/* Issue Title and Priority */}
@@ -522,7 +522,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
                           {t(`chat.actionPlan.priority.${issue.priority}`)}
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-[var(--foreground-tertiary)]">
                         {isCompleted ? t('chat.actionPlan.issueAddressed') : t('chat.actionPlan.clickToViewDetails')}
                       </p>
                     </div>
@@ -541,8 +541,8 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
                         className={cn(
                           "w-8 h-8 p-0 rounded-full border-2 transition-all",
                           isCompleted 
-                            ? "bg-green-500 border-green-500 text-white hover:bg-green-600" 
-                            : "border-gray-300 hover:border-green-400"
+                            ? "bg-green-500 border-green-500 text-[var(--foreground)] hover:bg-green-600" 
+                            : "border-[var(--glass-border-medium)] hover:border-green-400"
                         )}
                       >
                         {isCompleted && <CheckCircle2 className="h-4 w-4" />}
@@ -565,7 +565,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
                     "rounded-lg border-l-4 pl-6 py-4",
                     issue.priority === 'critical' ? 'border-red-500 bg-red-50/50' :
                     issue.priority === 'high' ? 'border-orange-500 bg-orange-50/50' :
-                    issue.priority === 'medium' ? 'border-blue-500 bg-blue-50/50' : 'border-green-500 bg-green-50/50',
+                    issue.priority === 'medium' ? 'border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)]/50' : 'border-green-500 bg-green-50/50',
                     isCompleted && "opacity-75"
                   )}>
                     <MedicalMarkdownRenderer 

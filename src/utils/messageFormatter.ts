@@ -13,7 +13,7 @@ export const formatAIResponse = (content: string): string => {
   
   // Enhanced source reference handling with interactive citations
   formatted = formatted.replace(/\[(\d+)\]/g, (match, num) => {
-    return `<span class="inline-source-ref cursor-pointer text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-1 py-0.5 rounded transition-colors" data-source-number="${num}" title="Click to highlight source ${num}">[${num}]</span>`;
+    return `<span class="inline-source-ref cursor-pointer text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 hover:bg-[var(--cardiology-accent-blue-light)] dark:hover:bg-[var(--cardiology-accent-blue-darker)]/20 px-1 py-0.5 rounded transition-colors" data-source-number="${num}" title="Click to highlight source ${num}">[${num}]</span>`;
   });
   
   return formatted;
@@ -24,7 +24,7 @@ export const extractSourceReferences = (content: string): { content: string; ref
   const references: string[] = [];
   const cleanContent = content.replace(/\[(\d+)\]/g, (match, num) => {
     references.push(num);
-    return `<sup class="text-blue-600 dark:text-blue-400">[${num}]</sup>`;
+    return `<sup class="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">[${num}]</sup>`;
   });
   
   return {

@@ -47,7 +47,7 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="relative group">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full opacity-75 blur-sm animate-pulse" />
               <div className="relative w-7 h-7 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                <Stethoscope className="w-4 h-4 text-white" />
+                <Stethoscope className="w-4 h-4 text-[var(--foreground)]" />
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -56,7 +56,7 @@ export const Footer: React.FC<FooterProps> = ({
               </h3>
               <Sparkles className="w-3 h-3 text-yellow-500 animate-pulse" />
             </div>
-            <span className="hidden sm:flex items-center space-x-1 text-xs text-gray-600 dark:text-gray-400">
+            <span className="hidden sm:flex items-center space-x-1 text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               <span>•</span>
               <span>&copy; {currentYear}</span>
               <Heart className="w-3 h-3 text-red-500" />
@@ -69,27 +69,27 @@ export const Footer: React.FC<FooterProps> = ({
               <>
                 <Link
                   to="/help"
-                  className="group px-3 py-1.5 rounded-full backdrop-blur-md bg-white/10 dark:bg-gray-800/10 border border-white/20 dark:border-gray-700/20 hover:bg-white/20 dark:hover:bg-gray-700/20 transition-all duration-300 hover:scale-105"
+                  className="group px-3 py-1.5 rounded-full backdrop-blur-md bg-[var(--component-card)]/10 dark:bg-[var(--background)]/10 border border-white/20 dark:border-[var(--border-strong)]/20 hover:bg-[var(--component-card)]/20 dark:hover:bg-[var(--card)]/20 transition-all duration-300 hover:scale-105"
                 >
-                  <div className="flex items-center space-x-1 text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                  <div className="flex items-center space-x-1 text-xs font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-400">
                     <HelpCircle className="w-3.5 h-3.5" />
                     <span className="hidden sm:inline">Help</span>
                   </div>
                 </Link>
                 <a
                   href="mailto:support@medimindexpert.com"
-                  className="group px-3 py-1.5 rounded-full backdrop-blur-md bg-white/10 dark:bg-gray-800/10 border border-white/20 dark:border-gray-700/20 hover:bg-white/20 dark:hover:bg-gray-700/20 transition-all duration-300 hover:scale-105"
+                  className="group px-3 py-1.5 rounded-full backdrop-blur-md bg-[var(--component-card)]/10 dark:bg-[var(--background)]/10 border border-white/20 dark:border-[var(--border-strong)]/20 hover:bg-[var(--component-card)]/20 dark:hover:bg-[var(--card)]/20 transition-all duration-300 hover:scale-105"
                 >
-                  <div className="flex items-center space-x-1 text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                  <div className="flex items-center space-x-1 text-xs font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-400">
                     <Mail className="w-3.5 h-3.5" />
                     <span className="hidden sm:inline">Support</span>
                   </div>
                 </a>
                 <Link
                   to="/privacy"
-                  className="group px-3 py-1.5 rounded-full backdrop-blur-md bg-white/10 dark:bg-gray-800/10 border border-white/20 dark:border-gray-700/20 hover:bg-white/20 dark:hover:bg-gray-700/20 transition-all duration-300 hover:scale-105"
+                  className="group px-3 py-1.5 rounded-full backdrop-blur-md bg-[var(--component-card)]/10 dark:bg-[var(--background)]/10 border border-white/20 dark:border-[var(--border-strong)]/20 hover:bg-[var(--component-card)]/20 dark:hover:bg-[var(--card)]/20 transition-all duration-300 hover:scale-105"
                 >
-                  <div className="flex items-center space-x-1 text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                  <div className="flex items-center space-x-1 text-xs font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-400">
                     <Shield className="w-3.5 h-3.5" />
                     <span className="hidden sm:inline">Privacy</span>
                   </div>
@@ -102,8 +102,8 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="flex items-center space-x-2">
             {profile?.medical_specialty && (
               <div className="flex items-center space-x-1 px-2 py-1 rounded-full bg-gradient-to-r from-blue-100/50 to-indigo-100/50 dark:from-blue-900/20 dark:to-indigo-900/20">
-                <Globe2 className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-                <span className="text-xs font-medium text-blue-700 dark:text-blue-300 capitalize">
+                <Globe2 className="w-3 h-3 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                <span className="text-xs font-medium text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 capitalize">
                   {profile.medical_specialty}
                 </span>
               </div>

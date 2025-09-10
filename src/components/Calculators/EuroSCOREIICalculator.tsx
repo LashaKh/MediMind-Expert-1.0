@@ -604,7 +604,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
       case 'intermediate': return 'text-yellow-600';
       case 'high': return 'text-orange-600';
       case 'very_high': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-[var(--foreground-tertiary)]';
     }
   };
 
@@ -614,7 +614,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
       case 'intermediate': return 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800';
       case 'high': return 'bg-orange-50 border-orange-200 dark:bg-orange-900/20 dark:border-orange-800';
       case 'very_high': return 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800';
-      default: return 'bg-gray-50 border-gray-200 dark:bg-gray-900/20 dark:border-gray-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] dark:bg-[var(--background-dark)]/20 dark:border-gray-800';
     }
   };
 
@@ -654,11 +654,11 @@ export const EuroSCOREIICalculator: React.FC = () => {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
                   <div className={`p-2 rounded-xl bg-gradient-to-r ${getRiskColor(realTimeRisk).accent}`}>
-                    <Gauge className="w-5 h-5 text-white" />
+                    <Gauge className="w-5 h-5 text-[var(--foreground)]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{t('calculators.eurscoreII.live_risk_preview')}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{t('calculators.eurscoreII.updates_as_complete')}</p>
+                    <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.eurscoreII.live_risk_preview')}</h3>
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.eurscoreII.updates_as_complete')}</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -672,7 +672,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
               </div>
               
               {/* Animated Progress Bar */}
-              <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div className="relative h-3 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full overflow-hidden">
                 <div 
                   className={`h-full bg-gradient-to-r ${getRiskColor(realTimeRisk).accent} transition-all duration-1000 ease-out`}
                   style={{ width: `${Math.min(realTimeRisk * 2, 100)}%` }}
@@ -684,16 +684,16 @@ export const EuroSCOREIICalculator: React.FC = () => {
           )}
 
           {/* Enhanced Step Progress */}
-          <div className="mb-8 p-6 bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl border border-white/50 dark:border-gray-700/50">
+          <div className="mb-8 p-6 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 backdrop-blur-xl rounded-3xl border border-white/50 dark:border-[var(--border-strong)]/50">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{t('calculators.eurscoreII.completion_progress')}</h3>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.eurscoreII.completion_progress')}</h3>
+              <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 {completedSteps.length}/3 {t('calculators.eurscoreII.sections_completed')}
               </div>
             </div>
             
             <div className="relative">
-              <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div className="h-2 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 transition-all duration-1000 ease-out"
                   style={{ width: `${getStepProgress()}%` }}
@@ -707,15 +707,15 @@ export const EuroSCOREIICalculator: React.FC = () => {
                   <div key={step} className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
                       completedSteps.includes(step) 
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg' 
+                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-[var(--foreground)] shadow-lg' 
                         : currentStep === step
-                        ? 'bg-gradient-to-r from-gray-400 to-gray-500 text-white'
-                        : 'bg-gray-200 text-gray-500'
+                        ? 'bg-gradient-to-r from-gray-400 to-gray-500 text-[var(--foreground)]'
+                        : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       {completedSteps.includes(step) ? <CheckCircle className="w-4 h-4" /> : step}
                     </div>
                     <span className={`text-sm font-medium ${
-                      completedSteps.includes(step) ? 'text-purple-600' : 'text-gray-600'
+                      completedSteps.includes(step) ? 'text-purple-600' : 'text-[var(--foreground-tertiary)]'
                     }`}>
                       {step === 1 ? t('calculators.eurscoreII.patient_section') : step === 2 ? t('calculators.eurscoreII.cardiac_section') : t('calculators.eurscoreII.operative_section')}
                     </span>
@@ -729,17 +729,17 @@ export const EuroSCOREIICalculator: React.FC = () => {
         {/* EuroSCORE II Alert */}
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6">
           <div className="flex items-start space-x-4">
-            <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-              <Globe className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <div className="p-3 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-xl">
+              <Globe className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
             </div>
             <div className="flex-1">
               <h4 className="text-lg font-bold text-blue-800 dark:text-blue-200 mb-2">{t('calculators.eurscoreII.alert_title')}</h4>
-              <p className="text-blue-700 dark:text-blue-300 leading-relaxed">
+              <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed">
                 {t('calculators.eurscoreII.alert_description')}
               </p>
-              <div className="mt-3 inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg px-3 py-1">
-                <Star className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">{t('calculators.eurscoreII.alert_validation')}</span>
+              <div className="mt-3 inline-flex items-center space-x-2 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-lg px-3 py-1">
+                <Star className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                <span className="text-xs font-semibold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">{t('calculators.eurscoreII.alert_validation')}</span>
               </div>
             </div>
           </div>
@@ -751,33 +751,33 @@ export const EuroSCOREIICalculator: React.FC = () => {
             <div className="flex items-center justify-center space-x-4 mb-8">
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 1 ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   1
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.eurscoreII.patient_factors')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.eurscoreII.patient_factors')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 2 ? 'bg-purple-500' : 'bg-gray-200'
+                currentStep >= 2 ? 'bg-purple-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 2 ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 2 ? 'bg-purple-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   2
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.eurscoreII.cardiac_factors')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.eurscoreII.cardiac_factors')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 3 ? 'bg-indigo-500' : 'bg-gray-200'
+                currentStep >= 3 ? 'bg-indigo-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 3 ? 'bg-indigo-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 3 ? 'bg-indigo-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   3
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.eurscoreII.operative_factors')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.eurscoreII.operative_factors')}</span>
               </div>
             </div>
 
@@ -786,10 +786,10 @@ export const EuroSCOREIICalculator: React.FC = () => {
               <div className="space-y-6 animate-fadeIn">
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
-                    <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.eurscoreII.section_patient_demographics')}</h3>
+                    <User className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.eurscoreII.section_patient_demographics')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.eurscoreII.section_patient_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.eurscoreII.section_patient_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
@@ -854,8 +854,8 @@ export const EuroSCOREIICalculator: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
-                    <Shield className="w-5 h-5 text-blue-600" />
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
+                    <Shield className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                     <span>{t('calculators.eurscoreII.additional_risk_factors')}</span>
                   </h4>
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -910,9 +910,9 @@ export const EuroSCOREIICalculator: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-2xl border border-purple-200 dark:border-purple-800">
                     <Heart className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.eurscoreII.section_cardiac_factors')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.eurscoreII.section_cardiac_factors')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.eurscoreII.section_cardiac_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.eurscoreII.section_cardiac_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
@@ -949,7 +949,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
                     <Heart className="w-5 h-5 text-purple-600" />
                     <span>{t('calculators.eurscoreII.cardiac_history_title')}</span>
                   </h4>
@@ -1019,9 +1019,9 @@ export const EuroSCOREIICalculator: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-indigo-50 to-pink-50 dark:from-indigo-900/20 dark:to-pink-900/20 rounded-2xl border border-indigo-200 dark:border-indigo-800">
                     <Stethoscope className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.eurscoreII.section_operative_factors')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.eurscoreII.section_operative_factors')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.eurscoreII.section_operative_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.eurscoreII.section_operative_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
@@ -1059,7 +1059,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
                     <AlertTriangle className="w-5 h-5 text-indigo-600" />
                     <span>{t('calculators.eurscoreII.critical_conditions_header')}</span>
                   </h4>
@@ -1122,7 +1122,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
               {/* Sophisticated calculation animation */}
               <div className="relative mx-auto mb-8 w-40 h-40">
                 {/* Outer ring */}
-                <div className="absolute inset-0 rounded-full border-4 border-gray-200 dark:border-gray-700"></div>
+                <div className="absolute inset-0 rounded-full border-4 border-[var(--glass-border-light)] dark:border-[var(--border-strong)]"></div>
                 
                 {/* Animated rings */}
                 <div className={`absolute inset-0 rounded-full border-4 border-transparent border-t-blue-500 animate-spin ${
@@ -1143,7 +1143,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
                   <div className={`p-4 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 ${
                     animationPhase >= 4 ? 'animate-sophisticatedPulse' : 'animate-sophisticatedScale'
                   }`}>
-                    <Sparkles className="w-10 h-10 text-white" />
+                    <Sparkles className="w-10 h-10 text-[var(--foreground)]" />
                   </div>
                 </div>
               </div>
@@ -1156,7 +1156,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
                     className={`w-4 h-4 rounded-full transition-all duration-500 ${
                       animationPhase >= phase 
                         ? 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-sophisticatedPulse shadow-lg' 
-                        : 'bg-gray-300 dark:bg-gray-600'
+                        : 'bg-[var(--component-panel)] dark:bg-[var(--border)]'
                     }`}
                   />
                 ))}
@@ -1164,15 +1164,15 @@ export const EuroSCOREIICalculator: React.FC = () => {
               
               {/* Dynamic status messages */}
               <div className="space-y-4">
-                <div className="p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl border border-white/50 dark:border-gray-700/50 shadow-xl">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                <div className="p-6 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-xl rounded-3xl border border-white/50 dark:border-[var(--border-strong)]/50 shadow-xl">
+                  <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
                     {t('calculators.eurscoreII.calculating')}
                   </h3>
                   <div className="h-8 flex items-center justify-center">
-                    <p className="text-lg text-gray-600 dark:text-gray-400 transition-all duration-300">
+                    <p className="text-lg text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] transition-all duration-300">
                       {animationPhase === 1 && (
                         <span className="flex items-center space-x-2">
-                          <Brain className="w-5 h-5 text-blue-500 animate-pulse" />
+                          <Brain className="w-5 h-5 text-[var(--cardiology-accent-blue)] animate-pulse" />
                           <span>{t('calculators.eurscoreII.analyzing_patient_factors')}</span>
                         </span>
                       )}
@@ -1196,7 +1196,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
                       )}
                       {animationPhase === 0 && (
                         <span className="flex items-center space-x-2">
-                          <Sparkles className="w-5 h-5 text-gray-500 animate-pulse" />
+                          <Sparkles className="w-5 h-5 text-[var(--foreground-secondary)] animate-pulse" />
                           <span>{t('calculators.eurscoreII.initializing_assessment')}</span>
                         </span>
                       )}
@@ -1206,7 +1206,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
                 
                 {/* Sophisticated loading dots */}
                 <div className="flex justify-center space-x-2">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-sophisticatedDots"></div>
+                  <div className="w-3 h-3 bg-[var(--cardiology-accent-blue)] rounded-full animate-sophisticatedDots"></div>
                   <div className="w-3 h-3 bg-purple-500 rounded-full animate-sophisticatedDots"></div>
                   <div className="w-3 h-3 bg-indigo-500 rounded-full animate-sophisticatedDots"></div>
                   <div className="w-3 h-3 bg-pink-500 rounded-full animate-sophisticatedDots"></div>
@@ -1261,7 +1261,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
                     </div>
                   </div>
 
-                  <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                  <p className="text-lg text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] max-w-2xl mx-auto leading-relaxed">
                     {result.interpretation}
                   </p>
                 </div>
@@ -1271,11 +1271,11 @@ export const EuroSCOREIICalculator: React.FC = () => {
               <div className="medical-card p-8 results-animate-in">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-500">
-                    <Shield className="w-8 h-8 text-white" />
+                    <Shield className="w-8 h-8 text-[var(--foreground)]" />
                   </div>
                   <div>
                     <h2 className="results-section-title">{t('calculators.eurscoreII.risk_stratification_analysis')}</h2>
-                    <p className="text-gray-600 dark:text-gray-400">{t('calculators.eurscoreII.population_based_categorization')}</p>
+                    <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.eurscoreII.population_based_categorization')}</p>
                   </div>
                 </div>
                 
@@ -1342,11 +1342,11 @@ export const EuroSCOREIICalculator: React.FC = () => {
               <div className="medical-card p-8 results-animate-in">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="p-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-500">
-                    <Stethoscope className="w-8 h-8 text-white" />
+                    <Stethoscope className="w-8 h-8 text-[var(--foreground)]" />
                   </div>
                   <div>
                     <h2 className="results-section-title">{t('calculators.eurscoreII.clinical_recommendations')}</h2>
-                    <p className="text-gray-600 dark:text-gray-400">{t('calculators.eurscoreII.evidence_based_validation')}</p>
+                    <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.eurscoreII.evidence_based_validation')}</p>
                   </div>
                 </div>
                 
@@ -1355,7 +1355,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
                     {result.recommendations.map((rec, index) => (
                       <div key={index} className="clinical-recommendation-item">
                         <div className="clinical-recommendation-icon">
-                          <CheckCircle className="w-5 h-5 text-white" />
+                          <CheckCircle className="w-5 h-5 text-[var(--foreground)]" />
                         </div>
                         <div className="clinical-recommendation-text">
                           {rec}
@@ -1370,32 +1370,32 @@ export const EuroSCOREIICalculator: React.FC = () => {
               <div className="medical-card p-8 results-animate-in">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="p-4 rounded-2xl bg-gradient-to-br from-red-500 via-pink-500 to-rose-500 shadow-lg">
-                    <BarChart3 className="w-8 h-8 text-white" />
+                    <BarChart3 className="w-8 h-8 text-[var(--foreground)]" />
                   </div>
                   <div>
                     <h2 className="results-section-title">{t('calculators.eurscoreII.comparative_risk_analysis')}</h2>
-                    <p className="text-gray-600 dark:text-gray-400">{t('calculators.eurscoreII.euroscore_vs_population')}</p>
+                    <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.eurscoreII.euroscore_vs_population')}</p>
                   </div>
                 </div>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Enhanced Chart Visualization */}
                   <div className="data-viz-container">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-6 relative z-10">
+                    <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-6 relative z-10">
                       {t('calculators.eurscoreII.risk_comparison_chart')}
                     </h3>
-                    <div className="comparison-chart relative overflow-hidden bg-white dark:bg-gray-800 rounded-lg p-4">
-                      <div className="text-xs text-gray-500 dark:text-gray-400 mb-4 text-center">
+                    <div className="comparison-chart relative overflow-hidden bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg p-4">
+                      <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mb-4 text-center">
                         {t('calculators.eurscoreII.mortality_risk_percent')}
                       </div>
                       <div className="space-y-6">
                         {/* Population Average Bar */}
                         <div className="relative">
                           <div className="flex justify-between items-center mb-3 min-h-6">
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 leading-tight flex-shrink-0 mr-4 risk-analysis-label">{t('calculators.eurscoreII.population_average')}</span>
-                            <span className="text-sm font-bold text-gray-600 dark:text-gray-400 flex-shrink-0 risk-analysis-value">2.8%</span>
+                            <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-tight flex-shrink-0 mr-4 risk-analysis-label">{t('calculators.eurscoreII.population_average')}</span>
+                            <span className="text-sm font-bold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] flex-shrink-0 risk-analysis-value">2.8%</span>
                           </div>
-                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 relative overflow-hidden">
+                          <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-4 relative overflow-hidden">
                             <div 
                               className="bg-gradient-to-r from-gray-400 to-gray-500 h-4 rounded-full transition-all duration-1000 ease-out"
                               style={{ width: '14%' }}
@@ -1408,10 +1408,10 @@ export const EuroSCOREIICalculator: React.FC = () => {
                         {/* Your Patient Bar */}
                         <div className="relative">
                           <div className="flex justify-between items-center mb-3 min-h-6">
-                            <span className="text-sm font-bold text-blue-700 dark:text-blue-300 leading-tight flex-shrink-0 mr-4 risk-analysis-label">{t('calculators.eurscoreII.your_patient')}</span>
-                            <span className="text-sm font-bold text-blue-600 dark:text-blue-400 flex-shrink-0 risk-analysis-value">{result.predictedMortality}%</span>
+                            <span className="text-sm font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-tight flex-shrink-0 mr-4 risk-analysis-label">{t('calculators.eurscoreII.your_patient')}</span>
+                            <span className="text-sm font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 flex-shrink-0 risk-analysis-value">{result.predictedMortality}%</span>
                           </div>
-                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 relative overflow-hidden">
+                          <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-4 relative overflow-hidden">
                             <div 
                               className="bg-gradient-to-r from-blue-500 to-blue-600 h-4 rounded-full transition-all duration-1000 ease-out shadow-lg"
                               style={{ width: `${Math.min(result.predictedMortality * 5, 100)}%` }}
@@ -1428,7 +1428,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
                             <span className="text-sm font-medium text-green-700 dark:text-green-300 leading-tight flex-shrink-0 mr-4 risk-analysis-label">{t('calculators.eurscoreII.low_risk_cohort')}</span>
                             <span className="text-sm font-bold text-green-600 dark:text-green-400 flex-shrink-0 risk-analysis-value">1.2%</span>
                           </div>
-                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 relative overflow-hidden">
+                          <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-4 relative overflow-hidden">
                             <div 
                               className="bg-gradient-to-r from-green-400 to-green-500 h-4 rounded-full transition-all duration-1000 ease-out"
                               style={{ width: '6%' }}
@@ -1444,7 +1444,7 @@ export const EuroSCOREIICalculator: React.FC = () => {
                             <span className="text-sm font-medium text-red-700 dark:text-red-300 leading-tight flex-shrink-0 mr-4 risk-analysis-label">{t('calculators.eurscoreII.high_risk_cohort')}</span>
                             <span className="text-sm font-bold text-red-600 dark:text-red-400 flex-shrink-0 risk-analysis-value">8.5%</span>
                           </div>
-                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 relative overflow-hidden">
+                          <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-4 relative overflow-hidden">
                             <div 
                               className="bg-gradient-to-r from-red-400 to-red-500 h-4 rounded-full transition-all duration-1000 ease-out"
                               style={{ width: '42.5%' }}
@@ -1459,21 +1459,21 @@ export const EuroSCOREIICalculator: React.FC = () => {
 
                   {/* Risk Model Comparison */}
                   <div className="space-y-6">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                    <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                       {t('calculators.eurscoreII.risk_model_comparison')}
                     </h3>
                     
                     {/* EuroSCORE II */}
                     <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
                       <div className="flex items-center gap-3 mb-2">
-                        <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-[var(--cardiology-accent-blue)]"></div>
                         <h4 className="font-bold text-blue-800 dark:text-blue-200">{t('calculators.eurscoreII.euroscore_ii_current')}</h4>
-                        <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full font-medium">{t('calculators.eurscoreII.current_label')}</span>
+                        <span className="text-xs bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 px-2 py-1 rounded-full font-medium">{t('calculators.eurscoreII.current_label')}</span>
                       </div>
-                      <p className="text-sm text-blue-700 dark:text-blue-300 mb-2">
+                      <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 mb-2">
                         {result.predictedMortality}% {t('calculators.eurscoreII.mortality_risk_result')}
                       </p>
-                      <div className="text-xs text-blue-600 dark:text-blue-400">
+                      <div className="text-xs text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">
                         {t('calculators.eurscoreII.latest_european_algorithm')}
                       </div>
                     </div>
@@ -1514,20 +1514,20 @@ export const EuroSCOREIICalculator: React.FC = () => {
               <div className="medical-card p-8 results-animate-in">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="p-3 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500">
-                    <FileText className="w-8 h-8 text-white" />
+                    <FileText className="w-8 h-8 text-[var(--foreground)]" />
                   </div>
                   <div>
                     <h2 className="results-section-title">{t('calculators.eurscoreII.scientific_foundation')}</h2>
-                    <p className="text-gray-600 dark:text-gray-400">{t('calculators.eurscoreII.evidence_based_validation')}</p>
+                    <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.eurscoreII.evidence_based_validation')}</p>
                   </div>
                 </div>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
                       {t('calculators.eurscoreII.evidence.formula_title')}
                     </h3>
-                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-xl border border-gray-200 dark:border-gray-600">
+                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
                       <div className="font-mono text-lg text-center">
                         <p className="text-indigo-700 dark:text-indigo-300 mb-2">
                           {t('calculators.eurscoreII.formula_prediction')}
@@ -1540,25 +1540,25 @@ export const EuroSCOREIICalculator: React.FC = () => {
                   </div>
                   
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
                       {t('calculators.eurscoreII.algorithm_validation')}
                     </h3>
                     <div className="space-y-4">
                       <div className="flex items-center gap-3">
                         <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                        <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                           {t('calculators.eurscoreII.validated_on_patients')}
                         </span>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                        <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                           {t('calculators.eurscoreII.c_index_excellent')}
                         </span>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                        <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                           {t('calculators.eurscoreII.multiple_international_validations')}
                         </span>
                       </div>
@@ -1615,12 +1615,12 @@ export const EuroSCOREIICalculator: React.FC = () => {
 
         {/* Footer Information */}
         <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-          <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <Info className="w-4 h-4" />
             <span>{t('calculators.eurscoreII.footer_info')}</span>
             <div className="flex items-center space-x-1">
-              <Globe className="w-4 h-4 text-blue-600" />
-              <span className="text-blue-600 font-semibold">{t('calculators.eurscoreII.validation_badge')}</span>
+              <Globe className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
+              <span className="text-[var(--cardiology-accent-blue-dark)] font-semibold">{t('calculators.eurscoreII.validation_badge')}</span>
             </div>
           </div>
           </div>

@@ -167,21 +167,21 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
           className="w-full max-w-2xl mx-4"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden backdrop-blur-xl">
+          <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-2xl shadow-2xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] overflow-hidden backdrop-blur-xl">
             {/* Header */}
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="p-4 border-b border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--foreground-secondary)]" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search commands or type to filter..."
-                  className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-gray-100 placeholder-gray-500"
+                  className="w-full pl-10 pr-4 py-3 bg-[var(--component-surface-primary)] dark:bg-[var(--card)] border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)] text-[var(--foreground)] dark:text-[var(--foreground)] placeholder-gray-500"
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
-                  <kbd className="hidden sm:inline-block px-2 py-1 text-xs bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 rounded border">
+                  <kbd className="hidden sm:inline-block px-2 py-1 text-xs bg-[var(--component-surface-tertiary)] dark:bg-[var(--border)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] rounded border">
                     ESC
                   </kbd>
                 </div>
@@ -192,13 +192,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
             <div className="max-h-96 overflow-y-auto" ref={listRef}>
               {filteredCommands.length === 0 ? (
                 <div className="p-8 text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                    <Search className="w-8 h-8 text-gray-400" />
+                  <div className="w-16 h-16 mx-auto mb-4 bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] rounded-full flex items-center justify-center">
+                    <Search className="w-8 h-8 text-[var(--foreground-secondary)]" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  <h3 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                     No commands found
                   </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
+                  <p className="text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                     Try adjusting your search query
                   </p>
                 </div>
@@ -206,7 +206,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                 <div className="p-2">
                   {Object.entries(groupedCommands).map(([category, categoryCommands]) => (
                     <div key={category} className="mb-4 last:mb-0">
-                      <div className="flex items-center space-x-2 px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      <div className="flex items-center space-x-2 px-3 py-2 text-xs font-semibold text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] uppercase tracking-wider">
                         {categoryIcons[category as keyof typeof categoryIcons]}
                         <span>{categoryLabels[category as keyof typeof categoryLabels]}</span>
                       </div>
@@ -221,8 +221,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                               className={`
                                 flex items-center justify-between px-3 py-3 rounded-xl cursor-pointer transition-all duration-200
                                 ${isSelected 
-                                  ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800' 
-                                  : 'hover:bg-gray-50 dark:hover:bg-gray-700'
+                                  ? 'bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800' 
+                                  : 'hover:bg-[var(--component-surface-primary)] dark:hover:bg-[var(--card)]'
                                 }
                               `}
                               onClick={() => {
@@ -236,18 +236,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                                 <div className={`
                                   p-2 rounded-lg transition-colors
                                   ${isSelected 
-                                    ? 'bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-300' 
-                                    : 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
+                                    ? 'bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)] text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300' 
+                                    : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--border)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                                   }
                                 `}>
                                   {command.icon}
                                 </div>
                                 <div>
-                                  <div className={`font-medium ${isSelected ? 'text-blue-900 dark:text-blue-100' : 'text-gray-900 dark:text-gray-100'}`}>
+                                  <div className={`font-medium ${isSelected ? 'text-blue-900 dark:text-blue-100' : 'text-[var(--foreground)] dark:text-[var(--foreground)]'}`}>
                                     {command.label}
                                   </div>
                                   {command.description && (
-                                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                                    <div className="text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                                       {command.description}
                                     </div>
                                   )}
@@ -257,8 +257,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                                 <div className="flex items-center space-x-1">
                                   {command.shortcut.split('+').map((key, i) => (
                                     <React.Fragment key={i}>
-                                      {i > 0 && <span className="text-gray-400">+</span>}
-                                      <kbd className="px-2 py-1 text-xs bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 rounded border">
+                                      {i > 0 && <span className="text-[var(--foreground-secondary)]">+</span>}
+                                      <kbd className="px-2 py-1 text-xs bg-[var(--component-surface-tertiary)] dark:bg-[var(--border)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] rounded border">
                                         {key}
                                       </kbd>
                                     </React.Fragment>
@@ -276,19 +276,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+            <div className="p-4 border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)] bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]/50">
+              <div className="flex items-center justify-between text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                 <div className="flex items-center space-x-4">
                   <span className="flex items-center space-x-1">
-                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-600 rounded">↑↓</kbd>
+                    <kbd className="px-1.5 py-0.5 bg-[var(--component-surface-tertiary)] dark:bg-[var(--border)] rounded">↑↓</kbd>
                     <span>Navigate</span>
                   </span>
                   <span className="flex items-center space-x-1">
-                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-600 rounded">Enter</kbd>
+                    <kbd className="px-1.5 py-0.5 bg-[var(--component-surface-tertiary)] dark:bg-[var(--border)] rounded">Enter</kbd>
                     <span>Select</span>
                   </span>
                   <span className="flex items-center space-x-1">
-                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-600 rounded">ESC</kbd>
+                    <kbd className="px-1.5 py-0.5 bg-[var(--component-surface-tertiary)] dark:bg-[var(--border)] rounded">ESC</kbd>
                     <span>Close</span>
                   </span>
                 </div>

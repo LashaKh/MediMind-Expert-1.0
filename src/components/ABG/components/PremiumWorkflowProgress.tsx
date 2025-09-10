@@ -120,7 +120,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
     if (status === 'completed') {
       return (
         <div className="relative">
-          <CheckCircle2 className="h-6 w-6 text-white drop-shadow-sm" />
+          <CheckCircle2 className="h-6 w-6 text-[var(--foreground)] drop-shadow-sm" />
           <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20 animate-ping" />
         </div>
       );
@@ -129,7 +129,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
     if (status === 'error') {
       return (
         <div className="relative">
-          <AlertCircle className="h-6 w-6 text-white drop-shadow-sm" />
+          <AlertCircle className="h-6 w-6 text-[var(--foreground)] drop-shadow-sm" />
           <div className="absolute inset-0 rounded-full bg-red-500 opacity-20 animate-pulse" />
         </div>
       );
@@ -138,8 +138,8 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
     if (status === 'current') {
       return (
         <div className="relative">
-          <Icon className="h-6 w-6 text-white drop-shadow-sm animate-pulse" />
-          <div className="absolute inset-0 rounded-full bg-white opacity-20 animate-ping" />
+          <Icon className="h-6 w-6 text-[var(--foreground)] drop-shadow-sm animate-pulse" />
+          <div className="absolute inset-0 rounded-full bg-[var(--component-card)] opacity-20 animate-ping" />
           <Sparkles className="absolute -top-1 -right-1 h-3 w-3 text-yellow-300 animate-pulse" />
         </div>
       );
@@ -196,7 +196,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
         </div>
 
         {/* Overall Progress Track */}
-        <div className="absolute top-14 left-6 right-6 h-2 rounded-full backdrop-blur supports-[backdrop-filter]:bg-white/40 bg-white/70 border border-white/50 shadow-sm">
+        <div className="absolute top-14 left-6 right-6 h-2 rounded-full backdrop-blur supports-[backdrop-filter]:bg-[var(--component-card)]/40 bg-[var(--component-card)]/70 border border-white/50 shadow-sm">
           <div className="absolute inset-0 rounded-full bg-gradient-to-r from-slate-200/60 via-slate-200/40 to-slate-200/60" />
 
           {/* Filled portion */}
@@ -214,7 +214,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
           <div
             className={cn(
               "absolute -top-1.5 h-5 w-5 rounded-full shadow-lg",
-              "bg-white ring-4 ring-white/70",
+              "bg-[var(--component-card)] ring-4 ring-white/70",
               "transition-all duration-700 ease-out"
             )}
             style={{ left: `calc(${animatedProgress}% - 10px)` }}
@@ -245,14 +245,14 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
                 {/* Step Circle */}
                 <div className={cn(
                   "relative z-10 w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-xl",
-                  "border-2 backdrop-blur supports-[backdrop-filter]:bg-white/40 bg-white/70",
+                  "border-2 backdrop-blur supports-[backdrop-filter]:bg-[var(--component-card)]/40 bg-[var(--component-card)]/70",
                   status === 'completed' && "bg-gradient-to-br from-emerald-500 to-emerald-600 border-emerald-300 shadow-emerald-200",
                   status === 'current' && `${step.gradient} border-white shadow-2xl`,
-                  status === 'upcoming' && "border-slate-300 shadow-slate-200",
+                  status === 'upcoming' && "border-[var(--glass-border-medium)] shadow-slate-200",
                   status === 'error' && "bg-gradient-to-br from-red-500 to-red-600 border-red-300 shadow-red-200",
                   status === 'current' && "animate-pulse"
                 )}>
-                  <span className="absolute -top-2 -left-2 px-1.5 py-0.5 rounded-md text-[10px] font-semibold text-white shadow-md bg-slate-900/70">{index + 1}</span>
+                  <span className="absolute -top-2 -left-2 px-1.5 py-0.5 rounded-md text-[10px] font-semibold text-[var(--foreground)] shadow-md bg-[var(--background-dark)]/70">{index + 1}</span>
                   {renderStepIcon(step, status)}
                   
                   {/* Glow Effect for Current Step */}
@@ -275,7 +275,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
                     "absolute top-8 left-16 w-full h-0.5 transition-all duration-500",
                     getConnectorStatus(index) === 'completed' && "bg-gradient-to-r from-emerald-500 to-purple-500",
                     getConnectorStatus(index) === 'current' && "bg-gradient-to-r from-purple-500 to-slate-300",
-                    getConnectorStatus(index) === 'upcoming' && "bg-slate-300"
+                    getConnectorStatus(index) === 'upcoming' && "bg-[var(--component-panel)]"
                   )} />
                 )}
 
@@ -284,8 +284,8 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
                   <h4 className={cn(
                     "text-[13px] font-semibold transition-colors duration-300 mb-1",
                     status === 'completed' && "text-emerald-700",
-                    status === 'current' && "text-slate-900",
-                    status === 'upcoming' && "text-slate-500",
+                    status === 'current' && "text-[var(--foreground)]",
+                    status === 'upcoming' && "text-[var(--foreground-secondary)]",
                     status === 'error' && "text-red-700"
                   )}>
                     {getStepText(step.step).label}
@@ -293,7 +293,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
                   <p className={cn(
                     "text-[11px] transition-colors duration-300 leading-relaxed",
                     status === 'completed' && "text-emerald-600",
-                    status === 'current' && "text-slate-600",
+                    status === 'current' && "text-[var(--foreground-tertiary)]",
                     status === 'upcoming' && "text-slate-400",
                     status === 'error' && "text-red-600"
                   )}>
@@ -303,10 +303,10 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
 
                 {/* Status Indicator */}
                 {status === 'current' && processingStatus && (
-                  <div className="mt-2 px-3 py-1 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full">
+                  <div className="mt-2 px-3 py-1 bg-[var(--component-card)]/80 backdrop-blur-sm border border-white/20 rounded-full">
                     <div className="flex items-center gap-2">
-                      <Activity className="h-3 w-3 text-blue-600 animate-pulse" />
-                      <span className="text-xs font-medium text-slate-700">
+                      <Activity className="h-3 w-3 text-[var(--cardiology-accent-blue-dark)] animate-pulse" />
+                      <span className="text-xs font-medium text-[var(--foreground)]">
                         {processingStatus}
                       </span>
                     </div>
@@ -320,7 +320,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
         {/* Completion State */}
         {currentStep === WorkflowStep.COMPLETED && (
             <div className="mt-6 flex justify-center">
-            <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-2xl shadow-lg">
+            <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-[var(--foreground)] rounded-2xl shadow-lg">
               <CheckCircle2 className="h-6 w-6" />
                 <span className="font-semibold">{t('abg.workflow.completeTitle', 'Analysis Complete!')}</span>
               <Zap className="h-5 w-5 animate-pulse" />
@@ -331,7 +331,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
         {/* Error State */}
         {error && (
             <div className="mt-5 flex justify-center">
-            <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl shadow-lg">
+            <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-[var(--foreground)] rounded-2xl shadow-lg">
               <AlertCircle className="h-6 w-6" />
                 <span className="font-semibold">{t('abg.workflow.error', 'Processing Error')}</span>
             </div>
@@ -340,10 +340,10 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
 
         {/* Progress Percentage */}
         <div className="mt-5 flex justify-center">
-          <div className="px-3.5 py-1.5 bg-white/80 backdrop-blur-sm supports-[backdrop-filter]:bg-white/60 border border-white/40 rounded-xl shadow-sm">
+          <div className="px-3.5 py-1.5 bg-[var(--component-card)]/80 backdrop-blur-sm supports-[backdrop-filter]:bg-[var(--component-card)]/60 border border-white/40 rounded-xl shadow-sm">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse" />
-              <span className="text-[13px] font-medium text-slate-700">
+              <span className="text-[13px] font-medium text-[var(--foreground)]">
                 {t('abg.workflow.progressComplete', '{{percent}}% Complete', { percent: Math.round(animatedProgress) })}
               </span>
             </div>

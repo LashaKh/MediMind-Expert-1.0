@@ -62,7 +62,7 @@ export const KnowledgeBase: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
       {/* Enhanced Hero Header with Gradient Background */}
-      <div className="relative bg-white" data-tour="knowledge-base-header">
+      <div className="relative bg-[var(--component-card)]" data-tour="knowledge-base-header">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-r from-gray-50 to-white">
           <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
@@ -77,17 +77,17 @@ export const KnowledgeBase: React.FC = () => {
             <div className="flex-1">
               {/* Icon and Title Section */}
               <div className="flex items-center space-x-4 mb-4">
-                <div className={`p-3 rounded-2xl ${theme.primaryBg} text-white shadow-lg`}>
+                <div className={`p-3 rounded-2xl ${theme.primaryBg} text-[var(--foreground)] shadow-lg`}>
                   <BookOpen className="w-8 h-8" />
                 </div>
                 <div>
                   <div className="flex items-center space-x-2 mb-1">
-                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--foreground)] leading-tight">
                       {t('knowledgeBase.title')}
                     </h1>
                     <Sparkles className={`w-5 h-5 sm:w-6 sm:h-6 ${theme.primary} animate-pulse`} />
                   </div>
-                  <div className="flex items-center space-x-2 text-base sm:text-lg text-gray-600">
+                  <div className="flex items-center space-x-2 text-base sm:text-lg text-[var(--foreground-tertiary)]">
                     {theme.icon}
                     <span className="font-medium break-words">{theme.specialtyName} {t('knowledgeBase.subtitle')}</span>
                   </div>
@@ -95,46 +95,46 @@ export const KnowledgeBase: React.FC = () => {
               </div>
 
               {/* Description - Responsive Typography */}
-              <p className="text-base sm:text-lg text-gray-700 leading-relaxed max-w-2xl">
+              <p className="text-base sm:text-lg text-[var(--foreground-tertiary)] leading-relaxed max-w-2xl">
                 {t('knowledgeBase.description')}
               </p>
 
               {/* Feature Highlights - Mobile Optimized */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-6">
-                <div className="flex items-center space-x-3 p-4 min-h-[44px] rounded-xl bg-white/60 border border-gray-200 hover:bg-white/80 transition-colors">
+                <div className="flex items-center space-x-3 p-4 min-h-[44px] rounded-xl bg-[var(--component-card)]/60 border border-[var(--glass-border-light)] hover:bg-[var(--component-card)]/80 transition-colors">
                   <GraduationCap className={`w-5 h-5 flex-shrink-0 ${theme.primary}`} />
-                  <span className="text-sm font-medium text-gray-700 break-words">{t('knowledgeBase.evidenceBased')}</span>
+                  <span className="text-sm font-medium text-[var(--foreground-tertiary)] break-words">{t('knowledgeBase.evidenceBased')}</span>
                 </div>
-                <div className="flex items-center space-x-3 p-4 min-h-[44px] rounded-xl bg-white/60 border border-gray-200 hover:bg-white/80 transition-colors">
+                <div className="flex items-center space-x-3 p-4 min-h-[44px] rounded-xl bg-[var(--component-card)]/60 border border-[var(--glass-border-light)] hover:bg-[var(--component-card)]/80 transition-colors">
                   <Search className={`w-5 h-5 flex-shrink-0 ${theme.primary}`} />
-                  <span className="text-sm font-medium text-gray-700 break-words">{t('knowledgeBase.aiPoweredSearch')}</span>
+                  <span className="text-sm font-medium text-[var(--foreground-tertiary)] break-words">{t('knowledgeBase.aiPoweredSearch')}</span>
                 </div>
-                <div className="flex items-center space-x-3 p-4 min-h-[44px] rounded-xl bg-white/60 border border-gray-200 hover:bg-white/80 transition-colors sm:col-span-2 lg:col-span-1">
+                <div className="flex items-center space-x-3 p-4 min-h-[44px] rounded-xl bg-[var(--component-card)]/60 border border-[var(--glass-border-light)] hover:bg-[var(--component-card)]/80 transition-colors sm:col-span-2 lg:col-span-1">
                   <Shield className={`w-5 h-5 flex-shrink-0 ${theme.primary}`} />
-                  <span className="text-sm font-medium text-gray-700 break-words">{t('knowledgeBase.securePrivate')}</span>
+                  <span className="text-sm font-medium text-[var(--foreground-tertiary)] break-words">{t('knowledgeBase.securePrivate')}</span>
                 </div>
               </div>
             </div>
 
             {/* Stats Card */}
             <div className="lg:flex-shrink-0">
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 lg:w-80">
+              <div className="bg-[var(--component-card)] rounded-2xl shadow-lg border border-[var(--glass-border-light)] p-6 lg:w-80">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900">{t('knowledgeBase.quickStats')}</h3>
+                  <h3 className="font-semibold text-[var(--foreground)]">{t('knowledgeBase.quickStats')}</h3>
                   <TrendingUp className={`w-5 h-5 ${theme.primary}`} />
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">{t('knowledgeBase.medicalGuidelines')}</span>
-                    <span className="font-semibold text-gray-900">500+</span>
+                    <span className="text-[var(--foreground-tertiary)]">{t('knowledgeBase.medicalGuidelines')}</span>
+                    <span className="font-semibold text-[var(--foreground)]">500+</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">{t('knowledgeBase.researchPapers')}</span>
-                    <span className="font-semibold text-gray-900">2,000+</span>
+                    <span className="text-[var(--foreground-tertiary)]">{t('knowledgeBase.researchPapers')}</span>
+                    <span className="font-semibold text-[var(--foreground)]">2,000+</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">{t('knowledgeBase.clinicalProtocols')}</span>
-                    <span className="font-semibold text-gray-900">150+</span>
+                    <span className="text-[var(--foreground-tertiary)]">{t('knowledgeBase.clinicalProtocols')}</span>
+                    <span className="font-semibold text-[var(--foreground)]">150+</span>
                   </div>
                 </div>
               </div>
@@ -143,21 +143,21 @@ export const KnowledgeBase: React.FC = () => {
 
           {/* Enhanced Tab Navigation - Mobile Touch Optimized */}
           <div className="mt-8">
-            <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-2 shadow-lg">
+            <div className="bg-[var(--component-card)]/80 backdrop-blur-sm border border-[var(--glass-border-light)] rounded-2xl p-2 shadow-lg">
               <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                  <button
                   onClick={() => setActiveTab('curated')}
                   className={`flex-1 flex items-center justify-center space-x-3 px-4 py-4 sm:px-6 min-h-[60px] rounded-xl transition-all duration-300 ${
                     activeTab === 'curated'
-                      ? `${theme.primaryBg} text-white shadow-lg transform scale-[1.02]`
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      ? `${theme.primaryBg} text-[var(--foreground)] shadow-lg transform scale-[1.02]`
+                      : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-surface-primary)]'
                   }`}
                    data-tour="document-library"
                 >
                   <BookOpen className="w-5 h-5 flex-shrink-0" />
                   <div className="text-left min-w-0 flex-1">
                     <div className="font-semibold text-sm sm:text-base truncate">{t('knowledgeBase.curatedKnowledge')}</div>
-                    <div className={`text-xs hidden sm:block ${activeTab === 'curated' ? 'text-white/80' : 'text-gray-500'}`}>
+                    <div className={`text-xs hidden sm:block ${activeTab === 'curated' ? 'text-[var(--foreground)]/80' : 'text-[var(--foreground-secondary)]'}`}>
                       {t('knowledgeBase.curatedKnowledgeDesc')}
                     </div>
                   </div>
@@ -166,15 +166,15 @@ export const KnowledgeBase: React.FC = () => {
                   onClick={() => setActiveTab('personal')}
                   className={`flex-1 flex items-center justify-center space-x-3 px-4 py-4 sm:px-6 min-h-[60px] rounded-xl transition-all duration-300 ${
                     activeTab === 'personal'
-                      ? 'bg-emerald-600 text-white shadow-lg transform scale-[1.02]'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      ? 'bg-emerald-600 text-[var(--foreground)] shadow-lg transform scale-[1.02]'
+                      : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-surface-primary)]'
                   }`}
                    data-tour="document-upload"
                 >
                   <Database className="w-5 h-5 flex-shrink-0" />
                   <div className="text-left min-w-0 flex-1">
                     <div className="font-semibold text-sm sm:text-base truncate">{t('knowledgeBase.personalLibrary')}</div>
-                    <div className={`text-xs hidden sm:block ${activeTab === 'personal' ? 'text-white/80' : 'text-gray-500'}`}>
+                    <div className={`text-xs hidden sm:block ${activeTab === 'personal' ? 'text-[var(--foreground)]/80' : 'text-[var(--foreground-secondary)]'}`}>
                       {t('knowledgeBase.personalLibraryDesc')}
                     </div>
                   </div>

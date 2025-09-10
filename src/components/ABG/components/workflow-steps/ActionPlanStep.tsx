@@ -105,15 +105,15 @@ export const ActionPlanStep: React.FC<ActionPlanStepProps> = ({
           >
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
-                <CheckCircle2 className="h-4 w-4 text-white" />
+                <CheckCircle2 className="h-4 w-4 text-[var(--foreground)]" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-800">Clinical Interpretation</h3>
-                <p className="text-xs text-slate-600">AI-generated clinical analysis</p>
+                <h3 className="text-base font-bold text-[var(--foreground)]">Clinical Interpretation</h3>
+                <p className="text-xs text-[var(--foreground-tertiary)]">AI-generated clinical analysis</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-[var(--foreground-secondary)]">
                 {isClinicalInterpretationCollapsed ? 'Show' : 'Hide'}
               </span>
               {isClinicalInterpretationCollapsed ? 
@@ -129,11 +129,11 @@ export const ActionPlanStep: React.FC<ActionPlanStepProps> = ({
               isLoading={false}
             />
           ) : (
-            <div className="bg-slate-50 rounded-lg p-4">
-              <div className="text-sm text-slate-600 leading-relaxed">
+            <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
+              <div className="text-sm text-[var(--foreground-tertiary)] leading-relaxed">
                 {getInterpretation() ? (
                   <div>
-                    <div className="font-medium text-slate-700 mb-2">Clinical Summary:</div>
+                    <div className="font-medium text-[var(--foreground)] mb-2">Clinical Summary:</div>
                     <p className="line-clamp-3">
                       {getInterpretation()
                         // Clean markdown formatting for preview
@@ -168,7 +168,7 @@ export const ActionPlanStep: React.FC<ActionPlanStepProps> = ({
               </div>
               <div className="mt-3 text-xs text-slate-400 flex items-center justify-between">
                 <span>AI-generated clinical analysis</span>
-                <span className="text-blue-500 font-medium">Click to expand</span>
+                <span className="text-[var(--cardiology-accent-blue)] font-medium">Click to expand</span>
               </div>
             </div>
           )}

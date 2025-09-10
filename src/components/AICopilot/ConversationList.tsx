@@ -158,7 +158,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       case 'obgyn':
         return <Brain className="w-3 h-3 text-purple-500" />;
       default:
-        return <MessageCircle className="w-3 h-3 text-gray-400" />;
+        return <MessageCircle className="w-3 h-3 text-[var(--foreground-secondary)]" />;
     }
   };
 
@@ -169,27 +169,27 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       case 'obgyn':
         return 'bg-purple-50 text-purple-700 border-purple-200';
       default:
-        return 'bg-gray-50 text-gray-700 border-gray-200';
+        return 'bg-[var(--component-surface-primary)] text-[var(--foreground-tertiary)] border-[var(--glass-border-light)]';
     }
   };
 
   const getConversationTypeIcon = (type: ConversationType | undefined) => {
     switch (type) {
       case 'case-study':
-        return <Stethoscope className="w-4 h-4 text-blue-600" />;
+        return <Stethoscope className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />;
       case 'general':
       default:
-        return <MessageCircle className="w-4 h-4 text-gray-600" />;
+        return <MessageCircle className="w-4 h-4 text-[var(--foreground-tertiary)]" />;
     }
   };
 
   const getConversationTypeColor = (type: ConversationType | undefined) => {
     switch (type) {
       case 'case-study':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
+        return 'bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)] border-blue-200';
       case 'general':
       default:
-        return 'bg-gray-50 text-gray-700 border-gray-200';
+        return 'bg-[var(--component-surface-primary)] text-[var(--foreground-tertiary)] border-[var(--glass-border-light)]';
     }
   };
 
@@ -199,26 +199,26 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     <>
       {/* Mobile-Optimized Backdrop */}
       <div 
-        className={`fixed inset-0 bg-slate-900/40 z-40 transition-opacity duration-300 ${className}`} 
+        className={`fixed inset-0 bg-[var(--background-dark)]/40 z-40 transition-opacity duration-300 ${className}`} 
         onClick={onClose} 
       />
       
       {/* Mobile-First Conversation Panel */}
-      <div className="fixed inset-0 md:left-6 md:top-20 md:bottom-6 md:w-[420px] bg-white z-50 flex flex-col md:rounded-3xl md:shadow-2xl md:shadow-slate-900/10 md:border md:border-slate-200/60 overflow-hidden">
+      <div className="fixed inset-0 md:left-6 md:top-20 md:bottom-6 md:w-[420px] bg-[var(--component-card)] z-50 flex flex-col md:rounded-3xl md:shadow-2xl md:shadow-slate-900/10 md:border md:border-[var(--glass-border-light)]/60 overflow-hidden">
         {/* Mobile-First Header Section */}
-        <div className="relative bg-white border-b border-slate-200/60 safe-top">
+        <div className="relative bg-[var(--component-card)] border-b border-[var(--glass-border-light)]/60 safe-top">
           <div className="relative px-4 py-4 md:p-6 md:pb-5">
             {/* Mobile Header Row */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="p-2 md:p-2.5 rounded-xl md:rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25">
-                  <MessageCircle className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                  <MessageCircle className="w-5 h-5 md:w-6 md:h-6 text-[var(--foreground)]" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-lg md:text-xl font-bold text-slate-800 tracking-tight truncate">
+                  <h2 className="text-lg md:text-xl font-bold text-[var(--foreground)] tracking-tight truncate">
                     Conversations
                   </h2>
-                  <p className="text-sm text-slate-500 font-medium hidden md:block">
+                  <p className="text-sm text-[var(--foreground-secondary)] font-medium hidden md:block">
                     View, search, and organize all your conversation history
                   </p>
                 </div>
@@ -231,10 +231,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   size="sm"
                   className="
                     min-h-[44px] px-3 md:px-4 py-2.5 rounded-xl
-                    bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold text-sm
+                    bg-gradient-to-r from-blue-500 to-indigo-600 text-[var(--foreground)] font-semibold text-sm
                     shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30
                     active:scale-95 transition-all duration-200
-                    focus:outline-none focus:ring-2 focus:ring-blue-500/20
+                    focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/20
                   "
                 >
                   <Plus className="w-4 h-4 md:mr-2" />
@@ -265,8 +265,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   size="sm"
                   className="
                     min-h-[44px] min-w-[44px] p-0 rounded-xl
-                    bg-gradient-to-br from-slate-50 to-slate-100/80 border border-slate-200/60
-                    text-slate-600 hover:text-slate-800 shadow-lg shadow-slate-900/5
+                    bg-gradient-to-br from-slate-50 to-slate-100/80 border border-[var(--glass-border-light)]/60
+                    text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] shadow-lg shadow-slate-900/5
                     hover:shadow-xl hover:shadow-slate-900/10 active:scale-95
                     transition-all duration-200
                     focus:outline-none focus:ring-2 focus:ring-slate-500/20
@@ -287,11 +287,11 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="
-                    w-full pl-12 pr-12 py-4 md:py-3.5 text-sm font-medium text-slate-700
-                    bg-gradient-to-r from-white/90 to-slate-50/90 border border-slate-200/60
+                    w-full pl-12 pr-12 py-4 md:py-3.5 text-sm font-medium text-[var(--foreground)]
+                    bg-gradient-to-r from-white/90 to-slate-50/90 border border-[var(--glass-border-light)]/60
                     rounded-xl md:rounded-2xl shadow-lg shadow-slate-900/5 backdrop-blur-xl
                     placeholder:text-slate-400 placeholder:font-medium
-                    focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-200/60
+                    focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/20 focus:border-blue-200/60
                     hover:shadow-xl hover:shadow-slate-900/10
                     transition-all duration-200 min-h-[52px]
                   "
@@ -300,7 +300,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm('')}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 min-h-[44px] min-w-[44px] p-2 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors duration-200 z-10 rounded-lg hover:bg-slate-100/50"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 min-h-[44px] min-w-[44px] p-2 flex items-center justify-center text-slate-400 hover:text-[var(--foreground-tertiary)] transition-colors duration-200 z-10 rounded-lg hover:bg-[var(--component-surface-secondary)]/50"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -310,14 +310,14 @@ export const ConversationList: React.FC<ConversationListProps> = ({
 
             {/* Mobile-Optimized Filter Tabs */}
             <div className="mb-4 md:mb-5">
-              <div className="flex items-center space-x-1 p-1 bg-slate-100/60 rounded-xl border border-slate-200/50">
+              <div className="flex items-center space-x-1 p-1 bg-[var(--component-surface-secondary)]/60 rounded-xl border border-[var(--glass-border-light)]/50">
                 <button
                   onClick={() => setSelectedType('all')}
                   className={`
                     flex-1 flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 px-2 md:px-4 py-3 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-200 min-h-[56px] md:min-h-[auto]
                     ${selectedType === 'all'
-                      ? 'bg-white text-slate-800 shadow-md shadow-slate-900/10 border border-slate-200/60'
-                      : 'text-slate-600 hover:text-slate-800 hover:bg-white/50'
+                      ? 'bg-[var(--component-card)] text-[var(--foreground)] shadow-md shadow-slate-900/10 border border-[var(--glass-border-light)]/60'
+                      : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-card)]/50'
                     }
                   `}
                 >
@@ -330,8 +330,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   className={`
                     flex-1 flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 px-2 md:px-4 py-3 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-200 min-h-[56px] md:min-h-[auto]
                     ${selectedType === 'general'
-                      ? 'bg-white text-slate-800 shadow-md shadow-slate-900/10 border border-slate-200/60'
-                      : 'text-slate-600 hover:text-slate-800 hover:bg-white/50'
+                      ? 'bg-[var(--component-card)] text-[var(--foreground)] shadow-md shadow-slate-900/10 border border-[var(--glass-border-light)]/60'
+                      : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-card)]/50'
                     }
                   `}
                 >
@@ -344,8 +344,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   className={`
                     flex-1 flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 px-2 md:px-4 py-3 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-200 min-h-[56px] md:min-h-[auto]
                     ${selectedType === 'case-study'
-                      ? 'bg-white text-slate-800 shadow-md shadow-slate-900/10 border border-slate-200/60'
-                      : 'text-slate-600 hover:text-slate-800 hover:bg-white/50'
+                      ? 'bg-[var(--component-card)] text-[var(--foreground)] shadow-md shadow-slate-900/10 border border-[var(--glass-border-light)]/60'
+                      : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-card)]/50'
                     }
                   `}
                 >
@@ -364,10 +364,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   value={selectedSpecialty}
                   onChange={(e) => setSelectedSpecialty(e.target.value as 'cardiology' | 'obgyn')}
                   className="
-                    w-full pl-10 pr-4 py-2.5 text-sm font-semibold text-slate-700
-                    bg-gradient-to-r from-white/90 to-slate-50/90 border border-slate-200/60
+                    w-full pl-10 pr-4 py-2.5 text-sm font-semibold text-[var(--foreground)]
+                    bg-gradient-to-r from-white/90 to-slate-50/90 border border-[var(--glass-border-light)]/60
                     rounded-xl shadow-md shadow-slate-900/5 backdrop-blur-xl
-                    focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-200/60
+                    focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/20 focus:border-blue-200/60
                     hover:shadow-lg hover:shadow-slate-900/10 hover:-translate-y-0.5
                     transition-all duration-300 ease-out appearance-none cursor-pointer
                   "
@@ -385,10 +385,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as 'latest' | 'oldest' | 'alphabetical' | 'mostMessages')}
                   className="
-                    w-full pl-10 pr-4 py-2.5 text-sm font-semibold text-slate-700
-                    bg-gradient-to-r from-white/90 to-slate-50/90 border border-slate-200/60
+                    w-full pl-10 pr-4 py-2.5 text-sm font-semibold text-[var(--foreground)]
+                    bg-gradient-to-r from-white/90 to-slate-50/90 border border-[var(--glass-border-light)]/60
                     rounded-xl shadow-md shadow-slate-900/5 backdrop-blur-xl
-                    focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-200/60
+                    focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/20 focus:border-blue-200/60
                     hover:shadow-lg hover:shadow-slate-900/10 hover:-translate-y-0.5
                     transition-all duration-300 ease-out appearance-none cursor-pointer
                   "
@@ -411,15 +411,15 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   <MessageCircle className="w-12 h-12 text-slate-400" />
                 </div>
                 <div className="absolute -top-1 -right-1 p-2 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg">
-                  <Search className="w-3 h-3 text-white" />
+                  <Search className="w-3 h-3 text-[var(--foreground)]" />
                 </div>
               </div>
               
-              <h3 className="text-lg font-bold text-slate-800 mb-2">
+              <h3 className="text-lg font-bold text-[var(--foreground)] mb-2">
                 {searchTerm ? t('conversations.noMatchesFound') : t('conversations.noConversationsFound')}
               </h3>
               
-              <p className="text-sm text-slate-500 mb-4 max-w-sm leading-relaxed">
+              <p className="text-sm text-[var(--foreground-secondary)] mb-4 max-w-sm leading-relaxed">
                 {searchTerm 
                   ? t('conversations.tryAdjustingSearchOrFilters')
                   : t('conversations.startNewConversationHint')
@@ -431,7 +431,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   onClick={handleCreateNew}
                   className="
                     relative px-6 py-3 rounded-xl
-                    bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold
+                    bg-gradient-to-r from-blue-500 to-indigo-600 text-[var(--foreground)] font-semibold
                     shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30
                     hover:scale-105 hover:-translate-y-0.5 active:scale-95
                     transition-all duration-300 ease-out
@@ -453,8 +453,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                         ? 'bg-gradient-to-r from-blue-50 to-sky-50 border-2 border-blue-200/60 shadow-lg shadow-blue-500/10'
                         : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200/60 shadow-lg shadow-blue-500/10'
                       : conv.type === 'case-study'
-                        ? 'bg-gradient-to-r from-blue-50/30 to-sky-50/30 border-2 border-blue-200/30 hover:border-blue-300/60 hover:shadow-lg hover:shadow-blue-500/10 active:scale-[0.98]'
-                        : 'bg-gradient-to-r from-white/90 to-slate-50/90 border-2 border-slate-200/40 hover:border-slate-300/60 hover:shadow-lg hover:shadow-slate-900/10 active:scale-[0.98]'
+                        ? 'bg-gradient-to-r from-blue-50/30 to-sky-50/30 border-2 border-blue-200/30 hover:border-[var(--cardiology-accent-blue)]/60 hover:shadow-lg hover:shadow-blue-500/10 active:scale-[0.98]'
+                        : 'bg-gradient-to-r from-white/90 to-slate-50/90 border-2 border-[var(--glass-border-light)]/40 hover:border-[var(--glass-border-medium)]/60 hover:shadow-lg hover:shadow-slate-900/10 active:scale-[0.98]'
                   }`}
                   onClick={() => editingId !== conv.id && handleSelectConversation(conv.id)}
                 >
@@ -471,9 +471,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                             if (e.key === 'Escape') handleCancelEdit();
                           }}
                           className="
-                            w-full px-4 py-3 text-sm font-semibold text-slate-800
-                            bg-white/90 border-2 border-blue-200/60 rounded-xl
-                            focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300/60
+                            w-full px-4 py-3 text-sm font-semibold text-[var(--foreground)]
+                            bg-[var(--component-card)]/90 border-2 border-blue-200/60 rounded-xl
+                            focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/20 focus:border-[var(--cardiology-accent-blue)]/60
                             shadow-lg backdrop-blur-sm
                           "
                           autoFocus
@@ -482,7 +482,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                           <Button 
                             size="sm" 
                             onClick={handleSaveEdit}
-                            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold"
+                            className="px-4 py-2 bg-[var(--cardiology-accent-blue)] hover:bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] rounded-lg font-semibold"
                           >
                             {t('conversations.save')}
                           </Button>
@@ -490,7 +490,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                             size="sm" 
                             variant="outline" 
                             onClick={handleCancelEdit}
-                            className="px-4 py-2 border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg font-semibold"
+                            className="px-4 py-2 border-[var(--glass-border-medium)] text-[var(--foreground)] hover:bg-[var(--component-surface-primary)] rounded-lg font-semibold"
                           >
                             {t('conversations.cancel')}
                           </Button>
@@ -510,32 +510,32 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                                   ? 'bg-gradient-to-br from-red-50 to-rose-100 border border-red-200/50' 
                                   : conv.specialty === 'obgyn'
                                     ? 'bg-gradient-to-br from-purple-50 to-violet-100 border border-purple-200/50'
-                                    : 'bg-gradient-to-br from-slate-50 to-gray-100 border border-slate-200/50'
+                                    : 'bg-gradient-to-br from-slate-50 to-gray-100 border border-[var(--glass-border-light)]/50'
                               }
                             `}>
                               {conv.type === 'case-study' ? (
-                                <Stethoscope className="w-4 h-4 md:w-3 md:h-3 text-blue-600" />
+                                <Stethoscope className="w-4 h-4 md:w-3 md:h-3 text-[var(--cardiology-accent-blue-dark)]" />
                               ) : (
                                 getSpecialtyIcon(conv.specialty)
                               )}
                               {conv.type === 'case-study' && (
-                                <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full border border-white"></div>
+                                <div className="absolute -top-1 -right-1 w-2 h-2 bg-[var(--cardiology-accent-blue)] rounded-full border border-white"></div>
                               )}
                             </div>
                             
                             {/* Mobile-Optimized Content */}
                             <div className="min-w-0 flex-1">
-                              <h3 className="font-bold text-base md:text-base text-slate-800 truncate leading-tight mb-1">
+                              <h3 className="font-bold text-base md:text-base text-[var(--foreground)] truncate leading-tight mb-1">
                                 {conv.title}
                               </h3>
                               
                               {/* Mobile-Friendly Stats */}
                               <div className="flex items-center space-x-2 text-xs">
-                                <span className="font-semibold text-slate-500">
+                                <span className="font-semibold text-[var(--foreground-secondary)]">
                                   {conv.messageCount} messages
                                 </span>
-                                <div className="w-1 h-1 bg-slate-300 rounded-full" />
-                                <span className="font-semibold text-slate-500 truncate">
+                                <div className="w-1 h-1 bg-[var(--component-panel)] rounded-full" />
+                                <span className="font-semibold text-[var(--foreground-secondary)] truncate">
                                   {formatTimestampDetailed(conv.updatedAt, 'relative')}
                                 </span>
                               </div>
@@ -549,7 +549,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                               size="sm"
                               className="
                                 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200
-                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-white/80 hover:bg-blue-50 shadow-md
+                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-[var(--component-card)]/80 hover:bg-[var(--cardiology-accent-blue-light)] shadow-md
                                 active:scale-95 hover:shadow-lg border border-blue-200/30
                               "
                               onClick={(e) => {
@@ -558,15 +558,15 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                               }}
                               title="Load messages"
                             >
-                              <MessageCircle className="w-4 h-4 text-blue-600" />
+                              <MessageCircle className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
                             </Button>
                             <Button
                               variant="ghost"
                               size="sm"
                               className="
                                 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200
-                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-white/80 hover:bg-slate-50 shadow-md
-                                active:scale-95 hover:shadow-lg border border-slate-200/30
+                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-[var(--component-card)]/80 hover:bg-[var(--component-surface-primary)] shadow-md
+                                active:scale-95 hover:shadow-lg border border-[var(--glass-border-light)]/30
                               "
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -574,14 +574,14 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                               }}
                               title="Edit conversation"
                             >
-                              <Edit className="w-4 h-4 text-slate-600" />
+                              <Edit className="w-4 h-4 text-[var(--foreground-tertiary)]" />
                             </Button>
                             <Button
                               variant="ghost"
                               size="sm"
                               className="
                                 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200
-                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-white/80 hover:bg-red-50 shadow-md
+                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-[var(--component-card)]/80 hover:bg-red-50 shadow-md
                                 active:scale-95 hover:shadow-lg border border-red-200/30
                               "
                               onClick={(e) => {
@@ -590,7 +590,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                               }}
                               title="Delete conversation"
                             >
-                              <Trash2 className="w-4 h-4 text-slate-600 hover:text-red-600" />
+                              <Trash2 className="w-4 h-4 text-[var(--foreground-tertiary)] hover:text-red-600" />
                             </Button>
                           </div>
                         </div>
@@ -598,7 +598,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                         {/* Last Message Preview */}
                         {conv.lastMessage && (
                           <div className="mb-4">
-                            <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed font-medium">
+                            <p className="text-sm text-[var(--foreground-tertiary)] line-clamp-2 leading-relaxed font-medium">
                               {conv.lastMessage}
                             </p>
                           </div>
@@ -608,9 +608,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2">
                             {/* Message Count Badge */}
-                            <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-slate-100 to-slate-50 border border-slate-200/50">
-                              <MessageCircle className="w-3 h-3 text-slate-500" />
-                              <span className="text-xs font-bold text-slate-700">
+                            <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-slate-100 to-slate-50 border border-[var(--glass-border-light)]/50">
+                              <MessageCircle className="w-3 h-3 text-[var(--foreground-secondary)]" />
+                              <span className="text-xs font-bold text-[var(--foreground)]">
                                 {conv.messageCount} {conv.messageCount !== 1 ? t('conversations.messages') : t('conversations.message')}
                               </span>
                             </div>
@@ -636,9 +636,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                           </div>
                           
                           {/* Enhanced Timestamp */}
-                          <div className="flex items-center space-x-1.5 px-2 py-1 rounded-lg bg-slate-100/50">
+                          <div className="flex items-center space-x-1.5 px-2 py-1 rounded-lg bg-[var(--component-surface-secondary)]/50">
                             <Calendar className="w-3 h-3 text-slate-400" />
-                            <span className="text-xs font-semibold text-slate-500 tabular-nums">
+                            <span className="text-xs font-semibold text-[var(--foreground-secondary)] tabular-nums">
                               {formatTimestampDetailed(conv.updatedAt, 'relative')}
                             </span>
                           </div>
@@ -661,8 +661,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
         </div>
 
         {/* Footer Stats */}
-        <div className="p-4 border-t border-gray-200 bg-gray-50">
-          <div className="text-xs text-gray-600 text-center">
+        <div className="p-4 border-t border-[var(--glass-border-light)] bg-[var(--component-surface-primary)]">
+          <div className="text-xs text-[var(--foreground-tertiary)] text-center">
             {conversationSummaries.length} {conversationSummaries.length !== 1 ? t('conversations.conversations') : t('conversations.conversation')} • {' '}
             {conversationSummaries.reduce((total, conv) => total + conv.messageCount, 0)} {t('conversations.totalMessages')}
           </div>
@@ -672,16 +672,16 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       {/* Delete Confirmation Dialog */}
       {deleteConfirmId && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-6 max-w-md mx-4 z-50 shadow-2xl">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('conversations.deleteConversation')}</h3>
-            <p className="text-gray-600 mb-4">
+          <div className="bg-[var(--component-card)] rounded-lg p-6 max-w-md mx-4 z-50 shadow-2xl">
+            <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">{t('conversations.deleteConversation')}</h3>
+            <p className="text-[var(--foreground-tertiary)] mb-4">
               {t('conversations.deleteConfirmation')}
             </p>
             <div className="flex gap-2 justify-end">
               <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>{t('conversations.cancel')}</Button>
               <Button 
                 onClick={handleConfirmDelete}
-                className="bg-red-600 hover:bg-red-700 text-white"
+                className="bg-red-600 hover:bg-red-700 text-[var(--foreground)]"
               >
                 {t('conversations.delete')}
               </Button>

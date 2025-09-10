@@ -58,7 +58,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
           description: 'Advanced AI medical intelligence with real-time literature integration and evidence-based recommendations',
           gradient: 'from-blue-500 to-cyan-500',
           badge: '24/7 Available',
-          badgeColor: 'bg-blue-100 text-blue-800',
+          badgeColor: 'bg-[var(--cardiology-accent-blue-light)] text-blue-800',
           metrics: { accuracy: '99.2%', responseTime: '<500ms', coverage: '50K+ Studies' },
           capabilities: ['Differential diagnosis assistance', 'Treatment recommendations', 'Risk stratification', 'Drug interactions']
         },
@@ -164,13 +164,13 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
           <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-10 sm:w-12 md:w-16 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
         </div>
         
-        <p className="text-xs sm:text-sm md:text-base lg:text-lg text-slate-600 max-w-xl mx-auto leading-relaxed font-light px-2">
+        <p className="text-xs sm:text-sm md:text-base lg:text-lg text-[var(--foreground-tertiary)] max-w-xl mx-auto leading-relaxed font-light px-2">
           {t('onboarding.specialty.subtitle')}
         </p>
         
         {/* Floating Elements - Hidden on mobile for performance */}
         <div className="hidden md:block absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute top-20 left-1/4 w-2 h-2 bg-blue-400 rounded-full animate-pulse opacity-60"></div>
+          <div className="absolute top-20 left-1/4 w-2 h-2 bg-[var(--cardiology-accent-blue)] rounded-full animate-pulse opacity-60"></div>
           <div className="absolute top-32 right-1/3 w-1 h-1 bg-purple-400 rounded-full animate-pulse opacity-40 animation-delay-1000"></div>
           <div className="absolute top-16 right-1/4 w-1.5 h-1.5 bg-pink-400 rounded-full animate-pulse opacity-50 animation-delay-2000"></div>
         </div>
@@ -211,7 +211,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                   ? 'bg-gradient-to-br from-red-50/90 via-white/95 to-rose-50/90 border-2 border-red-300/50 shadow-2xl shadow-red-200/30 scale-[1.03] transform-gpu'
                   : hoveredCard === specialty.id && specialty.available
                     ? 'bg-gradient-to-br from-white/95 via-gray-50/90 to-white/95 shadow-2xl shadow-gray-300/20 scale-[1.02] transform-gpu border border-red-200/30'
-                    : 'bg-white/90 backdrop-blur-sm border border-gray-200/50 shadow-lg hover:shadow-2xl hover:shadow-gray-200/20 hover:scale-[1.01] transform-gpu'
+                    : 'bg-[var(--component-card)]/90 backdrop-blur-sm border border-[var(--glass-border-light)]/50 shadow-lg hover:shadow-2xl hover:shadow-gray-200/20 hover:scale-[1.01] transform-gpu'
                 }
               `}
             >
@@ -222,7 +222,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                     <div
                       key={i}
                       className={`absolute w-2 h-2 rounded-full animate-ping opacity-30 ${
-                        i % 3 === 0 ? 'bg-red-400' : i % 3 === 1 ? 'bg-blue-400' : 'bg-purple-400'
+                        i % 3 === 0 ? 'bg-red-400' : i % 3 === 1 ? 'bg-[var(--cardiology-accent-blue)]' : 'bg-purple-400'
                       }`}
                       style={{
                         left: `${10 + (i * 8) % 80}%`,
@@ -270,7 +270,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
               {selectedSpecialty === specialty.id && specialty.available && (
                 <div className="absolute top-6 right-6">
                   <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
-                    <svg className="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-3.5 h-3.5 text-[var(--foreground)]" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -293,12 +293,12 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                     w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center transition-all duration-500 relative overflow-hidden
                     ${specialty.available 
                       ? (selectedSpecialty === specialty.id 
-                          ? 'bg-gradient-to-br from-red-500 via-rose-500 to-red-600 text-white shadow-2xl shadow-red-500/30' 
+                          ? 'bg-gradient-to-br from-red-500 via-rose-500 to-red-600 text-[var(--foreground)] shadow-2xl shadow-red-500/30' 
                           : hoveredCard === specialty.id 
-                            ? 'bg-gradient-to-br from-red-500 via-rose-500 to-red-600 text-white shadow-2xl shadow-red-500/30 scale-110 rotate-3' 
+                            ? 'bg-gradient-to-br from-red-500 via-rose-500 to-red-600 text-[var(--foreground)] shadow-2xl shadow-red-500/30 scale-110 rotate-3' 
                             : 'bg-gradient-to-br from-red-50 via-red-100 to-rose-50 text-red-500 shadow-lg'
                         )
-                      : 'bg-gradient-to-br from-gray-100 via-gray-200 to-gray-100 text-gray-400'
+                      : 'bg-gradient-to-br from-gray-100 via-gray-200 to-gray-100 text-[var(--foreground-secondary)]'
                     }
                   `}>
                     {specialty.icon}
@@ -316,7 +316,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                       <h3 className={`text-lg md:text-xl font-bold transition-all duration-300 ${
                         hoveredCard === specialty.id && specialty.available 
                           ? 'bg-gradient-to-r from-red-600 via-rose-600 to-red-700 bg-clip-text text-transparent scale-105' 
-                          : 'text-gray-900'
+                          : 'text-[var(--foreground)]'
                       }`}>
                         {specialty.name}
                       </h3>
@@ -329,15 +329,15 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                     
                     {specialty.subtitle && (
                       <p className={`text-sm md:text-base font-semibold transition-colors duration-300 ${
-                        hoveredCard === specialty.id && specialty.available ? 'text-red-600' : 'text-gray-700'
+                        hoveredCard === specialty.id && specialty.available ? 'text-red-600' : 'text-[var(--foreground-tertiary)]'
                       }`}>
                         {specialty.subtitle}
                       </p>
                     )}
                   </div>
                   
-                  <p className={`text-gray-600 leading-relaxed text-xs md:text-sm transition-colors duration-300 ${
-                    hoveredCard === specialty.id && specialty.available ? 'text-gray-700' : ''
+                  <p className={`text-[var(--foreground-tertiary)] leading-relaxed text-xs md:text-sm transition-colors duration-300 ${
+                    hoveredCard === specialty.id && specialty.available ? 'text-[var(--foreground-tertiary)]' : ''
                   }`}>
                     {specialty.description}
                   </p>
@@ -355,10 +355,10 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                 <div className="grid grid-cols-3 gap-6 mb-8">
                   {Object.entries(specialty.metrics).map(([key, value]) => (
                     <div key={key} className="text-center">
-                      <div className="text-2xl font-bold text-gray-900 mb-1">
+                      <div className="text-2xl font-bold text-[var(--foreground)] mb-1">
                         {value as string}
                       </div>
-                      <div className="text-sm text-gray-500 capitalize">
+                      <div className="text-sm text-[var(--foreground-secondary)] capitalize">
                         {key.replace(/([A-Z])/g, ' $1').trim()}
                       </div>
                     </div>
@@ -375,8 +375,8 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                       className={`
                         relative overflow-hidden rounded-lg p-3 md:p-4 transition-all duration-500 group cursor-pointer backdrop-blur-sm
                         ${hoveredCard === specialty.id 
-                          ? 'bg-white/95 shadow-xl transform translate-x-2 scale-[1.02] border border-red-100/50' 
-                          : 'bg-gray-50/80 hover:bg-white/90 hover:shadow-lg border border-gray-100/50'
+                          ? 'bg-[var(--component-card)]/95 shadow-xl transform translate-x-2 scale-[1.02] border border-red-100/50' 
+                          : 'bg-[var(--component-surface-primary)]/80 hover:bg-[var(--component-card)]/90 hover:shadow-lg border border-gray-100/50'
                         }
                       `}
                       style={{ transitionDelay: `${idx * 100}ms` }}
@@ -402,7 +402,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                       <div className="relative space-y-2">
                         <div className="flex items-start gap-3">
                           <div className={`
-                            w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg relative overflow-hidden
+                            w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center text-[var(--foreground)] font-bold text-sm shadow-lg relative overflow-hidden
                             bg-gradient-to-r ${feature.gradient}
                             group-hover:scale-110 group-hover:rotate-3 transition-all duration-300
                           `}>
@@ -412,13 +412,13 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                           
                           <div className="flex-1 space-y-1">
                             <div className="flex items-center justify-between">
-                              <h4 className="font-bold text-gray-900 text-sm md:text-base group-hover:text-gray-800 transition-colors">
+                              <h4 className="font-bold text-[var(--foreground)] text-sm md:text-base group-hover:text-[var(--foreground)] transition-colors">
                                 {feature.title}
                               </h4>
                               {feature.badge && (
                                 <span className={`
                                   inline-flex items-center px-2 py-1 rounded-full text-xs font-bold backdrop-blur-sm
-                                  ${feature.badgeColor || 'bg-blue-100 text-blue-800'}
+                                  ${feature.badgeColor || 'bg-[var(--cardiology-accent-blue-light)] text-blue-800'}
                                   group-hover:scale-105 transition-transform duration-300
                                 `}>
                                   {feature.badge}
@@ -426,7 +426,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                               )}
                             </div>
                             
-                            <p className="text-xs text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors">
+                            <p className="text-xs text-[var(--foreground-tertiary)] leading-relaxed group-hover:text-[var(--foreground-tertiary)] transition-colors">
                               {feature.description}
                             </p>
                           </div>
@@ -434,11 +434,11 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                         
                         {/* Metrics Display */}
                         {feature.metrics && hoveredCard === specialty.id && (
-                          <div className="grid grid-cols-3 gap-1 p-2 bg-gray-50/80 backdrop-blur-sm rounded-md border border-gray-200/50 animate-fade-in">
+                          <div className="grid grid-cols-3 gap-1 p-2 bg-[var(--component-surface-primary)]/80 backdrop-blur-sm rounded-md border border-[var(--glass-border-light)]/50 animate-fade-in">
                             {Object.entries(feature.metrics).map(([key, value]) => (
                               <div key={key} className="text-center">
-                                <div className="text-xs font-bold text-gray-900">{value as string}</div>
-                                <div className="text-xs text-gray-500 capitalize font-medium">{key}</div>
+                                <div className="text-xs font-bold text-[var(--foreground)]">{value as string}</div>
+                                <div className="text-xs text-[var(--foreground-secondary)] capitalize font-medium">{key}</div>
                               </div>
                             ))}
                           </div>
@@ -447,11 +447,11 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                         {/* Expandable Capabilities */}
                         {feature.capabilities && expandedFeatures === feature.title && (
                           <div className="space-y-2 animate-fade-in">
-                            <h5 className="text-sm font-bold text-gray-800 mb-3">Key Capabilities</h5>
+                            <h5 className="text-sm font-bold text-[var(--foreground)] mb-3">Key Capabilities</h5>
                             {feature.capabilities.map((capability: string, capIndex: number) => (
                               <div 
                                 key={capability} 
-                                className="flex items-center space-x-3 text-xs text-gray-600 animate-slide-in-right"
+                                className="flex items-center space-x-3 text-xs text-[var(--foreground-tertiary)] animate-slide-in-right"
                                 style={{ animationDelay: `${capIndex * 100}ms` }}
                               >
                                 <div className="w-2 h-2 bg-emerald-500 rounded-full" />
@@ -473,15 +473,15 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
               )}
 
               {/* Enhanced CTA */}
-              <div className="pt-3 md:pt-4 border-t border-gray-200/50 relative z-10">
+              <div className="pt-3 md:pt-4 border-t border-[var(--glass-border-light)]/50 relative z-10">
                 {specialty.available ? (
                   <button className={`
                     w-full py-3 md:py-4 px-4 md:px-6 rounded-xl font-bold text-sm md:text-base transition-all duration-400 relative overflow-hidden group/btn
                     ${selectedSpecialty === specialty.id
-                      ? 'bg-gradient-to-r from-red-500 via-rose-500 to-red-600 text-white shadow-2xl shadow-red-500/30 scale-105'
+                      ? 'bg-gradient-to-r from-red-500 via-rose-500 to-red-600 text-[var(--foreground)] shadow-2xl shadow-red-500/30 scale-105'
                       : hoveredCard === specialty.id
-                        ? 'bg-gradient-to-r from-red-500 via-rose-500 to-red-600 text-white shadow-2xl shadow-red-500/30 hover:scale-105'
-                        : 'bg-gradient-to-r from-red-50 via-red-100 to-rose-50 text-red-600 hover:from-red-500 hover:via-rose-500 hover:to-red-600 hover:text-white border border-red-200/50'
+                        ? 'bg-gradient-to-r from-red-500 via-rose-500 to-red-600 text-[var(--foreground)] shadow-2xl shadow-red-500/30 hover:scale-105'
+                        : 'bg-gradient-to-r from-red-50 via-red-100 to-rose-50 text-red-600 hover:from-red-500 hover:via-rose-500 hover:to-red-600 hover:text-[var(--foreground)] border border-red-200/50'
                     }
                   `}>
                     <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
@@ -493,7 +493,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                     </div>
                   </button>
                 ) : (
-                  <button className="w-full py-3 md:py-4 px-4 md:px-6 rounded-xl font-bold text-sm md:text-base bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 text-gray-400 cursor-not-allowed">
+                  <button className="w-full py-3 md:py-4 px-4 md:px-6 rounded-xl font-bold text-sm md:text-base bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 text-[var(--foreground-secondary)] cursor-not-allowed">
                     Available Soon - Stay Tuned
                   </button>
                 )}
@@ -509,7 +509,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
         ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
       `}>
         <div className="max-w-xl mx-auto px-2">
-          <p className="text-slate-500 text-xs md:text-sm leading-relaxed">
+          <p className="text-[var(--foreground-secondary)] text-xs md:text-sm leading-relaxed">
             {t('onboarding.specialty.note')}
           </p>
           
@@ -520,7 +520,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
               <span>{t('common.evidenceBased')}</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+              <div className="w-2 h-2 bg-[var(--cardiology-accent-blue)] rounded-full"></div>
               <span>{t('common.clinicallyValidated')}</span>
             </div>
             <div className="flex items-center space-x-2">
@@ -534,7 +534,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
             <div className="mt-6 md:mt-8">
               <button
                 onClick={onSkip}
-                className="mx-auto block px-6 py-3 text-sm font-medium text-slate-500 hover:text-slate-700 border border-slate-300 hover:border-slate-400 rounded-lg bg-white/80 hover:bg-white/90 backdrop-blur-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-opacity-50"
+                className="mx-auto block px-6 py-3 text-sm font-medium text-[var(--foreground-secondary)] hover:text-[var(--foreground)] border border-[var(--glass-border-medium)] hover:border-slate-400 rounded-lg bg-[var(--component-card)]/80 hover:bg-[var(--component-card)]/90 backdrop-blur-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-opacity-50"
               >
                 Skip for now - I'll choose later
               </button>

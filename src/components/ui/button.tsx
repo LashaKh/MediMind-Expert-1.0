@@ -7,12 +7,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-white hover:bg-primary/90",
-        destructive: "bg-red-500 text-white hover:bg-red-600",
-        outline: "border border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800",
-        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600",
-        ghost: "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800",
-        link: "bg-transparent underline-offset-4 hover:underline text-primary",
+        default: "bg-[var(--component-button-primary)] text-[var(--primary-foreground)] hover:bg-[var(--component-button-primary-hover)] backdrop-blur-sm",
+        destructive: "bg-[var(--error-background)] text-[var(--error-text)] hover:bg-[var(--error-background)]/90 backdrop-blur-sm",
+        outline: "border border-[var(--glass-border-medium)] bg-transparent hover:bg-[var(--component-button-ghost-hover)] backdrop-blur-sm",
+        secondary: "bg-[var(--component-button-secondary)] text-[var(--foreground)] hover:bg-[var(--component-button-secondary-hover)] backdrop-blur-sm",
+        ghost: "bg-[var(--component-button-ghost)] hover:bg-[var(--component-button-ghost-hover)] backdrop-blur-sm",
+        link: "bg-transparent underline-offset-4 hover:underline text-[var(--primary)] backdrop-blur-sm",
       },
       size: {
         default: "h-10 py-2 px-4",

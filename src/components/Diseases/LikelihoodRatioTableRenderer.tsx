@@ -35,7 +35,7 @@ export const LikelihoodRatioTableRenderer: React.FC<LikelihoodRatioTableRenderer
   if (!isLRTable || lrColumnIndex === -1 || valueColumnIndex === -1) {
     return (
       <div className="overflow-x-auto my-6">
-        <table className="w-full border-collapse bg-white rounded-lg shadow-sm">
+        <table className="w-full border-collapse bg-[var(--component-card)] rounded-lg shadow-sm">
           {children}
         </table>
       </div>
@@ -71,14 +71,14 @@ export const LikelihoodRatioTableRenderer: React.FC<LikelihoodRatioTableRenderer
             if (cellIndex === lrColumnIndex && lrValue > 0) {
               // Merge LR value with confidence interval
               return (
-                <td key={cellIndex} className="py-3 px-4 text-gray-800">
+                <td key={cellIndex} className="py-3 px-4 text-[var(--foreground)]">
                   <span className="font-semibold">{lrValue}</span>
-                  <span className="text-gray-500 ml-1">{confidenceInterval}</span>
+                  <span className="text-[var(--foreground-secondary)] ml-1">{confidenceInterval}</span>
                 </td>
               );
             } else if (cellIndex === valueColumnIndex && lrValue > 0) {
               // This is the value column - add visual indicator
-              let barColor = 'bg-gray-400';
+              let barColor = 'bg-[var(--muted)]';
               const maxLR = 20;
               const scaledValue = Math.min(lrValue, maxLR);
               const barWidth = Math.max(10, (scaledValue / maxLR) * 90);
@@ -93,7 +93,7 @@ export const LikelihoodRatioTableRenderer: React.FC<LikelihoodRatioTableRenderer
               
               return (
                 <td key={cellIndex} className="py-3 px-4">
-                  <div className="bg-gray-100 rounded-full h-6 w-full max-w-[200px]">
+                  <div className="bg-[var(--component-surface-secondary)] rounded-full h-6 w-full max-w-[200px]">
                     <div 
                       className={`${barColor} h-6 rounded-full transition-all duration-500 ease-out`}
                       style={{ width: `${barWidth}%` }}
@@ -128,12 +128,12 @@ export const LikelihoodRatioTableRenderer: React.FC<LikelihoodRatioTableRenderer
           const processedHeaders = headers.map((header: any, index: number) => {
             return React.cloneElement(header, {
               key: index,
-              className: 'text-left py-3 px-4 font-semibold text-gray-900'
+              className: 'text-left py-3 px-4 font-semibold text-[var(--foreground)]'
             });
           });
           return React.cloneElement(row, { 
             key: 0,
-            className: 'border-b-2 border-gray-200'
+            className: 'border-b-2 border-[var(--glass-border-light)]'
           }, processedHeaders);
         }
         return row;
@@ -145,7 +145,7 @@ export const LikelihoodRatioTableRenderer: React.FC<LikelihoodRatioTableRenderer
   
   return (
     <div className="overflow-x-auto my-6">
-      <table className="w-full border-collapse bg-white rounded-lg">
+      <table className="w-full border-collapse bg-[var(--component-card)] rounded-lg">
         {processedChildrenWithHeaders}
       </table>
     </div>

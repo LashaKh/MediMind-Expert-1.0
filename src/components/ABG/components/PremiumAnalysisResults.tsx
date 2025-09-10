@@ -54,7 +54,7 @@ const formatMedicalText = (text: string): React.ReactNode => {
     if (isSectionHeader) {
       // Section headers
       formattedLines.push(
-        <div key={index} className="font-bold text-lg text-slate-900 bg-gradient-to-r from-blue-50 to-purple-50 px-3 py-2 rounded-lg mt-4 first:mt-0 border-l-4 border-blue-500">
+        <div key={index} className="font-bold text-lg text-[var(--foreground)] bg-gradient-to-r from-blue-50 to-purple-50 px-3 py-2 rounded-lg mt-4 first:mt-0 border-l-4 border-[var(--cardiology-accent-blue)]">
           {trimmedLine.replace(':', '')}
         </div>
       );
@@ -71,22 +71,22 @@ const formatMedicalText = (text: string): React.ReactNode => {
         const valueMatch = value.match(/^([\d.,-]+)\s*([a-zA-Z/%]+)?(?:\s*\[([^\]]+)\])?/);
         
         formattedLines.push(
-          <div key={index} className="flex flex-wrap items-center gap-2 py-2 px-3 bg-white rounded-lg border border-slate-200 hover:border-slate-300 transition-colors">
-            <span className="font-medium text-slate-800 min-w-0 flex-1">{parameter.trim()}</span>
+          <div key={index} className="flex flex-wrap items-center gap-2 py-2 px-3 bg-[var(--component-card)] rounded-lg border border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] transition-colors">
+            <span className="font-medium text-[var(--foreground)] min-w-0 flex-1">{parameter.trim()}</span>
             <div className="flex items-center gap-2">
               {valueMatch ? (
                 <>
-                  <span className="font-mono font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                  <span className="font-mono font-semibold text-[var(--cardiology-accent-blue-dark)] bg-[var(--cardiology-accent-blue-light)] px-2 py-1 rounded">
                     {valueMatch[1]}{valueMatch[2] ? ` ${valueMatch[2]}` : ''}
                   </span>
                   {valueMatch[3] && (
-                    <span className="text-xs text-slate-500 font-mono bg-slate-50 px-2 py-1 rounded">
+                    <span className="text-xs text-[var(--foreground-secondary)] font-mono bg-[var(--component-surface-primary)] px-2 py-1 rounded">
                       [{valueMatch[3]}]
                     </span>
                   )}
                 </>
               ) : (
-                <span className="font-mono text-slate-700 bg-slate-50 px-2 py-1 rounded">{value}</span>
+                <span className="font-mono text-[var(--foreground)] bg-[var(--component-surface-primary)] px-2 py-1 rounded">{value}</span>
               )}
             </div>
           </div>
@@ -94,7 +94,7 @@ const formatMedicalText = (text: string): React.ReactNode => {
       } else {
         // Simple bulleted item
         formattedLines.push(
-          <div key={index} className="py-1 px-3 text-slate-700 bg-slate-50 rounded border-l-2 border-slate-300">
+          <div key={index} className="py-1 px-3 text-[var(--foreground)] bg-[var(--component-surface-primary)] rounded border-l-2 border-[var(--glass-border-medium)]">
             {paramContent}
           </div>
         );
@@ -105,9 +105,9 @@ const formatMedicalText = (text: string): React.ReactNode => {
       const value = valueParts.join(':').trim();
       
       formattedLines.push(
-        <div key={index} className="flex flex-wrap items-center gap-2 py-2 px-3 bg-white rounded-lg border border-slate-200">
-          <span className="font-medium text-slate-800 min-w-0 flex-1">{key.trim()}</span>
-          <span className="font-mono text-slate-700 bg-slate-50 px-2 py-1 rounded">{value}</span>
+        <div key={index} className="flex flex-wrap items-center gap-2 py-2 px-3 bg-[var(--component-card)] rounded-lg border border-[var(--glass-border-light)]">
+          <span className="font-medium text-[var(--foreground)] min-w-0 flex-1">{key.trim()}</span>
+          <span className="font-mono text-[var(--foreground)] bg-[var(--component-surface-primary)] px-2 py-1 rounded">{value}</span>
         </div>
       );
     } else {
@@ -124,8 +124,8 @@ const formatMedicalText = (text: string): React.ReactNode => {
         <div key={index} className={cn(
           "py-1",
           isGeneralHeader 
-            ? "font-bold text-xl text-slate-900 bg-gradient-to-r from-emerald-50 to-blue-50 px-3 py-3 rounded-lg border-l-4 border-emerald-500 mb-2" 
-            : "text-slate-700 px-1"
+            ? "font-bold text-xl text-[var(--foreground)] bg-gradient-to-r from-emerald-50 to-blue-50 px-3 py-3 rounded-lg border-l-4 border-emerald-500 mb-2" 
+            : "text-[var(--foreground)] px-1"
         )}>
           {trimmedLine}
         </div>
@@ -261,23 +261,23 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
           <div className="relative p-6">
             <div className="flex items-center justify-center mb-5">
               <div className="relative">
-                <Brain className="h-14 w-14 text-blue-500 animate-pulse" />
-                <div className="absolute inset-0 bg-blue-500 opacity-20 rounded-full animate-ping" />
+                <Brain className="h-14 w-14 text-[var(--cardiology-accent-blue)] animate-pulse" />
+                <div className="absolute inset-0 bg-[var(--cardiology-accent-blue)] opacity-20 rounded-full animate-ping" />
                 <Sparkles className="absolute -top-2 -right-2 h-5 w-5 text-purple-500 animate-pulse" />
               </div>
             </div>
             
             <div className="text-center space-y-3.5">
-                <h3 className="text-xl font-bold text-slate-800">
+                <h3 className="text-xl font-bold text-[var(--foreground)]">
                   {t('abg.analysis.loading.title', 'AI Analysis in Progress')}
                 </h3>
-              <p className="text-slate-600 max-w-md mx-auto text-sm">
+              <p className="text-[var(--foreground-tertiary)] max-w-md mx-auto text-sm">
                 {t('abg.analysis.loading.subtitle', 'Our advanced AI is analyzing your blood gas report using state-of-the-art vision technology.')}
               </p>
               
               <div className="flex justify-center">
                 <div className="flex space-x-2">
-                  <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-2.5 h-2.5 bg-[var(--cardiology-accent-blue)] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                   <div className="w-2.5 h-2.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                   <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
@@ -308,7 +308,7 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
               
               <Button 
                 onClick={() => window.location.reload()} 
-                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white"
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-[var(--foreground)]"
               >
                 {t('common.retry', 'Try Again')}
               </Button>
@@ -323,10 +323,10 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
   if (!result) {
     return (
       <div className={cn("abg-premium", className)}>
-        <div className="relative overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border border-slate-200 shadow-lg">
+        <div className="relative overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border border-[var(--glass-border-light)] shadow-lg">
           <div className="p-6 text-center">
             <FileText className="h-10 w-10 text-slate-400 mx-auto mb-3" />
-            <p className="text-slate-600">{t('abg.analysis.empty', 'No analysis results available')}</p>
+            <p className="text-[var(--foreground-tertiary)]">{t('abg.analysis.empty', 'No analysis results available')}</p>
           </div>
         </div>
       </div>
@@ -342,12 +342,12 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
         {/* Main Results Container */}
         <div className="space-y-6">
           {/* Analysis Content */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
+          <div className="bg-[var(--component-card)] rounded-2xl border border-[var(--glass-border-light)] shadow-xl overflow-hidden">
             {isEditing ? (
               /* Edit Mode */
               <div className="p-6 space-y-5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-slate-800">{t('abg.analysis.edit.title', 'Edit Analysis')}</h3>
+                  <h3 className="text-lg font-bold text-[var(--foreground)]">{t('abg.analysis.edit.title', 'Edit Analysis')}</h3>
                   <div className="flex gap-2">
                     <Button onClick={handleSave} size="sm" disabled={isProcessingReanalysis} className="bg-gradient-to-r from-emerald-500 to-emerald-600">
                       {isProcessingReanalysis ? (
@@ -372,7 +372,7 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
                 <textarea
                   value={editedText}
                   onChange={(e) => setEditedText(e.target.value)}
-                  className="w-full h-56 p-3.5 border border-slate-300 rounded-xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full h-56 p-3.5 border border-[var(--glass-border-medium)] rounded-xl resize-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent"
                   placeholder={t('abg.analysis.edit.placeholder', 'Enter analysis text...')}
                 />
               </div>
@@ -380,12 +380,12 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
               /* Display Mode */
               <div className="p-6">
                 <div className="flex items-center justify-between mb-5">
-                  <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-blue-600" />
+                  <h3 className="text-lg font-bold text-[var(--foreground)] flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
                     {t('abg.analysis.raw.title', 'Raw Analysis Data')}
                   </h3>
                   <div className="flex items-center gap-3">
-                    <Badge variant="secondary" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                    <Badge variant="secondary" className="bg-gradient-to-r from-blue-500 to-purple-500 text-[var(--foreground)]">
                       {t('abg.analysis.raw.badge', 'AI Generated')}
                     </Badge>
                     
@@ -395,7 +395,7 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
                           variant="outline"
                           size="sm"
                           onClick={handleCopy}
-                          className="border-slate-300 hover:bg-slate-50"
+                          className="border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]"
                         >
                           {copySuccess ? (
                             <CheckCircle2 className="h-4 w-4 mr-2" />
@@ -410,7 +410,7 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
                             variant="outline"
                             size="sm"
                             onClick={handleStartEdit}
-                            className="border-slate-300 hover:bg-slate-50"
+                            className="border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]"
                           >
                             <Edit2 className="h-4 w-4 mr-2" />
                             {t('common.edit', 'Edit')}
@@ -421,7 +421,7 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
                           variant="outline"
                           size="sm"
                           onClick={handleShare}
-                          className="border-slate-300 hover:bg-slate-50"
+                          className="border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]"
                         >
                           <Share2 className="h-4 w-4 mr-2" />
                           {t('common.share', 'Share')}
@@ -436,16 +436,16 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
                   <div className="space-y-5">
                     {parsedAnalysis.bloodGasValues && Object.keys(parsedAnalysis.bloodGasValues).length > 0 && (
                       <div>
-                        <h4 className="text-base font-semibold text-slate-700 mb-3.5 flex items-center gap-2">
-                          <BarChart3 className="h-5 w-5 text-blue-600" />
+                        <h4 className="text-base font-semibold text-[var(--foreground)] mb-3.5 flex items-center gap-2">
+                          <BarChart3 className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
                           {t('abg.analysis.parameters.title', 'Blood Gas Parameters')}
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
                           {Object.entries(parsedAnalysis.bloodGasValues).map(([name, value]) => (
-                            <div key={name} className="bg-slate-50 rounded-xl p-3.5 border border-slate-200 hover:shadow-md transition-shadow">
+                            <div key={name} className="bg-[var(--component-surface-primary)] rounded-xl p-3.5 border border-[var(--glass-border-light)] hover:shadow-md transition-shadow">
                               <div className="flex justify-between items-center">
-                                <span className="font-medium text-slate-700">{name}</span>
-                                <span className="text-base font-bold text-blue-600">{value}</span>
+                                <span className="font-medium text-[var(--foreground)]">{name}</span>
+                                <span className="text-base font-bold text-[var(--cardiology-accent-blue-dark)]">{value}</span>
                               </div>
                             </div>
                           ))}
@@ -455,12 +455,12 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
 
                     {/* Raw Text with Better Formatting */}
                     <div>
-                      <h4 className="text-base font-semibold text-slate-700 mb-3.5 flex items-center gap-2">
-                        <Eye className="h-5 w-5 text-blue-600" />
+                      <h4 className="text-base font-semibold text-[var(--foreground)] mb-3.5 flex items-center gap-2">
+                        <Eye className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
                         {t('abg.analysis.complete.title', 'Complete Analysis')}
                       </h4>
-                      <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200">
-                        <div className="text-sm text-slate-700">
+                      <div className="bg-[var(--component-surface-primary)] rounded-xl p-3.5 border border-[var(--glass-border-light)]">
+                        <div className="text-sm text-[var(--foreground)]">
                           {formatMedicalText(result.raw_analysis)}
                         </div>
                       </div>
@@ -468,8 +468,8 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
                   </div>
                 ) : (
                   /* Fallback Raw Text Display */
-                  <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200">
-                    <div className="text-sm text-slate-700">
+                  <div className="bg-[var(--component-surface-primary)] rounded-xl p-3.5 border border-[var(--glass-border-light)]">
+                    <div className="text-sm text-[var(--foreground)]">
                       {formatMedicalText(result.raw_analysis)}
                     </div>
                   </div>

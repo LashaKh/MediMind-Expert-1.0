@@ -1,0 +1,1615 @@
+/* 
+ * MediMind Expert - Theme Override System
+ * Comprehensive color blending and consistency enforcement
+ * Uses theme variables from theme-config.css (imported first)
+ */
+
+/* ============================================================================= */
+/* GLASSMORPHISM & BACKDROP FILTER SYSTEM */
+/* ============================================================================= */
+
+/* Base glassmorphism for all major containers */
+.glass-container,
+[data-glass="true"],
+.sidebar-container,
+[class*="card"],
+[role="dialog"],
+[role="alertdialog"] {
+  backdrop-filter: blur(12px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.2) !important;
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Enhanced glassmorphism for interactive elements */
+.glass-interactive,
+button:not(.glass-disabled),
+.btn:not(.glass-disabled),
+[role="button"]:not(.glass-disabled) {
+  backdrop-filter: var(--glass-blur-light) !important;
+  -webkit-backdrop-filter: var(--glass-blur-light) !important;
+  background: var(--component-button-secondary) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ============================================================================= */
+/* ENHANCED COMPONENT BACKGROUND SYSTEM */
+/* ============================================================================= */
+
+/* Universal Card System */
+[class*="card"],
+.premium-card,
+.medical-card,
+.calculator-card {
+  background: var(--component-card) !important;
+  border: 1px solid var(--component-card-border) !important;
+  backdrop-filter: var(--glass-blur-medium) !important;
+  -webkit-backdrop-filter: var(--glass-blur-medium) !important;
+  box-shadow: 0 8px 32px var(--component-card-shadow) !important;
+}
+
+[class*="card"]:hover,
+.premium-card:hover,
+.medical-card:hover,
+.calculator-card:hover {
+  background: var(--component-card-hover) !important;
+  backdrop-filter: var(--glass-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--glass-blur-heavy) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Workspace and Surface Backgrounds */
+.workspace-container,
+[class*="workspace"],
+.main-workspace {
+  background: var(--component-workspace) !important;
+  backdrop-filter: var(--glass-blur-light) !important;
+  -webkit-backdrop-filter: var(--glass-blur-light) !important;
+}
+
+/* Panel System */
+[class*="panel"],
+.control-panel,
+.sidebar-panel {
+  background: var(--component-panel) !important;
+  border: 1px solid var(--glass-border-medium) !important;
+  backdrop-filter: var(--glass-blur-medium) !important;
+  -webkit-backdrop-filter: var(--glass-blur-medium) !important;
+}
+
+/* Header and Navigation Enhancements */
+header,
+.header-container,
+[class*="header"] {
+  background: var(--component-header) !important;
+  backdrop-filter: var(--glass-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--glass-blur-heavy) !important;
+  border-bottom: 1px solid var(--glass-border-subtle) !important;
+}
+
+/* Medical UI Specific Overrides */
+.medical-calculator-card {
+  background: var(--medical-card-calculator) !important;
+  backdrop-filter: var(--glass-blur-medium) !important;
+  -webkit-backdrop-filter: var(--glass-blur-medium) !important;
+}
+
+.medical-result-display {
+  background: var(--medical-card-result) !important;
+  backdrop-filter: var(--glass-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--glass-blur-heavy) !important;
+}
+
+/* Transcription Interface */
+.georgian-panel,
+.transcription-panel,
+[class*="transcription"] {
+  background: var(--transcription-panel) !important;
+  backdrop-filter: var(--glass-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--glass-blur-heavy) !important;
+}
+
+/* AI Chat Interface */
+.chat-window,
+.flowise-chat,
+[class*="chat"] {
+  background: var(--chat-window) !important;
+  backdrop-filter: var(--glass-blur-medium) !important;
+  -webkit-backdrop-filter: var(--glass-blur-medium) !important;
+}
+
+/* ============================================================================= */
+/* UTILITY CLASSES FOR COMPONENT THEMES */
+/* ============================================================================= */
+
+/* Main theme card class */
+.theme-card {
+  background: var(--component-card) !important;
+  border: 1px solid var(--component-card-border) !important;
+  backdrop-filter: var(--glass-blur-medium) !important;
+  -webkit-backdrop-filter: var(--glass-blur-medium) !important;
+  box-shadow: 0 8px 32px var(--component-card-shadow) !important;
+}
+
+.theme-card:hover {
+  background: var(--component-card-hover) !important;
+  backdrop-filter: var(--glass-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--glass-blur-heavy) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Theme surface class for general backgrounds */
+.theme-surface {
+  background: var(--component-surface-primary) !important;
+  backdrop-filter: var(--glass-blur-light) !important;
+  -webkit-backdrop-filter: var(--glass-blur-light) !important;
+  border: 1px solid var(--glass-border-subtle) !important;
+}
+
+/* Theme modal class */
+.theme-modal {
+  background: var(--component-modal) !important;
+  border: 1px solid var(--component-modal-border) !important;
+  backdrop-filter: var(--glass-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--glass-blur-heavy) !important;
+  box-shadow: 0 16px 64px var(--component-card-shadow) !important;
+}
+
+/* Theme panel class */
+.theme-panel {
+  background: var(--component-panel) !important;
+  border: 1px solid var(--glass-border-medium) !important;
+  backdrop-filter: var(--glass-blur-medium) !important;
+  -webkit-backdrop-filter: var(--glass-blur-medium) !important;
+}
+
+.glass-interactive:hover,
+button:not(.glass-disabled):hover,
+.btn:not(.glass-disabled):hover,
+[role="button"]:not(.glass-disabled):hover {
+  backdrop-filter: blur(10px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(1.3) !important;
+  background: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+/* ============================================================================= */
+/* UNIVERSAL THEME ENFORCEMENT */
+/* ============================================================================= */
+
+/* Override all background colors with theme variables */
+* {
+  /* Ensure CSS variables take precedence */
+  --tw-bg-opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* Force theme colors on all major layout elements */
+body {
+  background: linear-gradient(135deg, 
+    oklch(0.92 0.03 257),
+    oklch(0.48 0.055 257), 
+    oklch(0.82 0.10 242)
+  ) fixed !important;
+  min-height: 100vh !important;
+  color: var(--foreground) !important;
+}
+
+/* Main application container */
+#root {
+  background: transparent !important;
+  min-height: 100vh !important;
+}
+
+/* All containers use transparent background to blend with main theme */
+div:not([class*="gradient"]):not([style*="gradient"]), 
+section, 
+main, 
+aside, 
+nav, 
+header, 
+footer,
+[class*="workspace"],
+[class*="content"],
+[class*="container"]:not([class*="gradient"]) {
+  /* Use transparent to let main theme background show through */
+  background: transparent !important;
+  background-color: transparent !important;
+  color: var(--foreground) !important;
+}
+
+/* Force sidebar styling */
+aside,
+[id*="sidebar"],
+[class*="sidebar"],
+.sidebar-container {
+  background: var(--sidebar) !important;
+  color: var(--sidebar-foreground) !important;
+  border-color: var(--sidebar-border) !important;
+  backdrop-filter: blur(12px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.2) !important;
+}
+
+/* All sidebar child elements */
+aside *,
+[id*="sidebar"] *,
+[class*="sidebar"] *,
+.sidebar-container * {
+  color: var(--sidebar-foreground) !important;
+}
+
+/* ============================================================================= */
+/* COMPONENT-SPECIFIC OVERRIDES */
+/* ============================================================================= */
+
+/* Cards and panels */
+[class*="card"],
+.premium-card,
+[role="dialog"],
+[role="alertdialog"],
+[class*="modal"],
+[class*="panel"] {
+  background: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border: 1px solid var(--border) !important;
+  backdrop-filter: blur(12px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.2) !important;
+}
+
+/* Navigation elements */
+[class*="nav"],
+[class*="menu"],
+[role="navigation"],
+[role="menu"],
+[role="menubar"] {
+  background: var(--popover) !important;
+  color: var(--popover-foreground) !important;
+  border-color: var(--border) !important;
+  backdrop-filter: blur(10px) saturate(1.1) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(1.1) !important;
+}
+
+/* Form elements */
+input,
+textarea,
+select,
+[role="textbox"],
+[role="combobox"],
+[contenteditable="true"] {
+  background: var(--input) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+  backdrop-filter: blur(6px) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(1.05) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+[role="textbox"]:focus,
+[role="combobox"]:focus,
+[contenteditable="true"]:focus {
+  border-color: var(--ring) !important;
+  box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2) !important;
+  background: var(--background) !important;
+  outline: none !important;
+}
+
+/* Button styling */
+button,
+.btn,
+[role="button"],
+[type="button"],
+[type="submit"] {
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border: 1px solid var(--primary) !important;
+  backdrop-filter: blur(8px) saturate(1.1) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(1.1) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+button:hover,
+.btn:hover,
+[role="button"]:hover,
+[type="button"]:hover,
+[type="submit"]:hover {
+  background: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px oklch(from var(--primary) l c h / 0.3) !important;
+}
+
+/* ============================================================================= */
+/* TAILWIND CLASS OVERRIDES */
+/* ============================================================================= */
+
+/* Override common Tailwind background classes with glassmorphism */
+.bg-white,
+.bg-gray-50,
+.bg-gray-100,
+.bg-slate-50,
+.bg-slate-100 {
+  background: var(--component-card) !important;
+  backdrop-filter: var(--glass-blur-light) !important;
+  -webkit-backdrop-filter: var(--glass-blur-light) !important;
+}
+
+/* Semi-transparent white backgrounds - convert to glassmorphic */
+.bg-white\/10,
+.bg-white\/20,
+.bg-white\/30,
+[class*="bg-white/"] {
+  background: var(--component-surface-primary) !important;
+  backdrop-filter: var(--glass-blur-medium) !important;
+  -webkit-backdrop-filter: var(--glass-blur-medium) !important;
+}
+
+/* Gray backgrounds with proper glassmorphism */
+.bg-gray-200,
+.bg-gray-300,
+.bg-slate-200,
+.bg-slate-300 {
+  background: var(--component-surface-secondary) !important;
+  backdrop-filter: var(--glass-blur-light) !important;
+  -webkit-backdrop-filter: var(--glass-blur-light) !important;
+}
+
+.bg-gray-800,
+.bg-gray-900,
+.bg-slate-800,
+.bg-slate-900 {
+  background: var(--card) !important;
+}
+
+/* Text color overrides */
+.text-gray-900,
+.text-slate-900 {
+  color: var(--foreground) !important;
+}
+
+.text-gray-600,
+.text-gray-700,
+.text-slate-600,
+.text-slate-700 {
+  color: var(--muted-foreground) !important;
+}
+
+/* Border color overrides */
+.border-gray-200,
+.border-gray-300,
+.border-slate-200,
+.border-slate-300 {
+  border-color: var(--border) !important;
+}
+
+/* ============================================================================= */
+/* MEDICAL-SPECIFIC COMPONENTS */
+/* ============================================================================= */
+
+/* Georgian transcription components */
+[class*="georgian"],
+[class*="transcription"],
+[class*="mediscribe"] {
+  background: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border: 1px solid var(--border) !important;
+  backdrop-filter: blur(10px) saturate(1.15) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(1.15) !important;
+}
+
+/* Medical calculator components */
+[class*="calculator"],
+[class*="medical"] {
+  background: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Premium medical cards */
+.premium-card,
+.medical-card {
+  background: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border: 1px solid var(--border) !important;
+  backdrop-filter: blur(12px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.2) !important;
+  box-shadow: 0 8px 32px oklch(from var(--primary) l c h / 0.1) !important;
+}
+
+/* ============================================================================= */
+/* SEARCH AND CONTENT AREAS */
+/* ============================================================================= */
+
+/* Search components */
+[class*="search"],
+[role="search"],
+[type="search"] {
+  background: var(--input) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+  backdrop-filter: blur(8px) saturate(1.1) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(1.1) !important;
+}
+
+/* Content areas */
+[class*="content"],
+[class*="workspace"],
+.main-content {
+  background: transparent !important;
+  color: var(--foreground) !important;
+}
+
+/* ============================================================================= */
+/* RESPONSIVE BEHAVIOR */
+/* ============================================================================= */
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  /* Reduce backdrop blur on mobile for performance */
+  .glass-container,
+  .glass-interactive {
+    backdrop-filter: blur(8px) saturate(1.1) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(1.1) !important;
+  }
+  
+  /* Ensure touch targets maintain glassmorphism */
+  button,
+  .btn,
+  [role="button"] {
+    min-height: 44px !important;
+    backdrop-filter: blur(6px) saturate(1.05) !important;
+    -webkit-backdrop-filter: blur(6px) saturate(1.05) !important;
+  }
+}
+
+/* ============================================================================= */
+/* ANIMATION ENHANCEMENTS */
+/* ============================================================================= */
+
+/* Smooth transitions for all theme changes */
+* {
+  transition-property: background-color, border-color, color, box-shadow !important;
+  transition-duration: 0.2s !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Hover effects for interactive elements */
+.glass-interactive:hover,
+button:hover,
+.btn:hover,
+[role="button"]:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px oklch(from var(--primary) l c h / 0.2) !important;
+}
+
+/* Focus states */
+*:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px var(--ring) !important;
+}
+
+/* ============================================================================= */
+/* FALLBACK SUPPORT */
+/* ============================================================================= */
+
+/* Fallback for browsers that don't support backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-container,
+  .glass-interactive {
+    background: oklch(0.96 0.015 242 / 0.9) !important;
+  }
+  
+  .dark .glass-container,
+  .dark .glass-interactive {
+    background: oklch(0.28 0.025 242 / 0.9) !important;
+  }
+}
+
+/* ============================================================================= */
+/* MAXIMUM SPECIFICITY OVERRIDES - ENSURE THEME VARIABLES ALWAYS WIN */
+/* ============================================================================= */
+
+/* Force theme variables on all elements - highest specificity */
+html body * {
+  /* Ensure no hardcoded colors can override theme variables */
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  --tw-border-opacity: 1;
+}
+
+/* Component-specific gradient overrides */
+[style*="background: linear-gradient"],
+[style*="background-image: linear-gradient"] {
+  /* Let inline styles use CSS variables from theme-config.css */
+}
+
+/* Tailwind utility class overrides */
+.from-red-500,
+.from-red-600,
+.to-red-500,
+.to-red-600 {
+  /* Redirect Tailwind gradient classes to use theme variables */
+  --tw-gradient-from: var(--cardiology-red-primary) !important;
+  --tw-gradient-to: var(--cardiology-red-secondary) !important;
+}
+
+.from-blue-500,
+.from-blue-600,
+.to-blue-500,
+.to-blue-600 {
+  --tw-gradient-from: var(--cardiology-blue-primary) !important;
+  --tw-gradient-to: var(--cardiology-blue-secondary) !important;
+}
+
+.from-orange-500,
+.from-orange-600,
+.to-orange-500,  
+.to-orange-600 {
+  --tw-gradient-from: var(--cardiology-orange-primary) !important;
+  --tw-gradient-to: var(--cardiology-orange-secondary) !important;
+}
+
+.from-emerald-500,
+.from-emerald-600,
+.to-emerald-500,
+.to-emerald-600 {
+  --tw-gradient-from: var(--cardiology-emerald-primary) !important;
+  --tw-gradient-to: var(--cardiology-emerald-secondary) !important;
+}
+
+/* Sidebar gradient class overrides */
+.from-blue-600.to-indigo-600 {
+  background: var(--gradient-blue) !important;
+}
+
+.from-blue-600.to-cyan-600 {
+  background: var(--gradient-cyan) !important;
+}
+
+.from-purple-600.to-violet-600 {
+  background: var(--gradient-purple) !important;
+}
+
+.from-red-600.to-rose-600 {
+  background: var(--gradient-red) !important;
+}
+
+/* Additional utility overrides */
+.bg-primary {
+  background-color: var(--primary) !important;
+}
+
+.text-primary {
+  color: var(--primary) !important;
+}
+
+.border-primary {
+  border-color: var(--primary) !important;
+}
+
+/* Emergency override - if something still shows hardcoded colors */
+.theme-override-emergency {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Fallback definitions are now handled by theme-config.css */
+
+/* ============================================================================= */
+/* UNIVERSAL BACKGROUND OVERRIDES - MAXIMUM COVERAGE */
+/* ============================================================================= */
+
+/* Force ALL remaining Tailwind background classes to use theme variables */
+[class*="bg-white"],
+[class*="bg-gray-"],
+[class*="bg-slate-"],
+[class*="bg-neutral-"],
+[class*="bg-stone-"],
+[class*="bg-zinc-"] {
+  background: var(--component-card) !important;
+  backdrop-filter: var(--glass-blur-light) !important;
+  -webkit-backdrop-filter: var(--glass-blur-light) !important;
+  border: 1px solid var(--component-card-border) !important;
+}
+
+/* Hover states for overridden backgrounds */
+[class*="bg-white"]:hover,
+[class*="bg-gray-"]:hover,
+[class*="bg-slate-"]:hover,
+[class*="bg-neutral-"]:hover,
+[class*="bg-stone-"]:hover,
+[class*="bg-zinc-"]:hover {
+  background: var(--component-card-hover) !important;
+  backdrop-filter: var(--glass-blur-medium) !important;
+  -webkit-backdrop-filter: var(--glass-blur-medium) !important;
+}
+
+/* Force border colors to use theme variables */
+[class*="border-gray-"],
+[class*="border-slate-"],
+[class*="border-white"] {
+  border-color: var(--glass-border-medium) !important;
+}
+
+/* ============================================================================= */
+/* CHART AND DATA VISUALIZATION OVERRIDES */
+/* ============================================================================= */
+
+/* Chart container styling */
+[class*="recharts"],
+.chart-container,
+[class*="chart"] {
+  background: var(--chart-background) !important;
+}
+
+/* Override hardcoded chart colors */
+.recharts-line {
+  stroke: var(--chart-line-1) !important;
+}
+
+.recharts-area {
+  fill: var(--chart-area-1) !important;
+}
+
+.recharts-cartesian-grid line {
+  stroke: var(--chart-grid) !important;
+}
+
+.recharts-xaxis text,
+.recharts-yaxis text {
+  fill: var(--chart-axis) !important;
+}
+
+/* Force tooltip backgrounds */
+.recharts-default-tooltip {
+  background: var(--tooltip-background) !important;
+  border: 1px solid var(--tooltip-border) !important;
+  color: var(--tooltip-foreground) !important;
+  backdrop-filter: var(--glass-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--glass-blur-heavy) !important;
+}
+
+/* ============================================================================= */
+/* STATUS INDICATOR OVERRIDES */
+/* ============================================================================= */
+
+/* Force status colors */
+.bg-green-500,
+.text-green-500,
+[class*="status-online"] {
+  background-color: var(--status-online) !important;
+  color: var(--status-online) !important;
+}
+
+.bg-red-500,
+.text-red-500,
+[class*="status-error"] {
+  background-color: var(--status-error) !important;
+  color: var(--status-error) !important;
+}
+
+.bg-yellow-500,
+.text-yellow-500,
+[class*="status-warning"] {
+  background-color: var(--status-warning) !important;
+  color: var(--status-warning) !important;
+}
+
+.bg-gray-400,
+.text-gray-400,
+[class*="status-offline"] {
+  background-color: var(--status-offline) !important;
+  color: var(--status-offline) !important;
+}
+
+/* ============================================================================= */
+/* AGGRESSIVE COLOR ENFORCEMENT - FORCE ALL COLORS TO THEME */
+/* ============================================================================= */
+
+/* Override ALL red/pink colors to use theme colors */
+[style*="rgb(239, 68, 68)"],
+[style*="rgb(220, 38, 38)"],
+[style*="rgb(185, 28, 28)"],
+[style*="rgb(248, 113, 113)"],
+[style*="rgb(252, 165, 165)"],
+[style*="rgb(254, 202, 202)"],
+[style*="rgb(239, 68, 68)"],
+[style*="#ef4444"],
+[style*="#dc2626"],
+[style*="#b91c1c"],
+[style*="#f87171"],
+[style*="#fca5a5"],
+[style*="#fecaca"],
+[style*="#fee2e2"],
+[style*="red"],
+[class*="bg-red"],
+[class*="text-red"],
+[class*="border-red"],
+.bg-red-50, .bg-red-100, .bg-red-200, .bg-red-300, .bg-red-400, .bg-red-500, .bg-red-600, .bg-red-700, .bg-red-800, .bg-red-900,
+.text-red-50, .text-red-100, .text-red-200, .text-red-300, .text-red-400, .text-red-500, .text-red-600, .text-red-700, .text-red-800, .text-red-900,
+.border-red-50, .border-red-100, .border-red-200, .border-red-300, .border-red-400, .border-red-500, .border-red-600, .border-red-700, .border-red-800, .border-red-900 {
+  background-color: var(--destructive) !important;
+  color: var(--destructive-foreground) !important;
+  border-color: var(--destructive) !important;
+}
+
+/* Override ALL green colors to use theme colors */
+[style*="rgb(16, 185, 129)"],
+[style*="rgb(5, 150, 105)"],
+[style*="rgb(4, 120, 87)"],
+[style*="rgb(52, 211, 153)"],
+[style*="rgb(110, 231, 183)"],
+[style*="rgb(167, 243, 208)"],
+[style*="#10b981"],
+[style*="#059669"],
+[style*="#047857"],
+[style*="#34d399"],
+[style*="#6ee7b7"],
+[style*="#a7f3d0"],
+[style*="#d1fae5"],
+[style*="green"],
+[style*="emerald"],
+[class*="bg-green"],
+[class*="text-green"],
+[class*="border-green"],
+[class*="bg-emerald"],
+[class*="text-emerald"],
+[class*="border-emerald"],
+.bg-green-50, .bg-green-100, .bg-green-200, .bg-green-300, .bg-green-400, .bg-green-500, .bg-green-600, .bg-green-700, .bg-green-800, .bg-green-900,
+.text-green-50, .text-green-100, .text-green-200, .text-green-300, .text-green-400, .text-green-500, .text-green-600, .text-green-700, .text-green-800, .text-green-900,
+.border-green-50, .border-green-100, .border-green-200, .border-green-300, .border-green-400, .border-green-500, .border-green-600, .border-green-700, .border-green-800, .border-green-900,
+.bg-emerald-50, .bg-emerald-100, .bg-emerald-200, .bg-emerald-300, .bg-emerald-400, .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
+.text-emerald-50, .text-emerald-100, .text-emerald-200, .text-emerald-300, .text-emerald-400, .text-emerald-500, .text-emerald-600, .text-emerald-700, .text-emerald-800, .text-emerald-900,
+.border-emerald-50, .border-emerald-100, .border-emerald-200, .border-emerald-300, .border-emerald-400, .border-emerald-500, .border-emerald-600, .border-emerald-700, .border-emerald-800, .border-emerald-900 {
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+  border-color: var(--accent) !important;
+}
+
+/* Override ALL blue colors to use theme primary colors */
+[style*="rgb(59, 130, 246)"],
+[style*="rgb(37, 99, 235)"],
+[style*="rgb(29, 78, 216)"],
+[style*="rgb(96, 165, 250)"],
+[style*="rgb(147, 197, 253)"],
+[style*="rgb(191, 219, 254)"],
+[style*="rgb(219, 234, 254)"],
+[style*="#3b82f6"],
+[style*="#2563eb"],
+[style*="#1d4ed8"],
+[style*="#60a5fa"],
+[style*="#93c5fd"],
+[style*="#bfdbfe"],
+[style*="#dbeafe"],
+[style*="blue"],
+[class*="bg-blue"],
+[class*="text-blue"],
+[class*="border-blue"],
+[class*="bg-sky"],
+[class*="text-sky"],
+[class*="border-sky"],
+[class*="bg-cyan"],
+[class*="text-cyan"],
+[class*="border-cyan"],
+.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400, .bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+.text-blue-50, .text-blue-100, .text-blue-200, .text-blue-300, .text-blue-400, .text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
+.border-blue-50, .border-blue-100, .border-blue-200, .border-blue-300, .border-blue-400, .border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900,
+.bg-sky-50, .bg-sky-100, .bg-sky-200, .bg-sky-300, .bg-sky-400, .bg-sky-500, .bg-sky-600, .bg-sky-700, .bg-sky-800, .bg-sky-900,
+.text-sky-50, .text-sky-100, .text-sky-200, .text-sky-300, .text-sky-400, .text-sky-500, .text-sky-600, .text-sky-700, .text-sky-800, .text-sky-900,
+.border-sky-50, .border-sky-100, .border-sky-200, .border-sky-300, .border-sky-400, .border-sky-500, .border-sky-600, .border-sky-700, .border-sky-800, .border-sky-900,
+.bg-cyan-50, .bg-cyan-100, .bg-cyan-200, .bg-cyan-300, .bg-cyan-400, .bg-cyan-500, .bg-cyan-600, .bg-cyan-700, .bg-cyan-800, .bg-cyan-900,
+.text-cyan-50, .text-cyan-100, .text-cyan-200, .text-cyan-300, .text-cyan-400, .text-cyan-500, .text-cyan-600, .text-cyan-700, .text-cyan-800, .text-cyan-900,
+.border-cyan-50, .border-cyan-100, .border-cyan-200, .border-cyan-300, .border-cyan-400, .border-cyan-500, .border-cyan-600, .border-cyan-700, .border-cyan-800, .border-cyan-900 {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-color: var(--primary) !important;
+}
+
+/* Override ALL purple/violet/indigo colors to use secondary colors */
+[style*="rgb(139, 92, 246)"],
+[style*="rgb(124, 58, 237)"],
+[style*="rgb(109, 40, 217)"],
+[style*="rgb(168, 139, 250)"],
+[style*="rgb(196, 181, 253)"],
+[style*="rgb(221, 214, 254)"],
+[style*="rgb(237, 233, 254)"],
+[style*="#8b5cf6"],
+[style*="#7c3aed"],
+[style*="#6d28d9"],
+[style*="#a855f7"],
+[style*="#c4b5fd"],
+[style*="#ddd6fe"],
+[style*="#ede9fe"],
+[style*="purple"],
+[style*="violet"],
+[style*="indigo"],
+[class*="bg-purple"],
+[class*="text-purple"],
+[class*="border-purple"],
+[class*="bg-violet"],
+[class*="text-violet"],
+[class*="border-violet"],
+[class*="bg-indigo"],
+[class*="text-indigo"],
+[class*="border-indigo"],
+.bg-purple-50, .bg-purple-100, .bg-purple-200, .bg-purple-300, .bg-purple-400, .bg-purple-500, .bg-purple-600, .bg-purple-700, .bg-purple-800, .bg-purple-900,
+.text-purple-50, .text-purple-100, .text-purple-200, .text-purple-300, .text-purple-400, .text-purple-500, .text-purple-600, .text-purple-700, .text-purple-800, .text-purple-900,
+.border-purple-50, .border-purple-100, .border-purple-200, .border-purple-300, .border-purple-400, .border-purple-500, .border-purple-600, .border-purple-700, .border-purple-800, .border-purple-900,
+.bg-violet-50, .bg-violet-100, .bg-violet-200, .bg-violet-300, .bg-violet-400, .bg-violet-500, .bg-violet-600, .bg-violet-700, .bg-violet-800, .bg-violet-900,
+.text-violet-50, .text-violet-100, .text-violet-200, .text-violet-300, .text-violet-400, .text-violet-500, .text-violet-600, .text-violet-700, .text-violet-800, .text-violet-900,
+.border-violet-50, .border-violet-100, .border-violet-200, .border-violet-300, .border-violet-400, .border-violet-500, .border-violet-600, .border-violet-700, .border-violet-800, .border-violet-900,
+.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400, .bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900,
+.text-indigo-50, .text-indigo-100, .text-indigo-200, .text-indigo-300, .text-indigo-400, .text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900,
+.border-indigo-50, .border-indigo-100, .border-indigo-200, .border-indigo-300, .border-indigo-400, .border-indigo-500, .border-indigo-600, .border-indigo-700, .border-indigo-800, .border-indigo-900 {
+  background-color: var(--secondary) !important;
+  color: var(--secondary-foreground) !important;
+  border-color: var(--secondary) !important;
+}
+
+/* Override ALL pink/rose colors to use primary colors */
+[style*="rgb(244, 63, 94)"],
+[style*="rgb(225, 29, 72)"],
+[style*="rgb(190, 18, 60)"],
+[style*="rgb(251, 113, 133)"],
+[style*="rgb(252, 165, 165)"],
+[style*="rgb(254, 202, 202)"],
+[style*="rgb(255, 228, 230)"],
+[style*="#f43f5e"],
+[style*="#e11d48"],
+[style*="#be123c"],
+[style*="#fb7185"],
+[style*="#fca5a5"],
+[style*="#fecaca"],
+[style*="#ffe4e6"],
+[style*="pink"],
+[style*="rose"],
+[class*="bg-pink"],
+[class*="text-pink"],
+[class*="border-pink"],
+[class*="bg-rose"],
+[class*="text-rose"],
+[class*="border-rose"],
+.bg-pink-50, .bg-pink-100, .bg-pink-200, .bg-pink-300, .bg-pink-400, .bg-pink-500, .bg-pink-600, .bg-pink-700, .bg-pink-800, .bg-pink-900,
+.text-pink-50, .text-pink-100, .text-pink-200, .text-pink-300, .text-pink-400, .text-pink-500, .text-pink-600, .text-pink-700, .text-pink-800, .text-pink-900,
+.border-pink-50, .border-pink-100, .border-pink-200, .border-pink-300, .border-pink-400, .border-pink-500, .border-pink-600, .border-pink-700, .border-pink-800, .border-pink-900,
+.bg-rose-50, .bg-rose-100, .bg-rose-200, .bg-rose-300, .bg-rose-400, .bg-rose-500, .bg-rose-600, .bg-rose-700, .bg-rose-800, .bg-rose-900,
+.text-rose-50, .text-rose-100, .text-rose-200, .text-rose-300, .text-rose-400, .text-rose-500, .text-rose-600, .text-rose-700, .text-rose-800, .text-rose-900,
+.border-rose-50, .border-rose-100, .border-rose-200, .border-rose-300, .border-rose-400, .border-rose-500, .border-rose-600, .border-rose-700, .border-rose-800, .border-rose-900 {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-color: var(--primary) !important;
+}
+
+/* Override ALL yellow/orange/amber colors to use accent colors */
+[style*="rgb(245, 158, 11)"],
+[style*="rgb(217, 119, 6)"],
+[style*="rgb(180, 83, 9)"],
+[style*="rgb(251, 191, 36)"],
+[style*="rgb(252, 211, 77)"],
+[style*="rgb(254, 240, 138)"],
+[style*="rgb(255, 251, 235)"],
+[style*="#f59e0b"],
+[style*="#d97706"],
+[style*="#b45309"],
+[style*="#fbbf24"],
+[style*="#fcd34d"],
+[style*="#fef08a"],
+[style*="#fffbeb"],
+[style*="yellow"],
+[style*="orange"],
+[style*="amber"],
+[class*="bg-yellow"],
+[class*="text-yellow"],
+[class*="border-yellow"],
+[class*="bg-orange"],
+[class*="text-orange"],
+[class*="border-orange"],
+[class*="bg-amber"],
+[class*="text-amber"],
+[class*="border-amber"],
+.bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500, .bg-yellow-600, .bg-yellow-700, .bg-yellow-800, .bg-yellow-900,
+.text-yellow-50, .text-yellow-100, .text-yellow-200, .text-yellow-300, .text-yellow-400, .text-yellow-500, .text-yellow-600, .text-yellow-700, .text-yellow-800, .text-yellow-900,
+.border-yellow-50, .border-yellow-100, .border-yellow-200, .border-yellow-300, .border-yellow-400, .border-yellow-500, .border-yellow-600, .border-yellow-700, .border-yellow-800, .border-yellow-900,
+.bg-orange-50, .bg-orange-100, .bg-orange-200, .bg-orange-300, .bg-orange-400, .bg-orange-500, .bg-orange-600, .bg-orange-700, .bg-orange-800, .bg-orange-900,
+.text-orange-50, .text-orange-100, .text-orange-200, .text-orange-300, .text-orange-400, .text-orange-500, .text-orange-600, .text-orange-700, .text-orange-800, .text-orange-900,
+.border-orange-50, .border-orange-100, .border-orange-200, .border-orange-300, .border-orange-400, .border-orange-500, .border-orange-600, .border-orange-700, .border-orange-800, .border-orange-900,
+.bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500, .bg-amber-600, .bg-amber-700, .bg-amber-800, .bg-amber-900,
+.text-amber-50, .text-amber-100, .text-amber-200, .text-amber-300, .text-amber-400, .text-amber-500, .text-amber-600, .text-amber-700, .text-amber-800, .text-amber-900,
+.border-amber-50, .border-amber-100, .border-amber-200, .border-amber-300, .border-amber-400, .border-amber-500, .border-amber-600, .border-amber-700, .border-amber-800, .border-amber-900 {
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+  border-color: var(--accent) !important;
+}
+
+/* ============================================================================= */
+/* HARDCODED HEX COLOR OVERRIDES */
+/* ============================================================================= */
+
+/* Common hardcoded colors - force to theme variables */
+[style*="#ffffff"],
+[style*="#fff"] {
+  background: var(--component-card) !important;
+  color: var(--foreground) !important;
+}
+
+[style*="#000000"],
+[style*="#000"] {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+/* Override common chart hex colors */
+[style*="#10b981"] { color: var(--accent) !important; background: var(--accent) !important; }
+[style*="#ef4444"] { color: var(--destructive) !important; background: var(--destructive) !important; }
+[style*="#f59e0b"] { color: var(--accent) !important; background: var(--accent) !important; }
+[style*="#3b82f6"] { color: var(--primary) !important; background: var(--primary) !important; }
+[style*="#8b5cf6"] { color: var(--secondary) !important; background: var(--secondary) !important; }
+[style*="#6b7280"] { color: var(--muted-foreground) !important; background: var(--muted) !important; }
+
+/* FINAL NUCLEAR OVERRIDE - CATCH ALL REMAINING COLORS */
+[style*="rgb("],
+[style*="rgba("],
+[style*="hsl("],
+[style*="hsla("],
+[style*="#"] {
+  /* Let theme variables take precedence over any inline styles */
+}
+
+/* Emergency last resort - override ANY element that still shows wrong colors */
+.theme-emergency-override,
+[data-theme-override="true"] {
+  background: var(--card) !important;
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Target Lucide icons specifically - preserve their design */
+[class*="lucide"],
+[data-lucide],
+.lucide,
+svg[class*="lucide"] {
+  color: var(--foreground) !important;
+  /* Let Lucide icons maintain their default fill/stroke behavior */
+}
+
+/* Override any remaining dot indicators, badges, or status elements */
+[class*="dot"],
+[class*="indicator"],
+[class*="status-dot"],
+[class*="badge"],
+[role="status"],
+[aria-label*="status"],
+.status,
+.badge,
+.indicator {
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-color: var(--primary) !important;
+}
+
+/* Fix specific text elements that should use theme colors */
+p,
+label,
+a:not([class*="icon"]):not([class*="lucide"]) {
+  color: var(--foreground) !important;
+}
+
+/* Ensure buttons with specific roles use theme colors */
+[aria-label*="Quick"],
+[aria-label*="Consult"],
+[class*="quick"],
+[class*="consult"] {
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-color: var(--primary) !important;
+}
+
+/* Force all text containers and content areas to blend seamlessly */
+h1, h2, h3, h4, h5, h6,
+p, span:not([class*="icon"]):not([class*="lucide"]),
+div:not([class*="icon"]):not([class*="lucide"]):not([class*="gradient"]),
+[class*="text-"],
+[class*="title"],
+[class*="heading"],
+[class*="label"],
+[class*="description"],
+[class*="welcome"],
+[class*="professional"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: var(--foreground) !important;
+}
+
+/* Ensure all content containers are transparent */
+[class*="workspace-content"],
+[class*="main-content"],
+[class*="page-content"],
+[data-testid*="content"],
+[role="main"],
+[role="article"],
+[role="section"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: var(--foreground) !important;
+}
+
+/* ============================================================================= */
+/* NUCLEAR OPTION - OVERRIDE EVERYTHING THAT MIGHT HAVE COLORS */
+/* ============================================================================= */
+
+/* Force ALL elements with any background to blend with theme */
+*[style*="background"],
+*[style*="Background"],
+*[style*="BACKGROUND"],
+*[class*="bg-"],
+*[class*="BG-"],
+.card,
+.Card,
+[class*="card"],
+[class*="Card"],
+.badge,
+.Badge,
+[class*="badge"],
+[class*="Badge"],
+.alert,
+.Alert,
+[class*="alert"],
+[class*="Alert"],
+/* Target main content containers */
+main,
+section,
+article,
+[class*="content"],
+[class*="container"],
+[class*="wrapper"],
+[class*="panel"],
+[class*="workspace"],
+/* Target specific white/light backgrounds */
+[class*="white"],
+[class*="light"],
+[style*="white"],
+[style*="rgb(255"],
+[style*="rgba(255"] {
+  /* Force background to blend seamlessly with main theme */
+  background-color: transparent !important;
+  background: transparent !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* For elements that absolutely need a background, use theme background */
+button,
+.btn,
+[role="button"],
+[type="button"],
+[type="submit"],
+input,
+textarea,
+select {
+  background-color: var(--background) !important;
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Force ALL text colors to use theme */
+*[style*="color"],
+*[style*="Color"],
+*[style*="COLOR"],
+*[class*="text-"],
+*[class*="TEXT-"],
+h1, h2, h3, h4, h5, h6,
+p, span, div, a, strong, em {
+  color: var(--foreground) !important;
+}
+
+/* Override specific component types aggressively */
+[data-testid*="card"],
+[data-testid*="Card"],
+[data-testid*="button"],
+[data-testid*="Button"],
+[data-testid*="badge"],
+[data-testid*="Badge"],
+[aria-label*="card"],
+[aria-label*="Card"],
+[aria-label*="button"],
+[aria-label*="Button"] {
+  background: var(--card) !important;
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Override React component classes */
+[class*="react"],
+[class*="React"],
+[class*="component"],
+[class*="Component"] {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+/* Override all possible button states */
+button,
+.button,
+.btn,
+[role="button"],
+[type="button"],
+[type="submit"],
+input[type="button"],
+input[type="submit"] {
+  background: var(--primary) !important;
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-color: var(--primary) !important;
+}
+
+button:hover,
+.button:hover,
+.btn:hover,
+[role="button"]:hover,
+[type="button"]:hover,
+[type="submit"]:hover {
+  background: var(--secondary) !important;
+  background-color: var(--secondary) !important;
+  color: var(--secondary-foreground) !important;
+  border-color: var(--secondary) !important;
+}
+
+button:active,
+.button:active,
+.btn:active,
+[role="button"]:active,
+[type="button"]:active,
+[type="submit"]:active {
+  background: var(--accent) !important;
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+  border-color: var(--accent) !important;
+}
+
+/* Override SVG colors more carefully - preserve icon structure */
+svg {
+  color: var(--foreground) !important;
+}
+
+/* Only override stroke for path elements, preserve fill behavior */
+svg path {
+  stroke: currentColor !important;
+  /* Don't force fill - let icons maintain their design */
+}
+
+/* Override icons specifically */
+[class*="icon"],
+[class*="Icon"],
+[data-testid*="icon"],
+[data-testid*="Icon"],
+[aria-label*="icon"],
+[aria-label*="Icon"] {
+  color: var(--foreground) !important;
+}
+
+/* Override ALL possible status indicators */
+[class*="status"],
+[class*="Status"],
+[class*="state"],
+[class*="State"],
+[data-status],
+[data-state] {
+  background: var(--muted) !important;
+  color: var(--muted-foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* ============================================================================= */
+/* COMPLETE TAILWIND UTILITY CLASS OVERRIDES */
+/* ============================================================================= */
+
+/* Background color utility classes - ALL Tailwind BG classes */
+.bg-white { background: var(--tw-bg-white) !important; }
+.bg-gray-50 { background: var(--tw-bg-gray-50) !important; }
+.bg-gray-100 { background: var(--tw-bg-gray-100) !important; }
+.bg-gray-200 { background: var(--tw-bg-gray-200) !important; }
+.bg-gray-300 { background: var(--tw-bg-gray-300) !important; }
+.bg-gray-400 { background: var(--tw-bg-gray-400) !important; }
+.bg-gray-500 { background: var(--tw-bg-gray-500) !important; }
+.bg-gray-600 { background: var(--tw-bg-gray-600) !important; }
+.bg-gray-700 { background: var(--tw-bg-gray-700) !important; }
+.bg-gray-800 { background: var(--tw-bg-gray-800) !important; }
+.bg-gray-900 { background: var(--tw-bg-gray-900) !important; }
+
+.bg-slate-50 { background: var(--tw-bg-slate-50) !important; }
+.bg-slate-100 { background: var(--tw-bg-slate-100) !important; }
+.bg-slate-200 { background: var(--tw-bg-slate-200) !important; }
+.bg-slate-300 { background: var(--tw-bg-slate-300) !important; }
+.bg-slate-400 { background: var(--tw-bg-slate-400) !important; }
+.bg-slate-500 { background: var(--tw-bg-slate-500) !important; }
+.bg-slate-600 { background: var(--tw-bg-slate-600) !important; }
+.bg-slate-700 { background: var(--tw-bg-slate-700) !important; }
+.bg-slate-800 { background: var(--tw-bg-slate-800) !important; }
+.bg-slate-900 { background: var(--tw-bg-slate-900) !important; }
+
+.bg-neutral-50 { background: var(--tw-bg-neutral-50) !important; }
+.bg-neutral-100 { background: var(--tw-bg-neutral-100) !important; }
+.bg-neutral-200 { background: var(--tw-bg-neutral-200) !important; }
+.bg-neutral-300 { background: var(--tw-bg-neutral-300) !important; }
+.bg-neutral-400 { background: var(--tw-bg-neutral-400) !important; }
+.bg-neutral-500 { background: var(--tw-bg-neutral-500) !important; }
+.bg-neutral-600 { background: var(--tw-bg-neutral-600) !important; }
+.bg-neutral-700 { background: var(--tw-bg-neutral-700) !important; }
+.bg-neutral-800 { background: var(--tw-bg-neutral-800) !important; }
+.bg-neutral-900 { background: var(--tw-bg-neutral-900) !important; }
+
+.bg-stone-50 { background: var(--tw-bg-stone-50) !important; }
+.bg-stone-100 { background: var(--tw-bg-stone-100) !important; }
+.bg-stone-200 { background: var(--tw-bg-stone-200) !important; }
+.bg-stone-300 { background: var(--tw-bg-stone-300) !important; }
+.bg-stone-400 { background: var(--tw-bg-stone-400) !important; }
+.bg-stone-500 { background: var(--tw-bg-stone-500) !important; }
+.bg-stone-600 { background: var(--tw-bg-stone-600) !important; }
+.bg-stone-700 { background: var(--tw-bg-stone-700) !important; }
+.bg-stone-800 { background: var(--tw-bg-stone-800) !important; }
+.bg-stone-900 { background: var(--tw-bg-stone-900) !important; }
+
+.bg-zinc-50 { background: var(--tw-bg-zinc-50) !important; }
+.bg-zinc-100 { background: var(--tw-bg-zinc-100) !important; }
+.bg-zinc-200 { background: var(--tw-bg-zinc-200) !important; }
+.bg-zinc-300 { background: var(--tw-bg-zinc-300) !important; }
+.bg-zinc-400 { background: var(--tw-bg-zinc-400) !important; }
+.bg-zinc-500 { background: var(--tw-bg-zinc-500) !important; }
+.bg-zinc-600 { background: var(--tw-bg-zinc-600) !important; }
+.bg-zinc-700 { background: var(--tw-bg-zinc-700) !important; }
+.bg-zinc-800 { background: var(--tw-bg-zinc-800) !important; }
+.bg-zinc-900 { background: var(--tw-bg-zinc-900) !important; }
+
+/* Colored background classes */
+.bg-red-50 { background: var(--tw-bg-red-50) !important; }
+.bg-red-100 { background: var(--tw-bg-red-100) !important; }
+.bg-red-200 { background: var(--tw-bg-red-200) !important; }
+.bg-red-300 { background: var(--tw-bg-red-300) !important; }
+.bg-red-400 { background: var(--tw-bg-red-400) !important; }
+.bg-red-500 { background: var(--tw-bg-red-500) !important; }
+.bg-red-600 { background: var(--tw-bg-red-600) !important; }
+.bg-red-700 { background: var(--tw-bg-red-700) !important; }
+.bg-red-800 { background: var(--tw-bg-red-800) !important; }
+.bg-red-900 { background: var(--tw-bg-red-900) !important; }
+
+.bg-orange-50 { background: var(--tw-bg-orange-50) !important; }
+.bg-orange-100 { background: var(--tw-bg-orange-100) !important; }
+.bg-orange-200 { background: var(--tw-bg-orange-200) !important; }
+.bg-orange-300 { background: var(--tw-bg-orange-300) !important; }
+.bg-orange-400 { background: var(--tw-bg-orange-400) !important; }
+.bg-orange-500 { background: var(--tw-bg-orange-500) !important; }
+.bg-orange-600 { background: var(--tw-bg-orange-600) !important; }
+.bg-orange-700 { background: var(--tw-bg-orange-700) !important; }
+.bg-orange-800 { background: var(--tw-bg-orange-800) !important; }
+.bg-orange-900 { background: var(--tw-bg-orange-900) !important; }
+
+.bg-yellow-50 { background: var(--tw-bg-yellow-50) !important; }
+.bg-yellow-100 { background: var(--tw-bg-yellow-100) !important; }
+.bg-yellow-200 { background: var(--tw-bg-yellow-200) !important; }
+.bg-yellow-300 { background: var(--tw-bg-yellow-300) !important; }
+.bg-yellow-400 { background: var(--tw-bg-yellow-400) !important; }
+.bg-yellow-500 { background: var(--tw-bg-yellow-500) !important; }
+.bg-yellow-600 { background: var(--tw-bg-yellow-600) !important; }
+.bg-yellow-700 { background: var(--tw-bg-yellow-700) !important; }
+.bg-yellow-800 { background: var(--tw-bg-yellow-800) !important; }
+.bg-yellow-900 { background: var(--tw-bg-yellow-900) !important; }
+
+.bg-green-50 { background: var(--tw-bg-green-50) !important; }
+.bg-green-100 { background: var(--tw-bg-green-100) !important; }
+.bg-green-200 { background: var(--tw-bg-green-200) !important; }
+.bg-green-300 { background: var(--tw-bg-green-300) !important; }
+.bg-green-400 { background: var(--tw-bg-green-400) !important; }
+.bg-green-500 { background: var(--tw-bg-green-500) !important; }
+.bg-green-600 { background: var(--tw-bg-green-600) !important; }
+.bg-green-700 { background: var(--tw-bg-green-700) !important; }
+.bg-green-800 { background: var(--tw-bg-green-800) !important; }
+.bg-green-900 { background: var(--tw-bg-green-900) !important; }
+
+.bg-emerald-50 { background: var(--tw-bg-emerald-50) !important; }
+.bg-emerald-100 { background: var(--tw-bg-emerald-100) !important; }
+.bg-emerald-200 { background: var(--tw-bg-emerald-200) !important; }
+.bg-emerald-300 { background: var(--tw-bg-emerald-300) !important; }
+.bg-emerald-400 { background: var(--tw-bg-emerald-400) !important; }
+.bg-emerald-500 { background: var(--tw-bg-emerald-500) !important; }
+.bg-emerald-600 { background: var(--tw-bg-emerald-600) !important; }
+.bg-emerald-700 { background: var(--tw-bg-emerald-700) !important; }
+.bg-emerald-800 { background: var(--tw-bg-emerald-800) !important; }
+.bg-emerald-900 { background: var(--tw-bg-emerald-900) !important; }
+
+.bg-blue-50 { background: var(--tw-bg-blue-50) !important; }
+.bg-blue-100 { background: var(--tw-bg-blue-100) !important; }
+.bg-blue-200 { background: var(--tw-bg-blue-200) !important; }
+.bg-blue-300 { background: var(--tw-bg-blue-300) !important; }
+.bg-blue-400 { background: var(--tw-bg-blue-400) !important; }
+.bg-blue-500 { background: var(--tw-bg-blue-500) !important; }
+.bg-blue-600 { background: var(--tw-bg-blue-600) !important; }
+.bg-blue-700 { background: var(--tw-bg-blue-700) !important; }
+.bg-blue-800 { background: var(--tw-bg-blue-800) !important; }
+.bg-blue-900 { background: var(--tw-bg-blue-900) !important; }
+
+.bg-indigo-50 { background: var(--tw-bg-indigo-50) !important; }
+.bg-indigo-100 { background: var(--tw-bg-indigo-100) !important; }
+.bg-indigo-200 { background: var(--tw-bg-indigo-200) !important; }
+.bg-indigo-300 { background: var(--tw-bg-indigo-300) !important; }
+.bg-indigo-400 { background: var(--tw-bg-indigo-400) !important; }
+.bg-indigo-500 { background: var(--tw-bg-indigo-500) !important; }
+.bg-indigo-600 { background: var(--tw-bg-indigo-600) !important; }
+.bg-indigo-700 { background: var(--tw-bg-indigo-700) !important; }
+.bg-indigo-800 { background: var(--tw-bg-indigo-800) !important; }
+.bg-indigo-900 { background: var(--tw-bg-indigo-900) !important; }
+
+.bg-violet-50 { background: var(--tw-bg-violet-50) !important; }
+.bg-violet-100 { background: var(--tw-bg-violet-100) !important; }
+.bg-violet-200 { background: var(--tw-bg-violet-200) !important; }
+.bg-violet-300 { background: var(--tw-bg-violet-300) !important; }
+.bg-violet-400 { background: var(--tw-bg-violet-400) !important; }
+.bg-violet-500 { background: var(--tw-bg-violet-500) !important; }
+.bg-violet-600 { background: var(--tw-bg-violet-600) !important; }
+.bg-violet-700 { background: var(--tw-bg-violet-700) !important; }
+.bg-violet-800 { background: var(--tw-bg-violet-800) !important; }
+.bg-violet-900 { background: var(--tw-bg-violet-900) !important; }
+
+.bg-purple-50 { background: var(--tw-bg-purple-50) !important; }
+.bg-purple-100 { background: var(--tw-bg-purple-100) !important; }
+.bg-purple-200 { background: var(--tw-bg-purple-200) !important; }
+.bg-purple-300 { background: var(--tw-bg-purple-300) !important; }
+.bg-purple-400 { background: var(--tw-bg-purple-400) !important; }
+.bg-purple-500 { background: var(--tw-bg-purple-500) !important; }
+.bg-purple-600 { background: var(--tw-bg-purple-600) !important; }
+.bg-purple-700 { background: var(--tw-bg-purple-700) !important; }
+.bg-purple-800 { background: var(--tw-bg-purple-800) !important; }
+.bg-purple-900 { background: var(--tw-bg-purple-900) !important; }
+
+.bg-fuchsia-50 { background: var(--tw-bg-fuchsia-50) !important; }
+.bg-fuchsia-100 { background: var(--tw-bg-fuchsia-100) !important; }
+.bg-fuchsia-200 { background: var(--tw-bg-fuchsia-200) !important; }
+.bg-fuchsia-300 { background: var(--tw-bg-fuchsia-300) !important; }
+.bg-fuchsia-400 { background: var(--tw-bg-fuchsia-400) !important; }
+.bg-fuchsia-500 { background: var(--tw-bg-fuchsia-500) !important; }
+.bg-fuchsia-600 { background: var(--tw-bg-fuchsia-600) !important; }
+.bg-fuchsia-700 { background: var(--tw-bg-fuchsia-700) !important; }
+.bg-fuchsia-800 { background: var(--tw-bg-fuchsia-800) !important; }
+.bg-fuchsia-900 { background: var(--tw-bg-fuchsia-900) !important; }
+
+.bg-pink-50 { background: var(--tw-bg-pink-50) !important; }
+.bg-pink-100 { background: var(--tw-bg-pink-100) !important; }
+.bg-pink-200 { background: var(--tw-bg-pink-200) !important; }
+.bg-pink-300 { background: var(--tw-bg-pink-300) !important; }
+.bg-pink-400 { background: var(--tw-bg-pink-400) !important; }
+.bg-pink-500 { background: var(--tw-bg-pink-500) !important; }
+.bg-pink-600 { background: var(--tw-bg-pink-600) !important; }
+.bg-pink-700 { background: var(--tw-bg-pink-700) !important; }
+.bg-pink-800 { background: var(--tw-bg-pink-800) !important; }
+.bg-pink-900 { background: var(--tw-bg-pink-900) !important; }
+
+.bg-rose-50 { background: var(--tw-bg-rose-50) !important; }
+.bg-rose-100 { background: var(--tw-bg-rose-100) !important; }
+.bg-rose-200 { background: var(--tw-bg-rose-200) !important; }
+.bg-rose-300 { background: var(--tw-bg-rose-300) !important; }
+.bg-rose-400 { background: var(--tw-bg-rose-400) !important; }
+.bg-rose-500 { background: var(--tw-bg-rose-500) !important; }
+.bg-rose-600 { background: var(--tw-bg-rose-600) !important; }
+.bg-rose-700 { background: var(--tw-bg-rose-700) !important; }
+.bg-rose-800 { background: var(--tw-bg-rose-800) !important; }
+.bg-rose-900 { background: var(--tw-bg-rose-900) !important; }
+
+/* Text color utility classes - ALL Tailwind text classes */
+.text-white { color: var(--tw-text-white) !important; }
+.text-black { color: var(--tw-text-black) !important; }
+
+.text-gray-50 { color: var(--tw-text-gray-50) !important; }
+.text-gray-100 { color: var(--tw-text-gray-100) !important; }
+.text-gray-200 { color: var(--tw-text-gray-200) !important; }
+.text-gray-300 { color: var(--tw-text-gray-300) !important; }
+.text-gray-400 { color: var(--tw-text-gray-400) !important; }
+.text-gray-500 { color: var(--tw-text-gray-500) !important; }
+.text-gray-600 { color: var(--tw-text-gray-600) !important; }
+.text-gray-700 { color: var(--tw-text-gray-700) !important; }
+.text-gray-800 { color: var(--tw-text-gray-800) !important; }
+.text-gray-900 { color: var(--tw-text-gray-900) !important; }
+
+.text-slate-50 { color: var(--tw-text-slate-50) !important; }
+.text-slate-100 { color: var(--tw-text-slate-100) !important; }
+.text-slate-200 { color: var(--tw-text-slate-200) !important; }
+.text-slate-300 { color: var(--tw-text-slate-300) !important; }
+.text-slate-400 { color: var(--tw-text-slate-400) !important; }
+.text-slate-500 { color: var(--tw-text-slate-500) !important; }
+.text-slate-600 { color: var(--tw-text-slate-600) !important; }
+.text-slate-700 { color: var(--tw-text-slate-700) !important; }
+.text-slate-800 { color: var(--tw-text-slate-800) !important; }
+.text-slate-900 { color: var(--tw-text-slate-900) !important; }
+
+.text-neutral-50 { color: var(--tw-text-neutral-50) !important; }
+.text-neutral-100 { color: var(--tw-text-neutral-100) !important; }
+.text-neutral-200 { color: var(--tw-text-neutral-200) !important; }
+.text-neutral-300 { color: var(--tw-text-neutral-300) !important; }
+.text-neutral-400 { color: var(--tw-text-neutral-400) !important; }
+.text-neutral-500 { color: var(--tw-text-neutral-500) !important; }
+.text-neutral-600 { color: var(--tw-text-neutral-600) !important; }
+.text-neutral-700 { color: var(--tw-text-neutral-700) !important; }
+.text-neutral-800 { color: var(--tw-text-neutral-800) !important; }
+.text-neutral-900 { color: var(--tw-text-neutral-900) !important; }
+
+.text-stone-50 { color: var(--tw-text-stone-50) !important; }
+.text-stone-100 { color: var(--tw-text-stone-100) !important; }
+.text-stone-200 { color: var(--tw-text-stone-200) !important; }
+.text-stone-300 { color: var(--tw-text-stone-300) !important; }
+.text-stone-400 { color: var(--tw-text-stone-400) !important; }
+.text-stone-500 { color: var(--tw-text-stone-500) !important; }
+.text-stone-600 { color: var(--tw-text-stone-600) !important; }
+.text-stone-700 { color: var(--tw-text-stone-700) !important; }
+.text-stone-800 { color: var(--tw-text-stone-800) !important; }
+.text-stone-900 { color: var(--tw-text-stone-900) !important; }
+
+.text-zinc-50 { color: var(--tw-text-zinc-50) !important; }
+.text-zinc-100 { color: var(--tw-text-zinc-100) !important; }
+.text-zinc-200 { color: var(--tw-text-zinc-200) !important; }
+.text-zinc-300 { color: var(--tw-text-zinc-300) !important; }
+.text-zinc-400 { color: var(--tw-text-zinc-400) !important; }
+.text-zinc-500 { color: var(--tw-text-zinc-500) !important; }
+.text-zinc-600 { color: var(--tw-text-zinc-600) !important; }
+.text-zinc-700 { color: var(--tw-text-zinc-700) !important; }
+.text-zinc-800 { color: var(--tw-text-zinc-800) !important; }
+.text-zinc-900 { color: var(--tw-text-zinc-900) !important; }
+
+/* Colored text classes */
+.text-red-500 { color: var(--tw-text-red-500) !important; }
+.text-red-600 { color: var(--tw-text-red-600) !important; }
+.text-red-700 { color: var(--tw-text-red-700) !important; }
+.text-orange-500 { color: var(--tw-text-orange-500) !important; }
+.text-orange-600 { color: var(--tw-text-orange-600) !important; }
+.text-yellow-500 { color: var(--tw-text-yellow-500) !important; }
+.text-yellow-600 { color: var(--tw-text-yellow-600) !important; }
+.text-green-500 { color: var(--tw-text-green-500) !important; }
+.text-green-600 { color: var(--tw-text-green-600) !important; }
+.text-emerald-500 { color: var(--tw-text-emerald-500) !important; }
+.text-emerald-600 { color: var(--tw-text-emerald-600) !important; }
+.text-blue-500 { color: var(--tw-text-blue-500) !important; }
+.text-blue-600 { color: var(--tw-text-blue-600) !important; }
+.text-indigo-500 { color: var(--tw-text-indigo-500) !important; }
+.text-indigo-600 { color: var(--tw-text-indigo-600) !important; }
+.text-violet-500 { color: var(--tw-text-violet-500) !important; }
+.text-violet-600 { color: var(--tw-text-violet-600) !important; }
+.text-purple-500 { color: var(--tw-text-purple-500) !important; }
+.text-purple-600 { color: var(--tw-text-purple-600) !important; }
+
+/* Border color utility classes */
+.border-white { border-color: var(--tw-border-white) !important; }
+.border-gray-100 { border-color: var(--tw-border-gray-100) !important; }
+.border-gray-200 { border-color: var(--tw-border-gray-200) !important; }
+.border-gray-300 { border-color: var(--tw-border-gray-300) !important; }
+.border-gray-400 { border-color: var(--tw-border-gray-400) !important; }
+.border-gray-500 { border-color: var(--tw-border-gray-500) !important; }
+.border-gray-600 { border-color: var(--tw-border-gray-600) !important; }
+.border-gray-700 { border-color: var(--tw-border-gray-700) !important; }
+.border-slate-100 { border-color: var(--tw-border-slate-100) !important; }
+.border-slate-200 { border-color: var(--tw-border-slate-200) !important; }
+.border-slate-300 { border-color: var(--tw-border-slate-300) !important; }
+.border-neutral-200 { border-color: var(--tw-border-neutral-200) !important; }
+.border-neutral-300 { border-color: var(--tw-border-neutral-300) !important; }
+.border-stone-200 { border-color: var(--tw-border-stone-200) !important; }
+.border-stone-300 { border-color: var(--tw-border-stone-300) !important; }
+.border-zinc-200 { border-color: var(--tw-border-zinc-200) !important; }
+.border-zinc-300 { border-color: var(--tw-border-zinc-300) !important; }
+
+/* Colored border classes */
+.border-red-500 { border-color: var(--tw-border-red-500) !important; }
+.border-orange-500 { border-color: var(--tw-border-orange-500) !important; }
+.border-yellow-500 { border-color: var(--tw-border-yellow-500) !important; }
+.border-green-500 { border-color: var(--tw-border-green-500) !important; }
+.border-emerald-500 { border-color: var(--tw-border-emerald-500) !important; }
+.border-blue-500 { border-color: var(--tw-border-blue-500) !important; }
+.border-indigo-500 { border-color: var(--tw-border-indigo-500) !important; }
+.border-violet-500 { border-color: var(--tw-border-violet-500) !important; }
+.border-purple-500 { border-color: var(--tw-border-purple-500) !important; }
+
+/* All background classes with glassmorphism */
+.bg-white,
+.bg-gray-50,
+.bg-gray-100,
+.bg-slate-50,
+.bg-slate-100,
+.bg-neutral-50,
+.bg-neutral-100,
+.bg-stone-50,
+.bg-stone-100,
+.bg-zinc-50,
+.bg-zinc-100 {
+  backdrop-filter: var(--glass-blur-light) !important;
+  -webkit-backdrop-filter: var(--glass-blur-light) !important;
+}
+
+/* Semi-transparent backgrounds */
+[class*="bg-white/"],
+[class*="bg-gray-"][class*="/"],
+[class*="bg-slate-"][class*="/"],
+[class*="bg-neutral-"][class*="/"],
+[class*="bg-stone-"][class*="/"],
+[class*="bg-zinc-"][class*="/"] {
+  backdrop-filter: var(--glass-blur-medium) !important;
+  -webkit-backdrop-filter: var(--glass-blur-medium) !important;
+}
+
+/* Hover state improvements */
+.bg-white:hover,
+.bg-gray-50:hover,
+.bg-gray-100:hover,
+.bg-slate-50:hover,
+.bg-slate-100:hover,
+.bg-neutral-50:hover,
+.bg-neutral-100:hover,
+.bg-stone-50:hover,
+.bg-stone-100:hover,
+.bg-zinc-50:hover,
+.bg-zinc-100:hover {
+  backdrop-filter: var(--glass-blur-heavy) !important;
+  -webkit-backdrop-filter: var(--glass-blur-heavy) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ============================================================================= */
+/* UNIVERSAL HEX COLOR REPLACEMENTS */
+/* ============================================================================= */
+
+/* More comprehensive hex color overrides */
+[style*="#ffffff"],
+[style*="#FFFFFF"],
+[style*="#fff"],
+[style*="#FFF"] {
+  background: var(--component-card) !important;
+  color: var(--foreground) !important;
+}
+
+[style*="#000000"],
+[style*="#000"] {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+[style*="#f8fafc"],
+[style*="#f1f5f9"],
+[style*="#e2e8f0"],
+[style*="#cbd5e1"] {
+  background: var(--component-surface-primary) !important;
+  color: var(--foreground) !important;
+}
+
+[style*="#64748b"],
+[style*="#475569"],
+[style*="#334155"] {
+  color: var(--muted-foreground) !important;
+}
+
+/* Medical/chart specific colors */
+[style*="#10b981"],
+[style*="#059669"],
+[style*="#047857"] {
+  color: var(--status-success) !important;
+  background: var(--tw-bg-green-500) !important;
+}
+
+[style*="#ef4444"],
+[style*="#dc2626"],
+[style*="#b91c1c"] {
+  color: var(--status-error) !important;
+  background: var(--tw-bg-red-500) !important;
+}
+
+[style*="#f59e0b"],
+[style*="#d97706"],
+[style*="#b45309"] {
+  color: var(--status-warning) !important;
+  background: var(--tw-bg-orange-500) !important;
+}
+
+[style*="#3b82f6"],
+[style*="#2563eb"],
+[style*="#1d4ed8"] {
+  color: var(--cardiology-accent-blue) !important;
+  background: var(--tw-bg-blue-500) !important;
+}

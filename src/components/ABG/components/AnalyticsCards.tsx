@@ -140,7 +140,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       badge: {
         text: stats.totalResults > 50 ? 'High Volume' : stats.totalResults > 10 ? 'Active' : 'Light',
         variant: 'outline',
-        color: stats.totalResults > 50 ? 'text-green-600' : stats.totalResults > 10 ? 'text-blue-600' : 'text-gray-600'
+        color: stats.totalResults > 50 ? 'text-green-600' : stats.totalResults > 10 ? 'text-[var(--cardiology-accent-blue-dark)]' : 'text-[var(--foreground-tertiary)]'
       }
     },
     {
@@ -163,7 +163,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       badge: {
         text: stats.avgProcessingTime < 5000 ? 'Fast' : stats.avgProcessingTime < 10000 ? 'Normal' : 'Slow',
         variant: 'outline',
-        color: stats.avgProcessingTime < 5000 ? 'text-green-600' : stats.avgProcessingTime < 10000 ? 'text-blue-600' : 'text-orange-600'
+        color: stats.avgProcessingTime < 5000 ? 'text-green-600' : stats.avgProcessingTime < 10000 ? 'text-[var(--cardiology-accent-blue-dark)]' : 'text-orange-600'
       }
     },
     {
@@ -250,7 +250,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
                   "p-2 rounded-lg bg-gradient-to-br",
                   card.gradient
                 )}>
-                  <Icon className="h-5 w-5 text-white" />
+                  <Icon className="h-5 w-5 text-[var(--foreground)]" />
                 </div>
                 
                 {card.badge && (
@@ -265,13 +265,13 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
 
               {/* Main Content */}
               <div className="space-y-2">
-                <h3 className="text-sm font-medium text-gray-600">
+                <h3 className="text-sm font-medium text-[var(--foreground-tertiary)]">
                   {card.title}
                 </h3>
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold text-[var(--foreground)]">
                   {card.value}
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[var(--foreground-secondary)]">
                   {card.subtitle}
                 </p>
               </div>
@@ -290,7 +290,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
                   )}>
                     {card.trend.value}%
                   </span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-[var(--foreground-secondary)]">
                     {card.trend.label}
                   </span>
                 </div>
@@ -306,18 +306,18 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       {/* Additional Summary Cards */}
       <Card className="md:col-span-2 lg:col-span-4 p-6">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <BarChart3 className="h-5 w-5 text-blue-600" />
+          <BarChart3 className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
           Analysis Breakdown
         </h3>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Analysis Type Distribution */}
           <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-            <div className="text-2xl font-bold text-blue-700">
+            <div className="text-2xl font-bold text-[var(--cardiology-accent-blue-dark)]">
               {additionalMetrics.arterialResults}
             </div>
-            <div className="text-sm text-blue-600">Arterial Blood Gas</div>
-            <div className="text-xs text-blue-500 mt-1">
+            <div className="text-sm text-[var(--cardiology-accent-blue-dark)]">Arterial Blood Gas</div>
+            <div className="text-xs text-[var(--cardiology-accent-blue)] mt-1">
               {results.length > 0 ? Math.round((additionalMetrics.arterialResults / results.length) * 100) : 0}% of total
             </div>
           </div>

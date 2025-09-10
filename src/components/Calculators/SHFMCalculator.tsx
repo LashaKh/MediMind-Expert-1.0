@@ -538,7 +538,7 @@ export const SHFMCalculator: React.FC = () => {
       case 'Intermediate': return 'border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800';
       case 'High': return 'border-orange-200 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-800';
       case 'Very High': return 'border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800';
-      default: return 'border-gray-200 bg-gray-50 dark:bg-gray-900/20 dark:border-gray-800';
+      default: return 'border-[var(--glass-border-light)] bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]/20 dark:border-gray-800';
     }
   };
 
@@ -548,7 +548,7 @@ export const SHFMCalculator: React.FC = () => {
       case 'Intermediate': return 'text-yellow-500';
       case 'High': return 'text-orange-500';
       case 'Very High': return 'text-red-500';
-      default: return 'text-gray-500';
+      default: return 'text-[var(--foreground-secondary)]';
     }
   };
 
@@ -564,17 +564,17 @@ export const SHFMCalculator: React.FC = () => {
         {/* SHFM Alert */}
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-4">
           <div className="flex items-start space-x-3">
-            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-              <Heart className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <div className="p-2 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-xl">
+              <Heart className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
             </div>
             <div className="flex-1">
               <h4 className="text-base font-bold text-blue-800 dark:text-blue-200 mb-1">{t('calculators.cardiology.shfm.title')}</h4>
-              <p className="text-blue-700 dark:text-blue-300 leading-relaxed">
+              <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed">
                 {t('calculators.cardiology.shfm.description')}
               </p>
-              <div className="mt-3 inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg px-3 py-1">
-                <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">Multi-Center Validated - Enhanced Therapy Analysis</span>
+              <div className="mt-3 inline-flex items-center space-x-2 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-lg px-3 py-1">
+                <Award className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                <span className="text-xs font-semibold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">Multi-Center Validated - Enhanced Therapy Analysis</span>
               </div>
             </div>
           </div>
@@ -601,44 +601,44 @@ export const SHFMCalculator: React.FC = () => {
             <div className="flex items-center justify-center space-x-3 mb-4">
               <div className="flex items-center space-x-1.5">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                  currentStep >= 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 1 ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   1
                 </div>
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.shfm.demographics_step')}</span>
+                <span className="text-xs font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.shfm.demographics_step')}</span>
               </div>
               <div className={`w-12 h-0.5 rounded-full transition-all duration-300 ${
-                currentStep >= 2 ? 'bg-indigo-500' : 'bg-gray-200'
+                currentStep >= 2 ? 'bg-indigo-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-1.5">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                  currentStep >= 2 ? 'bg-indigo-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 2 ? 'bg-indigo-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   2
                 </div>
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.shfm.clinical_step')}</span>
+                <span className="text-xs font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.shfm.clinical_step')}</span>
               </div>
               <div className={`w-12 h-0.5 rounded-full transition-all duration-300 ${
-                currentStep >= 3 ? 'bg-purple-500' : 'bg-gray-200'
+                currentStep >= 3 ? 'bg-purple-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-1.5">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                  currentStep >= 3 ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 3 ? 'bg-purple-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   3
                 </div>
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.shfm.laboratory_step')}</span>
+                <span className="text-xs font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.shfm.laboratory_step')}</span>
               </div>
               <div className={`w-12 h-0.5 rounded-full transition-all duration-300 ${
-                currentStep >= 4 ? 'bg-green-500' : 'bg-gray-200'
+                currentStep >= 4 ? 'bg-green-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-1.5">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                  currentStep >= 4 ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 4 ? 'bg-green-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   4
                 </div>
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.shfm.therapy_step')}</span>
+                <span className="text-xs font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.shfm.therapy_step')}</span>
               </div>
             </div>
 
@@ -647,10 +647,10 @@ export const SHFMCalculator: React.FC = () => {
               <div className="space-y-4 animate-fadeIn">
                 <div className="text-center mb-4">
                   <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
-                    <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.shfm.patient_demographics')}</h3>
+                    <User className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                    <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.shfm.patient_demographics')}</h3>
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('calculators.cardiology.shfm.demographics_description')}</p>
+                  <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">{t('calculators.cardiology.shfm.demographics_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -741,9 +741,9 @@ export const SHFMCalculator: React.FC = () => {
                 <div className="text-center mb-4">
                   <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl border border-indigo-200 dark:border-indigo-800">
                     <Activity className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.shfm.clinical_parameters')}</h3>
+                    <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.shfm.clinical_parameters')}</h3>
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('calculators.cardiology.shfm.clinical_description')}</p>
+                  <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">{t('calculators.cardiology.shfm.clinical_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -790,9 +790,9 @@ export const SHFMCalculator: React.FC = () => {
                 <div className="text-center mb-4">
                   <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border border-purple-200 dark:border-purple-800">
                     <BarChart3 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.shfm.laboratory_values')}</h3>
+                    <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.shfm.laboratory_values')}</h3>
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('calculators.cardiology.shfm.laboratory_description')}</p>
+                  <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">{t('calculators.cardiology.shfm.laboratory_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -895,15 +895,15 @@ export const SHFMCalculator: React.FC = () => {
                 <div className="text-center mb-4">
                   <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20 rounded-xl border border-green-200 dark:border-green-800">
                     <Pill className="w-5 h-5 text-green-600 dark:text-green-400" />
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.shfm.therapy_assessment')}</h3>
+                    <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.shfm.therapy_assessment')}</h3>
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('calculators.cardiology.shfm.therapy_description')}</p>
+                  <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">{t('calculators.cardiology.shfm.therapy_description')}</p>
                 </div>
 
                 <div className="space-y-4">
                   {/* Medications */}
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
                       <Pill className="w-4 h-4 text-green-600" />
                       <span>Heart Failure Medications</span>
                     </h4>
@@ -952,8 +952,8 @@ export const SHFMCalculator: React.FC = () => {
 
                   {/* Diuretic Dosing */}
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
-                      <Droplet className="w-4 h-4 text-blue-600" />
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
+                      <Droplet className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
                       <span>Diuretic Dosing (enter 0 if not used)</span>
                     </h4>
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -968,8 +968,8 @@ export const SHFMCalculator: React.FC = () => {
 
                   {/* Devices */}
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
-                      <Cpu className="w-4 h-4 text-blue-600" />
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
+                      <Cpu className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
                       <span>Device Therapy</span>
                     </h4>
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
@@ -1028,28 +1028,28 @@ export const SHFMCalculator: React.FC = () => {
               >
                 {/* Survival Overview Panel */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                  <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-white/20 dark:border-gray-700/20">
+                  <div className="p-3 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-xl border border-white/20 dark:border-[var(--border-strong)]/20">
                     <div className="text-center">
-                      <div className="text-xl font-bold text-blue-600 dark:text-blue-400">{result.oneYear}%</div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400">1 Year</div>
+                      <div className="text-xl font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">{result.oneYear}%</div>
+                      <div className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">1 Year</div>
                     </div>
                   </div>
-                  <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-white/20 dark:border-gray-700/20">
+                  <div className="p-3 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-xl border border-white/20 dark:border-[var(--border-strong)]/20">
                     <div className="text-center">
                       <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">{result.twoYear}%</div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400">2 Years</div>
+                      <div className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">2 Years</div>
                     </div>
                   </div>
-                  <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-white/20 dark:border-gray-700/20">
+                  <div className="p-3 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-xl border border-white/20 dark:border-[var(--border-strong)]/20">
                     <div className="text-center">
                       <div className="text-xl font-bold text-purple-600 dark:text-purple-400">{result.threeYear}%</div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400">3 Years</div>
+                      <div className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">3 Years</div>
                     </div>
                   </div>
-                  <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-white/20 dark:border-gray-700/20">
+                  <div className="p-3 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-xl border border-white/20 dark:border-[var(--border-strong)]/20">
                     <div className="text-center">
                       <div className="text-xl font-bold text-pink-600 dark:text-pink-400">{result.fiveYear}%</div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400">5 Years</div>
+                      <div className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">5 Years</div>
                     </div>
                   </div>
                 </div>
@@ -1059,7 +1059,7 @@ export const SHFMCalculator: React.FC = () => {
                   <div className="space-y-3">
                     <div className="flex items-center space-x-2">
                       <Target className="w-4 h-4 text-green-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">Potential Therapy Benefits</h4>
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Potential Therapy Benefits</h4>
                     </div>
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
                       {result.therapyImpact.aceInhibitor && (
@@ -1072,12 +1072,12 @@ export const SHFMCalculator: React.FC = () => {
                         </div>
                       )}
                       {result.therapyImpact.betaBlocker && (
-                        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <div className="p-3 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 rounded-lg border border-blue-200 dark:border-blue-800">
                           <div className="flex justify-between items-center">
                             <span className="font-medium text-blue-800 dark:text-blue-200">Beta-blocker</span>
-                            <span className="text-base font-bold text-blue-600 dark:text-blue-400">+{result.therapyImpact.betaBlocker}%</span>
+                            <span className="text-base font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">+{result.therapyImpact.betaBlocker}%</span>
                           </div>
-                          <div className="text-xs text-blue-700 dark:text-blue-300 mt-1">1-year survival improvement</div>
+                          <div className="text-xs text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 mt-1">1-year survival improvement</div>
                         </div>
                       )}
                       {result.therapyImpact.aldosteroneAntagonist && (
@@ -1114,15 +1114,15 @@ export const SHFMCalculator: React.FC = () => {
                 {/* Clinical Recommendations */}
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2">
-                    <Stethoscope className="w-4 h-4 text-blue-500" />
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">Clinical Management Recommendations</h4>
+                    <Stethoscope className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Clinical Management Recommendations</h4>
                   </div>
                   <div className={`p-4 rounded-xl border-2 ${getRiskColor(result.risk)}`}>
                     <div className="space-y-2">
                       {result.recommendations.map((rec, index) => (
                         <div key={index} className="flex items-start space-x-2">
                           <div className="w-1.5 h-1.5 bg-current rounded-full mt-2 flex-shrink-0"></div>
-                          <p className="text-xs text-gray-700 dark:text-gray-300">{rec}</p>
+                          <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{rec}</p>
                         </div>
                       ))}
                     </div>
@@ -1130,12 +1130,12 @@ export const SHFMCalculator: React.FC = () => {
                 </div>
 
                 {/* Algorithm Validation Status */}
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-3">
+                <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-xl p-3">
                   <div className="flex items-center space-x-2 mb-2">
-                    <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <Award className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                     <h4 className="font-semibold text-blue-800 dark:text-blue-200">Enhanced Seattle Heart Failure Model</h4>
                   </div>
-                  <div className="text-xs text-blue-700 dark:text-blue-300">
+                  <div className="text-xs text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">
                     ✓ Multi-Center Validated • Enhanced therapy impact analysis with evidence-based recommendations
                   </div>
                 </div>
@@ -1168,12 +1168,12 @@ export const SHFMCalculator: React.FC = () => {
 
         {/* Footer Information */}
         <div className="text-center pt-4 border-t border-white/20 dark:border-gray-800/20">
-          <div className="flex items-center justify-center space-x-3 text-xs text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-center space-x-3 text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <Info className="w-3 h-3" />
             <span>Based on Seattle Heart Failure Model (Levy et al.) • Enhanced therapy impact analysis</span>
             <div className="flex items-center space-x-1">
-              <Award className="w-3 h-3 text-blue-600" />
-              <span className="text-blue-600 font-semibold">Multi-Center Validated</span>
+              <Award className="w-3 h-3 text-[var(--cardiology-accent-blue-dark)]" />
+              <span className="text-[var(--cardiology-accent-blue-dark)] font-semibold">Multi-Center Validated</span>
             </div>
           </div>
         </div>

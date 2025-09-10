@@ -33,17 +33,17 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
       {/* Section Header */}
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-xl shadow-emerald-500/25 mb-6 group hover:scale-105 transition-all duration-300">
-          <Stethoscope className="w-8 h-8 text-white group-hover:rotate-12 transition-transform duration-300" />
+          <Stethoscope className="w-8 h-8 text-[var(--foreground)] group-hover:rotate-12 transition-transform duration-300" />
         </div>
         <h3 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-emerald-800 dark:from-white dark:to-emerald-200 bg-clip-text text-transparent mb-3">
           {t('calculators.cardiology.grace.clinical_section')}
         </h3>
-        <p className="text-gray-600 dark:text-gray-300 text-lg">Select clinical findings and presentation</p>
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-lg">Select clinical findings and presentation</p>
       </div>
 
       {/* Killip Classification */}
       <div className="group">
-        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 flex items-center">
+        <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-4 flex items-center">
           <Heart className="w-4 h-4 mr-2 text-rose-500" />
           {t('calculators.cardiology.grace.killip_class_label')}
         </label>
@@ -60,31 +60,31 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
               className={`relative p-6 rounded-2xl border-2 transition-all duration-300 text-left group hover:scale-105 ${
                 formData.killipClass === option.value
                   ? 'border-rose-500 bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 shadow-xl shadow-rose-500/20'
-                  : 'border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm hover:border-rose-300 dark:hover:border-rose-600'
+                  : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm hover:border-rose-300 dark:hover:border-rose-600'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
                 <h4 className={`font-bold text-lg ${
                   formData.killipClass === option.value 
                     ? 'text-rose-700 dark:text-rose-300' 
-                    : 'text-gray-800 dark:text-gray-200'
+                    : 'text-[var(--foreground)] dark:text-[var(--foreground)]'
                 }`}>
                   {option.label}
                 </h4>
                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
                   formData.killipClass === option.value
                     ? 'border-rose-500 bg-rose-500'
-                    : 'border-gray-300 dark:border-gray-600'
+                    : 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)]'
                 }`}>
                   {formData.killipClass === option.value && (
-                    <Check className="w-4 h-4 text-white" />
+                    <Check className="w-4 h-4 text-[var(--foreground)]" />
                   )}
                 </div>
               </div>
               <p className={`text-sm ${
                 formData.killipClass === option.value 
                   ? 'text-rose-600 dark:text-rose-300' 
-                  : 'text-gray-600 dark:text-gray-400'
+                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
               }`}>
                 {option.description}
               </p>
@@ -98,7 +98,7 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
 
       {/* Clinical Risk Factors */}
       <div>
-        <h4 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6 flex items-center">
+        <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-6 flex items-center">
           <AlertTriangle className="w-5 h-5 mr-2 text-amber-500" />
           {t('calculators.cardiology.grace.high_risk_features')}
         </h4>
@@ -108,11 +108,11 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
             <div className={`relative p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${
               formData.cardiacArrest
                 ? 'border-red-500 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 shadow-xl shadow-red-500/20'
-                : 'border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm hover:border-red-300 dark:hover:border-red-600'
+                : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm hover:border-red-300 dark:hover:border-red-600'
             }`}>
               <div className="flex items-center justify-between mb-3">
                 <Zap className={`w-6 h-6 ${
-                  formData.cardiacArrest ? 'text-red-600 dark:text-red-400' : 'text-gray-400'
+                  formData.cardiacArrest ? 'text-red-600 dark:text-red-400' : 'text-[var(--foreground-secondary)]'
                 }`} />
                 <input
                   type="checkbox"
@@ -123,20 +123,20 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
                 <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
                   formData.cardiacArrest
                     ? 'border-red-500 bg-red-500 shadow-lg shadow-red-500/30'
-                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                    : 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] bg-[var(--component-card)] dark:bg-[var(--card)]'
                 }`}>
                   {formData.cardiacArrest && (
-                    <Check className="w-4 h-4 text-white" />
+                    <Check className="w-4 h-4 text-[var(--foreground)]" />
                   )}
                 </div>
               </div>
               <h5 className={`font-semibold mb-2 ${
-                formData.cardiacArrest ? 'text-red-800 dark:text-red-200' : 'text-gray-700 dark:text-gray-300'
+                formData.cardiacArrest ? 'text-red-800 dark:text-red-200' : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
               }`}>
                 {t('calculators.cardiology.grace.cardiac_arrest_label')}
               </h5>
               <p className={`text-sm ${
-                formData.cardiacArrest ? 'text-red-600 dark:text-red-300' : 'text-gray-500 dark:text-gray-400'
+                formData.cardiacArrest ? 'text-red-600 dark:text-red-300' : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
               }`}>
                 {t('calculators.cardiology.grace.at_presentation')}
               </p>
@@ -151,11 +151,11 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
             <div className={`relative p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${
               formData.stDeviation
                 ? 'border-purple-500 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 shadow-xl shadow-purple-500/20'
-                : 'border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm hover:border-purple-300 dark:hover:border-purple-600'
+                : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm hover:border-purple-300 dark:hover:border-purple-600'
             }`}>
               <div className="flex items-center justify-between mb-3">
                 <BarChart3 className={`w-6 h-6 ${
-                  formData.stDeviation ? 'text-purple-600 dark:text-purple-400' : 'text-gray-400'
+                  formData.stDeviation ? 'text-purple-600 dark:text-purple-400' : 'text-[var(--foreground-secondary)]'
                 }`} />
                 <input
                   type="checkbox"
@@ -166,20 +166,20 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
                 <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
                   formData.stDeviation
                     ? 'border-purple-500 bg-purple-500 shadow-lg shadow-purple-500/30'
-                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                    : 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] bg-[var(--component-card)] dark:bg-[var(--card)]'
                 }`}>
                   {formData.stDeviation && (
-                    <Check className="w-4 h-4 text-white" />
+                    <Check className="w-4 h-4 text-[var(--foreground)]" />
                   )}
                 </div>
               </div>
               <h5 className={`font-semibold mb-2 ${
-                formData.stDeviation ? 'text-purple-800 dark:text-purple-200' : 'text-gray-700 dark:text-gray-300'
+                formData.stDeviation ? 'text-purple-800 dark:text-purple-200' : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
               }`}>
                 {t('calculators.cardiology.grace.st_deviation_label')}
               </h5>
               <p className={`text-sm ${
-                formData.stDeviation ? 'text-purple-600 dark:text-purple-300' : 'text-gray-500 dark:text-gray-400'
+                formData.stDeviation ? 'text-purple-600 dark:text-purple-300' : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
               }`}>
                 {t('calculators.cardiology.grace.on_initial_ecg')}
               </p>
@@ -194,11 +194,11 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
             <div className={`relative p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${
               formData.elevatedMarkers
                 ? 'border-green-500 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 shadow-xl shadow-green-500/20'
-                : 'border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm hover:border-green-300 dark:hover:border-green-600'
+                : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm hover:border-green-300 dark:hover:border-green-600'
             }`}>
               <div className="flex items-center justify-between mb-3">
                 <TrendingUp className={`w-6 h-6 ${
-                  formData.elevatedMarkers ? 'text-green-600 dark:text-green-400' : 'text-gray-400'
+                  formData.elevatedMarkers ? 'text-green-600 dark:text-green-400' : 'text-[var(--foreground-secondary)]'
                 }`} />
                 <input
                   type="checkbox"
@@ -209,20 +209,20 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
                 <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
                   formData.elevatedMarkers
                     ? 'border-green-500 bg-green-500 shadow-lg shadow-green-500/30'
-                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                    : 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] bg-[var(--component-card)] dark:bg-[var(--card)]'
                 }`}>
                   {formData.elevatedMarkers && (
-                    <Check className="w-4 h-4 text-white" />
+                    <Check className="w-4 h-4 text-[var(--foreground)]" />
                   )}
                 </div>
               </div>
               <h5 className={`font-semibold mb-2 ${
-                formData.elevatedMarkers ? 'text-green-800 dark:text-green-200' : 'text-gray-700 dark:text-gray-300'
+                formData.elevatedMarkers ? 'text-green-800 dark:text-green-200' : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
               }`}>
                 {t('calculators.cardiology.grace.elevated_markers_label')}
               </h5>
               <p className={`text-sm ${
-                formData.elevatedMarkers ? 'text-green-600 dark:text-green-300' : 'text-gray-500 dark:text-gray-400'
+                formData.elevatedMarkers ? 'text-green-600 dark:text-green-300' : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
               }`}>
                 {t('calculators.cardiology.grace.troponin_ck_mb')}
               </p>
@@ -238,7 +238,7 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
       <div className="flex justify-between items-center pt-8">
         <button
           onClick={onBack}
-          className="group relative px-8 py-3 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-2xl hover:border-gray-400 dark:hover:border-gray-500 transform hover:scale-105 transition-all duration-300"
+          className="group relative px-8 py-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-semibold rounded-2xl hover:border-[var(--border)] dark:hover:border-[var(--border)] transform hover:scale-105 transition-all duration-300"
         >
           <div className="flex items-center space-x-2">
             <ArrowRight className="w-5 h-5 rotate-180 group-hover:-translate-x-1 transition-transform duration-300" />
@@ -248,7 +248,7 @@ export const GraceFormStep2: React.FC<GraceFormStep2Props> = ({
 
         <button
           onClick={onNext}
-          className="group relative px-12 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-lg rounded-2xl shadow-xl shadow-emerald-500/25 hover:shadow-2xl hover:shadow-emerald-500/40 transform hover:scale-105 transition-all duration-300"
+          className="group relative px-12 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-[var(--foreground)] font-bold text-lg rounded-2xl shadow-xl shadow-emerald-500/25 hover:shadow-2xl hover:shadow-emerald-500/40 transform hover:scale-105 transition-all duration-300"
         >
           <div className="flex items-center space-x-2">
             <span>{t('calculators.cardiology.grace.calculate_risk_score')}</span>

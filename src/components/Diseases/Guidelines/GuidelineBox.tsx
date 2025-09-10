@@ -88,8 +88,8 @@ const convertTableRowsToHTML = (rows: string[]): string => {
   
   if (dataRows.length === 0) return '';
 
-  let html = '<div class="overflow-x-auto my-6 rounded-lg shadow-md border border-gray-200">';
-  html += '<table class="w-full border-collapse bg-white" style="border-spacing: 0;">';
+  let html = '<div class="overflow-x-auto my-6 rounded-lg shadow-md border border-[var(--glass-border-light)]">';
+  html += '<table class="w-full border-collapse bg-[var(--component-card)]" style="border-spacing: 0;">';
 
   dataRows.forEach((row, index) => {
     const cells = row.split('|').map(cell => cell.trim()).filter(cell => cell !== '');
@@ -159,7 +159,7 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
         bg: 'from-blue-50 to-blue-100',
         border: 'border-blue-200',
         text: 'text-blue-900',
-        badge: 'bg-blue-100 text-blue-800'
+        badge: 'bg-[var(--cardiology-accent-blue-light)] text-blue-800'
       };
     }
     if (orgUpper.includes('HRS')) {
@@ -266,9 +266,9 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
       icon: Building2,
       gradient: 'from-slate-500 to-slate-600',
       bg: 'from-slate-50 to-slate-100',
-      border: 'border-slate-200',
-      text: 'text-slate-900',
-      badge: 'bg-slate-100 text-slate-800'
+      border: 'border-[var(--glass-border-light)]',
+      text: 'text-[var(--foreground)]',
+      badge: 'bg-[var(--component-surface-secondary)] text-[var(--foreground)]'
     };
   };
 
@@ -309,7 +309,7 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
           
           {/* Sophisticated sparkle decoration */}
           <div className="absolute top-6 right-6 opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:rotate-12 group-hover:scale-110">
-            <Sparkles className="w-6 h-6 text-white filter drop-shadow-lg" />
+            <Sparkles className="w-6 h-6 text-[var(--foreground)] filter drop-shadow-lg" />
           </div>
           
           {/* Premium organization badge */}
@@ -323,18 +323,18 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
                        inset 0 1px 0 rgba(255, 255, 255, 0.3)
                      `
                    }}>
-                <IconComponent className="w-6 h-6 text-white drop-shadow-sm" />
+                <IconComponent className="w-6 h-6 text-[var(--foreground)] drop-shadow-sm" />
               </div>
               <div>
                 <span className={`font-bold text-lg ${orgStyle.text} tracking-wide drop-shadow-sm`}
                       style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
                   {orgStyle.abbreviation}
                 </span>
-                <p className="text-sm text-gray-700 font-medium opacity-90 mt-1">{orgStyle.name}</p>
+                <p className="text-sm text-[var(--foreground-tertiary)] font-medium opacity-90 mt-1">{orgStyle.name}</p>
               </div>
             </div>
             {year && (
-              <div className={`px-4 py-2 rounded-full text-sm font-bold backdrop-blur-sm border border-gray-200 transition-all duration-300 hover:scale-105`}
+              <div className={`px-4 py-2 rounded-full text-sm font-bold backdrop-blur-sm border border-[var(--glass-border-light)] transition-all duration-300 hover:scale-105`}
                    style={{
                      background: 'rgba(255, 255, 255, 0.9)',
                      color: '#1f2937',
@@ -350,7 +350,7 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
           <div className="relative z-10 px-8 pb-8">
             <div className="max-w-none">
               <div 
-                className="text-gray-900 font-medium text-base leading-relaxed"
+                className="text-[var(--foreground)] font-medium text-base leading-relaxed"
                 style={{ 
                   color: '#1f2937 !important',
                   lineHeight: '1.75',
@@ -361,7 +361,7 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
                     ? convertMarkdownTablesToHTML(content) // Convert tables first
                         .replace(/^\*\*As per\s+[^:]+(?:\s+guidelines?)?[:\s]*\*\*/i, '') // Remove "**As per..." prefix
                         .replace(/^As per\s+[^:]+(?:\s+guidelines?)?[,:\s]*/i, '') // Remove plain "As per..." prefix
-                        .replace(/\*\*([^*]+)\*\*/g, '<strong style="color: #1f2937 !important; font-weight: 700;">$1</strong>') // Bold formatting
+                        .replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--background) !important; font-weight: 700;">$1</strong>') // Bold formatting
                         .replace(/\n/g, '<br>') // Line breaks
                         .replace(/\(([A-E])\)/g, (match: string, level: string) => {
                           const colors: Record<string, string> = {
@@ -394,19 +394,19 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
   return (
     <div className={`my-6 rounded-xl border-2 ${orgStyle.border} bg-gradient-to-br ${orgStyle.bg} shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden`}>
       {/* Header with organization info */}
-      <div className={`bg-gradient-to-r ${orgStyle.gradient} px-6 py-4 text-white`}>
+      <div className={`bg-gradient-to-r ${orgStyle.gradient} px-6 py-4 text-[var(--foreground)]`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+            <div className="p-2 bg-[var(--component-card)]/20 rounded-lg backdrop-blur-sm">
               <IconComponent className="w-6 h-6" />
             </div>
             <div>
               <h3 className="font-bold text-lg">{orgStyle.abbreviation}</h3>
-              <p className="text-white/90 text-sm font-medium">{orgStyle.name}</p>
+              <p className="text-[var(--foreground)]/90 text-sm font-medium">{orgStyle.name}</p>
             </div>
           </div>
           {year && (
-            <div className="flex items-center space-x-2 bg-white/20 rounded-lg px-3 py-1 backdrop-blur-sm">
+            <div className="flex items-center space-x-2 bg-[var(--component-card)]/20 rounded-lg px-3 py-1 backdrop-blur-sm">
               <Calendar className="w-4 h-4" />
               <span className="text-sm font-semibold">{year}</span>
             </div>

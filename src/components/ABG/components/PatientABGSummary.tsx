@@ -124,7 +124,7 @@ export const PatientABGSummary: React.FC<PatientABGSummaryProps> = ({
       <Card className="p-6">
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
-          <span className="ml-3 text-gray-600">Loading patient ABG history...</span>
+          <span className="ml-3 text-[var(--foreground-tertiary)]">Loading patient ABG history...</span>
         </div>
       </Card>
     );
@@ -150,13 +150,13 @@ export const PatientABGSummary: React.FC<PatientABGSummaryProps> = ({
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center">
-            <User className="h-6 w-6 text-white" />
+            <User className="h-6 w-6 text-[var(--foreground)]" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-[var(--foreground)]">
               {patient.first_name} {patient.last_name}
             </h3>
-            <div className="flex items-center gap-4 mt-1 text-sm text-gray-600">
+            <div className="flex items-center gap-4 mt-1 text-sm text-[var(--foreground-tertiary)]">
               {patient.medical_record_number && (
                 <span>MRN: {patient.medical_record_number}</span>
               )}
@@ -165,7 +165,7 @@ export const PatientABGSummary: React.FC<PatientABGSummaryProps> = ({
               )}
             </div>
             {patient.date_of_birth && (
-              <div className="flex items-center gap-1 mt-1 text-sm text-gray-500">
+              <div className="flex items-center gap-1 mt-1 text-sm text-[var(--foreground-secondary)]">
                 <Calendar className="h-3 w-3" />
                 <span>DOB: {new Date(patient.date_of_birth).toLocaleDateString()}</span>
               </div>
@@ -189,30 +189,30 @@ export const PatientABGSummary: React.FC<PatientABGSummaryProps> = ({
       {/* Stats Summary */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="text-center">
-          <div className="text-2xl font-bold text-gray-900">{stats.totalResults}</div>
-          <div className="text-sm text-gray-600">Total ABGs</div>
+          <div className="text-2xl font-bold text-[var(--foreground)]">{stats.totalResults}</div>
+          <div className="text-sm text-[var(--foreground-tertiary)]">Total ABGs</div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-bold text-gray-900">{stats.recentResults}</div>
-          <div className="text-sm text-gray-600">Last 30 Days</div>
+          <div className="text-2xl font-bold text-[var(--foreground)]">{stats.recentResults}</div>
+          <div className="text-sm text-[var(--foreground-tertiary)]">Last 30 Days</div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-2xl font-bold text-[var(--foreground)]">
             {stats.avgProcessingTime > 0 ? `${(stats.avgProcessingTime / 1000).toFixed(1)}s` : '-'}
           </div>
-          <div className="text-sm text-gray-600">Avg Processing</div>
+          <div className="text-sm text-[var(--foreground-tertiary)]">Avg Processing</div>
         </div>
       </div>
 
       {/* Recent Results */}
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <TestTube2 className="h-4 w-4 text-gray-600" />
-          <h4 className="font-medium text-gray-900">Recent ABG Results</h4>
+          <TestTube2 className="h-4 w-4 text-[var(--foreground-tertiary)]" />
+          <h4 className="font-medium text-[var(--foreground)]">Recent ABG Results</h4>
         </div>
 
         {results.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-[var(--foreground-secondary)]">
             <TestTube2 className="h-12 w-12 mx-auto mb-3 opacity-50" />
             <div className="font-medium">No ABG results yet</div>
             <div className="text-sm">ABG analyses for this patient will appear here</div>
@@ -222,38 +222,38 @@ export const PatientABGSummary: React.FC<PatientABGSummaryProps> = ({
             {results.map((result) => (
               <div
                 key={result.id}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-between p-3 bg-[var(--component-surface-primary)] rounded-lg hover:bg-[var(--component-surface-secondary)] transition-colors"
               >
                 <div className="flex items-center gap-3 flex-1">
                   <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-rose-600 rounded-lg flex items-center justify-center">
-                    <TestTube2 className="h-4 w-4 text-white" />
+                    <TestTube2 className="h-4 w-4 text-[var(--foreground)]" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <Badge variant="secondary" className="text-xs">
                         {result.type}
                       </Badge>
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-[var(--foreground-tertiary)]">
                         {formatDate(result.created_at)}
                       </span>
                     </div>
                     <div className="flex items-center gap-4 mt-1">
                       {result.interpretation && (
                         <div className="flex items-center gap-1">
-                          <FileText className="h-3 w-3 text-gray-500" />
-                          <span className="text-xs text-gray-500">Interpreted</span>
+                          <FileText className="h-3 w-3 text-[var(--foreground-secondary)]" />
+                          <span className="text-xs text-[var(--foreground-secondary)]">Interpreted</span>
                         </div>
                       )}
                       {result.action_plan && (
                         <div className="flex items-center gap-1">
-                          <Activity className="h-3 w-3 text-gray-500" />
-                          <span className="text-xs text-gray-500">Action Plan</span>
+                          <Activity className="h-3 w-3 text-[var(--foreground-secondary)]" />
+                          <span className="text-xs text-[var(--foreground-secondary)]">Action Plan</span>
                         </div>
                       )}
                       {result.processing_time_ms && (
                         <div className="flex items-center gap-1">
-                          <Clock className="h-3 w-3 text-gray-500" />
-                          <span className="text-xs text-gray-500">
+                          <Clock className="h-3 w-3 text-[var(--foreground-secondary)]" />
+                          <span className="text-xs text-[var(--foreground-secondary)]">
                             {(result.processing_time_ms / 1000).toFixed(1)}s
                           </span>
                         </div>
@@ -278,7 +278,7 @@ export const PatientABGSummary: React.FC<PatientABGSummaryProps> = ({
 
             {stats.totalResults > results.length && (
               <div className="text-center pt-2">
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-[var(--foreground-secondary)]">
                   Showing {results.length} of {stats.totalResults} results
                 </div>
               </div>

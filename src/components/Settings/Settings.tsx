@@ -11,20 +11,20 @@ export const Settings: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center space-x-3 mb-6">
           <SettingsIcon className="w-8 h-8 text-primary" />
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          <h1 className="text-3xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
             {t('navigation.settings')}
           </h1>
         </div>
         
         <DebugPanel />
         
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-6">
-          <p className="text-gray-600 dark:text-gray-300 mb-4">
+        <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-md p-6 mt-6">
+          <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-4">
             {t('navigation.settingsDesc')}
           </p>
           <div className="text-center py-12">
-            <SettingsIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500 dark:text-gray-400">
+            <SettingsIcon className="w-16 h-16 text-[var(--foreground-secondary)] mx-auto mb-4" />
+            <p className="text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
               {t('navigation.comingSoon')}
             </p>
           </div>

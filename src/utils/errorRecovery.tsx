@@ -647,16 +647,16 @@ export function ResilientComponent<T>({
     if (fallback) return <>{fallback}</>;
     
     return (
-      <div className={`p-4 border rounded ${medicalContent ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200'}`}>
+      <div className={`p-4 border rounded ${medicalContent ? 'bg-red-50 border-red-200' : 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)]'}`}>
         <div className="flex items-center space-x-2 mb-2">
-          <svg className={`w-5 h-5 ${medicalContent ? 'text-red-500' : 'text-gray-500'}`} fill="currentColor" viewBox="0 0 20 20">
+          <svg className={`w-5 h-5 ${medicalContent ? 'text-red-500' : 'text-[var(--foreground-secondary)]'}`} fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
           </svg>
-          <h3 className={`font-medium ${medicalContent ? 'text-red-800' : 'text-gray-800'}`}>
+          <h3 className={`font-medium ${medicalContent ? 'text-red-800' : 'text-[var(--foreground)]'}`}>
             {medicalContent ? 'Medical Content Unavailable' : 'Content Unavailable'}
           </h3>
         </div>
-        <p className={`text-sm ${medicalContent ? 'text-red-700' : 'text-gray-600'}`}>
+        <p className={`text-sm ${medicalContent ? 'text-red-700' : 'text-[var(--foreground-tertiary)]'}`}>
           {medicalContent 
             ? 'Medical content is temporarily unavailable. Please verify information with primary medical sources.'
             : 'This content is temporarily unavailable. Please try again later.'}

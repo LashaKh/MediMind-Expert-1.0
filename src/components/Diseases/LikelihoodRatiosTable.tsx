@@ -17,13 +17,13 @@ export const LikelihoodRatiosTable: React.FC<LikelihoodRatiosTableProps> = ({ da
       if (value >= 10) return 'bg-green-500';
       if (value >= 5) return 'bg-yellow-500';
       if (value >= 2) return 'bg-orange-500';
-      return 'bg-gray-400';
+      return 'bg-[var(--muted)]';
     } else {
       // For negative LRs, lower is better
       if (value <= 0.1) return 'bg-green-500';
       if (value <= 0.2) return 'bg-yellow-500';
       if (value <= 0.5) return 'bg-orange-500';
-      return 'bg-gray-400';
+      return 'bg-[var(--muted)]';
     }
   };
 
@@ -43,14 +43,14 @@ export const LikelihoodRatiosTable: React.FC<LikelihoodRatiosTableProps> = ({ da
     <div className="w-full overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
-          <tr className="border-b-2 border-gray-200">
-            <th className="text-left py-3 px-4 font-semibold text-gray-900 w-1/2">
+          <tr className="border-b-2 border-[var(--glass-border-light)]">
+            <th className="text-left py-3 px-4 font-semibold text-[var(--foreground)] w-1/2">
               Finding
             </th>
-            <th className="text-left py-3 px-4 font-semibold text-gray-900 w-1/4">
+            <th className="text-left py-3 px-4 font-semibold text-[var(--foreground)] w-1/4">
               LR{type === 'positive' ? '+' : '-'}
             </th>
-            <th className="text-left py-3 px-4 font-semibold text-gray-900 w-1/4">
+            <th className="text-left py-3 px-4 font-semibold text-[var(--foreground)] w-1/4">
               Value
             </th>
           </tr>
@@ -62,21 +62,21 @@ export const LikelihoodRatiosTable: React.FC<LikelihoodRatiosTableProps> = ({ da
             
             return (
               <tr key={index} className="border-b border-gray-100">
-                <td className="py-3 px-4 text-gray-800">
+                <td className="py-3 px-4 text-[var(--foreground)]">
                   {row.finding}
                 </td>
                 <td className="py-3 px-4">
                   <div className="flex items-center space-x-2">
-                    <span className="font-semibold text-gray-900">
+                    <span className="font-semibold text-[var(--foreground)]">
                       {row.lrValue}
                     </span>
-                    <span className="text-gray-500 text-sm">
+                    <span className="text-[var(--foreground-secondary)] text-sm">
                       {row.confidenceInterval}
                     </span>
                   </div>
                 </td>
                 <td className="py-3 px-4">
-                  <div className="relative h-6 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="relative h-6 bg-[var(--component-surface-secondary)] rounded-full overflow-hidden">
                     <div
                       className={`absolute left-0 top-0 h-full ${barColor} transition-all duration-500 ease-out rounded-full`}
                       style={{ width: `${barWidth}%` }}

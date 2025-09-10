@@ -148,12 +148,12 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+      <div className="bg-[var(--component-card)] rounded-2xl shadow-sm border border-[var(--glass-border-light)] p-6">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="h-6 bg-[var(--component-surface-tertiary)] rounded w-1/3 mb-4"></div>
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-100 rounded-lg"></div>
+              <div key={i} className="h-16 bg-[var(--component-surface-secondary)] rounded-lg"></div>
             ))}
           </div>
         </div>
@@ -173,14 +173,14 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
             {/* Compact glowing layers */}
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-xl blur-lg opacity-70 group-hover:opacity-90 transition-opacity duration-300" />
             <div className="relative flex items-center justify-center w-10 h-10 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-600 rounded-xl shadow-xl border border-white/20">
-              <FileText className="w-5 h-5 text-white" />
+              <FileText className="w-5 h-5 text-[var(--foreground)]" />
             </div>
           </motion.div>
           <div>
-            <h3 className="text-lg font-black text-white">
+            <h3 className="text-lg font-black text-[var(--foreground)]">
               Select Documents
             </h3>
-            <p className="text-xs text-white/60 font-medium">
+            <p className="text-xs text-[var(--foreground)]/60 font-medium">
               Choose files for your podcast
             </p>
           </div>
@@ -195,7 +195,7 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
         >
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl blur-md opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
           <div className="relative px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-xl shadow-lg border border-white/20">
-            <div className="relative flex items-center space-x-2 text-white font-bold text-sm">
+            <div className="relative flex items-center space-x-2 text-[var(--foreground)] font-bold text-sm">
               <Upload className="w-4 h-4" />
               <span>Upload</span>
             </div>
@@ -217,14 +217,14 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/30 to-purple-600/40 rounded-xl blur-lg opacity-0 group-focus-within:opacity-100 transition-all duration-300" />
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10">
-            <Search className="w-4 h-4 text-white/60 group-focus-within:text-white transition-colors duration-300" />
+            <Search className="w-4 h-4 text-[var(--foreground)]/60 group-focus-within:text-[var(--foreground)] transition-colors duration-300" />
           </div>
           <input
             type="text"
             placeholder="Search documents..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="relative w-full pl-10 pr-4 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all duration-300 placeholder-white/40 text-white font-medium text-sm"
+            className="relative w-full pl-10 pr-4 py-3 bg-[var(--component-card)]/10 backdrop-blur-xl border border-white/20 rounded-xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all duration-300 placeholder-white/40 text-[var(--foreground)] font-medium text-sm"
           />
         </div>
       </div>
@@ -237,20 +237,20 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
           className="relative mb-4"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/40 to-purple-600/50 rounded-xl blur-lg opacity-70" />
-          <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl p-3">
+          <div className="relative bg-[var(--component-card)]/10 backdrop-blur-xl border border-white/20 rounded-xl p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-lg blur-md opacity-60" />
                   <div className="relative w-8 h-8 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-600 rounded-lg flex items-center justify-center shadow-lg border border-white/20">
-                    <Check className="w-4 h-4 text-white" />
+                    <Check className="w-4 h-4 text-[var(--foreground)]" />
                   </div>
                 </div>
                 <div>
-                  <span className="text-sm font-bold text-white">
+                  <span className="text-sm font-bold text-[var(--foreground)]">
                     {selectedDocuments.length} selected
                   </span>
-                  <p className="text-xs text-white/60">Ready to generate</p>
+                  <p className="text-xs text-[var(--foreground)]/60">Ready to generate</p>
                 </div>
               </div>
               <motion.button
@@ -259,8 +259,8 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                 onClick={() => onSelectionChange([])}
                 className="group relative px-3 py-1 rounded-lg overflow-hidden"
               >
-                <div className="absolute inset-0 bg-white/10 group-hover:bg-white/20 transition-colors duration-300 rounded-lg" />
-                <div className="relative flex items-center space-x-1 text-white/70 group-hover:text-white transition-colors duration-300">
+                <div className="absolute inset-0 bg-[var(--component-card)]/10 group-hover:bg-[var(--component-card)]/20 transition-colors duration-300 rounded-lg" />
+                <div className="relative flex items-center space-x-1 text-[var(--foreground)]/70 group-hover:text-[var(--foreground)] transition-colors duration-300">
                   <X className="w-3 h-3" />
                   <span className="text-xs font-medium">Clear</span>
                 </div>
@@ -297,15 +297,15 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Folder className="w-16 h-16 text-white/30 mx-auto mb-4" />
+                <Folder className="w-16 h-16 text-[var(--foreground)]/30 mx-auto mb-4" />
               </motion.div>
-              <p className="text-white/70 font-medium">
+              <p className="text-[var(--foreground)]/70 font-medium">
                 {documents.length === 0 
                   ? 'No documents uploaded yet'
                   : 'No documents match your search'
                 }
               </p>
-              <p className="text-white/50 text-sm mt-1">
+              <p className="text-[var(--foreground)]/50 text-sm mt-1">
                 {documents.length === 0 
                   ? 'Click "Upload" to add your first document'
                   : 'Try adjusting your search terms'
@@ -345,8 +345,8 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                   <div className={`
                     relative p-4 rounded-xl cursor-pointer transition-all duration-300 border group-hover:scale-[1.01]
                     ${isSelected
-                      ? 'bg-white/15 backdrop-blur-xl border-white/30 shadow-xl'
-                      : 'bg-white/5 backdrop-blur-xl border-white/10 hover:bg-white/10 hover:border-white/20'
+                      ? 'bg-[var(--component-card)]/15 backdrop-blur-xl border-white/30 shadow-xl'
+                      : 'bg-[var(--component-card)]/5 backdrop-blur-xl border-white/10 hover:bg-[var(--component-card)]/10 hover:border-white/20'
                     }
                   `}>
                     {/* Prismatic edge highlights */}
@@ -373,12 +373,12 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                           ${document.openai_upload_status === 'completed'
                             ? isSelected
                               ? 'bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-600 shadow-xl border-white/20'
-                              : 'bg-white/10 backdrop-blur-sm border-white/30 hover:bg-white/20'
+                              : 'bg-[var(--component-card)]/10 backdrop-blur-sm border-white/30 hover:bg-[var(--component-card)]/20'
                             : document.openai_upload_status === 'processing'
                               ? 'bg-yellow-500/20 border-yellow-400/40 cursor-not-allowed'
                               : document.openai_upload_status === 'failed'
                                 ? 'bg-red-500/20 border-red-400/40 cursor-not-allowed'
-                                : 'bg-gray-500/20 border-gray-400/40 cursor-not-allowed'
+                                : 'bg-[var(--muted-foreground)]/20 border-[var(--border)]/40 cursor-not-allowed'
                           }
                         `}>
                           {/* Prismatic inner highlight */}
@@ -396,7 +396,7 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                                   exit={{ scale: 0, rotate: 180 }}
                                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
                                 >
-                                  <Check className="w-4 h-4 text-white drop-shadow-sm" />
+                                  <Check className="w-4 h-4 text-[var(--foreground)] drop-shadow-sm" />
                                 </motion.div>
                               ) : (
                                 <motion.div
@@ -416,7 +416,7 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                             ) : document.openai_upload_status === 'failed' ? (
                               <X className="w-3 h-3 text-red-400" />
                             ) : (
-                              <div className="w-2 h-2 bg-gray-400 rounded-full" />
+                              <div className="w-2 h-2 bg-[var(--muted)] rounded-full" />
                             )}
                           </AnimatePresence>
                         </div>
@@ -425,12 +425,12 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                       {/* Compact Document Content */}
                       <div className="flex-1 min-w-0">
                         <h4 className={`font-bold text-lg mb-1 transition-colors duration-300 ${
-                          isSelected ? 'text-white' : 'text-white/90'
+                          isSelected ? 'text-[var(--foreground)]' : 'text-[var(--foreground)]/90'
                         }`}>
                           {document.title}
                         </h4>
                         <p className={`text-xs truncate transition-colors duration-300 ${
-                          isSelected ? 'text-white/70' : 'text-white/60'
+                          isSelected ? 'text-[var(--foreground)]/70' : 'text-[var(--foreground)]/60'
                         }`}>
                           {document.file_name}
                         </p>
@@ -455,15 +455,15 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                               </>
                             ) : (
                               <>
-                                <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                                <span className="text-xs text-gray-400 font-medium">Pending Upload</span>
+                                <div className="w-2 h-2 bg-[var(--muted)] rounded-full"></div>
+                                <span className="text-xs text-[var(--foreground-secondary)] font-medium">Pending Upload</span>
                               </>
                             )}
                           </div>
                           {document.openai_file_id && (
                             <>
-                              <span className="text-white/40">•</span>
-                              <span className="text-xs text-white/60 font-mono">
+                              <span className="text-[var(--foreground)]/40">•</span>
+                              <span className="text-xs text-[var(--foreground)]/60 font-mono">
                                 {document.openai_file_id.slice(0, 12)}...
                               </span>
                             </>
@@ -482,7 +482,7 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                               </span>
                             ))}
                             {document.tags.length > 2 && (
-                              <span className="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-white/10 backdrop-blur-sm border border-white/20 text-white/60">
+                              <span className="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-[var(--component-card)]/10 backdrop-blur-sm border border-white/20 text-[var(--foreground)]/60">
                                 +{document.tags.length - 2}
                               </span>
                             )}
@@ -492,14 +492,14 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                         {/* Compact Metadata */}
                         <div className="flex items-center space-x-3 mt-2">
                           <div className={`flex items-center space-x-1 text-xs transition-colors duration-300 ${
-                            isSelected ? 'text-white/70' : 'text-white/60'
+                            isSelected ? 'text-[var(--foreground)]/70' : 'text-[var(--foreground)]/60'
                           }`}>
                             <FileText className="w-3 h-3 text-purple-400" />
                             <span className="font-medium">{formatFileSize(document.file_size)}</span>
                           </div>
-                          <span className="text-white/40">•</span>
+                          <span className="text-[var(--foreground)]/40">•</span>
                           <div className={`flex items-center space-x-1 text-xs transition-colors duration-300 ${
-                            isSelected ? 'text-white/70' : 'text-white/60'
+                            isSelected ? 'text-[var(--foreground)]/70' : 'text-[var(--foreground)]/60'
                           }`}>
                             <Clock className="w-3 h-3 text-purple-400" />
                             <span className="font-medium">{formatDate(document.created_at)}</span>
@@ -520,7 +520,7 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                           isSelected ? 'opacity-40' : 'group-hover:opacity-30'
                         }`} />
                         <ChevronRight className={`relative w-6 h-6 transition-colors duration-300 ${
-                          isSelected ? 'text-purple-400' : 'text-white/40'
+                          isSelected ? 'text-purple-400' : 'text-[var(--foreground)]/40'
                         }`} />
                       </div>
                     </div>
@@ -537,7 +537,7 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
-        className="mt-3 flex items-center justify-center space-x-2 text-xs text-white/50"
+        className="mt-3 flex items-center justify-center space-x-2 text-xs text-[var(--foreground)]/50"
       >
         <Sparkles className="w-3 h-3 text-purple-400" />
         <span>Select documents for your podcast</span>
@@ -551,11 +551,11 @@ const DocumentSelector: React.FC<DocumentSelectorProps> = ({
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #e5e7eb;
+          background: var(--component-surface-secondary);
           border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #d1d5db;
+          background: var(--component-surface-tertiary);
         }
       `}</style>
     </div>

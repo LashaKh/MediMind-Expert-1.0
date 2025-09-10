@@ -230,16 +230,16 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
           {/* Results Display - World-Class Design */}
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-purple-400/10 to-indigo-400/10 rounded-4xl blur-3xl transform -rotate-1"></div>
-            <div className="relative bg-gradient-to-br from-white/90 via-white/70 to-white/90 dark:from-gray-900/90 dark:via-gray-800/70 dark:to-gray-900/90 backdrop-blur-2xl border border-white/20 dark:border-gray-700/20 rounded-4xl p-10 shadow-2xl">
+            <div className="relative bg-gradient-to-br from-white/90 via-white/70 to-white/90 dark:from-gray-900/90 dark:via-gray-800/70 dark:to-gray-900/90 backdrop-blur-2xl border border-white/20 dark:border-[var(--border-strong)]/20 rounded-4xl p-10 shadow-2xl">
               
               {/* Hero Score Display */}
               <div className="text-center mb-12">
                 <div className="inline-flex items-center justify-center w-40 h-40 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-2xl shadow-blue-500/30 mb-8 transform hover:scale-105 transition-all duration-500">
                   <div className="text-center">
-                    <div className="text-5xl font-black text-white mb-1">
+                    <div className="text-5xl font-black text-[var(--foreground)] mb-1">
                       {result.score}
                     </div>
-                    <div className="text-lg font-normal text-white/80">/ 7 {t('common.points')}</div>
+                    <div className="text-lg font-normal text-[var(--foreground)]/80">/ 7 {t('common.points')}</div>
                   </div>
                 </div>
                 
@@ -256,10 +256,10 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                 
                 <div className={`inline-flex items-center px-10 py-5 rounded-2xl text-2xl font-bold shadow-xl transform hover:scale-105 transition-all duration-300 ${
                   result.riskCategory === 'high' 
-                    ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-red-500/30' 
+                    ? 'bg-gradient-to-r from-red-500 to-red-600 text-[var(--foreground)] shadow-red-500/30' 
                     : result.riskCategory === 'intermediate'
-                    ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-orange-500/30'
-                    : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-green-500/30'
+                    ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-[var(--foreground)] shadow-orange-500/30'
+                    : 'bg-gradient-to-r from-green-500 to-emerald-500 text-[var(--foreground)] shadow-green-500/30'
                 }`}>
                   <Heart className="w-8 h-8 mr-4" />
                   {getInterpretation(result.riskCategory, result.score, result.adverseOutcomeRisk)}
@@ -279,7 +279,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                   </h4>
                     </div>
                     <div className="relative space-y-4">
-                      <div className="flex justify-between items-center p-4 bg-white/70 dark:bg-gray-800/70 rounded-2xl border border-purple-200/50 dark:border-purple-700/50">
+                      <div className="flex justify-between items-center p-4 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-2xl border border-purple-200/50 dark:border-purple-700/50">
                     <span className="text-lg font-medium text-purple-700 dark:text-purple-300">
                       {t('calculators.cardiology.timi.mortality')}
                     </span>
@@ -287,7 +287,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                       {result.riskDetails.mortality}%
                     </span>
                       </div>
-                      <div className="flex justify-between items-center p-4 bg-white/70 dark:bg-gray-800/70 rounded-2xl border border-purple-200/50 dark:border-purple-700/50">
+                      <div className="flex justify-between items-center p-4 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-2xl border border-purple-200/50 dark:border-purple-700/50">
                     <span className="text-lg font-medium text-purple-700 dark:text-purple-300">
                       {t('calculators.cardiology.timi.myocardial_infarction')}
                     </span>
@@ -295,11 +295,11 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                       {result.riskDetails.miRisk}%
                     </span>
                       </div>
-                      <div className="flex justify-between items-center p-4 bg-white/70 dark:bg-gray-800/70 rounded-2xl border border-purple-200/50 dark:border-purple-700/50">
+                      <div className="flex justify-between items-center p-4 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-2xl border border-purple-200/50 dark:border-purple-700/50">
                     <span className="text-lg font-medium text-purple-700 dark:text-purple-300">
                       {t('calculators.cardiology.timi.urgent_revascularization')}
                     </span>
-                    <span className="text-2xl font-black text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30 px-4 py-2 rounded-xl">
+                    <span className="text-2xl font-black text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 px-4 py-2 rounded-xl">
                       {result.riskDetails.urgentRevasc}%
                     </span>
                       </div>
@@ -348,7 +348,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                       })()}
                     </div>
                     <div className="relative space-y-6">
-                      <div className={`text-center p-6 bg-white/70 dark:bg-gray-800/70 rounded-2xl border ${
+                      <div className={`text-center p-6 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-2xl border ${
                         result.urgency === 'high' ? 'border-red-200/50 dark:border-red-700/50' :
                         result.urgency === 'moderate' ? 'border-orange-200/50 dark:border-orange-700/50' :
                         'border-green-200/50 dark:border-green-700/50'
@@ -377,36 +377,36 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                 </div>
 
             {/* Score Components */}
-            <div className="p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-white/20 dark:border-gray-700/20">
-              <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            <div className="p-6 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-xl border border-white/20 dark:border-[var(--border-strong)]/20">
+              <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
                 {t('calculators.cardiology.timi.score_components')} ({result.score}/7 {t('common.points', { defaultValue: 'points' })})
               </h4>
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
-                <div className={`flex items-center space-x-2 ${parseInt(formData.age) >= 65 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+                <div className={`flex items-center space-x-2 ${parseInt(formData.age) >= 65 ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' : 'text-[var(--foreground-secondary)]'}`}>
                   <CheckCircle className="w-4 h-4" />
                   <span className="text-sm">{t('calculators.cardiology.timi.age_component')}</span>
                 </div>
-                <div className={`flex items-center space-x-2 ${parseInt(formData.coronaryRiskFactors) >= 3 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+                <div className={`flex items-center space-x-2 ${parseInt(formData.coronaryRiskFactors) >= 3 ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' : 'text-[var(--foreground-secondary)]'}`}>
                   <CheckCircle className="w-4 h-4" />
                   <span className="text-sm">{t('calculators.cardiology.timi.cad_risk_factors_component')}</span>
                 </div>
-                <div className={`flex items-center space-x-2 ${formData.knownCAD ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+                <div className={`flex items-center space-x-2 ${formData.knownCAD ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' : 'text-[var(--foreground-secondary)]'}`}>
                   <CheckCircle className="w-4 h-4" />
                   <span className="text-sm">{t('calculators.cardiology.timi.known_cad_component')}</span>
                 </div>
-                <div className={`flex items-center space-x-2 ${formData.aspirinUse ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+                <div className={`flex items-center space-x-2 ${formData.aspirinUse ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' : 'text-[var(--foreground-secondary)]'}`}>
                   <CheckCircle className="w-4 h-4" />
                   <span className="text-sm">{t('calculators.cardiology.timi.aspirin_component')}</span>
                 </div>
-                <div className={`flex items-center space-x-2 ${formData.severeAngina ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+                <div className={`flex items-center space-x-2 ${formData.severeAngina ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' : 'text-[var(--foreground-secondary)]'}`}>
                   <CheckCircle className="w-4 h-4" />
                   <span className="text-sm">{t('calculators.cardiology.timi.angina_component')}</span>
                   </div>
-                <div className={`flex items-center space-x-2 ${formData.stDeviation ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+                <div className={`flex items-center space-x-2 ${formData.stDeviation ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' : 'text-[var(--foreground-secondary)]'}`}>
                   <CheckCircle className="w-4 h-4" />
                   <span className="text-sm">{t('calculators.cardiology.timi.st_component')}</span>
                   </div>
-                <div className={`flex items-center space-x-2 ${formData.elevatedBiomarkers ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+                <div className={`flex items-center space-x-2 ${formData.elevatedBiomarkers ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' : 'text-[var(--foreground-secondary)]'}`}>
                   <CheckCircle className="w-4 h-4" />
                   <span className="text-sm">{t('calculators.cardiology.timi.biomarkers_component')}</span>
                 </div>
@@ -416,14 +416,14 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
             {/* Clinical Recommendation */}
             <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl">
               <div className="flex items-center space-x-3 mb-4">
-                <Stethoscope className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <Stethoscope className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                 <h4 className="text-lg font-bold text-blue-800 dark:text-blue-200">
                   {t('calculators.cardiology.timi.clinical_strategy')}
                 </h4>
                       </div>
               <div className="space-y-3">
                 {result.recommendations.map((rec, index) => (
-                  <p key={index} className="text-blue-700 dark:text-blue-300 leading-relaxed">
+                  <p key={index} className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed">
                     {rec}
                   </p>
                     ))}
@@ -455,20 +455,20 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 to-indigo-400/5"></div>
               <div className="relative flex items-center space-x-6 mb-8">
                 <div className="p-4 bg-gradient-to-br from-blue-100 to-indigo-200 dark:from-blue-900/40 dark:to-indigo-800/40 rounded-2xl shadow-lg">
-                  <User className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                  <User className="w-8 h-8 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                 </div>
                 <h3 className="text-3xl font-black text-blue-800 dark:text-blue-200">
                   {t('calculators.cardiology.timi.about_creator_title')}
                 </h3>
               </div>
               <div className="relative space-y-6">
-                <p className="text-blue-700 dark:text-blue-300 leading-relaxed text-xl">
+                <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed text-xl">
                   <strong className="text-blue-800 dark:text-blue-200 text-2xl">{t('calculators.cardiology.timi.creator_name')}</strong>
                 </p>
-                <p className="text-blue-700 dark:text-blue-300 leading-relaxed text-lg">
+                <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed text-lg">
                   {t('calculators.cardiology.timi.creator_description')}
                 </p>
-                <p className="text-blue-600 dark:text-blue-400 text-lg">
+                <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 text-lg">
                   {t('calculators.cardiology.timi.creator_publications')}{' '}
                   <a 
                     href="https://pubmed.ncbi.nlm.nih.gov/?term=Antman+EM%5BAuthor%5D"
@@ -504,34 +504,34 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                     {t('calculators.cardiology.timi.formula_description')}
                   </p>
                   
-                  <div className="bg-white/80 dark:bg-gray-800/80 rounded-3xl p-8 space-y-4 backdrop-blur-sm border border-green-200/50 dark:border-green-700/50">
+                  <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 rounded-3xl p-8 space-y-4 backdrop-blur-sm border border-green-200/50 dark:border-green-700/50">
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                       <div className="flex justify-between items-center p-4 bg-green-50/80 dark:bg-green-900/30 rounded-2xl">
-                        <span className="text-gray-700 dark:text-gray-300 font-medium text-lg">{t('calculators.cardiology.timi.variable_age')}</span>
+                        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium text-lg">{t('calculators.cardiology.timi.variable_age')}</span>
                         <span className="font-mono text-2xl font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-800/40 px-4 py-2 rounded-xl">1</span>
                       </div>
                       <div className="flex justify-between items-center p-4 bg-green-50/80 dark:bg-green-900/30 rounded-2xl">
-                        <span className="text-gray-700 dark:text-gray-300 font-medium text-lg">{t('calculators.cardiology.timi.variable_risk_factors')}</span>
+                        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium text-lg">{t('calculators.cardiology.timi.variable_risk_factors')}</span>
                         <span className="font-mono text-2xl font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-800/40 px-4 py-2 rounded-xl">1</span>
                       </div>
                       <div className="flex justify-between items-center p-4 bg-green-50/80 dark:bg-green-900/30 rounded-2xl">
-                        <span className="text-gray-700 dark:text-gray-300 font-medium text-lg">{t('calculators.cardiology.timi.variable_known_cad')}</span>
+                        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium text-lg">{t('calculators.cardiology.timi.variable_known_cad')}</span>
                         <span className="font-mono text-2xl font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-800/40 px-4 py-2 rounded-xl">1</span>
                       </div>
                       <div className="flex justify-between items-center p-4 bg-green-50/80 dark:bg-green-900/30 rounded-2xl">
-                        <span className="text-gray-700 dark:text-gray-300 font-medium text-lg">{t('calculators.cardiology.timi.variable_aspirin')}</span>
+                        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium text-lg">{t('calculators.cardiology.timi.variable_aspirin')}</span>
                         <span className="font-mono text-2xl font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-800/40 px-4 py-2 rounded-xl">1</span>
                       </div>
                       <div className="flex justify-between items-center p-4 bg-green-50/80 dark:bg-green-900/30 rounded-2xl">
-                        <span className="text-gray-700 dark:text-gray-300 font-medium text-lg">{t('calculators.cardiology.timi.variable_angina')}</span>
+                        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium text-lg">{t('calculators.cardiology.timi.variable_angina')}</span>
                         <span className="font-mono text-2xl font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-800/40 px-4 py-2 rounded-xl">1</span>
                       </div>
                       <div className="flex justify-between items-center p-4 bg-green-50/80 dark:bg-green-900/30 rounded-2xl">
-                        <span className="text-gray-700 dark:text-gray-300 font-medium text-lg">{t('calculators.cardiology.timi.variable_st_deviation')}</span>
+                        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium text-lg">{t('calculators.cardiology.timi.variable_st_deviation')}</span>
                         <span className="font-mono text-2xl font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-800/40 px-4 py-2 rounded-xl">1</span>
                       </div>
                       <div className="flex justify-between items-center p-4 bg-green-50/80 dark:bg-green-900/30 rounded-2xl">
-                        <span className="text-gray-700 dark:text-gray-300 font-medium text-lg">{t('calculators.cardiology.timi.variable_biomarkers')}</span>
+                        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium text-lg">{t('calculators.cardiology.timi.variable_biomarkers')}</span>
                         <span className="font-mono text-2xl font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-800/40 px-4 py-2 rounded-xl">1</span>
                       </div>
                     </div>
@@ -559,30 +559,30 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
             </div>
 
             {/* Literature - World-Class Design */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100 dark:from-gray-950/40 dark:via-slate-950/40 dark:to-gray-900/40 border border-gray-200/60 dark:border-gray-800/40 rounded-3xl p-10 backdrop-blur-xl shadow-2xl shadow-gray-500/10">
+            <div className="relative overflow-hidden bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100 dark:from-gray-950/40 dark:via-slate-950/40 dark:to-gray-900/40 border border-[var(--glass-border-light)]/60 dark:border-gray-800/40 rounded-3xl p-10 backdrop-blur-xl shadow-2xl shadow-gray-500/10">
               <div className="absolute inset-0 bg-gradient-to-r from-gray-400/5 to-slate-400/5"></div>
               <div className="relative flex items-center space-x-6 mb-8">
                 <div className="p-4 bg-gradient-to-br from-gray-100 to-slate-200 dark:from-gray-900/40 dark:to-slate-800/40 rounded-2xl shadow-lg">
-                  <FileText className="w-8 h-8 text-gray-600 dark:text-gray-400" />
+                  <FileText className="w-8 h-8 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" />
                 </div>
-                <h3 className="text-3xl font-black text-gray-800 dark:text-gray-200">
+                <h3 className="text-3xl font-black text-[var(--foreground)] dark:text-[var(--foreground)]">
                   {t('calculators.cardiology.timi.literature_title')}
                 </h3>
               </div>
               <div className="relative space-y-6">
-                <div className="p-6 bg-white/80 dark:bg-gray-800/80 rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
-                  <h4 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-3">
+                <div className="p-6 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 rounded-2xl border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50">
+                  <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">
                     {t('calculators.cardiology.timi.original_reference_title')}
                   </h4>
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                  <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed text-lg">
                     {t('calculators.cardiology.timi.original_reference')}
                   </p>
                 </div>
-                <div className="p-6 bg-white/80 dark:bg-gray-800/80 rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
-                  <h4 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-3">
+                <div className="p-6 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 rounded-2xl border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50">
+                  <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">
                     {t('calculators.cardiology.timi.validation_studies_title')}
                   </h4>
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                  <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed text-lg">
                     {t('calculators.cardiology.timi.validation_studies')}
                   </p>
                 </div>
@@ -591,11 +591,11 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
 
             {/* Footer - Enhanced */}
             <div className="p-8 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-900/50 rounded-3xl text-center backdrop-blur-sm shadow-xl">
-              <div className="flex items-center justify-center space-x-4 text-gray-600 dark:text-gray-400 mb-3">
+              <div className="flex items-center justify-center space-x-4 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3">
                 <Award className="w-6 h-6" />
                 <span className="text-xl font-bold">{t('calculators.cardiology.timi.based_on_timi')}</span>
               </div>
-              <div className="text-lg text-gray-500 dark:text-gray-500">
+              <div className="text-lg text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                 {t('calculators.cardiology.timi.clinically_validated')}
               </div>
             </div>
@@ -634,19 +634,19 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
 
         {/* Progress Indicator - Enhanced */}
         <div className="flex justify-center mb-12">
-          <div className="flex items-center space-x-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/20 dark:border-gray-700/20">
-            <div className={`flex items-center space-x-4 ${step >= 1 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+          <div className="flex items-center space-x-6 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/20 dark:border-[var(--border-strong)]/20">
+            <div className={`flex items-center space-x-4 ${step >= 1 ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' : 'text-[var(--foreground-secondary)]'}`}>
               <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-300 ${
-                step >= 1 ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-400'
+                step >= 1 ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-[var(--foreground)] shadow-lg shadow-blue-500/30' : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)]'
               }`}>
                 1
               </div>
               <span className="font-bold text-lg">{t('calculators.cardiology.timi.patient_info')}</span>
             </div>
             <div className="w-12 h-px bg-gradient-to-r from-blue-300 to-purple-300 dark:from-blue-600 dark:to-purple-600"></div>
-            <div className={`flex items-center space-x-4 ${step >= 2 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
+            <div className={`flex items-center space-x-4 ${step >= 2 ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' : 'text-[var(--foreground-secondary)]'}`}>
               <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-300 ${
-                step >= 2 ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-400'
+                step >= 2 ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-[var(--foreground)] shadow-lg shadow-blue-500/30' : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)]'
               }`}>
                 2
               </div>
@@ -662,7 +662,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 to-indigo-400/5"></div>
               <div className="relative flex items-center space-x-6 mb-8">
                 <div className="p-4 bg-gradient-to-br from-blue-100 to-indigo-200 dark:from-blue-900/40 dark:to-indigo-800/40 rounded-2xl shadow-lg">
-                  <User className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                  <User className="w-8 h-8 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                 </div>
                 <h3 className="text-3xl font-black text-blue-800 dark:text-blue-200">
                   {t('calculators.cardiology.timi.demographics_section')}
@@ -681,8 +681,8 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                     max={120}
                     error={errors.age}
                   />
-                  <div className="p-4 bg-white/70 dark:bg-gray-800/70 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
-                    <p className="text-blue-700 dark:text-blue-300 leading-relaxed">
+                  <div className="p-4 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
+                    <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed">
                       {t('calculators.cardiology.timi.age_help')}
                     </p>
                   </div>
@@ -702,8 +702,8 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                     ]}
                     error={errors.coronaryRiskFactors}
                   />
-                  <div className="p-4 bg-white/70 dark:bg-gray-800/70 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
-                    <p className="text-blue-700 dark:text-blue-300 leading-relaxed">
+                  <div className="p-4 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
+                    <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed">
                       {t('calculators.cardiology.timi.risk_factors_help')}
                     </p>
                   </div>
@@ -712,7 +712,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
 
               <div className="relative mt-8 p-6 bg-gradient-to-r from-blue-100/80 to-indigo-100/80 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-3xl border border-blue-200/50 dark:border-blue-700/50">
                 <div className="flex items-start space-x-4">
-                  <Info className="w-6 h-6 text-blue-600 dark:text-blue-400 mt-1 flex-shrink-0" />
+                  <Info className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mt-1 flex-shrink-0" />
                   <p className="text-blue-800 dark:text-blue-200 leading-relaxed text-lg font-medium">
                     {t('calculators.cardiology.timi.risk_factors_detail')}
                   </p>
@@ -723,7 +723,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
             <div className="flex justify-end">
               <CalculatorButton
                 onClick={handleNextStep}
-                className="flex items-center space-x-3 px-8 py-4 text-lg font-bold bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-2xl shadow-xl shadow-blue-500/30 transform hover:scale-105 transition-all duration-300"
+                className="flex items-center space-x-3 px-8 py-4 text-lg font-bold bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-[var(--foreground)] rounded-2xl shadow-xl shadow-blue-500/30 transform hover:scale-105 transition-all duration-300"
               >
                 <span>{t('calculators.cardiology.timi.next_clinical_factors')}</span>
                 <ArrowRight className="w-6 h-6" />
@@ -746,14 +746,14 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                 </h3>
               </div>
 
-              <div className="relative mb-8 p-6 bg-white/80 dark:bg-gray-800/80 rounded-3xl border border-red-200/50 dark:border-red-700/50">
+              <div className="relative mb-8 p-6 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 rounded-3xl border border-red-200/50 dark:border-red-700/50">
                 <p className="text-red-700 dark:text-red-300 text-lg leading-relaxed font-medium">
                   {t('calculators.cardiology.timi.clinical_assessment_description')}
                 </p>
               </div>
 
               <div className="relative space-y-6">
-                <div className="p-6 bg-white/70 dark:bg-gray-800/70 rounded-3xl border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
+                <div className="p-6 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-3xl border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
                   <CalculatorCheckbox
                     label={t('calculators.cardiology.timi.known_cad')}
                     checked={formData.knownCAD}
@@ -762,7 +762,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                   />
                 </div>
 
-                <div className="p-6 bg-white/70 dark:bg-gray-800/70 rounded-3xl border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
+                <div className="p-6 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-3xl border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
                   <CalculatorCheckbox
                     label={t('calculators.cardiology.timi.aspirin_use')}
                     checked={formData.aspirinUse}
@@ -771,7 +771,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                   />
                 </div>
 
-                <div className="p-6 bg-white/70 dark:bg-gray-800/70 rounded-3xl border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
+                <div className="p-6 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-3xl border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
                   <CalculatorCheckbox
                     label={t('calculators.cardiology.timi.severe_angina')}
                     checked={formData.severeAngina}
@@ -780,7 +780,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                   />
                 </div>
 
-                <div className="p-6 bg-white/70 dark:bg-gray-800/70 rounded-3xl border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
+                <div className="p-6 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-3xl border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
                   <CalculatorCheckbox
                     label={t('calculators.cardiology.timi.st_deviation')}
                     checked={formData.stDeviation}
@@ -789,7 +789,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                   />
                 </div>
 
-                <div className="p-6 bg-white/70 dark:bg-gray-800/70 rounded-3xl border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
+                <div className="p-6 bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 rounded-3xl border border-red-200/50 dark:border-red-700/50 backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-300">
                   <CalculatorCheckbox
                     label={t('calculators.cardiology.timi.elevated_biomarkers')}
                     checked={formData.elevatedBiomarkers}
@@ -804,7 +804,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
               <CalculatorButton
                 onClick={handlePrevStep}
                 variant="outline"
-                className="flex items-center space-x-3 px-8 py-4 text-lg font-bold border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white/80 dark:bg-gray-800/80 rounded-2xl shadow-lg backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
+                className="flex items-center space-x-3 px-8 py-4 text-lg font-bold border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 rounded-2xl shadow-lg backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
               >
                 <ArrowLeft className="w-6 h-6" />
                 <span>{t('common.previous')}</span>
@@ -812,7 +812,7 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
               
               <CalculatorButton
                 onClick={handleCalculate}
-                className="flex items-center space-x-3 px-8 py-4 text-lg font-bold bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white rounded-2xl shadow-xl shadow-red-500/30 transform hover:scale-105 transition-all duration-300"
+                className="flex items-center space-x-3 px-8 py-4 text-lg font-bold bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-[var(--foreground)] rounded-2xl shadow-xl shadow-red-500/30 transform hover:scale-105 transition-all duration-300"
               >
                 <Calculator className="w-6 h-6" />
                 <span>{t('calculators.cardiology.timi.calculate_button')}</span>

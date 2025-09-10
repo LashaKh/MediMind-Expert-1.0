@@ -134,7 +134,7 @@ export const OnboardingFlow: React.FC = () => {
       <div className="min-h-screen min-h-[100svh] flex items-center justify-center p-4 safe-area-inset">
         <div className="text-center">
           <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-sm sm:text-base px-2">{t('onboarding.settingUpWorkspace')}</p>
+          <p className="text-[var(--foreground-tertiary)] text-sm sm:text-base px-2">{t('onboarding.settingUpWorkspace')}</p>
         </div>
       </div>
     );
@@ -143,13 +143,13 @@ export const OnboardingFlow: React.FC = () => {
   return (
     <div className="min-h-screen min-h-[100svh] bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 flex flex-col">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-slate-100 safe-area-inset-top">
+      <div className="bg-[var(--component-card)]/80 backdrop-blur-sm shadow-sm border-b border-slate-100 safe-area-inset-top">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent mb-3 leading-tight">
               {t('onboarding.welcome')}
             </h1>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 font-light max-w-2xl mx-auto px-2">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-[var(--foreground-tertiary)] font-light max-w-2xl mx-auto px-2">
               {t('onboarding.setupMessage')}
             </p>
           </div>
@@ -175,8 +175,8 @@ export const OnboardingFlow: React.FC = () => {
                 <div className={`
                   relative w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-base sm:text-lg font-bold transition-all duration-300 touch-target-md
                   ${index <= currentStep 
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25' 
-                    : 'bg-slate-200 text-slate-500'
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-[var(--foreground)] shadow-lg shadow-blue-500/25' 
+                    : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                   }
                 `}>
                   <span className="relative z-10">{index + 1}</span>
@@ -185,14 +185,14 @@ export const OnboardingFlow: React.FC = () => {
                   )}
                 </div>
                 <span className={`ml-3 sm:ml-4 text-base sm:text-lg font-semibold transition-colors duration-300 ${
-                  index <= currentStep ? 'text-blue-700' : 'text-slate-500'
+                  index <= currentStep ? 'text-[var(--cardiology-accent-blue-dark)]' : 'text-[var(--foreground-secondary)]'
                 } text-center sm:text-left`}>
                   {step.title}
                 </span>
               </div>
               {index < steps.length - 1 && (
                 <div className={`w-0.5 h-8 sm:w-16 lg:w-24 sm:h-0.5 mx-0 my-2 sm:mx-6 lg:mx-8 sm:my-0 transition-colors duration-300 ${
-                  index < currentStep ? 'bg-gradient-to-b sm:bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-slate-200'
+                  index < currentStep ? 'bg-gradient-to-b sm:bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-[var(--component-surface-tertiary)]'
                 }`} />
               )}
             </div>
@@ -202,7 +202,7 @@ export const OnboardingFlow: React.FC = () => {
         {/* Step Content */}
         <div className={`
           transition-all duration-500 transform
-          ${currentStep === 0 ? 'bg-transparent' : 'bg-white/60 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-lg border border-white/20 p-4 sm:p-6 lg:p-8'}
+          ${currentStep === 0 ? 'bg-transparent' : 'bg-[var(--component-card)]/60 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-lg border border-white/20 p-4 sm:p-6 lg:p-8'}
         `}>
           {currentStep === 0 && (
             <SpecialtySelection 

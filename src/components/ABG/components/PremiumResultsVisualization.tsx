@@ -132,7 +132,7 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
       case 'normal': return 'text-emerald-600';
       case 'abnormal': return 'text-yellow-600';
       case 'critical': return 'text-red-600';
-      default: return 'text-slate-600';
+      default: return 'text-[var(--foreground-tertiary)]';
     }
   };
 
@@ -142,7 +142,7 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
       case 'normal': return 'bg-emerald-50 border-emerald-200';
       case 'abnormal': return 'bg-yellow-50 border-yellow-200';
       case 'critical': return 'bg-red-50 border-red-200';
-      default: return 'bg-slate-50 border-slate-200';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)]';
     }
   };
 
@@ -157,7 +157,7 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
         className={cn(
           "relative p-6 rounded-xl border-2 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]",
           getStatusBackground(paramStatus.status),
-          selectedParameter?.name === param.name && "ring-2 ring-blue-500 ring-offset-2"
+          selectedParameter?.name === param.name && "ring-2 ring-[var(--cardiology-accent-blue)] ring-offset-2"
         )}
         onClick={() => setSelectedParameter(selectedParameter?.name === param.name ? null : param)}
       >
@@ -165,11 +165,11 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 bg-gradient-to-br ${config.gradient} rounded-lg flex items-center justify-center`}>
-              <config.icon className="h-5 w-5 text-white" />
+              <config.icon className="h-5 w-5 text-[var(--foreground)]" />
             </div>
             <div>
-              <h4 className="font-semibold text-slate-800">{param.name}</h4>
-              <p className="text-xs text-slate-600">{param.unit}</p>
+              <h4 className="font-semibold text-[var(--foreground)]">{param.name}</h4>
+              <p className="text-xs text-[var(--foreground-tertiary)]">{param.unit}</p>
             </div>
           </div>
           
@@ -187,15 +187,15 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
             <span className={cn("text-3xl font-bold", getStatusColor(paramStatus.status))}>
               {param.value}
             </span>
-            <span className="text-sm text-slate-600">{param.unit}</span>
+            <span className="text-sm text-[var(--foreground-tertiary)]">{param.unit}</span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[var(--foreground-secondary)] mt-1">
             Normal: {param.normalRange.min} - {param.normalRange.max} {param.unit}
           </p>
         </div>
 
         {/* Visual Range Bar */}
-        <div className="relative h-3 bg-slate-200 rounded-full overflow-hidden">
+        <div className="relative h-3 bg-[var(--component-surface-tertiary)] rounded-full overflow-hidden">
           {/* Normal range background */}
           <div 
             className="absolute top-0 bg-emerald-300 h-full rounded-full"
@@ -243,15 +243,15 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
 
         {/* Expanded Details */}
         {selectedParameter?.name === param.name && (
-          <div className="mt-4 pt-4 border-t border-slate-200 space-y-3 animate-in slide-in-from-top-2">
+          <div className="mt-4 pt-4 border-t border-[var(--glass-border-light)] space-y-3 animate-in slide-in-from-top-2">
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="font-medium text-slate-700">Normal Range</p>
-                <p className="text-slate-600">{param.normalRange.min} - {param.normalRange.max}</p>
+                <p className="font-medium text-[var(--foreground)]">Normal Range</p>
+                <p className="text-[var(--foreground-tertiary)]">{param.normalRange.min} - {param.normalRange.max}</p>
               </div>
               {param.criticalRange && (
                 <div>
-                  <p className="font-medium text-slate-700">Critical Range</p>
+                  <p className="font-medium text-[var(--foreground)]">Critical Range</p>
                   <p className="text-red-600">
                     {param.criticalRange.min && `< ${param.criticalRange.min}`}
                     {param.criticalRange.min && param.criticalRange.max && ' or '}
@@ -287,11 +287,11 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-600 to-emerald-600 rounded-xl flex items-center justify-center">
-            <BarChart3 className="h-6 w-6 text-white" />
+            <BarChart3 className="h-6 w-6 text-[var(--foreground)]" />
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-slate-800">Results Visualization</h3>
-            <p className="text-slate-600">Interactive blood gas parameter analysis</p>
+            <h3 className="text-2xl font-bold text-[var(--foreground)]">Results Visualization</h3>
+            <p className="text-[var(--foreground-tertiary)]">Interactive blood gas parameter analysis</p>
           </div>
         </div>
         
@@ -314,23 +314,23 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
       {/* Interpretation Summary */}
       {interpretation && (
         <div className="abg-card bg-gradient-to-br from-blue-50 to-purple-50 p-6 border border-blue-200">
-          <h4 className="text-lg font-semibold text-slate-800 mb-4">Clinical Interpretation</h4>
+          <h4 className="text-lg font-semibold text-[var(--foreground)] mb-4">Clinical Interpretation</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {interpretation.primaryDisorder && (
               <div>
-                <p className="text-sm font-medium text-slate-700">Primary Disorder</p>
-                <p className="text-blue-600 font-semibold">{interpretation.primaryDisorder}</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">Primary Disorder</p>
+                <p className="text-[var(--cardiology-accent-blue-dark)] font-semibold">{interpretation.primaryDisorder}</p>
               </div>
             )}
             {interpretation.compensation && (
               <div>
-                <p className="text-sm font-medium text-slate-700">Compensation</p>
-                <p className="text-blue-600 font-semibold">{interpretation.compensation}</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">Compensation</p>
+                <p className="text-[var(--cardiology-accent-blue-dark)] font-semibold">{interpretation.compensation}</p>
               </div>
             )}
             {interpretation.severity && (
               <div>
-                <p className="text-sm font-medium text-slate-700">Severity</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">Severity</p>
                 <Badge
                   className={cn(
                     interpretation.severity === 'mild' && "bg-green-100 text-green-700",
@@ -344,8 +344,8 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
             )}
             {interpretation.oxygenationStatus && (
               <div>
-                <p className="text-sm font-medium text-slate-700">Oxygenation</p>
-                <p className="text-blue-600 font-semibold">{interpretation.oxygenationStatus}</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">Oxygenation</p>
+                <p className="text-[var(--cardiology-accent-blue-dark)] font-semibold">{interpretation.oxygenationStatus}</p>
               </div>
             )}
           </div>
@@ -365,14 +365,14 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
               onClick={() => setActiveCategory(activeCategory === key ? null : key)}
               className={cn(
                 "transition-all duration-300",
-                activeCategory === key && `bg-gradient-to-r ${config.gradient} text-white border-transparent`
+                activeCategory === key && `bg-gradient-to-r ${config.gradient} text-[var(--foreground)] border-transparent`
               )}
             >
               <config.icon className="h-4 w-4 mr-2" />
               {config.label}
               <Badge 
                 variant="secondary" 
-                className="ml-2 text-xs bg-white/20 text-current border-white/20"
+                className="ml-2 text-xs bg-[var(--component-card)]/20 text-current border-white/20"
               >
                 {parametersByCategory[key]?.length || 0}
               </Badge>
@@ -392,9 +392,9 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
             <div key={category} className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className={`w-8 h-8 bg-gradient-to-br ${config.gradient} rounded-lg flex items-center justify-center`}>
-                  <config.icon className="h-4 w-4 text-white" />
+                  <config.icon className="h-4 w-4 text-[var(--foreground)]" />
                 </div>
-                <h4 className="text-xl font-semibold text-slate-800">{config.label}</h4>
+                <h4 className="text-xl font-semibold text-[var(--foreground)]">{config.label}</h4>
                 <Badge variant="secondary">
                   {categoryParams.length} parameter{categoryParams.length !== 1 ? 's' : ''}
                 </Badge>
@@ -410,7 +410,7 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
 
       {/* Summary Stats */}
       <div className="abg-card p-6">
-        <h4 className="text-lg font-semibold text-slate-800 mb-4">Analysis Summary</h4>
+        <h4 className="text-lg font-semibold text-[var(--foreground)] mb-4">Analysis Summary</h4>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="text-center p-4 bg-emerald-50 rounded-xl">
             <p className="text-2xl font-bold text-emerald-600">
@@ -430,9 +430,9 @@ export const PremiumResultsVisualization: React.FC<PremiumResultsVisualizationPr
             </p>
             <p className="text-sm text-red-700">Critical Values</p>
           </div>
-          <div className="text-center p-4 bg-blue-50 rounded-xl">
-            <p className="text-2xl font-bold text-blue-600">{parameters.length}</p>
-            <p className="text-sm text-blue-700">Total Parameters</p>
+          <div className="text-center p-4 bg-[var(--cardiology-accent-blue-light)] rounded-xl">
+            <p className="text-2xl font-bold text-[var(--cardiology-accent-blue-dark)]">{parameters.length}</p>
+            <p className="text-sm text-[var(--cardiology-accent-blue-dark)]">Total Parameters</p>
           </div>
         </div>
       </div>

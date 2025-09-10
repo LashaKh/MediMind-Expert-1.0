@@ -33,10 +33,10 @@ const DebugPanel: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-[var(--component-card)] rounded-lg border border-[var(--glass-border-light)] p-6">
         <div className="flex items-center gap-3 mb-4">
-          <RefreshCw className="w-5 h-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Debug Tools</h3>
+          <RefreshCw className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
+          <h3 className="text-lg font-semibold text-[var(--foreground)]">Debug Tools</h3>
         </div>
         
         {/* Translation Issues Section */}
@@ -69,8 +69,8 @@ const DebugPanel: React.FC = () => {
               className={`
                 flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm
                 ${isClearing 
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                  : 'bg-red-600 hover:bg-red-700 text-white'
+                  ? 'bg-[var(--component-surface-secondary)] text-[var(--foreground-secondary)] cursor-not-allowed' 
+                  : 'bg-red-600 hover:bg-red-700 text-[var(--foreground)]'
                 }
                 transition-colors duration-200
               `}
@@ -96,15 +96,15 @@ const DebugPanel: React.FC = () => {
           </div>
 
           {/* Additional Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg p-4">
             <h4 className="font-medium text-blue-800 mb-2">What gets cleared:</h4>
-            <ul className="text-sm text-blue-700 space-y-1">
+            <ul className="text-sm text-[var(--cardiology-accent-blue-dark)] space-y-1">
               <li>• Conversation history with old translations</li>
               <li>• Cached calculator results</li>
               <li>• OB/GYN specific cached data</li>
               <li>• Any other MediMind cached information</li>
             </ul>
-            <p className="text-sm text-blue-700 mt-3">
+            <p className="text-sm text-[var(--cardiology-accent-blue-dark)] mt-3">
               <strong>Note:</strong> Your account settings and preferences will be preserved.
             </p>
           </div>

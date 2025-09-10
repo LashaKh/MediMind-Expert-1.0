@@ -15,26 +15,26 @@ const DiseasePageWithGuidelinesExample: React.FC<DiseasePageWithGuidelinesProps>
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       {/* Disease Title */}
       <div className="text-center border-b pb-6">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-4xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
           {diseaseTitle}
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           Comprehensive medical information and evidence-based guidelines
         </p>
       </div>
 
       {/* Background Section */}
-      <section className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border p-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+      <section className="bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-lg shadow-sm border p-6">
+        <h2 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
           Background
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           Background section rendered with BackgroundRenderer...
         </p>
       </section>
 
       {/* Guidelines Section - Enhanced Rendering */}
-      <section className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border p-6">
+      <section className="bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-lg shadow-sm border p-6">
         <GuidelinesRenderer 
           content={markdownContent} 
           className="mb-8"
@@ -42,11 +42,11 @@ const DiseasePageWithGuidelinesExample: React.FC<DiseasePageWithGuidelinesProps>
       </section>
 
       {/* Clinical Findings Section */}
-      <section className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border p-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+      <section className="bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-lg shadow-sm border p-6">
+        <h2 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
           Clinical Findings
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           Clinical findings section rendered with existing components...
         </p>
       </section>

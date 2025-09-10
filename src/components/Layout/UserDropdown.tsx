@@ -116,7 +116,7 @@ export const UserDropdown: React.FC = () => {
 
   // Get position-specific styles with premium design - always right-aligned
   const getDropdownStyles = () => {
-    const baseStyles = "absolute mt-3 rounded-2xl shadow-2xl border border-white/20 dark:border-gray-600/20 py-2 z-50 transition-all duration-500 ease-out";
+    const baseStyles = "absolute mt-3 rounded-2xl shadow-2xl border border-white/20 dark:border-[var(--border-strong)]/20 py-2 z-50 transition-all duration-500 ease-out";
     const compactWidth = "w-56"; // Smaller, more compact width
     
     // Always position from the right edge to prevent overflow
@@ -128,7 +128,7 @@ export const UserDropdown: React.FC = () => {
       <button
         ref={buttonRef}
         onClick={handleToggle}
-        className="relative group flex items-center gap-2 px-4 py-0 h-11 rounded-2xl text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-500 ease-out border border-white/20 backdrop-blur-xl overflow-hidden"
+        className="relative group flex items-center gap-2 px-4 py-0 h-11 rounded-2xl text-[var(--foreground)] shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-500 ease-out border border-white/20 backdrop-blur-xl overflow-hidden"
         style={{
           background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.7) 0%, rgba(6, 182, 212, 0.8) 25%, rgba(59, 130, 246, 0.7) 50%, rgba(37, 99, 235, 0.8) 75%, rgba(6, 182, 212, 0.7) 100%)',
           backgroundSize: '300% 300%',
@@ -160,7 +160,7 @@ export const UserDropdown: React.FC = () => {
         
         <div className="relative z-10 flex items-center gap-2">
           {/* Menu icon with premium design */}
-          <div className="relative p-2 rounded-xl bg-white/25 backdrop-blur-sm group-hover:bg-white/35 transition-all duration-700 group-hover:rotate-12 group-hover:scale-110"
+          <div className="relative p-2 rounded-xl bg-[var(--component-card)]/25 backdrop-blur-sm group-hover:bg-[var(--component-card)]/35 transition-all duration-700 group-hover:rotate-12 group-hover:scale-110"
                style={{
                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1)'
                }}>
@@ -174,19 +174,19 @@ export const UserDropdown: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
             </svg>
             {/* Multi-layer icon glow */}
-            <div className="absolute inset-0 rounded-xl bg-white/50 opacity-0 group-hover:opacity-100 blur-sm transition-all duration-700" />
-            <div className="absolute inset-0 rounded-xl bg-blue-300/30 opacity-0 group-hover:opacity-100 blur-md transition-all duration-700 delay-100" />
+            <div className="absolute inset-0 rounded-xl bg-[var(--component-card)]/50 opacity-0 group-hover:opacity-100 blur-sm transition-all duration-700" />
+            <div className="absolute inset-0 rounded-xl bg-[var(--cardiology-accent-blue-medium)]/30 opacity-0 group-hover:opacity-100 blur-md transition-all duration-700 delay-100" />
           </div>
           
           {/* Menu text */}
-          <span className="relative font-extrabold text-white drop-shadow-lg tracking-wide group-hover:translate-x-1 transition-all duration-500 ease-out text-sm"
+          <span className="relative font-extrabold text-[var(--foreground)] drop-shadow-lg tracking-wide group-hover:translate-x-1 transition-all duration-500 ease-out text-sm"
                 style={{
                   textShadow: '0 2px 4px rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.2)'
                 }}>
             Menu
             {/* Enhanced text depth */}
             <span className="absolute inset-0 text-black/30 blur-sm -z-10">Menu</span>
-            <span className="absolute inset-0 text-white/20 blur-lg -z-20">Menu</span>
+            <span className="absolute inset-0 text-[var(--foreground)]/20 blur-lg -z-20">Menu</span>
           </span>
           
         </div>
@@ -197,17 +197,17 @@ export const UserDropdown: React.FC = () => {
         <div className="absolute inset-0 rounded-2xl border border-white/20 opacity-0 group-hover:opacity-100 group-hover:scale-140 transition-all duration-1600 ease-out delay-400" />
         
         {/* Magical floating particles effect */}
-        <div className="absolute top-1 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-300"
+        <div className="absolute top-1 left-1/4 w-1 h-1 bg-[var(--component-card)]/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-300"
              style={{ animation: 'floating-particles 4s ease-in-out infinite 0.5s' }} />
-        <div className="absolute top-2 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-500"
+        <div className="absolute top-2 right-1/3 w-0.5 h-0.5 bg-[var(--component-card)]/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-500"
              style={{ animation: 'floating-particles 4s ease-in-out infinite 1s' }} />
-        <div className="absolute bottom-2 left-1/2 w-0.5 h-0.5 bg-white/30 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-700"
+        <div className="absolute bottom-2 left-1/2 w-0.5 h-0.5 bg-[var(--component-card)]/30 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-700"
              style={{ animation: 'floating-particles 4s ease-in-out infinite 1.5s' }} />
         
         {/* Floating particles */}
-        <div className="absolute top-2 left-1/4 w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-300"
+        <div className="absolute top-2 left-1/4 w-1 h-1 bg-[var(--component-card)]/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-300"
              style={{ animation: 'floating-particles 4s ease-in-out infinite 0.5s' }} />
-        <div className="absolute bottom-2 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-500"
+        <div className="absolute bottom-2 right-1/3 w-0.5 h-0.5 bg-[var(--component-card)]/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 delay-500"
              style={{ animation: 'floating-particles 4s ease-in-out infinite 1s' }} />
       </button>
 
@@ -224,11 +224,11 @@ export const UserDropdown: React.FC = () => {
             <Link
               to="/profile"
               onClick={() => setIsOpen(false)}
-              className="relative group flex items-center px-6 py-4 text-sm text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-md min-h-[48px] touch-target-md overflow-hidden"
+              className="relative group flex items-center px-6 py-4 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-md min-h-[48px] touch-target-md overflow-hidden"
             >
               {/* Icon container with gradient */}
-              <div className="relative p-2 rounded-xl bg-blue-100 dark:bg-blue-900/30 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/40 transition-all duration-300 mr-4 group-hover:scale-110">
-                <User className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+              <div className="relative p-2 rounded-xl bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 group-hover:bg-[var(--cardiology-accent-blue-medium)] dark:group-hover:bg-[var(--cardiology-accent-blue-darker)]/40 transition-all duration-300 mr-4 group-hover:scale-110">
+                <User className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 flex-shrink-0" />
               </div>
               <span className="font-medium truncate group-hover:translate-x-1 transition-transform duration-300">{t('navigation.profile')}</span>
               {/* Hover gradient overlay */}
@@ -238,7 +238,7 @@ export const UserDropdown: React.FC = () => {
             <Link
               to="/help"
               onClick={() => setIsOpen(false)}
-              className="relative group flex items-center px-6 py-4 text-sm text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-green-50 hover:to-teal-50 dark:hover:from-green-900/20 dark:hover:to-teal-900/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-md min-h-[48px] touch-target-md overflow-hidden"
+              className="relative group flex items-center px-6 py-4 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-gradient-to-r hover:from-green-50 hover:to-teal-50 dark:hover:from-green-900/20 dark:hover:to-teal-900/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-md min-h-[48px] touch-target-md overflow-hidden"
             >
               {/* Icon container with gradient */}
               <div className="relative p-2 rounded-xl bg-green-100 dark:bg-green-900/30 group-hover:bg-green-200 dark:group-hover:bg-green-800/40 transition-all duration-300 mr-4 group-hover:scale-110">
@@ -256,7 +256,7 @@ export const UserDropdown: React.FC = () => {
                 toggleTheme();
                 setIsOpen(false);
               }}
-              className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="w-full flex items-center px-4 py-2 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] transition-colors"
             >
               {theme === 'dark' ? (
                 <Sun className="w-4 h-4 mr-3" />
@@ -267,7 +267,7 @@ export const UserDropdown: React.FC = () => {
             </button>
             */}
 
-            <div className="border-t border-gray-200/50 dark:border-gray-700/50 my-3"></div>
+            <div className="border-t border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 my-3"></div>
 
             <button
               onClick={() => {

@@ -131,19 +131,19 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
 
   const getStatusColor = useMemo(() => (status: string) => {
     switch (status) {
-      case 'premenopausal': return 'text-blue-700 bg-blue-50 border-blue-200';
+      case 'premenopausal': return 'text-[var(--cardiology-accent-blue-dark)] bg-[var(--cardiology-accent-blue-light)] border-blue-200';
       case 'perimenopausal': return 'text-orange-700 bg-orange-50 border-orange-200';
       case 'postmenopausal': return 'text-purple-700 bg-purple-50 border-purple-200';
-      default: return 'text-gray-700 bg-gray-50 border-gray-200';
+      default: return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-primary)] border-[var(--glass-border-light)]';
     }
   }, []);
 
   const getStatusIcon = useMemo(() => (status: string) => {
     switch (status) {
-      case 'premenopausal': return <CheckCircle className="w-5 h-5 text-blue-600" />;
+      case 'premenopausal': return <CheckCircle className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />;
       case 'perimenopausal': return <AlertTriangle className="w-5 h-5 text-orange-600" />;
       case 'postmenopausal': return <Info className="w-5 h-5 text-purple-600" />;
-      default: return <Info className="w-5 h-5 text-gray-600" />;
+      default: return <Info className="w-5 h-5 text-[var(--foreground-tertiary)]" />;
     }
   }, []);
 
@@ -171,14 +171,14 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
               {/* Demographics */}
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     {t('calculators.menopause_assessment.fields_age')}
                   </label>
                   <input
                     type="number"
                     value={formData.age}
                     onChange={(E) => handleInputChange('age', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]"
                     placeholder={t('calculators.menopause_assessment.placeholders_age')}
                     min="35"
                     max="70"
@@ -186,31 +186,31 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     {t('calculators.menopause_assessment.fields_lastMenstrualPeriod')}
                   </label>
                   <input
                     type="date"
                     value={formData.lastMenstrualPeriod}
                     onChange={(E) => handleInputChange('lastMenstrualPeriod', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]"
                   />
                 </div>
               </div>
 
               {/* Menstrual History */}
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('calculators.menopause_assessment.sections_menstrualHistory')}</h3>
+              <div className="bg-[var(--cardiology-accent-blue-light)] p-4 rounded-lg">
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">{t('calculators.menopause_assessment.sections_menstrualHistory')}</h3>
                 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.menopause_assessment.fields_menstrualPattern')}
                     </label>
                     <select
                       value={formData.menstrualPattern}
                       onChange={(E) => handleInputChange('menstrualPattern', e.target.value as 'regular' | 'irregular' | 'absent')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]"
                     >
                       <option value="regular">{t('calculators.menopause_assessment.options_menstrualPattern_regular')}</option>
                       <option value="irregular">{t('calculators.menopause_assessment.options_menstrualPattern_irregular')}</option>
@@ -219,14 +219,14 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.menopause_assessment.fields_hotFlashFrequency')}
                     </label>
                     <input
                       type="number"
                       value={formData.hotFlashFrequency}
                       onChange={(E) => handleInputChange('hotFlashFrequency', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]"
                       placeholder={t('calculators.menopause_assessment.placeholders_hotFlashFrequency')}
                       min="0"
                       max="50"
@@ -237,17 +237,17 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
 
               {/* Vasomotor Symptoms */}
               <div className="bg-orange-50 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('calculators.menopause_assessment.sections_vasomotorSymptoms')}</h3>
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">{t('calculators.menopause_assessment.sections_vasomotorSymptoms')}</h3>
                 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.menopause_assessment.fields_vasomotorSymptomSeverity')}
                     </label>
                     <select
                       value={formData.vasomotorSymptoms}
                       onChange={(E) => handleInputChange('vasomotorSymptoms', e.target.value as 'none' | 'mild' | 'moderate' | 'severe')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]"
                     >
                       <option value="none">{t('calculators.menopause_assessment.options_vasomotorSymptoms_none')}</option>
                       <option value="mild">{t('calculators.menopause_assessment.options_vasomotorSymptoms_mild')}</option>
@@ -260,45 +260,45 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
 
               {/* Associated Symptoms */}
               <div className="bg-green-50 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('calculators.menopause_assessment.sections_associatedSymptoms')}</h3>
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">{t('calculators.menopause_assessment.sections_associatedSymptoms')}</h3>
                 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                  <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-white">
+                  <label className="flex items-center space-x-3 p-3 border border-[var(--glass-border-light)] rounded-lg hover:bg-[var(--component-card)]">
                     <input
                       type="checkbox"
                       checked={formData.sleepDisturbance}
                       onChange={(E) => handleInputChange('sleepDisturbance', e.target.checked)}
-                      className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                      className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] border-[var(--glass-border-medium)] focus:ring-[var(--cardiology-accent-blue)]"
                     />
                     <div>
-                      <span className="text-sm font-medium text-gray-700">{t('calculators.menopause_assessment.symptoms_sleepDisturbance_label')}</span>
-                      <p className="text-xs text-gray-500">{t('calculators.menopause_assessment.symptoms_sleepDisturbance_description')}</p>
+                      <span className="text-sm font-medium text-[var(--foreground-tertiary)]">{t('calculators.menopause_assessment.symptoms_sleepDisturbance_label')}</span>
+                      <p className="text-xs text-[var(--foreground-secondary)]">{t('calculators.menopause_assessment.symptoms_sleepDisturbance_description')}</p>
                     </div>
                   </label>
 
-                  <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-white">
+                  <label className="flex items-center space-x-3 p-3 border border-[var(--glass-border-light)] rounded-lg hover:bg-[var(--component-card)]">
                     <input
                       type="checkbox"
                       checked={formData.moodChanges}
                       onChange={(E) => handleInputChange('moodChanges', e.target.checked)}
-                      className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                      className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] border-[var(--glass-border-medium)] focus:ring-[var(--cardiology-accent-blue)]"
                     />
                     <div>
-                      <span className="text-sm font-medium text-gray-700">{t('calculators.menopause_assessment.symptoms_moodChanges_label')}</span>
-                      <p className="text-xs text-gray-500">{t('calculators.menopause_assessment.symptoms_moodChanges_description')}</p>
+                      <span className="text-sm font-medium text-[var(--foreground-tertiary)]">{t('calculators.menopause_assessment.symptoms_moodChanges_label')}</span>
+                      <p className="text-xs text-[var(--foreground-secondary)]">{t('calculators.menopause_assessment.symptoms_moodChanges_description')}</p>
                     </div>
                   </label>
 
-                  <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-white">
+                  <label className="flex items-center space-x-3 p-3 border border-[var(--glass-border-light)] rounded-lg hover:bg-[var(--component-card)]">
                     <input
                       type="checkbox"
                       checked={formData.vaginalDryness}
                       onChange={(E) => handleInputChange('vaginalDryness', e.target.checked)}
-                      className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                      className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] border-[var(--glass-border-medium)] focus:ring-[var(--cardiology-accent-blue)]"
                     />
                     <div>
-                      <span className="text-sm font-medium text-gray-700">{t('calculators.menopause_assessment.symptoms_vaginalDryness_label')}</span>
-                      <p className="text-xs text-gray-500">{t('calculators.menopause_assessment.symptoms_vaginalDryness_description')}</p>
+                      <span className="text-sm font-medium text-[var(--foreground-tertiary)]">{t('calculators.menopause_assessment.symptoms_vaginalDryness_label')}</span>
+                      <p className="text-xs text-[var(--foreground-secondary)]">{t('calculators.menopause_assessment.symptoms_vaginalDryness_description')}</p>
                     </div>
                   </label>
                 </div>
@@ -306,41 +306,41 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
 
               {/* Laboratory Values */}
               <div className="bg-purple-50 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('calculators.menopause_assessment.sections_laboratoryValues')}</h3>
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">{t('calculators.menopause_assessment.sections_laboratoryValues')}</h3>
                 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.menopause_assessment.fields_fsh')}
                     </label>
                     <input
                       type="number"
                       value={formData.fsh}
                       onChange={(E) => handleInputChange('fsh', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]"
                       placeholder={t('calculators.menopause_assessment.placeholders_fsh')}
                       min="0"
                       max="200"
                       step="0.1"
                     />
-                    <p className="text-xs text-gray-500">{t('calculators.menopause_assessment.descriptions_fsh')}</p>
+                    <p className="text-xs text-[var(--foreground-secondary)]">{t('calculators.menopause_assessment.descriptions_fsh')}</p>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.menopause_assessment.fields_estradiol')}
                     </label>
                     <input
                       type="number"
                       value={formData.estradiol}
                       onChange={(E) => handleInputChange('estradiol', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]"
                       placeholder={t('calculators.menopause_assessment.placeholders_estradiol')}
                       min="0"
                       max="500"
                       step="0.1"
                     />
-                    <p className="text-xs text-gray-500">{t('calculators.menopause_assessment.descriptions_estradiol')}</p>
+                    <p className="text-xs text-[var(--foreground-secondary)]">{t('calculators.menopause_assessment.descriptions_estradiol')}</p>
                   </div>
                 </div>
               </div>
@@ -350,13 +350,13 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
                 <button
                   onClick={handleCalculate}
                   disabled={isLoading || !formData.age || !formData.lastMenstrualPeriod || !formData.hotFlashFrequency}
-                  className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                  className="flex-1 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] py-3 px-4 rounded-lg font-medium hover:bg-[var(--cardiology-accent-blue-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] disabled:bg-[var(--muted)] disabled:cursor-not-allowed transition-colors"
                 >
                   {isLoading ? t('calculators.common.calculating') : t('calculators.menopause_assessment.buttons_assess')}
                 </button>
                 <button
                   onClick={handleReset}
-                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+                  className="px-6 py-3 border border-[var(--glass-border-medium)] text-[var(--foreground-tertiary)] rounded-lg font-medium hover:bg-[var(--component-surface-primary)] focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
                 >
                   {t('calculators.common.reset')}
                 </button>
@@ -381,10 +381,10 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
-                <Shield className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{t('calculators.menopause_assessment.title')}</h3>
-                <p className="text-gray-600 mb-4">{t('calculators.menopause_assessment.comingSoon_description')}</p>
-                <p className="text-sm text-gray-500">
+                <Shield className="w-12 h-12 text-[var(--foreground-secondary)] mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">{t('calculators.menopause_assessment.title')}</h3>
+                <p className="text-[var(--foreground-tertiary)] mb-4">{t('calculators.menopause_assessment.comingSoon_description')}</p>
+                <p className="text-sm text-[var(--foreground-secondary)]">
                   {t('calculators.menopause_assessment.comingSoon_details')}
                 </p>
               </div>
@@ -409,9 +409,9 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
               </div>
 
               <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-                <div className="bg-blue-50 p-4 rounded-lg">
+                <div className="bg-[var(--cardiology-accent-blue-light)] p-4 rounded-lg">
                   <h3 className="font-semibold text-blue-800 mb-3">{t('calculators.menopause_assessment.about_stages_premenopausal_title')}</h3>
-                  <ul className="text-sm text-blue-700 space-y-1">
+                  <ul className="text-sm text-[var(--cardiology-accent-blue-dark)] space-y-1">
                     <li>• {t('calculators.menopause_assessment.about_stages_premenopausal_features_regularCycles')}</li>
                     <li>• {t('calculators.menopause_assessment.about_stages_premenopausal_features_normalHormones')}</li>
                     <li>• {t('calculators.menopause_assessment.about_stages_premenopausal_features_minimalSymptoms')}</li>
@@ -492,13 +492,13 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-blue-50 p-6 rounded-lg">
+              <div className="bg-[var(--cardiology-accent-blue-light)] p-6 rounded-lg">
                 <h3 className="text-lg font-semibold text-blue-800 mb-3">{t('calculators.menopause_assessment.about_laboratory_title')}</h3>
                 
                 <div className="grid xl:grid-cols-2 gap-4">
                   <div>
                     <h4 className="font-medium text-blue-800 mb-2">{t('calculators.menopause_assessment.about_laboratory_recommendedTests_title')}</h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
+                    <ul className="text-sm text-[var(--cardiology-accent-blue-dark)] space-y-1">
                       <li>• {t('calculators.menopause_assessment.about_laboratory_recommendedTests_fsh')}</li>
                       <li>• {t('calculators.menopause_assessment.about_laboratory_recommendedTests_estradiol')}</li>
                       <li>• {t('calculators.menopause_assessment.about_laboratory_recommendedTests_tsh')}</li>
@@ -508,7 +508,7 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
                   
                   <div>
                     <h4 className="font-medium text-blue-800 mb-2">{t('calculators.menopause_assessment.about_laboratory_typicalValues_title')}</h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
+                    <ul className="text-sm text-[var(--cardiology-accent-blue-dark)] space-y-1">
                       <li>• {t('calculators.menopause_assessment.about_laboratory_typicalValues_postmenopausalFsh')}</li>
                       <li>• {t('calculators.menopause_assessment.about_laboratory_typicalValues_estradiol')}</li>
                       <li>• {t('calculators.menopause_assessment.about_laboratory_typicalValues_variablePerimenopausal')}</li>
@@ -518,9 +518,9 @@ const MenopauseAssessmentCalculatorComponent: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">{t('calculators.menopause_assessment.about_guidelines_title')}</h3>
-                <ul className="text-sm text-gray-700 space-y-2">
+              <div className="bg-[var(--component-surface-primary)] p-6 rounded-lg">
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-3">{t('calculators.menopause_assessment.about_guidelines_title')}</h3>
+                <ul className="text-sm text-[var(--foreground-tertiary)] space-y-2">
                   <li><strong>{t('calculators.menopause_assessment.about_guidelines_nams_title')}:</strong> {t('calculators.menopause_assessment.about_guidelines_nams_description')}</li>
                   <li><strong>{t('calculators.menopause_assessment.about_guidelines_acog_title')}:</strong> {t('calculators.menopause_assessment.about_guidelines_acog_description')}</li>
                   <li><strong>{t('calculators.menopause_assessment.about_guidelines_ims_title')}:</strong> {t('calculators.menopause_assessment.about_guidelines_ims_description')}</li>

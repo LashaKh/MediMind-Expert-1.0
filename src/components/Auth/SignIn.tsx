@@ -117,7 +117,7 @@ export const SignIn: React.FC = () => {
             <div className="text-sm sm:text-base">
               <Link
                 to="/forgot-password"
-                className="inline-block font-medium text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200 touch-target-md px-4 py-2 rounded-lg focus-enhanced"
+                className="inline-block font-medium text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] dark:text-[var(--foreground-secondary)] dark:hover:text-[var(--foreground)] transition-colors duration-200 touch-target-md px-4 py-2 rounded-lg focus-enhanced"
               >
                 {t('auth.forgotPassword')}
               </Link>

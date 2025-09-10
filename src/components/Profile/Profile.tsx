@@ -193,7 +193,7 @@ export const Profile: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="animate-pulse space-y-8">
             {/* Header Skeleton */}
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-white/20 dark:border-gray-700/20">
+            <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-white/20 dark:border-[var(--border-strong)]/20">
               <div className="flex items-center space-x-6">
                 <div className="w-24 h-24 bg-gradient-to-br from-blue-200 to-indigo-200 dark:from-blue-800 to-indigo-800 rounded-2xl animate-pulse"></div>
                 <div className="space-y-3">
@@ -207,12 +207,12 @@ export const Profile: React.FC = () => {
             {/* Content Skeleton */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-6">
-                <div className="h-64 bg-white/80 dark:bg-gray-800/80 rounded-2xl animate-pulse"></div>
-                <div className="h-48 bg-white/80 dark:bg-gray-800/80 rounded-2xl animate-pulse"></div>
+                <div className="h-64 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 rounded-2xl animate-pulse"></div>
+                <div className="h-48 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 rounded-2xl animate-pulse"></div>
               </div>
               <div className="space-y-6">
-                <div className="h-32 bg-white/80 dark:bg-gray-800/80 rounded-2xl animate-pulse"></div>
-                <div className="h-24 bg-white/80 dark:bg-gray-800/80 rounded-2xl animate-pulse"></div>
+                <div className="h-32 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 rounded-2xl animate-pulse"></div>
+                <div className="h-24 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 rounded-2xl animate-pulse"></div>
               </div>
             </div>
           </div>
@@ -228,7 +228,7 @@ export const Profile: React.FC = () => {
         {/* Global Error/Success Messages - Floating */}
         {error && (
           <div className="fixed top-4 right-4 z-50 p-4 bg-red-500/90 backdrop-blur-xl border border-red-400/20 rounded-2xl shadow-2xl transform transition-all duration-500 ease-out animate-in slide-in-from-top-5">
-            <p className="text-white font-medium flex items-center space-x-2">
+            <p className="text-[var(--foreground)] font-medium flex items-center space-x-2">
               <X className="w-4 h-4" />
               <span>{error}</span>
             </p>
@@ -237,7 +237,7 @@ export const Profile: React.FC = () => {
 
         {success && (
           <div className="fixed top-4 right-4 z-50 p-4 bg-emerald-500/90 backdrop-blur-xl border border-emerald-400/20 rounded-2xl shadow-2xl transform transition-all duration-500 ease-out animate-in slide-in-from-top-5">
-            <p className="text-white font-medium flex items-center space-x-2">
+            <p className="text-[var(--foreground)] font-medium flex items-center space-x-2">
               <Badge className="w-4 h-4" />
               <span>{success}</span>
             </p>
@@ -263,8 +263,8 @@ export const Profile: React.FC = () => {
           {/* Sidebar Navigation */}
           <div className="lg:col-span-1 space-y-6">
             {/* Tab Navigation - Vertical */}
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20 dark:border-gray-700/20">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{t('profile.settings')}</h3>
+            <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20 dark:border-[var(--border-strong)]/20">
+              <h3 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">{t('profile.settings')}</h3>
               <nav className="space-y-2">
                 {tabs.map((tab) => (
                   <button
@@ -272,11 +272,11 @@ export const Profile: React.FC = () => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`group w-full flex items-center space-x-3 px-4 py-3 rounded-2xl font-medium text-sm transition-all duration-300 ${
                       activeTab === tab.id
-                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg transform scale-105'
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-gray-100 hover:transform hover:translate-x-1'
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-[var(--foreground)] shadow-lg transform scale-105'
+                        : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)]/50 hover:text-[var(--foreground)] dark:hover:text-[var(--foreground)] hover:transform hover:translate-x-1'
                     }`}
                   >
-                    <div className={`${activeTab === tab.id ? 'text-white' : 'text-gray-400 group-hover:text-blue-500'} transition-colors duration-300`}>
+                    <div className={`${activeTab === tab.id ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)] group-hover:text-[var(--cardiology-accent-blue)]'} transition-colors duration-300`}>
                       {tab.icon}
                     </div>
                     <span>{tab.label}</span>
@@ -286,17 +286,17 @@ export const Profile: React.FC = () => {
             </div>
 
             {/* Quick Stats */}
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20 dark:border-gray-700/20">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{t('profile.profileStats')}</h3>
+            <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20 dark:border-[var(--border-strong)]/20">
+              <h3 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">{t('profile.profileStats')}</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                      <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <div className="w-8 h-8 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-lg flex items-center justify-center">
+                      <Activity className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                     </div>
-                    <span className="text-sm text-gray-600 dark:text-gray-300">{t('profile.profileComplete')}</span>
+                    <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('profile.profileComplete')}</span>
                   </div>
-                  <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                  <span className="text-sm font-semibold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">
                     {Math.round((([formData.full_name, formData.medical_specialty, formData.about_me_context, profile?.profile_picture_url].filter(Boolean).length) / 4) * 100)}%
                   </span>
                 </div>
@@ -305,7 +305,7 @@ export const Profile: React.FC = () => {
                     <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
                       <Shield className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     </div>
-                    <span className="text-sm text-gray-600 dark:text-gray-300">{t('profile.securityScore')}</span>
+                    <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('profile.securityScore')}</span>
                   </div>
                   <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">95%</span>
                 </div>
@@ -314,7 +314,7 @@ export const Profile: React.FC = () => {
                     <div className="w-8 h-8 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
                       <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                     </div>
-                    <span className="text-sm text-gray-600 dark:text-gray-300">{t('profile.lastActive')}</span>
+                    <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('profile.lastActive')}</span>
                   </div>
                   <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">{t('profile.now')}</span>
                 </div>
@@ -324,7 +324,7 @@ export const Profile: React.FC = () => {
 
           {/* Main Content Area */}
           <div className="lg:col-span-3">
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/20 overflow-hidden">
+            <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 dark:border-[var(--border-strong)]/20 overflow-hidden">
             {activeTab === 'profile' && (
               <div className="p-8 space-y-8">
                 {/* Enhanced Personal Information Section */}
@@ -349,13 +349,13 @@ export const Profile: React.FC = () => {
                     ) : (
                       <div className="p-6 medical-glass rounded-2xl">
                         <div className="flex items-center space-x-3 mb-2">
-                          <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <User className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                          <label className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                             {t('profile.fullName')}
                           </label>
                         </div>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                          {profile?.full_name || <span className="text-gray-500 italic">{t('profile.notSet')}</span>}
+                        <p className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">
+                          {profile?.full_name || <span className="text-[var(--foreground-secondary)] italic">{t('profile.notSet')}</span>}
                         </p>
                       </div>
                     )}
@@ -391,13 +391,13 @@ export const Profile: React.FC = () => {
                       <div className="p-6 medical-glass rounded-2xl">
                         <div className="flex items-center space-x-3 mb-2">
                           <Stethoscope className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-                          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                             {t('profile.medicalSpecialty')}
                           </label>
                         </div>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                        <p className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">
                           {medicalSpecialties.find(s => s.value === profile?.medical_specialty)?.label || 
-                           <span className="text-gray-500 italic">{t('profile.notSet')}</span>}
+                           <span className="text-[var(--foreground-secondary)] italic">{t('profile.notSet')}</span>}
                         </p>
                       </div>
                     )}
@@ -426,14 +426,14 @@ export const Profile: React.FC = () => {
                       <div className="p-6 medical-glass rounded-2xl min-h-[200px]">
                         <div className="flex items-center space-x-3 mb-4">
                           <BookOpen className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                             Professional Context
                           </label>
                         </div>
                         <div className="prose prose-gray dark:prose-invert max-w-none">
-                          <p className="text-gray-900 dark:text-gray-100 leading-relaxed whitespace-pre-wrap">
+                          <p className="text-[var(--foreground)] dark:text-[var(--foreground)] leading-relaxed whitespace-pre-wrap">
                             {profile?.about_me_context || (
-                              <span className="text-gray-500 dark:text-gray-400 italic">
+                              <span className="text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] italic">
                                 {t('profile.notSet')} - Add your professional context to help our AI provide more personalized assistance.
                               </span>
                             )}
@@ -456,13 +456,13 @@ export const Profile: React.FC = () => {
                         <Shield className="w-6 h-6 text-red-600 dark:text-red-400" />
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('profile.securitySettings')}</h2>
-                        <p className="text-gray-600 dark:text-gray-400">{t('profile.keepAccountSecure')}</p>
+                        <h2 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('profile.securitySettings')}</h2>
+                        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('profile.keepAccountSecure')}</p>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+                  <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-6 border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 shadow-lg">
                     <ChangePasswordForm
                       onSuccess={() => {
                         setSuccess(t('profile.passwordUpdateSuccess'));
@@ -490,12 +490,12 @@ export const Profile: React.FC = () => {
                     {/* Content */}
                     <div className="relative py-12">
                       <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl transform transition-transform duration-500 hover:scale-110 hover:rotate-12">
-                        <Settings className="w-12 h-12 text-white animate-spin-slow" />
+                        <Settings className="w-12 h-12 text-[var(--foreground)] animate-spin-slow" />
                       </div>
-                      <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4 animate-gradient-text">
+                      <h3 className="text-3xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4 animate-gradient-text">
                         {t('profile.comingSoon')}
                       </h3>
-                      <p className="text-gray-600 dark:text-gray-400 mb-10 max-w-md mx-auto leading-relaxed">
+                      <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-10 max-w-md mx-auto leading-relaxed">
                         {t('profile.preferencesDesc')}
                       </p>
                       
@@ -504,11 +504,11 @@ export const Profile: React.FC = () => {
                         {/* Display Card */}
                         <div className="relative p-6 medical-glass rounded-2xl overflow-hidden group">
                           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                          <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mx-auto mb-4 border border-blue-500/20 transform transition-transform duration-300 group-hover:scale-110">
-                            <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                          <div className="w-12 h-12 bg-[var(--cardiology-accent-blue)]/10 rounded-xl flex items-center justify-center mx-auto mb-4 border border-[var(--cardiology-accent-blue)]/20 transform transition-transform duration-300 group-hover:scale-110">
+                            <User className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                           </div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">{t('profile.display')}</h4>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{t('profile.themeLayout')}</p>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('profile.display')}</h4>
+                          <p className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">{t('profile.themeLayout')}</p>
                         </div>
 
                         {/* Notifications Card */}
@@ -517,8 +517,8 @@ export const Profile: React.FC = () => {
                           <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mx-auto mb-4 border border-emerald-500/20 transform transition-transform duration-300 group-hover:scale-110">
                             <Activity className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                           </div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">{t('profile.notifications')}</h4>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{t('profile.alertsUpdates')}</p>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('profile.notifications')}</h4>
+                          <p className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">{t('profile.alertsUpdates')}</p>
                         </div>
                         
                         {/* AI Assistant Card */}
@@ -527,8 +527,8 @@ export const Profile: React.FC = () => {
                           <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mx-auto mb-4 border border-purple-500/20 transform transition-transform duration-300 group-hover:scale-110">
                             <Sparkles className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                           </div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">{t('profile.aiAssistant')}</h4>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{t('profile.personalization')}</p>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('profile.aiAssistant')}</h4>
+                          <p className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">{t('profile.personalization')}</p>
                         </div>
                       </div>
                     </div>
@@ -545,7 +545,7 @@ export const Profile: React.FC = () => {
       <div className="fixed bottom-6 right-6 lg:hidden z-40">
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center transform hover:scale-110 transition-all duration-300 hover:shadow-3xl"
+          className="w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 text-[var(--foreground)] rounded-full shadow-2xl flex items-center justify-center transform hover:scale-110 transition-all duration-300 hover:shadow-3xl"
         >
           {isEditing ? (
             <X className="w-6 h-6" />

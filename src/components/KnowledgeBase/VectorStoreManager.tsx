@@ -219,8 +219,8 @@ export const VectorStoreManager: React.FC = () => {
       case 'active': return 'text-green-600 bg-green-100 dark:bg-green-900/20';
       case 'error': return 'text-red-600 bg-red-100 dark:bg-red-900/20';
       case 'deleting': return 'text-orange-600 bg-orange-100 dark:bg-orange-900/20';
-      case 'inactive': return 'text-gray-600 bg-gray-100 dark:bg-gray-900/20';
-      default: return 'text-gray-600 bg-gray-100 dark:bg-gray-900/20';
+      case 'inactive': return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-secondary)] dark:bg-[var(--background-dark)]/20';
+      default: return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-secondary)] dark:bg-[var(--background-dark)]/20';
     }
   };
 
@@ -229,10 +229,10 @@ export const VectorStoreManager: React.FC = () => {
       <div className="p-4 sm:p-6">
         <div className="animate-pulse">
           <div className="flex items-center space-x-3 mb-6">
-            <div className="w-8 h-8 bg-gray-300 rounded-lg"></div>
-            <div className="h-6 bg-gray-300 rounded w-32 sm:w-48"></div>
+            <div className="w-8 h-8 bg-[var(--component-panel)] rounded-lg"></div>
+            <div className="h-6 bg-[var(--component-panel)] rounded w-32 sm:w-48"></div>
           </div>
-          <div className="bg-gray-300 rounded-xl h-48 sm:h-64"></div>
+          <div className="bg-[var(--component-panel)] rounded-xl h-48 sm:h-64"></div>
         </div>
       </div>
     );
@@ -247,10 +247,10 @@ export const VectorStoreManager: React.FC = () => {
             <Database className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
               Vector Store Management
             </h1>
-            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
+            <p className="text-sm sm:text-base text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1 leading-relaxed">
               Manage your OpenAI Vector Store for document storage and AI search
             </p>
           </div>
@@ -260,7 +260,7 @@ export const VectorStoreManager: React.FC = () => {
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="flex items-center justify-center min-w-[44px] min-h-[44px] px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50 touch-manipulation"
+            className="flex items-center justify-center min-w-[44px] min-h-[44px] px-4 py-2 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:text-[var(--foreground)] dark:hover:text-[var(--foreground)] hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] rounded-lg transition-colors disabled:opacity-50 touch-manipulation"
             title="Refresh Vector Store data"
             aria-label="Refresh Vector Store data"
           >
@@ -289,14 +289,14 @@ export const VectorStoreManager: React.FC = () => {
       {vectorStore ? (
         <div className="space-y-4 sm:space-y-6">
           {/* Vector Store Info Card - Mobile Optimized */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
+          <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
               <div className="flex-1 min-w-0">
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 break-words">
+                <h2 className="text-lg sm:text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2 break-words">
                   {vectorStore.name}
                 </h2>
                 {vectorStore.description && (
-                  <p className="text-gray-600 dark:text-gray-400 mb-3 text-sm sm:text-base leading-relaxed">
+                  <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3 text-sm sm:text-base leading-relaxed">
                     {vectorStore.description}
                   </p>
                 )}
@@ -304,7 +304,7 @@ export const VectorStoreManager: React.FC = () => {
                   <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium ${getStatusColor(vectorStore.status)} self-start`}>
                     {vectorStore.status.charAt(0).toUpperCase() + vectorStore.status.slice(1)}
                   </span>
-                  <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-mono break-all">
+                  <span className="text-xs sm:text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] font-mono break-all">
                     ID: {vectorStore.openai_vector_store_id}
                   </span>
                 </div>
@@ -326,56 +326,56 @@ export const VectorStoreManager: React.FC = () => {
 
             {/* Stats Grid - Mobile First */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-5">
+              <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--card)] rounded-xl p-4 sm:p-5">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-blue-100 dark:bg-blue-800/30 rounded-lg flex-shrink-0">
-                    <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                  <div className="p-2 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-lg flex-shrink-0">
+                    <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--cardiology-accent-blue-dark)]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium">Documents</p>
-                    <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
+                    <p className="text-xs sm:text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">Documents</p>
+                    <p className="text-lg sm:text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                       {vectorStore.document_count}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-5">
+              <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--card)] rounded-xl p-4 sm:p-5">
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-green-100 dark:bg-green-800/30 rounded-lg flex-shrink-0">
                     <HardDrive className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium">Storage Used</p>
-                    <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 truncate" title={formatFileSize(vectorStore.total_size_bytes)}>
+                    <p className="text-xs sm:text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">Storage Used</p>
+                    <p className="text-lg sm:text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] truncate" title={formatFileSize(vectorStore.total_size_bytes)}>
                       {formatFileSize(vectorStore.total_size_bytes)}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-5">
+              <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--card)] rounded-xl p-4 sm:p-5">
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-purple-100 dark:bg-purple-800/30 rounded-lg flex-shrink-0">
                     <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium">Created</p>
-                    <p className="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100">
+                    <p className="text-xs sm:text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">Created</p>
+                    <p className="text-sm sm:text-base font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                       {new Date(vectorStore.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' })}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 sm:p-5">
+              <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--card)] rounded-xl p-4 sm:p-5">
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-orange-100 dark:bg-orange-800/30 rounded-lg flex-shrink-0">
                     <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium">Last Updated</p>
-                    <p className="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100">
+                    <p className="text-xs sm:text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">Last Updated</p>
+                    <p className="text-sm sm:text-base font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                       {new Date(vectorStore.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' })}
                     </p>
                   </div>
@@ -386,32 +386,32 @@ export const VectorStoreManager: React.FC = () => {
 
           {/* OpenAI Status Card - Mobile Optimized */}
           {status && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
                 OpenAI Vector Store Status
               </h3>
               
               {status.openai_file_counts && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-                  <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <p className="text-xl sm:text-2xl font-bold text-blue-600">{status.openai_file_counts.total || 0}</p>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 font-medium">Total Files</p>
+                  <div className="text-center p-3 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 rounded-lg">
+                    <p className="text-xl sm:text-2xl font-bold text-[var(--cardiology-accent-blue-dark)]">{status.openai_file_counts.total || 0}</p>
+                    <p className="text-xs sm:text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1 font-medium">Total Files</p>
                   </div>
                   <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <p className="text-xl sm:text-2xl font-bold text-green-600">{status.openai_file_counts.completed || 0}</p>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 font-medium">Completed</p>
+                    <p className="text-xs sm:text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1 font-medium">Completed</p>
                   </div>
                   <div className="text-center p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
                     <p className="text-xl sm:text-2xl font-bold text-yellow-600">{status.openai_file_counts.in_progress || 0}</p>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 font-medium">Processing</p>
+                    <p className="text-xs sm:text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1 font-medium">Processing</p>
                   </div>
                   <div className="text-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
                     <p className="text-xl sm:text-2xl font-bold text-red-600">{status.openai_file_counts.failed || 0}</p>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 font-medium">Failed</p>
+                    <p className="text-xs sm:text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1 font-medium">Failed</p>
                   </div>
-                  <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg col-span-2 sm:col-span-1">
-                    <p className="text-xl sm:text-2xl font-bold text-gray-600">{status.openai_file_counts.cancelled || 0}</p>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 font-medium">Cancelled</p>
+                  <div className="text-center p-3 bg-[var(--component-surface-primary)] dark:bg-[var(--card)] rounded-lg col-span-2 sm:col-span-1">
+                    <p className="text-xl sm:text-2xl font-bold text-[var(--foreground-tertiary)]">{status.openai_file_counts.cancelled || 0}</p>
+                    <p className="text-xs sm:text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1 font-medium">Cancelled</p>
                   </div>
                 </div>
               )}
@@ -426,18 +426,18 @@ export const VectorStoreManager: React.FC = () => {
 
           {/* Document Categories - Mobile Optimized */}
           {stats && stats.categoryCounts && Object.keys(stats.categoryCounts).length > 0 && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
                 Document Categories
               </h3>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                 {Object.entries(stats.categoryCounts).map(([category, count]) => (
-                  <div key={category} className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400 capitalize font-medium mb-1">
+                  <div key={category} className="bg-[var(--component-surface-primary)] dark:bg-[var(--card)] rounded-xl p-4">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] capitalize font-medium mb-1">
                       {category.replace('-', ' ')}
                     </p>
-                    <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
+                    <p className="text-lg sm:text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                       {count} {count === 1 ? 'doc' : 'docs'}
                     </p>
                   </div>
@@ -452,10 +452,10 @@ export const VectorStoreManager: React.FC = () => {
           <div className="p-4 bg-primary/10 rounded-2xl w-fit mx-auto mb-6">
             <Database className="w-12 h-12 sm:w-16 sm:h-16 text-primary mx-auto" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+          <h2 className="text-xl sm:text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">
             No Vector Store Found
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto text-sm sm:text-base leading-relaxed">
+          <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-8 max-w-md mx-auto text-sm sm:text-base leading-relaxed">
             Create a Vector Store to upload and manage your documents for AI-powered search and analysis.
           </p>
           
@@ -463,17 +463,17 @@ export const VectorStoreManager: React.FC = () => {
             <button
               onClick={handleInitializeDefault}
               disabled={isCreating}
-              className="inline-flex items-center justify-center min-h-[52px] space-x-3 bg-primary text-white px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 font-semibold touch-manipulation"
+              className="inline-flex items-center justify-center min-h-[52px] space-x-3 bg-primary text-[var(--foreground)] px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 font-semibold touch-manipulation"
             >
               <Plus className="w-5 h-5" />
               <span>{isCreating ? 'Creating...' : 'Create Default Vector Store'}</span>
             </button>
             
-            <div className="text-gray-500 dark:text-gray-400 text-sm font-medium">or</div>
+            <div className="text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] text-sm font-medium">or</div>
             
             <button
               onClick={() => setShowCreateForm(true)}
-              className="inline-flex items-center justify-center min-h-[52px] space-x-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors font-semibold touch-manipulation"
+              className="inline-flex items-center justify-center min-h-[52px] space-x-3 border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] px-6 py-3 rounded-xl hover:bg-[var(--component-surface-primary)] dark:hover:bg-[var(--card)] hover:border-[var(--border)] dark:hover:border-[var(--border)] transition-colors font-semibold touch-manipulation"
             >
               <Settings className="w-5 h-5" />
               <span>Create Custom Vector Store</span>
@@ -485,17 +485,17 @@ export const VectorStoreManager: React.FC = () => {
       {/* Create Vector Store Modal - Mobile Optimized */}
       {showCreateForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-md mx-auto shadow-2xl border border-gray-200 dark:border-gray-700">
+          <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-2xl p-6 w-full max-w-md mx-auto shadow-2xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
+              <h3 className="text-lg sm:text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                 Create Vector Store
               </h3>
               <button
                 onClick={() => setShowCreateForm(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                className="p-2 hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] rounded-lg transition-colors"
                 aria-label="Close modal"
               >
-                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-[var(--foreground-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -503,27 +503,27 @@ export const VectorStoreManager: React.FC = () => {
             
             <form onSubmit={handleCreateVectorStore} className="space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3">
                   Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={createForm.name}
                   onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-gray-100 text-base"
+                  className="w-full px-4 py-3 border border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-[var(--card)] dark:text-[var(--foreground)] text-base"
                   placeholder="My Medical Knowledge Base"
                   required
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3">
                   Description
                 </label>
                 <textarea
                   value={createForm.description}
                   onChange={(e) => setCreateForm({ ...createForm, description: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-gray-100 resize-none text-base"
+                  className="w-full px-4 py-3 border border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-[var(--card)] dark:text-[var(--foreground)] resize-none text-base"
                   placeholder="Personal collection of medical documents and research papers"
                   rows={3}
                 />
@@ -533,14 +533,14 @@ export const VectorStoreManager: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowCreateForm(false)}
-                  className="flex-1 min-h-[48px] px-6 py-3 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 rounded-xl transition-colors font-semibold touch-manipulation"
+                  className="flex-1 min-h-[48px] px-6 py-3 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:text-[var(--foreground)] dark:hover:text-[var(--foreground)] border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] hover:border-[var(--border)] dark:hover:border-[var(--border)] rounded-xl transition-colors font-semibold touch-manipulation"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isCreating}
-                  className="flex-1 min-h-[48px] px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 font-semibold touch-manipulation"
+                  className="flex-1 min-h-[48px] px-6 py-3 bg-primary text-[var(--foreground)] rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 font-semibold touch-manipulation"
                 >
                   {isCreating ? 'Creating...' : 'Create Vector Store'}
                 </button>

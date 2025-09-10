@@ -21,7 +21,7 @@ export const ReadingStats: React.FC<ReadingStatsProps> = ({
   className = ''
 }) => {
   return (
-    <div className={`flex items-center space-x-4 text-sm text-gray-600 ${className}`}>
+    <div className={`flex items-center space-x-4 text-sm text-[var(--foreground-tertiary)] ${className}`}>
       {/* Estimated Reading Time */}
       <div className="flex items-center space-x-1">
         <Clock className="w-4 h-4" />
@@ -39,8 +39,8 @@ export const ReadingStats: React.FC<ReadingStatsProps> = ({
         onClick={onToggleBookmark}
         className={`flex items-center space-x-1 px-2 py-1 rounded-lg transition-colors ${
           bookmarked 
-            ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
-            : 'hover:bg-gray-100'
+            ? 'bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--cardiology-accent-blue-medium)]' 
+            : 'hover:bg-[var(--component-surface-secondary)]'
         }`}
         title={bookmarked ? 'Remove bookmark' : 'Add bookmark'}
       >

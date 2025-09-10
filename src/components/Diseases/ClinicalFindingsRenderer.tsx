@@ -221,7 +221,7 @@ const ClinicalFindingsRenderer: React.FC<ClinicalFindingsRendererProps> = ({ con
             {/* Section Title */}
             <h3 className={`text-xl font-bold ${colorScheme.text} mb-5 mt-10 flex items-center space-x-3 font-['Inter',_'system-ui',_sans-serif]`}>
               <div className={`p-2 bg-gradient-to-r ${colorScheme.gradient} rounded-lg shadow-md`}>
-                <IconComponent className="w-5 h-5 text-white" />
+                <IconComponent className="w-5 h-5 text-[var(--foreground)]" />
               </div>
               <span className="tracking-tight">{section.title}</span>
             </h3>
@@ -236,7 +236,7 @@ const ClinicalFindingsRenderer: React.FC<ClinicalFindingsRendererProps> = ({ con
                   {/* Content */}
                   <div className="flex items-start space-x-3">
                     <div className={`p-2.5 bg-gradient-to-r ${colorScheme.gradient} rounded-lg shadow-sm flex-shrink-0 group-hover:shadow-md transition-shadow`}>
-                      <IconComponent className="w-4 h-4 text-white" />
+                      <IconComponent className="w-4 h-4 text-[var(--foreground)]" />
                     </div>
                     <div className={`font-medium text-sm ${colorScheme.text} leading-snug flex-1`}>
                       {item}

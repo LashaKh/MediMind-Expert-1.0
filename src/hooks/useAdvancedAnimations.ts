@@ -283,7 +283,7 @@ export const useTouchRipple = () => {
     const y = (e as TouchEvent).touches?.[0]?.clientY || (e as MouseEvent).clientY;
 
     const ripple = document.createElement('div');
-    ripple.className = 'absolute rounded-full bg-white/30 animate-touch-ripple pointer-events-none';
+    ripple.className = 'absolute rounded-full bg-[var(--component-card)]/30 animate-touch-ripple pointer-events-none';
     ripple.style.width = '20px';
     ripple.style.height = '20px';
     ripple.style.left = `${x - rect.left - 10}px`;

@@ -22,9 +22,9 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
   
   return (
     <div className="w-80 flex-shrink-0">
-      <div className="sticky top-8 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+      <div className="sticky top-8 bg-[var(--component-card)] rounded-2xl shadow-xl border border-[var(--glass-border-light)] overflow-hidden">
         {/* TOC Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-[var(--foreground)]">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <BookOpen className="w-5 h-5" />
@@ -32,7 +32,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
             </div>
             <button
               onClick={onToggleVisibility}
-              className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+              className="p-1 hover:bg-[var(--component-card)]/20 rounded-lg transition-colors"
               title="Close table of contents"
             >
               <X className="w-4 h-4" />
@@ -66,13 +66,13 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
                     onClick={() => onItemClick(item.id)}
                     className={`flex-1 text-left px-3 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2 group ${
                       activeSection === item.id
-                        ? 'bg-blue-100 text-blue-800 border-l-4 border-blue-600'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
+                        ? 'bg-[var(--cardiology-accent-blue-light)] text-blue-800 border-l-4 border-blue-600'
+                        : 'text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-primary)] hover:text-[var(--cardiology-accent-blue-dark)]'
                     }`}
                     style={{ paddingLeft: `${item.level * 12 + 12}px` }}
                   >
                     <div className={`w-2 h-2 rounded-full ${
-                      activeSection === item.id ? 'bg-blue-600' : 'bg-gray-300 group-hover:bg-blue-400'
+                      activeSection === item.id ? 'bg-[var(--cardiology-accent-blue-dark)]' : 'bg-[var(--component-panel)] group-hover:bg-[var(--cardiology-accent-blue)]'
                     }`} />
                     <span className="text-sm font-medium truncate">{item.title}</span>
                   </button>
@@ -80,13 +80,13 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
                   {isMainSection && onToggleSection && (
                     <button
                       onClick={() => onToggleSection(item.id)}
-                      className="p-1 hover:bg-gray-100 rounded transition-colors"
+                      className="p-1 hover:bg-[var(--component-surface-secondary)] rounded transition-colors"
                       title={isCollapsed ? 'Expand section' : 'Collapse section'}
                     >
                       {isCollapsed ? (
-                        <Plus className="w-3 h-3 text-gray-500" />
+                        <Plus className="w-3 h-3 text-[var(--foreground-secondary)]" />
                       ) : (
-                        <Minus className="w-3 h-3 text-gray-500" />
+                        <Minus className="w-3 h-3 text-[var(--foreground-secondary)]" />
                       )}
                     </button>
                   )}

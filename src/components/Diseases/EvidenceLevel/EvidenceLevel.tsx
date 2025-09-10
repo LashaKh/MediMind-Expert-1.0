@@ -16,10 +16,10 @@ const EvidenceLevel: React.FC<EvidenceLevelProps> = ({ evidence, className = '' 
   // Color scheme mappings
   const colorClasses = {
     emerald: 'bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-800 border-emerald-300',
-    blue: 'bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 border-blue-300',
+    blue: 'bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 border-[var(--cardiology-accent-blue)]',
     amber: 'bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 border-amber-300',
     red: 'bg-gradient-to-r from-red-100 to-red-200 text-red-800 border-red-300',
-    slate: 'bg-gradient-to-r from-slate-100 to-slate-200 text-slate-800 border-slate-300',
+    slate: 'bg-gradient-to-r from-slate-100 to-slate-200 text-[var(--foreground)] border-[var(--glass-border-medium)]',
     purple: 'bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 border-purple-300',
     indigo: 'bg-gradient-to-r from-indigo-100 to-indigo-200 text-indigo-800 border-indigo-300'
   };

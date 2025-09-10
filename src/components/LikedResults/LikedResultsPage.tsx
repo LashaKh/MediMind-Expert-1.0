@@ -247,11 +247,11 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
       <div className="flex items-center justify-center min-h-96">
         <Card className="max-w-md">
           <CardContent className="p-8 text-center">
-            <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <Heart className="h-16 w-16 text-[var(--foreground-secondary)] mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
               Please Log In
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-[var(--foreground-tertiary)] mb-4">
               You need to be logged in to view your saved search results.
             </p>
             <Button 
@@ -271,8 +271,8 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
-          <Loader className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600">Loading your liked results...</p>
+          <Loader className="h-8 w-8 animate-spin mx-auto mb-4 text-[var(--cardiology-accent-blue-dark)]" />
+          <p className="text-[var(--foreground-tertiary)]">Loading your liked results...</p>
         </div>
       </div>
     );
@@ -283,18 +283,18 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-3xl font-bold text-[var(--foreground)] flex items-center gap-2">
             <Heart className="h-8 w-8 text-red-500 fill-current" />
             Liked Results
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-[var(--foreground-tertiary)] mt-1">
             Your saved medical research results ({likedState.stats.totalCount} total)
           </p>
         </div>
         
         {selectedResults.size > 0 && (
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-[var(--foreground-tertiary)]">
               {selectedResults.size} selected
             </span>
             <Button
@@ -316,9 +316,9 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-blue-600" />
+                <BookOpen className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
                 <div>
-                  <p className="text-sm text-gray-600">Total Results</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">Total Results</p>
                   <p className="text-2xl font-bold">{likedState.stats.totalCount}</p>
                 </div>
               </div>
@@ -330,7 +330,7 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
               <div className="flex items-center gap-2">
                 <Globe className="h-5 w-5 text-green-600" />
                 <div>
-                  <p className="text-sm text-gray-600">Providers</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">Providers</p>
                   <p className="text-2xl font-bold">{Object.keys(likedState.stats.byProvider).length}</p>
                 </div>
               </div>
@@ -342,7 +342,7 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
               <div className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-purple-600" />
                 <div>
-                  <p className="text-sm text-gray-600">Content Types</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">Content Types</p>
                   <p className="text-2xl font-bold">{Object.keys(likedState.stats.byContentType).length}</p>
                 </div>
               </div>
@@ -354,7 +354,7 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
               <div className="flex items-center gap-2">
                 <AlertCircle className="h-5 w-5 text-orange-600" />
                 <div>
-                  <p className="text-sm text-gray-600">Evidence Levels</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">Evidence Levels</p>
                   <p className="text-2xl font-bold">{Object.keys(likedState.stats.byEvidenceLevel).length}</p>
                 </div>
               </div>
@@ -444,7 +444,7 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
               </Button>
             </div>
             
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[var(--foreground-tertiary)]">
               Showing {filteredResults.length} of {likedState.likedResults.length} results
             </p>
           </div>
@@ -455,11 +455,11 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
       {filteredResults.length === 0 ? (
         <Card>
           <CardContent className="p-12 text-center">
-            <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <Heart className="h-16 w-16 text-[var(--foreground-secondary)] mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
               {likedState.likedResults.length === 0 ? 'No liked results yet' : 'No results match your filters'}
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-[var(--foreground-tertiary)] mb-4">
               {likedState.likedResults.length === 0 
                 ? 'Start searching and click the heart icon to save results here.'
                 : 'Try adjusting your search or filter criteria.'
@@ -483,7 +483,7 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
             const isSelected = selectedResults.has(resultKey);
             
             return (
-              <Card key={resultKey} className={`transition-all ${isSelected ? 'ring-2 ring-blue-500' : ''}`}>
+              <Card key={resultKey} className={`transition-all ${isSelected ? 'ring-2 ring-[var(--cardiology-accent-blue)]' : ''}`}>
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <input
@@ -497,7 +497,7 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
                       {/* Header */}
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                          <h3 className="text-lg font-semibold text-[var(--foreground)] hover:text-[var(--cardiology-accent-blue-dark)] transition-colors">
                             <a 
                               href={result.url} 
                               target="_blank" 
@@ -508,7 +508,7 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
                               <ExternalLink className="h-4 w-4" />
                             </a>
                           </h3>
-                          <p className="text-sm text-gray-600 mt-1">
+                          <p className="text-sm text-[var(--foreground-tertiary)] mt-1">
                             {result.source} • {formatProviderName(result.provider)}
                           </p>
                         </div>
@@ -537,13 +537,13 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
                       
                       {/* Snippet */}
                       {result.snippet && (
-                        <p className="text-gray-700 text-sm leading-relaxed">
+                        <p className="text-[var(--foreground-tertiary)] text-sm leading-relaxed">
                           {result.snippet}
                         </p>
                       )}
                       
                       {/* Metadata */}
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--foreground-tertiary)]">
                         {result.content_type && (
                           <Badge variant="secondary" className="flex items-center gap-1">
                             <FileText className="h-3 w-3" />
@@ -587,15 +587,15 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
                       
                       {/* Notes */}
                       {result.notes && (
-                        <div className="bg-gray-50 rounded-md p-3">
-                          <p className="text-sm text-gray-700">
+                        <div className="bg-[var(--component-surface-primary)] rounded-md p-3">
+                          <p className="text-sm text-[var(--foreground-tertiary)]">
                             <strong>Your notes:</strong> {result.notes}
                           </p>
                         </div>
                       )}
                       
                       {/* Original query */}
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-[var(--foreground-secondary)]">
                         Original search: "{result.original_query}"
                       </div>
                     </div>
@@ -617,8 +617,8 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
           {editingResult && (
             <div className="space-y-4">
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">{editingResult.title}</h4>
-                <p className="text-sm text-gray-600">{editingResult.source}</p>
+                <h4 className="font-medium text-[var(--foreground)] mb-2">{editingResult.title}</h4>
+                <p className="text-sm text-[var(--foreground-tertiary)]">{editingResult.source}</p>
               </div>
               
               <div>
@@ -632,7 +632,7 @@ export const LikedResultsPage: React.FC<LikedResultsPageProps> = ({ className })
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                   Tags
                 </label>
                 <div className="flex flex-wrap gap-2 mb-2">

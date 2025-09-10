@@ -18,28 +18,28 @@ export const SearchBar: React.FC<SearchProps> = ({
   return (
     <div className="relative">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--foreground-secondary)]" />
         <input
           type="text"
           placeholder="Search content..."
           value={searchTerm}
           onChange={(E) => onSearchChange(e.target.value)}
-          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+          className="w-full pl-10 pr-10 py-2 border border-[var(--glass-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)] transition-colors"
         />
         {searchTerm && (
           <button
             onClick={handleClear}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-[var(--component-surface-secondary)] rounded-full transition-colors"
             aria-label="Clear search"
           >
-            <X className="w-4 h-4 text-gray-400" />
+            <X className="w-4 h-4 text-[var(--foreground-secondary)]" />
           </button>
         )}
       </div>
       
       {isSearchActive && searchTerm && (
-        <div className="absolute top-full left-0 right-0 mt-1 p-2 bg-blue-50 border border-blue-200 rounded-lg shadow-sm">
-          <p className="text-sm text-blue-700">
+        <div className="absolute top-full left-0 right-0 mt-1 p-2 bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg shadow-sm">
+          <p className="text-sm text-[var(--cardiology-accent-blue-dark)]">
             Searching for: <span className="font-semibold">"{searchTerm}"</span>
           </p>
         </div>

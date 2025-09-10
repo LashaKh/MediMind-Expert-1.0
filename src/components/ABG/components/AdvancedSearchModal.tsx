@@ -166,7 +166,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
           )}
           style={{ scale: searchScale }}
         >
-          <Card className="bg-white border-2 border-slate-300 shadow-2xl rounded-xl">
+          <Card className="bg-[var(--component-card)] border-2 border-[var(--glass-border-medium)] shadow-2xl rounded-xl">
             <SearchHeader
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}

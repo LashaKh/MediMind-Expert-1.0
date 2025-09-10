@@ -680,7 +680,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
       case 'Very High':
         return 'border-red-300 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200';
       default:
-        return 'border-gray-300 bg-gray-50 dark:bg-gray-900/20 text-gray-800 dark:text-gray-200';
+        return 'border-[var(--glass-border-medium)] bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]/20 text-[var(--foreground)] dark:text-[var(--foreground)]';
     }
   }, []);
 
@@ -763,10 +763,10 @@ const MAGGICCalculatorComponent: React.FC = () => {
             animate={{ width: `${totalProgress}%` }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
           >
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-md border-2 border-purple-500" />
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-[var(--component-card)] rounded-full shadow-md border-2 border-purple-500" />
           </motion.div>
           <div className="flex justify-between mt-2">
-            <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Progress</span>
+            <span className="text-xs font-medium text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">Progress</span>
             <span className="text-xs font-bold text-purple-600 dark:text-purple-400">{Math.round(totalProgress)}%</span>
           </div>
         </motion.div>
@@ -779,7 +779,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
           className="relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-pink-600/10 to-indigo-600/10 dark:from-purple-500/20 dark:via-pink-500/20 dark:to-indigo-500/20" />
-          <div className="relative backdrop-blur-sm bg-white/60 dark:bg-gray-900/60 border border-purple-200/50 dark:border-purple-700/50 rounded-3xl p-8 shadow-2xl">
+          <div className="relative backdrop-blur-sm bg-[var(--component-card)]/60 dark:bg-[var(--background-dark)]/60 border border-purple-200/50 dark:border-purple-700/50 rounded-3xl p-8 shadow-2xl">
             <div className="flex items-start space-x-6">
               <motion.div 
                 whileHover={{ scale: 1.1, rotate: 5 }}
@@ -787,7 +787,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-400 rounded-2xl blur-xl opacity-50" />
                 <div className="relative p-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl shadow-xl">
-                  <Heart className="w-8 h-8 text-white" />
+                  <Heart className="w-8 h-8 text-[var(--foreground)]" />
                 </div>
               </motion.div>
               <div className="flex-1">
@@ -802,7 +802,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                     <Sparkles className="w-5 h-5 text-purple-500" />
                   </motion.div>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed mb-4">
                   {t('calculators.cardiology.maggic.alert_description')}
                 </p>
                 <div className="flex flex-wrap gap-3">
@@ -870,7 +870,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               ? `bg-gradient-to-br from-${color}-500 to-${color}-600 shadow-2xl shadow-${color}-500/30`
                               : isCompleted
                               ? `bg-gradient-to-br from-${color}-400 to-${color}-500 shadow-lg`
-                              : 'bg-gray-100 dark:bg-gray-800'
+                              : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--background)]'
                           }`}
                           onClick={() => isCompleted && setCurrentStep(step)}
                         >
@@ -880,11 +880,11 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               animate={{ scale: 1 }}
                               transition={{ type: "spring", stiffness: 300 }}
                             >
-                              <Check className="w-8 h-8 text-white" />
+                              <Check className="w-8 h-8 text-[var(--foreground)]" />
                             </motion.div>
                           ) : (
                             <Icon className={`w-8 h-8 ${
-                              isActive ? 'text-white' : 'text-gray-400'
+                              isActive ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)]'
                             }`} />
                           )}
                         </motion.div>
@@ -892,11 +892,11 @@ const MAGGICCalculatorComponent: React.FC = () => {
                           <p className={`text-xs font-semibold ${
                             isActive || isCompleted
                               ? `text-${color}-600 dark:text-${color}-400`
-                              : 'text-gray-500 dark:text-gray-400'
+                              : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                           }`}>
                             {t(`calculators.cardiology.maggic.step_${step}_label`)}
                           </p>
-                          <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                             {titles[index]}
                           </p>
                         </div>
@@ -908,7 +908,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                           animate={{ scaleX: 1 }}
                           transition={{ delay: index * 0.1 + 0.2 }}
                         >
-                          <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 rounded-full" />
+                          <div className="absolute inset-0 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full" />
                           <motion.div
                             className={`absolute inset-0 rounded-full bg-gradient-to-r ${
                               step === 1
@@ -948,13 +948,13 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-purple-50 via-purple-50/50 to-pink-50 dark:from-purple-900/20 dark:via-purple-900/10 dark:to-pink-900/20 rounded-3xl border border-purple-200/50 dark:border-purple-700/50 shadow-lg backdrop-blur-sm"
                     >
                       <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg">
-                        <User className="w-6 h-6 text-white" />
+                        <User className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <div className="text-left">
                         <h3 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                           {t('calculators.cardiology.maggic.patient_demographics')}
                         </h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                           {t('calculators.cardiology.maggic.demographics_description')}
                         </p>
                       </div>
@@ -979,7 +979,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                           className="absolute -top-2 -right-2 z-10"
                         >
                           <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                            <Check className="w-4 h-4 text-white" />
+                            <Check className="w-4 h-4 text-[var(--foreground)]" />
                           </div>
                         </motion.div>
                       )}
@@ -1009,7 +1009,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                           className="absolute -top-2 -right-2 z-10"
                         >
                           <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                            <Check className="w-4 h-4 text-white" />
+                            <Check className="w-4 h-4 text-[var(--foreground)]" />
                           </div>
                         </motion.div>
                       )}
@@ -1040,7 +1040,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                           className="absolute -top-2 -right-2 z-10"
                         >
                           <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                            <Check className="w-4 h-4 text-white" />
+                            <Check className="w-4 h-4 text-[var(--foreground)]" />
                           </div>
                         </motion.div>
                       )}
@@ -1071,7 +1071,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                           className="absolute -top-2 -right-2 z-10"
                         >
                           <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                            <Check className="w-4 h-4 text-white" />
+                            <Check className="w-4 h-4 text-[var(--foreground)]" />
                           </div>
                         </motion.div>
                       )}
@@ -1115,7 +1115,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setCurrentStep(2)}
-                      className="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/25"
+                      className="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-[var(--foreground)] font-semibold rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/25"
                     >
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-pink-600 to-indigo-600"
@@ -1159,13 +1159,13 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-pink-50 via-pink-50/50 to-indigo-50 dark:from-pink-900/20 dark:via-pink-900/10 dark:to-indigo-900/20 rounded-3xl border border-pink-200/50 dark:border-pink-700/50 shadow-lg backdrop-blur-sm"
                     >
                       <div className="p-3 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl shadow-lg">
-                        <Activity className="w-6 h-6 text-white" />
+                        <Activity className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <div className="text-left">
                         <h3 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-indigo-600 bg-clip-text text-transparent">
                           {t('calculators.cardiology.maggic.clinical_assessment')}
                         </h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                           {t('calculators.cardiology.maggic.clinical_description')}
                         </p>
                       </div>
@@ -1190,7 +1190,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                           className="absolute -top-2 -right-2 z-10"
                         >
                           <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                            <Check className="w-4 h-4 text-white" />
+                            <Check className="w-4 h-4 text-[var(--foreground)]" />
                           </div>
                         </motion.div>
                       )}
@@ -1221,7 +1221,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                           className="absolute -top-2 -right-2 z-10"
                         >
                           <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                            <Check className="w-4 h-4 text-white" />
+                            <Check className="w-4 h-4 text-[var(--foreground)]" />
                           </div>
                         </motion.div>
                       )}
@@ -1253,7 +1253,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                           className="absolute -top-2 -right-2 z-10"
                         >
                           <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                            <Check className="w-4 h-4 text-white" />
+                            <Check className="w-4 h-4 text-[var(--foreground)]" />
                           </div>
                         </motion.div>
                       )}
@@ -1286,7 +1286,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       whileHover={{ x: 5 }}
                     >
                       <div className="p-2 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg shadow-md">
-                        <Stethoscope className="w-5 h-5 text-white" />
+                        <Stethoscope className="w-5 h-5 text-[var(--foreground)]" />
                       </div>
                       <h4 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-indigo-600 bg-clip-text text-transparent">
                         {t('calculators.cardiology.maggic.comorbidities_section')}
@@ -1301,7 +1301,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                         <div className={`p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
                           formData.diabetes 
                             ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20 shadow-lg shadow-pink-500/20' 
-                            : 'border-gray-200 dark:border-gray-700 hover:border-pink-300'
+                            : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:border-pink-300'
                         }`}
                         onClick={() => setFormData({ ...formData, diabetes: !formData.diabetes })}
                         >
@@ -1309,21 +1309,21 @@ const MAGGICCalculatorComponent: React.FC = () => {
                             <div className={`p-2 rounded-lg transition-colors duration-300 ${
                               formData.diabetes 
                                 ? 'bg-pink-500 shadow-lg' 
-                                : 'bg-gray-200 dark:bg-gray-700'
+                                : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)]'
                             }`}>
                               <BarChart3 className={`w-4 h-4 ${
-                                formData.diabetes ? 'text-white' : 'text-gray-500'
+                                formData.diabetes ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)]'
                               }`} />
                             </div>
                             <div className="flex-1">
                               <h5 className={`font-semibold transition-colors duration-300 ${
                                 formData.diabetes 
                                   ? 'text-pink-700 dark:text-pink-300' 
-                                  : 'text-gray-700 dark:text-gray-300'
+                                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                               }`}>
                                 {t('calculators.cardiology.maggic.diabetes_label')}
                               </h5>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                              <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                                 {t('calculators.cardiology.maggic.diabetes_label_description')}
                               </p>
                             </div>
@@ -1333,7 +1333,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               transition={{ type: "spring", stiffness: 300 }}
                             >
                               <div className="w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center shadow-lg">
-                                <Check className="w-4 h-4 text-white" />
+                                <Check className="w-4 h-4 text-[var(--foreground)]" />
                               </div>
                             </motion.div>
                           </div>
@@ -1348,7 +1348,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                         <div className={`p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
                           formData.copd 
                             ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 shadow-lg shadow-indigo-500/20' 
-                            : 'border-gray-200 dark:border-gray-700 hover:border-indigo-300'
+                            : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:border-indigo-300'
                         }`}
                         onClick={() => setFormData({ ...formData, copd: !formData.copd })}
                         >
@@ -1356,21 +1356,21 @@ const MAGGICCalculatorComponent: React.FC = () => {
                             <div className={`p-2 rounded-lg transition-colors duration-300 ${
                               formData.copd 
                                 ? 'bg-indigo-500 shadow-lg' 
-                                : 'bg-gray-200 dark:bg-gray-700'
+                                : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)]'
                             }`}>
                               <Activity className={`w-4 h-4 ${
-                                formData.copd ? 'text-white' : 'text-gray-500'
+                                formData.copd ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)]'
                               }`} />
                             </div>
                             <div className="flex-1">
                               <h5 className={`font-semibold transition-colors duration-300 ${
                                 formData.copd 
                                   ? 'text-indigo-700 dark:text-indigo-300' 
-                                  : 'text-gray-700 dark:text-gray-300'
+                                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                               }`}>
                                 {t('calculators.cardiology.maggic.copd_label')}
                               </h5>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                              <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                                 {t('calculators.cardiology.maggic.copd_label_description')}
                               </p>
                             </div>
@@ -1380,7 +1380,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               transition={{ type: "spring", stiffness: 300 }}
                             >
                               <div className="w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center shadow-lg">
-                                <Check className="w-4 h-4 text-white" />
+                                <Check className="w-4 h-4 text-[var(--foreground)]" />
                               </div>
                             </motion.div>
                           </div>
@@ -1395,7 +1395,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                         <div className={`p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
                           formData.smoker 
                             ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20 shadow-lg shadow-orange-500/20' 
-                            : 'border-gray-200 dark:border-gray-700 hover:border-orange-300'
+                            : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:border-orange-300'
                         }`}
                         onClick={() => setFormData({ ...formData, smoker: !formData.smoker })}
                         >
@@ -1403,21 +1403,21 @@ const MAGGICCalculatorComponent: React.FC = () => {
                             <div className={`p-2 rounded-lg transition-colors duration-300 ${
                               formData.smoker 
                                 ? 'bg-orange-500 shadow-lg' 
-                                : 'bg-gray-200 dark:bg-gray-700'
+                                : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)]'
                             }`}>
                               <AlertCircle className={`w-4 h-4 ${
-                                formData.smoker ? 'text-white' : 'text-gray-500'
+                                formData.smoker ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)]'
                               }`} />
                             </div>
                             <div className="flex-1">
                               <h5 className={`font-semibold transition-colors duration-300 ${
                                 formData.smoker 
                                   ? 'text-orange-700 dark:text-orange-300' 
-                                  : 'text-gray-700 dark:text-gray-300'
+                                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                               }`}>
                                 {t('calculators.cardiology.maggic.smoker_label_text')}
                               </h5>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                              <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                                 {t('calculators.cardiology.maggic.smoker_label_description')}
                               </p>
                             </div>
@@ -1427,7 +1427,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               transition={{ type: "spring", stiffness: 300 }}
                             >
                               <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                                <Check className="w-4 h-4 text-white" />
+                                <Check className="w-4 h-4 text-[var(--foreground)]" />
                               </div>
                             </motion.div>
                           </div>
@@ -1442,7 +1442,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                         <div className={`p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
                           formData.first_diagnosis 
                             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 shadow-lg shadow-purple-500/20' 
-                            : 'border-gray-200 dark:border-gray-700 hover:border-purple-300'
+                            : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:border-purple-300'
                         }`}
                         onClick={() => setFormData({ ...formData, first_diagnosis: !formData.first_diagnosis })}
                         >
@@ -1450,21 +1450,21 @@ const MAGGICCalculatorComponent: React.FC = () => {
                             <div className={`p-2 rounded-lg transition-colors duration-300 ${
                               formData.first_diagnosis 
                                 ? 'bg-purple-500 shadow-lg' 
-                                : 'bg-gray-200 dark:bg-gray-700'
+                                : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)]'
                             }`}>
                               <Clock className={`w-4 h-4 ${
-                                formData.first_diagnosis ? 'text-white' : 'text-gray-500'
+                                formData.first_diagnosis ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)]'
                               }`} />
                             </div>
                             <div className="flex-1">
                               <h5 className={`font-semibold transition-colors duration-300 ${
                                 formData.first_diagnosis 
                                   ? 'text-purple-700 dark:text-purple-300' 
-                                  : 'text-gray-700 dark:text-gray-300'
+                                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                               }`}>
                                 {t('calculators.cardiology.maggic.first_diagnosis_label')}
                               </h5>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                              <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                                 {t('calculators.cardiology.maggic.first_diagnosis_label_description')}
                               </p>
                             </div>
@@ -1474,7 +1474,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               transition={{ type: "spring", stiffness: 300 }}
                             >
                               <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center shadow-lg">
-                                <Check className="w-4 h-4 text-white" />
+                                <Check className="w-4 h-4 text-[var(--foreground)]" />
                               </div>
                             </motion.div>
                           </div>
@@ -1493,7 +1493,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setCurrentStep(1)}
-                      className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
+                      className="px-6 py-3 bg-[var(--component-card)] dark:bg-[var(--background)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-semibold rounded-2xl shadow-lg border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:shadow-xl transition-all duration-300"
                     >
                       <span className="flex items-center space-x-2">
                         <ChevronRight className="w-5 h-5 rotate-180" />
@@ -1504,7 +1504,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setCurrentStep(3)}
-                      className="group relative px-8 py-4 bg-gradient-to-r from-pink-600 to-indigo-600 text-white font-semibold rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-pink-500/25"
+                      className="group relative px-8 py-4 bg-gradient-to-r from-pink-600 to-indigo-600 text-[var(--foreground)] font-semibold rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-pink-500/25"
                     >
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600"
@@ -1548,13 +1548,13 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-indigo-50 via-indigo-50/50 to-blue-50 dark:from-indigo-900/20 dark:via-indigo-900/10 dark:to-blue-900/20 rounded-3xl border border-indigo-200/50 dark:border-indigo-700/50 shadow-lg backdrop-blur-sm"
                     >
                       <div className="p-3 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl shadow-lg">
-                        <Pill className="w-6 h-6 text-white" />
+                        <Pill className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <div className="text-left">
                         <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
                           {t('calculators.cardiology.maggic.therapy_assessment')}
                         </h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                           {t('calculators.cardiology.maggic.therapy_description')}
                         </p>
                       </div>
@@ -1572,7 +1572,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       whileHover={{ x: 5 }}
                     >
                       <div className="p-2 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-md">
-                        <Pill className="w-5 h-5 text-white" />
+                        <Pill className="w-5 h-5 text-[var(--foreground)]" />
                       </div>
                       <h4 className="text-lg font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
                         {t('calculators.cardiology.maggic.gdmt_section')}
@@ -1587,7 +1587,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                         <div className={`p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
                           formData.beta_blocker 
                             ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-lg shadow-green-500/20' 
-                            : 'border-gray-200 dark:border-gray-700 hover:border-green-300'
+                            : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:border-green-300'
                         }`}
                         onClick={() => setFormData({ ...formData, beta_blocker: !formData.beta_blocker })}
                         >
@@ -1595,21 +1595,21 @@ const MAGGICCalculatorComponent: React.FC = () => {
                             <div className={`p-2 rounded-lg transition-colors duration-300 ${
                               formData.beta_blocker 
                                 ? 'bg-green-500 shadow-lg' 
-                                : 'bg-gray-200 dark:bg-gray-700'
+                                : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)]'
                             }`}>
                               <Pill className={`w-4 h-4 ${
-                                formData.beta_blocker ? 'text-white' : 'text-gray-500'
+                                formData.beta_blocker ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)]'
                               }`} />
                             </div>
                             <div className="flex-1">
                               <h5 className={`font-semibold transition-colors duration-300 ${
                                 formData.beta_blocker 
                                   ? 'text-green-700 dark:text-green-300' 
-                                  : 'text-gray-700 dark:text-gray-300'
+                                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                               }`}>
                                 {t('calculators.cardiology.maggic.beta_blocker_label')}
                               </h5>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                              <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                                 Evidence-based beta-blocker (carvedilol, metoprolol, bisoprolol)
                               </p>
                             </div>
@@ -1619,7 +1619,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               transition={{ type: "spring", stiffness: 300 }}
                             >
                               <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                                <Check className="w-4 h-4 text-white" />
+                                <Check className="w-4 h-4 text-[var(--foreground)]" />
                               </div>
                             </motion.div>
                           </div>
@@ -1633,30 +1633,30 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       >
                         <div className={`p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
                           formData.ace_inhibitor 
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg shadow-blue-500/20' 
-                            : 'border-gray-200 dark:border-gray-700 hover:border-blue-300'
+                            ? 'border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 shadow-lg shadow-blue-500/20' 
+                            : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:border-[var(--cardiology-accent-blue)]'
                         }`}
                         onClick={() => setFormData({ ...formData, ace_inhibitor: !formData.ace_inhibitor })}
                         >
                           <div className="flex items-start space-x-3">
                             <div className={`p-2 rounded-lg transition-colors duration-300 ${
                               formData.ace_inhibitor 
-                                ? 'bg-blue-500 shadow-lg' 
-                                : 'bg-gray-200 dark:bg-gray-700'
+                                ? 'bg-[var(--cardiology-accent-blue)] shadow-lg' 
+                                : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)]'
                             }`}>
                               <Pill className={`w-4 h-4 ${
-                                formData.ace_inhibitor ? 'text-white' : 'text-gray-500'
+                                formData.ace_inhibitor ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)]'
                               }`} />
                             </div>
                             <div className="flex-1">
                               <h5 className={`font-semibold transition-colors duration-300 ${
                                 formData.ace_inhibitor 
-                                  ? 'text-blue-700 dark:text-blue-300' 
-                                  : 'text-gray-700 dark:text-gray-300'
+                                  ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300' 
+                                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                               }`}>
                                 {t('calculators.cardiology.maggic.ace_inhibitor_label')}
                               </h5>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                              <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                                 Neurohormonal blockade therapy
                               </p>
                             </div>
@@ -1665,8 +1665,8 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               animate={{ scale: formData.ace_inhibitor ? 1 : 0 }}
                               transition={{ type: "spring", stiffness: 300 }}
                             >
-                              <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
-                                <Check className="w-4 h-4 text-white" />
+                              <div className="w-6 h-6 bg-[var(--cardiology-accent-blue)] rounded-full flex items-center justify-center shadow-lg">
+                                <Check className="w-4 h-4 text-[var(--foreground)]" />
                               </div>
                             </motion.div>
                           </div>
@@ -1685,7 +1685,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setCurrentStep(2)}
-                      className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
+                      className="px-6 py-3 bg-[var(--component-card)] dark:bg-[var(--background)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-semibold rounded-2xl shadow-lg border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:shadow-xl transition-all duration-300"
                     >
                       <span className="flex items-center space-x-2">
                         <ChevronRight className="w-5 h-5 rotate-180" />
@@ -1697,7 +1697,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       whileTap={{ scale: isCalculating ? 1 : 0.95 }}
                       onClick={handleCalculate}
                       disabled={isCalculating}
-                      className="group relative px-10 py-5 bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 text-white font-bold text-lg rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-3xl hover:shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="group relative px-10 py-5 bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 text-[var(--foreground)] font-bold text-lg rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-3xl hover:shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600"
@@ -1761,13 +1761,13 @@ const MAGGICCalculatorComponent: React.FC = () => {
                   whileHover={{ scale: 1.02 }}
                 >
                   <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl shadow-lg">
-                    <Heart className="w-8 h-8 text-white" />
+                    <Heart className="w-8 h-8 text-[var(--foreground)]" />
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                       {t('calculators.cardiology.maggic.results_title')}
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                       Comprehensive mortality risk assessment
                     </p>
                   </div>
@@ -1782,7 +1782,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                 className="relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-600/20 to-indigo-600/20 blur-3xl" />
-                <div className="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20 dark:border-gray-800/20">
+                <div className="relative bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20 dark:border-gray-800/20">
                   <div className="text-center mb-8">
                     <motion.div
                       initial={{ scale: 0 }}
@@ -1793,7 +1793,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       <div className="text-7xl font-bold bg-gradient-to-br from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
                         {animateScore}
                       </div>
-                      <div className="text-xl font-semibold text-gray-600 dark:text-gray-400">points</div>
+                      <div className="text-xl font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">points</div>
                     </motion.div>
                   </div>
                   
@@ -1806,18 +1806,18 @@ const MAGGICCalculatorComponent: React.FC = () => {
                   >
                     <div className={`px-8 py-4 rounded-2xl font-bold text-lg shadow-xl ${
                       result.risk === 'Low' 
-                        ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white'
+                        ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-[var(--foreground)]'
                         : result.risk === 'Intermediate'
-                        ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white'
+                        ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-[var(--foreground)]'
                         : result.risk === 'High'
-                        ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white'
-                        : 'bg-gradient-to-r from-red-500 to-red-700 text-white'
+                        ? 'bg-gradient-to-r from-orange-500 to-red-500 text-[var(--foreground)]'
+                        : 'bg-gradient-to-r from-red-500 to-red-700 text-[var(--foreground)]'
                     }`}>
                       {result.risk} Risk
                     </div>
                   </motion.div>
                   
-                  <p className="text-center text-gray-700 dark:text-gray-300 text-lg font-medium">
+                  <p className="text-center text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-lg font-medium">
                     {result.interpretation}
                   </p>
                 </div>
@@ -1836,10 +1836,10 @@ const MAGGICCalculatorComponent: React.FC = () => {
                   className="relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-purple-600/5 blur-xl" />
-                  <div className="relative p-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl border border-purple-200/50 dark:border-purple-700/50 shadow-xl">
+                  <div className="relative p-8 bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 backdrop-blur-xl rounded-3xl border border-purple-200/50 dark:border-purple-700/50 shadow-xl">
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg">
-                        <Timer className="w-6 h-6 text-white" />
+                        <Timer className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <motion.div
                         animate={{ scale: hoveredMetric === '1year' ? [1, 1.1, 1] : 1 }}
@@ -1848,7 +1848,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                         <Heart className="w-8 h-8 text-purple-500/20" />
                       </motion.div>
                     </div>
-                    <h4 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                    <h4 className="text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-2">
                       {t('calculators.cardiology.maggic.one_year_mortality')}
                     </h4>
                     <div className="flex items-baseline space-x-2 mb-4">
@@ -1862,17 +1862,17 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       </motion.span>
                       <span className="text-2xl font-semibold text-purple-600/70">%</span>
                     </div>
-                    <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div className="relative h-3 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full overflow-hidden">
                       <motion.div 
                         className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full shadow-lg"
                         initial={{ width: 0 }}
                         animate={{ width: `${Math.min(result.oneYearMortality * 2, 100)}%` }}
                         transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
                       >
-                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-full shadow-md" />
+                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[var(--component-card)] rounded-full shadow-md" />
                       </motion.div>
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    <p className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mt-2">
                       Based on MAGGIC meta-analysis of 39,372 patients
                     </p>
                   </div>
@@ -1885,10 +1885,10 @@ const MAGGICCalculatorComponent: React.FC = () => {
                   className="relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-pink-600/10 to-pink-600/5 blur-xl" />
-                  <div className="relative p-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl border border-pink-200/50 dark:border-pink-700/50 shadow-xl">
+                  <div className="relative p-8 bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 backdrop-blur-xl rounded-3xl border border-pink-200/50 dark:border-pink-700/50 shadow-xl">
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-3 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl shadow-lg">
-                        <TrendingUp className="w-6 h-6 text-white" />
+                        <TrendingUp className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <motion.div
                         animate={{ scale: hoveredMetric === '3year' ? [1, 1.1, 1] : 1 }}
@@ -1897,7 +1897,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                         <Heart className="w-8 h-8 text-pink-500/20" />
                       </motion.div>
                     </div>
-                    <h4 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                    <h4 className="text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-2">
                       {t('calculators.cardiology.maggic.three_year_mortality')}
                     </h4>
                     <div className="flex items-baseline space-x-2 mb-4">
@@ -1911,17 +1911,17 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       </motion.span>
                       <span className="text-2xl font-semibold text-pink-600/70">%</span>
                     </div>
-                    <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div className="relative h-3 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full overflow-hidden">
                       <motion.div 
                         className="absolute inset-y-0 left-0 bg-gradient-to-r from-pink-500 to-pink-600 rounded-full shadow-lg"
                         initial={{ width: 0 }}
                         animate={{ width: `${Math.min(result.threeYearMortality, 100)}%` }}
                         transition={{ duration: 1.5, delay: 1.1, ease: "easeOut" }}
                       >
-                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-full shadow-md" />
+                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[var(--component-card)] rounded-full shadow-md" />
                       </motion.div>
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    <p className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mt-2">
                       Validated across 30+ heart failure cohorts
                     </p>
                   </div>
@@ -1937,7 +1937,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
               >
                 <div className="flex items-center justify-center space-x-3">
                   <div className="p-2 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-md">
-                    <Target className="w-5 h-5 text-white" />
+                    <Target className="w-5 h-5 text-[var(--foreground)]" />
                   </div>
                   <h4 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                     {t('calculators.cardiology.maggic.risk_stratification_title')}
@@ -1999,30 +1999,30 @@ const MAGGICCalculatorComponent: React.FC = () => {
                         )}
                         <div className={`relative p-6 rounded-2xl border-2 transition-all duration-300 ${
                           isActive 
-                            ? `${category.risk === 'Low' ? 'border-green-500' : category.risk === 'Intermediate' ? 'border-yellow-500' : category.risk === 'High' ? 'border-orange-500' : 'border-red-500'} bg-gradient-to-br ${category.gradient} text-white shadow-2xl`
+                            ? `${category.risk === 'Low' ? 'border-green-500' : category.risk === 'Intermediate' ? 'border-yellow-500' : category.risk === 'High' ? 'border-orange-500' : 'border-red-500'} bg-gradient-to-br ${category.gradient} text-[var(--foreground)] shadow-2xl`
                             : `${category.risk === 'Low' ? 'border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/20' : category.risk === 'Intermediate' ? 'border-yellow-200 dark:border-yellow-800 bg-yellow-50/50 dark:bg-yellow-900/20' : category.risk === 'High' ? 'border-orange-200 dark:border-orange-800 bg-orange-50/50 dark:bg-orange-900/20' : 'border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-900/20'} hover:shadow-lg`
                         }`}>
                           <div className="flex justify-center mb-3">
                             <div className={`p-2 rounded-lg ${
-                              isActive ? 'bg-white/20' : category.risk === 'Low' ? 'bg-green-100 dark:bg-green-900/30' : category.risk === 'Intermediate' ? 'bg-yellow-100 dark:bg-yellow-900/30' : category.risk === 'High' ? 'bg-orange-100 dark:bg-orange-900/30' : 'bg-red-100 dark:bg-red-900/30'
+                              isActive ? 'bg-[var(--component-card)]/20' : category.risk === 'Low' ? 'bg-green-100 dark:bg-green-900/30' : category.risk === 'Intermediate' ? 'bg-yellow-100 dark:bg-yellow-900/30' : category.risk === 'High' ? 'bg-orange-100 dark:bg-orange-900/30' : 'bg-red-100 dark:bg-red-900/30'
                             }`}>
                               <Icon className={`w-5 h-5 ${
-                                isActive ? 'text-white' : category.risk === 'Low' ? 'text-green-600 dark:text-green-400' : category.risk === 'Intermediate' ? 'text-yellow-600 dark:text-yellow-400' : category.risk === 'High' ? 'text-orange-600 dark:text-orange-400' : 'text-red-600 dark:text-red-400'
+                                isActive ? 'text-[var(--foreground)]' : category.risk === 'Low' ? 'text-green-600 dark:text-green-400' : category.risk === 'Intermediate' ? 'text-yellow-600 dark:text-yellow-400' : category.risk === 'High' ? 'text-orange-600 dark:text-orange-400' : 'text-red-600 dark:text-red-400'
                               }`} />
                             </div>
                           </div>
                           <h5 className={`text-center font-bold mb-2 ${
-                            isActive ? 'text-white' : category.risk === 'Low' ? 'text-green-800 dark:text-green-200' : category.risk === 'Intermediate' ? 'text-yellow-800 dark:text-yellow-200' : category.risk === 'High' ? 'text-orange-800 dark:text-orange-200' : 'text-red-800 dark:text-red-200'
+                            isActive ? 'text-[var(--foreground)]' : category.risk === 'Low' ? 'text-green-800 dark:text-green-200' : category.risk === 'Intermediate' ? 'text-yellow-800 dark:text-yellow-200' : category.risk === 'High' ? 'text-orange-800 dark:text-orange-200' : 'text-red-800 dark:text-red-200'
                           }`}>
                             {category.risk}
                           </h5>
                           <p className={`text-center text-sm mb-1 ${
-                            isActive ? 'text-white/90' : category.risk === 'Low' ? 'text-green-700 dark:text-green-300' : category.risk === 'Intermediate' ? 'text-yellow-700 dark:text-yellow-300' : category.risk === 'High' ? 'text-orange-700 dark:text-orange-300' : 'text-red-700 dark:text-red-300'
+                            isActive ? 'text-[var(--foreground)]/90' : category.risk === 'Low' ? 'text-green-700 dark:text-green-300' : category.risk === 'Intermediate' ? 'text-yellow-700 dark:text-yellow-300' : category.risk === 'High' ? 'text-orange-700 dark:text-orange-300' : 'text-red-700 dark:text-red-300'
                           }`}>
                             {category.range}
                           </p>
                           <p className={`text-center text-xs ${
-                            isActive ? 'text-white/80' : category.risk === 'Low' ? 'text-green-600 dark:text-green-400' : category.risk === 'Intermediate' ? 'text-yellow-600 dark:text-yellow-400' : category.risk === 'High' ? 'text-orange-600 dark:text-orange-400' : 'text-red-600 dark:text-red-400'
+                            isActive ? 'text-[var(--foreground)]/80' : category.risk === 'Low' ? 'text-green-600 dark:text-green-400' : category.risk === 'Intermediate' ? 'text-yellow-600 dark:text-yellow-400' : category.risk === 'High' ? 'text-orange-600 dark:text-orange-400' : 'text-red-600 dark:text-red-400'
                           }`}>
                             {category.examples}
                           </p>
@@ -2033,7 +2033,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               animate={{ scale: 1, rotate: 0 }}
                               transition={{ delay: 1.5, type: "spring" }}
                             >
-                              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
+                              <div className="w-8 h-8 bg-[var(--component-card)] rounded-full flex items-center justify-center shadow-lg">
                                 <Check className={`w-5 h-5 ${category.risk === 'Low' ? 'text-green-500' : category.risk === 'Intermediate' ? 'text-yellow-500' : category.risk === 'High' ? 'text-orange-500' : 'text-red-500'}`} />
                               </div>
                             </motion.div>
@@ -2044,7 +2044,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                   })}
                 </div>
                 
-                <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-center text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                   {t('calculators.cardiology.maggic.mortality_rates_note')}
                 </p>
               </motion.div>
@@ -2058,7 +2058,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
               >
                 <div className="flex items-center justify-center space-x-3">
                   <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-md">
-                    <Stethoscope className="w-5 h-5 text-white" />
+                    <Stethoscope className="w-5 h-5 text-[var(--foreground)]" />
                   </div>
                   <h4 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                     {t('calculators.cardiology.maggic.recommendations_title')}
@@ -2067,7 +2067,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                 
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-indigo-600/10 blur-xl" />
-                  <div className="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-blue-200/50 dark:border-blue-700/50 shadow-xl">
+                  <div className="relative bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 backdrop-blur-xl rounded-3xl p-8 border border-blue-200/50 dark:border-blue-700/50 shadow-xl">
                     <AnimatePresence>
                       {showInsights && (
                         <motion.div 
@@ -2082,7 +2082,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: 2 + index * 0.1 }}
                               whileHover={{ x: 10 }}
-                              className="flex items-start space-x-4 p-4 rounded-2xl hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-300"
+                              className="flex items-start space-x-4 p-4 rounded-2xl hover:bg-[var(--cardiology-accent-blue-light)]/50 dark:hover:bg-[var(--cardiology-accent-blue-darker)]/20 transition-all duration-300"
                             >
                               <motion.div
                                 initial={{ scale: 0 }}
@@ -2090,9 +2090,9 @@ const MAGGICCalculatorComponent: React.FC = () => {
                                 transition={{ delay: 2.1 + index * 0.1, type: "spring" }}
                                 className="p-2 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg shadow-md flex-shrink-0"
                               >
-                                <Check className="w-5 h-5 text-white" />
+                                <Check className="w-5 h-5 text-[var(--foreground)]" />
                               </motion.div>
-                              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                              <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                                 {rec}
                               </p>
                             </motion.div>
@@ -2113,7 +2113,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
               >
                 <div className="flex items-center justify-center space-x-3">
                   <div className="p-2 bg-gradient-to-br from-gray-500 to-gray-600 rounded-lg shadow-md">
-                    <FileText className="w-5 h-5 text-white" />
+                    <FileText className="w-5 h-5 text-[var(--foreground)]" />
                   </div>
                   <h4 className="text-xl font-bold bg-gradient-to-r from-gray-600 to-gray-700 bg-clip-text text-transparent">
                     Score Breakdown
@@ -2122,7 +2122,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                 
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-gray-600/10 to-gray-600/10 blur-xl" />
-                  <div className="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+                  <div className="relative bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 backdrop-blur-xl rounded-3xl p-8 border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 shadow-xl">
                     <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
                       {result.scoreBreakdown?.map((item, index) => (
                         <motion.div
@@ -2130,10 +2130,10 @@ const MAGGICCalculatorComponent: React.FC = () => {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 2.6 + index * 0.05 }}
-                          className="flex items-center space-x-2 p-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg mb-2 break-inside-avoid"
+                          className="flex items-center space-x-2 p-2 bg-[var(--component-surface-primary)] dark:bg-[var(--background)]/50 rounded-lg mb-2 break-inside-avoid"
                         >
-                          <ArrowRight className="w-4 h-4 text-gray-500" />
-                          <span className="text-sm text-gray-700 dark:text-gray-300">{item}</span>
+                          <ArrowRight className="w-4 h-4 text-[var(--foreground-secondary)]" />
+                          <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{item}</span>
                         </motion.div>
                       ))}
                     </div>
@@ -2152,7 +2152,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleReset}
-                  className="group relative px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-800 text-white font-semibold rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-gray-500/25"
+                  className="group relative px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-800 text-[var(--foreground)] font-semibold rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-gray-500/25"
                 >
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-gray-800 to-black"
@@ -2182,16 +2182,16 @@ const MAGGICCalculatorComponent: React.FC = () => {
         >
           <motion.div 
             whileHover={{ scale: 1.02 }}
-            className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 dark:from-gray-800/20 dark:via-gray-800/10 dark:to-gray-800/20 rounded-3xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg backdrop-blur-sm"
+            className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 dark:from-gray-800/20 dark:via-gray-800/10 dark:to-gray-800/20 rounded-3xl border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 shadow-lg backdrop-blur-sm"
           >
             <div className="p-3 bg-gradient-to-br from-gray-500 to-gray-600 rounded-xl shadow-lg">
-              <Info className="w-6 h-6 text-white" />
+              <Info className="w-6 h-6 text-[var(--foreground)]" />
             </div>
             <div className="text-left">
               <h3 className="text-xl font-bold bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">
                 {t('calculators.cardiology.maggic.about_title')}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                 {t('calculators.cardiology.maggic.about_subtitle')}
               </p>
             </div>
@@ -2206,12 +2206,12 @@ const MAGGICCalculatorComponent: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 3.2 }}
           >
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
               {t('calculators.cardiology.maggic.about_description')}
             </p>
             
             <div className="space-y-4">
-              <h4 className="font-semibold text-gray-800 dark:text-gray-200 flex items-center space-x-2">
+              <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
                 <Sparkles className="w-5 h-5 text-purple-500" />
                 <span>Key Features</span>
               </h4>
@@ -2232,7 +2232,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                     <div className="p-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-full mt-1">
                       <feature.icon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <span className="flex-1 text-gray-700 dark:text-gray-300">{feature.text}</span>
+                    <span className="flex-1 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{feature.text}</span>
                   </motion.li>
                 ))}
               </ul>
@@ -2252,20 +2252,20 @@ const MAGGICCalculatorComponent: React.FC = () => {
               whileHover={{ scale: 1.01 }}
             >
               <div className="absolute -inset-2 bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-indigo-500/10 blur-2xl" />
-              <div className="relative bg-white/70 dark:bg-gray-900/70 backdrop-blur-lg p-6 rounded-2xl border border-purple-200/50 dark:border-purple-800/50 shadow-xl">
+              <div className="relative bg-[var(--component-card)]/70 dark:bg-[var(--background-dark)]/70 backdrop-blur-lg p-6 rounded-2xl border border-purple-200/50 dark:border-purple-800/50 shadow-xl">
                 <div className="flex items-start space-x-4">
                   <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.5 }}
                     className="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl shadow-lg flex-shrink-0"
                   >
-                    <PenTool className="w-6 h-6 text-white" />
+                    <PenTool className="w-6 h-6 text-[var(--foreground)]" />
                   </motion.div>
                   <div className="flex-1">
                     <h4 className="font-bold text-purple-900 dark:text-purple-100 mb-1">
                       {t('calculators.cardiology.maggic.about_creator_title')}
                     </h4>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.cardiology.maggic.creator_description')}
                     </p>
                   </div>
@@ -2274,13 +2274,13 @@ const MAGGICCalculatorComponent: React.FC = () => {
             </motion.div>
 
             {/* Tabs for Formula/Tables */}
-            <div className="bg-gray-100 dark:bg-gray-800/50 p-1.5 rounded-2xl flex space-x-2">
+            <div className="bg-[var(--component-surface-secondary)] dark:bg-[var(--background)]/50 p-1.5 rounded-2xl flex space-x-2">
               <motion.button
                 onClick={() => setActiveTab('formula')}
                 className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   activeTab === 'formula' 
-                    ? 'bg-white dark:bg-gray-900 shadow-md text-purple-600' 
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-700/50'
+                    ? 'bg-[var(--component-card)] dark:bg-[var(--background-dark)] shadow-md text-purple-600' 
+                    : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-[var(--component-card)]/50 dark:hover:bg-[var(--card)]/50'
                 }`}
               >
                 <div className="flex items-center justify-center space-x-2">
@@ -2292,8 +2292,8 @@ const MAGGICCalculatorComponent: React.FC = () => {
                 onClick={() => setActiveTab('tables')}
                 className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   activeTab === 'tables' 
-                    ? 'bg-white dark:bg-gray-900 shadow-md text-purple-600' 
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-700/50'
+                    ? 'bg-[var(--component-card)] dark:bg-[var(--background-dark)] shadow-md text-purple-600' 
+                    : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-[var(--component-card)]/50 dark:hover:bg-[var(--card)]/50'
                 }`}
               >
                 <div className="flex items-center justify-center space-x-2">
@@ -2311,7 +2311,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}
-                  className="p-6 bg-gray-50 dark:bg-gray-800/30 rounded-2xl border border-gray-200 dark:border-gray-700/50"
+                  className="p-6 bg-[var(--component-surface-primary)] dark:bg-[var(--background)]/30 rounded-2xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]/50"
                 >
                   <div className="flex items-center space-x-3 mb-4">
                     <Calculator className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -2319,7 +2319,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       {t('calculators.cardiology.maggic.formula_title')}
                     </h4>
                   </div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                     {t('calculators.cardiology.maggic.formula_description')}
                   </p>
                   <div className="mt-4 p-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
@@ -2354,10 +2354,10 @@ const MAGGICCalculatorComponent: React.FC = () => {
                         animate={{ opacity: [0.2, 0.4, 0.2] }}
                         transition={{ duration: 3, repeat: Infinity }}
                       />
-                      <div className="relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl">
+                      <div className="relative bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-2xl overflow-hidden shadow-xl">
                         <div className="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-b border-blue-200 dark:border-blue-800">
                           <h6 className="font-bold text-blue-900 dark:text-blue-100 flex items-center space-x-2">
-                            <HeartHandshake className="w-5 h-5 text-blue-600" />
+                            <HeartHandshake className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                             <span>{t('calculators.cardiology.maggic.ef_title')}</span>
                           </h6>
                         </div>
@@ -2376,12 +2376,12 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.2 + index * 0.05 }}
                               whileHover={{ scale: 1.02, x: 5 }}
-                              className="flex items-center justify-between p-3 rounded-xl transition-all duration-300 hover:bg-blue-50/50 dark:hover:bg-blue-900/20"
+                              className="flex items-center justify-between p-3 rounded-xl transition-all duration-300 hover:bg-[var(--cardiology-accent-blue-light)]/50 dark:hover:bg-[var(--cardiology-accent-blue-darker)]/20"
                             >
-                              <span className="text-gray-700 dark:text-gray-300 font-medium">{item.range}</span>
+                              <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">{item.range}</span>
                               <motion.div
                                 whileHover={{ scale: 1.2 }}
-                                className="px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full font-bold text-sm shadow-lg"
+                                className="px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-[var(--foreground)] rounded-full font-bold text-sm shadow-lg"
                               >
                                 +{item.points}
                               </motion.div>
@@ -2403,7 +2403,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                         animate={{ opacity: [0.2, 0.4, 0.2] }}
                         transition={{ duration: 3, repeat: Infinity }}
                       />
-                      <div className="relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl">
+                      <div className="relative bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-2xl overflow-hidden shadow-xl">
                         <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-b border-green-200 dark:border-green-800">
                           <h6 className="font-bold text-green-900 dark:text-green-100 flex items-center space-x-2">
                             <Activity className="w-5 h-5 text-green-600" />
@@ -2434,8 +2434,8 @@ const MAGGICCalculatorComponent: React.FC = () => {
                                   {item.icon}
                                 </motion.div>
                                 <div>
-                                  <span className="text-gray-700 dark:text-gray-300 font-medium">{item.class}</span>
-                                  <p className="text-xs text-gray-500 dark:text-gray-500">{item.description}</p>
+                                  <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">{item.class}</span>
+                                  <p className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">{item.description}</p>
                                 </div>
                               </div>
                               <motion.div
@@ -2445,7 +2445,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                                   item.points === 2 ? 'from-yellow-500 to-green-500' :
                                   item.points === 6 ? 'from-orange-500 to-yellow-500' :
                                   'from-red-500 to-orange-500'
-                                } text-white rounded-full font-bold text-sm shadow-lg`}
+                                } text-[var(--foreground)] rounded-full font-bold text-sm shadow-lg`}
                               >
                                 +{item.points}
                               </motion.div>
@@ -2470,7 +2470,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       animate={{ opacity: [0.2, 0.4, 0.2] }}
                       transition={{ duration: 3, repeat: Infinity }}
                     />
-                    <div className="relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl">
+                    <div className="relative bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-2xl overflow-hidden shadow-xl">
                       <div className="p-4 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border-b border-yellow-200 dark:border-yellow-800">
                         <div className="flex items-center justify-between">
                           <h6 className="font-bold text-yellow-900 dark:text-yellow-100 flex items-center space-x-2">
@@ -2516,7 +2516,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                                     className="flex items-center justify-between p-3 rounded-xl transition-all duration-300 hover:bg-yellow-50/50 dark:hover:bg-yellow-900/20"
                                   >
                                     <div className="flex items-center space-x-3">
-                                      <div className="relative w-20 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                      <div className="relative w-20 h-3 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full overflow-hidden">
                                         <motion.div
                                           className="absolute inset-y-0 left-0 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
                                           initial={{ width: 0 }}
@@ -2524,11 +2524,11 @@ const MAGGICCalculatorComponent: React.FC = () => {
                                           transition={{ delay: 0.9 + index * 0.05, duration: 0.5 }}
                                         />
                                       </div>
-                                      <span className="text-gray-700 dark:text-gray-300 font-medium text-sm">{item.range}</span>
+                                      <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium text-sm">{item.range}</span>
                                     </div>
                                     <motion.div
                                       whileHover={{ scale: 1.2 }}
-                                      className={`px-3 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-full font-bold text-sm shadow-lg`}
+                                      className={`px-3 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-[var(--foreground)] rounded-full font-bold text-sm shadow-lg`}
                                       style={{ opacity: 0.6 + intensity * 0.4 }}
                                     >
                                       +{item.points}
@@ -2555,7 +2555,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       animate={{ opacity: [0.2, 0.4, 0.2] }}
                       transition={{ duration: 3, repeat: Infinity }}
                     />
-                    <div className="relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl">
+                    <div className="relative bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-2xl overflow-hidden shadow-xl">
                       <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-b border-purple-200 dark:border-purple-800">
                         <h6 className="font-bold text-purple-900 dark:text-purple-100 flex items-center space-x-2">
                           <User className="w-5 h-5 text-purple-600" />
@@ -2585,12 +2585,12 @@ const MAGGICCalculatorComponent: React.FC = () => {
                               >
                                 {item.visual}
                               </motion.span>
-                              <span className="text-gray-700 dark:text-gray-300 font-medium">{item.range}</span>
+                              <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">{item.range}</span>
                             </div>
                             <motion.div
                               whileHover={{ scale: 1.2, rotate: 360 }}
                               transition={{ duration: 0.3 }}
-                              className={`px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-bold text-sm shadow-lg`}
+                              className={`px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-[var(--foreground)] rounded-full font-bold text-sm shadow-lg`}
                             >
                               +{item.points}
                             </motion.div>
@@ -2630,7 +2630,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
           >
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/10 via-teal-600/10 to-green-600/10 blur-3xl" />
             <motion.div 
-              className="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden"
+              className="relative bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden"
               whileHover={{ scale: 1.005 }}
             >
               {/* Header with animated background */}
@@ -2646,7 +2646,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                 <div className="relative flex items-center justify-between">
                   <div>
                     <motion.h4 
-                      className="text-2xl font-bold text-white mb-2"
+                      className="text-2xl font-bold text-[var(--foreground)] mb-2"
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 1.9 }}
@@ -2666,9 +2666,9 @@ const MAGGICCalculatorComponent: React.FC = () => {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 2.1, type: "spring" }}
-                    className="p-4 bg-white/20 backdrop-blur-md rounded-2xl shadow-xl"
+                    className="p-4 bg-[var(--component-card)]/20 backdrop-blur-md rounded-2xl shadow-xl"
                   >
-                    <Microscope className="w-8 h-8 text-white" />
+                    <Microscope className="w-8 h-8 text-[var(--foreground)]" />
                   </motion.div>
                 </div>
               </div>
@@ -2715,14 +2715,14 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       className="relative overflow-hidden"
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br from-${item.color}-600/5 to-${item.color}-600/10`} />
-                      <div className="relative p-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                      <div className="relative p-6 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 backdrop-blur-sm rounded-2xl border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50">
                         <div className="flex items-start space-x-4">
                           <motion.div
                             whileHover={{ rotate: 360 }}
                             transition={{ duration: 0.5 }}
                             className={`p-3 bg-gradient-to-br from-${item.color}-500 to-${item.color}-600 rounded-xl shadow-lg flex-shrink-0`}
                           >
-                            <item.icon className="w-6 h-6 text-white" />
+                            <item.icon className="w-6 h-6 text-[var(--foreground)]" />
                           </motion.div>
                           <div className="flex-1">
                             <div className="flex items-center justify-between mb-2">
@@ -2736,7 +2736,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                                 {item.stats}
                               </motion.span>
                             </div>
-                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                               {item.content}
                             </p>
                           </div>
@@ -2768,7 +2768,7 @@ const MAGGICCalculatorComponent: React.FC = () => {
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{stat.label}</p>
                           <motion.p 
                             className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent"
                             animate={{ scale: [1, 1.1, 1] }}
@@ -2795,14 +2795,14 @@ const MAGGICCalculatorComponent: React.FC = () => {
           >
             <div className="absolute -inset-2 bg-gradient-to-tr from-indigo-600/10 via-purple-600/10 to-pink-600/10 blur-3xl" />
             <motion.div 
-              className="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden"
+              className="relative bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden"
               whileHover={{ scale: 1.005, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}
             >
               <div className="p-8 bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500">
                 <div className="flex items-center justify-between">
                   <div>
                     <motion.h4 
-                      className="text-2xl font-bold text-white mb-2"
+                      className="text-2xl font-bold text-[var(--foreground)] mb-2"
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 3 }}
@@ -2822,9 +2822,9 @@ const MAGGICCalculatorComponent: React.FC = () => {
                     initial={{ scale: 0, rotate: -45 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 3.2, type: "spring" }}
-                    className="p-4 bg-white/20 backdrop-blur-md rounded-2xl shadow-xl"
+                    className="p-4 bg-[var(--component-card)]/20 backdrop-blur-md rounded-2xl shadow-xl"
                   >
-                    <BookOpen className="w-8 h-8 text-white" />
+                    <BookOpen className="w-8 h-8 text-[var(--foreground)]" />
                   </motion.div>
                 </div>
               </div>
@@ -2854,17 +2854,17 @@ const MAGGICCalculatorComponent: React.FC = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 3.3 + index * 0.1 }}
                       whileHover={{ scale: 1.03, zIndex: 10 }}
-                      className="block p-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 hover:shadow-lg transition-all duration-300"
+                      className="block p-6 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 backdrop-blur-sm rounded-2xl border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 hover:shadow-lg transition-all duration-300"
                     >
                       <div className="flex items-start space-x-4">
                         <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl shadow-lg flex-shrink-0">
-                          <item.icon className="w-6 h-6 text-white" />
+                          <item.icon className="w-6 h-6 text-[var(--foreground)]" />
                         </div>
                         <div className="flex-1">
                           <h5 className="font-bold text-indigo-900 dark:text-indigo-100 mb-1">{item.title}</h5>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">{item.authors}</p>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">{item.authors}</p>
                           <div className="flex items-center justify-between mt-3">
-                            <p className="text-xs text-gray-500 dark:text-gray-500">{item.journal}</p>
+                            <p className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">{item.journal}</p>
                             <div className="flex items-center text-indigo-600 dark:text-indigo-400">
                               <span className="text-xs font-semibold mr-1">Read</span>
                               <ExternalLink className="w-3 h-3" />

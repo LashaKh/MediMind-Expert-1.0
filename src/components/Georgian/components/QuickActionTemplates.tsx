@@ -216,12 +216,12 @@ const getCategoryColor = (category: string): string => {
   switch (category) {
     case 'Diagnosis & Assessment': return 'text-rose-700 bg-rose-100 dark:text-rose-300 dark:bg-rose-900/40 border border-rose-200 dark:border-rose-700';
     case 'Clinical Assessment': return 'text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30';
-    case 'Medication Management': return 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30';
+    case 'Medication Management': return 'text-[var(--cardiology-accent-blue-dark)] bg-[var(--cardiology-accent-blue-light)] dark:text-blue-400 dark:bg-[var(--cardiology-accent-blue-darker)]/30';
     case 'Treatment Planning': return 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30';
     case 'Patient Management': return 'text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30';
     case 'Documentation': return 'text-purple-600 bg-purple-100 dark:text-purple-400 dark:bg-purple-900/30';
     case 'Cardiology Specific': return 'text-rose-600 bg-rose-100 dark:text-rose-400 dark:bg-rose-900/30';
-    default: return 'text-slate-600 bg-slate-100 dark:text-slate-400 dark:bg-slate-900/30';
+    default: return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-secondary)] dark:text-slate-400 dark:bg-[var(--background-dark)]/30';
   }
 };
 
@@ -253,12 +253,12 @@ export const QuickActionTemplates: React.FC<QuickActionTemplatesProps> = ({
     return (
       <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
         <div className="w-16 h-16 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 rounded-2xl flex items-center justify-center mb-4">
-          <FileText className="w-8 h-8 text-slate-400 dark:text-slate-500" />
+          <FileText className="w-8 h-8 text-slate-400 dark:text-[var(--foreground-secondary)]" />
         </div>
-        <h3 className="text-lg font-semibold text-slate-600 dark:text-slate-400 mb-2">
+        <h3 className="text-lg font-semibold text-[var(--foreground-tertiary)] dark:text-slate-400 mb-2">
           No Transcript Available
         </h3>
-        <p className="text-sm text-slate-500 dark:text-slate-500 max-w-sm">
+        <p className="text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] max-w-sm">
           Start recording or upload an audio file to access our medical analysis templates.
         </p>
       </div>
@@ -280,8 +280,8 @@ export const QuickActionTemplates: React.FC<QuickActionTemplatesProps> = ({
               onClick={() => setSelectedCategory(category)}
               className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-700'
-                  : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-transparent hover:bg-slate-200 dark:hover:bg-slate-700'
+                  ? 'bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 dark:text-blue-300 border border-blue-200 dark:border-blue-700'
+                  : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] dark:bg-[var(--background)] dark:text-slate-400 border border-transparent hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--card)]'
               }`}
             >
               <CategoryIcon className="w-4 h-4" />
@@ -298,13 +298,13 @@ export const QuickActionTemplates: React.FC<QuickActionTemplatesProps> = ({
           const priorityColor = {
             high: 'border-red-200 dark:border-red-800',
             medium: 'border-amber-200 dark:border-amber-800',
-            low: 'border-slate-200 dark:border-slate-700'
+            low: 'border-[var(--glass-border-light)] dark:border-slate-700'
           };
 
           return (
             <div
               key={template.id}
-              className={`group relative bg-white dark:bg-slate-800 rounded-xl border ${priorityColor[template.priority]} shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer ${
+              className={`group relative bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl border ${priorityColor[template.priority]} shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer ${
                 disabled ? 'opacity-50 pointer-events-none' : 'hover:scale-[1.02]'
               }`}
               onClick={() => !disabled && onSelectTemplate(template.instruction)}
@@ -312,17 +312,17 @@ export const QuickActionTemplates: React.FC<QuickActionTemplatesProps> = ({
               {/* Priority Indicator */}
               <div className={`absolute top-3 right-3 w-2 h-2 rounded-full ${
                 template.priority === 'high' ? 'bg-red-500' :
-                template.priority === 'medium' ? 'bg-amber-500' : 'bg-slate-400'
+                template.priority === 'medium' ? 'bg-amber-500' : 'bg-[var(--muted)]'
               }`} />
 
               <div className="p-5">
                 {/* Header */}
                 <div className="flex items-start space-x-3 mb-3">
                   <div className={`bg-gradient-to-r ${template.color} rounded-lg p-2.5 shadow-sm group-hover:shadow-md transition-shadow`}>
-                    <IconComponent className="w-5 h-5 text-white" />
+                    <IconComponent className="w-5 h-5 text-[var(--foreground)]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-1 truncate">
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-slate-100 mb-1 truncate">
                       {template.title}
                     </h4>
                     <div className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${getCategoryColor(template.category)}`}>
@@ -332,13 +332,13 @@ export const QuickActionTemplates: React.FC<QuickActionTemplatesProps> = ({
                 </div>
 
                 {/* Description */}
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 line-clamp-2 leading-relaxed">
+                <p className="text-sm text-[var(--foreground-tertiary)] dark:text-slate-400 mb-4 line-clamp-2 leading-relaxed">
                   {template.description}
                 </p>
 
                 {/* Footer */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-500">
+                  <div className="flex items-center space-x-1 text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                     <Clock className="w-3 h-3" />
                     <span>~{template.estimatedTime}</span>
                   </div>
@@ -346,7 +346,7 @@ export const QuickActionTemplates: React.FC<QuickActionTemplatesProps> = ({
                   <div className={`px-2 py-1 rounded-md text-xs font-semibold ${
                     template.priority === 'high' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' :
                     template.priority === 'medium' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' :
-                    'bg-slate-100 text-slate-600 dark:bg-slate-900/50 dark:text-slate-400'
+                    'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] dark:bg-[var(--background-dark)]/50 dark:text-slate-400'
                   }`}>
                     {template.priority.toUpperCase()}
                   </div>
@@ -363,13 +363,13 @@ export const QuickActionTemplates: React.FC<QuickActionTemplatesProps> = ({
       {/* No Results */}
       {filteredTemplates.length === 0 && (
         <div className="text-center py-12">
-          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8 text-slate-400" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-600 dark:text-slate-400 mb-2">
+          <h3 className="text-lg font-semibold text-[var(--foreground-tertiary)] dark:text-slate-400 mb-2">
             No templates found
           </h3>
-          <p className="text-sm text-slate-500 dark:text-slate-500">
+          <p className="text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
             Try adjusting your search or category filter
           </p>
         </div>

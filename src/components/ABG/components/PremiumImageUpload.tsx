@@ -193,14 +193,14 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
     return (
       <div className={cn("abg-premium", className)} data-debug-id="abg-upload-compact" data-tour="abg-file-preview">
         <div className={cn(
-          "relative overflow-hidden rounded-2xl border bg-white/90 backdrop-blur transition-all duration-500",
+          "relative overflow-hidden rounded-2xl border bg-[var(--component-card)]/90 backdrop-blur transition-all duration-500",
           isAnimating ? "opacity-100" : "opacity-0",
-          error ? "border-red-200" : "border-slate-200"
+          error ? "border-red-200" : "border-[var(--glass-border-light)]"
         )}>
           {/* Header */}
-          <div className="px-5 py-3 border-b border-slate-200 bg-slate-50/60">
+          <div className="px-5 py-3 border-b border-[var(--glass-border-light)] bg-[var(--component-surface-primary)]/60">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-slate-800">
+              <div className="flex items-center gap-2 text-[var(--foreground)]">
                 <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                 <h3 className="font-semibold">{t('abg.upload.fileReady', 'File ready for analysis')}</h3>
               </div>
@@ -208,7 +208,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={handleRemove}
-                className="text-slate-600 hover:bg-slate-100 h-8 w-8 p-0"
+                className="text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-secondary)] h-8 w-8 p-0"
                 aria-label={t('abg.upload.removeAria', 'Remove file')}
               >
                 <X className="h-4 w-4" />
@@ -221,7 +221,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
             <div className="flex gap-5">
               {/* Image Preview */}
               <div className="relative flex-shrink-0">
-                <div className="w-28 h-28 rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+                <div className="w-28 h-28 rounded-xl overflow-hidden border border-[var(--glass-border-light)] shadow-sm">
                   <img
                     src={previewUrl}
                     alt="Preview"
@@ -229,18 +229,18 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
                   />
                 </div>
                 <div className="absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
-                  <CheckCircle2 className="h-4 w-4 text-white" />
+                  <CheckCircle2 className="h-4 w-4 text-[var(--foreground)]" />
                 </div>
               </div>
 
               {/* File Info */}
               <div className="flex-1 space-y-3.5">
                 <div>
-                  <h4 className="font-semibold text-slate-800 flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-blue-600" />
+                  <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
                     {selectedFile.name}
                   </h4>
-                  <p className="text-xs text-slate-600 mt-1">
+                  <p className="text-xs text-[var(--foreground-tertiary)] mt-1">
                     {formatFileSize(selectedFile.size)} • {selectedFile.type}
                   </p>
                 </div>
@@ -248,15 +248,15 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
                 {/* Upload Progress */}
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-600">{t('abg.upload.progress', 'Upload Progress')}</span>
+                    <span className="text-[var(--foreground-tertiary)]">{t('abg.upload.progress', 'Upload Progress')}</span>
                     <span className="font-medium text-emerald-600">{Math.round(uploadProgress)}%</span>
                   </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden" aria-hidden>
+                  <div className="w-full bg-[var(--component-surface-tertiary)] rounded-full h-2 overflow-hidden" aria-hidden>
                     <div 
                       className="h-full bg-emerald-500 rounded-full transition-all duration-300 relative"
                       style={{ width: `${uploadProgress}%` }}
                     >
-                      <div className="absolute inset-0 bg-white/30 opacity-30 animate-pulse" />
+                      <div className="absolute inset-0 bg-[var(--component-card)]/30 opacity-30 animate-pulse" />
                     </div>
                   </div>
                   <span className="sr-only" aria-live="polite">{t('abg.upload.progressSr', '{{percent}} percent uploaded', { percent: Math.round(uploadProgress) })}</span>
@@ -288,12 +288,12 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
 
             {/* Processing State */}
             {isProcessing && (
-              <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+              <div className="mt-6 p-4 bg-[var(--cardiology-accent-blue-light)] rounded-xl border border-blue-200">
                 <div className="flex items-center gap-3">
                   <div className="w-5 h-5 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
                   <div>
                     <p className="font-medium text-blue-800">{t('abg.upload.processing.title', 'Processing image…')}</p>
-                    <p className="text-sm text-blue-600">{t('abg.upload.processing.subtitle', 'AI is analyzing the blood gas report')}</p>
+                    <p className="text-sm text-[var(--cardiology-accent-blue-dark)]">{t('abg.upload.processing.subtitle', 'AI is analyzing the blood gas report')}</p>
                   </div>
                 </div>
               </div>
@@ -351,14 +351,14 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
           "relative cursor-pointer transition-colors duration-200",
           "rounded-2xl border-2 border-dashed overflow-hidden",
           "min-h-[140px] flex flex-col items-center justify-center",
-          "bg-white/80 backdrop-blur",
-          isDragOver ? "border-blue-500 ring-2 ring-blue-500/20" : "border-slate-300 hover:border-blue-400",
+          "bg-[var(--component-card)]/80 backdrop-blur",
+          isDragOver ? "border-[var(--cardiology-accent-blue)] ring-2 ring-[var(--cardiology-accent-blue)]/20" : "border-[var(--glass-border-medium)] hover:border-blue-400",
           isProcessing && "pointer-events-none opacity-50"
         )}
       >
         {/* Content */}
         <div className="relative z-10 text-center space-y-4 p-6">
-          <div className="mx-auto w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-white flex items-center justify-center shadow-sm">
+          <div className="mx-auto w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-[var(--foreground)] flex items-center justify-center shadow-sm">
             {isDragOver ? (
               <Download className="h-6 w-6" />
             ) : (
@@ -367,10 +367,10 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
           </div>
 
           <div className="space-y-1.5">
-            <h3 className="text-base font-semibold text-slate-900">
+            <h3 className="text-base font-semibold text-[var(--foreground)]">
               {isDragOver ? t('abg.upload.drop.title', 'Drop to upload') : t('abg.upload.title', 'Upload blood gas report')}
             </h3>
-            <p className="text-slate-600 max-w-md mx-auto leading-relaxed text-sm">
+            <p className="text-[var(--foreground-tertiary)] max-w-md mx-auto leading-relaxed text-sm">
               {isDragOver 
                 ? t('abg.upload.drop.subtitle', 'Release to upload for AI analysis')
                 : t('abg.upload.subtitle', 'Drag and drop an image here, or choose a file')
@@ -381,7 +381,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={(e) => { e.stopPropagation(); handleClick(); }}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--foreground)] hover:from-blue-700 hover:to-purple-700"
               size="sm"
             >
               <Upload className="h-5 w-5 mr-2" />
@@ -390,7 +390,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
             <Button
               variant="outline"
               size="sm"
-              className="border-slate-300 hover:border-blue-400 hover:bg-blue-50"
+              className="border-[var(--glass-border-medium)] hover:border-blue-400 hover:bg-[var(--cardiology-accent-blue-light)]"
               onClick={(e) => { e.stopPropagation(); handleRequestCamera(); }}
             >
               <Camera className="h-5 w-5 mr-2" />
@@ -398,7 +398,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
             </Button>
           </div>
 
-          <div className="text-xs text-slate-500">
+          <div className="text-xs text-[var(--foreground-secondary)]">
             {t('abg.upload.formats', 'JPEG, PNG, WebP • up to {{size}}MB', { size: maxSizeMB })}
           </div>
         </div>

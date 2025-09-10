@@ -41,8 +41,8 @@ const AnimatedCheckbox: React.FC<{
     <div 
       className={`group relative p-6 rounded-2xl border-2 transition-all duration-500 ease-out cursor-pointer transform hover:scale-[1.02] hover:-translate-y-1 ${
         checked 
-          ? 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-purple-950/30 border-blue-300/50 dark:border-blue-600/50 shadow-lg shadow-blue-500/10' 
-          : 'bg-white/60 dark:bg-gray-800/60 border-gray-200/60 dark:border-gray-700/60 hover:border-blue-200 dark:hover:border-blue-700 hover:shadow-lg hover:shadow-blue-500/5'
+          ? 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-purple-950/30 border-[var(--cardiology-accent-blue)]/50 dark:border-blue-600/50 shadow-lg shadow-blue-500/10' 
+          : 'bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 border-[var(--glass-border-light)]/60 dark:border-[var(--border-strong)]/60 hover:border-blue-200 dark:hover:border-blue-700 hover:shadow-lg hover:shadow-blue-500/5'
       }`}
       style={{ animationDelay: `${index * 100}ms` }}
       onMouseEnter={() => setIsHovered(true)}
@@ -58,15 +58,15 @@ const AnimatedCheckbox: React.FC<{
         <div className="relative flex-shrink-0 mt-1">
           <div className={`w-6 h-6 rounded-lg border-2 transition-all duration-300 ${
             checked 
-              ? 'bg-gradient-to-r from-blue-500 to-purple-500 border-blue-500 shadow-lg shadow-blue-500/25' 
-              : 'border-gray-300 dark:border-gray-600 group-hover:border-blue-400'
+              ? 'bg-gradient-to-r from-blue-500 to-purple-500 border-[var(--cardiology-accent-blue)] shadow-lg shadow-blue-500/25' 
+              : 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] group-hover:border-blue-400'
           }`}>
-            <CheckCircle2 className={`w-4 h-4 text-white absolute top-0.5 left-0.5 transition-all duration-300 ${
+            <CheckCircle2 className={`w-4 h-4 text-[var(--foreground)] absolute top-0.5 left-0.5 transition-all duration-300 ${
               checked ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
             }`} />
           </div>
           {/* Animated ripple effect */}
-          <div className={`absolute inset-0 rounded-lg bg-blue-500/20 transition-all duration-300 ${
+          <div className={`absolute inset-0 rounded-lg bg-[var(--cardiology-accent-blue)]/20 transition-all duration-300 ${
             checked ? 'animate-ping' : 'opacity-0'
           }`} style={{ animationIterationCount: 1 }} />
         </div>
@@ -76,12 +76,12 @@ const AnimatedCheckbox: React.FC<{
           <div className={`p-3 rounded-xl transition-all duration-300 ${
             checked 
               ? 'bg-gradient-to-r from-blue-500/10 to-purple-500/10' 
-              : 'bg-gray-100 dark:bg-gray-700 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/20'
+              : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] group-hover:bg-[var(--cardiology-accent-blue-light)] dark:group-hover:bg-[var(--cardiology-accent-blue-darker)]/20'
           }`}>
             <Icon className={`w-5 h-5 transition-all duration-300 ${
               checked 
-                ? 'text-blue-600 dark:text-blue-400' 
-                : 'text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400'
+                ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' 
+                : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-400'
             }`} />
           </div>
         )}
@@ -90,16 +90,16 @@ const AnimatedCheckbox: React.FC<{
         <div className="flex-1 min-w-0">
           <h4 className={`font-semibold text-lg leading-tight transition-all duration-300 ${
             checked 
-              ? 'text-gray-900 dark:text-gray-100' 
-              : 'text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100'
+              ? 'text-[var(--foreground)] dark:text-[var(--foreground)]' 
+              : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] group-hover:text-[var(--foreground)] dark:group-hover:text-[var(--foreground)]'
           }`}>
             {label}
           </h4>
           {description && (
             <p className={`mt-2 text-sm leading-relaxed transition-all duration-300 ${
               checked 
-                ? 'text-gray-600 dark:text-gray-400' 
-                : 'text-gray-500 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-400'
+                ? 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]' 
+                : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] group-hover:text-[var(--foreground-tertiary)] dark:group-hover:text-[var(--foreground-secondary)]'
             }`}>
               {description}
             </p>
@@ -110,7 +110,7 @@ const AnimatedCheckbox: React.FC<{
         <div className={`absolute top-4 right-4 transition-all duration-300 ${
           isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2'
         }`}>
-          <ArrowRight className="w-4 h-4 text-blue-500" />
+          <ArrowRight className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />
         </div>
       </div>
     </div>
@@ -175,13 +175,13 @@ const StageSection: React.FC<{
             {/* Stage badge */}
             <div className={`relative w-16 h-16 rounded-2xl bg-gradient-to-r ${colorClass.icon} shadow-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/20 to-transparent" />
-              <span className="text-2xl font-bold text-white relative z-10">{stage}</span>
+              <span className="text-2xl font-bold text-[var(--foreground)] relative z-10">{stage}</span>
               <div className="absolute inset-0 rounded-2xl shadow-lg shadow-black/20" />
             </div>
             
             {/* Icon */}
             <div className={`p-4 rounded-xl bg-gradient-to-r ${colorClass.icon} shadow-lg`}>
-              <Icon className="w-8 h-8 text-white" />
+              <Icon className="w-8 h-8 text-[var(--foreground)]" />
             </div>
             
             {/* Title and description */}
@@ -189,18 +189,18 @@ const StageSection: React.FC<{
               <h3 className={`text-2xl font-bold ${colorClass.text} mb-2`}>
                 {title}
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-lg">
+              <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-lg">
                 {description}
               </p>
             </div>
           </div>
           
           {/* Expand/collapse button */}
-          <button className="p-2 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-300">
+          <button className="p-2 rounded-xl bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 hover:bg-[var(--component-card)]/70 dark:hover:bg-[var(--background)]/70 transition-all duration-300">
             {isExpanded ? (
-              <ChevronUp className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+              <ChevronUp className="w-6 h-6 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" />
             ) : (
-              <ChevronDown className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+              <ChevronDown className="w-6 h-6 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" />
             )}
           </button>
         </div>
@@ -233,8 +233,8 @@ const CalculatorButton: React.FC<{
   const baseClasses = "relative overflow-hidden font-semibold rounded-2xl transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-offset-2";
   
   const variantClasses = {
-    primary: "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white shadow-2xl shadow-blue-500/25 focus:ring-blue-500/50",
-    secondary: "bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 shadow-xl focus:ring-gray-500/50"
+    primary: "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-[var(--foreground)] shadow-2xl shadow-blue-500/25 focus:ring-[var(--cardiology-accent-blue)]/50",
+    secondary: "bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 hover:bg-[var(--component-card)] dark:hover:bg-[var(--background)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] shadow-xl focus:ring-gray-500/50"
   };
   
   const sizeClasses = {
@@ -257,7 +257,7 @@ const CalculatorButton: React.FC<{
       
       {/* Ripple effect */}
       {isPressed && (
-        <div className="absolute inset-0 bg-white/20 animate-ping rounded-2xl" />
+        <div className="absolute inset-0 bg-[var(--component-card)]/20 animate-ping rounded-2xl" />
       )}
       
       {/* Content */}
@@ -292,37 +292,37 @@ const ResultCard: React.FC<{
   }[result.stage];
   
   return (
-    <div className={`relative overflow-hidden w-full max-w-4xl mx-auto rounded-3xl border-2 border-gray-200/20 dark:border-gray-700/50 bg-gradient-to-br from-gray-50/80 via-white/80 to-gray-50/80 dark:from-gray-800/80 dark:via-gray-900/80 dark:to-gray-800/80 p-8 shadow-2xl backdrop-blur-lg animate-in fade-in zoom-in-95`}>
+    <div className={`relative overflow-hidden w-full max-w-4xl mx-auto rounded-3xl border-2 border-[var(--glass-border-light)]/20 dark:border-[var(--border-strong)]/50 bg-gradient-to-br from-gray-50/80 via-white/80 to-gray-50/80 dark:from-gray-800/80 dark:via-gray-900/80 dark:to-gray-800/80 p-8 shadow-2xl backdrop-blur-lg animate-in fade-in zoom-in-95`}>
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500/5 via-transparent to-pink-500/5" />
       <div className="relative">
         <div className="flex items-center space-x-6 mb-6">
-          <div className={`flex-shrink-0 w-20 h-20 rounded-2xl bg-gradient-to-r ${colorClasses[result.riskLevel]} text-white flex items-center justify-center shadow-lg`}>
+          <div className={`flex-shrink-0 w-20 h-20 rounded-2xl bg-gradient-to-r ${colorClasses[result.riskLevel]} text-[var(--foreground)] flex items-center justify-center shadow-lg`}>
             <span className="text-4xl font-bold">{result.stage}</span>
           </div>
           <div>
-            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">{result.title}</h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mt-1">{result.description}</p>
+            <h2 className="text-3xl font-extrabold text-[var(--foreground)] dark:text-[var(--foreground)]">{result.title}</h2>
+            <p className="text-lg text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">{result.description}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center">
-              <Pill className="mr-3 text-blue-500" />
+            <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center">
+              <Pill className="mr-3 text-[var(--cardiology-accent-blue)]" />
               <span>{t('calculators.heartFailureStaging.results.recommendations.title')}</span>
             </h3>
             <ul className="space-y-3">
               {result.recommendations.map((rec, i) => (
                 <li key={i} className="flex items-start">
                   <CheckCircle className="flex-shrink-0 w-5 h-5 text-green-500 mt-1 mr-3" />
-                  <span className="text-gray-700 dark:text-gray-300">{rec}</span>
+                  <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{rec}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center">
+            <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center">
               <TrendingUp className="mr-3 text-purple-500" />
               <span>{t('calculators.heartFailureStaging.results.nextSteps.title')}</span>
             </h3>
@@ -330,7 +330,7 @@ const ResultCard: React.FC<{
               {result.nextSteps.map((step, i) => (
                 <li key={i} className="flex items-start">
                   <ArrowRight className="flex-shrink-0 w-5 h-5 text-purple-500 mt-1 mr-3" />
-                  <span className="text-gray-700 dark:text-gray-300">{step}</span>
+                  <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{step}</span>
                 </li>
               ))}
             </ul>
@@ -445,7 +445,7 @@ const HeartFailureStagingCalculator: React.FC = () => {
 
   return (
     <div style={{ transform: 'scale(0.85)', transformOrigin: 'top' }}>
-      <div className="p-4 sm:p-6 md:p-8 pb-32 font-sans bg-gray-50/50 dark:bg-gray-900/90 text-gray-800 dark:text-gray-200 min-h-screen">
+      <div className="p-4 sm:p-6 md:p-8 pb-32 font-sans bg-[var(--component-surface-primary)]/50 dark:bg-[var(--background-dark)]/90 text-[var(--foreground)] dark:text-[var(--foreground)] min-h-screen">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
@@ -453,7 +453,7 @@ const HeartFailureStagingCalculator: React.FC = () => {
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 pb-2">
             {t('calculators.heartFailureStaging.title')}
           </h1>
-          <p className="mt-4 text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+          <p className="mt-4 text-lg sm:text-xl text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] max-w-3xl mx-auto">
             {t('calculators.heartFailureStaging.description')}
           </p>
         </header>
@@ -607,19 +607,19 @@ const HeartFailureStagingCalculator: React.FC = () => {
 
         {/* Educational Content */}
         <div className="mt-20 max-w-5xl mx-auto">
-          <div className="p-8 bg-white/50 dark:bg-gray-800/50 rounded-2xl shadow-xl backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+          <div className="p-8 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-2xl shadow-xl backdrop-blur-md border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50">
+            <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4 flex items-center">
               <BookOpen className="mr-3 text-indigo-500"/>
               <span>{t('calculators.heartFailureStaging.evidence.title')}</span>
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-4">
               {t('calculators.heartFailureStaging.evidence.description')}
             </p>
             <a 
               href="https://www.ahajournals.org/doi/10.1161/CIR.0000000000001063" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 inline-flex items-center transition-transform hover:translate-x-1"
+              className="font-semibold text-[var(--cardiology-accent-blue-dark)] hover:text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 dark:hover:text-[var(--cardiology-accent-blue)] inline-flex items-center transition-transform hover:translate-x-1"
             >
               {t('calculators.heartFailureStaging.evidence.link')}
               <ExternalLink className="ml-2 w-4 h-4"/>
@@ -628,7 +628,7 @@ const HeartFailureStagingCalculator: React.FC = () => {
         </div>
         
         {/* Footer */}
-        <footer className="mt-16 text-center text-gray-500 dark:text-gray-500 text-sm">
+        <footer className="mt-16 text-center text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] text-sm">
           <p>&copy; {new Date().getFullYear()} {t('common.appName')}. {t('common.allRightsReserved')}</p>
           <p className="mt-1">{t('common.calculatorDisclaimer')}</p>
         </footer>
@@ -639,7 +639,7 @@ const HeartFailureStagingCalculator: React.FC = () => {
 };
 
 const SuspendedHeartFailureStagingCalculator = () => (
-  <Suspense fallback={<div className="h-screen w-full flex items-center justify-center bg-gray-100 dark:bg-gray-900"><p className="text-lg">Loading Calculator...</p></div>}>
+  <Suspense fallback={<div className="h-screen w-full flex items-center justify-center bg-[var(--component-surface-secondary)] dark:bg-[var(--background-dark)]"><p className="text-lg">Loading Calculator...</p></div>}>
     <HeartFailureStagingCalculator />
   </Suspense>
 );

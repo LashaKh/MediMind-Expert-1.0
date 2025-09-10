@@ -32,7 +32,7 @@ export const RouteLoader: React.FC<RouteLoaderProps> = ({ pageName = 'Page' }) =
           <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-violet-900 dark:from-white dark:via-blue-200 dark:to-violet-300 bg-clip-text text-transparent">
             Loading {pageName}
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 font-medium">
+          <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">
             Preparing your medical workspace...
           </p>
         </div>
@@ -42,7 +42,7 @@ export const RouteLoader: React.FC<RouteLoaderProps> = ({ pageName = 'Page' }) =
           {[0, 1, 2, 3].map((i) => (
             <div
               key={i}
-              className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"
+              className="w-2 h-2 bg-[var(--cardiology-accent-blue-dark)] rounded-full animate-bounce"
               style={{ animationDelay: `${i * 0.15}s` }}
             />
           ))}
@@ -50,10 +50,10 @@ export const RouteLoader: React.FC<RouteLoaderProps> = ({ pageName = 'Page' }) =
 
         {/* MediMind branding */}
         <div className="mt-8 text-center">
-          <div className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+          <div className="text-sm font-semibold text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
             MediMind Expert
           </div>
-          <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+          <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mt-1">
             Medical AI Assistant
           </div>
         </div>

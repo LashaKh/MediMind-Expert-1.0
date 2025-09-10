@@ -153,7 +153,7 @@ export const ResetPasswordForm: React.FC = () => {
         <div className="text-sm text-center">
           <Link
             to="/signin"
-            className="font-medium text-white hover:text-gray-200 dark:text-accent dark:hover:text-accent/90 touch-target-sm inline-block py-2 px-4 rounded-lg transition-colors hover:bg-white/10"
+            className="font-medium text-[var(--foreground)] hover:text-[var(--foreground)] dark:text-accent dark:hover:text-accent/90 touch-target-sm inline-block py-2 px-4 rounded-lg transition-colors hover:bg-[var(--component-card)]/10"
           >
             Back to Sign In
           </Link>

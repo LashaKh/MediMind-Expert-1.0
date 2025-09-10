@@ -231,11 +231,11 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
 
   if (loading) {
     return (
-      <div className={`bg-white rounded-xl shadow-lg p-6 ${className}`}>
+      <div className={`bg-[var(--component-card)] rounded-xl shadow-lg p-6 ${className}`}>
         <div className="flex items-center justify-center h-64">
           <div className="flex items-center space-x-3">
-            <RefreshCw className="w-5 h-5 animate-spin text-blue-600" />
-            <span className="text-gray-600">Loading user behavior data...</span>
+            <RefreshCw className="w-5 h-5 animate-spin text-[var(--cardiology-accent-blue-dark)]" />
+            <span className="text-[var(--foreground-tertiary)]">Loading user behavior data...</span>
           </div>
         </div>
       </div>
@@ -244,15 +244,15 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
 
   if (error) {
     return (
-      <div className={`bg-white rounded-xl shadow-lg p-6 ${className}`}>
+      <div className={`bg-[var(--component-card)] rounded-xl shadow-lg p-6 ${className}`}>
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-2" />
             <div className="text-red-500 mb-2">Error loading data</div>
-            <p className="text-gray-600 text-sm">{error}</p>
+            <p className="text-[var(--foreground-tertiary)] text-sm">{error}</p>
             <button 
               onClick={fetchUserBehaviorData}
-              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="mt-3 px-4 py-2 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] rounded-lg hover:bg-[var(--cardiology-accent-blue-dark)] transition-colors"
             >
               Retry
             </button>
@@ -263,17 +263,17 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
   }
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg overflow-hidden ${className}`}>
+    <div className={`bg-[var(--component-card)] rounded-xl shadow-lg overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="p-6 border-b border-gray-200">
+      <div className="p-6 border-b border-[var(--glass-border-light)]">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-purple-100 rounded-lg">
               <Activity className="w-5 h-5 text-purple-600" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">User Behavior Analytics</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="text-lg font-semibold text-[var(--foreground)]">User Behavior Analytics</h3>
+              <p className="text-sm text-[var(--foreground-tertiary)]">
                 Session patterns and engagement insights {specialty && `for ${specialty}`}
               </p>
             </div>
@@ -281,14 +281,14 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
           <div className="flex items-center space-x-2">
             <button
               onClick={fetchUserBehaviorData}
-              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] transition-colors"
               title="Refresh data"
             >
               <RefreshCw className="w-5 h-5" />
             </button>
             <button
               onClick={() => {/* Implement export functionality */}}
-              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] transition-colors"
               title="Export data"
             >
               <Download className="w-5 h-5" />
@@ -297,7 +297,7 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
         </div>
 
         {/* View Selector */}
-        <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+        <div className="flex space-x-1 bg-[var(--component-surface-secondary)] rounded-lg p-1">
           {[
             { id: 'sessions', label: 'Sessions', icon: Users },
             { id: 'devices', label: 'Devices', icon: Monitor },
@@ -309,8 +309,8 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
               onClick={() => setSelectedView(id as any)}
               className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 selectedView === id
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-[var(--component-card)] text-[var(--cardiology-accent-blue-dark)] shadow-sm'
+                  : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)]'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -381,15 +381,15 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
 
             {/* Session Summary */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-blue-50 rounded-lg p-4">
+              <div className="bg-[var(--cardiology-accent-blue-light)] rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-blue-900">Total Sessions</p>
-                    <p className="text-2xl font-bold text-blue-600">
+                    <p className="text-2xl font-bold text-[var(--cardiology-accent-blue-dark)]">
                       {sessionData.reduce((sum, d) => sum + d.sessions, 0).toLocaleString()}
                     </p>
                   </div>
-                  <Users className="w-8 h-8 text-blue-500" />
+                  <Users className="w-8 h-8 text-[var(--cardiology-accent-blue)]" />
                 </div>
               </div>
 
@@ -439,7 +439,7 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Device Distribution Pie Chart */}
               <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">Device Distribution</h4>
+                <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">Device Distribution</h4>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -464,7 +464,7 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
 
               {/* Device Performance */}
               <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">Session Time by Device</h4>
+                <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">Session Time by Device</h4>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={deviceData} layout="horizontal">
@@ -489,24 +489,24 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
             {/* Device Stats Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {deviceData.map((device) => (
-                <div key={device.device} className="bg-gray-50 rounded-lg p-4">
+                <div key={device.device} className="bg-[var(--component-surface-primary)] rounded-lg p-4">
                   <div className="flex items-center space-x-3 mb-3">
                     {device.device === 'mobile' && <Smartphone className="w-5 h-5" style={{ color: device.color }} />}
                     {device.device === 'desktop' && <Monitor className="w-5 h-5" style={{ color: device.color }} />}
                     {device.device === 'tablet' && <Tablet className="w-5 h-5" style={{ color: device.color }} />}
-                    <span className="font-medium text-gray-900 capitalize">{device.device}</span>
+                    <span className="font-medium text-[var(--foreground)] capitalize">{device.device}</span>
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Users</span>
+                      <span className="text-sm text-[var(--foreground-tertiary)]">Users</span>
                       <span className="font-semibold">{device.users.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Percentage</span>
+                      <span className="text-sm text-[var(--foreground-tertiary)]">Percentage</span>
                       <span className="font-semibold">{device.percentage.toFixed(1)}%</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Avg Session</span>
+                      <span className="text-sm text-[var(--foreground-tertiary)]">Avg Session</span>
                       <span className="font-semibold">{formatDuration(device.avgSessionTime)}</span>
                     </div>
                   </div>
@@ -519,12 +519,12 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
         {/* Activity Heatmap View */}
         {selectedView === 'activity' && (
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-4">Peak Activity Hours</h4>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="text-sm font-semibold text-[var(--foreground)] mb-4">Peak Activity Hours</h4>
+            <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
               <div className="grid grid-cols-24 gap-1">
                 {Array.from({ length: 24 }, (_, hour) => (
                   <div key={hour} className="text-center">
-                    <div className="text-xs text-gray-500 mb-2">{hour}</div>
+                    <div className="text-xs text-[var(--foreground-secondary)] mb-2">{hour}</div>
                     {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => {
                       const activity = activityHeatmap.find(a => a.hour === hour && a.day === day)?.activity || 0;
                       const intensity = Math.min(activity / 100, 1);
@@ -543,7 +543,7 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
                   </div>
                 ))}
               </div>
-              <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
+              <div className="flex items-center justify-between mt-4 text-xs text-[var(--foreground-secondary)]">
                 <span>Less activity</span>
                 <div className="flex items-center space-x-1">
                   {Array.from({ length: 5 }, (_, i) => (
@@ -563,7 +563,7 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
         {/* Specialty Engagement View */}
         {selectedView === 'specialty' && !specialty && (
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-4">Specialty Performance Radar</h4>
+            <h4 className="text-sm font-semibold text-[var(--foreground)] mb-4">Specialty Performance Radar</h4>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={specialtyEngagement}>
@@ -607,30 +607,30 @@ export const UserBehaviorDashboard: React.FC<UserBehaviorDashboardProps> = ({
       </div>
 
       {/* Key Metrics Footer */}
-      <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+      <div className="px-6 py-4 bg-[var(--component-surface-primary)] border-t border-[var(--glass-border-light)]">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
           <div>
-            <div className="text-sm text-gray-600">User Retention</div>
-            <div className="text-lg font-bold text-gray-900">
+            <div className="text-sm text-[var(--foreground-tertiary)]">User Retention</div>
+            <div className="text-lg font-bold text-[var(--foreground)]">
               {((sessionData.reduce((sum, d) => sum + d.returningUsers, 0) / 
                  sessionData.reduce((sum, d) => sum + d.uniqueUsers, 0)) * 100).toFixed(1)}%
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-600">Avg Bounce Rate</div>
-            <div className="text-lg font-bold text-gray-900">
+            <div className="text-sm text-[var(--foreground-tertiary)]">Avg Bounce Rate</div>
+            <div className="text-lg font-bold text-[var(--foreground)]">
               {(sessionData.reduce((sum, d) => sum + d.bounceRate, 0) / sessionData.length * 100).toFixed(1)}%
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-600">Mobile Usage</div>
-            <div className="text-lg font-bold text-gray-900">
+            <div className="text-sm text-[var(--foreground-tertiary)]">Mobile Usage</div>
+            <div className="text-lg font-bold text-[var(--foreground)]">
               {deviceData.find(d => d.device === 'mobile')?.percentage.toFixed(1) || '0'}%
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-600">Peak Activity</div>
-            <div className="text-lg font-bold text-gray-900">
+            <div className="text-sm text-[var(--foreground-tertiary)]">Peak Activity</div>
+            <div className="text-lg font-bold text-[var(--foreground)]">
               {Math.max(...activityHeatmap.map(a => a.activity))} sessions/hr
             </div>
           </div>

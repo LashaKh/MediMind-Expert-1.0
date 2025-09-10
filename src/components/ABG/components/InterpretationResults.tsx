@@ -419,7 +419,7 @@ export const InterpretationResults: React.FC<InterpretationResultsProps> = ({
                 {/* Section Content */}
                 {isExpanded && (
                   <div className="px-4 pb-4">
-                    <div className="bg-white/70 p-3 rounded border">
+                    <div className="bg-[var(--component-card)]/70 p-3 rounded border">
                       <div className="prose prose-sm max-w-none text-sm leading-relaxed whitespace-pre-wrap">
                         {section.content}
                       </div>

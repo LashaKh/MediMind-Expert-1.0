@@ -55,9 +55,9 @@ const PremiumCheckbox: React.FC<{
         relative overflow-hidden rounded-2xl p-6 transition-all duration-500 ease-out
         ${checked 
           ? type === 'essential' 
-            ? 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-900/30 dark:via-indigo-900/30 dark:to-purple-900/30 border-2 border-blue-300 dark:border-blue-600 shadow-xl shadow-blue-200/50 dark:shadow-blue-900/30' 
+            ? 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-900/30 dark:via-indigo-900/30 dark:to-purple-900/30 border-2 border-[var(--cardiology-accent-blue)] dark:border-blue-600 shadow-xl shadow-blue-200/50 dark:shadow-blue-900/30' 
             : 'bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-emerald-900/30 dark:via-green-900/30 dark:to-teal-900/30 border-2 border-emerald-300 dark:border-emerald-600 shadow-xl shadow-emerald-200/50 dark:shadow-emerald-900/30'
-          : 'bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 hover:bg-gray-50/90 dark:hover:bg-gray-700/90 hover:border-gray-300 dark:hover:border-gray-600'
+          : 'bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:bg-[var(--component-surface-primary)]/90 dark:hover:bg-[var(--card)]/90 hover:border-[var(--glass-border-medium)] dark:hover:border-[var(--border-strong)]'
         }
         backdrop-blur-sm cursor-pointer transform hover:scale-[1.02] hover:shadow-lg
       `}
@@ -79,13 +79,13 @@ const PremiumCheckbox: React.FC<{
             relative flex-shrink-0 w-6 h-6 rounded-lg border-2 transition-all duration-300
             ${checked 
               ? type === 'essential'
-                ? 'bg-gradient-to-br from-blue-500 to-indigo-600 border-blue-500 shadow-lg shadow-blue-500/30'
+                ? 'bg-gradient-to-br from-blue-500 to-indigo-600 border-[var(--cardiology-accent-blue)] shadow-lg shadow-blue-500/30'
                 : 'bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-500 shadow-lg shadow-emerald-500/30'
-              : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+              : 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] bg-[var(--component-card)] dark:bg-[var(--card)]'
             }
           `}>
             {checked && (
-              <CheckCircle className="w-4 h-4 text-white absolute inset-0.5 animate-in zoom-in-50 duration-200" />
+              <CheckCircle className="w-4 h-4 text-[var(--foreground)] absolute inset-0.5 animate-in zoom-in-50 duration-200" />
             )}
           </div>
           
@@ -94,9 +94,9 @@ const PremiumCheckbox: React.FC<{
             flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300
             ${checked 
               ? type === 'essential'
-                ? 'bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-800/50 dark:to-indigo-800/50 text-blue-600 dark:text-blue-400 shadow-lg'
+                ? 'bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-800/50 dark:to-indigo-800/50 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 shadow-lg'
                 : 'bg-gradient-to-br from-emerald-100 to-green-100 dark:from-emerald-800/50 dark:to-green-800/50 text-emerald-600 dark:text-emerald-400 shadow-lg'
-              : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+              : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
             }
           `}>
             <Icon className={`w-6 h-6 transition-transform duration-300 ${checked ? 'scale-110' : 'scale-100'}`} />
@@ -110,7 +110,7 @@ const PremiumCheckbox: React.FC<{
                 ? type === 'essential'
                   ? 'text-blue-900 dark:text-blue-100'
                   : 'text-emerald-900 dark:text-emerald-100'
-                : 'text-gray-900 dark:text-gray-100'
+                : 'text-[var(--foreground)] dark:text-[var(--foreground)]'
               }
             `}>
               {label}
@@ -119,9 +119,9 @@ const PremiumCheckbox: React.FC<{
               text-sm transition-colors duration-300
               ${checked 
                 ? type === 'essential'
-                  ? 'text-blue-700 dark:text-blue-300'
+                  ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300'
                   : 'text-emerald-700 dark:text-emerald-300'
-                : 'text-gray-600 dark:text-gray-400'
+                : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
               }
             `}>
               {description}
@@ -133,9 +133,9 @@ const PremiumCheckbox: React.FC<{
             flex-shrink-0 w-12 h-8 rounded-lg flex items-center justify-center text-sm font-bold transition-all duration-300
             ${checked 
               ? type === 'essential'
-                ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg'
-                : 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-[var(--foreground)] shadow-lg'
+                : 'bg-gradient-to-r from-emerald-500 to-green-600 text-[var(--foreground)] shadow-lg'
+              : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
             }
           `}>
             {type === 'essential' ? '+8' : '+1'}
@@ -205,15 +205,15 @@ const PremiumScoreDisplay: React.FC<{
         </div>
         
         <div className="relative z-10">
-          <div className="text-4xl font-bold text-white mb-2 font-mono tracking-tight">
+          <div className="text-4xl font-bold text-[var(--foreground)] mb-2 font-mono tracking-tight">
             {displayValue}
             {maxValue && <span className="text-2xl opacity-75">/{maxValue}</span>}
           </div>
-          <div className="text-white/90 font-semibold text-sm uppercase tracking-wider">
+          <div className="text-[var(--foreground)]/90 font-semibold text-sm uppercase tracking-wider">
             {title}
           </div>
           {subtitle && (
-            <div className="text-white/70 text-xs mt-1">
+            <div className="text-[var(--foreground)]/70 text-xs mt-1">
               {subtitle}
             </div>
           )}
@@ -221,9 +221,9 @@ const PremiumScoreDisplay: React.FC<{
         
         {/* Progress bar if maxValue provided */}
         {maxValue && (
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-[var(--component-card)]/20">
             <div 
-              className="h-full bg-white/60 transition-all duration-1000 ease-out"
+              className="h-full bg-[var(--component-card)]/60 transition-all duration-1000 ease-out"
               style={{ width: `${Math.min((value / maxValue) * 100, 100)}%` }}
             />
           </div>
@@ -473,19 +473,19 @@ export const SIADHCalculator: React.FC = () => {
         <div className="relative">
           <div className="flex items-center space-x-4 mb-6">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-xl shadow-blue-500/30">
-              <Droplets className="w-8 h-8 text-white" />
+              <Droplets className="w-8 h-8 text-[var(--foreground)]" />
             </div>
             <div>
               <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 SIADH Diagnostic Criteria
               </h2>
-              <p className="text-blue-700 dark:text-blue-300 text-lg">
+              <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 text-lg">
                 Advanced Clinical Assessment Tool
               </p>
             </div>
           </div>
           
-          <div className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed space-y-4">
+          <div className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-lg leading-relaxed space-y-4">
             <p>
               The Diagnostic Criteria for Syndrome of Inappropriate Antidiuretic Hormone Secretion (SIADH) is a clinical tool designed to aid in the diagnosis of SIADH, a condition characterized by excessive release of antidiuretic hormone from the posterior pituitary gland or other sources. The criteria are primarily used to identify patients with hyponatremia, a common electrolyte disorder, who may have SIADH as the underlying cause.
             </p>
@@ -512,19 +512,19 @@ export const SIADHCalculator: React.FC = () => {
             <CardTitle className="flex items-center space-x-3 text-blue-800 dark:text-blue-200">
               <Shield className="w-6 h-6" />
               <span>Essential Criteria</span>
-              <div className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-sm font-bold">
+              <div className="px-3 py-1 rounded-full bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/50 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 text-sm font-bold">
                 8 pts each
               </div>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+          <CardContent className="space-y-4 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <p className="text-base">
               Each essential criterion checked adds <strong>8 points</strong> to the total score.
             </p>
-            <div className="bg-blue-100/50 dark:bg-blue-900/20 rounded-xl p-4">
+            <div className="bg-[var(--cardiology-accent-blue-light)]/50 dark:bg-[var(--cardiology-accent-blue-darker)]/20 rounded-xl p-4">
               <div className="font-semibold text-blue-800 dark:text-blue-200 mb-2">Maximum Score</div>
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">48 points</div>
-              <div className="text-blue-600 dark:text-blue-400">6 criteria × 8 points each</div>
+              <div className="text-2xl font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">48 points</div>
+              <div className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">6 criteria × 8 points each</div>
             </div>
           </CardContent>
         </Card>
@@ -539,7 +539,7 @@ export const SIADHCalculator: React.FC = () => {
               </div>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+          <CardContent className="space-y-4 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <p className="text-base">
               Each supplemental criterion adds <strong>1 point</strong> and provides additional diagnostic support.
             </p>
@@ -565,7 +565,7 @@ export const SIADHCalculator: React.FC = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-white" />
+                  <CheckCircle className="w-5 h-5 text-[var(--foreground)]" />
                 </div>
                 <div>
                   <div className="font-semibold text-green-800 dark:text-green-200">≥8 points</div>
@@ -576,7 +576,7 @@ export const SIADHCalculator: React.FC = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 rounded-lg bg-red-500 flex items-center justify-center">
-                  <AlertTriangle className="w-5 h-5 text-white" />
+                  <AlertTriangle className="w-5 h-5 text-[var(--foreground)]" />
                 </div>
                 <div>
                   <div className="font-semibold text-red-800 dark:text-red-200">&lt;8 points</div>
@@ -608,7 +608,7 @@ export const SIADHCalculator: React.FC = () => {
             <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-4">
               SIADH Diagnostic Calculator
             </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] max-w-3xl mx-auto leading-relaxed">
               Advanced clinical assessment tool for diagnosing Syndrome of Inappropriate Antidiuretic Hormone Secretion
             </p>
           </div>
@@ -652,13 +652,13 @@ export const SIADHCalculator: React.FC = () => {
         <div className="text-center">
           <div className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-purple-500/10 backdrop-blur-sm rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-              <Shield className="w-6 h-6 text-white" />
+              <Shield className="w-6 h-6 text-[var(--foreground)]" />
             </div>
             <div className="text-left">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Essential Criteria</h2>
-              <p className="text-blue-600 dark:text-blue-400 font-medium">Each criterion worth 8 points</p>
+              <h2 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">Essential Criteria</h2>
+              <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 font-medium">Each criterion worth 8 points</p>
             </div>
-            <div className="px-4 py-2 rounded-xl bg-blue-500 text-white font-bold text-lg shadow-lg">
+            <div className="px-4 py-2 rounded-xl bg-[var(--cardiology-accent-blue)] text-[var(--foreground)] font-bold text-lg shadow-lg">
               {essentialPoints}/48
             </div>
           </div>
@@ -726,13 +726,13 @@ export const SIADHCalculator: React.FC = () => {
         <div className="text-center">
           <div className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-emerald-500/10 via-green-500/10 to-teal-500/10 backdrop-blur-sm rounded-2xl border border-emerald-200/50 dark:border-emerald-800/50">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg">
-              <Star className="w-6 h-6 text-white" />
+              <Star className="w-6 h-6 text-[var(--foreground)]" />
             </div>
             <div className="text-left">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Supplemental Criteria</h2>
+              <h2 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">Supplemental Criteria</h2>
               <p className="text-emerald-600 dark:text-emerald-400 font-medium">Each criterion worth 1 point</p>
             </div>
-            <div className="px-4 py-2 rounded-xl bg-emerald-500 text-white font-bold text-lg shadow-lg">
+            <div className="px-4 py-2 rounded-xl bg-emerald-500 text-[var(--foreground)] font-bold text-lg shadow-lg">
               {supplementalPoints}/7
             </div>
           </div>
@@ -812,10 +812,10 @@ export const SIADHCalculator: React.FC = () => {
           className={`
             group relative overflow-hidden px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300
             ${isCalculating 
-              ? 'bg-gray-400 cursor-not-allowed'
+              ? 'bg-[var(--muted)] cursor-not-allowed'
               : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 transform hover:scale-105'
             }
-            text-white
+            text-[var(--foreground)]
           `}
         >
           <div className="relative flex items-center space-x-3">
@@ -833,7 +833,7 @@ export const SIADHCalculator: React.FC = () => {
         
         <button
           onClick={handleReset}
-          className="group relative overflow-hidden px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50 transform hover:scale-105"
+          className="group relative overflow-hidden px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:border-[var(--border)] dark:hover:border-[var(--border)] hover:bg-[var(--component-surface-primary)] dark:hover:bg-[var(--background)]/50 transform hover:scale-105"
         >
           <div className="relative flex items-center space-x-3">
             <Zap className="w-6 h-6" />
@@ -862,9 +862,9 @@ export const SIADHCalculator: React.FC = () => {
                 }
               `}>
                 {result.interpretation === 'met' ? (
-                  <CheckCircle className="w-8 h-8 text-white" />
+                  <CheckCircle className="w-8 h-8 text-[var(--foreground)]" />
                 ) : (
-                  <AlertTriangle className="w-8 h-8 text-white" />
+                  <AlertTriangle className="w-8 h-8 text-[var(--foreground)]" />
                 )}
               </div>
               <div className="text-left">
@@ -877,7 +877,7 @@ export const SIADHCalculator: React.FC = () => {
                 `}>
                   {result.interpretation === 'met' ? 'Criteria Met' : 'Criteria Not Met'}
                 </div>
-                <div className="text-gray-600 dark:text-gray-400">
+                <div className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                   Total Score: {result.score}/55 points
                 </div>
               </div>
@@ -913,32 +913,32 @@ export const SIADHCalculator: React.FC = () => {
           </div>
 
           {/* Clinical actions */}
-          <Card className="border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-slate-50/50 to-gray-50/50 dark:from-slate-900/50 dark:to-gray-900/50 backdrop-blur-sm">
+          <Card className="border-[var(--glass-border-light)]/50 dark:border-slate-700/50 bg-gradient-to-br from-slate-50/50 to-gray-50/50 dark:from-slate-900/50 dark:to-gray-900/50 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-3 text-slate-800 dark:text-slate-200">
+              <CardTitle className="flex items-center space-x-3 text-[var(--foreground)] dark:text-slate-200">
                 <Stethoscope className="w-6 h-6" />
                 <span>Clinical Recommendations</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="p-4 rounded-xl bg-slate-100/50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50">
-                  <h4 className="font-semibold text-slate-800 dark:text-slate-200 mb-2">Clinical Interpretation</h4>
-                  <p className="text-slate-700 dark:text-slate-300">{result.recommendation}</p>
+                <div className="p-4 rounded-xl bg-[var(--component-surface-secondary)]/50 dark:bg-[var(--background)]/50 border border-[var(--glass-border-light)]/50 dark:border-slate-700/50">
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-slate-200 mb-2">Clinical Interpretation</h4>
+                  <p className="text-[var(--foreground)] dark:text-slate-300">{result.recommendation}</p>
                 </div>
                 
                 <div>
-                  <h4 className="font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center space-x-2">
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-slate-200 mb-4 flex items-center space-x-2">
                     <CheckCircle className="w-5 h-5 text-green-500" />
                     <span>Recommended Actions</span>
                   </h4>
                   <div className="grid gap-3">
                     {result.clinicalActions.map((action, index) => (
-                      <div key={index} className="flex items-start space-x-3 p-3 rounded-lg bg-white/50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50">
+                      <div key={index} className="flex items-start space-x-3 p-3 rounded-lg bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 border border-[var(--glass-border-light)]/50 dark:border-slate-700/50">
                         <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <span className="text-white text-sm font-bold">{index + 1}</span>
+                          <span className="text-[var(--foreground)] text-sm font-bold">{index + 1}</span>
                         </div>
-                        <span className="text-slate-700 dark:text-slate-300 leading-relaxed">{action}</span>
+                        <span className="text-[var(--foreground)] dark:text-slate-300 leading-relaxed">{action}</span>
                       </div>
                     ))}
                   </div>
@@ -958,14 +958,14 @@ export const SIADHCalculator: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Premium tab system */}
         <div className="flex justify-center mb-8">
-          <div className="grid grid-cols-2 p-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-xl">
+          <div className="grid grid-cols-2 p-2 bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-xl border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 rounded-2xl shadow-xl">
             <button
               onClick={() => setActiveTab('calculator')}
               className={`
                 flex items-center space-x-3 px-8 py-3 rounded-xl transition-all duration-300
                 ${activeTab === 'calculator'
-                  ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
+                  ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-[var(--foreground)] shadow-lg'
+                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:text-[var(--foreground)] dark:hover:text-[var(--foreground)]'
                 }
               `}
             >
@@ -977,8 +977,8 @@ export const SIADHCalculator: React.FC = () => {
               className={`
                 flex items-center space-x-3 px-8 py-3 rounded-xl transition-all duration-300
                 ${activeTab === 'about'
-                  ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-lg'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
+                  ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-[var(--foreground)] shadow-lg'
+                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:text-[var(--foreground)] dark:hover:text-[var(--foreground)]'
                 }
               `}
             >

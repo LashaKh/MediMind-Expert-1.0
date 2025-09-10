@@ -29,24 +29,24 @@ In patients with transthyretin amyloid cardiomyopathy, tafamidis was superior to
 `;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div className="min-h-screen bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)] py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-3xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
             Studies Integration Example
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+          <p className="text-lg text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             This example shows how to integrate the StudiesRenderer into your existing disease pages.
           </p>
         </div>
 
         <div className="grid gap-8">
           {/* Example 1: With Header */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
               Option 1: With Header (showHeader=true)
             </h2>
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-4">
               Best for standalone use or when Studies is the main focus
             </div>
             
@@ -57,11 +57,11 @@ In patients with transthyretin amyloid cardiomyopathy, tafamidis was superior to
           </div>
 
           {/* Example 2: Without Header */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
               Option 2: Without Header (showHeader=false)
             </h2>
-            <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-4">
               Best for integration into existing disease pages with custom headers
             </div>
             
@@ -72,12 +72,12 @@ In patients with transthyretin amyloid cardiomyopathy, tafamidis was superior to
           </div>
 
           {/* Integration Code Example */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
               Integration Code Example
             </h2>
-            <pre className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg overflow-x-auto text-sm">
-              <code className="text-gray-800 dark:text-gray-200">
+            <pre className="bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] p-4 rounded-lg overflow-x-auto text-sm">
+              <code className="text-[var(--foreground)] dark:text-[var(--foreground)]">
 {`// Import the StudiesRenderer
 import { StudiesRenderer } from '../components/Diseases/Studies';
 
@@ -105,16 +105,16 @@ const YourDiseasePage: React.FC = ({ markdownContent }) => {
           </div>
 
           {/* Features Overview */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
               Features & Benefits
             </h2>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                   Automatic Parsing
                 </h3>
-                <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                <ul className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] space-y-1">
                   <li>• Detects ## Studies sections</li>
                   <li>• Extracts year, title, and description</li>
                   <li>• Parses author, journal, and date</li>
@@ -122,10 +122,10 @@ const YourDiseasePage: React.FC = ({ markdownContent }) => {
                 </ul>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                   Professional UI
                 </h3>
-                <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                <ul className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] space-y-1">
                   <li>• Color-coded year badges</li>
                   <li>• Hover effects and transitions</li>
                   <li>• Responsive design</li>

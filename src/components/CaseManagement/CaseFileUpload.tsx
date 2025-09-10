@@ -204,8 +204,8 @@ export const CaseFileUpload: React.FC<CaseFileUploadProps> = ({
         onClick={() => fileInputRef.current?.click()}
         className={`
           relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer
-          transition-all duration-200 hover:border-blue-400 hover:bg-blue-50/50
-          ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}
+          transition-all duration-200 hover:border-blue-400 hover:bg-[var(--cardiology-accent-blue-light)]/50
+          ${isDragging ? 'border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)]' : 'border-[var(--glass-border-medium)]'}
           ${isProcessing ? 'pointer-events-none opacity-50' : ''}
         `}
       >
@@ -220,16 +220,16 @@ export const CaseFileUpload: React.FC<CaseFileUploadProps> = ({
 
         <div className="flex flex-col items-center space-y-3">
           {isProcessing ? (
-            <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
+            <Loader2 className="w-12 h-12 text-[var(--cardiology-accent-blue)] animate-spin" />
           ) : (
-            <Upload className="w-12 h-12 text-gray-400" />
+            <Upload className="w-12 h-12 text-[var(--foreground-secondary)]" />
           )}
           
           <div>
-            <p className="text-lg font-medium text-gray-700">
+            <p className="text-lg font-medium text-[var(--foreground-tertiary)]">
               {isDragging ? t('documents.dropFiles') : t('documents.dragDropText')}
             </p>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-[var(--foreground-secondary)] mt-1">
               {t('documents.supportedFormats')} ({t('documents.maxFileSize', { size: maxSizeMB })})
             </p>
           </div>
@@ -249,7 +249,7 @@ export const CaseFileUpload: React.FC<CaseFileUploadProps> = ({
       {/* Attachments List */}
       {attachments.length > 0 && (
         <div className="space-y-2">
-          <h4 className="text-sm font-medium text-gray-700">
+          <h4 className="text-sm font-medium text-[var(--foreground-tertiary)]">
             {t('documents.selectedFiles', { count: attachments.length })} ({attachments.length}/{maxFiles})
           </h4>
           
@@ -259,17 +259,17 @@ export const CaseFileUpload: React.FC<CaseFileUploadProps> = ({
                 key={attachment.id}
                 className={`
                   flex items-center justify-between p-3 rounded-lg border
-                  ${attachment.status === 'error' ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-gray-50'}
+                  ${attachment.status === 'error' ? 'border-red-300 bg-red-50' : 'border-[var(--glass-border-light)] bg-[var(--component-surface-primary)]'}
                 `}
               >
                 <div className="flex items-center space-x-3 flex-1 min-w-0">
                   {getFileIcon(attachment)}
                   
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-sm font-medium text-[var(--foreground)] truncate">
                       {attachment.file.name}
                     </p>
-                    <div className="flex items-center space-x-3 text-xs text-gray-500">
+                    <div className="flex items-center space-x-3 text-xs text-[var(--foreground-secondary)]">
                       <span>{(attachment.file.size / 1024 / 1024).toFixed(2)}MB</span>
                       <span>•</span>
                       <span>{getCategoryLabel(attachment.category)}</span>
@@ -285,7 +285,7 @@ export const CaseFileUpload: React.FC<CaseFileUploadProps> = ({
 
                 <div className="flex items-center space-x-2">
                   {attachment.status === 'processing' && (
-                    <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
+                    <Loader2 className="w-4 h-4 text-[var(--cardiology-accent-blue)] animate-spin" />
                   )}
                   {attachment.status === 'ready' && (
                     <CheckCircle className="w-4 h-4 text-green-500" />
@@ -311,7 +311,7 @@ export const CaseFileUpload: React.FC<CaseFileUploadProps> = ({
       )}
 
       {/* File Type Info */}
-      <div className="text-xs text-gray-500 space-y-1">
+      <div className="text-xs text-[var(--foreground-secondary)] space-y-1">
         <p className="font-medium">{t('documents.modal.select.supportedTypes')}:</p>
         <ul className="list-disc list-inside space-y-0.5 ml-2">
           <li>{t('documents.categories.medical-images')}: JPEG, PNG, DICOM</li>

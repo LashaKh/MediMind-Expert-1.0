@@ -36,13 +36,13 @@ export const HeroSection: React.FC = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <Stethoscope className="w-8 h-8 md:w-12 md:h-12 text-white" />
-            <h1 className="text-4xl md:text-7xl font-bold tracking-tight text-white bg-clip-text">
+            <Stethoscope className="w-8 h-8 md:w-12 md:h-12 text-[var(--foreground)]" />
+            <h1 className="text-4xl md:text-7xl font-bold tracking-tight text-[var(--foreground)] bg-clip-text">
               MediMind Expert
             </h1>
           </motion.div>
           <motion.h2 
-            className="text-2xl md:text-4xl font-bold text-white"
+            className="text-2xl md:text-4xl font-bold text-[var(--foreground)]"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -50,7 +50,7 @@ export const HeroSection: React.FC = () => {
             {t('landing.heroTitle')}
           </motion.h2>
           <motion.p 
-            className="text-base md:text-xl leading-relaxed text-gray-100 px-4 md:px-0"
+            className="text-base md:text-xl leading-relaxed text-[var(--foreground)] px-4 md:px-0"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -65,7 +65,7 @@ export const HeroSection: React.FC = () => {
           >
             <motion.button
               onClick={handleTrialClick}
-              className="w-full sm:w-auto rounded-full bg-white px-6 py-3 md:px-8 md:py-4 text-base md:text-lg font-semibold text-primary shadow-lg hover:bg-gray-100 transition-all duration-300"
+              className="w-full sm:w-auto rounded-full bg-[var(--component-card)] px-6 py-3 md:px-8 md:py-4 text-base md:text-lg font-semibold text-primary shadow-lg hover:bg-[var(--component-surface-secondary)] transition-all duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

@@ -308,21 +308,21 @@ export const MarkdownFileLoader: React.FC = () => {
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-center p-8 bg-white rounded-lg shadow-lg max-w-md">
-          <FileText className="w-16 h-16 mx-auto mb-4 text-blue-500" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Select a Markdown Source</h2>
-          <p className="text-gray-600">Choose a demo file, paste content, or upload a markdown file to get started.</p>
+        <div className="text-center p-8 bg-[var(--component-card)] rounded-lg shadow-lg max-w-md">
+          <FileText className="w-16 h-16 mx-auto mb-4 text-[var(--cardiology-accent-blue)]" />
+          <h2 className="text-xl font-semibold text-[var(--foreground)] mb-2">Select a Markdown Source</h2>
+          <p className="text-[var(--foreground-tertiary)]">Choose a demo file, paste content, or upload a markdown file to get started.</p>
         </div>
       </div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[var(--component-surface-primary)]">
       {/* Control Panel */}
-      <div className="bg-white border-b border-gray-200 p-4">
+      <div className="bg-[var(--component-card)] border-b border-[var(--glass-border-light)] p-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Interactive Markdown Viewer</h1>
+          <h1 className="text-2xl font-bold text-[var(--foreground)] mb-4">Interactive Markdown Viewer</h1>
           
           {/* Input Method Selection */}
           <div className="flex space-x-4 mb-4">
@@ -330,8 +330,8 @@ export const MarkdownFileLoader: React.FC = () => {
               onClick={() => setInputMethod('demo')}
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 inputMethod === 'demo' 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]' 
+                  : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-tertiary)]'
               }`}
             >
               <FileText className="w-4 h-4 mr-2" />
@@ -341,8 +341,8 @@ export const MarkdownFileLoader: React.FC = () => {
               onClick={() => setInputMethod('paste')}
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 inputMethod === 'paste' 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]' 
+                  : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-tertiary)]'
               }`}
             >
               <Code className="w-4 h-4 mr-2" />
@@ -352,8 +352,8 @@ export const MarkdownFileLoader: React.FC = () => {
               onClick={() => setInputMethod('file')}
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 inputMethod === 'file' 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]' 
+                  : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-tertiary)]'
               }`}
             >
               <Upload className="w-4 h-4 mr-2" />
@@ -370,12 +370,12 @@ export const MarkdownFileLoader: React.FC = () => {
                   onClick={() => setSelectedFile(key)}
                   className={`p-4 rounded-lg text-left transition-colors ${
                     selectedFile === key
-                      ? 'bg-blue-50 border-2 border-blue-500'
-                      : 'bg-white border border-gray-200 hover:border-blue-300'
+                      ? 'bg-[var(--cardiology-accent-blue-light)] border-2 border-[var(--cardiology-accent-blue)]'
+                      : 'bg-[var(--component-card)] border border-[var(--glass-border-light)] hover:border-[var(--cardiology-accent-blue)]'
                   }`}
                 >
-                  <h3 className="font-semibold text-gray-900 mb-2">{file.title}</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-semibold text-[var(--foreground)] mb-2">{file.title}</h3>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">
                     {file.content.substring(0, 100)}...
                   </p>
                 </button>
@@ -386,7 +386,7 @@ export const MarkdownFileLoader: React.FC = () => {
           {inputMethod === 'paste' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                   Document Title (optional)
                 </label>
                 <input
@@ -394,11 +394,11 @@ export const MarkdownFileLoader: React.FC = () => {
                   value={customTitle}
                   onChange={(e) => setCustomTitle(e.target.value)}
                   placeholder="Enter document title..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                   Markdown Content
                 </label>
                 <textarea
@@ -406,21 +406,21 @@ export const MarkdownFileLoader: React.FC = () => {
                   onChange={(e) => setCustomContent(e.target.value)}
                   placeholder="Paste your markdown content here..."
                   rows={10}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                  className="w-full px-3 py-2 border border-[var(--glass-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent font-mono text-sm"
                 />
               </div>
             </div>
           )}
 
           {inputMethod === 'file' && (
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+            <div className="border-2 border-dashed border-[var(--glass-border-medium)] rounded-lg p-6">
               <input
                 type="file"
                 accept=".md,.markdown,text/markdown"
                 onChange={handleFileChange}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                className="block w-full text-sm text-[var(--foreground-secondary)] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[var(--cardiology-accent-blue-light)] file:text-[var(--cardiology-accent-blue-dark)] hover:file:bg-[var(--cardiology-accent-blue-light)]"
               />
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-[var(--foreground-tertiary)]">
                 Select a markdown (.md) file to upload and display
               </p>
             </div>

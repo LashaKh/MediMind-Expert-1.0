@@ -138,7 +138,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
 
     return (
       <div className="space-y-2">
-        <h4 className="text-sm font-medium text-gray-700">{title}</h4>
+        <h4 className="text-sm font-medium text-[var(--foreground-tertiary)]">{title}</h4>
         <div className="h-32 relative">
           <svg viewBox="0 0 100 100" className="w-full h-full">
             <polyline
@@ -154,8 +154,8 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
               points={`0,100 ${points} 100,100`}
             />
           </svg>
-          <div className="absolute top-0 right-0 text-xs text-gray-500">{max}</div>
-          <div className="absolute bottom-0 right-0 text-xs text-gray-500">{min}</div>
+          <div className="absolute top-0 right-0 text-xs text-[var(--foreground-secondary)]">{max}</div>
+          <div className="absolute bottom-0 right-0 text-xs text-[var(--foreground-secondary)]">{min}</div>
         </div>
       </div>
     );
@@ -166,12 +166,12 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
 
     return (
       <div className="space-y-2">
-        <h4 className="text-sm font-medium text-gray-700">{title}</h4>
+        <h4 className="text-sm font-medium text-[var(--foreground-tertiary)]">{title}</h4>
         <div className="space-y-2">
           {data.map((value, index) => (
             <div key={index} className="flex items-center gap-2">
-              <div className="w-16 text-xs text-gray-600 truncate">{labels[index]}</div>
-              <div className="flex-1 h-4 bg-gray-100 rounded-full overflow-hidden">
+              <div className="w-16 text-xs text-[var(--foreground-tertiary)] truncate">{labels[index]}</div>
+              <div className="flex-1 h-4 bg-[var(--component-surface-secondary)] rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full"
                   style={{
@@ -180,7 +180,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
                   }}
                 />
               </div>
-              <div className="w-8 text-xs text-gray-600 text-right">{value}</div>
+              <div className="w-8 text-xs text-[var(--foreground-tertiary)] text-right">{value}</div>
             </div>
           ))}
         </div>
@@ -242,7 +242,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
           <>
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="h-5 w-5 text-blue-600" />
+                <TrendingUp className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
                 <h3 className="font-semibold">{t('abg.trends.volume.dailyTitle', 'Daily Analysis Volume')}</h3>
               </div>
               <SimpleLineChart
@@ -260,23 +260,23 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-[var(--cardiology-accent-blue-dark)]">
                       {Math.max(...trendData.map(p => p.count), 0)}
                     </div>
-                    <div className="text-sm text-gray-600">{t('abg.trends.volume.peakDaily', 'Peak Daily')}</div>
+                    <div className="text-sm text-[var(--foreground-tertiary)]">{t('abg.trends.volume.peakDaily', 'Peak Daily')}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-green-600">
                       {Math.round(trendData.reduce((sum, p) => sum + p.count, 0) / Math.max(trendData.length, 1))}
                     </div>
-                    <div className="text-sm text-gray-600">{t('abg.trends.volume.dailyAverage', 'Daily Average')}</div>
+                    <div className="text-sm text-[var(--foreground-tertiary)]">{t('abg.trends.volume.dailyAverage', 'Daily Average')}</div>
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-semibold text-gray-700">
+                  <div className="text-lg font-semibold text-[var(--foreground-tertiary)]">
                     {t('abg.trends.volume.total', '{{count}} Total', { count: trendData.reduce((sum, p) => sum + p.count, 0) })}
                   </div>
-                  <div className="text-sm text-gray-500">{t('abg.trends.volume.subtitle', 'Analyses in selected period')}</div>
+                  <div className="text-sm text-[var(--foreground-secondary)]">{t('abg.trends.volume.subtitle', 'Analyses in selected period')}</div>
                 </div>
               </div>
             </Card>
@@ -327,7 +327,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
 
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Activity className="h-5 w-5 text-blue-600" />
+                <Activity className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
                 <h3 className="font-semibold">{t('abg.trends.performance.metrics', 'Performance Metrics')}</h3>
               </div>
               <div className="space-y-4">
@@ -336,13 +336,13 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
                     <div className="text-2xl font-bold text-green-600">
                       {Math.min(...trendData.map(p => p.avgProcessingTime).filter(t => t > 0), Infinity) || 0}
                     </div>
-                    <div className="text-sm text-gray-600">{t('abg.trends.performance.fastest', 'Fastest (ms)')}</div>
+                    <div className="text-sm text-[var(--foreground-tertiary)]">{t('abg.trends.performance.fastest', 'Fastest (ms)')}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-red-600">
                       {Math.max(...trendData.map(p => p.avgProcessingTime), 0)}
                     </div>
-                    <div className="text-sm text-gray-600">{t('abg.trends.performance.slowest', 'Slowest (ms)')}</div>
+                    <div className="text-sm text-[var(--foreground-tertiary)]">{t('abg.trends.performance.slowest', 'Slowest (ms)')}</div>
                   </div>
                 </div>
               </div>
@@ -354,7 +354,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
           <>
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <PieChart className="h-5 w-5 text-blue-600" />
+                <PieChart className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
                 <h3 className="font-semibold">{t('abg.trends.distribution.typesTitle', 'Analysis Types')}</h3>
               </div>
               <SimpleBarChart
@@ -384,13 +384,13 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
       {/* Summary Insights */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <Activity className="h-5 w-5 text-blue-600" />
+          <Activity className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
           {t('abg.trends.insights.title', 'Key Insights')}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 bg-blue-50 rounded-lg">
+          <div className="p-4 bg-[var(--cardiology-accent-blue-light)] rounded-lg">
             <h4 className="font-medium text-blue-800 mb-2">{t('abg.trends.insights.volume', 'Volume Trend')}</h4>
-            <p className="text-sm text-blue-700">
+            <p className="text-sm text-[var(--cardiology-accent-blue-dark)]">
               {trendData.length > 0 && trendData[trendData.length - 1].count > trendData[0]?.count
                 ? t('abg.trends.insights.increasing', 'Analysis volume is increasing over time')
                 : t('abg.trends.insights.stable', 'Analysis volume is stable or decreasing')}

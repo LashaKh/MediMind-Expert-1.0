@@ -85,7 +85,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
 
   // Speaker colors for differentiation
   const speakerColors = [
-    'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700',
+    'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border-blue-200 dark:border-blue-700',
     'text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700',
     'text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-700',
     'text-orange-700 dark:text-orange-300 bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-700',
@@ -191,7 +191,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                     ${recordingState.isRecording ? 'opacity-50 cursor-not-allowed' : ''}
                   `}
                 >
-                  <Upload className="w-6 h-6 text-white" />
+                  <Upload className="w-6 h-6 text-[var(--foreground)]" />
                 </button>
               )}
             </div>
@@ -210,7 +210,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
           
           {/* Premium Text Area */}
           <div className="flex-1 relative overflow-hidden">
-            <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl sm:rounded-2xl lg:rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden mediscribe-mobile-transcript">
+            <div className="h-full bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm rounded-2xl sm:rounded-2xl lg:rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden mediscribe-mobile-transcript">
               
               {/* Conditional Content Display */}
               {hasSpeakers && speakers && speakers.length > 0 ? (
@@ -252,7 +252,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                   />
                   
                   {/* Modern Scroll Indicator */}
-                  <div className="absolute right-2 top-4 bottom-4 w-1 bg-blue-200/40 rounded-full overflow-hidden pointer-events-none">
+                  <div className="absolute right-2 top-4 bottom-4 w-1 bg-[var(--cardiology-accent-blue-medium)]/40 rounded-full overflow-hidden pointer-events-none">
                     <div className="w-full bg-gradient-to-b from-blue-500 to-blue-600 rounded-full transition-all duration-300" style={{height: '25%'}} />
                   </div>
                 </div>

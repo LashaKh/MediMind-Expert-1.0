@@ -77,7 +77,7 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
   // Loading state
   if (isLoading) {
     return (
-      <Card className={cn("bg-white/95 backdrop-blur-xl", className)}>
+      <Card className={cn("bg-[var(--component-card)]/95 backdrop-blur-xl", className)}>
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-lg">
@@ -93,11 +93,11 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
           {Array.from({ length: compact ? 3 : 5 }).map((_, index) => (
             <div key={index} className="animate-pulse">
               <div className="flex gap-3">
-                <div className="w-8 h-8 bg-gray-200 rounded-full flex-shrink-0"></div>
+                <div className="w-8 h-8 bg-[var(--component-surface-tertiary)] rounded-full flex-shrink-0"></div>
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-full"></div>
-                  <div className="h-3 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-4 bg-[var(--component-surface-tertiary)] rounded w-full"></div>
+                  <div className="h-3 bg-[var(--component-surface-tertiary)] rounded w-3/4"></div>
+                  <div className="h-3 bg-[var(--component-surface-tertiary)] rounded w-1/2"></div>
                 </div>
               </div>
             </div>
@@ -110,13 +110,13 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
   // Error state
   if (error) {
     return (
-      <Card className={cn("bg-white/95 backdrop-blur-xl", className)}>
+      <Card className={cn("bg-[var(--component-card)]/95 backdrop-blur-xl", className)}>
         <CardContent className="text-center py-8">
-          <FireIcon className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <FireIcon className="w-12 h-12 text-[var(--foreground-secondary)] mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
             {t('news.trending.error', 'Unable to Load Trending')}
           </h3>
-          <p className="text-gray-600 text-sm mb-4">{error}</p>
+          <p className="text-[var(--foreground-tertiary)] text-sm mb-4">{error}</p>
           {onRefresh && (
             <button
               onClick={onRefresh}
@@ -133,7 +133,7 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
   // Empty state
   if (articles.length === 0) {
     return (
-      <Card className={cn("bg-white/95 backdrop-blur-xl", className)}>
+      <Card className={cn("bg-[var(--component-card)]/95 backdrop-blur-xl", className)}>
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2 text-lg">
             <FireIcon className="w-5 h-5 text-orange-500" />
@@ -141,11 +141,11 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="text-center py-8">
-          <SparklesIcon className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <SparklesIcon className="w-12 h-12 text-[var(--foreground-secondary)] mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
             {t('news.trending.empty', 'No Trending News')}
           </h3>
-          <p className="text-gray-600 text-sm">
+          <p className="text-[var(--foreground-tertiary)] text-sm">
             {t('news.trending.emptyDesc', 'Check back soon for trending medical news')}
           </p>
         </CardContent>
@@ -154,7 +154,7 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
   }
 
   return (
-    <Card className={cn("bg-white/95 backdrop-blur-xl border border-gray-200/50", className)}>
+    <Card className={cn("bg-[var(--component-card)]/95 backdrop-blur-xl border border-[var(--glass-border-light)]/50", className)}>
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-lg">
@@ -175,7 +175,7 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
         </div>
         
         {articles.length > 0 && (
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-[var(--foreground-tertiary)] mt-2">
             {t('news.trending.subtitle', 'Most engaging medical news right now')}
           </p>
         )}
@@ -189,7 +189,7 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
           return (
             <div
               key={article.id}
-              className="group cursor-pointer p-4 rounded-lg hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-200"
+              className="group cursor-pointer p-4 rounded-lg hover:bg-[var(--component-surface-primary)] transition-all duration-200 border border-transparent hover:border-[var(--glass-border-light)]"
               onClick={() => handleArticleClick(article)}
             >
               <div className="flex gap-3">
@@ -200,18 +200,18 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
                 
                 <div className="flex-1 min-w-0">
                   {/* Title */}
-                  <h4 className="font-semibold text-gray-900 text-sm leading-tight mb-2 line-clamp-2 group-hover:text-indigo-900 transition-colors">
+                  <h4 className="font-semibold text-[var(--foreground)] text-sm leading-tight mb-2 line-clamp-2 group-hover:text-indigo-900 transition-colors">
                     {article.title}
                   </h4>
                   
                   {/* Engagement indicator */}
                   <div className="flex items-center gap-2 mb-2">
-                    <div className={`inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r ${engagement.color} text-white rounded-full text-xs font-semibold`}>
+                    <div className={`inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r ${engagement.color} text-[var(--foreground)] rounded-full text-xs font-semibold`}>
                       <EngagementIcon className="w-3 h-3" />
                       <span>{engagement.label}</span>
                     </div>
                     
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                    <div className="flex items-center gap-1 text-xs text-[var(--foreground-secondary)]">
                       <ChartBarIcon className="w-3 h-3" />
                       <span>{Math.round(article.engagementScore)}</span>
                     </div>
@@ -219,13 +219,13 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
                   
                   {/* Summary */}
                   {!compact && (
-                    <p className="text-xs text-gray-600 line-clamp-2 mb-2 leading-relaxed">
+                    <p className="text-xs text-[var(--foreground-tertiary)] line-clamp-2 mb-2 leading-relaxed">
                       {article.summary}
                     </p>
                   )}
                   
                   {/* Metadata */}
-                  <div className="flex items-center justify-between text-xs text-gray-500">
+                  <div className="flex items-center justify-between text-xs text-[var(--foreground-secondary)]">
                     <div className="flex items-center gap-2">
                       <span className="font-medium truncate max-w-24">
                         {article.sourceName}
@@ -261,7 +261,7 @@ export const NewsTrending: React.FC<NewsTrendingProps> = ({
         
         {/* Real-time update indicator */}
         <div className="pt-4 border-t border-gray-100">
-          <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center justify-center gap-2 text-xs text-[var(--foreground-secondary)]">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             <span>{t('news.trending.liveUpdate', 'Live updates')}</span>
           </div>

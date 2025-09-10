@@ -208,42 +208,42 @@ const VBACSuccessCalculatorComponent: React.FC = () => {
                 <div className="flex items-center justify-center space-x-4 mb-8">
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 1 ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 1 ? 'bg-pink-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       1
                     </div>
                     <span className={`text-sm font-medium transition-all duration-300 ${
-                      currentStep >= 1 ? 'text-pink-600' : 'text-gray-500'
+                      currentStep >= 1 ? 'text-pink-600' : 'text-[var(--foreground-secondary)]'
                     }`}>
                       {t('calculators.vbac_success.maternal_demographics')}
                     </span>
                   </div>
                   <div className={`w-8 h-1 rounded-full transition-all duration-300 ${
-                    currentStep >= 2 ? 'bg-pink-500' : 'bg-gray-300'
+                    currentStep >= 2 ? 'bg-pink-500' : 'bg-[var(--component-panel)]'
                   }`} />
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 2 ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 2 ? 'bg-pink-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       2
                     </div>
                     <span className={`text-sm font-medium transition-all duration-300 ${
-                      currentStep >= 2 ? 'text-pink-600' : 'text-gray-500'
+                      currentStep >= 2 ? 'text-pink-600' : 'text-[var(--foreground-secondary)]'
                     }`}>
                       {t('calculators.vbac_success.obstetric_history')}
                     </span>
                   </div>
                   <div className={`w-8 h-1 rounded-full transition-all duration-300 ${
-                    currentStep >= 3 ? 'bg-pink-500' : 'bg-gray-300'
+                    currentStep >= 3 ? 'bg-pink-500' : 'bg-[var(--component-panel)]'
                   }`} />
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 3 ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 3 ? 'bg-pink-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       3
                     </div>
                     <span className={`text-sm font-medium transition-all duration-300 ${
-                      currentStep >= 3 ? 'text-pink-600' : 'text-gray-500'
+                      currentStep >= 3 ? 'text-pink-600' : 'text-[var(--foreground-secondary)]'
                     }`}>
                       {t('calculators.vbac_success.current_pregnancy')}
                     </span>
@@ -463,24 +463,24 @@ const VBACSuccessCalculatorComponent: React.FC = () => {
                       {/* Success Probability */}
                       <Card className="p-6">
                         <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                             {t('calculators.vbac_success.success_probability')}
                           </span>
                           <span className={`font-medium ${getSuccessColor(result.successProbability)}`}>
                             {getTranslatedCategory(result.category)}
                           </span>
                         </div>
-                        <div className="text-3xl font-bold mt-2 text-gray-900 dark:text-gray-100">
+                        <div className="text-3xl font-bold mt-2 text-[var(--foreground)] dark:text-[var(--foreground)]">
                           {result.successProbability}%
                         </div>
                       </Card>
                       
                       {/* Uterine Rupture Risk */}
                       <Card className="p-6">
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                        <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                           {t('calculators.vbac_success.uterine_rupture_risk')}
                         </div>
-                        <div className="text-3xl font-bold mt-2 text-gray-900 dark:text-gray-100">
+                        <div className="text-3xl font-bold mt-2 text-[var(--foreground)] dark:text-[var(--foreground)]">
                           {result.uterineRuptureRisk}%
                         </div>
                       </Card>
@@ -489,13 +489,13 @@ const VBACSuccessCalculatorComponent: React.FC = () => {
                     {/* Recommendations */}
                     {result.recommendations && result.recommendations.length > 0 && (
                       <Card className="p-6">
-                        <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                        <h3 className="text-lg font-semibold mb-4 text-[var(--foreground)] dark:text-[var(--foreground)]">
                           {t('calculators.vbac_success.recommendations')}
                         </h3>
                         <ul className="space-y-2">
                           {result.recommendations.map((rec, index) => (
-                            <li key={index} className="text-sm text-gray-700 dark:text-gray-300 flex items-start">
-                              <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                            <li key={index} className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] flex items-start">
+                              <span className="w-2 h-2 bg-[var(--cardiology-accent-blue)] rounded-full mt-2 mr-3 flex-shrink-0"></span>
                               <span>{rec}</span>
                             </li>
                           ))}

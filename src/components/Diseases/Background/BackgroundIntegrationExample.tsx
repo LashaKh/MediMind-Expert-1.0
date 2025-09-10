@@ -15,16 +15,16 @@ const DiseasePageExample: React.FC<DiseasePageProps> = ({
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       {/* Disease Title */}
       <div className="text-center border-b pb-6">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-4xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
           {diseaseTitle}
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           Comprehensive medical information and guidelines
         </p>
       </div>
 
       {/* Background Section - Enhanced Rendering */}
-      <section className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border p-6">
+      <section className="bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-lg shadow-sm border p-6">
         <BackgroundRenderer 
           content={markdownContent} 
           className="mb-8"
@@ -32,20 +32,20 @@ const DiseasePageExample: React.FC<DiseasePageProps> = ({
       </section>
 
       {/* Other sections would follow here */}
-      <section className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border p-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+      <section className="bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-lg shadow-sm border p-6">
+        <h2 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
           Clinical Presentation
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           Other disease sections rendered with your existing components...
         </p>
       </section>
 
-      <section className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border p-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+      <section className="bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-lg shadow-sm border p-6">
+        <h2 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
           Guidelines
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           Guidelines section rendered with your existing components...
         </p>
       </section>

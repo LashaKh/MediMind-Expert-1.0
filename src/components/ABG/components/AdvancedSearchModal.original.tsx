@@ -269,7 +269,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
           className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-hidden"
           style={{ scale: searchScale }}
         >
-          <Card className="bg-white/98 backdrop-blur-3xl border-0 shadow-2xl ring-1 ring-white/20">
+          <Card className="bg-[var(--component-card)]/98 backdrop-blur-3xl border-0 shadow-2xl ring-1 ring-white/20">
             {/* Header */}
             <div className="relative overflow-hidden">
               {/* Animated Background */}
@@ -281,7 +281,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                 </div>
               </div>
               
-              <div className="relative px-6 py-4 border-b border-slate-200/60">
+              <div className="relative px-6 py-4 border-b border-[var(--glass-border-light)]/60">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <motion.div
@@ -292,7 +292,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                     >
                       <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl blur-md opacity-30 scale-110" />
                       <div className="relative bg-gradient-to-br from-blue-500 to-purple-600 p-3 rounded-2xl shadow-lg">
-                        <Search className="h-5 w-5 text-white" />
+                        <Search className="h-5 w-5 text-[var(--foreground)]" />
                       </div>
                       <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full animate-pulse" />
                     </motion.div>
@@ -309,7 +309,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                         initial={{ opacity: 0, x: -30 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="text-slate-600 flex items-center gap-2 mt-1"
+                        className="text-[var(--foreground-tertiary)] flex items-center gap-2 mt-1"
                       >
                         <Sparkles className="h-4 w-4 text-amber-500" />
                         Intelligent ABG filtering with AI-powered insights
@@ -327,7 +327,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                           exit={{ scale: 0, opacity: 0 }}
                           className="flex items-center gap-2"
                         >
-                          <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 shadow-md">
+                          <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-[var(--foreground)] border-0 shadow-md">
                             <Filter className="h-3 w-3 mr-1" />
                             {activeFiltersCount} active
                           </Badge>
@@ -339,7 +339,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                       variant="ghost"
                       size="sm"
                       onClick={onClose}
-                      className="rounded-full h-12 w-12 p-0 hover:bg-slate-100/70 transition-all duration-200"
+                      className="rounded-full h-12 w-12 p-0 hover:bg-[var(--component-surface-secondary)]/70 transition-all duration-200"
                     >
                       <X className="h-5 w-5" />
                     </Button>
@@ -355,9 +355,9 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                 >
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl border border-slate-200/60 shadow-xl">
+                    <div className="relative bg-[var(--component-card)]/90 backdrop-blur-xl rounded-2xl border border-[var(--glass-border-light)]/60 shadow-xl">
                       <div className="absolute left-5 top-1/2 -translate-y-1/2">
-                        <Search className="h-5 w-5 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                        <Search className="h-5 w-5 text-slate-400 group-hover:text-[var(--cardiology-accent-blue)] transition-colors" />
                       </div>
                       <Input
                         ref={searchInputRef}
@@ -373,7 +373,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0, opacity: 0 }}
                             onClick={() => setSearchQuery('')}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-slate-100/70 transition-colors"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-[var(--component-surface-secondary)]/70 transition-colors"
                           >
                             <X className="h-4 w-4 text-slate-400" />
                           </motion.button>
@@ -384,7 +384,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                   
                   {/* Search Suggestions */}
                   <div className="mt-3 flex items-center gap-2 flex-wrap">
-                    <span className="text-xs text-slate-500 font-medium">Quick searches:</span>
+                    <span className="text-xs text-[var(--foreground-secondary)] font-medium">Quick searches:</span>
                     {['respiratory acidosis', 'high pH', 'critical values', 'recent analyses'].map((suggestion, index) => (
                       <motion.button
                         key={suggestion}
@@ -392,7 +392,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.6 + index * 0.1 }}
                         onClick={() => setSearchQuery(suggestion)}
-                        className="px-3 py-1 text-xs bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 hover:text-slate-800 transition-all duration-200"
+                        className="px-3 py-1 text-xs bg-[var(--component-surface-secondary)] hover:bg-[var(--component-surface-tertiary)] rounded-full text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] transition-all duration-200"
                       >
                         {suggestion}
                       </motion.button>
@@ -405,11 +405,11 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
             {/* Content */}
             <div className="flex h-[500px]">
               {/* Sidebar Navigation */}
-              <div className="w-64 border-r border-slate-200/60 bg-gradient-to-br from-slate-50/80 to-white/60 backdrop-blur-xl">
+              <div className="w-64 border-r border-[var(--glass-border-light)]/60 bg-gradient-to-br from-slate-50/80 to-white/60 backdrop-blur-xl">
                 <div className="p-4 space-y-2">
                   <div className="mb-4">
-                    <h3 className="font-semibold text-slate-800 mb-1">Search Categories</h3>
-                    <p className="text-xs text-slate-600">Explore different aspects of your ABG data</p>
+                    <h3 className="font-semibold text-[var(--foreground)] mb-1">Search Categories</h3>
+                    <p className="text-xs text-[var(--foreground-tertiary)]">Explore different aspects of your ABG data</p>
                   </div>
                   
                   {searchSections.map((section, index) => (
@@ -422,8 +422,8 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                       className={cn(
                         "w-full text-left p-3 rounded-xl transition-all duration-300 group relative overflow-hidden",
                         activeSection === section.id
-                          ? "bg-white shadow-lg border border-slate-200/60 scale-[1.02]"
-                          : "hover:bg-white/70 hover:shadow-md hover:scale-[1.01]"
+                          ? "bg-[var(--component-card)] shadow-lg border border-[var(--glass-border-light)]/60 scale-[1.02]"
+                          : "hover:bg-[var(--component-card)]/70 hover:shadow-md hover:scale-[1.01]"
                       )}
                     >
                       {/* Background gradient when active */}
@@ -439,14 +439,14 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                         <div className={cn(
                           "p-2 rounded-lg transition-all duration-300 shadow-sm",
                           activeSection === section.id
-                            ? `${section.accent} text-white shadow-md`
+                            ? `${section.accent} text-[var(--foreground)] shadow-md`
                             : `bg-${section.color}-50 text-${section.color}-600 group-hover:shadow-md`
                         )}>
                           {section.icon}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-slate-900 mb-1 text-sm">{section.label}</div>
-                          <div className="text-xs text-slate-600 leading-relaxed">{section.description}</div>
+                          <div className="font-semibold text-[var(--foreground)] mb-1 text-sm">{section.label}</div>
+                          <div className="text-xs text-[var(--foreground-tertiary)] leading-relaxed">{section.description}</div>
                         </div>
                         {activeSection === section.id && (
                           <motion.div
@@ -478,23 +478,23 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                           variant="ghost"
                           size="sm"
                           onClick={handleReset}
-                          className="text-xs h-6 px-2 text-blue-600 hover:text-blue-700 hover:bg-blue-100"
+                          className="text-xs h-6 px-2 text-[var(--cardiology-accent-blue-dark)] hover:text-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--cardiology-accent-blue-light)]"
                         >
                           Clear All
                         </Button>
                       </div>
                       <div className="space-y-2 max-h-32 overflow-y-auto custom-scrollbar">
                         {searchQuery && (
-                          <div className="flex items-center justify-between text-xs p-2 bg-white/70 rounded-lg">
-                            <span className="text-slate-600 font-medium">Search Query</span>
+                          <div className="flex items-center justify-between text-xs p-2 bg-[var(--component-card)]/70 rounded-lg">
+                            <span className="text-[var(--foreground-tertiary)] font-medium">Search Query</span>
                             <Badge variant="outline" className="text-xs max-w-32 truncate">
                               "{searchQuery}"
                             </Badge>
                           </div>
                         )}
                         {Object.entries(filters).map(([key, value]) => (
-                          <div key={key} className="flex items-center justify-between text-xs p-2 bg-white/70 rounded-lg">
-                            <span className="text-slate-600 font-medium capitalize">
+                          <div key={key} className="flex items-center justify-between text-xs p-2 bg-[var(--component-card)]/70 rounded-lg">
+                            <span className="text-[var(--foreground-tertiary)] font-medium capitalize">
                               {key.replace(/([A-Z])/g, ' $1').trim()}
                             </span>
                             <Button
@@ -529,10 +529,10 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                       <div className="space-y-6">
                         <div className="text-center mb-6">
                           <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl mb-3">
-                            <Stethoscope className="h-6 w-6 text-white" />
+                            <Stethoscope className="h-6 w-6 text-[var(--foreground)]" />
                           </div>
-                          <h2 className="text-xl font-bold text-slate-900 mb-2">Clinical Parameters</h2>
-                          <p className="text-slate-600 text-sm max-w-md mx-auto">
+                          <h2 className="text-xl font-bold text-[var(--foreground)] mb-2">Clinical Parameters</h2>
+                          <p className="text-[var(--foreground-tertiary)] text-sm max-w-md mx-auto">
                             Search by pH levels, gas concentrations, and other clinical values with precision ranges
                           </p>
                         </div>
@@ -542,16 +542,16 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                           <Card className="p-4 bg-gradient-to-br from-red-50 to-blue-50 border border-red-200/60">
                             <div className="flex items-center gap-3 mb-3">
                               <div className="p-2 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg">
-                                <Droplets className="h-4 w-4 text-white" />
+                                <Droplets className="h-4 w-4 text-[var(--foreground)]" />
                               </div>
                               <div>
-                                <Label className="text-sm font-bold text-slate-800">pH Range</Label>
-                                <p className="text-xs text-slate-600">Normal: 7.35-7.45</p>
+                                <Label className="text-sm font-bold text-[var(--foreground)]">pH Range</Label>
+                                <p className="text-xs text-[var(--foreground-tertiary)]">Normal: 7.35-7.45</p>
                               </div>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                               <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-700">Minimum</label>
+                                <label className="text-xs font-medium text-[var(--foreground)]">Minimum</label>
                                 <Input
                                   type="number"
                                   step="0.01"
@@ -560,11 +560,11 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                   placeholder="7.35"
                                   value={filters.phMin || ''}
                                   onChange={(e) => updateFilter('phMin', e.target.value ? parseFloat(e.target.value) : undefined)}
-                                  className="bg-white/80 border-red-200 focus:border-red-300 focus:ring-red-200"
+                                  className="bg-[var(--component-card)]/80 border-red-200 focus:border-red-300 focus:ring-red-200"
                                 />
                               </div>
                               <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-700">Maximum</label>
+                                <label className="text-xs font-medium text-[var(--foreground)]">Maximum</label>
                                 <Input
                                   type="number"
                                   step="0.01"
@@ -573,7 +573,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                   placeholder="7.45"
                                   value={filters.phMax || ''}
                                   onChange={(e) => updateFilter('phMax', e.target.value ? parseFloat(e.target.value) : undefined)}
-                                  className="bg-white/80 border-red-200 focus:border-red-300 focus:ring-red-200"
+                                  className="bg-[var(--component-card)]/80 border-red-200 focus:border-red-300 focus:ring-red-200"
                                 />
                               </div>
                             </div>
@@ -583,32 +583,32 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                           <Card className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200/60">
                             <div className="flex items-center gap-3 mb-3">
                               <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
-                                <Wind className="h-4 w-4 text-white" />
+                                <Wind className="h-4 w-4 text-[var(--foreground)]" />
                               </div>
                               <div>
-                                <Label className="text-sm font-bold text-slate-800">PaCO2 (mmHg)</Label>
-                                <p className="text-xs text-slate-600">Normal: 35-45</p>
+                                <Label className="text-sm font-bold text-[var(--foreground)]">PaCO2 (mmHg)</Label>
+                                <p className="text-xs text-[var(--foreground-tertiary)]">Normal: 35-45</p>
                               </div>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                               <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-700">Minimum</label>
+                                <label className="text-xs font-medium text-[var(--foreground)]">Minimum</label>
                                 <Input
                                   type="number"
                                   placeholder="35"
                                   value={filters.paco2Min || ''}
                                   onChange={(e) => updateFilter('paco2Min', e.target.value ? parseFloat(e.target.value) : undefined)}
-                                  className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                                  className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
                                 />
                               </div>
                               <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-700">Maximum</label>
+                                <label className="text-xs font-medium text-[var(--foreground)]">Maximum</label>
                                 <Input
                                   type="number"
                                   placeholder="45"
                                   value={filters.paco2Max || ''}
                                   onChange={(e) => updateFilter('paco2Max', e.target.value ? parseFloat(e.target.value) : undefined)}
-                                  className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                                  className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
                                 />
                               </div>
                             </div>
@@ -618,32 +618,32 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                           <Card className="p-4 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/60">
                             <div className="flex items-center gap-3 mb-3">
                               <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg">
-                                <Heart className="h-4 w-4 text-white" />
+                                <Heart className="h-4 w-4 text-[var(--foreground)]" />
                               </div>
                               <div>
-                                <Label className="text-sm font-bold text-slate-800">HCO3 (mEq/L)</Label>
-                                <p className="text-xs text-slate-600">Normal: 22-26</p>
+                                <Label className="text-sm font-bold text-[var(--foreground)]">HCO3 (mEq/L)</Label>
+                                <p className="text-xs text-[var(--foreground-tertiary)]">Normal: 22-26</p>
                               </div>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                               <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-700">Minimum</label>
+                                <label className="text-xs font-medium text-[var(--foreground)]">Minimum</label>
                                 <Input
                                   type="number"
                                   placeholder="22"
                                   value={filters.hco3Min || ''}
                                   onChange={(e) => updateFilter('hco3Min', e.target.value ? parseFloat(e.target.value) : undefined)}
-                                  className="bg-white/80 border-emerald-200 focus:border-emerald-300 focus:ring-emerald-200"
+                                  className="bg-[var(--component-card)]/80 border-emerald-200 focus:border-emerald-300 focus:ring-emerald-200"
                                 />
                               </div>
                               <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-700">Maximum</label>
+                                <label className="text-xs font-medium text-[var(--foreground)]">Maximum</label>
                                 <Input
                                   type="number"
                                   placeholder="26"
                                   value={filters.hco3Max || ''}
                                   onChange={(e) => updateFilter('hco3Max', e.target.value ? parseFloat(e.target.value) : undefined)}
-                                  className="bg-white/80 border-emerald-200 focus:border-emerald-300 focus:ring-emerald-200"
+                                  className="bg-[var(--component-card)]/80 border-emerald-200 focus:border-emerald-300 focus:ring-emerald-200"
                                 />
                               </div>
                             </div>
@@ -653,32 +653,32 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                           <Card className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/60">
                             <div className="flex items-center gap-3 mb-3">
                               <div className="p-2 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg">
-                                <Gauge className="h-4 w-4 text-white" />
+                                <Gauge className="h-4 w-4 text-[var(--foreground)]" />
                               </div>
                               <div>
-                                <Label className="text-sm font-bold text-slate-800">PaO2 (mmHg)</Label>
-                                <p className="text-xs text-slate-600">Normal: 80-100</p>
+                                <Label className="text-sm font-bold text-[var(--foreground)]">PaO2 (mmHg)</Label>
+                                <p className="text-xs text-[var(--foreground-tertiary)]">Normal: 80-100</p>
                               </div>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                               <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-700">Minimum</label>
+                                <label className="text-xs font-medium text-[var(--foreground)]">Minimum</label>
                                 <Input
                                   type="number"
                                   placeholder="80"
                                   value={filters.pao2Min || ''}
                                   onChange={(e) => updateFilter('pao2Min', e.target.value ? parseFloat(e.target.value) : undefined)}
-                                  className="bg-white/80 border-amber-200 focus:border-amber-300 focus:ring-amber-200"
+                                  className="bg-[var(--component-card)]/80 border-amber-200 focus:border-amber-300 focus:ring-amber-200"
                                 />
                               </div>
                               <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-700">Maximum</label>
+                                <label className="text-xs font-medium text-[var(--foreground)]">Maximum</label>
                                 <Input
                                   type="number"
                                   placeholder="100"
                                   value={filters.pao2Max || ''}
                                   onChange={(e) => updateFilter('pao2Max', e.target.value ? parseFloat(e.target.value) : undefined)}
-                                  className="bg-white/80 border-amber-200 focus:border-amber-300 focus:ring-amber-200"
+                                  className="bg-[var(--component-card)]/80 border-amber-200 focus:border-amber-300 focus:ring-amber-200"
                                 />
                               </div>
                             </div>
@@ -689,11 +689,11 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                         <Card className="p-4 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200/60">
                           <div className="flex items-center gap-3 mb-3">
                             <div className="p-2 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-lg">
-                              <Activity className="h-4 w-4 text-white" />
+                              <Activity className="h-4 w-4 text-[var(--foreground)]" />
                             </div>
                             <div>
-                              <Label className="text-sm font-bold text-slate-800">ABG Type</Label>
-                              <p className="text-xs text-slate-600">Filter by blood gas type</p>
+                              <Label className="text-sm font-bold text-[var(--foreground)]">ABG Type</Label>
+                              <p className="text-xs text-[var(--foreground-tertiary)]">Filter by blood gas type</p>
                             </div>
                           </div>
                           <div className="grid grid-cols-2 gap-3">
@@ -708,14 +708,14 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                   "p-4 rounded-xl border transition-all duration-200 text-left group",
                                   filters.type === type.value
                                     ? "bg-purple-100 border-purple-300 text-purple-800"
-                                    : "bg-white/70 border-purple-200/60 hover:bg-purple-50 hover:border-purple-300"
+                                    : "bg-[var(--component-card)]/70 border-purple-200/60 hover:bg-purple-50 hover:border-purple-300"
                                 )}
                               >
                                 <div className="flex items-center gap-3">
                                   <div className={cn(
                                     "p-2 rounded-lg transition-colors",
                                     filters.type === type.value
-                                      ? "bg-purple-500 text-white"
+                                      ? "bg-purple-500 text-[var(--foreground)]"
                                       : "bg-purple-100 text-purple-600 group-hover:bg-purple-200"
                                   )}>
                                     {type.icon}
@@ -734,10 +734,10 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                       <div className="space-y-8">
                         <div className="text-center mb-8">
                           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl mb-4">
-                            <User className="h-8 w-8 text-white" />
+                            <User className="h-8 w-8 text-[var(--foreground)]" />
                           </div>
-                          <h2 className="text-2xl font-bold text-slate-900 mb-2">Patient Context</h2>
-                          <p className="text-slate-600 max-w-md mx-auto">
+                          <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Patient Context</h2>
+                          <p className="text-[var(--foreground-tertiary)] max-w-md mx-auto">
                             Filter by patient demographics and medical record information
                           </p>
                         </div>
@@ -746,18 +746,18 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                         <Card className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/60">
                           <div className="flex items-center gap-3 mb-6">
                             <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl">
-                              <Users className="h-6 w-6 text-white" />
+                              <Users className="h-6 w-6 text-[var(--foreground)]" />
                             </div>
                             <div>
-                              <Label className="text-lg font-bold text-slate-800">Patient Selection</Label>
-                              <p className="text-sm text-slate-600">Filter results by specific patient</p>
+                              <Label className="text-lg font-bold text-[var(--foreground)]">Patient Selection</Label>
+                              <p className="text-sm text-[var(--foreground-tertiary)]">Filter results by specific patient</p>
                             </div>
                           </div>
                           
                           <select
                             value={filters.patientId || ''}
                             onChange={(e) => updateFilter('patientId', e.target.value || undefined)}
-                            className="w-full p-4 bg-white/80 border border-emerald-200 rounded-xl focus:border-emerald-300 focus:ring-emerald-200 text-slate-800"
+                            className="w-full p-4 bg-[var(--component-card)]/80 border border-emerald-200 rounded-xl focus:border-emerald-300 focus:ring-emerald-200 text-[var(--foreground)]"
                           >
                             <option value="">All Patients ({patients.length} total)</option>
                             {patients.map((patient) => (
@@ -790,16 +790,16 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                           <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200/60">
                             <div className="flex items-center gap-3 mb-4">
                               <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg">
-                                <Hash className="h-5 w-5 text-white" />
+                                <Hash className="h-5 w-5 text-[var(--foreground)]" />
                               </div>
                               <div>
-                                <Label className="text-base font-bold text-slate-800">Age Range</Label>
-                                <p className="text-xs text-slate-600">Filter by patient age</p>
+                                <Label className="text-base font-bold text-[var(--foreground)]">Age Range</Label>
+                                <p className="text-xs text-[var(--foreground-tertiary)]">Filter by patient age</p>
                               </div>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                               <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-700">Min Age</label>
+                                <label className="text-xs font-medium text-[var(--foreground)]">Min Age</label>
                                 <Input
                                   type="number"
                                   min="0"
@@ -807,11 +807,11 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                   placeholder="0"
                                   value={filters.ageMin || ''}
                                   onChange={(e) => updateFilter('ageMin', e.target.value ? parseInt(e.target.value) : undefined)}
-                                  className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                                  className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
                                 />
                               </div>
                               <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-700">Max Age</label>
+                                <label className="text-xs font-medium text-[var(--foreground)]">Max Age</label>
                                 <Input
                                   type="number"
                                   min="0"
@@ -819,7 +819,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                   placeholder="150"
                                   value={filters.ageMax || ''}
                                   onChange={(e) => updateFilter('ageMax', e.target.value ? parseInt(e.target.value) : undefined)}
-                                  className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                                  className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
                                 />
                               </div>
                             </div>
@@ -828,11 +828,11 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                           <Card className="p-6 bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200/60">
                             <div className="flex items-center gap-3 mb-4">
                               <div className="p-2 bg-gradient-to-br from-pink-500 to-rose-500 rounded-lg">
-                                <Users className="h-5 w-5 text-white" />
+                                <Users className="h-5 w-5 text-[var(--foreground)]" />
                               </div>
                               <div>
-                                <Label className="text-base font-bold text-slate-800">Gender</Label>
-                                <p className="text-xs text-slate-600">Filter by gender</p>
+                                <Label className="text-base font-bold text-[var(--foreground)]">Gender</Label>
+                                <p className="text-xs text-[var(--foreground-tertiary)]">Filter by gender</p>
                               </div>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
@@ -844,7 +844,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                     "p-4 rounded-xl border transition-all text-center group",
                                     filters.gender === gender
                                       ? "bg-pink-100 border-pink-300 text-pink-800"
-                                      : "bg-white/70 border-pink-200/60 hover:bg-pink-50 hover:border-pink-300"
+                                      : "bg-[var(--component-card)]/70 border-pink-200/60 hover:bg-pink-50 hover:border-pink-300"
                                   )}
                                 >
                                   <Users className={cn(
@@ -867,10 +867,10 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                       <div className="space-y-8">
                         <div className="text-center mb-8">
                           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-500 rounded-2xl mb-4">
-                            <Brain className="h-8 w-8 text-white" />
+                            <Brain className="h-8 w-8 text-[var(--foreground)]" />
                           </div>
-                          <h2 className="text-2xl font-bold text-slate-900 mb-2">AI Analysis Results</h2>
-                          <p className="text-slate-600 max-w-md mx-auto">
+                          <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">AI Analysis Results</h2>
+                          <p className="text-[var(--foreground-tertiary)] max-w-md mx-auto">
                             Filter by AI interpretations, confidence levels, and clinical assessments
                           </p>
                         </div>
@@ -878,7 +878,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                         {/* Interpretation Types */}
                         <div className="space-y-6">
                           <div>
-                            <Label className="text-lg font-bold text-slate-800 mb-4 block flex items-center gap-2">
+                            <Label className="text-lg font-bold text-[var(--foreground)] mb-4 block flex items-center gap-2">
                               <Lightbulb className="h-5 w-5 text-amber-500" />
                               Primary Interpretation
                             </Label>
@@ -895,21 +895,21 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                     "p-5 rounded-2xl border transition-all text-left group relative overflow-hidden",
                                     filters.interpretation === option.value
                                       ? `bg-${option.color}-50 border-${option.color}-300 shadow-lg scale-105`
-                                      : "bg-white/70 border-slate-200/60 hover:bg-slate-50 hover:shadow-md"
+                                      : "bg-[var(--component-card)]/70 border-[var(--glass-border-light)]/60 hover:bg-[var(--component-surface-primary)] hover:shadow-md"
                                   )}
                                 >
                                   <div className="flex items-start gap-4">
                                     <div className={cn(
                                       "p-3 rounded-xl transition-all",
                                       filters.interpretation === option.value
-                                        ? `bg-${option.color}-500 text-white shadow-lg`
+                                        ? `bg-${option.color}-500 text-[var(--foreground)] shadow-lg`
                                         : `bg-${option.color}-50 text-${option.color}-600 group-hover:bg-${option.color}-100`
                                     )}>
                                       {option.icon}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                      <div className="font-bold text-sm text-slate-900 mb-1">{option.label}</div>
-                                      <div className="text-xs text-slate-600 leading-relaxed">{option.description}</div>
+                                      <div className="font-bold text-sm text-[var(--foreground)] mb-1">{option.label}</div>
+                                      <div className="text-xs text-[var(--foreground-tertiary)] leading-relaxed">{option.description}</div>
                                     </div>
                                   </div>
                                   {filters.interpretation === option.value && (
@@ -925,14 +925,14 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                           </div>
 
                           {/* Severity Levels */}
-                          <Card className="p-6 bg-gradient-to-br from-slate-50 to-gray-50 border border-slate-200/60">
+                          <Card className="p-6 bg-gradient-to-br from-slate-50 to-gray-50 border border-[var(--glass-border-light)]/60">
                             <div className="flex items-center gap-3 mb-6">
                               <div className="p-3 bg-gradient-to-br from-slate-600 to-gray-700 rounded-xl">
-                                <BarChart3 className="h-6 w-6 text-white" />
+                                <BarChart3 className="h-6 w-6 text-[var(--foreground)]" />
                               </div>
                               <div>
-                                <Label className="text-lg font-bold text-slate-800">Severity Classification</Label>
-                                <p className="text-sm text-slate-600">Filter by clinical severity level</p>
+                                <Label className="text-lg font-bold text-[var(--foreground)]">Severity Classification</Label>
+                                <p className="text-sm text-[var(--foreground-tertiary)]">Filter by clinical severity level</p>
                               </div>
                             </div>
                             <div className="grid grid-cols-3 gap-4">
@@ -946,13 +946,13 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                     "p-4 rounded-xl border transition-all text-center group",
                                     filters.severity === severity.value
                                       ? `bg-${severity.color}-50 border-${severity.color}-300 text-${severity.color}-800 shadow-lg`
-                                      : "bg-white/70 border-slate-200/60 hover:bg-slate-50 hover:shadow-md"
+                                      : "bg-[var(--component-card)]/70 border-[var(--glass-border-light)]/60 hover:bg-[var(--component-surface-primary)] hover:shadow-md"
                                   )}
                                 >
                                   <div className={cn(
                                     "p-2 rounded-lg mx-auto mb-2 w-fit transition-colors",
                                     filters.severity === severity.value
-                                      ? `bg-${severity.color}-500 text-white`
+                                      ? `bg-${severity.color}-500 text-[var(--foreground)]`
                                       : `bg-${severity.color}-50 text-${severity.color}-600 group-hover:bg-${severity.color}-100`
                                   )}>
                                     {severity.icon}
@@ -969,9 +969,9 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                               <div className="space-y-4">
                                 <div className="flex items-center gap-3">
                                   <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg">
-                                    <CheckCircle2 className="h-5 w-5 text-white" />
+                                    <CheckCircle2 className="h-5 w-5 text-[var(--foreground)]" />
                                   </div>
-                                  <Label className="text-base font-bold text-slate-800">Analysis Features</Label>
+                                  <Label className="text-base font-bold text-[var(--foreground)]">Analysis Features</Label>
                                 </div>
                                 <div className="space-y-3">
                                   <label className="flex items-center gap-3 p-3 rounded-lg hover:bg-green-100/50 transition-colors cursor-pointer">
@@ -1006,16 +1006,16 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                             <Card className="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200/60">
                               <div className="flex items-center gap-3 mb-4">
                                 <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
-                                  <Gauge className="h-5 w-5 text-white" />
+                                  <Gauge className="h-5 w-5 text-[var(--foreground)]" />
                                 </div>
                                 <div>
-                                  <Label className="text-base font-bold text-slate-800">AI Confidence</Label>
-                                  <p className="text-xs text-slate-600">Analysis certainty level</p>
+                                  <Label className="text-base font-bold text-[var(--foreground)]">AI Confidence</Label>
+                                  <p className="text-xs text-[var(--foreground-tertiary)]">Analysis certainty level</p>
                                 </div>
                               </div>
                               <div className="grid grid-cols-2 gap-3">
                                 <div className="space-y-1">
-                                  <label className="text-xs font-medium text-slate-700">Min %</label>
+                                  <label className="text-xs font-medium text-[var(--foreground)]">Min %</label>
                                   <Input
                                     type="number"
                                     min="0"
@@ -1025,11 +1025,11 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                     onChange={(e) => updateFilter('confidenceMin', 
                                       e.target.value ? parseFloat(e.target.value) / 100 : undefined
                                     )}
-                                    className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                                    className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
                                   />
                                 </div>
                                 <div className="space-y-1">
-                                  <label className="text-xs font-medium text-slate-700">Max %</label>
+                                  <label className="text-xs font-medium text-[var(--foreground)]">Max %</label>
                                   <Input
                                     type="number"
                                     min="0"
@@ -1039,7 +1039,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                     onChange={(e) => updateFilter('confidenceMax', 
                                       e.target.value ? parseFloat(e.target.value) / 100 : undefined
                                     )}
-                                    className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                                    className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
                                   />
                                 </div>
                               </div>
@@ -1054,10 +1054,10 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                       <div className="space-y-8">
                         <div className="text-center mb-8">
                           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl mb-4">
-                            <Clock3 className="h-8 w-8 text-white" />
+                            <Clock3 className="h-8 w-8 text-[var(--foreground)]" />
                           </div>
-                          <h2 className="text-2xl font-bold text-slate-900 mb-2">Time & Quality Metrics</h2>
-                          <p className="text-slate-600 max-w-md mx-auto">
+                          <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Time & Quality Metrics</h2>
+                          <p className="text-[var(--foreground-tertiary)] max-w-md mx-auto">
                             Filter by date ranges, processing times, and system performance metrics
                           </p>
                         </div>
@@ -1066,38 +1066,38 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                         <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200/60">
                           <div className="flex items-center gap-3 mb-6">
                             <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl">
-                              <CalendarIcon className="h-6 w-6 text-white" />
+                              <CalendarIcon className="h-6 w-6 text-[var(--foreground)]" />
                             </div>
                             <div>
-                              <Label className="text-lg font-bold text-slate-800">Date Range</Label>
-                              <p className="text-sm text-slate-600">Filter results by analysis date</p>
+                              <Label className="text-lg font-bold text-[var(--foreground)]">Date Range</Label>
+                              <p className="text-sm text-[var(--foreground-tertiary)]">Filter results by analysis date</p>
                             </div>
                           </div>
                           
                           <div className="grid grid-cols-2 gap-6 mb-6">
                             <div className="space-y-2">
-                              <label className="text-sm font-medium text-slate-700">Start Date</label>
+                              <label className="text-sm font-medium text-[var(--foreground)]">Start Date</label>
                               <Input
                                 type="date"
                                 value={filters.startDate || ''}
                                 onChange={(e) => updateFilter('startDate', e.target.value || undefined)}
-                                className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                                className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
                               />
                             </div>
                             <div className="space-y-2">
-                              <label className="text-sm font-medium text-slate-700">End Date</label>
+                              <label className="text-sm font-medium text-[var(--foreground)]">End Date</label>
                               <Input
                                 type="date"
                                 value={filters.endDate || ''}
                                 onChange={(e) => updateFilter('endDate', e.target.value || undefined)}
-                                className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                                className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
                               />
                             </div>
                           </div>
 
                           {/* Quick Date Ranges */}
                           <div className="space-y-3">
-                            <Label className="text-sm font-semibold text-slate-700">Quick Select</Label>
+                            <Label className="text-sm font-semibold text-[var(--foreground)]">Quick Select</Label>
                             <div className="grid grid-cols-4 gap-3">
                               {[
                                 { label: 'Today', days: 0, icon: <Clock className="h-4 w-4" /> },
@@ -1116,7 +1116,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                     updateFilter('startDate', range.days === 0 ? endDate : startDate);
                                     updateFilter('endDate', endDate);
                                   }}
-                                  className="bg-white/70 border-blue-200 hover:bg-blue-50 hover:border-blue-300 flex-col h-auto py-3"
+                                  className="bg-[var(--component-card)]/70 border-blue-200 hover:bg-[var(--cardiology-accent-blue-light)] hover:border-[var(--cardiology-accent-blue)] flex-col h-auto py-3"
                                 >
                                   {range.icon}
                                   <span className="text-xs mt-1">{range.label}</span>
@@ -1130,11 +1130,11 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                         <Card className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/60">
                           <div className="flex items-center gap-3 mb-6">
                             <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl">
-                              <Zap className="h-6 w-6 text-white" />
+                              <Zap className="h-6 w-6 text-[var(--foreground)]" />
                             </div>
                             <div>
-                              <Label className="text-lg font-bold text-slate-800">Processing Performance</Label>
-                              <p className="text-sm text-slate-600">Filter by AI processing time</p>
+                              <Label className="text-lg font-bold text-[var(--foreground)]">Processing Performance</Label>
+                              <p className="text-sm text-[var(--foreground-tertiary)]">Filter by AI processing time</p>
                             </div>
                           </div>
                           
@@ -1154,7 +1154,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                   "p-4 rounded-xl border transition-all text-left group",
                                   filters.processingTimeMax === range.value
                                     ? `bg-${range.color}-50 border-${range.color}-300 text-${range.color}-800 shadow-lg`
-                                    : "bg-white/70 border-emerald-200/60 hover:bg-emerald-50 hover:shadow-md"
+                                    : "bg-[var(--component-card)]/70 border-emerald-200/60 hover:bg-emerald-50 hover:shadow-md"
                                 )}
                               >
                                 <div className="flex items-center justify-between mb-2">
@@ -1163,7 +1163,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                                   )}
                                 </div>
-                                <div className="text-xs text-slate-600">{range.description}</div>
+                                <div className="text-xs text-[var(--foreground-tertiary)]">{range.description}</div>
                               </button>
                             ))}
                           </div>
@@ -1176,19 +1176,19 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="border-t border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-white/60 backdrop-blur-xl px-6 py-4">
+            <div className="border-t border-[var(--glass-border-light)]/60 bg-gradient-to-r from-slate-50/80 to-white/60 backdrop-blur-xl px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <Button
                     variant="outline"
                     onClick={handleReset}
                     disabled={!hasChanges}
-                    className="bg-white/70 border-slate-200 hover:bg-slate-50 flex items-center gap-2"
+                    className="bg-[var(--component-card)]/70 border-[var(--glass-border-light)] hover:bg-[var(--component-surface-primary)] flex items-center gap-2"
                   >
                     <RotateCcw className="h-4 w-4" />
                     Reset All Filters
                   </Button>
-                  <div className="text-sm text-slate-600 flex items-center gap-2">
+                  <div className="text-sm text-[var(--foreground-tertiary)] flex items-center gap-2">
                     {activeFiltersCount > 0 ? (
                       <>
                         <div className="flex items-center gap-1">
@@ -1210,7 +1210,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                   <Button 
                     variant="ghost" 
                     onClick={onClose}
-                    className="hover:bg-slate-100/70"
+                    className="hover:bg-[var(--component-surface-secondary)]/70"
                   >
                     Cancel
                   </Button>
@@ -1218,7 +1218,7 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
                     <Button
                       onClick={handleSearch}
                       disabled={isSearching}
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg px-6 py-2 h-auto"
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-[var(--foreground)] shadow-lg px-6 py-2 h-auto"
                     >
                       {isSearching ? (
                         <>
@@ -1244,17 +1244,17 @@ export const AdvancedSearchModal: React.FC<AdvancedSearchModalProps> = ({
               </div>
 
               {/* Keyboard Shortcuts */}
-              <div className="mt-3 pt-3 border-t border-slate-200/60">
-                <div className="flex items-center justify-center gap-6 text-xs text-slate-500">
+              <div className="mt-3 pt-3 border-t border-[var(--glass-border-light)]/60">
+                <div className="flex items-center justify-center gap-6 text-xs text-[var(--foreground-secondary)]">
                   <div className="flex items-center gap-1">
                     <div className="flex gap-1">
-                      <kbd className="px-1.5 py-0.5 bg-slate-200 rounded text-xs font-medium">⌘</kbd>
-                      <kbd className="px-1.5 py-0.5 bg-slate-200 rounded text-xs font-medium">⏎</kbd>
+                      <kbd className="px-1.5 py-0.5 bg-[var(--component-surface-tertiary)] rounded text-xs font-medium">⌘</kbd>
+                      <kbd className="px-1.5 py-0.5 bg-[var(--component-surface-tertiary)] rounded text-xs font-medium">⏎</kbd>
                     </div>
                     <span>Quick Search</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 bg-slate-200 rounded text-xs font-medium">Esc</kbd>
+                    <kbd className="px-1.5 py-0.5 bg-[var(--component-surface-tertiary)] rounded text-xs font-medium">Esc</kbd>
                     <span>Close Modal</span>
                   </div>
                   <div className="flex items-center gap-1 text-amber-600">

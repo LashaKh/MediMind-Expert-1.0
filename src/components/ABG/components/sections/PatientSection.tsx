@@ -24,10 +24,10 @@ export const PatientSection: React.FC<PatientSectionProps> = ({
     <div className="space-y-8">
       <div className="text-center mb-8">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl mb-4">
-          <User className="h-8 w-8 text-white" />
+          <User className="h-8 w-8 text-[var(--foreground)]" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">Patient Context</h2>
-        <p className="text-slate-600 max-w-md mx-auto">
+        <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Patient Context</h2>
+        <p className="text-[var(--foreground-tertiary)] max-w-md mx-auto">
           Filter by patient demographics and medical record information
         </p>
       </div>
@@ -36,18 +36,18 @@ export const PatientSection: React.FC<PatientSectionProps> = ({
       <Card className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/60">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl">
-            <Users className="h-6 w-6 text-white" />
+            <Users className="h-6 w-6 text-[var(--foreground)]" />
           </div>
           <div>
-            <Label className="text-lg font-bold text-slate-800">Patient Selection</Label>
-            <p className="text-sm text-slate-600">Filter results by specific patient</p>
+            <Label className="text-lg font-bold text-[var(--foreground)]">Patient Selection</Label>
+            <p className="text-sm text-[var(--foreground-tertiary)]">Filter results by specific patient</p>
           </div>
         </div>
         
         <select
           value={filters.patientId || ''}
           onChange={(e) => updateFilter('patientId', e.target.value || undefined)}
-          className="w-full p-4 bg-white/80 border border-emerald-200 rounded-xl focus:border-emerald-300 focus:ring-emerald-200 text-slate-800"
+          className="w-full p-4 bg-[var(--component-card)]/80 border border-emerald-200 rounded-xl focus:border-emerald-300 focus:ring-emerald-200 text-[var(--foreground)]"
         >
           <option value="">All Patients ({patients.length} total)</option>
           {patients.map((patient) => (
@@ -81,16 +81,16 @@ export const PatientSection: React.FC<PatientSectionProps> = ({
         <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200/60">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg">
-              <Hash className="h-5 w-5 text-white" />
+              <Hash className="h-5 w-5 text-[var(--foreground)]" />
             </div>
             <div>
-              <Label className="text-base font-bold text-slate-800">Age Range</Label>
-              <p className="text-xs text-slate-600">Filter by patient age</p>
+              <Label className="text-base font-bold text-[var(--foreground)]">Age Range</Label>
+              <p className="text-xs text-[var(--foreground-tertiary)]">Filter by patient age</p>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-700">Min Age</label>
+              <label className="text-xs font-medium text-[var(--foreground)]">Min Age</label>
               <Input
                 type="number"
                 min="0"
@@ -98,11 +98,11 @@ export const PatientSection: React.FC<PatientSectionProps> = ({
                 placeholder="0"
                 value={filters.ageMin || ''}
                 onChange={(e) => updateFilter('ageMin', e.target.value ? parseInt(e.target.value) : undefined)}
-                className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-700">Max Age</label>
+              <label className="text-xs font-medium text-[var(--foreground)]">Max Age</label>
               <Input
                 type="number"
                 min="0"
@@ -110,7 +110,7 @@ export const PatientSection: React.FC<PatientSectionProps> = ({
                 placeholder="150"
                 value={filters.ageMax || ''}
                 onChange={(e) => updateFilter('ageMax', e.target.value ? parseInt(e.target.value) : undefined)}
-                className="bg-white/80 border-blue-200 focus:border-blue-300 focus:ring-blue-200"
+                className="bg-[var(--component-card)]/80 border-blue-200 focus:border-[var(--cardiology-accent-blue)] focus:ring-blue-200"
               />
             </div>
           </div>
@@ -120,11 +120,11 @@ export const PatientSection: React.FC<PatientSectionProps> = ({
         <Card className="p-6 bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200/60">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-gradient-to-br from-pink-500 to-rose-500 rounded-lg">
-              <Users className="h-5 w-5 text-white" />
+              <Users className="h-5 w-5 text-[var(--foreground)]" />
             </div>
             <div>
-              <Label className="text-base font-bold text-slate-800">Gender</Label>
-              <p className="text-xs text-slate-600">Filter by gender</p>
+              <Label className="text-base font-bold text-[var(--foreground)]">Gender</Label>
+              <p className="text-xs text-[var(--foreground-tertiary)]">Filter by gender</p>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -136,7 +136,7 @@ export const PatientSection: React.FC<PatientSectionProps> = ({
                   "p-4 rounded-xl border transition-all text-center group",
                   filters.gender === gender
                     ? "bg-pink-100 border-pink-300 text-pink-800"
-                    : "bg-white/70 border-pink-200/60 hover:bg-pink-50 hover:border-pink-300"
+                    : "bg-[var(--component-card)]/70 border-pink-200/60 hover:bg-pink-50 hover:border-pink-300"
                 )}
               >
                 <Users className={cn(

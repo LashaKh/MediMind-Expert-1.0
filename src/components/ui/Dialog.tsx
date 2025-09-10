@@ -44,7 +44,7 @@ export const Dialog: React.FC<DialogProps> = ({ open, onOpenChange, children }) 
 
 export const DialogContent: React.FC<DialogContentProps> = ({ children, className = '' }) => {
   return (
-    <div className={`relative bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-4 ${className}`}>
+    <div className={`relative bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-xl p-6 w-full max-w-md mx-4 ${className}`}>
       {children}
     </div>
   );
@@ -60,7 +60,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({ children }) => {
 
 export const DialogTitle: React.FC<DialogTitleProps> = ({ children }) => {
   return (
-    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+    <h2 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">
       {children}
     </h2>
   );
@@ -68,7 +68,7 @@ export const DialogTitle: React.FC<DialogTitleProps> = ({ children }) => {
 
 export const DialogDescription: React.FC<DialogDescriptionProps> = ({ children }) => {
   return (
-    <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+    <p className="text-base text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
       {children}
     </p>
   );
@@ -85,7 +85,7 @@ export const DialogClose: React.FC<DialogCloseProps> = ({ onClose, className = '
     <button
       onClick={onClose}
       className={cn(
-        "absolute top-4 right-4 p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors",
+        "absolute top-4 right-4 p-2 rounded-lg text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] transition-colors",
         "min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center",
         className
       )}
@@ -105,7 +105,7 @@ interface DialogFooterProps {
 export const DialogFooter: React.FC<DialogFooterProps> = ({ children, className = '' }) => {
   return (
     <div className={cn(
-      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 gap-3 sm:gap-0 pt-6 border-t border-gray-200 dark:border-gray-700 mt-6",
+      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 gap-3 sm:gap-0 pt-6 border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)] mt-6",
       className
     )}>
       {children}

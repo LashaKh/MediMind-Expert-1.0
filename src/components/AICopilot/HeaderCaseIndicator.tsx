@@ -65,7 +65,7 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
       case 'high':
         return 'bg-red-400';
       default:
-        return 'bg-gray-400';
+        return 'bg-[var(--muted)]';
     }
   };
 
@@ -78,9 +78,9 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
           flex items-center space-x-2 sm:space-x-3 h-10 sm:h-11 px-4 sm:px-5 rounded-xl
           bg-gradient-to-r from-blue-50/90 to-indigo-50/90 border border-blue-200/60
           shadow-md backdrop-blur-xl
-          hover:shadow-lg hover:border-blue-300/60
+          hover:shadow-lg hover:border-[var(--cardiology-accent-blue)]/60
           transition-all duration-200 ease-out cursor-pointer
-          ${isExpanded ? 'shadow-lg border-blue-300/60' : ''}
+          ${isExpanded ? 'shadow-lg border-[var(--cardiology-accent-blue)]/60' : ''}
           ${className}
         `}
         onClick={() => setIsExpanded(!isExpanded)}
@@ -88,7 +88,7 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
         {/* Case Icon with Status */}
         <div className="relative flex-shrink-0">
           <div className="w-6 h-6 sm:w-7 sm:h-7 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
-            <FileText className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+            <FileText className="w-3 h-3 sm:w-4 sm:h-4 text-[var(--foreground)]" />
           </div>
           {/* Active indicator */}
           <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse border border-white" />
@@ -109,10 +109,10 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
             </span>
             <Activity className="w-3 h-3 text-green-500 animate-pulse flex-shrink-0" />
           </div>
-          <div className="flex items-center space-x-2 text-xs text-blue-600">
+          <div className="flex items-center space-x-2 text-xs text-[var(--cardiology-accent-blue-dark)]">
             <span className="font-medium hidden sm:inline">Active Case</span>
             <span className="font-medium sm:hidden">Active</span>
-            <span className="text-blue-500">•</span>
+            <span className="text-[var(--cardiology-accent-blue)]">•</span>
             <span className="capitalize">{activeCase.specialty}</span>
           </div>
         </div>
@@ -122,7 +122,7 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            className="h-6 w-6 p-0 rounded-lg text-blue-600 hover:text-blue-800 hover:bg-blue-100/50"
+            className="h-6 w-6 p-0 rounded-lg text-[var(--cardiology-accent-blue-dark)] hover:text-blue-800 hover:bg-[var(--cardiology-accent-blue-light)]/50"
             title={isExpanded ? "Collapse" : "Expand case details"}
           >
             {isExpanded ? (
@@ -176,9 +176,9 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
             <div className="p-4 space-y-3 max-w-sm">
               {/* Patient Info */}
               {(activeCase.patientName || activeCase.age || activeCase.gender) && (
-                <div className="flex items-center space-x-2 text-xs bg-blue-50/50 rounded-lg p-2">
+                <div className="flex items-center space-x-2 text-xs bg-[var(--cardiology-accent-blue-light)]/50 rounded-lg p-2">
                   <User className="w-3 h-3 text-blue-400 flex-shrink-0" />
-                  <span className="text-blue-700 font-medium">
+                  <span className="text-[var(--cardiology-accent-blue-dark)] font-medium">
                     {activeCase.patientName && `${activeCase.patientName} • `}
                     {activeCase.age && `${activeCase.age}y • `}
                     {activeCase.gender}
@@ -187,8 +187,8 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
               )}
 
               {/* Case Description */}
-              <div className="text-xs text-gray-700 leading-relaxed bg-gray-50/50 rounded-lg p-2">
-                <div className="font-medium text-gray-800 mb-1">Case Description</div>
+              <div className="text-xs text-[var(--foreground-tertiary)] leading-relaxed bg-[var(--component-surface-primary)]/50 rounded-lg p-2">
+                <div className="font-medium text-[var(--foreground)] mb-1">Case Description</div>
                 {activeCase.description}
               </div>
 
@@ -203,7 +203,7 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
               {/* Tags */}
               {activeCase.metadata?.tags && activeCase.metadata.tags.length > 0 && (
                 <div className="space-y-1">
-                  <div className="flex items-center space-x-1 text-xs text-gray-600">
+                  <div className="flex items-center space-x-1 text-xs text-[var(--foreground-tertiary)]">
                     <Tag className="w-3 h-3" />
                     <span className="font-medium">Tags</span>
                   </div>
@@ -211,13 +211,13 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
                     {activeCase.metadata.tags.slice(0, 4).map((tag, index) => (
                       <span 
                         key={index} 
-                        className="px-2 py-0.5 bg-blue-100/70 text-blue-700 rounded-md text-xs font-medium"
+                        className="px-2 py-0.5 bg-[var(--cardiology-accent-blue-light)]/70 text-[var(--cardiology-accent-blue-dark)] rounded-md text-xs font-medium"
                       >
                         {tag}
                       </span>
                     ))}
                     {activeCase.metadata.tags.length > 4 && (
-                      <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded-md text-xs">
+                      <span className="px-2 py-0.5 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-md text-xs">
                         +{activeCase.metadata.tags.length - 4}
                       </span>
                     )}
@@ -227,7 +227,7 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
 
               {/* Action Buttons */}
               <div className="flex items-center justify-between pt-2 border-t border-blue-100">
-                <div className="flex items-center space-x-2 text-xs text-gray-500">
+                <div className="flex items-center space-x-2 text-xs text-[var(--foreground-secondary)]">
                   <Calendar className="w-3 h-3" />
                   <span>Created {activeCase.createdAt.toLocaleDateString()}</span>
                 </div>
@@ -241,7 +241,7 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
                       onViewCase();
                       setIsExpanded(false);
                     }}
-                    className="h-7 px-3 text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg"
+                    className="h-7 px-3 text-xs text-[var(--cardiology-accent-blue-dark)] hover:text-blue-800 hover:bg-[var(--cardiology-accent-blue-light)] rounded-lg"
                   >
                     <Eye className="w-3 h-3 mr-1" />
                     View Details

@@ -135,7 +135,7 @@ export const SignUp: React.FC = () => {
           </div>
 
           {/* Terms and Privacy Notice */}
-          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-3 sm:p-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+          <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--background)]/50 rounded-xl p-3 sm:p-4 text-xs sm:text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <p className="leading-relaxed">
               {t('auth.termsNotice')}
             </p>

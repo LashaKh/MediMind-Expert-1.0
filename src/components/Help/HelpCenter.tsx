@@ -2648,42 +2648,42 @@ If issues persist:
   const renderContent = (content: string) => {
     return content.split('\n').map((line, index) => {
       if (line.startsWith('# ')) {
-        return <h1 key={index} className="text-2xl font-bold text-gray-900 mb-4 mt-6">{line.substring(2)}</h1>;
+        return <h1 key={index} className="text-2xl font-bold text-[var(--foreground)] mb-4 mt-6">{line.substring(2)}</h1>;
       }
       if (line.startsWith('## ')) {
-        return <h2 key={index} className="text-xl font-semibold text-gray-800 mb-3 mt-5">{line.substring(3)}</h2>;
+        return <h2 key={index} className="text-xl font-semibold text-[var(--foreground)] mb-3 mt-5">{line.substring(3)}</h2>;
       }
       if (line.startsWith('### ')) {
-        return <h3 key={index} className="text-lg font-medium text-gray-700 mb-2 mt-4">{line.substring(4)}</h3>;
+        return <h3 key={index} className="text-lg font-medium text-[var(--foreground-tertiary)] mb-2 mt-4">{line.substring(4)}</h3>;
       }
       if (line.startsWith('**') && line.endsWith('**')) {
-        return <p key={index} className="font-semibold text-gray-800 mb-2">{line.substring(2, line.length - 2)}</p>;
+        return <p key={index} className="font-semibold text-[var(--foreground)] mb-2">{line.substring(2, line.length - 2)}</p>;
       }
       if (line.startsWith('- ')) {
-        return <li key={index} className="text-gray-600 mb-1 ml-4">{line.substring(2)}</li>;
+        return <li key={index} className="text-[var(--foreground-tertiary)] mb-1 ml-4">{line.substring(2)}</li>;
       }
       if (line.startsWith('❌ ') || line.startsWith('✅ ')) {
-        return <p key={index} className="text-gray-600 mb-2 font-mono text-sm bg-gray-50 p-2 rounded">{line}</p>;
+        return <p key={index} className="text-[var(--foreground-tertiary)] mb-2 font-mono text-sm bg-[var(--component-surface-primary)] p-2 rounded">{line}</p>;
       }
       if (line.trim() === '') {
         return <br key={index} />;
       }
-      return <p key={index} className="text-gray-600 mb-3 leading-relaxed">{line}</p>;
+      return <p key={index} className="text-[var(--foreground-tertiary)] mb-3 leading-relaxed">{line}</p>;
     });
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[var(--component-surface-primary)]">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-[var(--component-card)] shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center">
                 <BookOpen className="w-8 h-8 text-primary mr-3" />
                 Help Center
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-[var(--foreground-tertiary)] mt-1">
                 Learn how to make the most of MediMind Expert
               </p>
             </div>
@@ -2698,13 +2698,13 @@ If issues persist:
             {/* Search */}
             <div className="mb-6">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--foreground-secondary)] w-5 h-5" />
                 <input
                   type="text"
                   placeholder="Search help articles..."
                   value={searchTerm}
                   onChange={(E) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-[var(--glass-border-medium)] rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
             </div>
@@ -2718,8 +2718,8 @@ If issues persist:
                 }}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   !selectedSection 
-                    ? 'bg-primary text-white' 
-                    : 'hover:bg-gray-100 text-gray-700'
+                    ? 'bg-primary text-[var(--foreground)]' 
+                    : 'hover:bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)]'
                 }`}
               >
                 <div className="flex items-center">
@@ -2737,8 +2737,8 @@ If issues persist:
                     }}
                     className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                       selectedSection === section.id 
-                        ? 'bg-primary text-white' 
-                        : 'hover:bg-gray-100 text-gray-700'
+                        ? 'bg-primary text-[var(--foreground)]' 
+                        : 'hover:bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -2762,7 +2762,7 @@ If issues persist:
                           className={`w-full text-left px-3 py-2 text-sm rounded transition-colors ${
                             selectedArticle?.id === article.id
                               ? 'bg-primary/10 text-primary font-medium'
-                              : 'text-gray-600 hover:bg-gray-50'
+                              : 'text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-primary)]'
                           }`}
                         >
                           {article.title}
@@ -2779,10 +2779,10 @@ If issues persist:
           <div className="flex-1">
             {selectedArticle ? (
               /* Article View */
-              <div className="bg-white rounded-lg shadow-sm border p-8">
+              <div className="bg-[var(--component-card)] rounded-lg shadow-sm border p-8">
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h1 className="text-3xl font-bold text-gray-900">
+                    <h1 className="text-3xl font-bold text-[var(--foreground)]">
                       {selectedArticle.title}
                     </h1>
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -2799,7 +2799,7 @@ If issues persist:
                     {selectedArticle.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                        className="px-2 py-1 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] text-xs rounded"
                       >
                         {tag}
                       </span>
@@ -2814,14 +2814,14 @@ If issues persist:
             ) : selectedSection ? (
               /* Section View */
               <div>
-                <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+                <div className="bg-[var(--component-card)] rounded-lg shadow-sm border p-6 mb-6">
                   <div className="flex items-center mb-4">
                     {helpSections.find(s => s.id === selectedSection)?.icon}
-                    <h1 className="text-2xl font-bold text-gray-900 ml-3">
+                    <h1 className="text-2xl font-bold text-[var(--foreground)] ml-3">
                       {helpSections.find(s => s.id === selectedSection)?.title}
                     </h1>
                   </div>
-                  <p className="text-gray-600">
+                  <p className="text-[var(--foreground-tertiary)]">
                     {helpSections.find(s => s.id === selectedSection)?.description}
                   </p>
                 </div>
@@ -2830,12 +2830,12 @@ If issues persist:
                   {filteredArticles.map((article) => (
                     <div
                       key={article.id}
-                      className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow cursor-pointer"
+                      className="bg-[var(--component-card)] rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow cursor-pointer"
                       onClick={() => setSelectedArticle(article)}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
                             {article.title}
                           </h3>
                           <div className="flex items-center gap-4 mb-3">
@@ -2852,7 +2852,7 @@ If issues persist:
                               {article.tags.slice(0, 3).map((tag) => (
                                 <span
                                   key={tag}
-                                  className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                                  className="px-2 py-1 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] text-xs rounded"
                                 >
                                   {tag}
                                 </span>
@@ -2860,7 +2860,7 @@ If issues persist:
                             </div>
                           </div>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-gray-400 mt-1" />
+                        <ChevronRight className="w-5 h-5 text-[var(--foreground-secondary)] mt-1" />
                       </div>
                     </div>
                   ))}
@@ -2869,19 +2869,19 @@ If issues persist:
             ) : (
               /* Overview */
               <div>
-                <div className="bg-white rounded-lg shadow-sm border p-8 mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                <div className="bg-[var(--component-card)] rounded-lg shadow-sm border p-8 mb-8">
+                  <h2 className="text-2xl font-bold text-[var(--foreground)] mb-4">
                     Welcome to MediMind Expert Help Center
                   </h2>
-                  <p className="text-gray-600 text-lg mb-6">
+                  <p className="text-[var(--foreground-tertiary)] text-lg mb-6">
                     Find comprehensive guides, tutorials, and answers to help you make the most of your medical AI co-pilot.
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center p-4 bg-blue-50 rounded-lg">
-                      <MessageCircle className="w-8 h-8 text-blue-600 mr-3" />
+                    <div className="flex items-center p-4 bg-[var(--cardiology-accent-blue-light)] rounded-lg">
+                      <MessageCircle className="w-8 h-8 text-[var(--cardiology-accent-blue-dark)] mr-3" />
                       <div>
                         <h3 className="font-semibold text-blue-900">Need Quick Help?</h3>
-                        <p className="text-blue-700 text-sm">Search above or browse topics on the left</p>
+                        <p className="text-[var(--cardiology-accent-blue-dark)] text-sm">Search above or browse topics on the left</p>
                       </div>
                     </div>
                     <div className="flex items-center p-4 bg-green-50 rounded-lg">
@@ -2898,7 +2898,7 @@ If issues persist:
                   {filteredSections.map((section) => (
                     <div
                       key={section.id}
-                      className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow cursor-pointer"
+                      className="bg-[var(--component-card)] rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow cursor-pointer"
                       onClick={() => setSelectedSection(section.id)}
                     >
                       <div className="flex items-center justify-between mb-4">
@@ -2906,16 +2906,16 @@ If issues persist:
                           <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                             {section.icon}
                           </div>
-                          <h3 className="text-lg font-semibold text-gray-900 ml-3">
+                          <h3 className="text-lg font-semibold text-[var(--foreground)] ml-3">
                             {section.title}
                           </h3>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-gray-400" />
+                        <ChevronRight className="w-5 h-5 text-[var(--foreground-secondary)]" />
                       </div>
-                      <p className="text-gray-600 mb-4">
+                      <p className="text-[var(--foreground-tertiary)] mb-4">
                         {section.description}
                       </p>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-[var(--foreground-secondary)]">
                         {section.articles.length} article{section.articles.length !== 1 ? 's' : ''}
                       </div>
                     </div>

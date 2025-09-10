@@ -94,11 +94,11 @@ export const UploadStep: React.FC<UploadStepProps> = ({
       <div className="abg-card abg-glass p-6" data-tour="abg-type-selection">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
-            <Settings className="h-5 w-5 text-white" />
+            <Settings className="h-5 w-5 text-[var(--foreground)]" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-800">{t('abg.upload.type.title', 'Blood Gas Type')}</h3>
-            <p className="text-slate-600 text-sm">{t('abg.upload.type.subtitle', 'Select the type of analysis')}</p>
+            <h3 className="text-lg font-bold text-[var(--foreground)]">{t('abg.upload.type.title', 'Blood Gas Type')}</h3>
+            <p className="text-[var(--foreground-tertiary)] text-sm">{t('abg.upload.type.subtitle', 'Select the type of analysis')}</p>
           </div>
         </div>
         
@@ -113,9 +113,9 @@ export const UploadStep: React.FC<UploadStepProps> = ({
                 type.color === 'blue' ? "hover:border-blue-400" : "hover:border-purple-400",
                 abgType === type.value 
                   ? type.color === 'blue' 
-                    ? "border-blue-500 bg-blue-50 shadow-md" 
+                    ? "border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)] shadow-md" 
                     : "border-purple-500 bg-purple-50 shadow-md"
-                  : "border-slate-200 bg-white"
+                  : "border-[var(--glass-border-light)] bg-[var(--component-card)]"
               )}
             >
               <input
@@ -131,17 +131,17 @@ export const UploadStep: React.FC<UploadStepProps> = ({
                   "w-3.5 h-3.5 rounded-full border-2 transition-colors",
                   abgType === type.value 
                     ? type.color === 'blue' 
-                      ? "border-blue-500 bg-blue-500" 
+                      ? "border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue)]" 
                       : "border-purple-500 bg-purple-500"
-                    : "border-slate-300"
+                    : "border-[var(--glass-border-medium)]"
                 )}>
                   {abgType === type.value && (
-                    <div className="w-1.5 h-1.5 bg-white rounded-full mx-auto mt-0.5" />
+                    <div className="w-1.5 h-1.5 bg-[var(--component-card)] rounded-full mx-auto mt-0.5" />
                   )}
                 </div>
-                <span className="font-medium text-slate-800 text-sm sm:text-base">{t(type.labelKey)}</span>
+                <span className="font-medium text-[var(--foreground)] text-sm sm:text-base">{t(type.labelKey)}</span>
               </div>
-              <p className="text-xs text-slate-600 mt-2 ml-7">{t(type.descriptionKey)}</p>
+              <p className="text-xs text-[var(--foreground-tertiary)] mt-2 ml-7">{t(type.descriptionKey)}</p>
             </label>
           ))}
         </div>
@@ -151,11 +151,11 @@ export const UploadStep: React.FC<UploadStepProps> = ({
       <div className="abg-card abg-glass p-6">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-            <FileText className="h-5 w-5 text-white" />
+            <FileText className="h-5 w-5 text-[var(--foreground)]" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-800">{t('abg.upload.caseContext.title', 'Case Context (Optional)')}</h3>
-            <p className="text-slate-600 text-sm">{t('abg.upload.caseContext.subtitle', 'Link BG analysis to a patient case')}</p>
+            <h3 className="text-lg font-bold text-[var(--foreground)]">{t('abg.upload.caseContext.title', 'Case Context (Optional)')}</h3>
+            <p className="text-[var(--foreground-tertiary)] text-sm">{t('abg.upload.caseContext.subtitle', 'Link BG analysis to a patient case')}</p>
           </div>
         </div>
 
@@ -165,7 +165,7 @@ export const UploadStep: React.FC<UploadStepProps> = ({
             {t('case.selectExistingCase', 'Select Existing Case')}
           </Button>
           {activeCase && (
-            <div className="text-sm text-slate-600 self-center">
+            <div className="text-sm text-[var(--foreground-tertiary)] self-center">
               {t('case.activeCase', 'Active Case')}: <span className="font-medium">{activeCase.title}</span>
             </div>
           )}
@@ -188,9 +188,9 @@ export const UploadStep: React.FC<UploadStepProps> = ({
             
             <div className="flex items-center justify-center">
               <div className="flex items-center gap-3">
-                <div className="h-px bg-slate-300 flex-1 w-16" />
-                <span className="text-sm text-slate-500 font-medium">{t('common.or', 'or')}</span>
-                <div className="h-px bg-slate-300 flex-1 w-16" />
+                <div className="h-px bg-[var(--component-panel)] flex-1 w-16" />
+                <span className="text-sm text-[var(--foreground-secondary)] font-medium">{t('common.or', 'or')}</span>
+                <div className="h-px bg-[var(--component-panel)] flex-1 w-16" />
               </div>
             </div>
             
@@ -198,7 +198,7 @@ export const UploadStep: React.FC<UploadStepProps> = ({
               <Button
                 variant="outline"
                 onClick={() => onShowCamera(true)}
-                className="bg-white border-slate-300 hover:border-blue-400 hover:bg-blue-50"
+                className="bg-[var(--component-card)] border-[var(--glass-border-medium)] hover:border-blue-400 hover:bg-[var(--cardiology-accent-blue-light)]"
                 size="md"
               >
                 <Camera className="h-5 w-5 mr-2" />
@@ -221,7 +221,7 @@ export const UploadStep: React.FC<UploadStepProps> = ({
         <Button
           variant="outline"
           onClick={() => navigate(-1)}
-          className="border-slate-300 hover:border-slate-400"
+          className="border-[var(--glass-border-medium)] hover:border-slate-400"
         >
           <ChevronLeft className="h-4 w-4 mr-2" />
           {t('common.cancel', 'Cancel')}
@@ -255,15 +255,15 @@ export const UploadStep: React.FC<UploadStepProps> = ({
       {isProcessing && unifiedProgress && (
         <div className="abg-card abg-glass p-5 mt-6">
           <div className="flex items-center gap-4 mb-4">
-            <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+            <Loader2 className="h-6 w-6 animate-spin text-[var(--cardiology-accent-blue-dark)]" />
             <div className="flex-1">
-              <div className="text-base font-semibold text-slate-800">{unifiedProgress.currentTask}</div>
-              <div className="text-xs text-slate-600">{unifiedProgress.stageDescription}</div>
+              <div className="text-base font-semibold text-[var(--foreground)]">{unifiedProgress.currentTask}</div>
+              <div className="text-xs text-[var(--foreground-tertiary)]">{unifiedProgress.stageDescription}</div>
             </div>
-            <div className="text-base font-mono font-bold text-blue-600">{unifiedProgress.overallProgress}%</div>
+            <div className="text-base font-mono font-bold text-[var(--cardiology-accent-blue-dark)]">{unifiedProgress.overallProgress}%</div>
           </div>
           
-          <div className="w-full bg-slate-200 rounded-full h-2.5 mb-3">
+          <div className="w-full bg-[var(--component-surface-tertiary)] rounded-full h-2.5 mb-3">
             <div 
               className="bg-gradient-to-r from-blue-500 to-blue-600 h-2.5 rounded-full transition-all duration-500" 
               style={{ width: `${unifiedProgress.overallProgress}%` }}
@@ -273,14 +273,14 @@ export const UploadStep: React.FC<UploadStepProps> = ({
           <div className="flex gap-4 justify-center">
             <div className={cn(
               "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all",
-              unifiedProgress.phase === 'extraction' ? "bg-blue-100 text-blue-800 shadow-md" : "bg-slate-100 text-slate-600"
+              unifiedProgress.phase === 'extraction' ? "bg-[var(--cardiology-accent-blue-light)] text-blue-800 shadow-md" : "bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)]"
             )}>
               <FileText className="h-4 w-4" />
               Text Extraction
             </div>
             <div className={cn(
               "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all",
-              unifiedProgress.phase === 'interpretation' ? "bg-green-100 text-green-800 shadow-md" : "bg-slate-100 text-slate-600"
+              unifiedProgress.phase === 'interpretation' ? "bg-green-100 text-green-800 shadow-md" : "bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)]"
             )}>
               <Brain className="h-4 w-4" />
               Clinical Analysis

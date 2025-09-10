@@ -108,8 +108,8 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
       description: t('filters.categories.contentFormatDesc', 'Filter by content type, file format, and document structure'),
       icon: DocumentTextIcon,
       iconActive: DocumentTextSolid,
-      color: 'text-blue-600',
-      badgeColor: 'bg-blue-100 text-blue-700'
+      color: 'text-[var(--cardiology-accent-blue-dark)]',
+      badgeColor: 'bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)]'
     },
     {
       id: 'authority-quality',
@@ -154,8 +154,8 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
       description: t('filters.categories.advancedOptionsDesc', 'Clinical trials, research parameters, and specialized filters'),
       icon: CogIcon,
       iconActive: CogIcon,
-      color: 'text-gray-600',
-      badgeColor: 'bg-gray-100 text-gray-700'
+      color: 'text-[var(--foreground-tertiary)]',
+      badgeColor: 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)]'
     }
   ];
 
@@ -177,10 +177,10 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
           layout === 'vertical' ? 'w-full justify-start' : 'flex-1 justify-center'
         } ${
           isActive
-            ? `bg-white shadow-lg border-2 border-current ${category.color} transform scale-105`
+            ? `bg-[var(--component-card)] shadow-lg border-2 border-current ${category.color} transform scale-105`
             : hasActiveFilters
-            ? 'bg-white/80 hover:bg-white shadow-md border border-gray-200 hover:border-current hover:shadow-lg text-gray-700 hover:text-current'
-            : 'bg-transparent hover:bg-white/60 text-gray-500 hover:text-gray-700 border border-transparent hover:border-gray-200'
+            ? 'bg-[var(--component-card)]/80 hover:bg-[var(--component-card)] shadow-md border border-[var(--glass-border-light)] hover:border-current hover:shadow-lg text-[var(--foreground-tertiary)] hover:text-current'
+            : 'bg-transparent hover:bg-[var(--component-card)]/60 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] border border-transparent hover:border-[var(--glass-border-light)]'
         }`}
         title={category.description}
         style={{
@@ -223,7 +223,7 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
             {category.label}
           </div>
           {layout === 'vertical' && (
-            <div className="text-xs text-gray-500 mt-1 line-clamp-2">
+            <div className="text-xs text-[var(--foreground-secondary)] mt-1 line-clamp-2">
               {category.description}
             </div>
           )}
@@ -233,7 +233,7 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
         {hasActiveFilters && (
           <div className={`flex-shrink-0 px-2.5 py-1 rounded-full text-xs font-bold transition-all duration-300 ${
             isActive 
-              ? 'bg-current text-white' 
+              ? 'bg-current text-[var(--foreground)]' 
               : category.badgeColor
           } ${count > 9 ? 'animate-pulse' : ''}`}>
             {count > 99 ? '99+' : count}
@@ -269,13 +269,13 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
   }
 
   return (
-    <div className={`bg-gray-50/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 ${className}`}>
+    <div className={`bg-[var(--component-surface-primary)]/80 backdrop-blur-sm rounded-2xl p-2 border border-[var(--glass-border-light)]/50 ${className}`}>
       {/* Mobile dropdown for small screens */}
       <div className="block lg:hidden">
         <select
           value={activeCategory}
           onChange={(e) => onCategoryChange(e.target.value as FilterCategoryId)}
-          className="w-full p-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          className="w-full p-3 bg-[var(--component-card)] border border-[var(--glass-border-light)] rounded-xl text-sm font-medium text-[var(--foreground-tertiary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
         >
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
@@ -292,13 +292,13 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
       </div>
 
       {/* Quick stats */}
-      <div className="hidden lg:flex items-center justify-center gap-6 mt-4 pt-4 border-t border-gray-200/50 text-xs text-gray-500">
+      <div className="hidden lg:flex items-center justify-center gap-6 mt-4 pt-4 border-t border-[var(--glass-border-light)]/50 text-xs text-[var(--foreground-secondary)]">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
           <span>{t('filters.summary.activeFilters', 'Active filters')}: {Object.values(categoryCounts).reduce((sum, count) => sum + count, 0)}</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+          <div className="w-2 h-2 bg-[var(--cardiology-accent-blue)] rounded-full"></div>
           <span>{t('filters.summary.categories', 'Categories')}: {Object.keys(categoryCounts).filter(key => categoryCounts[key as FilterCategoryId] > 0).length}</span>
         </div>
       </div>

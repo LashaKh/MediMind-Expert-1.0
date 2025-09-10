@@ -64,9 +64,9 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                 style={{ minWidth: 'var(--medical-mobile-touch-md)', minHeight: 'var(--medical-mobile-touch-md)' }}
               >
                 <div className="flex flex-col items-center justify-center">
-                  <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400 mb-0.5" />
+                  <FileText className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mb-0.5" />
                   {sessionsCount > 0 && (
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 leading-none">
+                    <span className="text-xs font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 leading-none">
                       {sessionsCount > 99 ? '99+' : sessionsCount}
                     </span>
                   )}
@@ -84,11 +84,11 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                 aria-label="Navigate to home"
               >
                 <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 transcription-primary-gradient rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 active:scale-95">
-                  <FileText className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
+                  <FileText className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-[var(--foreground)]" />
                 </div>
                 {/* Subtle glow animation when active */}
                 {authStatus.isAuthenticated && (
-                  <div className="absolute inset-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-blue-400/20 rounded-xl sm:rounded-2xl animate-pulse" />
+                  <div className="absolute inset-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-[var(--cardiology-accent-blue)]/20 rounded-xl sm:rounded-2xl animate-pulse" />
                 )}
               </div>
               
@@ -96,7 +96,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
               <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1">
                 <div className="flex items-center space-x-2 sm:space-x-3">
                   <h1 
-                    className="text-lg sm:text-xl lg:text-3xl font-bold text-white tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity duration-200"
+                    className="text-lg sm:text-xl lg:text-3xl font-bold text-[var(--foreground)] tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity duration-200"
                     onClick={() => navigate('/')}
                     role="button"
                     aria-label="Navigate to home"
@@ -104,7 +104,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                     MediScribe
                   </h1>
                 </div>
-                <p className="text-xs sm:text-sm text-white/80 font-medium tracking-wide truncate">
+                <p className="text-xs sm:text-sm text-[var(--foreground)]/80 font-medium tracking-wide truncate">
                   AI Medical Transcription
                 </p>
               </div>
@@ -144,7 +144,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
               {/* Mobile Status Icon - Only show on mobile */}
               <div className="sm:hidden">
                 {processing ? (
-                  <Zap className="w-3 h-3 text-blue-600 dark:text-blue-400 animate-pulse" />
+                  <Zap className="w-3 h-3 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 animate-pulse" />
                 ) : (
                   <Activity className={`w-3 h-3 ${
                     authStatus.isAuthenticated 

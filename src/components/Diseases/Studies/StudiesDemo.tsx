@@ -39,20 +39,20 @@ This is some clinical findings content...
 `;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div className="min-h-screen bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)] py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-3xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
             Studies Renderer Demo
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+          <p className="text-lg text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             This demo shows how the StudiesRenderer component identifies and displays 
             research studies from disease markdown content.
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
             Rendered Studies Section
           </h2>
           
@@ -62,11 +62,11 @@ This is some clinical findings content...
           />
         </div>
 
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="mt-8 bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
             Features Demonstrated
           </h2>
-          <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+          <ul className="space-y-2 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <li className="flex items-start">
               <span className="text-green-500 mr-2">•</span>
               <span>Automatic parsing of study entries with year, title, and description</span>

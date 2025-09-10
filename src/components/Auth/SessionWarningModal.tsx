@@ -65,7 +65,7 @@ export const SessionWarningModal: React.FC<SessionWarningModalProps> = ({
             </span>
           </div>
           
-          <p className="text-sm text-gray-600 dark:text-gray-400 text-center px-2">
+          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-center px-2">
             Would you like to extend your session?
           </p>
         </div>

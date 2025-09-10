@@ -196,7 +196,7 @@ const NewsListComponent: React.FC<NewsListProps> = ({
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-            <h2 className="text-2xl font-bold text-gray-900">{t('news.loading', 'Loading medical news...')}</h2>
+            <h2 className="text-2xl font-bold text-[var(--foreground)]">{t('news.loading', 'Loading medical news...')}</h2>
           </div>
           
           <div className="flex items-center gap-2">
@@ -224,13 +224,13 @@ const NewsListComponent: React.FC<NewsListProps> = ({
         {/* Loading skeleton */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="bg-white rounded-xl border border-gray-200 p-6 animate-pulse">
-              <div className="h-4 bg-gray-200 rounded mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded mb-4"></div>
-              <div className="h-3 bg-gray-200 rounded mb-6"></div>
+            <div key={index} className="bg-[var(--component-card)] rounded-xl border border-[var(--glass-border-light)] p-6 animate-pulse">
+              <div className="h-4 bg-[var(--component-surface-tertiary)] rounded mb-4"></div>
+              <div className="h-4 bg-[var(--component-surface-tertiary)] rounded mb-4"></div>
+              <div className="h-3 bg-[var(--component-surface-tertiary)] rounded mb-6"></div>
               <div className="flex justify-between items-center">
-                <div className="h-3 bg-gray-200 rounded w-24"></div>
-                <div className="h-8 bg-gray-200 rounded w-16"></div>
+                <div className="h-3 bg-[var(--component-surface-tertiary)] rounded w-24"></div>
+                <div className="h-8 bg-[var(--component-surface-tertiary)] rounded w-16"></div>
               </div>
             </div>
           ))}
@@ -268,19 +268,19 @@ const NewsListComponent: React.FC<NewsListProps> = ({
   if (!isLoading && articles.length === 0) {
     return (
       <div className={cn("text-center py-12", className)}>
-        <SparklesIcon className="w-16 h-16 text-gray-300 mx-auto mb-6" />
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">
+        <SparklesIcon className="w-16 h-16 text-[var(--foreground-secondary)] mx-auto mb-6" />
+        <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">
           {t('news.empty.title', 'No Medical News Found')}
         </h3>
-        <p className="text-gray-600 mb-8 max-w-md mx-auto">
+        <p className="text-[var(--foreground-tertiary)] mb-8 max-w-md mx-auto">
           {t('news.empty.description', 'No news articles match your current filters. Try adjusting your search criteria or check back later for new content.')}
         </p>
         
-        <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-gray-200/50 max-w-md mx-auto">
-          <h4 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-[var(--component-card)]/90 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-[var(--glass-border-light)]/50 max-w-md mx-auto">
+          <h4 className="text-lg font-semibold text-[var(--foreground)] mb-4">
             {t('news.empty.suggestions.title', 'Search Tips')}
           </h4>
-          <div className="space-y-2 text-left text-sm text-gray-600">
+          <div className="space-y-2 text-left text-sm text-[var(--foreground-tertiary)]">
             <p>• Try different medical specialties</p>
             <p>• Adjust date range filters</p>
             <p>• Remove category restrictions</p>
@@ -296,7 +296,7 @@ const NewsListComponent: React.FC<NewsListProps> = ({
       {/* Header with view controls */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-[var(--foreground)]">
             {t('news.title', 'Medical News')}
           </h2>
           
@@ -307,7 +307,7 @@ const NewsListComponent: React.FC<NewsListProps> = ({
           )}
           
           {isLoading && (
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-[var(--foreground-tertiary)]">
               <div className="w-4 h-4 border border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
               <span>{t('news.updating', 'Updating...')}</span>
             </div>
@@ -385,7 +385,7 @@ const NewsListComponent: React.FC<NewsListProps> = ({
           {loadingMore ? (
             <div className="flex items-center justify-center gap-3">
               <div className="w-6 h-6 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-              <span className="text-gray-600">
+              <span className="text-[var(--foreground-tertiary)]">
                 {t('news.loadingMore', 'Loading more articles...')}
               </span>
             </div>
@@ -405,11 +405,11 @@ const NewsListComponent: React.FC<NewsListProps> = ({
 
       {/* End of results message */}
       {!hasMore && articles.length > 0 && (
-        <div className="text-center py-8 border-t border-gray-200">
-          <div className="text-gray-500 text-sm">
+        <div className="text-center py-8 border-t border-[var(--glass-border-light)]">
+          <div className="text-[var(--foreground-secondary)] text-sm">
             {t('news.endOfResults', 'You\'ve reached the end of the news feed')}
           </div>
-          <div className="text-xs text-gray-400 mt-1">
+          <div className="text-xs text-[var(--foreground-secondary)] mt-1">
             {totalCount} {totalCount === 1 ? t('news.article', 'article') : t('news.articles', 'articles')} {t('news.total', 'total')}
           </div>
         </div>

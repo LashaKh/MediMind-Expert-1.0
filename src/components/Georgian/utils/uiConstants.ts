@@ -76,8 +76,8 @@ export const STATUS_COLORS = {
     border: 'border-amber-200'
   },
   info: {
-    bg: 'bg-blue-500',
-    text: 'text-blue-700',
+    bg: 'bg-[var(--cardiology-accent-blue)]',
+    text: 'text-[var(--cardiology-accent-blue-dark)]',
     border: 'border-blue-200'
   },
   processing: {

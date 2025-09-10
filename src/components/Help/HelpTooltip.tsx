@@ -74,7 +74,7 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 rounded-full"
+        className="text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 rounded-full"
         aria-label="Help"
       >
         <HelpCircle className={iconSizeClasses[size]} />
@@ -86,12 +86,12 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({
           onMouseEnter={() => trigger === 'hover' && setIsVisible(true)}
           onMouseLeave={() => trigger === 'hover' && setIsVisible(false)}
         >
-          <div className="bg-gray-900 text-white rounded-lg shadow-lg p-3 relative">
+          <div className="bg-[var(--background-dark)] text-[var(--foreground)] rounded-lg shadow-lg p-3 relative">
             {/* Close button for click trigger */}
             {trigger === 'click' && (
               <button
                 onClick={handleClose}
-                className="absolute top-1 right-1 text-gray-300 hover:text-white"
+                className="absolute top-1 right-1 text-[var(--foreground-secondary)] hover:text-[var(--foreground)]"
                 aria-label="Close help"
               >
                 <X className="w-3 h-3" />
@@ -106,7 +106,7 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({
             )}
 
             {/* Content */}
-            <div className="text-gray-100 leading-relaxed">
+            <div className="text-[var(--foreground)] leading-relaxed">
               {content}
             </div>
 

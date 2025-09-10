@@ -56,9 +56,9 @@ export const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
       return (
         <div className={`
           ${isFullscreen ? 'h-full overflow-auto' : 'max-h-[500px] overflow-y-auto'}
-          p-4 bg-gray-50 rounded-lg
+          p-4 bg-[var(--component-surface-primary)] rounded-lg
         `}>
-          <pre className="whitespace-pre-wrap text-sm text-gray-700 font-mono">
+          <pre className="whitespace-pre-wrap text-sm text-[var(--foreground-tertiary)] font-mono">
             {attachment.extractedText}
           </pre>
         </div>
@@ -67,10 +67,10 @@ export const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
 
     // Default preview
     return (
-      <div className="flex flex-col items-center justify-center p-12 bg-gray-50 rounded-lg">
+      <div className="flex flex-col items-center justify-center p-12 bg-[var(--component-surface-primary)] rounded-lg">
         {getFileIcon()}
-        <p className="mt-4 text-sm text-gray-600">Preview not available</p>
-        <p className="text-xs text-gray-500 mt-1">{attachment.type}</p>
+        <p className="mt-4 text-sm text-[var(--foreground-tertiary)]">Preview not available</p>
+        <p className="text-xs text-[var(--foreground-secondary)] mt-1">{attachment.type}</p>
       </div>
     );
   };
@@ -87,17 +87,17 @@ export const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-lg shadow-lg ${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
+    <div className={`bg-[var(--component-card)] rounded-lg shadow-lg ${className} ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center space-x-3 flex-1 min-w-0">
           {getFileIcon()}
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium text-gray-900 truncate">
+            <h3 className="text-sm font-medium text-[var(--foreground)] truncate">
               {attachment.name}
             </h3>
             {attachment.category && (
-              <p className="text-xs text-gray-500">{attachment.category}</p>
+              <p className="text-xs text-[var(--foreground-secondary)]">{attachment.category}</p>
             )}
           </div>
         </div>

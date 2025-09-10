@@ -720,7 +720,7 @@ export const GeorgianSTTApp: React.FC = () => {
             <div className="flex flex-col space-y-3">
               <button
                 onClick={() => handleCreateSession()}
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+                className="w-full bg-[var(--cardiology-accent-blue)] hover:bg-[var(--cardiology-accent-blue)]/90 text-[var(--foreground)] py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
               >
                 <Plus className="w-4 h-4" />
                 <span>New Session</span>
@@ -731,7 +731,7 @@ export const GeorgianSTTApp: React.FC = () => {
                 placeholder="Search sessions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-[var(--input-focus-ring)] focus:border-transparent"
               />
             </div>
             
@@ -739,19 +739,19 @@ export const GeorgianSTTApp: React.FC = () => {
             <div className="space-y-3 overflow-y-auto" style={{ maxHeight: '50vh' }}>
               {sessionLoading ? (
                 <div className="flex items-center justify-center py-8">
-                  <div className="text-blue-500">Loading sessions...</div>
+                  <div className="text-[var(--cardiology-accent-blue)]">Loading sessions...</div>
                 </div>
               ) : filteredSessions.length === 0 ? (
-                <div className="bg-white p-6 rounded-lg border text-center">
+                <div className="bg-[var(--component-card)] p-6 rounded-lg border text-center">
                   <div className="flex flex-col items-center space-y-4">
-                    <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center">
-                      <Stethoscope className="w-8 h-8 text-blue-600" />
+                    <div className="w-16 h-16 bg-[var(--badge-info)] rounded-xl flex items-center justify-center">
+                      <Stethoscope className="w-8 h-8 text-[var(--cardiology-accent-blue)]" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
                         No History Yet
                       </h3>
-                      <p className="text-sm text-gray-600 mb-4 max-w-sm">
+                      <p className="text-sm text-[var(--foreground-tertiary)] mb-4 max-w-sm">
                         Create your first medical transcription session to begin capturing patient consultations.
                       </p>
                       <button
@@ -759,7 +759,7 @@ export const GeorgianSTTApp: React.FC = () => {
                           handleCreateSession();
                           closeMobileDrawer();
                         }}
-                        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium flex items-center space-x-2"
+                        className="bg-[var(--cardiology-accent-blue)] hover:bg-[var(--cardiology-accent-blue)]/90 text-[var(--foreground)] py-2 px-4 rounded-lg font-medium flex items-center space-x-2"
                       >
                         <Plus className="w-4 h-4" />
                         <span>Create First Session</span>
@@ -775,10 +775,10 @@ export const GeorgianSTTApp: React.FC = () => {
                   return (
                     <div
                       key={session.id}
-                      className={`bg-white border-2 rounded-lg p-4 cursor-pointer transition-all duration-200 ${
+                      className={`bg-[var(--component-card)] border-2 rounded-lg p-4 cursor-pointer transition-all duration-200 ${
                         isActive
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-blue-300'
+                          ? 'border-[var(--cardiology-accent-blue)] bg-[var(--badge-info)]'
+                          : 'border-input hover:border-[var(--cardiology-accent-blue)]'
                       }`}
                       onClick={() => handleMobileSessionSelect(session.id)}
                     >
@@ -786,21 +786,21 @@ export const GeorgianSTTApp: React.FC = () => {
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
                           <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
                             isActive 
-                              ? 'bg-blue-600 text-white' 
-                              : 'bg-gray-200 text-gray-500'
+                              ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]'
+                              : 'bg-[var(--muted)] text-[var(--muted-foreground)]'
                           }`}>
                             <FileText className="w-5 h-5" />
                           </div>
                           
                           <div className="flex-1 min-w-0">
                             <h3 className={`text-base font-semibold truncate mb-1 ${
-                              isActive ? 'text-blue-900' : 'text-gray-900'
+                              isActive ? 'text-blue-900' : 'text-[var(--foreground)]'
                             }`}>
                               {session.title}
                             </h3>
                             
                             <div className="flex items-center space-x-3 text-sm">
-                              <span className={isActive ? 'text-blue-600' : 'text-gray-500'}>
+                              <span className={isActive ? 'text-[var(--cardiology-accent-blue-dark)]' : 'text-[var(--foreground-secondary)]'}>
                                 {new Date(session.createdAt).toLocaleDateString('en-US', { 
                                   month: 'short', 
                                   day: 'numeric',
@@ -809,7 +809,7 @@ export const GeorgianSTTApp: React.FC = () => {
                                 })}
                               </span>
                               {session.durationMs > 0 && (
-                                <span className={isActive ? 'text-blue-600' : 'text-gray-500'}>
+                                <span className={isActive ? 'text-[var(--cardiology-accent-blue-dark)]' : 'text-[var(--foreground-secondary)]'}>
                                   {formatTime(session.durationMs)}
                                 </span>
                               )}
@@ -828,7 +828,7 @@ export const GeorgianSTTApp: React.FC = () => {
                         <p className={`text-sm leading-relaxed ${
                           isActive 
                             ? 'text-blue-800'
-                            : 'text-gray-600'
+                            : 'text-[var(--foreground-tertiary)]'
                         }`}
                           style={{ 
                             display: '-webkit-box',
@@ -984,10 +984,10 @@ export const GeorgianSTTApp: React.FC = () => {
 
       {/* Enhanced Medical Security Warning */}
       {window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && (
-        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 max-w-lg bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-amber-200/50 dark:border-amber-700/50 rounded-xl p-6 shadow-2xl shadow-amber-500/10">
+        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 max-w-lg bg-[var(--component-card)]/95 dark:bg-[var(--background)]/95 backdrop-blur-xl border border-amber-200/50 dark:border-amber-700/50 rounded-xl p-6 shadow-2xl shadow-amber-500/10">
           <div className="flex items-start space-x-4">
             <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
-              <Shield className="w-6 h-6 text-white" />
+              <Shield className="w-6 h-6 text-[var(--foreground)]" />
             </div>
             <div className="flex-1">
               <div className="flex items-center space-x-2 mb-3">
@@ -1039,7 +1039,7 @@ export const GeorgianSTTApp: React.FC = () => {
             width: '64px',
             height: '64px',
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%)',
+            background: 'var(--gradient-premium-purple)',
             border: '2px solid rgba(255, 255, 255, 0.2)',
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
             zIndex: 999999,

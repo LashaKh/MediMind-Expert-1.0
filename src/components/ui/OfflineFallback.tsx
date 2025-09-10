@@ -28,7 +28,7 @@ export const OfflineIndicator: React.FC<{ className?: string }> = ({ className =
   if (isOnline) return null;
   
   return (
-    <div className={`fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-2 text-sm z-50 ${className}`}>
+    <div className={`fixed top-0 left-0 right-0 bg-red-600 text-[var(--foreground)] text-center py-2 text-sm z-50 ${className}`}>
       <div className="flex items-center justify-center">
         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-12.728 12.728m0-12.728l12.728 12.728" />
@@ -50,12 +50,12 @@ export const OfflineFallbackPage: React.FC = () => {
   }, [isOnline]);
   
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--component-surface-primary)] flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
         <div className="mb-6">
-          <div className="w-24 h-24 mx-auto bg-gray-200 rounded-full flex items-center justify-center">
+          <div className="w-24 h-24 mx-auto bg-[var(--component-surface-tertiary)] rounded-full flex items-center justify-center">
             <svg
-              className="w-12 h-12 text-gray-400"
+              className="w-12 h-12 text-[var(--foreground-secondary)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -70,18 +70,18 @@ export const OfflineFallbackPage: React.FC = () => {
           </div>
         </div>
         
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+        <h1 className="text-2xl font-bold text-[var(--foreground)] mb-4">
           You're Offline
         </h1>
         
-        <p className="text-gray-600 mb-6">
+        <p className="text-[var(--foreground-tertiary)] mb-6">
           It looks like you've lost your internet connection. Don't worry - you can still browse previously loaded content.
         </p>
         
         <div className="space-y-4">
-          <div className="bg-white rounded-lg border p-4 text-left">
-            <h3 className="font-semibold text-gray-900 mb-2">What you can do:</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
+          <div className="bg-[var(--component-card)] rounded-lg border p-4 text-left">
+            <h3 className="font-semibold text-[var(--foreground)] mb-2">What you can do:</h3>
+            <ul className="text-sm text-[var(--foreground-tertiary)] space-y-1">
               <li>• Review previously loaded medical calculators</li>
               <li>• Browse cached patient cases</li>
               <li>• Access offline documentation</li>
@@ -91,14 +91,14 @@ export const OfflineFallbackPage: React.FC = () => {
           
           <button
             onClick={() => window.location.reload()}
-            className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+            className="w-full bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] px-4 py-2 rounded-md hover:bg-[var(--cardiology-accent-blue-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:ring-offset-2 transition-colors"
           >
             Try to Reconnect
           </button>
           
           <button
             onClick={() => window.history.back()}
-            className="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+            className="w-full bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] px-4 py-2 rounded-md hover:bg-[var(--component-surface-tertiary)] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
           >
             Go Back
           </button>

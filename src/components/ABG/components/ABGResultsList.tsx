@@ -237,7 +237,7 @@ export const ABGResultsList: React.FC<ABGResultsListProps> = ({
 
   // Get confidence color
   const getConfidenceColor = (confidence?: number): string => {
-    if (!confidence) return 'text-gray-500';
+    if (!confidence) return 'text-[var(--foreground-secondary)]';
     if (confidence >= 0.8) return 'text-green-600';
     if (confidence >= 0.6) return 'text-yellow-600';
     return 'text-red-600';
@@ -522,8 +522,8 @@ export const ABGResultsList: React.FC<ABGResultsListProps> = ({
                       onResultToggle(result.id);
                     }}
                     className={cn(
-                      "h-8 w-8 p-0 hover:bg-blue-100/60 transition-all duration-200",
-                      selectedResults.has(result.id) && "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                      "h-8 w-8 p-0 hover:bg-[var(--cardiology-accent-blue-light)]/60 transition-all duration-200",
+                      selectedResults.has(result.id) && "bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--cardiology-accent-blue-light)]"
                     )}
                   >
                     {selectedResults.has(result.id) ? (
@@ -539,7 +539,7 @@ export const ABGResultsList: React.FC<ABGResultsListProps> = ({
                   variant="ghost"
                   size="sm"
                   onClick={() => onResultSelect?.(result)}
-                  className="hover:bg-blue-100/60 text-blue-600 hover:text-blue-700"
+                  className="hover:bg-[var(--cardiology-accent-blue-light)]/60 text-[var(--cardiology-accent-blue-dark)] hover:text-[var(--cardiology-accent-blue-dark)]"
                 >
                   <Eye className="h-4 w-4" />
                 </Button>

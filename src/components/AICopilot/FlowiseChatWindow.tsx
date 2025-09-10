@@ -860,7 +860,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     ${isPulsing ? 'animate-pulse' : ''}
                   `}>
                     {React.cloneElement(specialtyConfig.icon, { 
-                      className: "w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white relative z-10 transition-transform duration-300 group-hover:scale-110" 
+                      className: "w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-[var(--foreground)] relative z-10 transition-transform duration-300 group-hover:scale-110" 
                     })}
                     
                     {/* Mobile-optimized shine effect */}
@@ -910,7 +910,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         ${isConnected ? 'bg-emerald-500 shadow-emerald-500/40' : 'bg-rose-500 shadow-rose-500/40'}
                         ${isConnected ? 'animate-pulse shadow-sm' : 'animate-bounce shadow-sm'}
                       `} />
-                      <span className="text-xs font-medium text-slate-600">
+                      <span className="text-xs font-medium text-[var(--foreground-tertiary)]">
                         {isConnected ? 'Online' : 'Offline'}
                       </span>
                     </div>
@@ -925,7 +925,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                   onKnowledgeBaseChange={handleKnowledgeBaseChange}
                   personalDocumentCount={personalDocumentCount}
                   disabled={isLoading}
-                  className={`w-full bg-white/95 ${animationClasses.backdropBlur} border-white/60 shadow-lg rounded-xl`}
+                  className={`w-full bg-[var(--component-card)]/95 ${animationClasses.backdropBlur} border-white/60 shadow-lg rounded-xl`}
                 />
               </div>
 
@@ -957,7 +957,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 {abgContext && (
                   <div className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 bg-gradient-to-r from-red-50 to-rose-50 rounded-lg sm:rounded-xl border border-red-200/40 shadow-sm">
                     <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-red-500 to-rose-600 rounded-md sm:rounded-lg flex items-center justify-center">
-                      <TestTube2 className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                      <TestTube2 className="h-3 w-3 sm:h-4 sm:w-4 text-[var(--foreground)]" />
                     </div>
                     <div className="hidden md:flex flex-col min-w-0">
                       <span className="text-sm font-medium text-red-900 truncate">{t('chat.abg.active', 'ABG Analysis Active')}</span>
@@ -980,7 +980,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 {!activeCase && (
                   <>
                     {/* Primary Chat Actions Group */}
-                    <div className="flex items-center space-x-1 bg-white/40 backdrop-blur-sm rounded-xl p-1 border border-white/60 shadow-sm">
+                    <div className="flex items-center space-x-1 bg-[var(--component-card)]/40 backdrop-blur-sm rounded-xl p-1 border border-white/60 shadow-sm">
                       
                       {/* Mobile-optimized New chat button */}
                       <Button
@@ -990,8 +990,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         disabled={isDisabled || !isConnected}
                         className={`
                           group relative min-h-[44px] min-w-[44px] sm:px-4 p-0 sm:p-2 rounded-lg font-medium text-sm
-                          bg-white/80 hover:bg-white/90 text-slate-700
-                          border border-transparent hover:border-slate-200/60
+                          bg-[var(--component-card)]/80 hover:bg-[var(--component-card)]/90 text-[var(--foreground)]
+                          border border-transparent hover:border-[var(--glass-border-light)]/60
                           hover:shadow-md hover:scale-105 active:scale-95
                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
                           transition-all duration-200
@@ -1016,14 +1016,14 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           onClick={() => setShowConversationList(true)}
                           className={`
                             group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
-                            bg-white/80 hover:bg-white/90
-                            border border-transparent hover:border-slate-200/60
+                            bg-[var(--component-card)]/80 hover:bg-[var(--component-card)]/90
+                            border border-transparent hover:border-[var(--glass-border-light)]/60
                             hover:shadow-md hover:scale-105 active:scale-95
                             transition-all duration-200
                           `}
                           title={t('chat.conversationHistory', 'Conversation History')}
                         >
-                          <History className="w-4 h-4 text-slate-600 group-hover:text-slate-800 transition-colors duration-200" />
+                          <History className="w-4 h-4 text-[var(--foreground-tertiary)] group-hover:text-[var(--foreground)] transition-colors duration-200" />
                           <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-slate-500/0 to-slate-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </Button>
                       </EnhancedTooltip>
@@ -1049,7 +1049,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           }}
                           className={`
                             group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
-                            bg-white/80 hover:bg-violet-50/80
+                            bg-[var(--component-card)]/80 hover:bg-violet-50/80
                             border border-transparent hover:border-violet-200/60
                             hover:shadow-md hover:scale-105 active:scale-95
                             transition-all duration-200
@@ -1058,7 +1058,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         >
                           <FileText className="w-4 h-4 text-violet-600 group-hover:text-violet-800 transition-colors duration-200" />
                           {caseHistory.length > 0 && (
-                            <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-violet-500 to-purple-600 text-white text-xs font-bold flex items-center justify-center shadow-md shadow-violet-500/30">
+                            <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-violet-500 to-purple-600 text-[var(--foreground)] text-xs font-bold flex items-center justify-center shadow-md shadow-violet-500/30">
                               {caseHistory.length > 9 ? '9+' : caseHistory.length}
                             </div>
                           )}
@@ -1074,7 +1074,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           size="sm"
                           className={`
                             group relative min-h-[44px] px-4 rounded-lg font-medium text-sm
-                            bg-white/80 hover:bg-violet-50/80 text-violet-700
+                            bg-[var(--component-card)]/80 hover:bg-violet-50/80 text-violet-700
                             border border-transparent hover:border-violet-200/60
                             hover:shadow-md hover:scale-105 active:scale-95
                             disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
@@ -1126,7 +1126,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <TestTube2 className="h-5 w-5 text-white" />
+                  <TestTube2 className="h-5 w-5 text-[var(--foreground)]" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">

@@ -177,7 +177,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
       case 'excellent':
         return { color: 'text-green-600', bg: 'bg-green-50', icon: Star };
       case 'good':
-        return { color: 'text-blue-600', bg: 'bg-blue-50', icon: CheckCircle };
+        return { color: 'text-[var(--cardiology-accent-blue-dark)]', bg: 'bg-[var(--cardiology-accent-blue-light)]', icon: CheckCircle };
       case 'average':
         return { color: 'text-yellow-600', bg: 'bg-yellow-50', icon: Target };
       default:
@@ -192,10 +192,10 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
     return (
       <div className={cn("space-y-6", className)}>
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-8 bg-[var(--component-surface-tertiary)] rounded w-1/3"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>
+              <div key={i} className="h-32 bg-[var(--component-surface-tertiary)] rounded-lg"></div>
             ))}
           </div>
         </div>
@@ -208,11 +208,11 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
       {/* Dashboard Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Activity className="h-6 w-6 text-blue-600" />
+          <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2">
+            <Activity className="h-6 w-6 text-[var(--cardiology-accent-blue-dark)]" />
             ABG Analysis Dashboard
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-[var(--foreground-tertiary)] mt-1">
             Comprehensive analytics and insights for your blood gas analysis history
           </p>
         </div>
@@ -220,11 +220,11 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           {/* Time Range Selector */}
           <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-gray-500" />
+            <Calendar className="h-4 w-4 text-[var(--foreground-secondary)]" />
             <select
               value={selectedTimeRange}
               onChange={(e) => handleTimeRangeChange(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-2 border border-[var(--glass-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent"
             >
               {TIME_RANGES.map(range => (
                 <option key={range.value} value={range.value}>
@@ -235,7 +235,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
           </div>
 
           {/* View Mode Toggle */}
-          <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="flex bg-[var(--component-surface-secondary)] rounded-lg p-1">
             {[
               { mode: 'overview', icon: BarChart3, label: 'Overview' },
               { mode: 'analytics', icon: PieChart, label: 'Analytics' },
@@ -264,10 +264,10 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
               <PerformanceIcon className={cn("h-5 w-5", performanceIndicator.color)} />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">
+              <h3 className="font-semibold text-[var(--foreground)]">
                 System Performance: {stats.performanceRating.charAt(0).toUpperCase() + stats.performanceRating.slice(1)}
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[var(--foreground-tertiary)]">
                 Quality Score: {stats.qualityScore}% | Success Rate: {stats.successRate}% | Avg Confidence: {stats.avgConfidence}%
               </p>
             </div>
@@ -276,7 +276,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
           <div className="flex items-center gap-2">
             <Badge 
               variant={stats.recentTrend > 0 ? 'default' : 'secondary'}
-              className={stats.recentTrend > 0 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}
+              className={stats.recentTrend > 0 ? 'bg-green-100 text-green-800' : 'bg-[var(--component-surface-secondary)] text-[var(--foreground)]'}
             >
               <TrendingUp className={cn("h-3 w-3 mr-1", stats.recentTrend < 0 && "rotate-180")} />
               {Math.abs(stats.recentTrend)}%
@@ -324,7 +324,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
               onFiltersChange({ startDate: sevenDaysAgo.toISOString().split('T')[0] });
             }}
           >
-            <Calendar className="h-4 w-4 mr-2 text-blue-500" />
+            <Calendar className="h-4 w-4 mr-2 text-[var(--cardiology-accent-blue)]" />
             Recent Activity
           </Button>
           <Button 

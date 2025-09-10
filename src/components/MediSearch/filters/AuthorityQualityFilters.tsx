@@ -53,7 +53,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
         description: 'Centers for Disease Control and Prevention',
         examples: ['Disease surveillance', 'Public health guidelines'],
         icon: ShieldCheckIcon,
-        color: 'text-blue-700',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         trustLevel: 'high'
       },
       {
@@ -62,7 +62,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
         description: 'Food and Drug Administration',
         examples: ['Drug approvals', 'Safety communications'],
         icon: ShieldCheckIcon,
-        color: 'text-blue-700',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         trustLevel: 'high'
       },
       {
@@ -71,7 +71,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
         description: 'National Institutes of Health',
         examples: ['Research funding', 'Clinical guidelines'],
         icon: ShieldCheckIcon,
-        color: 'text-blue-700',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         trustLevel: 'high'
       },
       {
@@ -80,7 +80,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
         description: 'World Health Organization',
         examples: ['Global health guidelines', 'Disease classification'],
         icon: GlobeAltIcon,
-        color: 'text-blue-600',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         trustLevel: 'high'
       }
     ],
@@ -138,7 +138,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
         description: 'Integrated clinical practice and research',
         examples: ['Clinical guidelines', 'Patient care protocols'],
         icon: AcademicCapIcon,
-        color: 'text-blue-600',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         trustLevel: 'high'
       },
       {
@@ -147,7 +147,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
         description: 'Medical research and education leader',
         examples: ['Research publications', 'Clinical protocols'],
         icon: AcademicCapIcon,
-        color: 'text-blue-700',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         trustLevel: 'high'
       }
     ],
@@ -176,7 +176,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
         description: 'British Medical Journal',
         examples: ['Evidence-based medicine', 'Clinical research'],
         icon: BookOpenIcon,
-        color: 'text-blue-600',
+        color: 'text-[var(--cardiology-accent-blue-dark)]',
         trustLevel: 'high'
       },
       {
@@ -214,7 +214,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
         description: 'Medical information and education',
         examples: ['Medical news', 'Continuing education'],
         icon: GlobeAltIcon,
-        color: 'text-blue-500',
+        color: 'text-[var(--cardiology-accent-blue)]',
         trustLevel: 'medium'
       }
     ]
@@ -235,7 +235,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
       label: 'Editorial Review',
       description: 'Reviewed by editorial staff',
       icon: CheckBadgeIcon,
-      color: 'text-blue-600',
+      color: 'text-[var(--cardiology-accent-blue-dark)]',
       trustLevel: 'medium' as const
     },
     {
@@ -263,7 +263,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
       label: 'Moderately Cited',
       description: 'Articles with moderate citation counts (10-100 citations)',
       icon: StarIcon,
-      color: 'text-blue-600',
+      color: 'text-[var(--cardiology-accent-blue-dark)]',
       badge: 'Good Impact'
     },
     {
@@ -319,7 +319,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
     switch (level) {
       case 'high': return 'bg-green-100 text-green-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-[var(--component-surface-secondary)] text-[var(--foreground)]';
     }
   };
 
@@ -328,8 +328,8 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
 
     return (
       <div key={categoryKey} className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-          {options[0] && React.createElement(options[0].icon, { className: "w-5 h-5 text-gray-600" })}
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+          {options[0] && React.createElement(options[0].icon, { className: "w-5 h-5 text-[var(--foreground-tertiary)]" })}
           {categoryTitle}
           {selectedAuthorities.length > 0 && (
             <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
@@ -348,25 +348,25 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleAuthorityChange(categoryKey, option.id, e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mt-0.5"
+                  className="w-5 h-5 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500 mt-0.5"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <IconComponent className={`w-4 h-4 ${option.color}`} />
-                    <span className="font-medium text-gray-900">{option.label}</span>
+                    <span className="font-medium text-[var(--foreground)]">{option.label}</span>
                     <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${getTrustLevelColor(option.trustLevel)}`}>
                       {option.trustLevel}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-2">{option.description}</p>
-                  <div className="text-xs text-gray-500">
+                  <p className="text-sm text-[var(--foreground-tertiary)] mb-2">{option.description}</p>
+                  <div className="text-xs text-[var(--foreground-secondary)]">
                     <strong>Examples:</strong> {option.examples.join(', ')}
                   </div>
                 </div>
@@ -381,11 +381,11 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-[var(--foreground)] mb-6 flex items-center gap-2">
           <ShieldCheckSolid className="w-6 h-6 text-green-600" />
           {t('filters.authorityQuality.title', 'Authority & Quality')}
         </h3>
-        <p className="text-gray-600 mb-6">
+        <p className="text-[var(--foreground-tertiary)] mb-6">
           {t('filters.authorityQuality.description', 'Filter by source credibility, peer review status, and evidence quality')}
         </p>
       </div>
@@ -401,8 +401,8 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
 
       {/* Peer Review Status */}
       <div className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-          <CheckBadgeIcon className="w-5 h-5 text-gray-600" />
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+          <CheckBadgeIcon className="w-5 h-5 text-[var(--foreground-tertiary)]" />
           {t('filters.authorityQuality.peerReview', 'Peer Review Status')}
           {filters.peerReviewStatus && filters.peerReviewStatus.length > 0 && (
             <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
@@ -421,24 +421,24 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handlePeerReviewChange(option.id, e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mt-0.5"
+                  className="w-5 h-5 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500 mt-0.5"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <IconComponent className={`w-4 h-4 ${option.color}`} />
-                    <span className="font-medium text-gray-900">{option.label}</span>
+                    <span className="font-medium text-[var(--foreground)]">{option.label}</span>
                     <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${getTrustLevelColor(option.trustLevel)}`}>
                       {option.trustLevel}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">{option.description}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">{option.description}</p>
                 </div>
               </label>
             );
@@ -448,7 +448,7 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
 
       {/* Citation Tier */}
       <div className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
           <StarSolid className="w-5 h-5 text-yellow-600" />
           {t('filters.authorityQuality.citationImpact', 'Citation Impact')}
           {filters.citationTier && filters.citationTier.length > 0 && (
@@ -468,24 +468,24 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleCitationTierChange(option.id, e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mt-0.5"
+                  className="w-5 h-5 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500 mt-0.5"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <IconComponent className={`w-4 h-4 ${option.color}`} />
-                    <span className="font-medium text-gray-900">{option.label}</span>
-                    <span className={`px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800`}>
+                    <span className="font-medium text-[var(--foreground)]">{option.label}</span>
+                    <span className={`px-2 py-0.5 text-xs font-medium rounded-full bg-[var(--cardiology-accent-blue-light)] text-blue-800`}>
                       {option.badge}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">{option.description}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">{option.description}</p>
                 </div>
               </label>
             );
@@ -511,9 +511,9 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
 
       {/* Summary */}
       {(filters.sourceAuthority || filters.peerReviewStatus || filters.citationTier) && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h5 className="font-medium text-gray-900 mb-2">{t('filters.authorityQuality.summary', 'Authority & Quality Summary')}</h5>
-          <div className="text-sm text-gray-600 space-y-1">
+        <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
+          <h5 className="font-medium text-[var(--foreground)] mb-2">{t('filters.authorityQuality.summary', 'Authority & Quality Summary')}</h5>
+          <div className="text-sm text-[var(--foreground-tertiary)] space-y-1">
             {filters.sourceAuthority && Object.entries(filters.sourceAuthority).map(([category, authorities]) => 
               authorities && authorities.length > 0 && (
                 <div key={category}>

@@ -78,8 +78,8 @@ export const TourProgress: React.FC<TourProgressProps> = ({
               ${i < currentStep 
                 ? 'bg-green-500 shadow-lg shadow-green-500/30' 
                 : i === currentStep 
-                  ? 'bg-blue-500 shadow-lg shadow-blue-500/30' 
-                  : 'bg-gray-300 dark:bg-gray-600'
+                  ? 'bg-[var(--cardiology-accent-blue)] shadow-lg shadow-blue-500/30' 
+                  : 'bg-[var(--component-panel)] dark:bg-[var(--border)]'
               }
             `}
           />
@@ -92,12 +92,12 @@ export const TourProgress: React.FC<TourProgressProps> = ({
     return (
       <div className={`w-full ${className}`}>
         {showLabels && (
-          <div className={`flex justify-between items-center mb-2 ${sizes.text} text-gray-600 dark:text-gray-400`}>
+          <div className={`flex justify-between items-center mb-2 ${sizes.text} text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]`}>
             <span>Progress</span>
             <span className="font-semibold">{Math.round(progress)}%</span>
           </div>
         )}
-        <div className={`w-full bg-gray-200 dark:bg-gray-700 rounded-full ${sizes.line} overflow-hidden`}>
+        <div className={`w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full ${sizes.line} overflow-hidden`}>
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
@@ -138,7 +138,7 @@ export const TourProgress: React.FC<TourProgressProps> = ({
             stroke="currentColor"
             strokeWidth={sizes.strokeWidth}
             fill="transparent"
-            className="text-gray-200 dark:text-gray-700"
+            className="text-[var(--foreground)] dark:text-[var(--foreground-tertiary)]"
           />
           {/* Progress circle */}
           <motion.circle
@@ -168,11 +168,11 @@ export const TourProgress: React.FC<TourProgressProps> = ({
         {/* Center text */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
-            <div className={`font-bold text-gray-900 dark:text-white ${sizes.text}`}>
+            <div className={`font-bold text-[var(--foreground)] dark:text-[var(--foreground)] ${sizes.text}`}>
               {Math.round(progress)}%
             </div>
             {showLabels && (
-              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] mt-1">
                 {currentStep + 1}/{totalSteps}
               </div>
             )}
@@ -202,10 +202,10 @@ export const TourProgress: React.FC<TourProgressProps> = ({
                 relative flex items-center justify-center
                 ${sizes.activeDot} rounded-full border-2 transition-all duration-300
                 ${i < currentStep 
-                  ? 'bg-green-500 border-green-500 text-white' 
+                  ? 'bg-green-500 border-green-500 text-[var(--foreground)]' 
                   : i === currentStep 
-                    ? 'bg-blue-500 border-blue-500 text-white' 
-                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400'
+                    ? 'bg-[var(--cardiology-accent-blue)] border-[var(--cardiology-accent-blue)] text-[var(--foreground)]' 
+                    : 'bg-[var(--component-card)] dark:bg-[var(--background)] border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                 }
               `}
             >
@@ -229,7 +229,7 @@ export const TourProgress: React.FC<TourProgressProps> = ({
                   flex-1 h-0.5 mx-2 origin-left transition-all duration-300
                   ${i < currentStep 
                     ? 'bg-green-500' 
-                    : 'bg-gray-300 dark:bg-gray-600'
+                    : 'bg-[var(--component-panel)] dark:bg-[var(--border)]'
                   }
                 `}
               />

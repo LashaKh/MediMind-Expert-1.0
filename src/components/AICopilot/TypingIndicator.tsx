@@ -25,22 +25,22 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
       <div className="flex items-start space-x-2 max-w-xs lg:max-w-md">
         {/* AI avatar */}
         {showAvatar && (
-          <div className="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-            <Bot className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+          <div className="flex-shrink-0 w-8 h-8 bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] rounded-full flex items-center justify-center">
+            <Bot className="w-4 h-4 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" />
           </div>
         )}
         
-        <div className="bg-gray-100 dark:bg-gray-700 rounded-lg px-4 py-2 shadow-sm">
+        <div className="bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] rounded-lg px-4 py-2 shadow-sm">
           {/* Custom message or dots animation */}
           {message ? (
-            <div className="text-sm text-gray-600 dark:text-gray-300 italic">
+            <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] italic">
               {message}
             </div>
           ) : (
             <div className="flex space-x-1" aria-hidden="true">
-              <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce [animation-delay:0ms]"></div>
-              <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce [animation-delay:150ms]"></div>
-              <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce [animation-delay:300ms]"></div>
+              <div className="w-2 h-2 bg-[var(--muted)] dark:bg-[var(--muted-foreground)] rounded-full animate-bounce [animation-delay:0ms]"></div>
+              <div className="w-2 h-2 bg-[var(--muted)] dark:bg-[var(--muted-foreground)] rounded-full animate-bounce [animation-delay:150ms]"></div>
+              <div className="w-2 h-2 bg-[var(--muted)] dark:bg-[var(--muted-foreground)] rounded-full animate-bounce [animation-delay:300ms]"></div>
             </div>
           )}
         </div>
@@ -67,14 +67,14 @@ export const PulseTypingIndicator: React.FC<TypingIndicatorProps> = ({
       <div className="flex items-start space-x-2 max-w-xs lg:max-w-md">
         {/* AI avatar with pulse */}
         {showAvatar && (
-          <div className="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center relative">
-            <Bot className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+          <div className="flex-shrink-0 w-8 h-8 bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] rounded-full flex items-center justify-center relative">
+            <Bot className="w-4 h-4 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" />
           </div>
         )}
         
-        <div className="bg-gray-100 dark:bg-gray-700 rounded-lg px-4 py-2 shadow-sm relative overflow-hidden">
+        <div className="bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] rounded-lg px-4 py-2 shadow-sm relative overflow-hidden">
           {message ? (
-            <div className="text-sm text-gray-600 dark:text-gray-300 italic">
+            <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] italic">
               {message}
             </div>
           ) : (
@@ -82,9 +82,9 @@ export const PulseTypingIndicator: React.FC<TypingIndicatorProps> = ({
               {/* Shimmer effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse"></div>
               <div className="flex space-x-1" aria-hidden="true">
-                <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce [animation-delay:0ms]"></div>
-                <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce [animation-delay:150ms]"></div>
-                <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce [animation-delay:300ms]"></div>
+                <div className="w-2 h-2 bg-[var(--muted)] dark:bg-[var(--muted-foreground)] rounded-full animate-bounce [animation-delay:0ms]"></div>
+                <div className="w-2 h-2 bg-[var(--muted)] dark:bg-[var(--muted-foreground)] rounded-full animate-bounce [animation-delay:150ms]"></div>
+                <div className="w-2 h-2 bg-[var(--muted)] dark:bg-[var(--muted-foreground)] rounded-full animate-bounce [animation-delay:300ms]"></div>
               </div>
             </>
           )}

@@ -554,7 +554,7 @@ export const GWTGHFCalculator: React.FC = () => {
       case 'Intermediate': return 'text-yellow-600 dark:text-yellow-400';
       case 'High': return 'text-orange-600 dark:text-orange-400';
       case 'Very High': return 'text-red-600 dark:text-red-400';
-      default: return 'text-gray-600';
+      default: return 'text-[var(--foreground-tertiary)]';
     }
   };
 
@@ -564,7 +564,7 @@ export const GWTGHFCalculator: React.FC = () => {
       case 'Intermediate': return <AlertCircle className="w-6 h-6 text-yellow-500" />;
       case 'High': return <AlertTriangle className="w-6 h-6 text-orange-500" />;
       case 'Very High': return <Shield className="w-6 h-6 text-red-500" />;
-      default: return <Activity className="w-6 h-6 text-gray-500" />;
+      default: return <Activity className="w-6 h-6 text-[var(--foreground-secondary)]" />;
     }
   };
 
@@ -603,14 +603,14 @@ export const GWTGHFCalculator: React.FC = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl blur-xl opacity-50 animate-heartbeatAdvanced" />
               <div className="relative p-4 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl shadow-lg transform rotate-3 hover:rotate-6 transition-transform duration-300">
-                <Heart className="w-8 h-8 text-white animate-heartbeatAdvanced" />
+                <Heart className="w-8 h-8 text-[var(--foreground)] animate-heartbeatAdvanced" />
               </div>
             </div>
             <div className="flex-1">
               <h4 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-600 dark:from-red-400 dark:to-orange-400 bg-clip-text text-transparent mb-3">
                 {t('calculators.cardiology.gwtgHf.enhanced_alert_title')}
               </h4>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+              <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed text-lg">
                 {t('calculators.cardiology.gwtgHf.enhanced_alert_description')}
               </p>
               <div className="mt-4 inline-flex items-center space-x-3 premium-glass rounded-full px-5 py-2.5 transform hover:scale-105 transition-all duration-300">
@@ -630,15 +630,15 @@ export const GWTGHFCalculator: React.FC = () => {
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-orange-500 rounded-full blur-xl opacity-50 animate-pulse" />
                   <div className="relative w-24 h-24 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center shadow-2xl">
-                    <Heart className="w-12 h-12 text-white animate-heartbeatAdvanced" />
+                    <Heart className="w-12 h-12 text-[var(--foreground)] animate-heartbeatAdvanced" />
                   </div>
                   <div className="absolute inset-0 rounded-full border-4 border-white/20 animate-ping" />
                 </div>
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold text-white mb-2">
+                  <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">
                     Analyzing Risk Factors
                   </h3>
-                  <p className="text-gray-200">
+                  <p className="text-[var(--foreground)]">
                     Calculating GWTG-HF mortality risk score...
                   </p>
                 </div>
@@ -667,21 +667,21 @@ export const GWTGHFCalculator: React.FC = () => {
                     }`} />
                     <div className={`relative w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-500 transform group-hover:scale-110 ${
                       currentStep >= 1 
-                        ? 'bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg' 
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                        ? 'bg-gradient-to-br from-red-500 to-red-600 text-[var(--foreground)] shadow-lg' 
+                        : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                     }`}>
                       {currentStep > 1 ? <CheckCircle className="w-6 h-6" /> : '1'}
                     </div>
                   </div>
                   <span className={`text-sm font-semibold transition-all duration-300 ${
-                    currentStep >= 1 ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'
+                    currentStep >= 1 ? 'text-red-600 dark:text-red-400' : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                   }`}>
                     {t('calculators.cardiology.gwtgHf.progress_demographics')}
                   </span>
                 </div>
                 
                 {/* Connector 1 */}
-                <div className="relative w-20 h-1 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                <div className="relative w-20 h-1 overflow-hidden rounded-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)]">
                   <div className={`absolute inset-y-0 left-0 bg-gradient-to-r from-red-500 to-orange-500 transition-all duration-700 ${
                     currentStep >= 2 ? 'w-full' : 'w-0'
                   }`} />
@@ -698,21 +698,21 @@ export const GWTGHFCalculator: React.FC = () => {
                     }`} />
                     <div className={`relative w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-500 transform group-hover:scale-110 ${
                       currentStep >= 2 
-                        ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg' 
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                        ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-[var(--foreground)] shadow-lg' 
+                        : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                     }`}>
                       {currentStep > 2 ? <CheckCircle className="w-6 h-6" /> : '2'}
                     </div>
                   </div>
                   <span className={`text-sm font-semibold transition-all duration-300 ${
-                    currentStep >= 2 ? 'text-orange-600 dark:text-orange-400' : 'text-gray-500 dark:text-gray-400'
+                    currentStep >= 2 ? 'text-orange-600 dark:text-orange-400' : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                   }`}>
                     {t('calculators.cardiology.gwtgHf.progress_vital_signs')}
                   </span>
                 </div>
                 
                 {/* Connector 2 */}
-                <div className="relative w-20 h-1 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                <div className="relative w-20 h-1 overflow-hidden rounded-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)]">
                   <div className={`absolute inset-y-0 left-0 bg-gradient-to-r from-orange-500 to-blue-500 transition-all duration-700 ${
                     currentStep >= 3 ? 'w-full' : 'w-0'
                   }`} />
@@ -725,18 +725,18 @@ export const GWTGHFCalculator: React.FC = () => {
                 <div className="flex items-center space-x-3 group">
                   <div className="relative">
                     <div className={`absolute inset-0 rounded-full blur-lg transition-all duration-500 ${
-                      currentStep >= 3 ? 'bg-blue-500 opacity-50' : 'opacity-0'
+                      currentStep >= 3 ? 'bg-[var(--cardiology-accent-blue)] opacity-50' : 'opacity-0'
                     }`} />
                     <div className={`relative w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-500 transform group-hover:scale-110 ${
                       currentStep >= 3 
-                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg' 
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-[var(--foreground)] shadow-lg' 
+                        : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                     }`}>
                       3
                     </div>
                   </div>
                   <span className={`text-sm font-semibold transition-all duration-300 ${
-                    currentStep >= 3 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'
+                    currentStep >= 3 ? 'text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400' : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                   }`}>
                     {t('calculators.cardiology.gwtgHf.progress_laboratory')}
                   </span>
@@ -750,13 +750,13 @@ export const GWTGHFCalculator: React.FC = () => {
                 <div className="text-center">
                   <div className="inline-flex items-center space-x-4 premium-glass rounded-full px-8 py-4 shadow-lg transform hover:scale-105 transition-all duration-300">
                     <div className="p-3 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl shadow-lg">
-                      <User className="w-7 h-7 text-white" />
+                      <User className="w-7 h-7 text-[var(--foreground)]" />
                     </div>
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-600 dark:from-red-400 dark:to-orange-400 bg-clip-text text-transparent">
                       {t('calculators.cardiology.gwtgHf.section_demographics')}
                     </h3>
                   </div>
-                  <p className="text-base text-gray-600 dark:text-gray-400 mt-4 font-medium">
+                  <p className="text-base text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-4 font-medium">
                     {t('calculators.cardiology.gwtgHf.section_demographics_description')}
                   </p>
                 </div>
@@ -775,7 +775,7 @@ export const GWTGHFCalculator: React.FC = () => {
                       icon={User}
                       className="premium-input focus-premium"
                     />
-                    <div className="mt-2 flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="mt-2 flex items-center space-x-2 text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                       <Info className="w-3 h-3" />
                       <span>Valid range: 18-120 years</span>
                     </div>
@@ -795,7 +795,7 @@ export const GWTGHFCalculator: React.FC = () => {
                       icon={User}
                       className="premium-input focus-premium"
                     />
-                    <div className="mt-2 flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="mt-2 flex items-center space-x-2 text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                       <Info className="w-3 h-3" />
                       <span>Risk stratification varies by ethnicity</span>
                     </div>
@@ -813,8 +813,8 @@ export const GWTGHFCalculator: React.FC = () => {
                       />
                       <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl">
                         <div className="flex items-start space-x-3">
-                          <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
-                          <div className="text-sm text-gray-700 dark:text-gray-300">
+                          <AlertCircle className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mt-0.5" />
+                          <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                             <p className="font-semibold mb-1">Clinical Note:</p>
                             <p>COPD is an independent predictor of mortality in heart failure patients, contributing +2 points to the risk score.</p>
                           </div>
@@ -827,7 +827,7 @@ export const GWTGHFCalculator: React.FC = () => {
                 <div className="flex justify-end mt-8">
                   <button
                     onClick={() => setCurrentStep(2)}
-                    className="group relative px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-bold rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-300 overflow-hidden btn-premium"
+                    className="group relative px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-[var(--foreground)] font-bold rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-300 overflow-hidden btn-premium"
                   >
                     <span className="relative z-10 flex items-center space-x-3">
                       <span>{t('calculators.cardiology.gwtgHf.button_next_vital_signs')}</span>
@@ -844,13 +844,13 @@ export const GWTGHFCalculator: React.FC = () => {
                 <div className="text-center">
                   <div className="inline-flex items-center space-x-4 premium-glass rounded-full px-8 py-4 shadow-lg transform hover:scale-105 transition-all duration-300">
                     <div className="p-3 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl shadow-lg animate-pulse">
-                      <Activity className="w-7 h-7 text-white" />
+                      <Activity className="w-7 h-7 text-[var(--foreground)]" />
                     </div>
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-yellow-600 dark:from-orange-400 dark:to-yellow-400 bg-clip-text text-transparent">
                       {t('calculators.cardiology.gwtgHf.vital_signs_section')}
                     </h3>
                   </div>
-                  <p className="text-base text-gray-600 dark:text-gray-400 mt-4 font-medium">
+                  <p className="text-base text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-4 font-medium">
                     {t('calculators.cardiology.gwtgHf.vital_signs_description')}
                   </p>
                 </div>
@@ -872,7 +872,7 @@ export const GWTGHFCalculator: React.FC = () => {
                     />
                     <div className="mt-3 p-3 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-xl">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-600 dark:text-gray-400">Normal: 120-139</span>
+                        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Normal: 120-139</span>
                         <span className="font-semibold text-orange-600 dark:text-orange-400">Lower = Higher Risk</span>
                       </div>
                     </div>
@@ -895,7 +895,7 @@ export const GWTGHFCalculator: React.FC = () => {
                     <div className="mt-3 p-3 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                        <span className="text-xs text-gray-600 dark:text-gray-400">Tachycardia increases mortality risk</span>
+                        <span className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Tachycardia increases mortality risk</span>
                       </div>
                     </div>
                   </div>
@@ -904,7 +904,7 @@ export const GWTGHFCalculator: React.FC = () => {
                 <div className="flex justify-between mt-8">
                   <button
                     onClick={() => setCurrentStep(1)}
-                    className="group px-6 py-3 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                    className="group px-6 py-3 bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] border border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] rounded-xl font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--card)] hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
                     <span className="flex items-center space-x-2">
                       <User className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -913,7 +913,7 @@ export const GWTGHFCalculator: React.FC = () => {
                   </button>
                   <button
                     onClick={() => setCurrentStep(3)}
-                    className="group relative px-8 py-4 bg-gradient-to-r from-orange-600 to-blue-600 hover:from-orange-700 hover:to-blue-700 text-white font-bold rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-300 overflow-hidden btn-premium"
+                    className="group relative px-8 py-4 bg-gradient-to-r from-orange-600 to-blue-600 hover:from-orange-700 hover:to-blue-700 text-[var(--foreground)] font-bold rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-300 overflow-hidden btn-premium"
                   >
                     <span className="relative z-10 flex items-center space-x-3">
                       <span>{t('calculators.cardiology.gwtgHf.next_laboratory')}</span>
@@ -930,13 +930,13 @@ export const GWTGHFCalculator: React.FC = () => {
                 <div className="text-center">
                   <div className="inline-flex items-center space-x-4 premium-glass rounded-full px-8 py-4 shadow-lg transform hover:scale-105 transition-all duration-300">
                     <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl shadow-lg">
-                      <BarChart3 className="w-7 h-7 text-white animate-pulse" />
+                      <BarChart3 className="w-7 h-7 text-[var(--foreground)] animate-pulse" />
                     </div>
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
                       {t('calculators.cardiology.gwtgHf.laboratory_section')}
                     </h3>
                   </div>
-                  <p className="text-base text-gray-600 dark:text-gray-400 mt-4 font-medium">
+                  <p className="text-base text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-4 font-medium">
                     {t('calculators.cardiology.gwtgHf.laboratory_description')}
                   </p>
                 </div>
@@ -958,7 +958,7 @@ export const GWTGHFCalculator: React.FC = () => {
                     />
                     <div className="mt-3 p-3 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-600 dark:text-gray-400">Normal: 7-20 mg/dL</span>
+                        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Normal: 7-20 mg/dL</span>
                         <span className="font-semibold text-yellow-600 dark:text-yellow-400">Kidney function marker</span>
                       </div>
                     </div>
@@ -980,7 +980,7 @@ export const GWTGHFCalculator: React.FC = () => {
                     />
                     <div className="mt-3 p-3 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-600 dark:text-gray-400">Normal: 136-145 mEq/L</span>
+                        <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Normal: 136-145 mEq/L</span>
                         <span className="font-semibold text-green-600 dark:text-green-400">Hyponatremia = Risk ↑</span>
                       </div>
                     </div>
@@ -990,7 +990,7 @@ export const GWTGHFCalculator: React.FC = () => {
                 <div className="flex justify-between mt-8">
                   <button
                     onClick={() => setCurrentStep(2)}
-                    className="group px-6 py-3 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                    className="group px-6 py-3 bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] border border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] rounded-xl font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--card)] hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
                     <span className="flex items-center space-x-2">
                       <Activity className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -1000,7 +1000,7 @@ export const GWTGHFCalculator: React.FC = () => {
                   <button
                     onClick={handleCalculate}
                     disabled={isCalculating}
-                    className="group relative px-10 py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-bold rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden btn-premium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="group relative px-10 py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-[var(--foreground)] font-bold rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden btn-premium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isCalculating ? (
                       <span className="flex items-center space-x-3">
@@ -1032,14 +1032,14 @@ export const GWTGHFCalculator: React.FC = () => {
                     <div className="relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl blur-xl opacity-50 animate-heartbeatAdvanced" />
                       <div className="relative p-4 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl shadow-lg">
-                        <Heart className="w-10 h-10 text-white animate-heartbeatAdvanced" />
+                        <Heart className="w-10 h-10 text-[var(--foreground)] animate-heartbeatAdvanced" />
                       </div>
                     </div>
                     <h2 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-orange-600 dark:from-red-400 dark:to-orange-400 bg-clip-text text-transparent">
                       {t('calculators.cardiology.gwtgHf.results_title')}
                     </h2>
                   </div>
-                  <p className="text-lg text-gray-600 dark:text-gray-400">
+                  <p className="text-lg text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     {getInterpretation(result)}
                   </p>
                 </div>
@@ -1052,7 +1052,7 @@ export const GWTGHFCalculator: React.FC = () => {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
                         {getRiskIcon(result.risk)}
-                        <h4 className="font-bold text-gray-900 dark:text-gray-100">
+                        <h4 className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                           {t('calculators.cardiology.gwtgHf.risk_score_label')}
                         </h4>
                       </div>
@@ -1066,10 +1066,10 @@ export const GWTGHFCalculator: React.FC = () => {
                           <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
                         </div>
                       </div>
-                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                      <div className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] uppercase tracking-wide">
                         {t('calculators.cardiology.gwtgHf.gwtg_points')}
                       </div>
-                      <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className="h-2 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-gradient-to-r from-green-500 via-yellow-500 via-orange-500 to-red-500 transition-all duration-1000"
                           style={{ width: `${Math.min((result.score / 100) * 100, 100)}%` }}
@@ -1087,7 +1087,7 @@ export const GWTGHFCalculator: React.FC = () => {
                         <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
                           <Target className="w-6 h-6 text-red-500 animate-pulse" />
                         </div>
-                        <h4 className="font-bold text-gray-900 dark:text-gray-100">
+                        <h4 className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                           {t('calculators.cardiology.gwtgHf.mortality_risk_label')}
                         </h4>
                       </div>
@@ -1099,7 +1099,7 @@ export const GWTGHFCalculator: React.FC = () => {
                           {result.mortality}%
                         </div>
                       </div>
-                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                      <div className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] uppercase tracking-wide">
                         {t('calculators.cardiology.gwtgHf.in_hospital_mortality')}
                       </div>
                       <div className="flex items-center space-x-2 p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
@@ -1130,7 +1130,7 @@ export const GWTGHFCalculator: React.FC = () => {
                             'text-red-500'
                           } animate-pulse`} />
                         </div>
-                        <h4 className="font-bold text-gray-900 dark:text-gray-100">
+                        <h4 className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                           {t('calculators.cardiology.gwtgHf.risk_category_label')}
                         </h4>
                       </div>
@@ -1139,14 +1139,14 @@ export const GWTGHFCalculator: React.FC = () => {
                       <div className={`text-3xl font-black ${getRiskColor(result.risk)} animate-numberTicker uppercase`}>
                         {result.risk}
                       </div>
-                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                      <div className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] uppercase tracking-wide">
                         {t('calculators.cardiology.gwtgHf.risk_stratification')}
                       </div>
                       <div className={`h-12 rounded-lg flex items-center justify-center font-semibold text-sm ${
-                        result.risk === 'Low' ? 'bg-gradient-to-r from-green-400 to-green-500 text-white' :
-                        result.risk === 'Intermediate' ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-white' :
-                        result.risk === 'High' ? 'bg-gradient-to-r from-orange-400 to-orange-500 text-white' :
-                        'bg-gradient-to-r from-red-400 to-red-500 text-white'
+                        result.risk === 'Low' ? 'bg-gradient-to-r from-green-400 to-green-500 text-[var(--foreground)]' :
+                        result.risk === 'Intermediate' ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-[var(--foreground)]' :
+                        result.risk === 'High' ? 'bg-gradient-to-r from-orange-400 to-orange-500 text-[var(--foreground)]' :
+                        'bg-gradient-to-r from-red-400 to-red-500 text-[var(--foreground)]'
                       } shadow-lg transform hover:scale-105 transition-all duration-300`}>
                         {result.risk === 'Low' ? 'STANDARD CARE' :
                          result.risk === 'Intermediate' ? 'ENHANCED MONITORING' :
@@ -1164,13 +1164,13 @@ export const GWTGHFCalculator: React.FC = () => {
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center space-x-3">
                       <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl shadow-lg">
-                        <BarChart3 className="w-6 h-6 text-white" />
+                        <BarChart3 className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
-                      <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                      <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                         {t('calculators.cardiology.gwtgHf.risk_factor_contribution')}
                       </h4>
                     </div>
-                    <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <div className="text-sm font-medium text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                       Total: {result.score} points
                     </div>
                   </div>
@@ -1210,16 +1210,16 @@ export const GWTGHFCalculator: React.FC = () => {
                           <div className={`text-xs font-medium text-${factor.color}-700 dark:text-${factor.color}-300 mb-2`}>
                             {factor.label}
                           </div>
-                          <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                          <div className="h-1.5 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full overflow-hidden">
                             <div 
                               className={`h-full bg-gradient-to-r from-${factor.color}-400 to-${factor.color}-600 transition-all duration-1000`}
                               style={{ width: `${percentage}%` }}
                             />
                           </div>
                           {hoveredFactor === factor.key && (
-                            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg whitespace-nowrap">
+                            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-[var(--background-dark)] text-[var(--foreground)] text-xs px-3 py-1.5 rounded-lg whitespace-nowrap">
                               {((factor.value / result.score) * 100).toFixed(1)}% of total risk
-                              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45" />
+                              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-[var(--background-dark)] rotate-45" />
                             </div>
                           )}
                         </div>
@@ -1240,13 +1240,13 @@ export const GWTGHFCalculator: React.FC = () => {
                         result.risk === 'High' ? 'bg-gradient-to-br from-orange-500 to-orange-600' :
                         'bg-gradient-to-br from-red-500 to-red-600'
                       }`}>
-                        <Stethoscope className="w-6 h-6 text-white" />
+                        <Stethoscope className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
-                      <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                      <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                         {t('calculators.cardiology.gwtgHf.clinical_management')}
                       </h4>
                     </div>
-                    <div className={`px-4 py-2 rounded-full text-sm font-bold text-white ${
+                    <div className={`px-4 py-2 rounded-full text-sm font-bold text-[var(--foreground)] ${
                       result.risk === 'Low' ? 'bg-green-500' :
                       result.risk === 'Intermediate' ? 'bg-yellow-500' :
                       result.risk === 'High' ? 'bg-orange-500' :
@@ -1269,7 +1269,7 @@ export const GWTGHFCalculator: React.FC = () => {
                         }`}
                         style={{ transitionDelay: `${900 + index * 100}ms` }}
                       >
-                        <div className={`mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white flex-shrink-0 ${
+                        <div className={`mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center font-bold text-[var(--foreground)] flex-shrink-0 ${
                           result.risk === 'Low' ? 'bg-gradient-to-br from-green-400 to-green-500' :
                           result.risk === 'Intermediate' ? 'bg-gradient-to-br from-yellow-400 to-yellow-500' :
                           result.risk === 'High' ? 'bg-gradient-to-br from-orange-400 to-orange-500' :
@@ -1277,7 +1277,7 @@ export const GWTGHFCalculator: React.FC = () => {
                         }`}>
                           {index + 1}
                         </div>
-                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1">
+                        <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed flex-1">
                           {rec}
                         </p>
                       </div>
@@ -1292,9 +1292,9 @@ export const GWTGHFCalculator: React.FC = () => {
                   <div className="premium-glass rounded-3xl p-8">
                     <div className="flex items-center space-x-3 mb-6">
                       <div className="p-3 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl shadow-lg">
-                        <Info className="w-6 h-6 text-white" />
+                        <Info className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
-                      <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                      <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                         {t('calculators.cardiology.gwtgHf.risk_reference_title')}
                       </h4>
                     </div>
@@ -1310,11 +1310,11 @@ export const GWTGHFCalculator: React.FC = () => {
                           className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 hover:shadow-md transform hover:scale-[1.02] ${
                             result.score >= parseInt(item.range) || item.range.startsWith('≥') 
                               ? `bg-${item.color}-100 dark:bg-${item.color}-900/30 ring-2 ring-${item.color}-500` 
-                              : 'bg-gray-50 dark:bg-gray-800/50'
+                              : 'bg-[var(--component-surface-primary)] dark:bg-[var(--background)]/50'
                           }`}
                         >
                           <div className="flex items-center space-x-3">
-                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white bg-gradient-to-br from-${item.color}-400 to-${item.color}-600`}>
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-[var(--foreground)] bg-gradient-to-br from-${item.color}-400 to-${item.color}-600`}>
                               {index + 1}
                             </div>
                             <div>
@@ -1326,7 +1326,7 @@ export const GWTGHFCalculator: React.FC = () => {
                               </div>
                             </div>
                           </div>
-                          <div className={`px-3 py-1 rounded-full bg-${item.color}-500 text-white text-xs font-bold`}>
+                          <div className={`px-3 py-1 rounded-full bg-${item.color}-500 text-[var(--foreground)] text-xs font-bold`}>
                             {item.risk}
                           </div>
                         </div>
@@ -1338,35 +1338,35 @@ export const GWTGHFCalculator: React.FC = () => {
                   <div className="premium-glass rounded-3xl p-8">
                     <div className="flex items-center space-x-3 mb-6">
                       <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl shadow-lg">
-                        <User className="w-6 h-6 text-white" />
+                        <User className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
-                      <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                      <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                         {t('calculators.cardiology.gwtgHf.from_creator_title')}
                       </h4>
                     </div>
                     
                     <div className="space-y-6">
                       <div className="flex items-start space-x-4">
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-400 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg transform rotate-3">
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-400 to-purple-600 flex items-center justify-center text-[var(--foreground)] font-bold text-xl shadow-lg transform rotate-3">
                           GF
                         </div>
                         <div className="flex-1">
-                          <h5 className="font-bold text-lg text-gray-900 dark:text-gray-100">
+                          <h5 className="font-bold text-lg text-[var(--foreground)] dark:text-[var(--foreground)]">
                             {t('calculators.cardiology.gwtgHf.creator_name')}
                           </h5>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                             {t('calculators.cardiology.gwtgHf.creator_title_role')}
                           </p>
                         </div>
                       </div>
                       
-                      <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                      <div className="space-y-4 pt-4 border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
                         <div className="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl">
                           <h6 className="font-bold text-indigo-800 dark:text-indigo-200 mb-2 flex items-center space-x-2">
                             <Zap className="w-5 h-5" />
                             <span>{t('calculators.cardiology.gwtgHf.why_developed')}</span>
                           </h6>
-                          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                             {t('calculators.cardiology.gwtgHf.why_developed_text')}
                           </p>
                         </div>
@@ -1376,7 +1376,7 @@ export const GWTGHFCalculator: React.FC = () => {
                             <Target className="w-5 h-5" />
                             <span>{t('calculators.cardiology.gwtgHf.clinical_application')}</span>
                           </h6>
-                          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                             {t('calculators.cardiology.gwtgHf.clinical_application_text')}
                           </p>
                         </div>
@@ -1387,7 +1387,7 @@ export const GWTGHFCalculator: React.FC = () => {
                           href="https://pubmed.ncbi.nlm.nih.gov/?term=Fonarow+GC%5BAuthor%5D" 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="group inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300"
+                          className="group inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-[var(--foreground)] font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300"
                         >
                           <BookOpen className="w-5 h-5" />
                           <span>{t('calculators.cardiology.gwtgHf.view_publications')}</span>
@@ -1405,9 +1405,9 @@ export const GWTGHFCalculator: React.FC = () => {
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center space-x-3">
                       <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl shadow-lg">
-                        <BookOpen className="w-6 h-6 text-white" />
+                        <BookOpen className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
-                      <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                      <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                         {t('calculators.cardiology.gwtgHf.evidence_title')}
                       </h4>
                     </div>
@@ -1424,13 +1424,13 @@ export const GWTGHFCalculator: React.FC = () => {
                           <Calculator className="w-5 h-5" />
                           <span>{t('calculators.cardiology.gwtgHf.formula_title')}</span>
                         </h6>
-                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                           {t('calculators.cardiology.gwtgHf.formula_description')}
                         </p>
                       </div>
                       
                       <div className="space-y-3">
-                        <h6 className="font-bold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+                        <h6 className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
                           <Target className="w-5 h-5 text-emerald-500" />
                           <span>Key Validation Points</span>
                         </h6>
@@ -1439,9 +1439,9 @@ export const GWTGHFCalculator: React.FC = () => {
                           t('calculators.cardiology.gwtgHf.key_predictors'),
                           t('calculators.cardiology.gwtgHf.ehealthrecords_validation')
                         ].map((point, index) => (
-                          <div key={index} className="flex items-start space-x-3 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                          <div key={index} className="flex items-start space-x-3 p-3 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-lg">
                             <CheckCircle className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-gray-700 dark:text-gray-300">{point}</p>
+                            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{point}</p>
                           </div>
                         ))}
                       </div>
@@ -1466,10 +1466,10 @@ export const GWTGHFCalculator: React.FC = () => {
                           ].map((item, index) => (
                             <div key={index} className="space-y-1">
                               <div className="flex justify-between text-sm">
-                                <span className="font-medium text-gray-700 dark:text-gray-300">{item.score}</span>
+                                <span className="font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{item.score}</span>
                                 <span className="font-bold text-emerald-700 dark:text-emerald-300">{item.mortality}</span>
                               </div>
-                              <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                              <div className="h-1.5 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full overflow-hidden">
                                 <div 
                                   className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000"
                                   style={{ width: `${item.bar}%` }}
@@ -1481,16 +1481,16 @@ export const GWTGHFCalculator: React.FC = () => {
                       </div>
                       
                       <div className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-900/50 rounded-xl">
-                        <h6 className="font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center space-x-2">
+                        <h6 className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
                           <FileText className="w-5 h-5" />
                           <span>References</span>
                         </h6>
                         <div className="space-y-2 text-xs">
-                          <p className="text-gray-600 dark:text-gray-400">
+                          <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                             <span className="font-semibold">{t('calculators.cardiology.gwtgHf.original_reference')}:</span>
                             <br />Peterson PN, et al. Circ Cardiovasc Qual Outcomes. 2010;3(1):25-32.
                           </p>
-                          <p className="text-gray-600 dark:text-gray-400">
+                          <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                             <span className="font-semibold">{t('calculators.cardiology.gwtgHf.validation_reference')}:</span>
                             <br />Lagu T, et al. Circ Heart Fail. 2016;9(8).
                           </p>
@@ -1515,30 +1515,30 @@ export const GWTGHFCalculator: React.FC = () => {
                     <div className="relative flex items-center justify-between">
                       <div className="flex items-center space-x-4">
                         <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl shadow-lg animate-pulse">
-                          <Award className="w-8 h-8 text-white" />
+                          <Award className="w-8 h-8 text-[var(--foreground)]" />
                         </div>
                         <div>
                           <h4 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
                             {t('calculators.cardiology.gwtgHf.algorithm_title')}
                           </h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                             {t('calculators.cardiology.gwtgHf.algorithm_description')}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-3">
                         <div className="flex -space-x-2">
-                          <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white dark:ring-gray-800">
+                          <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-[var(--foreground)] text-xs font-bold ring-2 ring-white dark:ring-gray-800">
                             ✓
                           </div>
-                          <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white dark:ring-gray-800">
+                          <div className="w-8 h-8 rounded-full bg-[var(--cardiology-accent-blue)] flex items-center justify-center text-[var(--foreground)] text-xs font-bold ring-2 ring-white dark:ring-gray-800">
                             ✓
                           </div>
-                          <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white dark:ring-gray-800">
+                          <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-[var(--foreground)] text-xs font-bold ring-2 ring-white dark:ring-gray-800">
                             ✓
                           </div>
                         </div>
-                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">100% Validated</span>
+                        <span className="text-xs font-bold text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] uppercase tracking-wide">100% Validated</span>
                       </div>
                     </div>
                   </div>
@@ -1551,7 +1551,7 @@ export const GWTGHFCalculator: React.FC = () => {
               }`} style={{ transitionDelay: '1800ms' }}>
                 <button
                   onClick={handleReset}
-                  className="group relative px-8 py-4 bg-gray-100 dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-2xl font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 shadow-lg transform hover:scale-105 transition-all duration-300 overflow-hidden"
+                  className="group relative px-8 py-4 bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] rounded-2xl font-bold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--card)] shadow-lg transform hover:scale-105 transition-all duration-300 overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center space-x-3">
                     <Calculator className="w-6 h-6 group-hover:rotate-12 transition-transform" />
@@ -1563,7 +1563,7 @@ export const GWTGHFCalculator: React.FC = () => {
                     setShowResult(false);
                     setAnimateResults(false);
                   }}
-                  className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden btn-premium"
+                  className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-[var(--foreground)] font-bold rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden btn-premium"
                 >
                   <span className="relative z-10 flex items-center space-x-3">
                     <Edit className="w-6 h-6 group-hover:rotate-12 transition-transform" />
@@ -1577,12 +1577,12 @@ export const GWTGHFCalculator: React.FC = () => {
 
         {/* Footer Information */}
         <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-          <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <Info className="w-4 h-4" />
             <span>{t('calculators.cardiology.gwtgHf.footer_based_on')}</span>
             <div className="flex items-center space-x-1">
-              <Award className="w-4 h-4 text-blue-600" />
-              <span className="text-blue-600 font-semibold">{t('calculators.cardiology.gwtgHf.footer_guidelines_validated')}</span>
+              <Award className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
+              <span className="text-[var(--cardiology-accent-blue-dark)] font-semibold">{t('calculators.cardiology.gwtgHf.footer_guidelines_validated')}</span>
             </div>
           </div>
         </div>

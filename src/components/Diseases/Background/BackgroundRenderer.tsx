@@ -93,7 +93,7 @@ const BackgroundRenderer: React.FC<BackgroundRendererProps> = ({
     const titleLower = title.toLowerCase();
     
     if (titleLower.includes('definition')) {
-      return <BookOpen className="w-5 h-5 text-blue-600" />;
+      return <BookOpen className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />;
     } else if (titleLower.includes('pathophysiology')) {
       return <Microscope className="w-5 h-5 text-purple-600" />;
     } else if (titleLower.includes('epidemiology')) {
@@ -129,13 +129,13 @@ const BackgroundRenderer: React.FC<BackgroundRendererProps> = ({
       {showHeader && (
         <div className="flex items-center space-x-3 mb-6">
           <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-            <BookOpen className="w-6 h-6 text-white" />
+            <BookOpen className="w-6 h-6 text-[var(--foreground)]" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
               Background
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               Essential disease information and context
             </p>
           </div>
@@ -165,14 +165,14 @@ const BackgroundRenderer: React.FC<BackgroundRendererProps> = ({
               <div className="flex items-start space-x-4">
                 {/* Icon */}
                 <div className="flex-shrink-0 mt-1">
-                  <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg group-hover:bg-gray-100 dark:group-hover:bg-gray-700 transition-colors">
+                  <div className="p-2 bg-[var(--component-surface-primary)] dark:bg-[var(--background)] rounded-lg group-hover:bg-[var(--component-surface-secondary)] dark:group-hover:bg-[var(--card)] transition-colors">
                     {section.icon}
                   </div>
                 </div>
                 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <h3 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-400 transition-colors">
                     {section.title}
                   </h3>
                   
@@ -180,7 +180,7 @@ const BackgroundRenderer: React.FC<BackgroundRendererProps> = ({
                     {formatContent(section.content).split('\n\n').map((paragraph, pIndex) => (
                       <p 
                         key={pIndex} 
-                        className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3 last:mb-0"
+                        className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed mb-3 last:mb-0"
                       >
                         {paragraph}
                       </p>
@@ -197,12 +197,12 @@ const BackgroundRenderer: React.FC<BackgroundRendererProps> = ({
       <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Activity className="w-5 h-5 text-blue-600" />
+            <Activity className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
             <span className="text-sm font-medium text-blue-900 dark:text-blue-100">
               Background Overview Complete
             </span>
           </div>
-          <div className="text-xs text-blue-700 dark:text-blue-300">
+          <div className="text-xs text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">
             {sections.length} key aspects covered
           </div>
         </div>

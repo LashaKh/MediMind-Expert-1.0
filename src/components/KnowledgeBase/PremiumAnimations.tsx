@@ -24,7 +24,7 @@ export const PremiumLoader: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({ size = 
         }}
       />
       <motion.div
-        className="absolute inset-1 rounded-full bg-white dark:bg-gray-900"
+        className="absolute inset-1 rounded-full bg-[var(--component-card)] dark:bg-[var(--background-dark)]"
         initial={{ scale: 0.8 }}
         animate={{ scale: [0.8, 1, 0.8] }}
         transition={{
@@ -75,7 +75,7 @@ export const FloatingActionButton: React.FC<{
       <motion.button
         className={`
           ${variantClasses[variant]}
-          w-14 h-14 rounded-full shadow-2xl text-white
+          w-14 h-14 rounded-full shadow-2xl text-[var(--foreground)]
           flex items-center justify-center
           backdrop-blur-sm border border-white/20
         `}
@@ -120,7 +120,7 @@ export const FloatingActionButton: React.FC<{
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 10 }}
           className={`
-            absolute mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg
+            absolute mb-2 px-3 py-2 bg-[var(--background-dark)] text-[var(--foreground)] text-sm rounded-lg
             shadow-lg whitespace-nowrap
             ${position === 'bottom-right' ? 'bottom-full right-0' : 'bottom-full left-0'}
           `}
@@ -203,7 +203,7 @@ export const ProgressRing: React.FC<{
           animate={{ scale: 1 }}
           transition={{ delay: animated ? 0.5 : 0, type: "spring", stiffness: 200 }}
         >
-          <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <span className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
             {Math.round(progress)}%
           </span>
         </motion.div>
@@ -365,7 +365,7 @@ export const LiquidLoader: React.FC<{
 }> = ({ progress, color = "#3B82F6", height = 4 }) => {
   return (
     <div 
-      className="relative w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"
+      className="relative w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full overflow-hidden"
       style={{ height }}
     >
       <motion.div
@@ -453,7 +453,7 @@ export const PremiumCard: React.FC<{
       />
       
       {/* Card Content */}
-      <div className="relative bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="relative bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] overflow-hidden">
         {children}
         
         {/* Shimmer Effect */}

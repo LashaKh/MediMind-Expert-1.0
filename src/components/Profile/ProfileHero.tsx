@@ -130,7 +130,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
         {particles.map((particle) => (
           <div
             key={particle.id}
-            className="absolute w-1 h-1 bg-blue-400/20 rounded-full animate-medical-particle"
+            className="absolute w-1 h-1 bg-[var(--cardiology-accent-blue)]/20 rounded-full animate-medical-particle"
             style={{
               left: `${particle.x}%`,
               top: `${particle.y}%`,
@@ -199,7 +199,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                 
                 {/* Achievement Badge */}
                 <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg animate-medical-badge-glow">
-                  <Award className="w-5 h-5 text-white" />
+                  <Award className="w-5 h-5 text-[var(--foreground)]" />
                 </div>
               </div>
             </div>
@@ -215,7 +215,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                   </h1>
                   
                   {/* Professional Subtitle */}
-                  <div className="flex items-center space-x-4 text-gray-600 dark:text-gray-300">
+                  <div className="flex items-center space-x-4 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     <div className="flex items-center space-x-2">
                       <Mail className="w-4 h-4" />
                       <span className="font-medium">{user?.email}</span>
@@ -230,16 +230,16 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                 {/* Medical Specialty Badge */}
                 {profile?.medical_specialty && (
                   <div className={`inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r ${specialtyGradient} rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-300 group`}>
-                    <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                      <SpecialtyIcon className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 bg-[var(--component-card)]/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                      <SpecialtyIcon className="w-5 h-5 text-[var(--foreground)]" />
                     </div>
                     <div>
-                      <span className="text-white font-medium text-sm uppercase tracking-wide">
+                      <span className="text-[var(--foreground)] font-medium text-sm uppercase tracking-wide">
                         {medicalSpecialties.find(s => s.value === profile.medical_specialty)?.label}
                       </span>
-                      <div className="text-white/80 text-xs">Medical Specialist</div>
+                      <div className="text-[var(--foreground)]/80 text-xs">Medical Specialist</div>
                     </div>
-                    <div className="w-2 h-2 bg-white/60 rounded-full animate-live-pulse" />
+                    <div className="w-2 h-2 bg-[var(--component-card)]/60 rounded-full animate-live-pulse" />
                   </div>
                 )}
 
@@ -250,7 +250,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                     <div className="w-12 h-12 relative">
                       <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                         <path
-                          className="text-gray-200 dark:text-gray-700"
+                          className="text-[var(--foreground)] dark:text-[var(--foreground-tertiary)]"
                           d="M18 2.0845
                             a 15.9155 15.9155 0 0 1 0 31.831
                             a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -259,7 +259,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                           strokeWidth="2"
                         />
                         <path
-                          className="text-blue-500 transition-all duration-1000 ease-out"
+                          className="text-[var(--cardiology-accent-blue)] transition-all duration-1000 ease-out"
                           d="M18 2.0845
                             a 15.9155 15.9155 0 0 1 0 31.831
                             a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -270,14 +270,14 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                         />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
+                        <span className="text-xs font-bold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                           {profileCompletionValue}%
                         </span>
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">Profile Complete</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Professional Setup</div>
+                      <div className="text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">Profile Complete</div>
+                      <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">Professional Setup</div>
                     </div>
                   </div>
 
@@ -285,19 +285,19 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 bg-green-500 rounded-full animate-live-pulse" />
                     <div>
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">Verified</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Professional Account</div>
+                      <div className="text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">Verified</div>
+                      <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">Professional Account</div>
                     </div>
                   </div>
 
                   {/* Achievement Count */}
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 bg-gradient-to-r from-amber-400 to-orange-500 rounded-lg flex items-center justify-center">
-                      <Star className="w-4 h-4 text-white" />
+                      <Star className="w-4 h-4 text-[var(--foreground)]" />
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">8</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Achievements</div>
+                      <div className="text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">8</div>
+                      <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">Achievements</div>
                     </div>
                   </div>
                 </div>
@@ -310,9 +310,9 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                 <button
                   ref={magneticButtonRef}
                   onClick={onEdit}
-                  className="group relative overflow-hidden px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all duration-300 animate-button-magnetic hw-accelerate"
+                  className="group relative overflow-hidden px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-[var(--foreground)] rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all duration-300 animate-button-magnetic hw-accelerate"
                 >
-                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-[var(--component-card)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="relative flex items-center space-x-2 z-10">
                     <Edit className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
                     <span className="font-medium">{t('profile.editProfile')}</span>
@@ -326,9 +326,9 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                   <button
                     onClick={onSave}
                     disabled={isSaving}
-                    className="group relative overflow-hidden px-8 py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hw-accelerate"
+                    className="group relative overflow-hidden px-8 py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-[var(--foreground)] rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hw-accelerate"
                   >
-                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-[var(--component-card)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="relative flex items-center space-x-2 z-10">
                       <Save className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                       <span className="font-medium">{isSaving ? t('profile.saving') : t('profile.saveChanges')}</span>
@@ -338,7 +338,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                   <button
                     onClick={onCancel}
                     disabled={isSaving}
-                    className="group relative overflow-hidden px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hw-accelerate"
+                    className="group relative overflow-hidden px-8 py-4 bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hw-accelerate"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="relative flex items-center space-x-2 z-10">
@@ -353,8 +353,8 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
 
           {/* Professional Tagline */}
           {formData.about_me_context && (
-            <div className="mt-6 p-4 bg-white/5 dark:bg-gray-900/20 backdrop-blur-sm rounded-xl border border-white/10 dark:border-gray-700/30">
-              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed italic">
+            <div className="mt-6 p-4 bg-[var(--component-card)]/5 dark:bg-[var(--background-dark)]/20 backdrop-blur-sm rounded-xl border border-white/10 dark:border-[var(--border-strong)]/30">
+              <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-sm leading-relaxed italic">
                 "{formData.about_me_context.slice(0, 120)}{formData.about_me_context.length > 120 ? '...' : ''}"
               </p>
             </div>
@@ -370,7 +370,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
               isEditing 
                 ? 'bg-gradient-to-r from-emerald-600 to-green-600' 
                 : 'bg-gradient-to-r from-blue-600 to-indigo-600'
-            } text-white rounded-full shadow-2xl flex items-center justify-center transform hover:scale-110 transition-all duration-300 hover:shadow-3xl hw-accelerate disabled:opacity-50`}
+            } text-[var(--foreground)] rounded-full shadow-2xl flex items-center justify-center transform hover:scale-110 transition-all duration-300 hover:shadow-3xl hw-accelerate disabled:opacity-50`}
           >
             {isEditing ? (
               <Save className="w-6 h-6" />

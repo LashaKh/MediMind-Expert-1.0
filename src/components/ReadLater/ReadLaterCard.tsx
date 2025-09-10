@@ -88,9 +88,9 @@ export function ReadLaterCard({
       case 5: return 'bg-red-100 text-red-800 border-red-200';
       case 4: return 'bg-orange-100 text-orange-800 border-orange-200';
       case 3: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 2: return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 2: return 'bg-[var(--cardiology-accent-blue-light)] text-blue-800 border-blue-200';
       case 1: return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      default: return 'bg-[var(--component-surface-secondary)] text-[var(--foreground)] border-[var(--glass-border-light)]';
     }
   };
 
@@ -100,11 +100,11 @@ export function ReadLaterCard({
       case 'completed':
         return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'reading':
-        return <Play className="h-4 w-4 text-blue-600" />;
+        return <Play className="h-4 w-4 text-[var(--cardiology-accent-blue-dark)]" />;
       case 'archived':
-        return <Archive className="h-4 w-4 text-gray-600" />;
+        return <Archive className="h-4 w-4 text-[var(--foreground-tertiary)]" />;
       default:
-        return <Circle className="h-4 w-4 text-gray-400" />;
+        return <Circle className="h-4 w-4 text-[var(--foreground-secondary)]" />;
     }
   };
 
@@ -116,19 +116,19 @@ export function ReadLaterCard({
         return 'bg-green-100 text-green-800';
       case 'cohort_study':
       case 'case_control':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-[var(--cardiology-accent-blue-light)] text-blue-800';
       case 'case_series':
       case 'expert_opinion':
         return 'bg-yellow-100 text-yellow-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-[var(--component-surface-secondary)] text-[var(--foreground)]';
     }
   };
 
   const cardContent = (
     <Card className={cn(
       "transition-all duration-200 hover:shadow-md",
-      selected && "ring-2 ring-blue-500 ring-opacity-50",
+      selected && "ring-2 ring-[var(--cardiology-accent-blue)] ring-opacity-50",
       viewMode === 'list' ? "flex-row" : ""
     )}>
       <CardHeader className={cn(
@@ -144,11 +144,11 @@ export function ReadLaterCard({
                 onSelect(article.id);
               }}
               className={cn(
-                "flex-shrink-0 w-4 h-4 rounded border-2 border-gray-300 flex items-center justify-center",
-                selected && "bg-blue-600 border-blue-600"
+                "flex-shrink-0 w-4 h-4 rounded border-2 border-[var(--glass-border-medium)] flex items-center justify-center",
+                selected && "bg-[var(--cardiology-accent-blue-dark)] border-blue-600"
               )}
             >
-              {selected && <CheckCircle className="h-3 w-3 text-white" />}
+              {selected && <CheckCircle className="h-3 w-3 text-[var(--foreground)]" />}
             </button>
 
             {/* Status Icon */}
@@ -158,17 +158,17 @@ export function ReadLaterCard({
 
             <div className="flex-1 min-w-0">
               {/* Title */}
-              <h3 className="font-medium text-gray-900 dark:text-white line-clamp-2 leading-5">
+              <h3 className="font-medium text-[var(--foreground)] dark:text-[var(--foreground)] line-clamp-2 leading-5">
                 {article.title}
               </h3>
 
               {/* Source and Date */}
               <div className="flex items-center space-x-2 mt-1">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                   {article.source_name}
                 </span>
-                <span className="text-xs text-gray-400">•</span>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-[var(--foreground-secondary)]">•</span>
+                <span className="text-xs text-[var(--foreground-secondary)]">
                   {formatDistanceToNow(new Date(article.published_date), { addSuffix: true })}
                 </span>
               </div>
@@ -218,7 +218,7 @@ export function ReadLaterCard({
 
         {/* Summary */}
         {viewMode === 'grid' && (
-          <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 mt-2">
+          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] line-clamp-3 mt-2">
             {article.summary}
           </p>
         )}
@@ -230,7 +230,7 @@ export function ReadLaterCard({
       )}>
         {/* Summary for list view */}
         {viewMode === 'list' && (
-          <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-3">
+          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] line-clamp-2 mb-3">
             {article.summary}
           </p>
         )}
@@ -273,7 +273,7 @@ export function ReadLaterCard({
         {/* Reading Progress */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">
+            <span className="text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
               {t('readLater.progress', 'Progress')}
             </span>
             <span className="font-medium">
@@ -287,7 +287,7 @@ export function ReadLaterCard({
           />
 
           {/* Reading Time */}
-          <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center justify-between text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
             <div className="flex items-center space-x-1">
               <Clock className="h-3 w-3" />
               <span>
@@ -320,7 +320,7 @@ export function ReadLaterCard({
 
         {/* Highlights Count */}
         {article.highlights.length > 0 && (
-          <div className="mt-2 flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
+          <div className="mt-2 flex items-center space-x-1 text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
             <Highlighter className="h-3 w-3" />
             <span>{article.highlights.length} highlights</span>
           </div>
@@ -351,7 +351,7 @@ export function ReadLaterCard({
                 onClick={() => handleProgressUpdate(progress)}
                 className={cn(
                   "w-8 h-8 p-0 text-xs",
-                  article.reading_progress >= progress && "bg-blue-100 text-blue-600"
+                  article.reading_progress >= progress && "bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)]"
                 )}
                 disabled={article.reading_progress >= progress}
               >
@@ -371,7 +371,7 @@ export function ReadLaterCard({
           <div className="space-y-4">
             <div>
               <h4 className="font-medium text-sm mb-2">{article.title}</h4>
-              <p className="text-sm text-gray-600 line-clamp-2">{article.summary}</p>
+              <p className="text-sm text-[var(--foreground-tertiary)] line-clamp-2">{article.summary}</p>
             </div>
             
             <Textarea

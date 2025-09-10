@@ -140,7 +140,7 @@ const ApgarScoreCalculatorComponent: React.FC = () => {
       case 'severely-depressed': return 'text-red-600 bg-red-50 border-red-200';
       case 'moderately-depressed': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'excellent': return 'text-green-600 bg-green-50 border-green-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      default: return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-primary)] border-[var(--glass-border-light)]';
     }
   }, []);
 
@@ -195,9 +195,9 @@ const ApgarScoreCalculatorComponent: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border border-green-200 dark:border-green-800">
                     <Clock className="w-6 h-6 text-green-600 dark:text-green-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.obgyn.apgar_score.time_point_title')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.obgyn.apgar_score.time_point_title')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.obgyn.apgar_score.time_point_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.obgyn.apgar_score.time_point_description')}</p>
                   
                   <div className="flex justify-center space-x-4 mt-6">
                     {[
@@ -211,7 +211,7 @@ const ApgarScoreCalculatorComponent: React.FC = () => {
                         className={`p-4 rounded-xl text-center transition-all duration-300 border-2 ${
                           formData.timepoint === time.value
                             ? 'bg-green-100 border-green-300 text-green-800 shadow-lg transform scale-105'
-                            : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                            : 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-secondary)]'
                         }`}
                       >
                         <div className="font-semibold">{time.label}</div>
@@ -225,10 +225,10 @@ const ApgarScoreCalculatorComponent: React.FC = () => {
                 <div className="space-y-6">
                   <div className="text-center mb-8">
                     <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
-                      <Stethoscope className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.obgyn.apgar_score.parameters_title')}</h3>
+                      <Stethoscope className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                      <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.obgyn.apgar_score.parameters_title')}</h3>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.obgyn.apgar_score.parameters_description')}</p>
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.obgyn.apgar_score.parameters_description')}</p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -267,7 +267,7 @@ const ApgarScoreCalculatorComponent: React.FC = () => {
                     {/* Respiratory Effort */}
                     <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl">
                       <div className="flex items-center space-x-3 mb-4">
-                        <Activity className="w-5 h-5 text-blue-600" />
+                        <Activity className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                         <h4 className="font-semibold text-blue-800 dark:text-blue-200">{t('calculators.obgyn.apgar_score.respiratory_effort.title')}</h4>
                       </div>
                       
@@ -286,9 +286,9 @@ const ApgarScoreCalculatorComponent: React.FC = () => {
                         icon={Activity}
                       />
 
-                      <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg">
+                      <div className="mt-4 p-4 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 border border-blue-200 dark:border-blue-700 rounded-lg">
                         <h5 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">{t('calculators.obgyn.apgar_score.respiratory_effort.guide_title')}</h5>
-                        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                        <div className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 space-y-1">
                           <p>• {t('calculators.obgyn.apgar_score.respiratory_effort.guide.absent')}</p>
                           <p>• {t('calculators.obgyn.apgar_score.respiratory_effort.guide.weak')}</p>
                           <p>• {t('calculators.obgyn.apgar_score.respiratory_effort.guide.strong')}</p>
@@ -471,7 +471,7 @@ const ApgarScoreCalculatorComponent: React.FC = () => {
 
             {/* Footer Information */}
             <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-              <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 <Info className="w-4 h-4" />
                 <span>{t('calculators.obgyn.apgar_score.footer.clinical_use')}</span>
                 <div className="flex items-center space-x-1">
@@ -512,15 +512,15 @@ const ApgarScoreCalculatorComponent: React.FC = () => {
             <Card className="border-2 border-blue-200 dark:border-blue-800">
               <CardHeader>
                 <div className="flex items-center space-x-3">
-                  <Target className="w-6 h-6 text-blue-600" />
+                  <Target className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)]" />
                   <CardTitle className="text-blue-800 dark:text-blue-200">{t('calculators.obgyn.apgar_score.about.components.title')}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-3">{t('calculators.obgyn.apgar_score.about.components.mnemonic.title')}</h4>
-                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                    <h4 className="font-semibold text-sm text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">{t('calculators.obgyn.apgar_score.about.components.mnemonic.title')}</h4>
+                    <ul className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] space-y-2">
                       <li><strong>A</strong> - {t('calculators.obgyn.apgar_score.about.components.mnemonic.appearance')}</li>
                       <li><strong>P</strong> - {t('calculators.obgyn.apgar_score.about.components.mnemonic.pulse')}</li>
                       <li><strong>G</strong> - {t('calculators.obgyn.apgar_score.about.components.mnemonic.grimace')}</li>
@@ -529,8 +529,8 @@ const ApgarScoreCalculatorComponent: React.FC = () => {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-3">{t('calculators.obgyn.apgar_score.about.components.scoring.title')}</h4>
-                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                    <h4 className="font-semibold text-sm text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">{t('calculators.obgyn.apgar_score.about.components.scoring.title')}</h4>
+                    <ul className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] space-y-2">
                       <li>• {t('calculators.obgyn.apgar_score.about.components.scoring.scale')}</li>
                       <li>• {t('calculators.obgyn.apgar_score.about.components.scoring.total')}</li>
                       <li>• {t('calculators.obgyn.apgar_score.about.components.scoring.higher')}</li>

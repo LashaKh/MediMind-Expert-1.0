@@ -23,7 +23,7 @@ const medicalButtonVariants = cva(
         // Primary: High-contrast medical blue for critical actions
         primary: [
           "bg-gradient-to-r from-medical-blue-600 to-medical-blue-700",
-          "text-white shadow-lg shadow-medical-blue-500/25",
+          "text-[var(--foreground)] shadow-lg shadow-medical-blue-500/25",
           "hover:from-medical-blue-700 hover:to-medical-blue-800",
           "hover:shadow-xl hover:shadow-medical-blue-500/30",
           "focus-visible:ring-medical-blue-500"
@@ -41,7 +41,7 @@ const medicalButtonVariants = cva(
         // Success: Medical green for confirmations
         success: [
           "bg-gradient-to-r from-medical-success-600 to-medical-success-700",
-          "text-white shadow-lg shadow-medical-success-500/25",
+          "text-[var(--foreground)] shadow-lg shadow-medical-success-500/25",
           "hover:from-medical-success-700 hover:to-medical-success-800",
           "hover:shadow-xl hover:shadow-medical-success-500/30",
           "focus-visible:ring-medical-success-500"
@@ -50,7 +50,7 @@ const medicalButtonVariants = cva(
         // Destructive: Medical red for critical actions
         destructive: [
           "bg-gradient-to-r from-medical-error-600 to-medical-error-700",
-          "text-white shadow-lg shadow-medical-error-500/25",
+          "text-[var(--foreground)] shadow-lg shadow-medical-error-500/25",
           "hover:from-medical-error-700 hover:to-medical-error-800",
           "hover:shadow-xl hover:shadow-medical-error-500/30",
           "focus-visible:ring-medical-error-500"
@@ -145,7 +145,7 @@ MedicalButton.displayName = "MedicalButton";
 const medicalCardVariants = cva(
   [
     "relative rounded-2xl border transition-all duration-300",
-    "bg-white dark:bg-medical-gray-800",
+    "bg-[var(--component-card)] dark:bg-medical-gray-800",
     "border-medical-gray-200 dark:border-medical-gray-700",
     "shadow-md hover:shadow-xl"
   ],
@@ -204,7 +204,7 @@ MedicalCard.displayName = "MedicalCard";
 const medicalInputVariants = cva(
   [
     "w-full border-2 transition-all duration-200",
-    "bg-white dark:bg-medical-gray-800",
+    "bg-[var(--component-card)] dark:bg-medical-gray-800",
     "text-medical-gray-900 dark:text-medical-gray-100",
     "placeholder:text-medical-gray-500 dark:placeholder:text-medical-gray-400",
     "focus:outline-none focus:ring-2 focus:ring-medical-blue-500/20",
@@ -385,7 +385,7 @@ export const MedicalTextarea = forwardRef<HTMLTextAreaElement, MedicalTextareaPr
           className={cn(
             // Base styles
             "w-full min-h-[88px] px-4 py-3 text-base rounded-xl border-2",
-            "bg-white dark:bg-medical-gray-800",
+            "bg-[var(--component-card)] dark:bg-medical-gray-800",
             "text-medical-gray-900 dark:text-medical-gray-100",
             "placeholder:text-medical-gray-500 dark:placeholder:text-medical-gray-400",
             "focus:outline-none focus:ring-2 focus:ring-medical-blue-500/20",

@@ -266,11 +266,11 @@ export const ActionPlanResults: React.FC<ActionPlanResultsProps> = ({
         };
       default:
         return {
-          bg: 'bg-blue-50',
+          bg: 'bg-[var(--cardiology-accent-blue-light)]',
           border: 'border-blue-200',
           text: 'text-blue-900',
-          badge: 'bg-blue-100 text-blue-800',
-          icon: 'text-blue-600'
+          badge: 'bg-[var(--cardiology-accent-blue-light)] text-blue-800',
+          icon: 'text-[var(--cardiology-accent-blue-dark)]'
         };
     }
   };
@@ -449,8 +449,8 @@ export const ActionPlanResults: React.FC<ActionPlanResultsProps> = ({
                                 className={cn(
                                   "mt-0.5 flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors",
                                   isCompleted 
-                                    ? "bg-green-500 border-green-500 text-white"
-                                    : "border-gray-300 hover:border-gray-400"
+                                    ? "bg-green-500 border-green-500 text-[var(--foreground)]"
+                                    : "border-[var(--glass-border-medium)] hover:border-[var(--border)]"
                                 )}
                               >
                                 {isCompleted && <CheckCircle2 className="h-3 w-3" />}
@@ -516,13 +516,13 @@ export const ActionPlanResults: React.FC<ActionPlanResultsProps> = ({
 
       {/* Progress Summary */}
       {actionCategories.length > 0 && (
-        <Card className="p-4 border-blue-200 bg-blue-50">
+        <Card className="p-4 border-blue-200 bg-[var(--cardiology-accent-blue-light)]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <User className="h-5 w-5 text-blue-600" />
+              <User className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
               <span className="font-medium text-blue-900">Progress Summary</span>
             </div>
-            <div className="text-sm text-blue-700">
+            <div className="text-sm text-[var(--cardiology-accent-blue-dark)]">
               {completedActions.size} of {actionCategories.reduce((acc, cat) => acc + cat.items.length, 0)} actions completed
             </div>
           </div>

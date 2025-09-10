@@ -96,21 +96,21 @@ export const MediSearchPage: React.FC<MediSearchPageProps> = ({ className = '' }
       onQueryChange={updateSearchParams}
       initialTab={searchParams.get('tab') as any}
     >
-      <div className={`w-full min-h-screen bg-gray-50 ${className}`}>
+      <div className={`w-full min-h-screen bg-[var(--component-surface-primary)] ${className}`}>
         {/* Search Page Header */}
-        <div className="bg-white border-b border-gray-200 px-4 py-6 md:px-6 lg:px-8" data-tour="search-header">
+        <div className="bg-[var(--component-card)] border-b border-[var(--glass-border-light)] px-4 py-6 md:px-6 lg:px-8" data-tour="search-header">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">
               Medical Literature Search
             </h1>
-            <p className="text-gray-600 text-lg">
+            <p className="text-[var(--foreground-tertiary)] text-lg">
               Search through medical journals, guidelines, and clinical research
             </p>
             
             {/* Specialty indicator */}
             {specialty && (
               <div className="mt-4">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[var(--cardiology-accent-blue-light)] text-blue-800">
                   {specialty}
                 </span>
               </div>

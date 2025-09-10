@@ -198,7 +198,7 @@ const EDDCalculatorComponent: React.FC = () => {
       case 'high': return 'text-green-600 bg-green-50 border-green-200';
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'low': return 'text-red-600 bg-red-50 border-red-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      default: return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-primary)] border-[var(--glass-border-light)]';
     }
   }, []);
 
@@ -207,7 +207,7 @@ const EDDCalculatorComponent: React.FC = () => {
       case 'high': return 'bg-green-50 border-green-200 text-green-800';
       case 'moderate': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
       case 'low': return 'bg-red-50 border-red-200 text-red-800';
-      default: return 'bg-gray-50 border-gray-200 text-gray-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] text-[var(--foreground)]';
     }
   }, []);
 
@@ -252,33 +252,33 @@ const EDDCalculatorComponent: React.FC = () => {
                 <div className="flex items-center justify-center space-x-4 mb-8">
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 1 ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 1 ? 'bg-pink-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       1
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.edd.dating_methods')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.edd.dating_methods')}</span>
                   </div>
                   <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                    currentStep >= 2 ? 'bg-rose-500' : 'bg-gray-200'
+                    currentStep >= 2 ? 'bg-rose-500' : 'bg-[var(--component-surface-tertiary)]'
                   }`}></div>
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 2 ? 'bg-rose-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 2 ? 'bg-rose-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       2
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('common.clinical_data')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('common.clinical_data')}</span>
                   </div>
                   <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                    currentStep >= 3 ? 'bg-purple-500' : 'bg-gray-200'
+                    currentStep >= 3 ? 'bg-purple-500' : 'bg-[var(--component-surface-tertiary)]'
                   }`}></div>
                   <div className="flex items-center space-x-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      currentStep >= 3 ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                      currentStep >= 3 ? 'bg-purple-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                     }`}>
                       3
                     </div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('common.calculation')}</span>
+                    <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('common.calculation')}</span>
                   </div>
                 </div>
 
@@ -288,17 +288,17 @@ const EDDCalculatorComponent: React.FC = () => {
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-2xl border border-pink-200 dark:border-pink-800">
                         <Calendar className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.edd.dating_methods')}</h3>
+                        <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.edd.dating_methods')}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.edd.multiple_dating_methods')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.edd.multiple_dating_methods')}</p>
                     </div>
 
                     <div className="space-y-6">
                       {/* LMP Method */}
-                      <div className="p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl">
+                      <div className="p-6 bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl">
                         <div className="flex items-center space-x-3 mb-4">
                           <Calendar className="w-5 h-5 text-pink-600" />
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.edd.lmp_method')}</h4>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.edd.lmp_method')}</h4>
                           <div className="flex items-center space-x-1 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg px-2 py-1">
                             <span className="text-xs font-medium text-yellow-700 dark:text-yellow-300">{t('calculators.edd.moderate_confidence')}</span>
                           </div>
@@ -333,10 +333,10 @@ const EDDCalculatorComponent: React.FC = () => {
                       </div>
 
                       {/* Ultrasound Method */}
-                      <div className="p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl">
+                      <div className="p-6 bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl">
                         <div className="flex items-center space-x-3 mb-4">
                           <Activity className="w-5 h-5 text-green-600" />
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.edd.ultrasound_method')}</h4>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.edd.ultrasound_method')}</h4>
                           <div className="flex items-center space-x-1 bg-green-100 dark:bg-green-900/30 rounded-lg px-2 py-1">
                             <span className="text-xs font-medium text-green-700 dark:text-green-300">{t('calculators.edd.high_confidence')}</span>
                           </div>
@@ -359,10 +359,10 @@ const EDDCalculatorComponent: React.FC = () => {
                       </div>
 
                       {/* ART Method */}
-                      <div className="p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl">
+                      <div className="p-6 bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl">
                         <div className="flex items-center space-x-3 mb-4">
-                          <BarChart3 className="w-5 h-5 text-blue-600" />
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.edd.art_method')}</h4>
+                          <BarChart3 className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.edd.art_method')}</h4>
                           <div className="flex items-center space-x-1 bg-green-100 dark:bg-green-900/30 rounded-lg px-2 py-1">
                             <span className="text-xs font-medium text-green-700 dark:text-green-300">{t('calculators.edd.high_confidence')}</span>
                           </div>
@@ -425,9 +425,9 @@ const EDDCalculatorComponent: React.FC = () => {
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-rose-50 to-purple-50 dark:from-rose-900/20 dark:to-purple-900/20 rounded-2xl border border-rose-200 dark:border-rose-800">
                         <Stethoscope className="w-6 h-6 text-rose-600 dark:text-rose-400" />
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.edd.clinical_data_review')}</h3>
+                        <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.edd.clinical_data_review')}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.edd.review_dating_parameters')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.edd.review_dating_parameters')}</p>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
@@ -449,7 +449,7 @@ const EDDCalculatorComponent: React.FC = () => {
                           )}
                           {formData.artTransferDate && (
                             <div className="flex items-center space-x-2">
-                              <BarChart3 className="w-4 h-4 text-blue-600" />
+                              <BarChart3 className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
                               <span className="text-sm font-medium">ART: Day {formData.artDaysToTransfer} transfer</span>
                             </div>
                           )}
@@ -547,11 +547,11 @@ const EDDCalculatorComponent: React.FC = () => {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
                       <div className="flex items-center space-x-3 mb-3">
-                        <Calendar className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                        <Calendar className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                         <h4 className="font-semibold text-blue-800 dark:text-blue-200">{t('calculators.edd.estimated_due_date')}</h4>
                       </div>
                       <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{formatDate(String(result.value))}</p>
-                      <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">{t('calculators.edd.forty_weeks_gestation')}</p>
+                      <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mt-1">{t('calculators.edd.forty_weeks_gestation')}</p>
                     </div>
 
                     <div className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl">
@@ -567,15 +567,15 @@ const EDDCalculatorComponent: React.FC = () => {
                   {/* Clinical Recommendations */}
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
-                      <Stethoscope className="w-5 h-5 text-blue-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.edd.clinical_recommendations')}</h4>
+                      <Stethoscope className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.edd.clinical_recommendations')}</h4>
                     </div>
                     <div className={`p-6 rounded-2xl border-2 ${getRiskBgColor(result.confidence)}`}>
                       <div className="space-y-3">
                         {result.recommendations.map((rec, index) => (
                           <div key={index} className="flex items-start space-x-2">
                             <div className="w-2 h-2 bg-current rounded-full mt-2 flex-shrink-0"></div>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">{rec}</p>
+                            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{rec}</p>
                           </div>
                         ))}
                       </div>
@@ -636,7 +636,7 @@ const EDDCalculatorComponent: React.FC = () => {
 
             {/* Footer Information */}
             <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-              <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 <Info className="w-4 h-4" />
                 <span>{t('calculators.edd.based_on_acog_700')} • {t('calculators.edd.educational_purposes_only')}</span>
                 <div className="flex items-center space-x-1">
@@ -676,27 +676,27 @@ const EDDCalculatorComponent: React.FC = () => {
             {/* Dating Methods */}
             <div className="space-y-6">
               <div className="text-center">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('calculators.edd.evidence_based_dating_methods')}</h3>
-                <p className="text-gray-600 dark:text-gray-400">{t('calculators.edd.multiple_approaches_accuracy')}</p>
+                <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.edd.evidence_based_dating_methods')}</h3>
+                <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.edd.multiple_approaches_accuracy')}</p>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                 {/* LMP Method */}
-                <div className="bg-white dark:bg-gray-800 border-2 border-pink-200 dark:border-pink-800 rounded-xl p-6">
+                <div className="bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-pink-200 dark:border-pink-800 rounded-xl p-6">
                   <div className="flex items-center space-x-3 mb-4">
                     <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
                       <Calendar className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
                     </div>
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.edd.last_menstrual_period_lmp')}</h4>
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.edd.last_menstrual_period_lmp')}</h4>
                   </div>
                   <div className="space-y-3">
                     <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg px-3 py-2">
                       <span className="text-xs font-medium text-yellow-700 dark:text-yellow-300">{t('calculators.edd.moderate_accuracy_days')}</span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.edd.naegele_rule_description')}
                     </p>
-                    <ul className="text-xs text-gray-500 dark:text-gray-500 space-y-1">
+                    <ul className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] space-y-1">
                       <li>{t('calculators.edd.standard_28_day_cycle')}</li>
                       <li>{t('calculators.edd.cycle_length_adjustments')}</li>
                       <li>{t('calculators.edd.requires_accurate_lmp')}</li>
@@ -705,21 +705,21 @@ const EDDCalculatorComponent: React.FC = () => {
                 </div>
 
                 {/* Ultrasound Method */}
-                <div className="bg-white dark:bg-gray-800 border-2 border-green-200 dark:border-green-800 rounded-xl p-6">
+                <div className="bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-green-200 dark:border-green-800 rounded-xl p-6">
                   <div className="flex items-center space-x-3 mb-4">
                     <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
                       <Activity className="w-5 h-5 text-green-600 dark:text-green-400" />
                     </div>
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.edd.ultrasound_method')}</h4>
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.edd.ultrasound_method')}</h4>
                   </div>
                   <div className="space-y-3">
                     <div className="bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2">
                       <span className="text-xs font-medium text-green-700 dark:text-green-300">{t('calculators.edd.high_confidence_accuracy')}</span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.edd.crl_most_accurate')}
                     </p>
-                    <ul className="text-xs text-gray-500 dark:text-gray-500 space-y-1">
+                    <ul className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] space-y-1">
                       <li>{t('calculators.edd.crl_range_weeks')}</li>
                       <li>{t('calculators.edd.robinson_fleming_formula')}</li>
                       <li>{t('calculators.edd.gold_standard_dating')}</li>
@@ -728,21 +728,21 @@ const EDDCalculatorComponent: React.FC = () => {
                 </div>
 
                 {/* ART Method */}
-                <div className="bg-white dark:bg-gray-800 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-6">
+                <div className="bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-blue-200 dark:border-blue-800 rounded-xl p-6">
                   <div className="flex items-center space-x-3 mb-4">
-                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                      <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <div className="p-2 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-lg">
+                      <BarChart3 className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                     </div>
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.edd.art_method')}</h4>
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.edd.art_method')}</h4>
                   </div>
                   <div className="space-y-3">
                     <div className="bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2">
                       <span className="text-xs font-medium text-green-700 dark:text-green-300">{t('calculators.edd.high_confidence_accuracy')}</span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.edd.highly_accurate_known_conception')}
                     </p>
-                    <ul className="text-xs text-gray-500 dark:text-gray-500 space-y-1">
+                    <ul className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] space-y-1">
                       <li>{t('calculators.edd.transfer_day_options')}</li>
                       <li>{t('calculators.edd.known_conception_timing')}</li>
                       <li>{t('calculators.edd.precise_developmental_stage')}</li>
@@ -813,7 +813,7 @@ const EDDCalculatorComponent: React.FC = () => {
 
             {/* Footer */}
             <div className="text-center pt-6 border-t border-pink-200 dark:border-pink-800">
-              <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 <Info className="w-4 h-4" />
                 <span>{t('calculators.edd.based_on_acog_700')} • {t('calculators.edd.educational_purposes_only')}</span>
                 <div className="flex items-center space-x-1">

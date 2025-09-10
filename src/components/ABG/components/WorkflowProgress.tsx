@@ -99,11 +99,11 @@ export const WorkflowProgress: React.FC<WorkflowProgressProps> = ({
       )}>
         <Circle className={cn(
           "h-8 w-8 absolute",
-          status === 'current' ? "text-primary" : "text-gray-300"
+          status === 'current' ? "text-primary" : "text-[var(--foreground-secondary)]"
         )} />
         <Icon className={cn(
           "h-4 w-4 z-10",
-          status === 'current' ? "text-primary" : "text-gray-400"
+          status === 'current' ? "text-primary" : "text-[var(--foreground-secondary)]"
         )} />
       </div>
     );
@@ -112,7 +112,7 @@ export const WorkflowProgress: React.FC<WorkflowProgressProps> = ({
   return (
     <div className="relative">
       {/* Progress Bar Background */}
-      <div className="absolute top-8 left-0 right-0 h-1 bg-gray-200 rounded-full" />
+      <div className="absolute top-8 left-0 right-0 h-1 bg-[var(--component-surface-tertiary)] rounded-full" />
       
       {/* Progress Bar Fill */}
       <div 
@@ -151,7 +151,7 @@ export const WorkflowProgress: React.FC<WorkflowProgressProps> = ({
                 "bg-background border-2 transition-colors duration-300",
                 status === 'completed' && "border-green-600 bg-green-50",
                 status === 'current' && "border-primary bg-primary/10",
-                status === 'upcoming' && "border-gray-300",
+                status === 'upcoming' && "border-[var(--glass-border-medium)]",
                 status === 'error' && "border-red-600 bg-red-50"
               )}>
                 {getStepIcon(step, status)}
@@ -167,7 +167,7 @@ export const WorkflowProgress: React.FC<WorkflowProgressProps> = ({
                   "text-sm font-medium transition-colors duration-300",
                   status === 'completed' && "text-green-700",
                   status === 'current' && "text-primary",
-                  status === 'upcoming' && "text-gray-400",
+                  status === 'upcoming' && "text-[var(--foreground-secondary)]",
                   status === 'error' && "text-red-700"
                 )}>
                   {label}
@@ -176,7 +176,7 @@ export const WorkflowProgress: React.FC<WorkflowProgressProps> = ({
                   "text-xs mt-0.5 max-w-[120px]",
                   status === 'completed' && "text-green-600",
                   status === 'current' && "text-muted-foreground",
-                  status === 'upcoming' && "text-gray-400",
+                  status === 'upcoming' && "text-[var(--foreground-secondary)]",
                   status === 'error' && "text-red-600"
                   )}>
                     {description}
@@ -196,28 +196,28 @@ export const WorkflowProgress: React.FC<WorkflowProgressProps> = ({
               <div className={cn(
                 "flex items-center justify-center w-8 h-8 rounded-full border-2 transition-colors",
                 unifiedPhase === 'extraction' ? "border-primary bg-primary/10" : 
-                unifiedPhase === 'interpretation' || unifiedPhase === 'complete' ? "border-green-600 bg-green-50" : "border-gray-300"
+                unifiedPhase === 'interpretation' || unifiedPhase === 'complete' ? "border-green-600 bg-green-50" : "border-[var(--glass-border-medium)]"
               )}>
                 {unifiedPhase === 'interpretation' || unifiedPhase === 'complete' ? (
                   <CheckCircle2 className="h-4 w-4 text-green-600" />
                 ) : (
                   <FileText className={cn(
                     "h-4 w-4",
-                    unifiedPhase === 'extraction' ? "text-primary" : "text-gray-400"
+                    unifiedPhase === 'extraction' ? "text-primary" : "text-[var(--foreground-secondary)]"
                   )} />
                 )}
               </div>
               <span className={cn(
                 "text-sm font-medium",
                 unifiedPhase === 'extraction' ? "text-primary" :
-                unifiedPhase === 'interpretation' || unifiedPhase === 'complete' ? "text-green-700" : "text-gray-400"
+                unifiedPhase === 'interpretation' || unifiedPhase === 'complete' ? "text-green-700" : "text-[var(--foreground-secondary)]"
               )}>
                 {t('abg.workflow.subphases.extraction', 'Text Extraction')}
               </span>
             </div>
 
             {/* Progress Arrow */}
-            <div className="flex-1 h-px bg-gray-300 relative">
+            <div className="flex-1 h-px bg-[var(--component-panel)] relative">
               <div 
                 className="absolute left-0 top-0 h-px bg-primary transition-all duration-300"
                 style={{ width: unifiedPhase === 'extraction' ? '50%' : unifiedPhase === 'interpretation' || unifiedPhase === 'complete' ? '100%' : '0%' }}
@@ -229,21 +229,21 @@ export const WorkflowProgress: React.FC<WorkflowProgressProps> = ({
               <div className={cn(
                 "flex items-center justify-center w-8 h-8 rounded-full border-2 transition-colors",
                 unifiedPhase === 'interpretation' ? "border-primary bg-primary/10" :
-                unifiedPhase === 'complete' ? "border-green-600 bg-green-50" : "border-gray-300"
+                unifiedPhase === 'complete' ? "border-green-600 bg-green-50" : "border-[var(--glass-border-medium)]"
               )}>
                 {unifiedPhase === 'complete' ? (
                   <CheckCircle2 className="h-4 w-4 text-green-600" />
                 ) : (
                   <Stethoscope className={cn(
                     "h-4 w-4",
-                    unifiedPhase === 'interpretation' ? "text-primary" : "text-gray-400"
+                    unifiedPhase === 'interpretation' ? "text-primary" : "text-[var(--foreground-secondary)]"
                   )} />
                 )}
               </div>
               <span className={cn(
                 "text-sm font-medium",
                 unifiedPhase === 'interpretation' ? "text-primary" :
-                unifiedPhase === 'complete' ? "text-green-700" : "text-gray-400"
+                unifiedPhase === 'complete' ? "text-green-700" : "text-[var(--foreground-secondary)]"
               )}>
                 {t('abg.workflow.subphases.interpretation', 'Clinical Analysis')}
               </span>

@@ -1,3 +1,9 @@
+/* Import Theme Configuration FIRST - SINGLE SOURCE OF TRUTH */
+@import './styles/theme-config.css';
+
+/* Import Theme Override System - MUST BE AFTER theme-config.css */
+@import './styles/theme-overrides.css';
+
 /* Import Responsive Design System */
 @import './styles/responsive.css';
 @import './styles/personal-library-premium.css';
@@ -39,12 +45,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+  background: linear-gradient(to bottom, var(--primary), var(--accent));
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #2563eb, #7c3aed);
+  background: linear-gradient(to bottom, var(--primary), var(--accent));
 }
 
 @tailwind base;
@@ -154,13 +160,13 @@
 
 /* FORCE DARK CARDS - MUST BE AFTER TAILWIND TO OVERRIDE */
 .premium-card {
-  background: #1f2937 !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border: 1px solid var(--border) !important;
 }
 
 .premium-card * {
-  color: #ffffff !important;
+  color: var(--card-foreground) !important;
 }
 
 .premium-card h1,
@@ -170,18 +176,18 @@
 .premium-card .text-2xl,
 .premium-card .text-3xl,
 .premium-card .font-bold {
-  color: #ffffff !important;
+  color: var(--card-foreground) !important;
 }
 
 .premium-card p,
 .premium-card div,
 .premium-card span {
-  color: #f3f4f6 !important;
+  color: var(--muted-foreground) !important;
 }
 
 .premium-card .text-gray-500,
 .premium-card .text-gray-400 {
-  color: #d1d5db !important;
+  color: var(--muted-foreground) !important;
 }
 
 /* Premium Chat Header Animations */
@@ -210,10 +216,10 @@
 
 @keyframes premiumGlow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 20px var(--ring);
   }
   50% {
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 30px var(--ring);
   }
 }
 
@@ -336,11 +342,11 @@
 
   /* Enhanced Shadows */
   .shadow-3xl {
-    box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-glass-light);
   }
 
   .shadow-4xl {
-    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-glass-heavy);
   }
 
   /* Profile-specific animations */
@@ -360,12 +366,12 @@
 
   .profile-hover-lift:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-glass-negative);
   }
 
   /* Gradient text animations */
   .gradient-text {
-    background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4);
+    background: linear-gradient(45deg, var(--primary), var(--accent), var(--secondary));
     background-size: 200% 200%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -381,20 +387,20 @@
   /* Smooth focus states */
   .focus-enhanced:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 0 3px var(--ring);
   }
 
   /* Medical themed gradients */
   .medical-gradient {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   }
 
   .medical-gradient-2 {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
   }
 
   .medical-gradient-3 {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   }
 }
 
@@ -558,52 +564,7 @@ html[data-font-loaded="true"] *::after {
 }
 
 @layer base {
-  :root {
-    /* Light theme - matching MediMind design */
-    --background: 0 0% 100%;
-    --foreground: 217 32% 17%;
-    --card: 0 0% 100%;
-    --card-foreground: 217 32% 17%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 217 32% 17%;
-    --primary: 217 91% 60%; /* Blue accent from the design */
-    --primary-foreground: 0 0% 98%;
-    --secondary: 217 32% 96%;
-    --secondary-foreground: 217 32% 17%;
-    --muted: 217 32% 96%;
-    --muted-foreground: 217 13% 45%;
-    --accent: 180 83% 55%; /* Teal accent */
-    --accent-foreground: 217 32% 17%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 217 32% 89%;
-    --input: 217 32% 89%;
-    --ring: 217 91% 60%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    /* Dark theme - matching the MediMind dark design */
-    --background: 217 32% 17%; /* Dark navy from the design */
-    --foreground: 0 0% 98%;
-    --card: 217 32% 20%;
-    --card-foreground: 0 0% 98%;
-    --popover: 217 32% 20%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 217 91% 60%; /* Blue accent */
-    --primary-foreground: 217 32% 17%;
-    --secondary: 217 32% 25%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 217 32% 25%;
-    --muted-foreground: 217 13% 65%;
-    --accent: 180 83% 55%; /* Teal accent */
-    --accent-foreground: 217 32% 17%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 217 32% 25%;
-    --input: 217 32% 25%;
-    --ring: 217 91% 60%;
-  }
+  /* Font and layout utilities only - colors now managed by theme-config.css */
 
   body {
     @apply bg-background text-foreground;
@@ -614,7 +575,12 @@ html[data-font-loaded="true"] *::after {
   }
 
   a {
-    @apply text-primary hover:text-primary/90 dark:text-accent dark:hover:text-accent/90;
+    color: var(--primary);
+    transition: opacity 0.2s ease;
+  }
+  
+  a:hover {
+    opacity: 0.9;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -622,10 +588,20 @@ html[data-font-loaded="true"] *::after {
   }
 
   input, textarea, select {
-    @apply bg-white dark:bg-dark-secondary text-gray-900 dark:text-white 
-           border border-gray-300 dark:border-dark-border
-           focus:border-primary dark:focus:border-accent
-           placeholder:text-gray-500 dark:placeholder:text-dark-muted;
+    background: var(--input);
+    color: var(--foreground);
+    border: 1px solid var(--input-border);
+    transition: border-color 0.2s ease;
+  }
+  
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--ring);
+    background: var(--input-focus);
+    outline: none;
+  }
+  
+  input::placeholder, textarea::placeholder {
+    color: var(--muted-foreground);
   }
 
   button {
@@ -647,20 +623,84 @@ html[data-font-loaded="true"] *::after {
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background-color: rgba(156, 163, 175, 0.5);
+  background-color: var(--muted-foreground);
   border-radius: 3px;
 }
 
 .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-  background-color: rgba(75, 85, 99, 0.5);
+  background-color: var(--muted-foreground);
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(156, 163, 175, 0.7);
+  background-color: var(--foreground-secondary);
 }
 
 .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(75, 85, 99, 0.7);
+  background-color: var(--foreground-secondary);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+
+  --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
+  --tracking-tight: calc(var(--tracking-normal) - 0.025em);
+  --tracking-normal: var(--tracking-normal);
+  --tracking-wide: calc(var(--tracking-normal) + 0.025em);
+  --tracking-wider: calc(var(--tracking-normal) + 0.05em);
+  --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+}
+
+body {
+  letter-spacing: var(--tracking-normal);
 }
 
 @layer base {
@@ -743,10 +783,10 @@ html[data-font-loaded="true"] *::after {
 
 @keyframes glow-effect {
   0%, 100% {
-    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 4px 20px oklch(from var(--primary) l c h / 0.1);
   }
   50% {
-    box-shadow: 0 8px 40px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 8px 40px oklch(from var(--primary) l c h / 0.2);
   }
 }
 
@@ -830,7 +870,7 @@ html[data-font-loaded="true"] *::after {
     filter: brightness(1) drop-shadow(0 0 0 transparent);
   }
   50% {
-    filter: brightness(1.2) drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+    filter: brightness(1.2) drop-shadow(0 0 8px oklch(from var(--primary) l c h / 0.6));
   }
 }
 
@@ -857,7 +897,7 @@ html[data-font-loaded="true"] *::after {
 
 .calculator-pill:hover {
   transform: translateX(2px);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 2px 8px oklch(from var(--primary) l c h / 0.15);
 }
 
 .compact-button {
@@ -1025,45 +1065,45 @@ html[data-font-loaded="true"] *::after {
 
 /* Premium Glassmorphism Components */
 .premium-glass {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  backdrop-filter: blur(20px) saturate(1.8);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  background: var(--component-card);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--glass-border-medium);
+  box-shadow: 0 8px 32px var(--component-card-shadow);
 }
 
 .dark .premium-glass {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  background: var(--component-card);
+  border: 1px solid var(--glass-border-medium);
+  box-shadow: 0 8px 32px var(--component-card-shadow);
 }
 
 /* Advanced Neumorphism */
 .premium-neumorphic {
-  background: linear-gradient(145deg, #ffffff, #f3f4f6);
-  box-shadow: 20px 20px 60px #d1d5db, -20px -20px 60px #ffffff;
+  background: var(--component-card);
+  box-shadow: var(--shadow-premium);
 }
 
 .dark .premium-neumorphic {
-  background: linear-gradient(145deg, #1f2937, #111827);
-  box-shadow: 20px 20px 60px #0f1117, -20px -20px 60px #2d3748;
+  background: var(--component-card);
+  box-shadow: var(--shadow-premium);
 }
 
 /* Premium Gradients */
 .gradient-premium-cardio {
-  background: linear-gradient(135deg, #dc2626 0%, #ea580c 25%, #f59e0b 50%, #eab308 100%);
+  background: var(--gradient-premium-cardio);
   background-size: 400% 400%;
   animation: gradient 15s ease infinite;
 }
 
 .gradient-premium-health {
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background: var(--gradient-premium-health);
   background-size: 400% 400%;
   animation: gradient 12s ease infinite;
 }
 
 .gradient-premium-risk {
-  background: conic-gradient(from 180deg at 50% 50%, #16a34a 0deg, #eab308 90deg, #ea580c 180deg, #dc2626 270deg, #16a34a 360deg);
+  background: var(--gradient-premium-risk);
   background-size: 200% 200%;
   animation: gradient 8s linear infinite;
 }
@@ -1101,7 +1141,7 @@ html[data-font-loaded="true"] *::after {
 
 /* Sophisticated Loading States */
 .premium-skeleton {
-  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background: var(--gradient-premium-skeleton);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
 }
@@ -1183,7 +1223,7 @@ html[data-font-loaded="true"] *::after {
 
 /* Advanced Progress Indicators */
 .progress-premium {
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background: var(--gradient-premium-purple);
   background-size: 200% 100%;
   animation: progressFlow 2s linear infinite;
 }
@@ -1272,7 +1312,7 @@ html[data-font-loaded="true"] *::after {
   animation: glassRefraction 3s ease-in-out infinite;
 }
 
-/* FORCE MENU BUTTONS TO BLUE THEME - OVERRIDE GREEN STYLING */
+/* UPDATED MENU BUTTONS TO USE NEW THEME VARIABLES */
 button[aria-label*="menu" i],
 button[aria-label*="Menu" i],
 button[aria-label*="toggle" i],
@@ -1283,9 +1323,9 @@ button[title*="Menu" i],
 [class*="nav-button"],
 button:has(svg[data-testid*="menu"]),
 button:has(.lucide-menu) {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 50%, rgba(59, 130, 246, 0.1) 100%) !important;
-  color: rgb(37, 99, 235) !important;
-  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  background: oklch(from var(--primary) l c h / 0.1) !important;
+  color: var(--primary) !important;
+  border: 1px solid oklch(from var(--primary) l c h / 0.3) !important;
 }
 
 button[aria-label*="menu" i]:hover,
@@ -1298,9 +1338,9 @@ button[title*="Menu" i]:hover,
 [class*="nav-button"]:hover,
 button:has(svg[data-testid*="menu"]):hover,
 button:has(.lucide-menu):hover {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(6, 182, 212, 0.2) 50%, rgba(59, 130, 246, 0.2) 100%) !important;
-  color: rgb(29, 78, 216) !important;
-  border: 1px solid rgba(59, 130, 246, 0.5) !important;
+  background: oklch(from var(--primary) l c h / 0.2) !important;
+  color: oklch(from var(--primary) calc(l * 0.8) c h) !important;
+  border: 1px solid oklch(from var(--primary) l c h / 0.5) !important;
   transform: scale(1.05) !important;
 }
 
@@ -1583,23 +1623,23 @@ button:has(.lucide-menu):hover {
 
 /* Advanced Color System */
 .gradient-revolutionary-blue {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 50%, var(--primary) 100%);
 }
 
 .gradient-revolutionary-purple {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+  background: var(--gradient-premium-purple);
 }
 
 .gradient-revolutionary-teal {
-  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 50%, #0f766e 100%);
+  background: var(--gradient-premium-teal);
 }
 
 .gradient-revolutionary-rose {
-  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 50%, #be123c 100%);
+  background: var(--gradient-premium-rose);
 }
 
 .gradient-revolutionary-amber {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  background: var(--gradient-premium-amber);
 }
 
 /* Revolutionary Shadow System */
@@ -1647,7 +1687,7 @@ button:has(.lucide-menu):hover {
 
 /* Revolutionary Typography */
 .text-revolutionary {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1726,4 +1766,10 @@ button:has(.lucide-menu):hover {
     opacity: 0;
   }
 }
+
+/* ============================================================================= */
+/* THEME ENFORCEMENT - CLEAN IMPLEMENTATION */
+/* Replaced NUCLEAR OVERRIDE layers with elegant theme override system */
+/* See /src/styles/theme-overrides.css for comprehensive implementation */
+/* ============================================================================= */
 

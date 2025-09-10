@@ -53,8 +53,8 @@ const statusConfig = {
     icon: Clock,
     title: 'Preparing Upload',
     description: 'Analyzing file and preparing for upload...',
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+    color: 'text-[var(--cardiology-accent-blue)]',
+    bgColor: 'bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20',
     borderColor: 'border-blue-200 dark:border-blue-800'
   },
   chunking: {
@@ -69,8 +69,8 @@ const statusConfig = {
     icon: Upload,
     title: 'Uploading',
     description: 'Uploading file chunks to secure storage...',
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+    color: 'text-[var(--cardiology-accent-blue)]',
+    bgColor: 'bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20',
     borderColor: 'border-blue-200 dark:border-blue-800'
   },
   reassembling: {
@@ -144,7 +144,7 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
         animate={{
           background: [
             'linear-gradient(45deg, transparent, transparent)',
-            'linear-gradient(45deg, rgba(59, 130, 246, 0.1), transparent)',
+            'linear-gradient(45deg, oklch(from var(--primary) l c h / 0.1), transparent)',
             'linear-gradient(45deg, transparent, transparent)'
           ]
         }}
@@ -176,21 +176,21 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
             <h4 className={`font-semibold ${config.color}`}>
               {config.title}
             </h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               {error || config.description}
             </p>
           </div>
         </div>
 
         {/* File info */}
-        <div className="text-right text-sm text-gray-500">
+        <div className="text-right text-sm text-[var(--foreground-secondary)]">
           <div className="font-medium">
             {formatFileName(fileName)}
           </div>
           <div className="text-xs">
             {formatFileSize(fileSize)}
             {isChunked && (
-              <span className="ml-1 px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded text-xs font-medium">
+              <span className="ml-1 px-1.5 py-0.5 bg-[var(--progress-info)] text-[var(--progress-info-foreground)] rounded text-xs font-medium">
                 Chunked
               </span>
             )}
@@ -201,15 +201,15 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
       {/* Progress Bar */}
       <div className="relative z-10 mb-4">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             Progress
           </span>
-          <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
+          <span className="text-sm font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
             {Math.round(animatedProgress)}%
           </span>
         </div>
         
-        <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div className="relative h-3 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full overflow-hidden">
           {/* Background shimmer effect */}
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
@@ -257,13 +257,13 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="relative z-10 mb-4 p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-gray-200/50 dark:border-gray-700/50"
+            className="relative z-10 mb-4 p-3 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-lg border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50"
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+              <span className="text-xs font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 Chunk Progress
               </span>
-              <span className="text-xs font-bold text-gray-800 dark:text-gray-200">
+              <span className="text-xs font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                 {chunkProgress.currentChunk} / {chunkProgress.totalChunks}
               </span>
             </div>
@@ -277,8 +277,8 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
                     i < chunkProgress.currentChunk
                       ? 'bg-green-500'
                       : i === chunkProgress.currentChunk
-                      ? 'bg-blue-500'
-                      : 'bg-gray-200 dark:bg-gray-600'
+                      ? 'bg-[var(--cardiology-accent-blue)]'
+                      : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--border)]'
                   }`}
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
@@ -289,7 +289,7 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
             
             {/* Current chunk progress */}
             {chunkProgress.currentChunk < chunkProgress.totalChunks && (
-              <div className="mt-2 text-xs text-gray-500">
+              <div className="mt-2 text-xs text-[var(--foreground-secondary)]">
                 <motion.div
                   className="flex items-center"
                   animate={{ opacity: [0.5, 1, 0.5] }}
@@ -305,7 +305,7 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
       </AnimatePresence>
 
       {/* Status Details */}
-      <div className="relative z-10 flex items-center justify-between text-xs text-gray-500">
+      <div className="relative z-10 flex items-center justify-between text-xs text-[var(--foreground-secondary)]">
         <div className="flex items-center space-x-4">
           {uploadSpeed && (
             <div className="flex items-center">
@@ -340,14 +340,14 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="relative z-10 mt-4 p-3 bg-white/30 dark:bg-gray-800/30 rounded-lg border border-gray-200/30 dark:border-gray-700/30"
+            className="relative z-10 mt-4 p-3 bg-[var(--component-card)]/30 dark:bg-[var(--background)]/30 rounded-lg border border-[var(--glass-border-light)]/30 dark:border-[var(--border-strong)]/30"
           >
             <div className="flex items-center justify-center space-x-2">
               <div className="flex items-center space-x-1">
                 {[...Array(3)].map((_, i) => (
                   <motion.div
                     key={i}
-                    className="w-2 h-2 bg-blue-500 rounded-full"
+                    className="w-2 h-2 bg-[var(--cardiology-accent-blue)] rounded-full"
                     animate={{
                       scale: [1, 1.5, 1],
                       opacity: [0.5, 1, 0.5]
@@ -360,12 +360,12 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
                   />
                 ))}
               </div>
-              <ArrowRight className="w-4 h-4 text-gray-400" />
+              <ArrowRight className="w-4 h-4 text-[var(--foreground-secondary)]" />
               <Server className="w-5 h-5 text-purple-500" />
-              <ArrowRight className="w-4 h-4 text-gray-400" />
+              <ArrowRight className="w-4 h-4 text-[var(--foreground-secondary)]" />
               <Database className="w-5 h-5 text-indigo-500" />
             </div>
-            <div className="text-center mt-2 text-xs text-gray-600 dark:text-gray-400">
+            <div className="text-center mt-2 text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               {status === 'reassembling' ? 'Reconstructing file from chunks' : 'Creating knowledge base'}
             </div>
           </motion.div>

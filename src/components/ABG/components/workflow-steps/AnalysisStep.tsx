@@ -46,7 +46,7 @@ export const AnalysisStep: React.FC<AnalysisStepProps> = ({
           <Button
             variant="outline"
             onClick={() => onGoToStep(WorkflowStep.UPLOAD)}
-            className="w-full sm:w-auto border-slate-300 hover:border-slate-400"
+            className="w-full sm:w-auto border-[var(--glass-border-medium)] hover:border-slate-400"
           >
             <ChevronLeft className="h-4 w-4 mr-2" />
             {t('abg.analysis.backToUpload', 'Back to Upload')}

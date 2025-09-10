@@ -199,7 +199,13 @@
 
 /* Links */
 .markdown-content a {
-  @apply text-primary hover:text-primary/90 underline;
+  color: var(--primary);
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+}
+
+.markdown-content a:hover {
+  opacity: 0.9;
 }
 
 /* Emphasis */

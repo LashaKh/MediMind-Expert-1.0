@@ -102,7 +102,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 // Default fallback component - Mobile responsive
 const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetError }) => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--component-surface-primary)] p-4">
       <div className="max-w-lg w-full text-center">
         <div className="mb-6">
           <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-red-100 rounded-full flex items-center justify-center">
@@ -122,25 +122,25 @@ const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetError 
           </div>
         </div>
         
-        <h1 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
+        <h1 className="text-lg sm:text-xl font-semibold text-[var(--foreground)] mb-3">
           Something went wrong
         </h1>
         
-        <p className="text-sm sm:text-base text-gray-600 mb-6 leading-relaxed">
+        <p className="text-sm sm:text-base text-[var(--foreground-tertiary)] mb-6 leading-relaxed">
           We apologize for the inconvenience. An unexpected error has occurred in the application.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             onClick={resetError}
-            className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
+            className="flex-1 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] px-6 py-3 rounded-lg hover:bg-[var(--cardiology-accent-blue-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
           >
             Try Again
           </button>
           
           <button
             onClick={() => window.location.reload()}
-            className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
+            className="flex-1 bg-[var(--component-surface-tertiary)] text-[var(--foreground-tertiary)] px-6 py-3 rounded-lg hover:bg-[var(--component-panel)] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
           >
             Reload Page
           </button>
@@ -148,7 +148,7 @@ const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetError 
         
         {process.env.NODE_ENV === 'development' && (
           <details className="mt-6 text-left">
-            <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700 min-h-[44px] touch-manipulation flex items-center">
+            <summary className="cursor-pointer text-sm text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] min-h-[44px] touch-manipulation flex items-center">
               Error Details (Development Only)
             </summary>
             <pre className="mt-3 text-xs text-red-600 bg-red-50 p-4 rounded-lg border overflow-auto max-h-60 font-mono">

@@ -36,7 +36,7 @@ export const MobileInput = forwardRef<HTMLInputElement, MobileInputProps>(
         {label && (
           <label 
             htmlFor={props.id}
-            className="block text-sm font-medium text-gray-900 dark:text-gray-100"
+            className="block text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]"
           >
             {label}
             {props.required && <span className="text-red-500 ml-1">*</span>}
@@ -48,7 +48,7 @@ export const MobileInput = forwardRef<HTMLInputElement, MobileInputProps>(
           {/* Left Icon */}
           {Icon && (
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10">
-              <Icon className="w-5 h-5 text-gray-400" />
+              <Icon className="w-5 h-5 text-[var(--foreground-secondary)]" />
             </div>
           )}
 
@@ -59,10 +59,10 @@ export const MobileInput = forwardRef<HTMLInputElement, MobileInputProps>(
             className={cn(
               // Base mobile-optimized styles
               'w-full min-h-[44px] px-4 py-3 text-base rounded-xl border-2 transition-all duration-200',
-              'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100',
+              'bg-[var(--component-card)] dark:bg-[var(--background)] text-[var(--foreground)] dark:text-[var(--foreground)]',
               'placeholder-gray-500 dark:placeholder-gray-400',
               'focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary',
-              'disabled:bg-gray-50 dark:disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed',
+              'disabled:bg-[var(--component-surface-primary)] dark:disabled:bg-[var(--card)] disabled:text-[var(--foreground-secondary)] disabled:cursor-not-allowed',
               
               // Icon spacing
               Icon && 'pl-12',
@@ -71,7 +71,7 @@ export const MobileInput = forwardRef<HTMLInputElement, MobileInputProps>(
               // State-based styles
               error && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
               success && 'border-green-500 focus:border-green-500 focus:ring-green-500/20',
-              !error && !success && 'border-gray-300 dark:border-gray-600',
+              !error && !success && 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)]',
               
               // Touch optimizations
               'touch-manipulation',
@@ -88,17 +88,17 @@ export const MobileInput = forwardRef<HTMLInputElement, MobileInputProps>(
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="touch-target-sm p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="touch-target-sm p-1 rounded-lg hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] transition-colors"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? (
-                  <EyeOff className="w-5 h-5 text-gray-400" />
+                  <EyeOff className="w-5 h-5 text-[var(--foreground-secondary)]" />
                 ) : (
-                  <Eye className="w-5 h-5 text-gray-400" />
+                  <Eye className="w-5 h-5 text-[var(--foreground-secondary)]" />
                 )}
               </button>
             ) : RightIcon ? (
-              <RightIcon className="w-5 h-5 text-gray-400" />
+              <RightIcon className="w-5 h-5 text-[var(--foreground-secondary)]" />
             ) : success ? (
               <Check className="w-5 h-5 text-green-500" />
             ) : error ? (
@@ -109,7 +109,7 @@ export const MobileInput = forwardRef<HTMLInputElement, MobileInputProps>(
 
         {/* Hint Text */}
         {hint && !error && (
-          <p className="text-sm text-gray-600 dark:text-gray-400">{hint}</p>
+          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{hint}</p>
         )}
 
         {/* Error Message */}
@@ -162,7 +162,7 @@ export const MobileTextarea = forwardRef<HTMLTextAreaElement, MobileTextareaProp
         {label && (
           <label 
             htmlFor={props.id}
-            className="block text-sm font-medium text-gray-900 dark:text-gray-100"
+            className="block text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]"
           >
             {label}
             {props.required && <span className="text-red-500 ml-1">*</span>}
@@ -175,16 +175,16 @@ export const MobileTextarea = forwardRef<HTMLTextAreaElement, MobileTextareaProp
           className={cn(
             // Base mobile-optimized styles
             'w-full min-h-[88px] px-4 py-3 text-base rounded-xl border-2 transition-all duration-200',
-            'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100',
+            'bg-[var(--component-card)] dark:bg-[var(--background)] text-[var(--foreground)] dark:text-[var(--foreground)]',
             'placeholder-gray-500 dark:placeholder-gray-400',
             'focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary',
-            'disabled:bg-gray-50 dark:disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed',
+            'disabled:bg-[var(--component-surface-primary)] dark:disabled:bg-[var(--card)] disabled:text-[var(--foreground-secondary)] disabled:cursor-not-allowed',
             'resize-y',
             
             // State-based styles
             error && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
             success && 'border-green-500 focus:border-green-500 focus:ring-green-500/20',
-            !error && !success && 'border-gray-300 dark:border-gray-600',
+            !error && !success && 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)]',
             
             // Touch optimizations
             'touch-manipulation',
@@ -202,7 +202,7 @@ export const MobileTextarea = forwardRef<HTMLTextAreaElement, MobileTextareaProp
           <div className="flex-1">
             {/* Hint Text */}
             {hint && !error && (
-              <p className="text-sm text-gray-600 dark:text-gray-400">{hint}</p>
+              <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{hint}</p>
             )}
 
             {/* Error Message */}
@@ -220,7 +220,7 @@ export const MobileTextarea = forwardRef<HTMLTextAreaElement, MobileTextareaProp
               'text-sm ml-2 flex-shrink-0',
               maxLength && charCount > maxLength * 0.9 
                 ? 'text-red-600' 
-                : 'text-gray-500 dark:text-gray-400'
+                : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
             )}>
               {charCount}{maxLength && `/${maxLength}`}
             </p>
@@ -262,7 +262,7 @@ export const MobileSelect = forwardRef<HTMLSelectElement, MobileSelectProps>(
         {label && (
           <label 
             htmlFor={props.id}
-            className="block text-sm font-medium text-gray-900 dark:text-gray-100"
+            className="block text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]"
           >
             {label}
             {props.required && <span className="text-red-500 ml-1">*</span>}
@@ -276,15 +276,15 @@ export const MobileSelect = forwardRef<HTMLSelectElement, MobileSelectProps>(
             className={cn(
               // Base mobile-optimized styles
               'w-full min-h-[44px] px-4 py-3 text-base rounded-xl border-2 transition-all duration-200',
-              'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100',
+              'bg-[var(--component-card)] dark:bg-[var(--background)] text-[var(--foreground)] dark:text-[var(--foreground)]',
               'focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary',
-              'disabled:bg-gray-50 dark:disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed',
+              'disabled:bg-[var(--component-surface-primary)] dark:disabled:bg-[var(--card)] disabled:text-[var(--foreground-secondary)] disabled:cursor-not-allowed',
               'cursor-pointer appearance-none',
               
               // State-based styles
               error && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
               success && 'border-green-500 focus:border-green-500 focus:ring-green-500/20',
-              !error && !success && 'border-gray-300 dark:border-gray-600',
+              !error && !success && 'border-[var(--glass-border-medium)] dark:border-[var(--border-strong)]',
               
               // Touch optimizations
               'touch-manipulation',
@@ -311,7 +311,7 @@ export const MobileSelect = forwardRef<HTMLSelectElement, MobileSelectProps>(
 
           {/* Custom dropdown arrow */}
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-[var(--foreground-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
           </div>
@@ -330,7 +330,7 @@ export const MobileSelect = forwardRef<HTMLSelectElement, MobileSelectProps>(
 
         {/* Hint Text */}
         {hint && !error && (
-          <p className="text-sm text-gray-600 dark:text-gray-400">{hint}</p>
+          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{hint}</p>
         )}
 
         {/* Error Message */}
@@ -364,7 +364,7 @@ export const MobileCheckbox = forwardRef<HTMLInputElement, MobileCheckboxProps>(
             ref={ref}
             type="checkbox"
             className={cn(
-              'w-5 h-5 mt-0.5 rounded border-2 border-gray-300 dark:border-gray-600',
+              'w-5 h-5 mt-0.5 rounded border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)]',
               'text-primary focus:ring-2 focus:ring-primary/20 focus:border-primary',
               'transition-all duration-200 cursor-pointer',
               'disabled:cursor-not-allowed disabled:opacity-50',
@@ -373,11 +373,11 @@ export const MobileCheckbox = forwardRef<HTMLInputElement, MobileCheckboxProps>(
             {...props}
           />
           <div className="flex-1 min-w-0">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+            <span className="text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">
               {label}
             </span>
             {description && (
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                 {description}
               </p>
             )}
@@ -427,7 +427,7 @@ export const MobileRadioGroup: React.FC<MobileRadioGroupProps> = ({
     <div className={cn('space-y-2', containerClassName)}>
       {/* Group Label */}
       {label && (
-        <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
+        <label className="block text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">
           {label}
         </label>
       )}
@@ -442,15 +442,15 @@ export const MobileRadioGroup: React.FC<MobileRadioGroupProps> = ({
               value={option.value}
               checked={value === option.value}
               onChange={(e) => onChange?.(e.target.value)}
-              className="w-5 h-5 mt-0.5 border-2 border-gray-300 dark:border-gray-600 text-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 cursor-pointer"
+              className="w-5 h-5 mt-0.5 border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 cursor-pointer"
               {...option}
             />
             <div className="flex-1 min-w-0">
-              <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">
                 {option.label}
               </span>
               {option.description && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                   {option.description}
                 </p>
               )}
@@ -510,11 +510,11 @@ export const MobileButton = forwardRef<HTMLButtonElement, MobileButtonProps>(
           size === 'lg' && 'px-6 py-4 text-lg min-h-[52px]',
           
           // Variant styles
-          variant === 'primary' && 'bg-primary text-white hover:bg-primary/90 shadow-sm hover:shadow-md',
-          variant === 'secondary' && 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600',
-          variant === 'outline' && 'border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800',
-          variant === 'ghost' && 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
-          variant === 'destructive' && 'bg-red-600 text-white hover:bg-red-700 shadow-sm hover:shadow-md',
+          variant === 'primary' && 'bg-primary text-[var(--foreground)] hover:bg-primary/90 shadow-sm hover:shadow-md',
+          variant === 'secondary' && 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground)] dark:text-[var(--foreground)] hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--border)]',
+          variant === 'outline' && 'border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-primary)] dark:hover:bg-[var(--background)]',
+          variant === 'ghost' && 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)]',
+          variant === 'destructive' && 'bg-red-600 text-[var(--foreground)] hover:bg-red-700 shadow-sm hover:shadow-md',
           
           className
         )}

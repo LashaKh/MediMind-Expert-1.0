@@ -65,7 +65,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         return {
           icon: Stethoscope,
           gradient: 'from-blue-500 to-indigo-600',
-          color: 'text-blue-600',
+          color: 'text-[var(--cardiology-accent-blue-dark)]',
           bg: 'from-blue-500/10 to-indigo-500/10',
           title: t('chat.specialtyTitles.medicalExpert', 'Medical AI Expert'),
           subtitle: t('chat.specialtySubtitles.medical', 'Comprehensive healthcare assistance')
@@ -155,7 +155,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             flex items-center justify-center
             animate-pulse-glow
           `}>
-            <SpecialtyIcon className="w-12 h-12 text-white" />
+            <SpecialtyIcon className="w-12 h-12 text-[var(--foreground)]" />
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 to-transparent" />
           </div>
 
@@ -167,10 +167,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             `}>
               {t('chat.welcomeTo')} {specialtyConfig.title}
             </h1>
-            <p className="text-xl text-slate-600 leading-relaxed">
+            <p className="text-xl text-[var(--foreground-tertiary)] leading-relaxed">
               {specialtyConfig.subtitle}
             </p>
-            <div className="flex items-center justify-center space-x-4 text-sm text-slate-500">
+            <div className="flex items-center justify-center space-x-4 text-sm text-[var(--foreground-secondary)]">
               <div className="flex items-center space-x-2">
                 <Activity className="w-4 h-4" />
                 <span>{t('chat.liveAt', 'Live at')} {currentTime.toLocaleTimeString()}</span>
@@ -225,10 +225,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
                     {/* Content */}
                     <div className="flex-1 space-y-2">
-                      <h3 className="text-lg font-bold text-slate-800">
+                      <h3 className="text-lg font-bold text-[var(--foreground)]">
                         {action.title}
                       </h3>
-                      <p className="text-sm text-slate-600 leading-relaxed">
+                      <p className="text-sm text-[var(--foreground-tertiary)] leading-relaxed">
                         {action.description}
                       </p>
                     </div>
@@ -236,7 +236,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                     {/* Arrow */}
                     <ArrowRight className={`
                       w-5 h-5 text-slate-400 transition-all duration-300
-                      ${isHovered ? 'translate-x-1 text-slate-600' : ''}
+                      ${isHovered ? 'translate-x-1 text-[var(--foreground-tertiary)]' : ''}
                     `} />
                   </div>
 
@@ -257,7 +257,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         {caseHistory && caseHistory.length > 0 && (
           <div className="w-full max-w-4xl">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-slate-800">
+              <h3 className="text-xl font-bold text-[var(--foreground)]">
                 {t('chat.recentCases', 'Recent Cases')} ({caseHistory.length})
               </h3>
               <Button
@@ -274,7 +274,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               {caseHistory.slice(0, 3).map((caseItem: any, index: number) => (
                 <div
                   key={caseItem.id || index}
-                  className="p-4 rounded-xl backdrop-blur-sm bg-white/40 border border-white/20 hover:bg-white/60 transition-all duration-300 cursor-pointer"
+                  className="p-4 rounded-xl theme-card transition-all duration-300 cursor-pointer"
                   onClick={() => onQuickAction?.(`selectCase:${caseItem.id}`)}
                 >
                   <div className="flex items-start space-x-3">
@@ -282,10 +282,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                       <FileText className="w-4 h-4 text-purple-600" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-slate-800 truncate text-sm">
+                      <h4 className="font-semibold text-[var(--foreground)] truncate text-sm">
                         {caseItem.title}
                       </h4>
-                      <p className="text-xs text-slate-600 line-clamp-2 mt-1">
+                      <p className="text-xs text-[var(--foreground-tertiary)] line-clamp-2 mt-1">
                         {caseItem.description}
                       </p>
                       <div className="flex items-center space-x-2 mt-2">
@@ -302,7 +302,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                             {caseItem.metadata.complexity}
                           </span>
                         )}
-                        <span className="text-xs text-slate-500">
+                        <span className="text-xs text-[var(--foreground-secondary)]">
                           {new Date(caseItem.createdAt).toLocaleDateString()}
                         </span>
                       </div>
@@ -325,19 +325,19 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                   key={index}
                   className={`
                     text-center p-4 rounded-xl
-                    backdrop-blur-sm bg-white/30 border border-white/20
-                    transition-all duration-300 hover:scale-105 hover:bg-white/50
+                    theme-card
+                    transition-all duration-300 hover:scale-105
                   `}
                 >
                   <div className="mb-3 flex justify-center">
                     <div className="p-2 rounded-lg bg-gradient-to-br from-slate-500/10 to-gray-500/10">
-                      <FeatureIcon className="w-5 h-5 text-slate-600" />
+                      <FeatureIcon className="w-5 h-5 text-[var(--foreground-tertiary)]" />
                     </div>
                   </div>
-                  <h4 className="font-semibold text-slate-800 mb-1">
+                  <h4 className="font-semibold text-[var(--foreground)] mb-1">
                     {feature.title}
                   </h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                  <p className="text-xs text-[var(--foreground-tertiary)] leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -348,7 +348,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
         {/* Call to Action */}
         <div className="text-center">
-          <p className="text-sm text-slate-500 mb-4">
+          <p className="text-sm text-[var(--foreground-secondary)] mb-4">
             {t('chat.startTypingOrSelectAction', 'Start by typing a message below or selecting an action above')}
           </p>
           <div className="flex items-center justify-center space-x-2">

@@ -54,7 +54,7 @@ const DEFAULT_PRESETS: FilterPreset[] = [
       startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
     },
     icon: Calendar,
-    color: 'text-blue-600',
+    color: 'text-[var(--cardiology-accent-blue-dark)]',
     isDefault: true
   },
   {
@@ -238,10 +238,10 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       {/* Filter Header */}
       <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
-          <Filter className="h-5 w-5 text-gray-600" />
-        <h3 className="font-medium text-gray-900">{t('abg.filtersAdvanced.title', 'Advanced Filters')}</h3>
+          <Filter className="h-5 w-5 text-[var(--foreground-tertiary)]" />
+        <h3 className="font-medium text-[var(--foreground)]">{t('abg.filtersAdvanced.title', 'Advanced Filters')}</h3>
           {activeFiltersCount > 0 && (
-            <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+            <Badge variant="secondary" className="bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)]">
             {t('abg.filtersAdvanced.activeCount', '{{count}} active', { count: activeFiltersCount })}
             </Badge>
           )}
@@ -289,14 +289,14 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Patient Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                 <User className="h-4 w-4 inline mr-1" />
                 {t('abg.filtersAdvanced.patient', 'Patient')}
               </label>
               <select
                 value={filters.patientId || ''}
                 onChange={(e) => handleCustomFilterChange('patientId', e.target.value || undefined)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent"
               >
                 <option value="">{t('abg.filtersAdvanced.allPatients', 'All Patients')}</option>
                 {patients.map(patient => (
@@ -309,14 +309,14 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
             {/* Analysis Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                 <Target className="h-4 w-4 inline mr-1" />
                 {t('abg.filtersAdvanced.analysisType', 'Analysis Type')}
               </label>
               <select
                 value={filters.type || ''}
                 onChange={(e) => handleCustomFilterChange('type', e.target.value as ABGType || undefined)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent"
               >
                 <option value="">{t('abg.results.filters.allTypes', 'All Types')}</option>
                 <option value="Arterial Blood Gas">{t('abg.results.filters.types.arterial', 'Arterial Blood Gas')}</option>
@@ -326,7 +326,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
             {/* Quick Date Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                 <Calendar className="h-4 w-4 inline mr-1" />
                 {t('abg.filtersAdvanced.quickDates', 'Quick Dates')}
               </label>
@@ -341,7 +341,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                     });
                   }
                 }}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent"
               >
                 <option value="">{t('abg.filtersAdvanced.selectPeriod', 'Select period...')}</option>
                 {datePresets.map(preset => (
@@ -354,7 +354,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
             {/* Start Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                 {t('abg.results.filters.startDate', 'Start Date')}
               </label>
               <input
@@ -364,13 +364,13 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                   ...customFilters.dateRange,
                   start: e.target.value || undefined
                 })}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent"
               />
             </div>
 
             {/* End Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                 {t('abg.results.filters.endDate', 'End Date')}
               </label>
               <input
@@ -380,13 +380,13 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                   ...customFilters.dateRange,
                   end: e.target.value || undefined
                 })}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent"
               />
             </div>
 
             {/* Status Filters */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                 {t('abg.filtersAdvanced.statusFilters', 'Status Filters')}
               </label>
               <div className="space-y-2">
@@ -413,7 +413,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
           {/* Save Search */}
           <div className="border-t pt-4">
             <div className="flex items-center justify-between">
-              <h4 className="font-medium text-gray-900 flex items-center gap-2">
+              <h4 className="font-medium text-[var(--foreground)] flex items-center gap-2">
                 <Bookmark className="h-4 w-4" />
                 {t('abg.filtersAdvanced.saveSearch.title', 'Save Search')}
               </h4>
@@ -430,14 +430,14 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
             {/* Save Dialog */}
             {showSaveDialog && (
-              <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+              <div className="mt-3 p-3 bg-[var(--component-surface-primary)] rounded-lg">
                 <div className="flex gap-2">
                   <input
                     type="text"
                     placeholder={t('abg.filtersAdvanced.saveSearch.placeholder', 'Search name...')}
                     value={saveSearchName}
                     onChange={(e) => setSaveSearchName(e.target.value)}
-                    className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="flex-1 p-2 border border-[var(--glass-border-medium)] rounded-md focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent"
                     onKeyDown={(e) => e.key === 'Enter' && saveCurrentSearch()}
                   />
                   <Button size="sm" onClick={saveCurrentSearch}>
@@ -456,7 +456,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       {/* Saved Searches */}
       {savedSearches.length > 0 && (
         <Card className="p-4">
-          <h4 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
+          <h4 className="font-medium text-[var(--foreground)] mb-3 flex items-center gap-2">
             <Star className="h-4 w-4 text-yellow-500" />
             {t('abg.filtersAdvanced.savedSearches', 'Saved Searches')}
           </h4>

@@ -170,7 +170,7 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
         
         {/* Main picture container */}
         <div className="relative">
-          <div className="w-40 h-40 rounded-3xl overflow-hidden border-4 border-white/50 dark:border-gray-700/50 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 shadow-2xl group-hover:shadow-3xl transition-all duration-500 group-hover:scale-105">
+          <div className="w-40 h-40 rounded-3xl overflow-hidden border-4 border-white/50 dark:border-[var(--border-strong)]/50 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 shadow-2xl group-hover:shadow-3xl transition-all duration-500 group-hover:scale-105">
             {previewUrl ? (
               <img
                 src={previewUrl}
@@ -190,10 +190,10 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
             onClick={handleFileSelect}
           >
             <div className="text-center space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-              <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mx-auto backdrop-blur-sm">
-                <Camera className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-[var(--component-card)]/20 rounded-2xl flex items-center justify-center mx-auto backdrop-blur-sm">
+                <Camera className="w-6 h-6 text-[var(--foreground)]" />
               </div>
-              <p className="text-white text-sm font-medium">{t('profile.changePhoto')}</p>
+              <p className="text-[var(--foreground)] text-sm font-medium">{t('profile.changePhoto')}</p>
             </div>
           </div>
 
@@ -201,7 +201,7 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
           {previewUrl && !isUploading && (
             <button
               onClick={handleRemoveImage}
-              className="absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl flex items-center justify-center hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-110 group/remove"
+              className="absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-r from-red-500 to-red-600 text-[var(--foreground)] rounded-2xl flex items-center justify-center hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-110 group/remove"
               title="Remove profile picture"
             >
               <X className="w-5 h-5 group-hover/remove:rotate-90 transition-transform duration-300" />
@@ -213,14 +213,14 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/80 to-indigo-500/80 flex items-center justify-center backdrop-blur-sm">
               <div className="text-center space-y-3">
                 <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto"></div>
-                <p className="text-white text-sm font-medium">{t('profile.saving')}</p>
+                <p className="text-[var(--foreground)] text-sm font-medium">{t('profile.saving')}</p>
               </div>
             </div>
           )}
 
           {/* Status indicator */}
           <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-2xl flex items-center justify-center border-4 border-white dark:border-gray-800 shadow-lg">
-            <Camera className="w-4 h-4 text-white" />
+            <Camera className="w-4 h-4 text-[var(--foreground)]" />
           </div>
         </div>
       </div>
@@ -229,7 +229,7 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
       <button
         onClick={handleFileSelect}
         disabled={isUploading}
-        className="group flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
+        className="group flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-[var(--foreground)] rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
       >
         <Upload className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
         <span className="font-medium">{isUploading ? t('profile.saving') : t('profile.uploadNewPhoto')}</span>

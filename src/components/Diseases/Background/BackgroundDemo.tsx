@@ -75,10 +75,10 @@ const BackgroundDemo: React.FC = () => {
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-3xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
           Background Renderer Demo
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           Beautiful rendering of disease background sections from markdown
         </p>
       </div>
@@ -112,7 +112,7 @@ const BackgroundDemo: React.FC = () => {
         <Card>
           <CardContent className="flex items-center justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <span className="ml-2 text-gray-600 dark:text-gray-400">Loading disease content...</span>
+            <span className="ml-2 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Loading disease content...</span>
           </CardContent>
         </Card>
       )}
@@ -140,8 +140,8 @@ const BackgroundDemo: React.FC = () => {
             </CardHeader>
             {showRawMarkdown && (
               <CardContent>
-                <pre className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto text-sm">
-                  <code className="text-gray-800 dark:text-gray-200">
+                <pre className="bg-[var(--component-surface-primary)] dark:bg-[var(--background)] p-4 rounded-lg overflow-x-auto text-sm">
+                  <code className="text-[var(--foreground)] dark:text-[var(--foreground)]">
                     {backgroundSection}
                   </code>
                 </pre>
@@ -155,7 +155,7 @@ const BackgroundDemo: React.FC = () => {
       {!loading && markdownContent && !backgroundSection && (
         <Card>
           <CardContent className="text-center py-8">
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               No background section found in the selected disease file.
             </p>
           </CardContent>

@@ -91,7 +91,7 @@ export const LandmarkTrialsSection: React.FC<LandmarkTrialsSectionProps> = ({
                 
                 {/* Award Icon */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Award className="w-7 h-7 text-white drop-shadow-xl transform group-hover/icon:scale-110 transition-transform duration-300" />
+                  <Award className="w-7 h-7 text-[var(--foreground)] drop-shadow-xl transform group-hover/icon:scale-110 transition-transform duration-300" />
                 </div>
                 
                 {/* Crown Effect */}
@@ -134,7 +134,7 @@ export const LandmarkTrialsSection: React.FC<LandmarkTrialsSectionProps> = ({
               
                              {/* Distinguished Description */}
                <div className="prose prose-amber max-w-none">
-                 <p className="text-gray-700 leading-relaxed text-base font-medium tracking-wide">
+                 <p className="text-[var(--foreground-tertiary)] leading-relaxed text-base font-medium tracking-wide">
                    {cleanDescription}
                  </p>
                </div>
@@ -146,14 +146,14 @@ export const LandmarkTrialsSection: React.FC<LandmarkTrialsSectionProps> = ({
                    <div className="relative bg-gradient-to-r from-amber-50/90 to-orange-50/90 border border-amber-300/70 rounded-2xl p-4 backdrop-blur-sm">
                      <div className="flex items-start gap-3">
                        <div className="p-2 bg-gradient-to-br from-amber-600 to-orange-600 rounded-lg shadow-lg flex-shrink-0">
-                         <BookOpen className="w-4 h-4 text-white" />
+                         <BookOpen className="w-4 h-4 text-[var(--foreground)]" />
                        </div>
                        <div className="flex-1">
                          <div className="flex items-center gap-2 mb-2">
                            <span className="text-xs font-bold tracking-wider text-amber-800 uppercase">Reference</span>
                            <div className="w-1 h-1 bg-amber-500 rounded-full"></div>
                          </div>
-                         <cite className="text-sm text-gray-700 font-medium leading-relaxed italic block">
+                         <cite className="text-sm text-[var(--foreground-tertiary)] font-medium leading-relaxed italic block">
                            {finalCitation}
                          </cite>
                        </div>
@@ -169,7 +169,7 @@ export const LandmarkTrialsSection: React.FC<LandmarkTrialsSectionProps> = ({
                      href={finalPubmedLink}
                      target="_blank"
                      rel="noopener noreferrer"
-                     className="group/link relative inline-flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-amber-600 via-orange-600 to-yellow-600 text-white text-sm font-bold rounded-2xl shadow-[0_6px_20px_rgba(245,158,11,0.4)] hover:shadow-[0_12px_32px_rgba(245,158,11,0.6)] transform hover:scale-105 hover:-translate-y-1 transition-all duration-400 ease-out overflow-hidden"
+                     className="group/link relative inline-flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-amber-600 via-orange-600 to-yellow-600 text-[var(--foreground)] text-sm font-bold rounded-2xl shadow-[0_6px_20px_rgba(245,158,11,0.4)] hover:shadow-[0_12px_32px_rgba(245,158,11,0.6)] transform hover:scale-105 hover:-translate-y-1 transition-all duration-400 ease-out overflow-hidden"
                    >
                      {/* Luxurious Glow Effect */}
                      <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-white/15 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-400" />
@@ -177,7 +177,7 @@ export const LandmarkTrialsSection: React.FC<LandmarkTrialsSectionProps> = ({
                      {/* Royal Icon Animation */}
                      <div className="relative">
                        <ExternalLink className="w-5 h-5 transform group-hover/link:scale-110 group-hover/link:rotate-12 transition-all duration-400" />
-                       <div className="absolute -inset-1 bg-white/40 rounded-full opacity-0 group-hover/link:opacity-100 group-hover/link:animate-ping" />
+                       <div className="absolute -inset-1 bg-[var(--component-card)]/40 rounded-full opacity-0 group-hover/link:opacity-100 group-hover/link:animate-ping" />
                      </div>
                      
                      <span className="tracking-wide font-bold">Access PubMed</span>

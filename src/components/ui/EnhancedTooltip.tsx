@@ -106,27 +106,27 @@ export const EnhancedTooltip: React.FC<EnhancedTooltipProps> = ({
           <div className="relative">
             {/* Arrow */}
             <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-              <div className="w-4 h-4 rotate-45 bg-white border-l border-t border-slate-200/60"></div>
+              <div className="w-4 h-4 rotate-45 bg-[var(--component-card)] border-l border-t border-[var(--glass-border-light)]/60"></div>
             </div>
             
             {/* Tooltip Card */}
-            <div className="bg-white/95 backdrop-blur-xl rounded-2xl border border-slate-200/60 shadow-2xl shadow-slate-900/20 p-6">
+            <div className="bg-[var(--component-card)]/95 backdrop-blur-xl rounded-2xl border border-[var(--glass-border-light)]/60 shadow-2xl shadow-slate-900/20 p-6">
               <div className="space-y-4">
                 {/* Header */}
                 <div className="flex items-center space-x-3">
                   {Icon && (
                     <div className={`p-3 rounded-xl bg-gradient-to-br ${gradient} shadow-md`}>
-                      <Icon className="w-6 h-6 text-white" />
+                      <Icon className="w-6 h-6 text-[var(--foreground)]" />
                     </div>
                   )}
                   <div>
-                    <h3 className="font-bold text-slate-900 text-lg">
+                    <h3 className="font-bold text-[var(--foreground)] text-lg">
                       {title}
                     </h3>
                     {badge && (
                       <div className={`
                         inline-flex px-3 py-1 rounded-full text-xs font-bold mt-1
-                        bg-gradient-to-r ${gradient} text-white shadow-sm
+                        bg-gradient-to-r ${gradient} text-[var(--foreground)] shadow-sm
                       `}>
                         {badge}
                       </div>
@@ -135,7 +135,7 @@ export const EnhancedTooltip: React.FC<EnhancedTooltipProps> = ({
                 </div>
                 
                 {/* Description */}
-                <div className="text-sm text-slate-600 leading-relaxed">
+                <div className="text-sm text-[var(--foreground-tertiary)] leading-relaxed">
                   {description}
                 </div>
               </div>

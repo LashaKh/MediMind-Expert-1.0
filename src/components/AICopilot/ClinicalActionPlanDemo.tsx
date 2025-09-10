@@ -140,10 +140,10 @@ export const ClinicalActionPlanDemo: React.FC = () => {
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2">
           Clinical Action Plan Display Demo
         </h1>
-        <p className="text-gray-600">
+        <p className="text-[var(--foreground-tertiary)]">
           Demonstrating the formatted display of clinical recommendations and treatment protocols.
         </p>
       </div>

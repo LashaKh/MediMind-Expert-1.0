@@ -205,7 +205,7 @@ const PPHRiskCalculatorComponent: React.FC = () => {
       case 'high':
         return 'bg-red-50 border-red-200 text-red-800';
       default:
-        return 'bg-gray-50 border-gray-200 text-gray-800';
+        return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] text-[var(--foreground)]';
     }
   }, []);
 
@@ -218,7 +218,7 @@ const PPHRiskCalculatorComponent: React.FC = () => {
       case 'high':
         return <AlertCircle className="w-6 h-6 text-red-600" />;
       default:
-        return <Info className="w-6 h-6 text-gray-600" />;
+        return <Info className="w-6 h-6 text-[var(--foreground-tertiary)]" />;
     }
   }, []);
 
@@ -275,11 +275,11 @@ const PPHRiskCalculatorComponent: React.FC = () => {
     >
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'calculator' | 'about')} className="w-full space-y-6">
         <TabsList className="grid w-full grid-cols-2 bg-red-50 border border-red-200">
-          <TabsTrigger value="calculator" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">
+          <TabsTrigger value="calculator" className="data-[state=active]:bg-red-600 data-[state=active]:text-[var(--foreground)]">
             <Calculator className="w-4 h-4 mr-2" />
             {t('calculators.obgyn.pph_risk_calculator.calculator_tab')}
           </TabsTrigger>
-          <TabsTrigger value="about" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">
+          <TabsTrigger value="about" className="data-[state=active]:bg-red-600 data-[state=active]:text-[var(--foreground)]">
             <Info className="w-4 h-4 mr-2" />
             {t('calculators.obgyn.pph_risk_calculator.about_tab')}
           </TabsTrigger>
@@ -301,8 +301,8 @@ const PPHRiskCalculatorComponent: React.FC = () => {
                   <div className={`
                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors
                     ${step >= i 
-                      ? 'bg-red-600 border-red-600 text-white' 
-                      : 'bg-white border-red-300 text-red-400'
+                      ? 'bg-red-600 border-red-600 text-[var(--foreground)]' 
+                      : 'bg-[var(--component-card)] border-red-300 text-red-400'
                     }
                   `}>
                     {getStepIcon(i)}
@@ -398,7 +398,7 @@ const PPHRiskCalculatorComponent: React.FC = () => {
                   <CalculatorButton
                     onClick={handleNext}
                     disabled={!formData.maternalAge || !formData.bmi || !formData.parity}
-                    className="bg-red-600 hover:bg-red-700 text-white px-8"
+                    className="bg-red-600 hover:bg-red-700 text-[var(--foreground)] px-8"
                   >
                     {t('calculators.obgyn.pph_risk_calculator.demographics.next_button')}
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -453,7 +453,7 @@ const PPHRiskCalculatorComponent: React.FC = () => {
                   </CalculatorButton>
                   <CalculatorButton
                     onClick={handleNext}
-                    className="bg-red-600 hover:bg-red-700 text-white px-8 flex-1"
+                    className="bg-red-600 hover:bg-red-700 text-[var(--foreground)] px-8 flex-1"
                   >
                     {t('calculators.obgyn.pph_risk_calculator.medical_history.next_button')}
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -556,7 +556,7 @@ const PPHRiskCalculatorComponent: React.FC = () => {
                   <CalculatorButton
                     onClick={handleCalculate}
                     disabled={isLoading}
-                    className="bg-red-600 hover:bg-red-700 text-white px-8 flex-1"
+                    className="bg-red-600 hover:bg-red-700 text-[var(--foreground)] px-8 flex-1"
                   >
                     {isLoading ? (
                       <>
@@ -611,12 +611,12 @@ const PPHRiskCalculatorComponent: React.FC = () => {
 
                 {/* Management Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg p-4">
                     <div className="flex items-center gap-3 mb-3">
-                      <Shield className="w-5 h-5 text-blue-600" />
+                      <Shield className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                       <h4 className="font-semibold text-blue-800">{t('calculators.obgyn.pph_risk_calculator.results.cards.prevention_strategy.title')}</h4>
                     </div>
-                    <p className="text-sm text-blue-700 capitalize">
+                    <p className="text-sm text-[var(--cardiology-accent-blue-dark)] capitalize">
                       {t(`calculators.obgyn.pph_risk_calculator.results.prevention_strategies.${result.preventionStrategy}`)}
                     </p>
                   </div>
@@ -722,11 +722,11 @@ const PPHRiskCalculatorComponent: React.FC = () => {
                   </ul>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg p-4">
                   <h3 className="font-semibold text-blue-800 mb-2">
                     {t('calculators.obgyn.pph_risk_calculator.about.prevention_strategies.title')}
                   </h3>
-                  <ul className="text-sm text-blue-700 space-y-1">
+                  <ul className="text-sm text-[var(--cardiology-accent-blue-dark)] space-y-1">
                    {getTranslationArray('calculators.obgyn.pph_risk_calculator.about.prevention_strategies.items').map((item: string, index: number) => (
                      <li key={index}>• {item}</li>
                    ))}
@@ -757,11 +757,11 @@ const PPHRiskCalculatorComponent: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">
+                <div className="bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] rounded-lg p-4">
+                  <h3 className="font-semibold text-[var(--foreground)] mb-2">
                     {t('calculators.obgyn.pph_risk_calculator.about.clinical_guidelines.title')}
                   </h3>
-                  <ul className="text-sm text-gray-700 space-y-2">
+                  <ul className="text-sm text-[var(--foreground-tertiary)] space-y-2">
                    {getTranslationArray('calculators.obgyn.pph_risk_calculator.about.clinical_guidelines.items').map((item: string, index: number) => (
                      <li key={index}>{item}</li>
                    ))}

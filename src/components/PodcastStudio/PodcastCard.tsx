@@ -96,7 +96,7 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
         return {
           icon: Clock,
           text: status,
-          color: 'text-gray-400',
+          color: 'text-[var(--foreground-secondary)]',
           bg: 'from-gray-500/20 to-slate-500/30',
           glow: 'from-gray-400 to-slate-500',
           iconBg: 'from-gray-400 to-slate-500'
@@ -186,12 +186,12 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
 
         {/* Premium Audio Wave Decoration */}
         <div className="absolute top-0 right-0 w-32 h-32 opacity-5 overflow-hidden rounded-3xl">
-          <AudioWaveform className="w-full h-full text-white transform rotate-12 scale-150" />
+          <AudioWaveform className="w-full h-full text-[var(--foreground)] transform rotate-12 scale-150" />
         </div>
 
         {/* Sparkle Animation */}
         <motion.div 
-          className="absolute top-6 right-6 text-white/20"
+          className="absolute top-6 right-6 text-[var(--foreground)]/20"
           animate={{ 
             rotate: [0, 360],
             scale: [1, 1.2, 1]
@@ -212,10 +212,10 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
               {/* Premium Status Badge */}
               <div className="flex items-center gap-3 mb-4">
                 <div className={`relative p-2 rounded-xl bg-gradient-to-r ${statusInfo.iconBg} shadow-lg`}>
-                  <StatusIcon className="w-4 h-4 text-white" />
+                  <StatusIcon className="w-4 h-4 text-[var(--foreground)]" />
                   {podcast.status === 'generating' && (
                     <motion.div
-                      className="absolute inset-0 rounded-xl bg-white/30"
+                      className="absolute inset-0 rounded-xl bg-[var(--component-card)]/30"
                       animate={{ 
                         scale: [1, 1.2, 1],
                         opacity: [0.3, 0, 0.3]
@@ -232,7 +232,7 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
                   <div className={`text-sm font-semibold ${statusInfo.color}`}>
                     {statusInfo.text}
                   </div>
-                  <div className="text-xs text-white/60">
+                  <div className="text-xs text-[var(--foreground)]/60">
                     {formatDate(podcast.created_at)}
                   </div>
                 </div>
@@ -240,7 +240,7 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
 
               {/* Revolutionary Title with Glow Effect */}
               <motion.h3 
-                className="text-lg font-bold text-white mb-2 group-hover:text-white/90 transition-all duration-300 line-clamp-2"
+                className="text-lg font-bold text-[var(--foreground)] mb-2 group-hover:text-[var(--foreground)]/90 transition-all duration-300 line-clamp-2"
                 whileHover={{ scale: 1.01 }}
               >
                 <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
@@ -249,7 +249,7 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
               </motion.h3>
               
               {podcast.description && (
-                <p className="text-sm text-white/70 line-clamp-2 leading-relaxed">
+                <p className="text-sm text-[var(--foreground)]/70 line-clamp-2 leading-relaxed">
                   {podcast.description}
                 </p>
               )}
@@ -259,7 +259,7 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
             <div className="relative ml-4">
               <motion.button
                 onClick={() => setShowMenu(!showMenu)}
-                className="p-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white/80 hover:text-white hover:bg-white/20 transition-all duration-300 group/btn"
+                className="p-3 bg-[var(--component-card)]/10 backdrop-blur-sm border border-white/20 rounded-xl text-[var(--foreground)]/80 hover:text-[var(--foreground)] hover:bg-[var(--component-card)]/20 transition-all duration-300 group/btn"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -280,25 +280,25 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
                         <>
                           <motion.button
                             onClick={handleDownload}
-                            className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-white/90 hover:bg-white/10 transition-all duration-200 group/item"
+                            className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-[var(--foreground)]/90 hover:bg-[var(--component-card)]/10 transition-all duration-200 group/item"
                             whileHover={{ x: 4 }}
                           >
-                            <div className="p-2 bg-blue-500/20 rounded-lg group-hover/item:bg-blue-500/30 transition-colors duration-200">
+                            <div className="p-2 bg-[var(--cardiology-accent-blue)]/20 rounded-lg group-hover/item:bg-[var(--cardiology-accent-blue)]/30 transition-colors duration-200">
                               <Download className="w-4 h-4 text-blue-400" />
                             </div>
                             <span className="font-medium">{t('podcast.actions.download')}</span>
-                            <ChevronRight className="w-4 h-4 ml-auto text-white/50 group-hover/item:text-white/80 transition-colors duration-200" />
+                            <ChevronRight className="w-4 h-4 ml-auto text-[var(--foreground)]/50 group-hover/item:text-[var(--foreground)]/80 transition-colors duration-200" />
                           </motion.button>
                           <motion.button
                             onClick={handleShare}
-                            className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-white/90 hover:bg-white/10 transition-all duration-200 group/item"
+                            className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-[var(--foreground)]/90 hover:bg-[var(--component-card)]/10 transition-all duration-200 group/item"
                             whileHover={{ x: 4 }}
                           >
                             <div className="p-2 bg-green-500/20 rounded-lg group-hover/item:bg-green-500/30 transition-colors duration-200">
                               <Share2 className="w-4 h-4 text-green-400" />
                             </div>
                             <span className="font-medium">{t('podcast.actions.share')}</span>
-                            <ChevronRight className="w-4 h-4 ml-auto text-white/50 group-hover/item:text-white/80 transition-colors duration-200" />
+                            <ChevronRight className="w-4 h-4 ml-auto text-[var(--foreground)]/50 group-hover/item:text-[var(--foreground)]/80 transition-colors duration-200" />
                           </motion.button>
                           <div className="mx-4 my-2 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                         </>
@@ -310,14 +310,14 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
                             onRetry();
                             setShowMenu(false);
                           }}
-                          className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-white/90 hover:bg-white/10 transition-all duration-200 group/item"
+                          className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-[var(--foreground)]/90 hover:bg-[var(--component-card)]/10 transition-all duration-200 group/item"
                           whileHover={{ x: 4 }}
                         >
                           <div className="p-2 bg-yellow-500/20 rounded-lg group-hover/item:bg-yellow-500/30 transition-colors duration-200">
                             <RefreshCw className="w-4 h-4 text-yellow-400" />
                           </div>
                           <span className="font-medium">{t('podcast.actions.retry')}</span>
-                          <ChevronRight className="w-4 h-4 ml-auto text-white/50 group-hover/item:text-white/80 transition-colors duration-200" />
+                          <ChevronRight className="w-4 h-4 ml-auto text-[var(--foreground)]/50 group-hover/item:text-[var(--foreground)]/80 transition-colors duration-200" />
                         </motion.button>
                       )}
                       
@@ -326,14 +326,14 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
                           onDelete();
                           setShowMenu(false);
                         }}
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-white/90 hover:bg-red-500/20 transition-all duration-200 group/item"
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-[var(--foreground)]/90 hover:bg-red-500/20 transition-all duration-200 group/item"
                         whileHover={{ x: 4 }}
                       >
                         <div className="p-2 bg-red-500/20 rounded-lg group-hover/item:bg-red-500/30 transition-colors duration-200">
                           <Trash2 className="w-4 h-4 text-red-400" />
                         </div>
                         <span className="font-medium">{t('podcast.actions.delete')}</span>
-                        <ChevronRight className="w-4 h-4 ml-auto text-white/50 group-hover/item:text-white/80 transition-colors duration-200" />
+                        <ChevronRight className="w-4 h-4 ml-auto text-[var(--foreground)]/50 group-hover/item:text-[var(--foreground)]/80 transition-colors duration-200" />
                       </motion.button>
                     </div>
                 </motion.div>
@@ -346,18 +346,18 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
         <div className="grid grid-cols-3 gap-3 mb-5 px-6">
           {/* Duration Card */}
           <motion.div 
-            className="relative p-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl group/meta"
+            className="relative p-3 bg-[var(--component-card)]/5 backdrop-blur-sm border border-white/10 rounded-xl group/meta"
             whileHover={{ scale: 1.05, y: -2 }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl opacity-0 group-hover/meta:opacity-100 transition-opacity duration-300" />
             <div className="relative z-10">
               <div className="flex items-center justify-center w-6 h-6 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg mb-1 mx-auto">
-                <Clock className="w-3 h-3 text-white" />
+                <Clock className="w-3 h-3 text-[var(--foreground)]" />
               </div>
-              <div className="text-[10px] text-white/60 text-center mb-0.5 font-medium">
+              <div className="text-[10px] text-[var(--foreground)]/60 text-center mb-0.5 font-medium">
                 {t('podcast.card.duration')}
               </div>
-              <div className="text-xs font-bold text-white text-center">
+              <div className="text-xs font-bold text-[var(--foreground)] text-center">
                 {formatDuration(podcast.duration)}
               </div>
             </div>
@@ -365,18 +365,18 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
 
           {/* Sources Card */}
           <motion.div 
-            className="relative p-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl group/meta"
+            className="relative p-3 bg-[var(--component-card)]/5 backdrop-blur-sm border border-white/10 rounded-xl group/meta"
             whileHover={{ scale: 1.05, y: -2 }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover/meta:opacity-100 transition-opacity duration-300" />
             <div className="relative z-10">
               <div className="flex items-center justify-center w-6 h-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg mb-1 mx-auto">
-                <FileText className="w-3 h-3 text-white" />
+                <FileText className="w-3 h-3 text-[var(--foreground)]" />
               </div>
-              <div className="text-[10px] text-white/60 text-center mb-0.5 font-medium">
+              <div className="text-[10px] text-[var(--foreground)]/60 text-center mb-0.5 font-medium">
                 {t('podcast.card.sources')}
               </div>
-              <div className="text-xs font-bold text-white text-center">
+              <div className="text-xs font-bold text-[var(--foreground)] text-center">
                 {podcast.source_documents?.length || 1}
               </div>
             </div>
@@ -384,18 +384,18 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
 
           {/* Quality Card */}
           <motion.div 
-            className="relative p-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl group/meta"
+            className="relative p-3 bg-[var(--component-card)]/5 backdrop-blur-sm border border-white/10 rounded-xl group/meta"
             whileHover={{ scale: 1.05, y: -2 }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-xl opacity-0 group-hover/meta:opacity-100 transition-opacity duration-300" />
             <div className="relative z-10">
               <div className="flex items-center justify-center w-6 h-6 bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg mb-1 mx-auto">
-                <Star className="w-3 h-3 text-white" />
+                <Star className="w-3 h-3 text-[var(--foreground)]" />
               </div>
-              <div className="text-[10px] text-white/60 text-center mb-0.5 font-medium">
+              <div className="text-[10px] text-[var(--foreground)]/60 text-center mb-0.5 font-medium">
                 Quality
               </div>
-              <div className="text-xs font-bold text-white text-center">
+              <div className="text-xs font-bold text-[var(--foreground)] text-center">
                 HD
               </div>
             </div>
@@ -440,11 +440,11 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
                 
                 {/* Content */}
                 <div className="relative flex items-center justify-center space-x-2">
-                  <div className="p-1.5 bg-white/20 rounded-lg">
-                    <Play className="w-4 h-4 text-white" />
+                  <div className="p-1.5 bg-[var(--component-card)]/20 rounded-lg">
+                    <Play className="w-4 h-4 text-[var(--foreground)]" />
                   </div>
-                  <span className="text-white font-bold text-sm">{t('podcast.actions.play')}</span>
-                  <Volume2 className="w-3.5 h-3.5 text-white/80" />
+                  <span className="text-[var(--foreground)] font-bold text-sm">{t('podcast.actions.play')}</span>
+                  <Volume2 className="w-3.5 h-3.5 text-[var(--foreground)]/80" />
                 </div>
               </div>
             </motion.button>
@@ -462,10 +462,10 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
               <div className="relative px-6 py-3 bg-gradient-to-r from-red-500 via-pink-500 to-rose-500 rounded-xl shadow-xl shadow-red-500/25">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
                 <div className="relative flex items-center justify-center space-x-2">
-                  <div className="p-1.5 bg-white/20 rounded-lg">
-                    <RefreshCw className="w-4 h-4 text-white" />
+                  <div className="p-1.5 bg-[var(--component-card)]/20 rounded-lg">
+                    <RefreshCw className="w-4 h-4 text-[var(--foreground)]" />
                   </div>
-                  <span className="text-white font-bold text-sm">{t('podcast.actions.retry')}</span>
+                  <span className="text-[var(--foreground)] font-bold text-sm">{t('podcast.actions.retry')}</span>
                 </div>
               </div>
             </motion.button>

@@ -21,13 +21,13 @@ export const SpecialtyIndicator: React.FC<SpecialtyIndicatorProps> = ({
     return (
       <div className={`animate-pulse ${className}`}>
         {variant === 'badge' && (
-          <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-200 h-6 w-24"></div>
+          <div className="inline-flex items-center px-3 py-1 rounded-full bg-[var(--component-surface-tertiary)] h-6 w-24"></div>
         )}
         {variant === 'text' && (
-          <div className="bg-gray-200 h-4 w-20 rounded"></div>
+          <div className="bg-[var(--component-surface-tertiary)] h-4 w-20 rounded"></div>
         )}
         {variant === 'card' && (
-          <div className="bg-gray-200 h-16 w-48 rounded-lg"></div>
+          <div className="bg-[var(--component-surface-tertiary)] h-16 w-48 rounded-lg"></div>
         )}
       </div>
     );
@@ -57,9 +57,9 @@ export const SpecialtyIndicator: React.FC<SpecialtyIndicatorProps> = ({
   // No specialty verified
   if (!isSpecialtyVerified || !specialty) {
     return (
-      <div className={`text-gray-500 ${className}`}>
+      <div className={`text-[var(--foreground-secondary)] ${className}`}>
         {variant === 'badge' && (
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)]">
             👤 General
           </span>
         )}
@@ -67,8 +67,8 @@ export const SpecialtyIndicator: React.FC<SpecialtyIndicatorProps> = ({
           <span className="text-sm">No specialty</span>
         )}
         {variant === 'card' && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-            <span className="text-gray-600 text-sm">Specialty not specified</span>
+          <div className="bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] rounded-lg p-4">
+            <span className="text-[var(--foreground-tertiary)] text-sm">Specialty not specified</span>
           </div>
         )}
       </div>
@@ -97,10 +97,10 @@ export const SpecialtyIndicator: React.FC<SpecialtyIndicatorProps> = ({
       default:
         return {
           icon: '🏥',
-          bgColor: 'bg-blue-100',
+          bgColor: 'bg-[var(--cardiology-accent-blue-light)]',
           textColor: 'text-blue-800',
           borderColor: 'border-blue-200',
-          accentColor: 'text-blue-600'
+          accentColor: 'text-[var(--cardiology-accent-blue-dark)]'
         };
     }
   };
@@ -160,7 +160,7 @@ export const SpecialtyIndicator: React.FC<SpecialtyIndicatorProps> = ({
           {showIcon && <span className="text-2xl mr-3">{styles.icon}</span>}
           <div>
             <h3 className={`font-semibold ${styles.textColor}`}>{displayName}</h3>
-            <p className="text-gray-600 text-sm">Current Specialty</p>
+            <p className="text-[var(--foreground-tertiary)] text-sm">Current Specialty</p>
           </div>
         </div>
       </div>
@@ -180,7 +180,7 @@ export const SpecialtyLoadingSpinner: React.FC<{ className?: string }> = ({ clas
           <span className="text-xs">🏥</span>
         </div>
       </div>
-      <span className="ml-2 text-sm text-gray-600">Loading specialty...</span>
+      <span className="ml-2 text-sm text-[var(--foreground-tertiary)]">Loading specialty...</span>
     </div>
   );
 }; 

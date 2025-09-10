@@ -87,14 +87,14 @@ export function ReadLaterPage() {
   const totalUnreadCount = state.collections.reduce((sum, c) => sum + c.unread_count, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-[var(--component-card)] dark:bg-[var(--background)] border-b border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
-              <BookOpen className="h-6 w-6 text-blue-600" />
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <BookOpen className="h-6 w-6 text-[var(--cardiology-accent-blue-dark)]" />
+              <h1 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">
                 {t('readLater.title', 'Read Later')}
               </h1>
               {totalUnreadCount > 0 && (
@@ -107,7 +107,7 @@ export function ReadLaterPage() {
             <div className="flex items-center space-x-3">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--foreground-secondary)]" />
                 <Input
                   type="text"
                   placeholder={t('readLater.searchPlaceholder', 'Search articles...')}
@@ -122,14 +122,14 @@ export function ReadLaterPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFilters(!showFilters)}
-                className={cn(showFilters && "bg-blue-50 text-blue-600")}
+                className={cn(showFilters && "bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)]")}
               >
                 <Filter className="h-4 w-4 mr-2" />
                 {t('readLater.filters', 'Filters')}
               </Button>
 
               {/* View Mode Toggle */}
-              <div className="flex rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex rounded-lg border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
                 <Button
                   variant={state.viewMode === 'grid' ? 'default' : 'ghost'}
                   size="sm"
@@ -157,10 +157,10 @@ export function ReadLaterPage() {
           {/* Sidebar */}
           <div className="w-80 flex-shrink-0">
             {/* Collections */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-sm border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] mb-6">
+              <div className="p-4 border-b border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-white">
+                  <h2 className="text-lg font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">
                     {t('readLater.collections', 'Collections')}
                   </h2>
                   <Button
@@ -191,7 +191,7 @@ export function ReadLaterPage() {
 
             {/* Filters */}
             {showFilters && (
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mt-6">
+              <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg shadow-sm border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] mt-6">
                 <ReadLaterFilters
                   filters={state.filters}
                   onFiltersChange={actions.setFilters}
@@ -293,10 +293,10 @@ function ArticlesList({ status, state, actions, onLoadMore, isLoadingMore }: Art
       <div className="space-y-4">
         {[...Array(6)].map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-3"></div>
-              <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-              <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
+            <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg p-6 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
+              <div className="h-4 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded w-3/4 mb-3"></div>
+              <div className="h-3 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded w-full mb-2"></div>
+              <div className="h-3 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded w-2/3"></div>
             </div>
           </div>
         ))}
@@ -340,14 +340,14 @@ function ArticlesList({ status, state, actions, onLoadMore, isLoadingMore }: Art
                 state.selectedArticles.includes(article.id)
               )}
               onChange={handleSelectAll}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="rounded border-[var(--glass-border-medium)] text-[var(--cardiology-accent-blue-dark)] focus:ring-[var(--cardiology-accent-blue)]"
             />
-            <span className="text-sm text-gray-700 dark:text-gray-300">
+            <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               {t('readLater.selectAll', 'Select all')}
             </span>
           </label>
           
-          <span className="text-sm text-gray-500 dark:text-gray-400">
+          <span className="text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
             {filteredArticles.length} {t('readLater.articles', 'articles')}
           </span>
         </div>
@@ -356,7 +356,7 @@ function ArticlesList({ status, state, actions, onLoadMore, isLoadingMore }: Art
         <select
           value={`${state.sortBy}-${state.sortOrder}`}
           onChange={(e) => handleSelectAll()}
-          className="text-sm border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1 bg-white dark:bg-gray-800"
+          className="text-sm border border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] rounded-md px-3 py-1 bg-[var(--component-card)] dark:bg-[var(--background)]"
         >
           <option value="created_at-desc">{t('readLater.sortNewest', 'Newest first')}</option>
           <option value="created_at-asc">{t('readLater.sortOldest', 'Oldest first')}</option>

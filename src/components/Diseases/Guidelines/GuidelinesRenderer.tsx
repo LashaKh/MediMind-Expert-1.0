@@ -203,7 +203,7 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
         organization: org,
         year: year,
         type: 'recommendation',
-        icon: <Stethoscope className="w-5 h-5 text-blue-600" />
+        icon: <Stethoscope className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
       });
     }
   };
@@ -225,11 +225,11 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
       case 'contraindication':
         return <XCircle className="w-5 h-5 text-red-600" />;
       case 'consideration':
-        return <Info className="w-5 h-5 text-blue-600" />;
+        return <Info className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />;
       case 'key-source':
         return <Building2 className="w-5 h-5 text-purple-600" />;
       default:
-        return <Shield className="w-5 h-5 text-gray-600" />;
+        return <Shield className="w-5 h-5 text-[var(--foreground-tertiary)]" />;
     }
   };
   
@@ -244,10 +244,10 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
     const levelChar = level.charAt(level.length - 1).toUpperCase();
     const colors = {
       'A': 'bg-green-100 text-green-800 border-green-200',
-      'B': 'bg-blue-100 text-blue-800 border-blue-200', 
+      'B': 'bg-[var(--cardiology-accent-blue-light)] text-blue-800 border-blue-200', 
       'C': 'bg-yellow-100 text-yellow-800 border-yellow-200',
       'D': 'bg-red-100 text-red-800 border-red-200',
-      'E': 'bg-gray-100 text-gray-800 border-gray-200'
+      'E': 'bg-[var(--component-surface-secondary)] text-[var(--foreground)] border-[var(--glass-border-light)]'
     };
     
     const colorClass = colors[levelChar as keyof typeof colors] || colors['E'];
@@ -290,8 +290,8 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
       },
       'consideration': {
         border: 'border-l-blue-500',
-        bg: 'bg-blue-50 dark:bg-blue-900/20',
-        hover: 'hover:bg-blue-100 dark:hover:bg-blue-900/30'
+        bg: 'bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20',
+        hover: 'hover:bg-[var(--cardiology-accent-blue-light)] dark:hover:bg-[var(--cardiology-accent-blue-darker)]/30'
       }
     };
     
@@ -310,13 +310,13 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
       {showHeader && (
         <div className="flex items-center space-x-3 mb-6">
           <div className="p-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg">
-            <Shield className="w-6 h-6 text-white" />
+            <Shield className="w-6 h-6 text-[var(--foreground)]" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
               Guidelines
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               Evidence-based clinical recommendations
             </p>
           </div>
@@ -349,7 +349,7 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
                 <div className="flex items-start space-x-4">
                   {/* Icon */}
                   <div className="flex-shrink-0 mt-1">
-                    <div className="p-2 bg-white dark:bg-gray-800 rounded-lg group-hover:bg-gray-50 dark:group-hover:bg-gray-700 transition-colors shadow-sm">
+                    <div className="p-2 bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg group-hover:bg-[var(--component-surface-primary)] dark:group-hover:bg-[var(--card)] transition-colors shadow-sm">
                       {item.icon}
                     </div>
                   </div>
@@ -358,7 +358,7 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                        <h3 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                           {item.title}
                         </h3>
                         
@@ -366,13 +366,13 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
                         {(item.organization || item.year) && (
                           <div className="flex items-center space-x-2 mb-2">
                             {item.organization && (
-                              <Badge variant="outline" className="text-xs bg-white dark:bg-gray-800">
+                              <Badge variant="outline" className="text-xs bg-[var(--component-card)] dark:bg-[var(--background)]">
                                 <Building2 className="w-3 h-3 mr-1" />
                                 {item.organization}
                               </Badge>
                             )}
                             {item.year && (
-                              <Badge variant="outline" className="text-xs bg-white dark:bg-gray-800">
+                              <Badge variant="outline" className="text-xs bg-[var(--component-card)] dark:bg-[var(--background)]">
                                 <Calendar className="w-3 h-3 mr-1" />
                                 {item.year}
                               </Badge>
@@ -393,7 +393,7 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
                       {formatContent(item.content).split('\n\n').map((paragraph, pIndex) => (
                         <p 
                           key={pIndex} 
-                          className="text-gray-900 dark:text-gray-200 leading-relaxed mb-3 last:mb-0"
+                          className="text-[var(--foreground)] dark:text-[var(--foreground)] leading-relaxed mb-3 last:mb-0"
                         >
                           {paragraph}
                         </p>

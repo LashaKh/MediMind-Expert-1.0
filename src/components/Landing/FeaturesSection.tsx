@@ -51,7 +51,7 @@ export const FeaturesSection: React.FC = () => {
           <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
             {t('landing.features.title')}
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400">
+          <p className="text-xl text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             {t('landing.features.subtitle')}
           </p>
         </motion.div>

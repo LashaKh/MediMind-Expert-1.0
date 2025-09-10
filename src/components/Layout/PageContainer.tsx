@@ -57,10 +57,10 @@ export const PageContainer: React.FC<PageContainerProps> = ({
 
   const getBackgroundClass = () => {
     switch (background) {
-      case 'gray': return 'bg-gray-50 dark:bg-gray-900';
-      case 'white': return 'bg-white dark:bg-gray-800';
+      case 'gray': return 'bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]';
+      case 'white': return 'bg-[var(--component-card)] dark:bg-[var(--background)]';
       case 'transparent': return 'bg-transparent';
-      default: return 'bg-gray-50 dark:bg-gray-900';
+      default: return 'bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]';
     }
   };
 

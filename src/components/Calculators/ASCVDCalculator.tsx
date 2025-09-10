@@ -520,7 +520,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
       case 'high':
         return 'text-red-600 dark:text-red-400';
       default:
-        return 'text-gray-600 dark:text-gray-400';
+        return 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]';
     }
   }, []);
 
@@ -535,7 +535,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
       case 'high':
         return 'from-red-500/10 via-red-400/5 to-rose-500/10 border-red-200/50 dark:border-red-400/30';
       default:
-        return 'from-gray-500/10 via-gray-400/5 to-gray-500/10 border-gray-200/50 dark:border-gray-400/30';
+        return 'from-gray-500/10 via-gray-400/5 to-gray-500/10 border-[var(--glass-border-light)]/50 dark:border-[var(--border)]/30';
     }
   }, []);
 
@@ -570,33 +570,33 @@ const ASCVDCalculatorComponent: React.FC = () => {
             <div className="flex items-center justify-center space-x-4 mb-8">
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 1 ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   1
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.ascvd.demographics_section')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.ascvd.demographics_section')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 2 ? 'bg-blue-500' : 'bg-gray-200'
+                currentStep >= 2 ? 'bg-[var(--cardiology-accent-blue)]' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 2 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 2 ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   2
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.ascvd.lab_values_section')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.ascvd.lab_values_section')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 3 ? 'bg-blue-500' : 'bg-gray-200'
+                currentStep >= 3 ? 'bg-[var(--cardiology-accent-blue)]' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 3 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 3 ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   3
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.ascvd.risk_factors_section')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.ascvd.risk_factors_section')}</span>
               </div>
             </div>
 
@@ -605,8 +605,8 @@ const ASCVDCalculatorComponent: React.FC = () => {
               <div className="space-y-6 animate-fadeIn">
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
-                    <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.ascvd.demographics_section')}</h3>
+                    <User className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.ascvd.demographics_section')}</h3>
                   </div>
                 </div>
 
@@ -675,7 +675,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl border border-purple-200 dark:border-purple-800">
                     <Droplet className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.ascvd.lab_values_section')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.ascvd.lab_values_section')}</h3>
                   </div>
                 </div>
 
@@ -747,7 +747,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-2xl border border-orange-200 dark:border-orange-800">
                     <AlertTriangle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.ascvd.risk_factors_section')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.ascvd.risk_factors_section')}</h3>
                   </div>
                 </div>
 
@@ -817,7 +817,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                             stroke="currentColor"
                             strokeWidth="8"
                             fill="transparent"
-                            className="text-white/20"
+                            className="text-[var(--foreground)]/20"
                           />
                           <circle
                             cx="50"
@@ -839,7 +839,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                             <div className={`text-3xl font-bold ${getRiskColor(result.riskCategory)}`}>
                               {result.tenYearRisk.toFixed(1)}%
                             </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-300 font-medium">
+                            <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-medium">
                               10-Year Risk
                             </div>
                           </div>
@@ -850,7 +850,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                         <div className="flex items-center space-x-3">
                           <Heart className={`w-8 h-8 ${getRiskColor(result.riskCategory)}`} />
                           <div>
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                            <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                               ASCVD Risk Assessment
                             </h3>
                             <div className={`text-lg font-semibold ${getRiskColor(result.riskCategory)}`}>
@@ -860,7 +860,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                         </div>
                         
                         <div className="max-w-md">
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                          <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                             {getInterpretation(result.riskCategory, result.tenYearRisk)}
                           </p>
                         </div>
@@ -869,7 +869,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
 
                     {/* Risk Level Indicator */}
                     <div className="flex flex-col items-center space-y-4">
-                      <div className={`px-6 py-3 rounded-2xl ${getRiskColor(result.riskCategory)} bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-white/20`}>
+                      <div className={`px-6 py-3 rounded-2xl ${getRiskColor(result.riskCategory)} bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm border border-white/20`}>
                         <span className="font-bold text-lg">
                           {result.riskCategory === 'low' && '💚 Low Risk'}
                           {result.riskCategory === 'borderline' && '🟡 Borderline Risk'}
@@ -878,10 +878,10 @@ const ASCVDCalculatorComponent: React.FC = () => {
                         </span>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        <div className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                           {result.tenYearRisk.toFixed(1)}%
                         </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                        <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                           10-Year ASCVD Risk
                         </div>
                       </div>
@@ -897,19 +897,19 @@ const ASCVDCalculatorComponent: React.FC = () => {
                       <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-blue-500/10"></div>
                       <div className="relative p-6">
                         <div className="flex items-center space-x-3 mb-4">
-                          <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center backdrop-blur-sm">
-                            <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                          <div className="w-12 h-12 rounded-2xl bg-[var(--cardiology-accent-blue)]/20 flex items-center justify-center backdrop-blur-sm">
+                            <BarChart3 className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                           </div>
                           <div>
-                            <h4 className="font-bold text-gray-900 dark:text-gray-100 text-lg">{t('calculators.cardiology.ascvd.lifetime_risk_title')}</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Extended Risk Projection</p>
+                            <h4 className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)] text-lg">{t('calculators.cardiology.ascvd.lifetime_risk_title')}</h4>
+                            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Extended Risk Projection</p>
                           </div>
                         </div>
                         <div className="space-y-3">
-                          <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                          <div className="text-3xl font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">
                             {result.lifetimeRisk.toFixed(1)}%
                           </div>
-                          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                             {t('calculators.cardiology.ascvd.lifetime_risk_description')}
                           </p>
                         </div>
@@ -926,15 +926,15 @@ const ASCVDCalculatorComponent: React.FC = () => {
                           <Target className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-gray-900 dark:text-gray-100 text-lg">{t('calculators.cardiology.ascvd.risk_classification_title')}</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Clinical Category</p>
+                          <h4 className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)] text-lg">{t('calculators.cardiology.ascvd.risk_classification_title')}</h4>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Clinical Category</p>
                         </div>
                       </div>
                       <div className="space-y-3">
                         <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                           {result.riskCategory.charAt(0).toUpperCase() + result.riskCategory.slice(1)} Risk
                         </div>
-                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                           {result.riskCategory === 'low' && t('calculators.cardiology.ascvd.risk_classification_low')}
                           {result.riskCategory === 'borderline' && t('calculators.cardiology.ascvd.risk_classification_borderline')}
                           {result.riskCategory === 'intermediate' && t('calculators.cardiology.ascvd.risk_classification_intermediate')}
@@ -955,18 +955,18 @@ const ASCVDCalculatorComponent: React.FC = () => {
                           <Zap className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                         </div>
                         <div>
-                          <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.ascvd.therapy_reduction_title')}</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Evidence-Based Interventions</p>
+                          <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.ascvd.therapy_reduction_title')}</h4>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Evidence-Based Interventions</p>
                         </div>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                         <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500/20 via-blue-400/10 to-indigo-500/20 border border-blue-200/50 dark:border-blue-400/30 backdrop-blur-sm hover:scale-105 transition-all duration-300">
                           <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-blue-500/10"></div>
                           <div className="relative p-4">
-                            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                            <div className="text-2xl font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mb-2">
                               {result.therapyBenefit.statin.toFixed(1)}%
                             </div>
-                            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('calculators.cardiology.ascvd.statin_therapy')}</div>
+                            <div className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.ascvd.statin_therapy')}</div>
                           </div>
                         </div>
                         <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-500/20 via-green-400/10 to-emerald-500/20 border border-green-200/50 dark:border-green-400/30 backdrop-blur-sm hover:scale-105 transition-all duration-300">
@@ -975,7 +975,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                             <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">
                               {result.therapyBenefit.bpControl.toFixed(1)}%
                             </div>
-                            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('calculators.cardiology.ascvd.bp_control')}</div>
+                            <div className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.ascvd.bp_control')}</div>
                           </div>
                         </div>
                         {result.therapyBenefit.smoking > 0 && (
@@ -985,7 +985,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                               <div className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
                                 {result.therapyBenefit.smoking.toFixed(1)}%
                               </div>
-                              <div className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('calculators.cardiology.ascvd.smoking_cessation')}</div>
+                              <div className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.ascvd.smoking_cessation')}</div>
                             </div>
                           </div>
                         )}
@@ -995,7 +995,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                             <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-2">
                               {result.therapyBenefit.aspirin.toFixed(1)}%
                             </div>
-                            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('calculators.cardiology.ascvd.aspirin_therapy')}</div>
+                            <div className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.ascvd.aspirin_therapy')}</div>
                           </div>
                         </div>
                       </div>
@@ -1022,28 +1022,28 @@ const ASCVDCalculatorComponent: React.FC = () => {
                 )}
 
               {/* Evidence Section */}
-              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-500/10 via-slate-400/5 to-gray-500/10 border border-slate-200/50 dark:border-slate-400/30 backdrop-blur-xl">
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-500/10 via-slate-400/5 to-gray-500/10 border border-[var(--glass-border-light)]/50 dark:border-slate-400/30 backdrop-blur-xl">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-slate-500/10"></div>
                 <div className="relative p-6 space-y-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-500/20 flex items-center justify-center backdrop-blur-sm">
-                      <Award className="w-6 h-6 text-slate-600 dark:text-slate-400" />
+                    <div className="w-12 h-12 rounded-2xl bg-[var(--muted-foreground)]/20 flex items-center justify-center backdrop-blur-sm">
+                      <Award className="w-6 h-6 text-[var(--foreground-tertiary)] dark:text-slate-400" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                      <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                         {t('calculators.cardiology.ascvd.evidence_title')}
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Scientific Foundation</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Scientific Foundation</p>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                     {t('calculators.cardiology.ascvd.evidence_description')}
                   </p>
                   <a 
                     href="https://www.ahajournals.org/doi/pdf/10.1161/01.cir.0000437741.48606.98"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center px-4 py-2 rounded-xl bg-blue-500/20 border border-blue-200/50 dark:border-blue-400/30 text-blue-700 dark:text-blue-300 hover:bg-blue-500/30 transition-all duration-300"
+                    className="group inline-flex items-center px-4 py-2 rounded-xl bg-[var(--cardiology-accent-blue)]/20 border border-blue-200/50 dark:border-blue-400/30 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 hover:bg-[var(--cardiology-accent-blue)]/30 transition-all duration-300"
                   >
                     <ExternalLink className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                     <span className="font-medium">{t('calculators.cardiology.ascvd.evidence_link_text')}</span>
@@ -1060,17 +1060,17 @@ const ASCVDCalculatorComponent: React.FC = () => {
                       <User className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                      <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                         {t('calculators.cardiology.ascvd.about_creator_title')}
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Development Team</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Development Team</p>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <p className="text-lg font-bold text-indigo-700 dark:text-indigo-300">
                       {t('calculators.cardiology.ascvd.creator_name')}
                     </p>
-                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                       {t('calculators.cardiology.ascvd.creator_bio')}
                     </p>
                   </div>
@@ -1101,7 +1101,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
 
         {/* Footer Information */}
         <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-          <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <Info className="w-4 h-4" />
             <span>{t('calculators.cardiology.ascvd.footer_guidelines')}</span>
             <div className="flex items-center space-x-1">

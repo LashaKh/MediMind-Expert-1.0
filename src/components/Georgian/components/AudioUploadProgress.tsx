@@ -27,7 +27,7 @@ export const AudioUploadProgress: React.FC<AudioUploadProgressProps> = ({
   const getStageIcon = () => {
     switch (stage) {
       case 'validating':
-        return <Upload className="w-5 h-5 text-blue-600 animate-pulse" />;
+        return <Upload className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] animate-pulse" />;
       case 'chunking':
         return <FileAudio className="w-5 h-5 text-indigo-600 animate-pulse" />;
       case 'transcribing':
@@ -37,7 +37,7 @@ export const AudioUploadProgress: React.FC<AudioUploadProgressProps> = ({
       case 'error':
         return <XCircle className="w-5 h-5 text-red-600" />;
       default:
-        return <Clock className="w-5 h-5 text-gray-500" />;
+        return <Clock className="w-5 h-5 text-[var(--foreground-secondary)]" />;
     }
   };
 
@@ -63,7 +63,7 @@ export const AudioUploadProgress: React.FC<AudioUploadProgressProps> = ({
   const getStageColor = () => {
     switch (stage) {
       case 'validating':
-        return 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20';
+        return 'border-blue-200 bg-[var(--cardiology-accent-blue-light)] dark:border-blue-800 dark:bg-[var(--cardiology-accent-blue-darker)]/20';
       case 'chunking':
         return 'border-indigo-200 bg-indigo-50 dark:border-indigo-800 dark:bg-indigo-900/20';
       case 'transcribing':
@@ -73,7 +73,7 @@ export const AudioUploadProgress: React.FC<AudioUploadProgressProps> = ({
       case 'error':
         return 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20';
       default:
-        return 'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/20';
+        return 'border-[var(--glass-border-light)] bg-[var(--component-surface-primary)] dark:border-[var(--border-strong)] dark:bg-[var(--background)]/20';
     }
   };
 
@@ -89,11 +89,11 @@ export const AudioUploadProgress: React.FC<AudioUploadProgressProps> = ({
           <div className="flex items-center space-x-3">
             {getStageIcon()}
             <div className="min-w-0 flex-1">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+              <h3 className="text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] truncate">
                 Audio Upload
               </h3>
               {fileName && (
-                <p className="text-xs text-gray-600 dark:text-gray-400 truncate" title={fileName}>
+                <p className="text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] truncate" title={fileName}>
                   {fileName}
                 </p>
               )}
@@ -104,7 +104,7 @@ export const AudioUploadProgress: React.FC<AudioUploadProgressProps> = ({
           {(stage === 'validating' || stage === 'chunking' || stage === 'transcribing') && onCancel && (
             <button
               onClick={onCancel}
-              className="p-1 text-gray-400 hover:text-red-600 transition-colors duration-200"
+              className="p-1 text-[var(--foreground-secondary)] hover:text-red-600 transition-colors duration-200"
               title="Cancel upload"
             >
               <XCircle className="w-4 h-4" />
@@ -115,13 +115,13 @@ export const AudioUploadProgress: React.FC<AudioUploadProgressProps> = ({
         {/* Progress Bar */}
         {(stage === 'chunking' || stage === 'transcribing') && (
           <div className="mb-3">
-            <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
+            <div className="flex justify-between text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">
               <span>{Math.round(progress)}%</span>
               {estimatedTimeRemaining && (
                 <span>{estimatedTimeRemaining}s remaining</span>
               )}
             </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-2 overflow-hidden">
               <div 
                 className="bg-gradient-to-r from-emerald-500 to-teal-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
@@ -132,12 +132,12 @@ export const AudioUploadProgress: React.FC<AudioUploadProgressProps> = ({
 
         {/* Chunk Progress */}
         {stage === 'transcribing' && totalChunks > 0 && (
-          <div className="mb-3 p-2 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+          <div className="mb-3 p-2 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-lg">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-gray-600 dark:text-gray-400">
+              <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 Chunk Progress
               </span>
-              <span className="font-medium text-gray-900 dark:text-gray-100">
+              <span className="font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">
                 {currentChunk} / {totalChunks}
               </span>
             </div>
@@ -148,19 +148,19 @@ export const AudioUploadProgress: React.FC<AudioUploadProgressProps> = ({
                   className={`h-1 flex-1 rounded-full transition-all duration-300 ${
                     i < Math.floor((currentChunk / totalChunks) * 10)
                       ? 'bg-emerald-500'
-                      : 'bg-gray-300 dark:bg-gray-600'
+                      : 'bg-[var(--component-panel)] dark:bg-[var(--border)]'
                   }`}
                 />
               ))}
               {totalChunks > 10 && (
-                <span className="text-xs text-gray-500 ml-1">...</span>
+                <span className="text-xs text-[var(--foreground-secondary)] ml-1">...</span>
               )}
             </div>
           </div>
         )}
 
         {/* Status Message */}
-        <p className="text-sm text-gray-700 dark:text-gray-300">
+        <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           {getStageMessage()}
         </p>
 
@@ -178,7 +178,7 @@ export const AudioUploadProgress: React.FC<AudioUploadProgressProps> = ({
           <div className="mt-3 flex justify-end">
             <button
               onClick={() => {/* This could trigger a close action */}}
-              className="text-xs px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+              className="text-xs px-3 py-1 bg-green-600 text-[var(--foreground)] rounded-lg hover:bg-green-700 transition-colors duration-200"
             >
               Done
             </button>

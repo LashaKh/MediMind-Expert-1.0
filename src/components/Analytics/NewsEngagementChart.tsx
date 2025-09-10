@@ -183,11 +183,11 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
 
   if (loading) {
     return (
-      <div className={`bg-white rounded-xl shadow-lg p-6 ${className}`}>
+      <div className={`bg-[var(--component-card)] rounded-xl shadow-lg p-6 ${className}`}>
         <div className="flex items-center justify-center h-64">
           <div className="flex items-center space-x-3">
-            <RefreshCw className="w-5 h-5 animate-spin text-blue-600" />
-            <span className="text-gray-600">Loading engagement data...</span>
+            <RefreshCw className="w-5 h-5 animate-spin text-[var(--cardiology-accent-blue-dark)]" />
+            <span className="text-[var(--foreground-tertiary)]">Loading engagement data...</span>
           </div>
         </div>
       </div>
@@ -196,14 +196,14 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
 
   if (error) {
     return (
-      <div className={`bg-white rounded-xl shadow-lg p-6 ${className}`}>
+      <div className={`bg-[var(--component-card)] rounded-xl shadow-lg p-6 ${className}`}>
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="text-red-500 mb-2">⚠️ Error loading data</div>
-            <p className="text-gray-600 text-sm">{error}</p>
+            <p className="text-[var(--foreground-tertiary)] text-sm">{error}</p>
             <button 
               onClick={fetchEngagementData}
-              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="mt-3 px-4 py-2 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] rounded-lg hover:bg-[var(--cardiology-accent-blue-dark)] transition-colors"
             >
               Retry
             </button>
@@ -214,24 +214,24 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
   }
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg overflow-hidden ${className}`}>
+    <div className={`bg-[var(--component-card)] rounded-xl shadow-lg overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="p-6 border-b border-gray-200">
+      <div className="p-6 border-b border-[var(--glass-border-light)]">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <BarChart3 className="w-5 h-5 text-blue-600" />
+            <div className="p-2 bg-[var(--cardiology-accent-blue-light)] rounded-lg">
+              <BarChart3 className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">News Engagement Analytics</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="text-lg font-semibold text-[var(--foreground)]">News Engagement Analytics</h3>
+              <p className="text-sm text-[var(--foreground-tertiary)]">
                 Real-time user interaction metrics {specialty && `for ${specialty}`}
               </p>
             </div>
           </div>
           <button
             onClick={fetchEngagementData}
-            className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] transition-colors"
             title="Refresh data"
           >
             <RefreshCw className="w-5 h-5" />
@@ -241,11 +241,11 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
         {/* Controls */}
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">Chart Type:</label>
+            <label className="text-sm font-medium text-[var(--foreground-tertiary)]">Chart Type:</label>
             <select
               value={chartType}
               onChange={(e) => setChartType(e.target.value as any)}
-              className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="px-3 py-1 border border-[var(--glass-border-medium)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)]"
             >
               <option value="area">Area Chart</option>
               <option value="line">Line Chart</option>
@@ -254,11 +254,11 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
           </div>
 
           <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">Metric:</label>
+            <label className="text-sm font-medium text-[var(--foreground-tertiary)]">Metric:</label>
             <select
               value={selectedMetric}
               onChange={(e) => setSelectedMetric(e.target.value as any)}
-              className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="px-3 py-1 border border-[var(--glass-border-medium)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)]"
             >
               <option value="clicks">Clicks</option>
               <option value="views">Views</option>
@@ -381,8 +381,8 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Specialty Distribution Pie Chart */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
-                <Users className="w-4 h-4 mr-2 text-gray-600" />
+              <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center">
+                <Users className="w-4 h-4 mr-2 text-[var(--foreground-tertiary)]" />
                 Engagement by Specialty
               </h4>
               <div className="h-48">
@@ -409,27 +409,27 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
 
             {/* Specialty Performance Metrics */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
-                <TrendingUp className="w-4 h-4 mr-2 text-gray-600" />
+              <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center">
+                <TrendingUp className="w-4 h-4 mr-2 text-[var(--foreground-tertiary)]" />
                 Performance by Specialty
               </h4>
               <div className="space-y-3">
                 {specialtyData.map((spec) => (
-                  <div key={spec.specialty} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={spec.specialty} className="flex items-center justify-between p-3 bg-[var(--component-surface-primary)] rounded-lg">
                     <div className="flex items-center space-x-3">
                       <div 
                         className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: spec.color }}
                       />
-                      <span className="text-sm font-medium text-gray-900 capitalize">
+                      <span className="text-sm font-medium text-[var(--foreground)] capitalize">
                         {spec.specialty.replace('_', ' ')}
                       </span>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-semibold text-gray-900">
+                      <div className="text-sm font-semibold text-[var(--foreground)]">
                         {(spec.clickThroughRate * 100).toFixed(1)}%
                       </div>
-                      <div className="text-xs text-gray-600">CTR</div>
+                      <div className="text-xs text-[var(--foreground-tertiary)]">CTR</div>
                     </div>
                   </div>
                 ))}
@@ -440,14 +440,14 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
       </div>
 
       {/* Summary Stats */}
-      <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+      <div className="px-6 py-4 bg-[var(--component-surface-primary)] border-t border-[var(--glass-border-light)]">
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="text-center">
             <div className="flex items-center justify-center mb-1">
-              <Eye className="w-4 h-4 text-blue-600 mr-1" />
-              <span className="text-xs font-medium text-gray-600">Total Views</span>
+              <Eye className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] mr-1" />
+              <span className="text-xs font-medium text-[var(--foreground-tertiary)]">Total Views</span>
             </div>
-            <div className="text-lg font-bold text-gray-900">
+            <div className="text-lg font-bold text-[var(--foreground)]">
               {data.reduce((sum, d) => sum + d.views, 0).toLocaleString()}
             </div>
           </div>
@@ -455,9 +455,9 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
           <div className="text-center">
             <div className="flex items-center justify-center mb-1">
               <Users className="w-4 h-4 text-green-600 mr-1" />
-              <span className="text-xs font-medium text-gray-600">Total Clicks</span>
+              <span className="text-xs font-medium text-[var(--foreground-tertiary)]">Total Clicks</span>
             </div>
-            <div className="text-lg font-bold text-gray-900">
+            <div className="text-lg font-bold text-[var(--foreground)]">
               {data.reduce((sum, d) => sum + d.clicks, 0).toLocaleString()}
             </div>
           </div>
@@ -465,9 +465,9 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
           <div className="text-center">
             <div className="flex items-center justify-center mb-1">
               <Share2 className="w-4 h-4 text-purple-600 mr-1" />
-              <span className="text-xs font-medium text-gray-600">Shares</span>
+              <span className="text-xs font-medium text-[var(--foreground-tertiary)]">Shares</span>
             </div>
-            <div className="text-lg font-bold text-gray-900">
+            <div className="text-lg font-bold text-[var(--foreground)]">
               {data.reduce((sum, d) => sum + d.shares, 0).toLocaleString()}
             </div>
           </div>
@@ -475,9 +475,9 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
           <div className="text-center">
             <div className="flex items-center justify-center mb-1">
               <Bookmark className="w-4 h-4 text-orange-600 mr-1" />
-              <span className="text-xs font-medium text-gray-600">Bookmarks</span>
+              <span className="text-xs font-medium text-[var(--foreground-tertiary)]">Bookmarks</span>
             </div>
-            <div className="text-lg font-bold text-gray-900">
+            <div className="text-lg font-bold text-[var(--foreground)]">
               {data.reduce((sum, d) => sum + d.bookmarks, 0).toLocaleString()}
             </div>
           </div>
@@ -485,9 +485,9 @@ export const NewsEngagementChart: React.FC<NewsEngagementChartProps> = ({
           <div className="text-center">
             <div className="flex items-center justify-center mb-1">
               <Clock className="w-4 h-4 text-indigo-600 mr-1" />
-              <span className="text-xs font-medium text-gray-600">Avg Read Time</span>
+              <span className="text-xs font-medium text-[var(--foreground-tertiary)]">Avg Read Time</span>
             </div>
-            <div className="text-lg font-bold text-gray-900">
+            <div className="text-lg font-bold text-[var(--foreground)]">
               {Math.round(data.reduce((sum, d) => sum + d.readTime, 0) / data.length)}s
             </div>
           </div>

@@ -84,7 +84,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
               return (
                 <div key={index} className="flex justify-between items-center py-1">
                   <span className="font-medium">{key.trim()}:</span>
-                  <span className="font-mono text-blue-600">{value.trim()}</span>
+                  <span className="font-mono text-[var(--cardiology-accent-blue-dark)]">{value.trim()}</span>
                 </div>
               );
             }
@@ -119,15 +119,15 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
             >
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                  <FileText className="h-4 w-4 text-white" />
+                  <FileText className="h-4 w-4 text-[var(--foreground)]" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-800">{t('abg.analysis.raw.title', 'Raw Analysis Data')}</h3>
-                  <p className="text-xs text-slate-600">{t('abg.analysis.raw.reviewHint', 'Review and edit if needed')}</p>
+                  <h3 className="text-base font-bold text-[var(--foreground)]">{t('abg.analysis.raw.title', 'Raw Analysis Data')}</h3>
+                  <p className="text-xs text-[var(--foreground-tertiary)]">{t('abg.analysis.raw.reviewHint', 'Review and edit if needed')}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-[var(--foreground-secondary)]">
                   {isExtractedTextCollapsed ? t('abg.common.show', 'Show') : t('abg.common.hide', 'Hide')}
                 </span>
                 {isExtractedTextCollapsed ? 
@@ -149,8 +149,8 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                 showPreview={true}
               />
             ) : (
-              <div className="bg-slate-50 rounded-lg p-4">
-                <div className="text-sm text-slate-600 leading-relaxed">
+              <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
+                <div className="text-sm text-[var(--foreground-tertiary)] leading-relaxed">
                   {renderExtractedTextPreview()}
                 </div>
                 <div className="mt-3 text-xs text-slate-400 flex items-center justify-between">
@@ -160,7 +160,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                       : t('abg.analysis.waitingData', 'Waiting for data')
                     }
                   </span>
-                  <span className="text-blue-500 font-medium">{t('abg.common.clickToExpand', 'Click to expand')}</span>
+                  <span className="text-[var(--cardiology-accent-blue)] font-medium">{t('abg.common.clickToExpand', 'Click to expand')}</span>
                 </div>
               </div>
             )}
@@ -174,15 +174,15 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
             >
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
-                  <CheckCircle2 className="h-4 w-4 text-white" />
+                  <CheckCircle2 className="h-4 w-4 text-[var(--foreground)]" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-800">{t('abg.interpretation.title', 'Clinical Interpretation')}</h3>
-                  <p className="text-xs text-slate-600">{t('abg.interpretation.subtitle', 'AI-generated clinical analysis')}</p>
+                  <h3 className="text-base font-bold text-[var(--foreground)]">{t('abg.interpretation.title', 'Clinical Interpretation')}</h3>
+                  <p className="text-xs text-[var(--foreground-tertiary)]">{t('abg.interpretation.subtitle', 'AI-generated clinical analysis')}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-[var(--foreground-secondary)]">
                   {isClinicalInterpretationCollapsed ? t('abg.common.show', 'Show') : t('abg.common.hide', 'Hide')}
                 </span>
                 {isClinicalInterpretationCollapsed ? 
@@ -198,11 +198,11 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                 isLoading={false}
               />
             ) : (
-              <div className="bg-slate-50 rounded-lg p-4">
-                <div className="text-sm text-slate-600 leading-relaxed">
+              <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
+                <div className="text-sm text-[var(--foreground-tertiary)] leading-relaxed">
                   {interpretation ? (
                     <div>
-                      <div className="font-medium text-slate-700 mb-2">{t('abg.interpretation.summary', 'Clinical Summary:')}</div>
+                      <div className="font-medium text-[var(--foreground)] mb-2">{t('abg.interpretation.summary', 'Clinical Summary:')}</div>
                       <p className="line-clamp-3">
                         {interpretation
                           // Clean markdown formatting for preview
@@ -237,7 +237,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                 </div>
                 <div className="mt-3 text-xs text-slate-400 flex items-center justify-between">
                   <span>{t('abg.interpretation.subtitle', 'AI-generated clinical analysis')}</span>
-                  <span className="text-blue-500 font-medium">{t('abg.common.clickToExpand', 'Click to expand')}</span>
+                  <span className="text-[var(--cardiology-accent-blue)] font-medium">{t('abg.common.clickToExpand', 'Click to expand')}</span>
                 </div>
               </div>
             )}
@@ -304,7 +304,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
               <div className="flex items-center gap-3 mb-4">
                 <div className="relative">
                   <div className="abg-next-steps-header-icon w-8 h-8 rounded-xl flex items-center justify-center">
-                    <Target className="h-4 w-4 text-white" />
+                    <Target className="h-4 w-4 text-[var(--foreground)]" />
                   </div>
                   <div className="abg-next-steps-badge absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full"></div>
                 </div>
@@ -337,7 +337,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                     className="relative w-full h-auto p-0 overflow-hidden border-0 bg-transparent hover:bg-transparent"
                     disabled={isProcessing}
                   >
-                    <div className="relative w-full bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-slate-300/50 transition-all duration-500 group-hover:border-slate-300/80">
+                    <div className="relative w-full bg-[var(--component-card)]/80 backdrop-blur-sm rounded-2xl border border-[var(--glass-border-light)]/80 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-slate-300/50 transition-all duration-500 group-hover:border-[var(--glass-border-medium)]/80">
                       {/* Animated background gradient */}
                       <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       
@@ -347,9 +347,9 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                       {/* Content */}
                       <div className="relative p-4 text-center">
                         <div className="abg-action-card-icon w-10 h-10 mx-auto mb-3 bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg">
-                          <FileText className="h-5 w-5 text-slate-600 group-hover:text-slate-700 transition-colors duration-300" />
+                          <FileText className="h-5 w-5 text-[var(--foreground-tertiary)] group-hover:text-[var(--foreground)] transition-colors duration-300" />
                         </div>
-                        <h5 className="font-bold text-slate-700 mb-1 group-hover:text-slate-800 transition-colors duration-300 text-sm">{t('abg.analysis.edit.title', 'Edit Analysis Data')}</h5>
+                        <h5 className="font-bold text-[var(--foreground)] mb-1 group-hover:text-[var(--foreground)] transition-colors duration-300 text-sm">{t('abg.analysis.edit.title', 'Edit Analysis Data')}</h5>
                         
                         {/* Subtle accent line */}
                         <div className="abg-action-card-accent-line text-slate-300"></div>
@@ -372,14 +372,14 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                         
                         {/* Content */}
                         <div className="relative p-4 text-center">
-                          <div className="abg-action-card-icon w-10 h-10 mx-auto mb-3 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl">
+                          <div className="abg-action-card-icon w-10 h-10 mx-auto mb-3 bg-[var(--component-card)]/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl">
                             {isProcessing ? (
                               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                             ) : (
-                              <CheckCircle2 className="h-5 w-5 text-white" />
+                              <CheckCircle2 className="h-5 w-5 text-[var(--foreground)]" />
                             )}
                           </div>
-                          <h5 className="font-bold text-white mb-1 text-sm">{isProcessing ? t('common.processing', 'Processing...') : t('abg.analysis.complete.title', 'Complete Analysis')}</h5>
+                          <h5 className="font-bold text-[var(--foreground)] mb-1 text-sm">{isProcessing ? t('common.processing', 'Processing...') : t('abg.analysis.complete.title', 'Complete Analysis')}</h5>
                           
                           {/* Progress indicator for processing */}
                           {isProcessing && (

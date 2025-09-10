@@ -22,11 +22,11 @@ export const AudienceComplexityFilters: React.FC<AudienceComplexityFiltersProps>
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-[var(--foreground)] mb-6 flex items-center gap-2">
           <UsersIcon className="w-6 h-6 text-purple-600" />
           {t('filters.audienceComplexity.title', 'Audience & Complexity Level')}
         </h3>
-        <p className="text-gray-600 mb-6">
+        <p className="text-[var(--foreground-tertiary)] mb-6">
           {t('filters.audienceComplexity.description', 'Filter by target audience, complexity level, and reading difficulty')}
         </p>
       </div>

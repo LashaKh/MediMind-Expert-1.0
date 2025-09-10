@@ -47,7 +47,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       'medical history': { icon: Heart, gradient: 'from-red-500 to-rose-600', bg: 'from-red-50 to-rose-50', text: 'text-red-900', border: 'border-red-200' },
       'past medical history': { icon: Heart, gradient: 'from-red-500 to-rose-600', bg: 'from-red-50 to-rose-50', text: 'text-red-900', border: 'border-red-200' },
       'vital signs': { icon: Activity, gradient: 'from-cyan-500 to-blue-600', bg: 'from-cyan-50 to-blue-50', text: 'text-cyan-900', border: 'border-cyan-200' },
-      default: { icon: Activity, gradient: 'from-slate-500 to-gray-600', bg: 'from-slate-50 to-gray-50', text: 'text-slate-900', border: 'border-slate-200' }
+      default: { icon: Activity, gradient: 'from-slate-500 to-gray-600', bg: 'from-slate-50 to-gray-50', text: 'text-[var(--foreground)]', border: 'border-[var(--glass-border-light)]' }
     };
     return schemes[sectionType.toLowerCase() as keyof typeof schemes] || schemes.default;
   };
@@ -56,9 +56,9 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
   const MarkdownComponents = {
     // H1 with medical icons and gradient backgrounds
     h1: ({ children }: any) => (
-      <h1 className="text-4xl font-bold text-gray-900 mb-8 flex items-center space-x-4 pb-6 border-b-2 border-gradient-to-r from-blue-500 to-indigo-500 font-['Inter',_'system-ui',_sans-serif]">
+      <h1 className="text-4xl font-bold text-[var(--foreground)] mb-8 flex items-center space-x-4 pb-6 border-b-2 border-gradient-to-r from-blue-500 to-indigo-500 font-['Inter',_'system-ui',_sans-serif]">
         <div className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl">
-          <FileText className="w-8 h-8 text-white" />
+          <FileText className="w-8 h-8 text-[var(--foreground)]" />
         </div>
         <span className="tracking-tight">{children}</span>
       </h1>
@@ -82,7 +82,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
             <div className="bg-purple-50 -mx-8 px-8 py-6 mb-8 mt-12 rounded-2xl border-l-4 border-gradient-to-b from-purple-600 to-violet-600">
               <h2 className="text-3xl font-bold text-purple-900 flex items-center space-x-4 font-['Inter',_'system-ui',_sans-serif]" {...props}>
                 <div className="p-3 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl shadow-lg">
-                  <Stethoscope className="w-6 h-6 text-white" />
+                  <Stethoscope className="w-6 h-6 text-[var(--foreground)]" />
                 </div>
                 <span className="tracking-tight">{children}</span>
               </h2>
@@ -105,7 +105,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
             <div className="bg-indigo-50 -mx-8 px-8 py-6 mb-8 mt-12 rounded-2xl border-l-4 border-gradient-to-b from-indigo-600 to-purple-600">
               <h2 className="text-3xl font-bold text-indigo-900 flex items-center space-x-4 font-['Inter',_'system-ui',_sans-serif]" {...props}>
                 <div className="p-3 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg">
-                  <BookOpen className="w-6 h-6 text-white" />
+                  <BookOpen className="w-6 h-6 text-[var(--foreground)]" />
                 </div>
                 <span className="tracking-tight">{children}</span>
               </h2>
@@ -119,7 +119,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       let icon = Activity;
       let gradientClasses = "from-blue-600 to-indigo-600";
       let textColor = "text-blue-900";
-      let bgColor = "bg-blue-50";
+      let bgColor = "bg-[var(--cardiology-accent-blue-light)]";
       
       if (text.includes('Background') || text.includes('Overview')) {
         icon = BookOpen;
@@ -139,8 +139,8 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       } else if (text.includes('References')) {
         icon = Globe;
         gradientClasses = "from-slate-600 to-gray-600";
-        textColor = "text-slate-900";
-        bgColor = "bg-slate-50";
+        textColor = "text-[var(--foreground)]";
+        bgColor = "bg-[var(--component-surface-primary)]";
       }
       
       const IconComponent = icon;
@@ -149,7 +149,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
         <div className={`${bgColor} -mx-8 px-8 py-6 mb-8 mt-12 rounded-2xl border-l-4 border-gradient-to-b ${gradientClasses.replace('from-', 'from-').replace('to-', 'to-')}`}>
           <h2 className={`text-3xl font-bold ${textColor} flex items-center space-x-4 font-['Inter',_'system-ui',_sans-serif]`} {...props}>
             <div className={`p-3 bg-gradient-to-r ${gradientClasses} rounded-xl shadow-lg`}>
-              <IconComponent className="w-6 h-6 text-white" />
+              <IconComponent className="w-6 h-6 text-[var(--foreground)]" />
             </div>
             <span className="tracking-tight">{children}</span>
           </h2>
@@ -196,7 +196,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       return (
         <h3 className={`text-xl font-bold ${colorClasses} mb-5 mt-10 flex items-center space-x-3 font-['Inter',_'system-ui',_sans-serif]`} {...props}>
           <div className={`p-2 bg-gradient-to-r ${dotColor} rounded-lg shadow-md`}>
-            <IconComponent className="w-5 h-5 text-white" />
+            <IconComponent className="w-5 h-5 text-[var(--foreground)]" />
           </div>
           <span className="tracking-tight">{children}</span>
         </h3>
@@ -205,7 +205,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
 
     // H4 with simple dotted styling
     h4: ({ children, ...props }: any) => (
-      <h4 className="text-lg font-bold text-gray-800 mb-4 mt-8 flex items-center space-x-2 font-['Inter',_'system-ui',_sans-serif]" {...props}>
+      <h4 className="text-lg font-bold text-[var(--foreground)] mb-4 mt-8 flex items-center space-x-2 font-['Inter',_'system-ui',_sans-serif]" {...props}>
         <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-sm"></div>
         <span className="tracking-tight">{children}</span>
       </h4>
@@ -235,12 +235,12 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
           
           const colorClasses = {
             emerald: 'from-emerald-100 to-green-100 text-emerald-900 border-emerald-300',
-            blue: 'from-blue-100 to-sky-100 text-blue-900 border-blue-300',
+            blue: 'from-blue-100 to-sky-100 text-blue-900 border-[var(--cardiology-accent-blue)]',
             amber: 'from-amber-100 to-yellow-100 text-amber-900 border-amber-300',
             purple: 'from-purple-100 to-violet-100 text-purple-900 border-purple-300',
             red: 'from-red-100 to-pink-100 text-red-900 border-red-300',
             indigo: 'from-indigo-100 to-blue-100 text-indigo-900 border-indigo-300',
-            slate: 'from-slate-100 to-gray-100 text-slate-900 border-slate-300'
+            slate: 'from-slate-100 to-gray-100 text-[var(--foreground)] border-[var(--glass-border-medium)]'
           };
           
           return (
@@ -261,13 +261,13 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
         return (
           <div className="my-8 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 shadow-lg" {...props}>
             <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-blue-600 rounded-lg">
-                <Calculator className="w-5 h-5 text-white" />
+              <div className="p-2 bg-[var(--cardiology-accent-blue-dark)] rounded-lg">
+                <Calculator className="w-5 h-5 text-[var(--foreground)]" />
               </div>
               <h3 className="text-xl font-bold text-blue-900">CHA₂DS₂-VASc Calculator</h3>
             </div>
             <CHA2DS2VAScCalculator />
-            <p className="mt-4 text-gray-700">{children}</p>
+            <p className="mt-4 text-[var(--foreground-tertiary)]">{children}</p>
           </div>
         );
       }
@@ -323,8 +323,8 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
           return (
             <div className="my-8 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 shadow-lg" {...props}>
               <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-blue-600 rounded-lg">
-                  <Calculator className="w-5 h-5 text-white" />
+                <div className="p-2 bg-[var(--cardiology-accent-blue-dark)] rounded-lg">
+                  <Calculator className="w-5 h-5 text-[var(--foreground)]" />
                 </div>
                 <h3 className="text-xl font-bold text-blue-900">CHA₂DS₂-VASc Calculator</h3>
               </div>
@@ -336,7 +336,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       
       // For all other paragraphs (including those with evidence levels mixed with text), render normally with inline evidence highlighting
       return (
-        <p className="mb-4 text-gray-700 leading-relaxed" {...props}>
+        <p className="mb-4 text-[var(--foreground-tertiary)] leading-relaxed" {...props}>
           {renderTextWithEvidenceLevels(children)}
         </p>
       );
@@ -354,12 +354,12 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
         
         const colorClasses = {
           emerald: 'text-emerald-900 bg-gradient-to-r from-emerald-100 to-green-100 border-emerald-300',
-          blue: 'text-blue-900 bg-gradient-to-r from-blue-100 to-sky-100 border-blue-300',
+          blue: 'text-blue-900 bg-gradient-to-r from-blue-100 to-sky-100 border-[var(--cardiology-accent-blue)]',
           amber: 'text-amber-900 bg-gradient-to-r from-amber-100 to-yellow-100 border-amber-300',
           purple: 'text-purple-900 bg-gradient-to-r from-purple-100 to-violet-100 border-purple-300',
           red: 'text-red-900 bg-gradient-to-r from-red-100 to-pink-100 border-red-300',
           indigo: 'text-indigo-900 bg-gradient-to-r from-indigo-100 to-blue-100 border-indigo-300',
-          slate: 'text-slate-900 bg-gradient-to-r from-slate-100 to-gray-100 border-slate-300'
+          slate: 'text-[var(--foreground)] bg-gradient-to-r from-slate-100 to-gray-100 border-[var(--glass-border-medium)]'
         };
 
         const displayText = `Evidence Level ${level}`;
@@ -382,7 +382,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       }
       
       return (
-        <strong className="font-bold text-gray-900 bg-gradient-to-r from-slate-100 to-gray-100 px-2 py-1 rounded-lg border border-slate-200 font-['Inter',_'system-ui',_sans-serif] shadow-sm" {...props}>
+        <strong className="font-bold text-[var(--foreground)] bg-gradient-to-r from-slate-100 to-gray-100 px-2 py-1 rounded-lg border border-[var(--glass-border-light)] font-['Inter',_'system-ui',_sans-serif] shadow-sm" {...props}>
           {children}
         </strong>
       );
@@ -420,7 +420,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
 
     // List items with evidence level highlighting
     li: ({ children, ...props }: any) => (
-      <li className="mb-2 text-gray-700" {...props}>
+      <li className="mb-2 text-[var(--foreground-tertiary)]" {...props}>
         {renderTextWithEvidenceLevels(children)}
       </li>
     ),
@@ -445,7 +445,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
         <div className={`group relative overflow-hidden rounded-xl border ${colorScheme.border} bg-gradient-to-br ${colorScheme.bg} p-4 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105`} {...props}>
           <div className="flex items-start space-x-3">
             <div className={`p-2.5 bg-gradient-to-r ${colorScheme.gradient} rounded-lg shadow-sm flex-shrink-0 group-hover:shadow-md transition-shadow`}>
-              <IconComponent className="w-4 h-4 text-white" />
+              <IconComponent className="w-4 h-4 text-[var(--foreground)]" />
             </div>
             <div className={`font-medium text-sm ${colorScheme.text} leading-snug flex-1`}>
               {children}
@@ -460,14 +460,14 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
     // Enhanced blockquotes
     blockquote: ({ children, ...props }: any) => (
       <blockquote 
-        className="border-l-4 border-blue-500 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-8 my-8 rounded-r-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300"
+        className="border-l-4 border-[var(--cardiology-accent-blue)] bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-8 my-8 rounded-r-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300"
         {...props}
       >
         <div className="flex items-start space-x-5">
           <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl shadow-xl">
-            <Quote className="w-6 h-6 text-white" />
+            <Quote className="w-6 h-6 text-[var(--foreground)]" />
           </div>
-          <div className="flex-1 text-gray-800 font-medium leading-relaxed text-lg italic font-['Inter',_'system-ui',_sans-serif] tracking-tight">
+          <div className="flex-1 text-[var(--foreground)] font-medium leading-relaxed text-lg italic font-['Inter',_'system-ui',_sans-serif] tracking-tight">
             {renderTextWithEvidenceLevels(children)}
           </div>
         </div>
@@ -489,7 +489,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       if (isLikelihoodRatioTable) {
         return (
           <div className="overflow-x-auto my-8">
-            <table className="w-full border-collapse bg-white rounded-lg shadow-sm" {...props}>
+            <table className="w-full border-collapse bg-[var(--component-card)] rounded-lg shadow-sm" {...props}>
               {children}
             </table>
           </div>
@@ -498,11 +498,11 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       
       const containerClasses = hasAdvancedStyling 
         ? "overflow-x-auto my-12 rounded-2xl shadow-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50"
-        : "overflow-x-auto my-8 rounded-xl shadow-xl border border-gray-200";
+        : "overflow-x-auto my-8 rounded-xl shadow-xl border border-[var(--glass-border-light)]";
       
       const tableClasses = hasAdvancedStyling
-        ? "w-full border-collapse bg-white rounded-2xl overflow-hidden"
-        : "w-full border-collapse bg-white rounded-xl overflow-hidden";
+        ? "w-full border-collapse bg-[var(--component-card)] rounded-2xl overflow-hidden"
+        : "w-full border-collapse bg-[var(--component-card)] rounded-xl overflow-hidden";
       
       return (
         <div className={containerClasses}>
@@ -523,15 +523,15 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       // For likelihood ratio tables, use minimal styling
       if (isLRTable) {
         return (
-          <thead className="bg-white" {...props}>
+          <thead className="bg-[var(--component-card)]" {...props}>
             {children}
           </thead>
         );
       }
       
       const headerClasses = hasEvidenceLevels 
-        ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white"
-        : "bg-gradient-to-r from-gray-700 to-gray-800 text-white";
+        ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-[var(--foreground)]"
+        : "bg-gradient-to-r from-gray-700 to-gray-800 text-[var(--foreground)]";
       
       return (
         <thead className={headerClasses} {...props}>
@@ -548,7 +548,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       // For likelihood ratio tables, use simpler styling
       if (isLRHeader || text === 'Finding' || text === 'Value') {
         return (
-          <th className="text-left py-3 px-4 font-semibold text-gray-900 border-b-2 border-gray-200" {...props}>
+          <th className="text-left py-3 px-4 font-semibold text-[var(--foreground)] border-b-2 border-[var(--glass-border-light)]" {...props}>
             {children}
           </th>
         );
@@ -580,10 +580,10 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       const isLRColumn = isLRTable && cellIndex === 1; // Second column
       
       const cellClasses = isEvidenceCell
-        ? "px-6 py-4 border-b border-gray-200 font-medium bg-gradient-to-r from-blue-50 to-indigo-50"
+        ? "px-6 py-4 border-b border-[var(--glass-border-light)] font-medium bg-gradient-to-r from-blue-50 to-indigo-50"
         : isLRTable
         ? "py-3 px-4 border-b border-gray-100"
-        : "px-6 py-4 border-b border-gray-200";
+        : "px-6 py-4 border-b border-[var(--glass-border-light)]";
       
       if (isEvidenceCell) {
         const match = text.match(/Class\s*([A-E])/i);
@@ -594,7 +594,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
           return (
             <td className={cellClasses} {...props}>
               <div className="flex items-center space-x-2">
-                <EvidenceIcon className="w-4 h-4 text-blue-600" />
+                <EvidenceIcon className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
                 <span className="font-bold">{children}</span>
               </div>
             </td>
@@ -607,7 +607,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
         return (
           <td className={cellClasses} {...props}>
             <div className="flex items-center space-x-2">
-              <span className="font-semibold text-gray-900">
+              <span className="font-semibold text-[var(--foreground)]">
                 {children}
               </span>
             </div>
@@ -623,7 +623,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
         const lrMatch = lrText.match(/^(\d+\.?\d*)/); 
         const lrValue = lrMatch ? parseFloat(lrMatch[1]) : 0;
         
-        let barColor = 'bg-gray-300';
+        let barColor = 'bg-[var(--component-panel)]';
         const maxLR = 20;
         const scaledValue = Math.min(lrValue, maxLR);
         const barWidth = Math.max(10, (scaledValue / maxLR) * 90);
@@ -635,14 +635,14 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
         } else if (lrValue >= 2) {
           barColor = 'bg-orange-500';
         } else {
-          barColor = 'bg-gray-400';
+          barColor = 'bg-[var(--muted)]';
         }
         
         return (
           <td className={cellClasses} {...props}>
             <div className="flex items-center space-x-3">
-              <span className="text-gray-500 text-sm min-w-[60px]">{children}</span>
-              <div className="flex-1 bg-gray-100 rounded-full h-6 max-w-[200px]">
+              <span className="text-[var(--foreground-secondary)] text-sm min-w-[60px]">{children}</span>
+              <div className="flex-1 bg-[var(--component-surface-secondary)] rounded-full h-6 max-w-[200px]">
                 <div 
                   className={`${barColor} h-6 rounded-full transition-all duration-500 ease-out`}
                   style={{ width: `${barWidth}%` }}
@@ -662,14 +662,14 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
 
     // Medical-grade code styling
     code: ({ children, ...props }: any) => (
-      <code className="bg-slate-100 text-slate-800 px-2 py-1 rounded font-mono text-sm font-medium border border-slate-200 shadow-sm" {...props}>
+      <code className="bg-[var(--component-surface-secondary)] text-[var(--foreground)] px-2 py-1 rounded font-mono text-sm font-medium border border-[var(--glass-border-light)] shadow-sm" {...props}>
         {children}
       </code>
     ),
 
     // Professional code blocks
     pre: ({ children, ...props }: any) => (
-      <pre className="bg-slate-900 text-slate-100 p-8 rounded-2xl overflow-x-auto my-8 shadow-2xl border border-slate-700 font-['JetBrains_Mono',_monospace]" {...props}>
+      <pre className="bg-[var(--background-dark)] text-slate-100 p-8 rounded-2xl overflow-x-auto my-8 shadow-2xl border border-slate-700 font-['JetBrains_Mono',_monospace]" {...props}>
         {children}
       </pre>
     ),

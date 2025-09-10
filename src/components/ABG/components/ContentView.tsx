@@ -49,12 +49,12 @@ export const ContentView: React.FC<ContentViewProps> = ({
       <div className="abg-card p-12 text-center">
         <div className="flex justify-center mb-6">
           <div className="relative">
-            <Activity className="h-16 w-16 text-blue-500 animate-pulse" />
-            <div className="absolute inset-0 bg-blue-500 opacity-20 rounded-full animate-ping" />
+            <Activity className="h-16 w-16 text-[var(--cardiology-accent-blue)] animate-pulse" />
+            <div className="absolute inset-0 bg-[var(--cardiology-accent-blue)] opacity-20 rounded-full animate-ping" />
           </div>
         </div>
-        <h3 className="text-xl font-semibold text-slate-800 mb-2">Loading Your History</h3>
-        <p className="text-slate-600">Fetching your ABG analysis results...</p>
+        <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Loading Your History</h3>
+        <p className="text-[var(--foreground-tertiary)]">Fetching your ABG analysis results...</p>
       </div>
     );
   }
@@ -68,7 +68,7 @@ export const ContentView: React.FC<ContentViewProps> = ({
         </div>
         <h3 className="text-xl font-semibold text-red-800 mb-2">Loading Failed</h3>
         <p className="text-red-600 mb-6">{error}</p>
-        <Button onClick={onRetry} className="bg-red-600 hover:bg-red-700 text-white">
+        <Button onClick={onRetry} className="bg-red-600 hover:bg-red-700 text-[var(--foreground)]">
           <RefreshCw className="h-4 w-4 mr-2" />
           Try Again
         </Button>
@@ -85,8 +85,8 @@ export const ContentView: React.FC<ContentViewProps> = ({
             <FileText className="h-12 w-12 text-slate-400" />
           </div>
         </div>
-        <h3 className="text-2xl font-bold text-slate-800 mb-4">No Results Found</h3>
-        <p className="text-slate-600 mb-8 max-w-md mx-auto">
+        <h3 className="text-2xl font-bold text-[var(--foreground)] mb-4">No Results Found</h3>
+        <p className="text-[var(--foreground-tertiary)] mb-8 max-w-md mx-auto">
           {filters && Object.keys(filters).length > 0
             ? 'Try adjusting your filters or search criteria to find more results'
             : 'Get started by creating your first ABG analysis'

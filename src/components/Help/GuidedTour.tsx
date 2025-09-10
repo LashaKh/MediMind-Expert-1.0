@@ -425,7 +425,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
       {/* Tooltip */}
       <div
         style={getTooltipPosition()}
-        className="relative max-w-md w-full mx-4 rounded-2xl shadow-2xl bg-white/80 border border-white/30 backdrop-blur-xl ring-1 ring-black/5"
+        className="relative max-w-md w-full mx-4 rounded-2xl shadow-2xl bg-[var(--component-card)]/80 border border-white/30 backdrop-blur-xl ring-1 ring-black/5"
         id="guided-tour-tooltip"
       >
         {/* Accent glow */}
@@ -434,14 +434,14 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
         <div className="p-6 relative">
           {/* Top meta */}
           <div className="flex items-center justify-between mb-4">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-600/10 to-purple-600/10 text-blue-700 ring-1 ring-inset ring-blue-600/20">
-              <Sparkles className="w-4 h-4 text-blue-600" />
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-600/10 to-purple-600/10 text-[var(--cardiology-accent-blue-dark)] ring-1 ring-inset ring-[var(--cardiology-accent-blue-dark)]/20">
+              <Sparkles className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
               <span>{t('tour.tooltip.title', { defaultValue: 'Medical Tour Guide' })}</span>
-              <span className="text-gray-500">• {t('tour.tooltip.stepCounter', { defaultValue: 'Step {{current}} of {{total}}', current: currentStep + 1, total: steps.length })}</span>
+              <span className="text-[var(--foreground-secondary)]">• {t('tour.tooltip.stepCounter', { defaultValue: 'Step {{current}} of {{total}}', current: currentStep + 1, total: steps.length })}</span>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors rounded-full p-1.5 hover:bg-black/5"
+              className="text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] transition-colors rounded-full p-1.5 hover:bg-black/5"
               aria-label={t('tour.tooltip.close', { defaultValue: 'Close tour' })}
             >
               <X className="w-5 h-5" />
@@ -449,10 +449,10 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
           </div>
 
           {/* Title */}
-          <h3 className="text-xl font-semibold tracking-tight text-gray-900 mb-2">{t(`tour.steps.${tourType}.${currentStepData.id}.title`, { defaultValue: currentStepData.title })}</h3>
+          <h3 className="text-xl font-semibold tracking-tight text-[var(--foreground)] mb-2">{t(`tour.steps.${tourType}.${currentStepData.id}.title`, { defaultValue: currentStepData.title })}</h3>
 
           {/* Content */}
-          <p className="text-gray-700/90 mb-5 leading-relaxed">
+          <p className="text-[var(--foreground-tertiary)]/90 mb-5 leading-relaxed">
             {t(`tour.steps.${tourType}.${currentStepData.id}.content`, { defaultValue: currentStepData.content })}
           </p>
 
@@ -468,7 +468,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
                 role="progressbar"
               />
             </div>
-            <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
+            <div className="mt-2 flex items-center justify-between text-xs text-[var(--foreground-secondary)]">
               <span>{t('tour.tooltip.progressLabel', { defaultValue: 'Progress' })}</span>
               <span>{Math.round(((currentStep + 1) / steps.length) * 100)}%</span>
             </div>
@@ -480,7 +480,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
               <span
                 key={idx}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                  idx === currentStep ? 'w-6 bg-blue-600' : 'w-2 bg-gray-300'
+                  idx === currentStep ? 'w-6 bg-[var(--cardiology-accent-blue-dark)]' : 'w-2 bg-[var(--component-panel)]'
                 }`}
               />
             ))}
@@ -492,7 +492,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
               {currentStep > 0 && (
                 <button
                   onClick={handlePrevious}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 text-gray-700 hover:text-gray-900 rounded-lg hover:bg-black/5 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] rounded-lg hover:bg-black/5 transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   {t('tour.tooltip.previous', { defaultValue: 'Previous' })}
@@ -500,7 +500,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
               )}
               <button
                 onClick={() => navigate('/help')}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-gray-700 hover:text-gray-900 rounded-lg hover:bg-black/5 transition-colors"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] rounded-lg hover:bg-black/5 transition-colors"
               >
                 {t('tour.tooltip.allTours', { defaultValue: 'All Tours' })}
               </button>
@@ -510,7 +510,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
               {(currentStepData.allowSkip !== false) && (
                 <button
                   onClick={handleSkip}
-                  className="px-3 py-2 text-gray-600 hover:text-gray-800 rounded-lg hover:bg-black/5 transition-colors"
+                  className="px-3 py-2 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] rounded-lg hover:bg-black/5 transition-colors"
                 >
                   {t('tour.tooltip.skip', { defaultValue: 'Skip Tour' })}
                 </button>
@@ -518,7 +518,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
 
               <button
                 onClick={handleNext}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-white bg-gradient-to-r from-blue-600 to-purple-600 shadow hover:shadow-md transition-shadow"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[var(--foreground)] bg-gradient-to-r from-blue-600 to-purple-600 shadow hover:shadow-md transition-shadow"
               >
                 {currentStep < steps.length - 1 ? (
                   <>
@@ -536,13 +536,13 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
           </div>
 
           {/* Shortcuts hint */}
-          <div className="mt-4 text-[11px] text-gray-500 flex items-center justify-end gap-3">
+          <div className="mt-4 text-[11px] text-[var(--foreground-secondary)] flex items-center justify-end gap-3">
             <span className="hidden sm:inline">{t('tour.tooltip.press', { defaultValue: 'Press' })}</span>
-            <span className="font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded px-1.5 py-0.5">←</span>
+            <span className="font-medium text-[var(--foreground-tertiary)] bg-[var(--component-surface-secondary)] border border-[var(--glass-border-light)] rounded px-1.5 py-0.5">←</span>
             <span className="hidden sm:inline">{t('tour.tooltip.or', { defaultValue: 'or' })}</span>
-            <span className="font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded px-1.5 py-0.5">→</span>
+            <span className="font-medium text-[var(--foreground-tertiary)] bg-[var(--component-surface-secondary)] border border-[var(--glass-border-light)] rounded px-1.5 py-0.5">→</span>
             <span className="hidden sm:inline">{t('tour.tooltip.toNavigate', { defaultValue: 'to navigate' })} •</span>
-            <span className="font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded px-1.5 py-0.5">Esc</span>
+            <span className="font-medium text-[var(--foreground-tertiary)] bg-[var(--component-surface-secondary)] border border-[var(--glass-border-light)] rounded px-1.5 py-0.5">Esc</span>
             <span className="hidden sm:inline">{t('tour.tooltip.toClose', { defaultValue: 'to close' })}</span>
           </div>
         </div>

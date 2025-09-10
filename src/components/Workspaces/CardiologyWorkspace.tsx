@@ -111,13 +111,13 @@ const StatsCounter: React.FC<{ value: string; label: string; trend: string; icon
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none" />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none" style={{ background: 'var(--overlay-interactive-hover)' }} />
       
       <div className="relative z-10">
         <div className="flex items-start justify-between mb-8">
           <div className="relative">
-            <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-red-500 via-rose-500 to-rose-600 flex items-center justify-center shadow-elevated group-hover:shadow-floating transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-3">
-              <Icon className="w-8 h-8 text-white health-icon" />
+            <div className="w-16 h-16 rounded-3xl flex items-center justify-center shadow-elevated group-hover:shadow-floating transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-3" style={{background: 'var(--gradient-workspace-red)'}}>
+              <Icon className="w-8 h-8 text-[var(--foreground)] health-icon" />
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl" />
             </div>
             {/* Pulse ring */}
@@ -129,22 +129,22 @@ const StatsCounter: React.FC<{ value: string; label: string; trend: string; icon
               fontFamily: 'Inter, system-ui, sans-serif',
               fontWeight: '700',
               letterSpacing: '0.02em',
-              textShadow: '0 1px 2px rgba(5, 150, 105, 0.1)'
+              textShadow: 'var(--medical-shadow-emerald)'
             }}>{trend}</span>
           </div>
         </div>
         
         <div className="space-y-3">
-          <div className="premium-metric-value text-6xl font-black text-gray-900 gradient-text group-hover:scale-105 transition-transform duration-300" style={{
+          <div className="premium-metric-value text-6xl font-black text-[var(--foreground)] gradient-text group-hover:scale-105 transition-transform duration-300" style={{
             fontFamily: 'Inter, system-ui, sans-serif',
             fontWeight: '900',
             letterSpacing: '-0.02em',
-            textShadow: '0 4px 8px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1)',
+            textShadow: 'var(--medical-shadow-black-light), var(--medical-shadow-black-medium)',
             fontFeatureSettings: '"tnum" on, "lnum" on'
           }}>
             {displayValue}
           </div>
-          <div className="premium-metric-label text-lg font-medium text-gray-600 group-hover:text-gray-700 transition-colors duration-300" style={{
+          <div className="premium-metric-label text-lg font-medium text-[var(--foreground-tertiary)] group-hover:text-[var(--foreground-tertiary)] transition-colors duration-300" style={{
             fontFamily: 'Inter, system-ui, sans-serif',
             fontWeight: '500',
             letterSpacing: '0.01em',
@@ -154,10 +154,11 @@ const StatsCounter: React.FC<{ value: string; label: string; trend: string; icon
           </div>
           
           {/* Progress indicator */}
-          <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-red-500 to-rose-500 rounded-full transition-all duration-1000 ease-out"
-              style={{ 
+          <div className="w-full h-1 rounded-full overflow-hidden" style={{ background: 'var(--glass-border-medium)' }}>
+            <div
+              className="h-full rounded-full transition-all duration-1000 ease-out"
+              style={{
+                background: 'var(--gradient-workspace-red)',
                 width: isVisible ? '100%' : '0%',
                 transitionDelay: isVisible ? '500ms' : '0ms'
               }}
@@ -216,9 +217,9 @@ export const CardiologyWorkspace: React.FC = () => {
       subtitle: 'Intelligent Medical Assistant',
       description: 'Advanced AI-powered medical intelligence with real-time literature integration, evidence-based recommendations, and comprehensive diagnostic support for complex cardiac cases.',
       icon: MessageSquare,
-      primaryColor: '#dc2626',
-      secondaryColor: '#ef4444',
-      accentColor: '#f87171',
+      primaryColor: 'var(--cardiology-red-primary)',
+      secondaryColor: 'var(--cardiology-red-secondary)',
+      accentColor: 'var(--cardiology-accent-red)',
       onClick: goToAICopilot,
       stats: { value: '24/7', label: 'Available' },
       badge: 'AI Powered',
@@ -242,9 +243,9 @@ export const CardiologyWorkspace: React.FC = () => {
       subtitle: 'Precision Risk Assessment',
       description: 'Comprehensive suite of 16+ clinically validated cardiac risk calculators with real-time validation, automated interpretation, and seamless integration with patient records.',
       icon: Calculator,
-      primaryColor: '#059669',
-      secondaryColor: '#10b981',
-      accentColor: '#34d399',
+      primaryColor: 'var(--cardiology-emerald-primary)',
+      secondaryColor: 'var(--cardiology-emerald-secondary)',
+      accentColor: 'var(--cardiology-accent-emerald)',
       onClick: goToCalculators,
       stats: { value: '16+', label: 'Calculators' },
       badge: 'Validated',
@@ -268,9 +269,9 @@ export const CardiologyWorkspace: React.FC = () => {
       subtitle: 'Medical Literature & Guidelines',
       description: 'Expertly curated medical knowledge repository with AI-powered search, personalized recommendations, and seamless integration with current guidelines and latest research.',
       icon: BookOpen,
-      primaryColor: '#3b82f6',
-      secondaryColor: '#6366f1',
-      accentColor: '#8b5cf6',
+      primaryColor: 'var(--cardiology-blue-primary)',
+      secondaryColor: 'var(--cardiology-blue-secondary)',
+      accentColor: 'var(--cardiology-accent-purple)',
       onClick: goToKnowledgeBase,
       stats: { value: '2.5K+', label: 'Resources' },
       badge: 'AI-Curated',
@@ -294,9 +295,9 @@ export const CardiologyWorkspace: React.FC = () => {
       subtitle: 'AI-Powered ABG Intelligence',
       description: 'Revolutionary blood gas analysis platform with machine learning interpretation, predictive analytics, automated alerts, and comprehensive clinical decision support.',
       icon: TestTube2,
-      primaryColor: '#dc2626',
-      secondaryColor: '#ef4444',
-      accentColor: '#f87171',
+      primaryColor: 'var(--cardiology-red-primary)',
+      secondaryColor: 'var(--cardiology-red-secondary)',
+      accentColor: 'var(--cardiology-accent-red)',
       onClick: goToABGAnalysis,
       stats: { value: 'AI', label: 'Powered' },
       badge: 'Smart Analysis',
@@ -320,9 +321,9 @@ export const CardiologyWorkspace: React.FC = () => {
       subtitle: 'Clinical Collaboration Platform',
       description: 'Next-generation case management with AI-driven insights, multi-disciplinary collaboration tools, predictive analytics, and comprehensive workflow automation.',
       icon: FileText,
-      primaryColor: '#ea580c',
-      secondaryColor: '#f97316',
-      accentColor: '#fb923c',
+      primaryColor: 'var(--cardiology-orange-primary)',
+      secondaryColor: 'var(--cardiology-orange-secondary)',
+      accentColor: 'var(--cardiology-accent-orange)',
       onClick: () => {},
       stats: { value: 'Team', label: 'Ready' },
       badge: 'AI-Driven',
@@ -356,35 +357,35 @@ export const CardiologyWorkspace: React.FC = () => {
     { 
       label: 'Emergency Cardiac Protocol', 
       icon: Heart, 
-      color: 'from-red-500 to-red-600',
+      color: 'gradient-cardiology-red',
       action: () => navigate('/calculators')
     },
     { 
       label: 'Blood Gas Analysis', 
       icon: TestTube2, 
-      color: 'from-orange-500 to-orange-600',
+      color: 'gradient-cardiology-orange',
       action: goToABGAnalysis
     },
     { 
       label: 'AI Clinical Consult', 
       icon: Brain, 
-      color: 'from-blue-500 to-blue-600',
+      color: 'gradient-cardiology-blue',
       action: goToAICopilot
     },
     { 
       label: 'ASCVD Risk Calculator', 
       icon: Calculator, 
-      color: 'from-emerald-500 to-emerald-600',
+      color: 'gradient-cardiology-emerald',
       action: () => navigate('/calculators')
     }
   ];
 
   return (
-    <div className="min-h-screen bg-white" role="main" aria-label="Cardiology Workspace - Professional Medical Intelligence Platform">
+    <div className="min-h-screen bg-transparent" role="main" aria-label="Cardiology Workspace - Professional Medical Intelligence Platform">
       {/* Skip to main content link for accessibility */}
       <a 
         href="#main-content" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 focus:z-50"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] px-4 py-2 rounded-md z-50 focus:z-50"
         aria-label="Skip to main content"
       >
         Skip to main content
@@ -394,7 +395,7 @@ export const CardiologyWorkspace: React.FC = () => {
       <ParticleSystem aria-hidden="true" />
 
       {/* Revolutionary Luxury Header - World-Class Design */}
-      <div className="relative bg-gradient-to-br from-slate-50/95 via-white to-gray-50/80 border-b border-gray-200/50 overflow-hidden backdrop-blur-3xl">
+      <div className="relative bg-gradient-to-br from-slate-50/95 via-white to-gray-50/80 border-b border-[var(--glass-border-light)]/50 overflow-hidden backdrop-blur-3xl">
         {/* Premium Multi-Layer Background System */}
         <div className="absolute inset-0">
           {/* Sophisticated Gradient Mesh */}
@@ -439,7 +440,7 @@ export const CardiologyWorkspace: React.FC = () => {
                   <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/25 via-white/10 to-transparent" />
                   
                   {/* Heart Icon */}
-                  <Heart className="w-12 h-12 lg:w-14 lg:h-14 text-white relative z-10 drop-shadow-lg" />
+                  <Heart className="w-12 h-12 lg:w-14 lg:h-14 text-[var(--foreground)] relative z-10 drop-shadow-lg" />
                   
                   {/* Sophisticated ECG Animation */}
                   <div className="absolute inset-0 rounded-3xl overflow-hidden">
@@ -464,7 +465,7 @@ export const CardiologyWorkspace: React.FC = () => {
                       fontFamily: 'Inter, system-ui, sans-serif',
                       fontWeight: '900',
                       letterSpacing: '-0.05em',
-                      textShadow: '0 12px 24px rgba(0,0,0,0.15), 0 6px 12px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.05)',
+                      textShadow: 'var(--medical-shadow-black-heavy), 0 6px 12px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.05)',
                       WebkitTextStroke: '0.5px rgba(0,0,0,0.08)',
                       fontFeatureSettings: '"ss01" on, "ss02" on, "cv01" on, "cv02" on, "kern" on, "liga" on',
                       textRendering: 'optimizeLegibility',
@@ -479,18 +480,18 @@ export const CardiologyWorkspace: React.FC = () => {
                       <div className="absolute -inset-2 bg-gradient-to-r from-red-500/20 via-rose-500/15 to-red-600/20 rounded-2xl blur-lg opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="relative px-5 py-3 bg-gradient-to-r from-red-500 via-rose-500 to-red-600 rounded-2xl shadow-2xl shadow-red-500/25 border border-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-500">
                         <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/20 via-white/10 to-transparent" />
-                        <span className="relative text-sm font-bold text-white tracking-wider" style={{
+                        <span className="relative text-sm font-bold text-[var(--foreground)] tracking-wider" style={{
                           fontFamily: 'Inter, system-ui, sans-serif',
                           fontWeight: '700',
                           letterSpacing: '0.08em',
-                          textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                          textShadow: 'var(--medical-shadow-black-medium)',
                           textTransform: 'uppercase'
                         }}>Professional</span>
                       </div>
                     </div>
                   </div>
                   
-                  <h2 className="luxury-subtitle text-2xl sm:text-3xl lg:text-4xl font-extralight text-gray-600/90 tracking-wide" style={{
+                  <h2 className="luxury-subtitle text-2xl sm:text-3xl lg:text-4xl font-extralight text-[var(--foreground-tertiary)]/90 tracking-wide" style={{
                     fontFamily: 'Inter, system-ui, sans-serif',
                     fontWeight: '200',
                     letterSpacing: '0.03em',
@@ -509,17 +510,17 @@ export const CardiologyWorkspace: React.FC = () => {
                   <div className="flex items-center space-x-5">
                     <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500/12 via-indigo-500/8 to-blue-600/12 backdrop-blur-sm border border-blue-200/40 flex items-center justify-center shadow-lg shadow-blue-500/10 group hover:scale-105 transition-all duration-500">
                       <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/20 via-white/10 to-transparent" />
-                      <Stethoscope className="w-6 h-6 text-blue-600/90 relative z-10" />
+                      <Stethoscope className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)]/90 relative z-10" />
                     </div>
                     <div className="space-y-1">
-                      <div className="luxury-welcome text-base sm:text-lg text-gray-800 font-medium" style={{
+                      <div className="luxury-welcome text-base sm:text-lg text-[var(--foreground)] font-medium" style={{
                         fontFamily: 'Inter, system-ui, sans-serif',
                         fontWeight: '500',
                         letterSpacing: '-0.01em'
                       }}>
                         Welcome back, <span className="font-semibold bg-gradient-to-r from-red-600 via-rose-600 to-red-700 bg-clip-text text-transparent">{profile?.full_name || 'Dr. Physician'}</span>
                       </div>
-                      <div className="text-sm text-gray-500/80 font-normal" style={{
+                      <div className="text-sm text-[var(--foreground-secondary)]/80 font-normal" style={{
                         fontFamily: 'Inter, system-ui, sans-serif',
                         letterSpacing: '0.01em'
                       }}>
@@ -574,7 +575,7 @@ export const CardiologyWorkspace: React.FC = () => {
                   </div>
                   
                   {/* Time Display */}
-                  <div className="luxury-time text-2xl font-bold text-gray-900 tracking-tight" style={{
+                  <div className="luxury-time text-2xl font-bold text-[var(--foreground)] tracking-tight" style={{
                     fontFamily: 'JetBrains Mono, SF Mono, Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace',
                     fontWeight: '700',
                     letterSpacing: '0.02em',
@@ -586,7 +587,7 @@ export const CardiologyWorkspace: React.FC = () => {
                   </div>
                   
                   {/* Date Display */}
-                  <div className="luxury-date text-sm text-gray-600/80 font-medium tracking-wide" style={{
+                  <div className="luxury-date text-sm text-[var(--foreground-tertiary)]/80 font-medium tracking-wide" style={{
                     fontFamily: 'Inter, system-ui, sans-serif',
                     fontWeight: '500',
                     letterSpacing: '0.03em',
@@ -596,7 +597,7 @@ export const CardiologyWorkspace: React.FC = () => {
                   </div>
                   
                   {/* Timezone */}
-                  <div className="text-xs text-gray-500/60 font-normal tracking-widest" style={{
+                  <div className="text-xs text-[var(--foreground-secondary)]/60 font-normal tracking-widest" style={{
                     fontFamily: 'Inter, system-ui, sans-serif',
                     letterSpacing: '0.1em'
                   }}>
@@ -615,7 +616,7 @@ export const CardiologyWorkspace: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <main id="main-content" className="max-w-7xl mx-auto px-8 py-16 bg-white" tabIndex="-1">
+      <main id="main-content" className="max-w-7xl mx-auto px-8 py-16 bg-transparent" tabIndex="-1">
 
         {/* Revolutionary Medical Tools Suite */}
         <div className="mb-20">
@@ -626,13 +627,13 @@ export const CardiologyWorkspace: React.FC = () => {
                 fontFamily: 'Inter, system-ui, sans-serif',
                 fontWeight: '700',
                 letterSpacing: '0.15em',
-                textShadow: '0 1px 2px rgba(5, 150, 105, 0.1)'
+                textShadow: 'var(--medical-shadow-emerald)'
               }}>PROFESSIONAL SUITE</span>
             </div>
-            <h2 className="text-5xl font-black text-gray-900 mb-6 tracking-tight">
+            <h2 className="text-5xl font-black text-[var(--foreground)] mb-6 tracking-tight">
               Next-Generation Medical Tools
             </h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl text-[var(--foreground-tertiary)] max-w-4xl mx-auto leading-relaxed">
               Industry-leading cardiology platform featuring AI-powered clinical intelligence, validated risk calculators, 
               and comprehensive diagnostic support trusted by healthcare professionals worldwide
             </p>
@@ -649,7 +650,7 @@ export const CardiologyWorkspace: React.FC = () => {
                 <div
                   key={feature.id}
                   data-tour={feature.tourId}
-                  className={`group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl border border-gray-100 cursor-pointer transform hover:scale-105 hover:-rotate-1 transition-all duration-500 overflow-hidden ${isFocused ? 'ring-4 ring-red-200' : ''} animate-delay-${index * 100}`}
+                  className={`group relative theme-card rounded-3xl shadow-lg hover:shadow-2xl cursor-pointer transform hover:scale-105 hover:-rotate-1 transition-all duration-500 overflow-hidden ${isFocused ? 'ring-4 ring-red-200' : ''} animate-delay-${index * 100}`}
                   onMouseEnter={() => {
                     setHoveredCard(feature.id);
                     setFocusedFeature(feature.id);
@@ -689,7 +690,7 @@ export const CardiologyWorkspace: React.FC = () => {
                             background: `linear-gradient(135deg, ${feature.primaryColor}, ${feature.secondaryColor})`
                           }}
                         >
-                          <IconComponent className="w-10 h-10 text-white relative z-10 transform group-hover:scale-110 transition-transform duration-500" />
+                          <IconComponent className="w-10 h-10 text-[var(--foreground)] relative z-10 transform group-hover:scale-110 transition-transform duration-500" />
                           
                           {/* Shimmer Effect */}
                           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12" />
@@ -707,7 +708,7 @@ export const CardiologyWorkspace: React.FC = () => {
                       {/* Status Badge and Stats */}
                       <div className="flex flex-col items-end space-y-3">
                         <span 
-                          className="px-4 py-2 text-white text-xs font-bold rounded-2xl shadow-lg transform group-hover:scale-105 transition-transform duration-300"
+                          className="px-4 py-2 text-[var(--foreground)] text-xs font-bold rounded-2xl shadow-lg transform group-hover:scale-105 transition-transform duration-300"
                           style={{
                             background: `linear-gradient(135deg, ${feature.primaryColor}, ${feature.secondaryColor})`
                           }}
@@ -715,8 +716,8 @@ export const CardiologyWorkspace: React.FC = () => {
                           {feature.badge}
                         </span>
                         <div className="text-right">
-                          <div className="text-3xl font-black text-gray-900 group-hover:scale-105 transition-transform duration-300">{feature.stats.value}</div>
-                          <div className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{feature.stats.label}</div>
+                          <div className="text-3xl font-black text-[var(--foreground)] group-hover:scale-105 transition-transform duration-300">{feature.stats.value}</div>
+                          <div className="text-xs text-[var(--foreground-secondary)] font-semibold uppercase tracking-wide">{feature.stats.label}</div>
                         </div>
                       </div>
                     </div>
@@ -724,7 +725,7 @@ export const CardiologyWorkspace: React.FC = () => {
                     {/* Title and Description */}
                     <div className="space-y-4 mb-6">
                       <div>
-                        <h3 className="text-2xl font-black text-gray-900 mb-2 group-hover:text-gray-800 transition-colors duration-300 leading-tight">
+                        <h3 className="text-2xl font-black text-[var(--foreground)] mb-2 group-hover:text-[var(--foreground)] transition-colors duration-300 leading-tight">
                           {feature.title}
                         </h3>
                         <p 
@@ -734,18 +735,18 @@ export const CardiologyWorkspace: React.FC = () => {
                           {feature.subtitle}
                         </p>
                       </div>
-                      <p className="text-gray-600 leading-relaxed text-sm group-hover:text-gray-700 transition-colors duration-300">
+                      <p className="text-[var(--foreground-tertiary)] leading-relaxed text-sm group-hover:text-[var(--foreground-tertiary)] transition-colors duration-300">
                         {feature.description}
                       </p>
                     </div>
 
                     {/* Performance Metrics */}
                     {feature.metrics && (
-                      <div className="grid grid-cols-3 gap-3 mb-6 p-4 bg-gray-900 rounded-2xl border border-gray-800 group-hover:bg-gray-800 transition-colors duration-300">
+                      <div className="grid grid-cols-3 gap-3 mb-6 p-4 bg-[var(--background-dark)] rounded-2xl border border-gray-800 group-hover:bg-[var(--background)] transition-colors duration-300">
                         {Object.entries(feature.metrics).map(([key, value]) => (
                           <div key={key} className="text-center">
-                            <div className="text-lg font-bold text-white">{value}</div>
-                            <div className="text-xs text-gray-300 capitalize font-medium">{key}</div>
+                            <div className="text-lg font-bold text-[var(--foreground)]">{value}</div>
+                            <div className="text-xs text-[var(--foreground-secondary)] capitalize font-medium">{key}</div>
                           </div>
                         ))}
                       </div>
@@ -757,7 +758,7 @@ export const CardiologyWorkspace: React.FC = () => {
                         {feature.features.map((tag, tagIndex) => (
                           <span 
                             key={tag}
-                            className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-xl transform group-hover:scale-105 transition-all duration-300"
+                            className="px-3 py-1 bg-[var(--component-surface-secondary)] hover:bg-[var(--component-surface-tertiary)] text-[var(--foreground-tertiary)] text-xs font-semibold rounded-xl transform group-hover:scale-105 transition-all duration-300"
                             style={{ 
                               animationDelay: `${(index * 100) + (tagIndex * 50)}ms`,
                               transitionDelay: `${tagIndex * 25}ms`
@@ -772,7 +773,7 @@ export const CardiologyWorkspace: React.FC = () => {
                     {/* Expandable Capabilities */}
                     {isHovered && feature.capabilities && (
                       <div className="mb-6 space-y-3 animate-fade-in">
-                        <h4 className="text-sm font-bold text-gray-800 flex items-center space-x-2">
+                        <h4 className="text-sm font-bold text-[var(--foreground)] flex items-center space-x-2">
                           <Target className="w-4 h-4 text-emerald-600" />
                           <span>Key Capabilities</span>
                         </h4>
@@ -780,7 +781,7 @@ export const CardiologyWorkspace: React.FC = () => {
                           {feature.capabilities.map((capability, capIndex) => (
                             <div 
                               key={capability} 
-                              className="flex items-center space-x-3 text-sm text-gray-600 animate-slide-in-right"
+                              className="flex items-center space-x-3 text-sm text-[var(--foreground-tertiary)] animate-slide-in-right"
                               style={{ animationDelay: `${capIndex * 75}ms` }}
                             >
                               <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
@@ -794,7 +795,7 @@ export const CardiologyWorkspace: React.FC = () => {
                     {/* Call to Action Button */}
                     <div className="mt-auto pt-6">
                       <button
-                        className="group/btn relative w-full px-6 py-4 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden focus:outline-none focus:ring-4 focus:ring-gray-300"
+                        className="group/btn relative w-full px-6 py-4 bg-gradient-to-r from-[var(--foreground)] via-[var(--foreground-secondary)] to-[var(--foreground)] text-background font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden focus:outline-none focus:ring-4 focus:ring-[var(--focus-ring-primary)]"
                         onClick={(e) => {
                           e.stopPropagation();
                           feature.onClick();
@@ -828,7 +829,7 @@ export const CardiologyWorkspace: React.FC = () => {
         </div>
 
         {/* Emergency Response Command Center */}
-        <div className="relative bg-white rounded-3xl shadow-2xl border border-red-100 p-12 mb-20 overflow-hidden">
+        <div className="relative theme-card rounded-3xl shadow-2xl p-12 mb-20 overflow-hidden">
           {/* Sophisticated Background Effects */}
           <div className="absolute inset-0">
             <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-red-50 via-rose-25 to-transparent opacity-80" />
@@ -841,8 +842,8 @@ export const CardiologyWorkspace: React.FC = () => {
             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <pattern id="emergency-grid" width="60" height="60" patternUnits="userSpaceOnUse">
-                  <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#dc2626" strokeWidth="2"/>
-                  <circle cx="30" cy="30" r="2" fill="#dc2626"/>
+                  <path d="M 60 0 L 0 0 0 60" fill="none" stroke="var(--cardiology-red-primary)" strokeWidth="2"/>
+                  <circle cx="30" cy="30" r="2" fill="var(--cardiology-red-primary)"/>
                 </pattern>
               </defs>
               <rect width="100%" height="100%" fill="url(#emergency-grid)" />
@@ -855,15 +856,15 @@ export const CardiologyWorkspace: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl px-6 py-3 shadow-lg">
-                    <Zap className="w-6 h-6 text-white animate-pulse" />
-                    <span className="text-sm font-bold text-white tracking-wider">EMERGENCY RESPONSE</span>
+                    <Zap className="w-6 h-6 text-[var(--foreground)] animate-pulse" />
+                    <span className="text-sm font-bold text-[var(--foreground)] tracking-wider">EMERGENCY RESPONSE</span>
                   </div>
                   <div className="px-4 py-2 bg-gradient-to-r from-red-100 to-orange-100 rounded-2xl border-2 border-red-200">
                     <span className="text-sm font-black text-red-700">CRITICAL ACCESS</span>
                   </div>
                 </div>
                 
-                <h3 className="premium-section-title text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 tracking-tight transform hover:scale-105 transition-all duration-500" style={{
+                <h3 className="premium-section-title text-5xl sm:text-6xl lg:text-7xl font-black text-[var(--foreground)] tracking-tight transform hover:scale-105 transition-all duration-500" style={{
                   fontFamily: 'Inter, system-ui, sans-serif',
                   fontWeight: '900',
                   letterSpacing: '-0.02em',
@@ -873,14 +874,14 @@ export const CardiologyWorkspace: React.FC = () => {
                   Emergency Command Center
                 </h3>
                 
-                <p className="text-xl text-gray-600 font-medium max-w-3xl leading-relaxed">
+                <p className="text-xl text-[var(--foreground-tertiary)] font-medium max-w-3xl leading-relaxed">
                   Instant access to critical cardiology protocols and life-saving diagnostic tools. 
-                  <span className="block text-lg text-gray-500 mt-1 font-normal">
+                  <span className="block text-lg text-[var(--foreground-secondary)] mt-1 font-normal">
                     Evidence-based emergency response with one-click activation for time-critical patient care
                   </span>
                 </p>
                 
-                <div className="flex items-center space-x-6 text-sm text-gray-500">
+                <div className="flex items-center space-x-6 text-sm text-[var(--foreground-secondary)]">
                   <div className="flex items-center space-x-2">
                     <Target className="w-4 h-4 text-red-500" />
                     <span className="font-semibold">One-click response</span>
@@ -890,7 +891,7 @@ export const CardiologyWorkspace: React.FC = () => {
                     <span className="font-semibold">Evidence-based protocols</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Activity className="w-4 h-4 text-blue-500" />
+                    <Activity className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />
                     <span className="font-semibold">Real-time results</span>
                   </div>
                 </div>
@@ -922,7 +923,7 @@ export const CardiologyWorkspace: React.FC = () => {
                   <button
                     key={action.label}
                     onClick={action.action}
-                    className={`group relative p-8 bg-gradient-to-br ${action.color} text-white rounded-3xl shadow-2xl hover:shadow-3xl transform hover:scale-110 hover:-rotate-2 transition-all duration-400 focus:outline-none focus:ring-4 focus:ring-white/50 animate-delay-${(index + 8) * 100} overflow-hidden`}
+                    className={`group relative p-8 bg-gradient-to-br ${action.color} text-[var(--foreground)] rounded-3xl shadow-2xl hover:shadow-3xl transform hover:scale-110 hover:-rotate-2 transition-all duration-400 focus:outline-none focus:ring-4 focus:ring-white/50 animate-delay-${(index + 8) * 100} overflow-hidden`}
                     style={{
                       minHeight: '200px'
                     }}
@@ -936,7 +937,7 @@ export const CardiologyWorkspace: React.FC = () => {
                     <div className="relative z-10 h-full flex flex-col justify-center items-center space-y-6">
                       {/* Icon Container with Advanced Effects */}
                       <div className="relative">
-                        <div className="w-24 h-24 bg-white/25 backdrop-blur-lg rounded-3xl flex items-center justify-center group-hover:bg-white/35 transition-all duration-500 group-hover:scale-125 group-hover:rotate-12 shadow-2xl">
+                        <div className="w-24 h-24 bg-[var(--component-card)]/25 backdrop-blur-lg rounded-3xl flex items-center justify-center group-hover:bg-[var(--component-card)]/35 transition-all duration-500 group-hover:scale-125 group-hover:rotate-12 shadow-2xl">
                           <IconComponent className="w-12 h-12 group-hover:scale-125 transition-transform duration-500" />
                         </div>
                         
@@ -952,7 +953,7 @@ export const CardiologyWorkspace: React.FC = () => {
                           fontFamily: 'Inter, system-ui, sans-serif',
                           fontWeight: '900',
                           letterSpacing: '-0.01em',
-                          textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                          textShadow: 'var(--medical-shadow-black-medium)',
                           lineHeight: '1.2'
                         }}>
                           {action.label}
@@ -968,53 +969,53 @@ export const CardiologyWorkspace: React.FC = () => {
                       
                       {/* Emergency Activation Indicator */}
                       <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="w-2 h-2 bg-white rounded-full animate-bounce" />
+                        <div className="w-2 h-2 bg-[var(--component-card)] rounded-full animate-bounce" />
                         <div className="text-sm font-bold tracking-wider" style={{
                           fontFamily: 'Inter, system-ui, sans-serif',
                           fontWeight: '700',
                           letterSpacing: '0.15em',
-                          textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                          textShadow: 'var(--medical-shadow-black-medium)'
                         }}>ACTIVATE</div>
-                        <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                        <div className="w-2 h-2 bg-[var(--component-card)] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
                       </div>
                     </div>
                     
                     {/* Emergency Border Glow */}
-                    <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_30px_rgba(255,255,255,0.3)]" />
+                    <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{boxShadow: '0 0 30px rgba(255,255,255,0.3)'}} />
                   </button>
                 );
               })}
             </div>
             
             {/* Emergency Contact Info */}
-            <div className="mt-12 flex items-center justify-center space-x-8 p-6 bg-gray-50 rounded-2xl border border-gray-200">
+            <div className="mt-12 flex items-center justify-center space-x-8 p-6 rounded-2xl" style={{ background: 'var(--component-surface-secondary)', border: '1px solid var(--glass-border-medium)' }}>
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-red-500 rounded-2xl flex items-center justify-center">
-                  <HeartHandshake className="w-5 h-5 text-white" />
+                  <HeartHandshake className="w-5 h-5 text-[var(--foreground)]" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-gray-900">Emergency Support</div>
-                  <div className="text-xs text-gray-500">24/7 Clinical Assistance</div>
+                  <div className="text-sm font-bold text-[var(--foreground)]">Emergency Support</div>
+                  <div className="text-xs text-[var(--foreground-secondary)]">24/7 Clinical Assistance</div>
                 </div>
               </div>
               
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-500 rounded-2xl flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-[var(--cardiology-accent-blue)] rounded-2xl flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-[var(--foreground)]" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-gray-900">Protocol Compliance</div>
-                  <div className="text-xs text-gray-500">ACC/AHA Guidelines</div>
+                  <div className="text-sm font-bold text-[var(--foreground)]">Protocol Compliance</div>
+                  <div className="text-xs text-[var(--foreground-secondary)]">ACC/AHA Guidelines</div>
                 </div>
               </div>
               
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center">
-                  <Activity className="w-5 h-5 text-white" />
+                  <Activity className="w-5 h-5 text-[var(--foreground)]" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-gray-900">Response Time</div>
-                  <div className="text-xs text-gray-500">&lt; 3 seconds</div>
+                  <div className="text-sm font-bold text-[var(--foreground)]">Response Time</div>
+                  <div className="text-xs text-[var(--foreground-secondary)]">&lt; 3 seconds</div>
                 </div>
               </div>
             </div>
@@ -1022,21 +1023,21 @@ export const CardiologyWorkspace: React.FC = () => {
         </div>
 
         {/* Achievement Banner */}
-        <div className="bg-white/98 backdrop-blur-[24px] saturate-[120%] border border-gray-200/50 rounded-[28px] shadow-lg hover:shadow-xl transition-all duration-500 bg-gradient-to-r from-emerald-500/10 via-blue-500/10 to-purple-500/10 border-emerald-200/50 p-8">
+        <div className="theme-card rounded-[28px] shadow-lg hover:shadow-xl transition-all duration-500 p-8" style={{ background: 'var(--overlay-card-accent)', backdropFilter: 'var(--glass-blur-heavy)' }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-3xl flex items-center justify-center shadow-elevated">
-                <Award className="w-8 h-8 text-white" />
+              <div className="w-16 h-16 rounded-3xl flex items-center justify-center shadow-elevated" style={{background: 'var(--gradient-workspace-blue)'}}>
+                <Award className="w-8 h-8 text-[var(--foreground)]" />
               </div>
               <div>
-                <h4 className="text-2xl font-bold text-black mb-1" style={{ color: '#000000 !important', WebkitTextFillColor: '#000000 !important' }}>Production Excellence Achieved</h4>
-                <p className="text-gray-900" style={{ color: '#000000 !important', WebkitTextFillColor: '#000000 !important' }}>100% calculator validation • Mobile-first design • AI-powered intelligence</p>
+                <h4 className="text-2xl font-bold text-black mb-1" style={{ color: 'var(--foreground) !important', WebkitTextFillColor: 'var(--foreground) !important' }}>Production Excellence Achieved</h4>
+                <p className="text-[var(--foreground)]" style={{ color: 'var(--foreground) !important', WebkitTextFillColor: 'var(--foreground) !important' }}>100% calculator validation • Mobile-first design • AI-powered intelligence</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex space-x-2">
                 <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
-                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-3 h-3 bg-[var(--cardiology-accent-blue)] rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
                 <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
               </div>
               <CheckCircle2 className="w-8 h-8 text-emerald-600" />

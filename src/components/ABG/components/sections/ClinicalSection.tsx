@@ -24,10 +24,10 @@ export const ClinicalSection: React.FC<ClinicalSectionProps> = ({
     <div className="space-y-6">
       <div className="text-center mb-6">
         <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl mb-3">
-          <Stethoscope className="h-6 w-6 text-white" />
+          <Stethoscope className="h-6 w-6 text-[var(--foreground)]" />
         </div>
-        <h2 className="text-xl font-bold text-slate-900 mb-2">Clinical Parameters</h2>
-        <p className="text-slate-600 text-sm max-w-md mx-auto">
+        <h2 className="text-xl font-bold text-[var(--foreground)] mb-2">Clinical Parameters</h2>
+        <p className="text-[var(--foreground-tertiary)] text-sm max-w-md mx-auto">
           Search by pH levels, gas concentrations, and other clinical values with precision ranges
         </p>
       </div>
@@ -92,11 +92,11 @@ export const ClinicalSection: React.FC<ClinicalSectionProps> = ({
       <Card className="p-4 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200/60">
         <div className="flex items-center gap-3 mb-3">
           <div className="p-2 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-lg">
-            <Activity className="h-4 w-4 text-white" />
+            <Activity className="h-4 w-4 text-[var(--foreground)]" />
           </div>
           <div>
-            <Label className="text-sm font-bold text-slate-800">ABG Type</Label>
-            <p className="text-xs text-slate-600">Filter by blood gas type</p>
+            <Label className="text-sm font-bold text-[var(--foreground)]">ABG Type</Label>
+            <p className="text-xs text-[var(--foreground-tertiary)]">Filter by blood gas type</p>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-3">
@@ -108,14 +108,14 @@ export const ClinicalSection: React.FC<ClinicalSectionProps> = ({
                 "p-4 rounded-xl border transition-all duration-200 text-left group",
                 filters.type === type.value
                   ? "bg-purple-100 border-purple-300 text-purple-800"
-                  : "bg-white/70 border-purple-200/60 hover:bg-purple-50 hover:border-purple-300"
+                  : "bg-[var(--component-card)]/70 border-purple-200/60 hover:bg-purple-50 hover:border-purple-300"
               )}
             >
               <div className="flex items-center gap-3">
                 <div className={cn(
                   "p-2 rounded-lg transition-colors",
                   filters.type === type.value
-                    ? "bg-purple-500 text-white"
+                    ? "bg-purple-500 text-[var(--foreground)]"
                     : "bg-purple-100 text-purple-600 group-hover:bg-purple-200"
                 )}>
                   {type.icon}

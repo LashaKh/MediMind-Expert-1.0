@@ -292,19 +292,19 @@ function DAPTCalculatorComponent() {
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-700 rounded-2xl p-6 mb-8">
           <div className="flex items-start space-x-4">
             <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-800 rounded-xl flex items-center justify-center">
-                <Info className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="w-10 h-10 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)] rounded-xl flex items-center justify-center">
+                <Info className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
               </div>
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
                 {t('calculators.cardiology.dapt.therapy_management_tool')}
               </h3>
-              <p className="text-blue-700 dark:text-blue-300 leading-relaxed">
+              <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed">
                 {t('calculators.cardiology.dapt.tool_description')}
               </p>
               <div className="mt-3">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)] text-blue-800 dark:text-blue-200">
                   <CheckCircle2 className="w-4 h-4 mr-1" />
                   {t('calculators.cardiology.dapt.study_validated')}
                 </span>
@@ -319,33 +319,33 @@ function DAPTCalculatorComponent() {
             <div className="flex items-center justify-center space-x-4 mb-8">
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 1 ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 1 ? 'bg-purple-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   1
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.dapt.patient_profile')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.dapt.patient_profile')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 2 ? 'bg-purple-500' : 'bg-gray-200'
+                currentStep >= 2 ? 'bg-purple-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 2 ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 2 ? 'bg-purple-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   2
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.dapt.risk_assessment')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.dapt.risk_assessment')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 3 ? 'bg-purple-500' : 'bg-gray-200'
+                currentStep >= 3 ? 'bg-purple-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 3 ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 3 ? 'bg-purple-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   3
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.dapt.dapt_analysis')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.dapt.dapt_analysis')}</span>
               </div>
             </div>
 
@@ -355,9 +355,9 @@ function DAPTCalculatorComponent() {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl border border-emerald-200 dark:border-emerald-800">
                     <User className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.dapt.demographics_section')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.dapt.demographics_section')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.cardiology.dapt.demographics_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.cardiology.dapt.demographics_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
@@ -410,10 +410,10 @@ function DAPTCalculatorComponent() {
               <div className="space-y-6 animate-fadeIn">
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
-                    <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.dapt.risk_factors_section')}</h3>
+                    <Activity className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.dapt.risk_factors_section')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.cardiology.dapt.risk_factors_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.cardiology.dapt.risk_factors_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -489,9 +489,9 @@ function DAPTCalculatorComponent() {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-2xl border border-orange-200 dark:border-orange-800">
                     <Stethoscope className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.dapt.specialized_factors_section')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.dapt.specialized_factors_section')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.cardiology.dapt.specialized_factors_description')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.cardiology.dapt.specialized_factors_description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
@@ -526,21 +526,21 @@ function DAPTCalculatorComponent() {
           result && (
             <div className="animate-fadeIn">
               {/* Hero Results Card - Matching AF Calculator Style */}
-              <div className={`relative overflow-hidden rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-2xl shadow-black/5 dark:shadow-black/20 mb-8 ${
+              <div className={`relative overflow-hidden rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/50 shadow-2xl shadow-black/5 dark:shadow-black/20 mb-8 ${
                 result.score >= 2 ? 'bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-emerald-950/20 dark:via-green-950/20 dark:to-teal-950/20' :
                 result.score >= 0 ? 'bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 dark:from-amber-950/20 dark:via-yellow-950/20 dark:to-orange-950/20' :
                 'bg-gradient-to-br from-rose-50 via-red-50 to-pink-50 dark:from-rose-950/20 dark:via-red-950/20 dark:to-pink-950/20'
               }`}>
                 {/* Glassmorphism overlay */}
-                <div className="absolute inset-0 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80"></div>
+                <div className="absolute inset-0 backdrop-blur-sm bg-[var(--component-card)]/80 dark:bg-[var(--background-dark)]/80"></div>
                 
                 <div className="relative p-8">
                   {/* Header */}
                   <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                    <h2 className="text-3xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                       {t('calculators.cardiology.dapt.score_analysis')}
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {getInterpretation(result.ischemicBenefit, result.score)}
                     </p>
                   </div>
@@ -558,7 +558,7 @@ function DAPTCalculatorComponent() {
                           stroke="currentColor"
                           strokeWidth="8"
                           fill="transparent"
-                          className="text-gray-200 dark:text-gray-700"
+                          className="text-[var(--foreground)] dark:text-[var(--foreground-tertiary)]"
                         />
                         {/* Progress circle */}
                         <circle
@@ -587,7 +587,7 @@ function DAPTCalculatorComponent() {
                         }`}>
                           {result.score}
                         </span>
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                           {t('calculators.common.points')}
                         </span>
                       </div>
@@ -612,66 +612,66 @@ function DAPTCalculatorComponent() {
 
                   {/* Risk Analysis Grid */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-                    <div className="backdrop-blur-sm bg-white/60 dark:bg-gray-800/60 rounded-xl p-6 border border-white/40 dark:border-gray-700/40">
+                    <div className="backdrop-blur-sm bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40">
                       <div className="flex items-center mb-3">
                         <div className="p-2 bg-emerald-500/10 rounded-lg mr-3">
                           <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                         </div>
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.dapt.ischemic_benefit')}</h4>
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.dapt.ischemic_benefit')}</h4>
                       </div>
                       <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{t(`calculators.cardiology.dapt.${result.ischemicBenefit}_risk`)}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{t('calculators.cardiology.dapt.mace_reduction', { reduction: result.riskBalance.ischemicReduction })}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.dapt.mace_reduction', { reduction: result.riskBalance.ischemicReduction })}</p>
                     </div>
                     
-                    <div className="backdrop-blur-sm bg-white/60 dark:bg-gray-800/60 rounded-xl p-6 border border-white/40 dark:border-gray-700/40">
+                    <div className="backdrop-blur-sm bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40">
                       <div className="flex items-center mb-3">
                         <div className="p-2 bg-red-500/10 rounded-lg mr-3">
                           <Droplets className="w-5 h-5 text-red-600 dark:text-red-400" />
                         </div>
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.dapt.bleeding_risk')}</h4>
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.dapt.bleeding_risk')}</h4>
                       </div>
                       <p className="text-lg font-bold text-red-600 dark:text-red-400">{t(`calculators.cardiology.dapt.${result.bleedingRisk}_risk`)}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{t('calculators.cardiology.dapt.bleeding_increase', { increase: result.riskBalance.bleedingIncrease })}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.dapt.bleeding_increase', { increase: result.riskBalance.bleedingIncrease })}</p>
                     </div>
                     
-                    <div className="backdrop-blur-sm bg-white/60 dark:bg-gray-800/60 rounded-xl p-6 border border-white/40 dark:border-gray-700/40">
+                    <div className="backdrop-blur-sm bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40">
                       <div className="flex items-center mb-3">
-                        <div className="p-2 bg-blue-500/10 rounded-lg mr-3">
-                          <Zap className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        <div className="p-2 bg-[var(--cardiology-accent-blue)]/10 rounded-lg mr-3">
+                          <Zap className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                         </div>
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.dapt.net_benefit')}</h4>
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.dapt.net_benefit')}</h4>
                       </div>
-                      <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{getBenefitInfo(result.netBenefit).label}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{getBenefitInfo(result.netBenefit).description}</p>
+                      <p className="text-lg font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">{getBenefitInfo(result.netBenefit).label}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{getBenefitInfo(result.netBenefit).description}</p>
                     </div>
                   </div>
 
                   {/* Clinical Recommendation */}
-                  <div className="backdrop-blur-sm bg-white/60 dark:bg-gray-800/60 rounded-xl p-6 border border-white/40 dark:border-gray-700/40 mb-6">
+                  <div className="backdrop-blur-sm bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 mb-6">
                     <div className="flex items-start space-x-4">
                       <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                        <Brain className="w-6 h-6 text-white" />
+                        <Brain className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">{t('calculators.cardiology.dapt.duration_recommendation')}</h4>
-                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{result.durationGuidance}</p>
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.cardiology.dapt.duration_recommendation')}</h4>
+                        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">{result.durationGuidance}</p>
                       </div>
                     </div>
                   </div>
                   
                   {/* Clinical Considerations */}
-                  <div className="backdrop-blur-sm bg-white/60 dark:bg-gray-800/60 rounded-xl p-6 border border-white/40 dark:border-gray-700/40">
+                  <div className="backdrop-blur-sm bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40">
                     <div className="flex items-start space-x-4">
                       <div className="p-3 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl shadow-lg">
-                        <Stethoscope className="w-6 h-6 text-white" />
+                        <Stethoscope className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">{t('calculators.cardiology.dapt.clinical_considerations')}</h4>
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">{t('calculators.cardiology.dapt.clinical_considerations')}</h4>
                         <ul className="space-y-2">
                           {result.clinicalConsiderations.map((consideration, index) => (
                             <li key={index} className="flex items-start">
                               <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                              <span className="text-gray-700 dark:text-gray-300">{consideration}</span>
+                              <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{consideration}</span>
                             </li>
                           ))}
                         </ul>
@@ -682,33 +682,33 @@ function DAPTCalculatorComponent() {
               </div>
 
               {/* Interpretation Guide */}
-              <div className="mt-8 p-6 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-900/50 rounded-2xl border border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{t('calculators.cardiology.dapt.interpretation_guide')}</h3>
+              <div className="mt-8 p-6 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-900/50 rounded-2xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
+                <h3 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">{t('calculators.cardiology.dapt.interpretation_guide')}</h3>
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <Award className="w-5 h-5 text-green-500 mr-3 mt-1 flex-shrink-0" />
                     <div>
                       <p className="font-semibold">{t('calculators.cardiology.dapt.score_high')}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{t('calculators.cardiology.dapt.score_high_desc')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.dapt.score_high_desc')}</p>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <BarChart3 className="w-5 h-5 text-yellow-500 mr-3 mt-1 flex-shrink-0" />
                     <div>
                       <p className="font-semibold">{t('calculators.cardiology.dapt.score_intermediate')}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{t('calculators.cardiology.dapt.score_intermediate_desc')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.dapt.score_intermediate_desc')}</p>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <Shield className="w-5 h-5 text-red-500 mr-3 mt-1 flex-shrink-0" />
                     <div>
                       <p className="font-semibold">{t('calculators.cardiology.dapt.score_low')}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{t('calculators.cardiology.dapt.score_low_desc')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.dapt.score_low_desc')}</p>
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                   <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                <div className="mt-4 pt-4 border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
+                   <p className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] italic">
                     {t('calculators.cardiology.dapt.algorithm_validation')}
                   </p>
                 </div>
@@ -719,12 +719,12 @@ function DAPTCalculatorComponent() {
                 {/* Gradient Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-emerald-950/20 dark:via-teal-950/20 dark:to-cyan-950/20 rounded-2xl" />
                 
-                <div className="relative backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-white/30 dark:border-gray-700/30 shadow-xl">
+                <div className="relative backdrop-blur-sm bg-[var(--component-card)]/70 dark:bg-[var(--background-dark)]/70 rounded-2xl border border-white/30 dark:border-[var(--border-strong)]/30 shadow-xl">
                   <div className="p-8">
                     {/* Header */}
                     <div className="flex items-center space-x-3 mb-6">
                       <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl shadow-lg shadow-emerald-500/25">
-                        <UserCheck className="w-6 h-6 text-white" />
+                        <UserCheck className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
                         {t('calculators.cardiology.dapt.creator_insights_title')}
@@ -732,23 +732,23 @@ function DAPTCalculatorComponent() {
                     </div>
 
                     {/* Creator Profile */}
-                    <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40 mb-6">
+                    <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 mb-6">
                       <div className="flex items-start space-x-4">
                         <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/25">
-                          <User className="w-6 h-6 text-white" />
+                          <User className="w-6 h-6 text-[var(--foreground)]" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 text-lg">
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2 text-lg">
                             {t('calculators.cardiology.dapt.creator_name')}
                           </h4>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                          <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                             {t('calculators.cardiology.dapt.creator_bio')}
                           </p>
                           <a 
                             href="https://pubmed.ncbi.nlm.nih.gov/?term=Yeh+RW%5BAu%5D" 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="inline-flex items-center mt-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                            className="inline-flex items-center mt-3 text-sm font-medium text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
                           >
                             <ExternalLink className="w-4 h-4 mr-1" />
                             View Publications on PubMed
@@ -758,13 +758,13 @@ function DAPTCalculatorComponent() {
                     </div>
 
                     {/* Condensed Insight */}
-                    <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40">
+                    <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40">
                       <div className="flex items-start space-x-4">
                         <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl shadow-lg shadow-emerald-500/25">
-                          <Lightbulb className="w-5 h-5 text-white" />
+                          <Lightbulb className="w-5 h-5 text-[var(--foreground)]" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
+                          <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed font-medium">
                             {t('calculators.cardiology.dapt.creator_insight_condensed')}
                           </p>
                         </div>
@@ -779,12 +779,12 @@ function DAPTCalculatorComponent() {
                 {/* Gradient Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/20 dark:via-indigo-950/20 dark:to-purple-950/20 rounded-2xl" />
                 
-                <div className="relative backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-white/30 dark:border-gray-700/30 shadow-xl">
+                <div className="relative backdrop-blur-sm bg-[var(--component-card)]/70 dark:bg-[var(--background-dark)]/70 rounded-2xl border border-white/30 dark:border-[var(--border-strong)]/30 shadow-xl">
                   <div className="p-8">
                     {/* Header */}
                     <div className="flex items-center space-x-3 mb-6">
                       <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/25">
-                        <FileText className="w-6 h-6 text-white" />
+                        <FileText className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
                         {t('calculators.cardiology.dapt.evidence_title')}
@@ -793,17 +793,17 @@ function DAPTCalculatorComponent() {
 
                     <div className="grid gap-4 sm:gap-6">
                       {/* Formula Section */}
-                      <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40 hover:shadow-lg transition-all duration-300">
+                      <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 hover:shadow-lg transition-all duration-300">
                         <div className="flex items-start space-x-3">
-                          <div className="p-2 bg-blue-500/10 rounded-lg">
-                            <Calculator className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                          <div className="p-2 bg-[var(--cardiology-accent-blue)]/10 rounded-lg">
+                            <Calculator className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                            <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">
                               {t('calculators.cardiology.dapt.evidence_formula_title')}
                             </h4>
-                            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-4">
-                              <div className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                            <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--background)] rounded-lg p-4 mb-4">
+                              <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] space-y-2">
                                 <p className="font-mono">{t('calculators.cardiology.dapt.formula_description')}</p>
                                 <div className="mt-3 space-y-1">
                                   <p><strong>{t('calculators.cardiology.dapt.age_scoring')}</strong></p>
@@ -811,7 +811,7 @@ function DAPTCalculatorComponent() {
                                 </div>
                               </div>
                             </div>
-                            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                            <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 rounded-lg p-4">
                               <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
                                 {t('calculators.cardiology.dapt.interpretation_note')}
                               </p>
@@ -821,32 +821,32 @@ function DAPTCalculatorComponent() {
                       </div>
                       
                       {/* Evidence Cards */}
-                      <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40 hover:shadow-lg transition-all duration-300">
+                      <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 hover:shadow-lg transition-all duration-300">
                         <div className="flex items-start space-x-3">
                           <div className="p-2 bg-indigo-500/10 rounded-lg">
                             <CheckCircle2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                            <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                               {t('calculators.cardiology.dapt.evidence_validation_title')}
                             </h4>
-                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                               {t('calculators.cardiology.dapt.evidence_validation_description')}
                             </p>
                           </div>
                         </div>
                       </div>
 
-                      <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-gray-700/40 hover:shadow-lg transition-all duration-300">
+                      <div className="bg-gradient-to-r from-white/60 to-white/30 dark:from-gray-800/60 dark:to-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-white/40 dark:border-[var(--border-strong)]/40 hover:shadow-lg transition-all duration-300">
                         <div className="flex items-start space-x-3">
                           <div className="p-2 bg-purple-500/10 rounded-lg">
                             <Award className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                            <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                               {t('calculators.cardiology.dapt.evidence_guidelines_title')}
                             </h4>
-                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                               {t('calculators.cardiology.dapt.evidence_guidelines_description')}
                             </p>
                           </div>
@@ -854,9 +854,9 @@ function DAPTCalculatorComponent() {
                       </div>
 
                       {/* Reference Links */}
-                      <div className="bg-gradient-to-r from-gray-50/80 to-white/80 dark:from-gray-800/80 dark:to-gray-700/80 backdrop-blur-sm rounded-xl p-6 border border-gray-200/50 dark:border-gray-600/50">
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                          <BookOpen className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
+                      <div className="bg-gradient-to-r from-gray-50/80 to-white/80 dark:from-gray-800/80 dark:to-gray-700/80 backdrop-blur-sm rounded-xl p-6 border border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50">
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4 flex items-center">
+                          <BookOpen className="w-5 h-5 mr-2 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                           {t('calculators.cardiology.dapt.references_title')}
                         </h4>
                         <div className="space-y-3">
@@ -864,22 +864,22 @@ function DAPTCalculatorComponent() {
                             href="https://jamanetwork.com/journals/jama/fullarticle/2516815"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg border border-white/50 dark:border-gray-700/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                            className="group flex items-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-lg border border-white/50 dark:border-[var(--border-strong)]/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
                           >
-                            <div className="p-2 bg-blue-500/10 rounded-lg mr-3 group-hover:bg-blue-500/20 transition-colors">
-                              <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                            <div className="p-2 bg-[var(--cardiology-accent-blue)]/10 rounded-lg mr-3 group-hover:bg-[var(--cardiology-accent-blue)]/20 transition-colors">
+                              <FileText className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                             </div>
-                            <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300">
+                            <span className="font-medium text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-300">
                               {t('calculators.cardiology.dapt.reference_original')}
                             </span>
-                            <ExternalLink className="w-4 h-4 ml-auto text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
+                            <ExternalLink className="w-4 h-4 ml-auto text-[var(--foreground-secondary)] group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-400" />
                           </a>
                           
                           <a 
                             href="https://www.sciencedirect.com/science/article/pii/S0003497516309080"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg border border-white/50 dark:border-gray-700/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                            className="group flex items-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-lg border border-white/50 dark:border-[var(--border-strong)]/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
                           >
                             <div className="p-2 bg-indigo-500/10 rounded-lg mr-3 group-hover:bg-indigo-500/20 transition-colors">
                               <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -887,14 +887,14 @@ function DAPTCalculatorComponent() {
                             <span className="font-medium text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300">
                               {t('calculators.cardiology.dapt.reference_validation')}
                             </span>
-                            <ExternalLink className="w-4 h-4 ml-auto text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400" />
+                            <ExternalLink className="w-4 h-4 ml-auto text-[var(--foreground-secondary)] group-hover:text-indigo-600 dark:group-hover:text-indigo-400" />
                           </a>
 
                           <a 
                             href="https://www.sciencedirect.com/science/article/pii/S0735109716004549"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg border border-white/50 dark:border-gray-700/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                            className="group flex items-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-lg border border-white/50 dark:border-[var(--border-strong)]/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
                           >
                             <div className="p-2 bg-green-500/10 rounded-lg mr-3 group-hover:bg-green-500/20 transition-colors">
                               <FileText className="w-4 h-4 text-green-600 dark:text-green-400" />
@@ -902,7 +902,7 @@ function DAPTCalculatorComponent() {
                             <span className="font-medium text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300">
                               {t('calculators.cardiology.dapt.reference_guidelines')}
                             </span>
-                            <ExternalLink className="w-4 h-4 ml-auto text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400" />
+                            <ExternalLink className="w-4 h-4 ml-auto text-[var(--foreground-secondary)] group-hover:text-green-600 dark:group-hover:text-green-400" />
                           </a>
                         </div>
                       </div>

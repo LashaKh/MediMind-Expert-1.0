@@ -50,8 +50,8 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ className = 
   return (
     <nav 
       className={`
-        fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm
-        border-t border-gray-200 dark:border-gray-700 shadow-lg safe-bottom
+        fixed bottom-0 left-0 right-0 z-40 bg-[var(--component-card)]/95 dark:bg-[var(--background-dark)]/95 backdrop-blur-sm
+        border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)] shadow-lg safe-bottom
         md:hidden ${className}
       `}
       style={{
@@ -75,10 +75,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ className = 
                 transition-all duration-200 relative group min-w-[48px] min-h-[48px] flex-1
                 ${active 
                   ? 'text-primary bg-primary/10' 
-                  : 'text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800'
+                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:text-primary dark:hover:text-primary hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--background)]'
                 }
                 focus-enhanced active:scale-95 active:bg-primary/20
-                border border-transparent hover:border-gray-200 dark:hover:border-gray-700
+                border border-transparent hover:border-[var(--glass-border-light)] dark:hover:border-[var(--border-strong)]
                 ${active ? 'border-primary/20' : ''}
               `}
               style={{
@@ -100,7 +100,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ className = 
               `}>
                 <Icon className={`
                   w-6 h-6 transition-all duration-200
-                  ${active ? 'text-primary' : 'text-gray-600 dark:text-gray-400'}
+                  ${active ? 'text-primary' : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'}
                 `} />
                 
                 {/* Active background glow - removed as we now have bg on container */}
@@ -111,7 +111,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ className = 
                 text-xs font-medium truncate transition-all duration-200 max-w-full
                 ${active 
                   ? 'text-primary font-semibold' 
-                  : 'text-gray-600 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200'
+                  : 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] group-hover:text-[var(--foreground)] dark:group-hover:text-[var(--foreground)]'
                 }
               `}>
                 {item.shortLabel}

@@ -197,7 +197,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
             variant="ghost"
             size="sm"
             onClick={clearAllFilters}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)]"
           >
             <XMarkIcon className="w-4 h-4" />
               <span className="hidden sm:inline">{t('common.clear', 'Clear')}</span>
@@ -208,7 +208,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
   }
 
   return (
-    <Card className={cn("bg-white/95 backdrop-blur-xl border border-gray-200/50", className)}>
+    <Card className={cn("bg-[var(--component-card)]/95 backdrop-blur-xl border border-[var(--glass-border-light)]/50", className)}>
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-lg">
@@ -222,7 +222,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={clearAllFilters}
-                className="text-gray-500 hover:text-gray-700 gap-2"
+                className="text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] gap-2"
               >
                 <XMarkIcon className="w-4 h-4" />
                 {t('news.filters.clearAll', 'Clear All')}
@@ -234,7 +234,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={onToggle}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)]"
               >
                 <XMarkIcon className="w-4 h-4" />
               </Button>
@@ -246,7 +246,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
       <CardContent className="space-y-6">
         {/* Categories */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center gap-2">
             <BeakerIcon className="w-4 h-4 text-indigo-600" />
             {t('news.filters.categories', 'Categories')}
           </h4>
@@ -263,13 +263,13 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
                     "flex items-center gap-2 p-3 rounded-lg border transition-all duration-200 text-left",
                     isSelected
                       ? "border-indigo-200 bg-indigo-50 text-indigo-900"
-                      : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-700"
+                      : "border-[var(--glass-border-light)] bg-[var(--component-card)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)] text-[var(--foreground-tertiary)]"
                   )}
                   title={option.description}
                 >
                   <IconComponent className={cn(
                     "w-4 h-4 flex-shrink-0",
-                    isSelected ? "text-indigo-600" : "text-gray-500"
+                    isSelected ? "text-indigo-600" : "text-[var(--foreground-secondary)]"
                   )} />
                   <span className="text-sm font-medium truncate">{option.label}</span>
                 </button>
@@ -280,7 +280,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
 
         {/* Date Range */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center gap-2">
             <CalendarIcon className="w-4 h-4 text-indigo-600" />
             {t('news.filters.dateRange', 'Date Range')}
           </h4>
@@ -296,12 +296,12 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
                     "p-3 rounded-lg border transition-all duration-200 text-left",
                     isSelected
                       ? "border-indigo-200 bg-indigo-50 text-indigo-900"
-                      : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-700"
+                      : "border-[var(--glass-border-light)] bg-[var(--component-card)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)] text-[var(--foreground-tertiary)]"
                   )}
                   title={option.description}
                 >
                   <div className="text-sm font-medium">{option.label}</div>
-                  <div className="text-xs text-gray-500 mt-1">{option.description}</div>
+                  <div className="text-xs text-[var(--foreground-secondary)] mt-1">{option.description}</div>
                 </button>
               );
             })}
@@ -310,7 +310,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
 
         {/* Content Types */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center gap-2">
             <AcademicCapIcon className="w-4 h-4 text-indigo-600" />
             {t('news.filters.contentTypes', 'Content Types')}
           </h4>
@@ -327,12 +327,12 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
                     "flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200",
                     isSelected
                       ? "border-indigo-200 bg-indigo-50 text-indigo-900"
-                      : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-700"
+                      : "border-[var(--glass-border-light)] bg-[var(--component-card)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)] text-[var(--foreground-tertiary)]"
                   )}
                 >
                   <IconComponent className={cn(
                     "w-4 h-4",
-                    isSelected ? "text-indigo-600" : "text-gray-500"
+                    isSelected ? "text-indigo-600" : "text-[var(--foreground-secondary)]"
                   )} />
                   <span className="text-sm font-medium">{option.label}</span>
                 </button>
@@ -343,7 +343,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
 
         {/* Evidence Levels */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center gap-2">
             <TrophyIcon className="w-4 h-4 text-indigo-600" />
             {t('news.filters.evidenceLevels', 'Evidence Levels')}
           </h4>
@@ -361,7 +361,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
                       "w-full flex items-center justify-between p-3 rounded-lg border transition-all duration-200 text-left",
                       isSelected
                         ? "border-indigo-200 bg-indigo-50 text-indigo-900"
-                        : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-700"
+                        : "border-[var(--glass-border-light)] bg-[var(--component-card)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)] text-[var(--foreground-tertiary)]"
                     )}
                   >
                     <span className="text-sm font-medium">{option.label}</span>
@@ -379,7 +379,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
 
         {/* Search within news */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-3">
+          <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">
             {t('news.filters.search', 'Search in News')}
           </h4>
           <div className="relative">
@@ -388,12 +388,12 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
               value={localFilters.search || ''}
               onChange={(e) => updateFilter('search', e.target.value)}
               placeholder={t('news.filters.searchPlaceholder', 'Search news titles and summaries...')}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+              className="w-full px-4 py-3 border border-[var(--glass-border-medium)] rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
             />
             {localFilters.search && (
               <button
                 onClick={() => updateFilter('search', '')}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)]"
               >
                 <XMarkIcon className="w-4 h-4" />
               </button>
@@ -403,12 +403,12 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
 
         {/* Quality Thresholds */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-3">
+          <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">
             {t('news.filters.quality', 'Quality Thresholds')}
           </h4>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs text-gray-600 mb-2">
+              <label className="block text-xs text-[var(--foreground-tertiary)] mb-2">
                 Min Relevance Score
               </label>
               <input
@@ -420,13 +420,13 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
                 onChange={(e) => updateFilter('minRelevanceScore', parseFloat(e.target.value))}
                 className="w-full"
               />
-              <div className="text-xs text-gray-500 mt-1">
+              <div className="text-xs text-[var(--foreground-secondary)] mt-1">
                 {Math.round((localFilters.minRelevanceScore || 0) * 100)}%
               </div>
             </div>
             
             <div>
-              <label className="block text-xs text-gray-600 mb-2">
+              <label className="block text-xs text-[var(--foreground-tertiary)] mb-2">
                 Min Credibility Score
               </label>
               <input
@@ -438,7 +438,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
                 onChange={(e) => updateFilter('minCredibilityScore', parseFloat(e.target.value))}
                 className="w-full"
               />
-              <div className="text-xs text-gray-500 mt-1">
+              <div className="text-xs text-[var(--foreground-secondary)] mt-1">
                 {Math.round((localFilters.minCredibilityScore || 0) * 100)}%
               </div>
             </div>
@@ -447,7 +447,7 @@ export const NewsFilters: React.FC<NewsFiltersProps> = ({
 
         {/* Apply button */}
         {onApplyFilters && (
-          <div className="pt-4 border-t border-gray-200">
+          <div className="pt-4 border-t border-[var(--glass-border-light)]">
             <Button
               onClick={onApplyFilters}
               className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:shadow-lg transition-all duration-200"

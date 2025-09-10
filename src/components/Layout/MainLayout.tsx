@@ -87,9 +87,10 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
   return (
     <div 
-      className="min-h-screen flex flex-col bg-background safe-area-inset layout-container"
+      className="min-h-screen flex flex-col safe-area-inset layout-container"
       style={{ 
-        backgroundImage: 'none !important'
+        background: 'transparent',
+        backgroundImage: 'none'
       }}
     >
       {/* Header with safe area support */}

@@ -29,7 +29,7 @@ export function useLikelihoodRatioTables(containerRef: React.RefObject<HTMLEleme
       if (!isLRTable || lrColumnIndex === -1 || valueColumnIndex === -1) return;
 
       // Style the table
-      table.classList.add('w-full', 'border-collapse', 'bg-white', 'rounded-lg');
+      table.classList.add('w-full', 'border-collapse', 'bg-[var(--component-card)]', 'rounded-lg');
       
       // Process each data row
       const rows = table.querySelectorAll('tbody tr');
@@ -51,10 +51,10 @@ export function useLikelihoodRatioTables(containerRef: React.RefObject<HTMLEleme
         const confidenceInterval = valueCell.textContent || '';
         
         // Update LR cell to include confidence interval
-        lrCell.innerHTML = `<span class="font-semibold">${lrValue}</span> <span class="text-gray-500">${confidenceInterval}</span>`;
+        lrCell.innerHTML = `<span class="font-semibold">${lrValue}</span> <span class="text-[var(--foreground-secondary)]">${confidenceInterval}</span>`;
         
         // Replace value cell with visual indicator
-        let barColor = 'bg-gray-400';
+        let barColor = 'bg-[var(--muted)]';
         const maxLR = 20;
         const scaledValue = Math.min(lrValue, maxLR);
         const barWidth = Math.max(10, (scaledValue / maxLR) * 90);
@@ -68,7 +68,7 @@ export function useLikelihoodRatioTables(containerRef: React.RefObject<HTMLEleme
         }
         
         valueCell.innerHTML = `
-          <div class="bg-gray-100 rounded-full h-6 w-full max-w-[200px]">
+          <div class="bg-[var(--component-surface-secondary)] rounded-full h-6 w-full max-w-[200px]">
             <div class="${barColor} h-6 rounded-full transition-all duration-500 ease-out" style="width: ${barWidth}%"></div>
           </div>
         `;
@@ -79,15 +79,15 @@ export function useLikelihoodRatioTables(containerRef: React.RefObject<HTMLEleme
         });
         
         // Style the row
-        row.classList.add('border-b', 'border-gray-100', 'hover:bg-gray-50', 'transition-colors');
+        row.classList.add('border-b', 'border-gray-100', 'hover:bg-[var(--component-surface-primary)]', 'transition-colors');
       });
       
       // Style headers
       const headerRow = table.querySelector('thead tr');
       if (headerRow) {
-        headerRow.classList.add('border-b-2', 'border-gray-200');
+        headerRow.classList.add('border-b-2', 'border-[var(--glass-border-light)]');
         headers.forEach(header => {
-          header.classList.add('text-left', 'py-3', 'px-4', 'font-semibold', 'text-gray-900');
+          header.classList.add('text-left', 'py-3', 'px-4', 'font-semibold', 'text-[var(--foreground)]');
         });
       }
     });

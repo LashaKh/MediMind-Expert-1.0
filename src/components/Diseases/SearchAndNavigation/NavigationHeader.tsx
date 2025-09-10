@@ -37,21 +37,21 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   showTOC
 }) => {
   return (
-    <div className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+    <div className="sticky top-0 z-30 bg-[var(--component-card)] border-b border-[var(--glass-border-light)] shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Left Section - Title and TOC Toggle */}
           <div className="flex items-center space-x-4">
             <button
               onClick={onToggleTOC}
-              className="p-2 bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-blue-600/10 hover:from-blue-500/20 hover:via-cyan-500/20 hover:to-blue-600/20 border border-blue-400/20 hover:border-blue-400/40 text-blue-600 dark:text-blue-400 rounded-lg transition-colors"
+              className="p-2 bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-blue-600/10 hover:from-blue-500/20 hover:via-cyan-500/20 hover:to-blue-600/20 border border-blue-400/20 hover:border-blue-400/40 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 rounded-lg transition-colors"
               title={showTOC ? 'Hide table of contents' : 'Show table of contents'}
             >
               <Menu className="w-5 h-5" />
             </button>
             
             {title && (
-              <h1 className="text-xl font-semibold text-gray-900 truncate">
+              <h1 className="text-xl font-semibold text-[var(--foreground)] truncate">
                 {title}
               </h1>
             )}
@@ -79,7 +79,7 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
             <div className="flex items-center space-x-1">
               <button
                 onClick={onDownloadPDF}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-surface-secondary)] rounded-lg transition-colors"
                 title="Download PDF"
               >
                 <Download className="w-5 h-5" />
@@ -87,7 +87,7 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
               
               <button
                 onClick={onShare}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-surface-secondary)] rounded-lg transition-colors"
                 title="Share"
               >
                 <Share2 className="w-5 h-5" />
@@ -95,7 +95,7 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
               
               <button
                 onClick={onPrint}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-surface-secondary)] rounded-lg transition-colors"
                 title="Print"
               >
                 <Printer className="w-5 h-5" />

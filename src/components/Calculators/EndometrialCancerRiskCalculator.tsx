@@ -185,7 +185,7 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
       case 'very-high':
         return 'bg-red-50 border-red-200 text-red-800';
       default:
-        return 'bg-gray-50 border-gray-200 text-gray-800';
+        return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] text-[var(--foreground)]';
     }
   }, []);
 
@@ -200,7 +200,7 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
       case 'very-high':
         return <AlertCircle className="w-6 h-6 text-red-600" />;
       default:
-        return <Info className="w-6 h-6 text-gray-600" />;
+        return <Info className="w-6 h-6 text-[var(--foreground-tertiary)]" />;
     }
   }, []);
 
@@ -226,11 +226,11 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
     >
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'calculator' | 'about')} className="w-full space-y-6">
         <TabsList className="grid w-full grid-cols-2 bg-purple-50 border border-purple-200">
-          <TabsTrigger value="calculator" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+          <TabsTrigger value="calculator" className="data-[state=active]:bg-purple-600 data-[state=active]:text-[var(--foreground)]">
             <Calculator className="w-4 h-4 mr-2" />
             {t('calculators.obgyn.endometrial_cancer_risk.calculate_button')}
           </TabsTrigger>
-          <TabsTrigger value="about" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+          <TabsTrigger value="about" className="data-[state=active]:bg-purple-600 data-[state=active]:text-[var(--foreground)]">
             <Info className="w-4 h-4 mr-2" />
             {t('calculators.obgyn.endometrial_cancer_risk.about_title')}
           </TabsTrigger>
@@ -252,8 +252,8 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
                   <div className={`
                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors
                     ${step >= i 
-                      ? 'bg-purple-600 border-purple-600 text-white' 
-                      : 'bg-white border-purple-300 text-purple-400'
+                      ? 'bg-purple-600 border-purple-600 text-[var(--foreground)]' 
+                      : 'bg-[var(--component-card)] border-purple-300 text-purple-400'
                     }
                   `}>
                     {getStepIcon(i)}
@@ -330,19 +330,19 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
                   />
                 </div>
 
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <div className="bg-[var(--cardiology-accent-blue-light)] p-4 rounded-lg border border-blue-200">
                   <h4 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
                     <Info className="w-5 h-5" />
                     {t('calculators.obgyn.endometrial_cancer_risk.bmi_categories')}
                   </h4>
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="text-blue-700"><strong>{t('calculators.obgyn.endometrial_cancer_risk.bmi_normal')}:</strong> {t('calculators.obgyn.endometrial_cancer_risk.baseline_risk')}</p>
-                      <p className="text-blue-700"><strong>{t('calculators.obgyn.endometrial_cancer_risk.bmi_overweight')}:</strong> {t('calculators.obgyn.endometrial_cancer_risk.moderate_risk')}</p>
+                      <p className="text-[var(--cardiology-accent-blue-dark)]"><strong>{t('calculators.obgyn.endometrial_cancer_risk.bmi_normal')}:</strong> {t('calculators.obgyn.endometrial_cancer_risk.baseline_risk')}</p>
+                      <p className="text-[var(--cardiology-accent-blue-dark)]"><strong>{t('calculators.obgyn.endometrial_cancer_risk.bmi_overweight')}:</strong> {t('calculators.obgyn.endometrial_cancer_risk.moderate_risk')}</p>
                     </div>
                     <div>
-                      <p className="text-blue-700"><strong>{t('calculators.obgyn.endometrial_cancer_risk.bmi_obese_i')}:</strong> {t('calculators.obgyn.endometrial_cancer_risk.high_risk_2_3x')}</p>
-                      <p className="text-blue-700"><strong>{t('calculators.obgyn.endometrial_cancer_risk.bmi_obese_ii')}:</strong> {t('calculators.obgyn.endometrial_cancer_risk.very_high_risk_3_6x')}</p>
+                      <p className="text-[var(--cardiology-accent-blue-dark)]"><strong>{t('calculators.obgyn.endometrial_cancer_risk.bmi_obese_i')}:</strong> {t('calculators.obgyn.endometrial_cancer_risk.high_risk_2_3x')}</p>
+                      <p className="text-[var(--cardiology-accent-blue-dark)]"><strong>{t('calculators.obgyn.endometrial_cancer_risk.bmi_obese_ii')}:</strong> {t('calculators.obgyn.endometrial_cancer_risk.very_high_risk_3_6x')}</p>
                     </div>
                   </div>
                 </div>
@@ -351,7 +351,7 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
                   <CalculatorButton
                     onClick={handleNext}
                     disabled={!formData.age || !formData.bmi}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8"
+                    className="bg-purple-600 hover:bg-purple-700 text-[var(--foreground)] px-8"
                   >
                     {t('calculators.obgyn.endometrial_cancer_risk.next_medical_history')}
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -405,7 +405,7 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
               </div>
 
               {/* Reproductive History */}
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <div className="bg-[var(--cardiology-accent-blue-light)] p-4 rounded-lg border border-blue-200">
                   <h4 className="font-semibold text-blue-800 mb-4 flex items-center gap-2">
                     <Baby className="w-5 h-5" />
                     {t('calculators.obgyn.endometrial_cancer_risk.reproductive_history')}
@@ -460,7 +460,7 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
                   </CalculatorButton>
                   <CalculatorButton
                     onClick={handleNext}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 flex-1"
+                    className="bg-purple-600 hover:bg-purple-700 text-[var(--foreground)] px-8 flex-1"
                   >
                     {t('calculators.obgyn.endometrial_cancer_risk.next_calculate_risk')}
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -484,8 +484,8 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
               </CardHeader>
               <CardContent className="p-6 space-y-6">
                 {/* Summary of inputs */}
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <div className="bg-[var(--component-surface-primary)] p-4 rounded-lg border border-[var(--glass-border-light)]">
+                  <h4 className="font-semibold text-[var(--foreground)] mb-4 flex items-center gap-2">
                     <FileText className="w-5 h-5" />
                     {t('calculators.obgyn.endometrial_cancer_risk.assessment_summary')}
                   </h4>
@@ -516,7 +516,7 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
                   <CalculatorButton
                     onClick={handleCalculate}
                     disabled={isLoading}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 flex-1"
+                    className="bg-purple-600 hover:bg-purple-700 text-[var(--foreground)] px-8 flex-1"
                   >
                     {isLoading ? (
                       <>
@@ -569,12 +569,12 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
 
                 {/* Management Strategy Grid */}
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg p-4">
                     <div className="flex items-center gap-3 mb-3">
-                      <Stethoscope className="w-5 h-5 text-blue-600" />
+                      <Stethoscope className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                       <h4 className="font-semibold text-blue-800">{t('calculators.obgyn.endometrial_cancer_risk.management_recommendation')}</h4>
                     </div>
-                    <p className="text-sm text-blue-700">
+                    <p className="text-sm text-[var(--cardiology-accent-blue-dark)]">
                       {t('calculators.obgyn.endometrial_cancer_risk.management_description')}
                     </p>
                   </div>
@@ -709,7 +709,7 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <div className="bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-blue-800 mb-4 flex items-center gap-2">
                   <Stethoscope className="w-5 h-5" />
                   {t('calculators.obgyn.endometrial_cancer_risk.risk_based_management')}
@@ -718,7 +718,7 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-medium text-blue-800 mb-2">{t('calculators.obgyn.endometrial_cancer_risk.very_high_risk_lynch')}</h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
+                    <ul className="text-sm text-[var(--cardiology-accent-blue-dark)] space-y-1">
                       <li>• {t('calculators.obgyn.endometrial_cancer_risk.annual_biopsy_lynch')}</li>
                       <li>• {t('calculators.obgyn.endometrial_cancer_risk.tv_ultrasound_lynch')}</li>
                       <li>• {t('calculators.obgyn.endometrial_cancer_risk.prophylactic_hysterectomy_lynch')}</li>
@@ -729,7 +729,7 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
                   
                   <div>
                     <h4 className="font-medium text-blue-800 mb-2">{t('calculators.obgyn.endometrial_cancer_risk.high_risk_multiple')}</h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
+                    <ul className="text-sm text-[var(--cardiology-accent-blue-dark)] space-y-1">
                       <li>• {t('calculators.obgyn.endometrial_cancer_risk.enhanced_surveillance_high')}</li>
                       <li>• {t('calculators.obgyn.endometrial_cancer_risk.endometrial_sampling_high')}</li>
                       <li>• {t('calculators.obgyn.endometrial_cancer_risk.weight_management_high')}</li>
@@ -740,7 +740,7 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
 
                   <div>
                     <h4 className="font-medium text-blue-800 mb-2">{t('calculators.obgyn.endometrial_cancer_risk.average_risk_general')}</h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
+                    <ul className="text-sm text-[var(--cardiology-accent-blue-dark)] space-y-1">
                       <li>• {t('calculators.obgyn.endometrial_cancer_risk.no_routine_screening_average')}</li>
                       <li>• {t('calculators.obgyn.endometrial_cancer_risk.prompt_evaluation_average')}</li>
                       <li>• {t('calculators.obgyn.endometrial_cancer_risk.annual_pelvic_exam_average')}</li>
@@ -828,12 +828,12 @@ const EndometrialCancerRiskCalculatorComponent: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <div className="bg-[var(--component-surface-primary)] border border-[var(--glass-border-light)] rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-[var(--foreground)] mb-3 flex items-center gap-2">
                   <FileText className="w-5 h-5" />
                   {t('calculators.obgyn.endometrial_cancer_risk.clinical_guidelines_evidence')}
                 </h3>
-                <ul className="text-sm text-gray-700 space-y-2">
+                <ul className="text-sm text-[var(--foreground-tertiary)] space-y-2">
                   <li><strong>{t('calculators.obgyn.endometrial_cancer_risk.nccn_guidelines_v2024')}</strong></li>
                   <li><strong>{t('calculators.obgyn.endometrial_cancer_risk.sgo_clinical_statement')}</strong></li>
                   <li><strong>{t('calculators.obgyn.endometrial_cancer_risk.acog_bulletin_147')}</strong></li>

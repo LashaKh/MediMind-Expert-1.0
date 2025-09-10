@@ -128,10 +128,10 @@ export const PersonalKnowledgeBasePage: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center animate-pulse">
-            <BookOpen className="w-8 h-8 text-white" />
+            <BookOpen className="w-8 h-8 text-[var(--foreground)]" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Loading Personal Library...</h3>
-          <p className="text-gray-600">Preparing your premium knowledge base experience.</p>
+          <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">Loading Personal Library...</h3>
+          <p className="text-[var(--foreground-tertiary)]">Preparing your premium knowledge base experience.</p>
         </div>
       </div>
     }>
@@ -380,9 +380,9 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2">Authentication Required</h2>
-          <p className="text-gray-600">Please sign in to access your personal knowledge base.</p>
+          <AlertCircle className="w-16 h-16 text-[var(--foreground-secondary)] mx-auto mb-4" />
+          <h2 className="text-2xl font-semibold text-[var(--foreground)] mb-2">Authentication Required</h2>
+          <p className="text-[var(--foreground-tertiary)]">Please sign in to access your personal knowledge base.</p>
         </div>
       </div>
     );
@@ -391,42 +391,42 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       {/* Header Section */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200">
+      <div className="bg-[var(--component-card)]/80 backdrop-blur-sm border-b border-[var(--glass-border-light)]">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
           {/* Top Stats Row - Mobile Optimized */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm min-h-[80px]">
+            <div className="bg-[var(--component-card)] rounded-xl border border-[var(--glass-border-light)] p-4 shadow-sm min-h-[80px]">
               <div className="flex items-center justify-between h-full">
                 <div className="min-w-0 flex-1 mr-3">
-                  <p className="text-sm text-gray-600 truncate">{t('documents.stats.totalDocuments')}</p>
-                  <p className="text-xl sm:text-2xl font-bold text-gray-900">{documentStats.total}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] truncate">{t('documents.stats.totalDocuments')}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-[var(--foreground)]">{documentStats.total}</p>
                 </div>
                 <File className={`w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 ${theme.primary}`} />
               </div>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm min-h-[80px]">
+            <div className="bg-[var(--component-card)] rounded-xl border border-[var(--glass-border-light)] p-4 shadow-sm min-h-[80px]">
               <div className="flex items-center justify-between h-full">
                 <div className="min-w-0 flex-1 mr-3">
-                  <p className="text-sm text-gray-600 truncate">{t('documents.stats.completed')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] truncate">{t('documents.stats.completed')}</p>
                   <p className="text-xl sm:text-2xl font-bold text-green-600">{documentStats.completed}</p>
                 </div>
                 <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 text-green-600" />
               </div>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm min-h-[80px]">
+            <div className="bg-[var(--component-card)] rounded-xl border border-[var(--glass-border-light)] p-4 shadow-sm min-h-[80px]">
               <div className="flex items-center justify-between h-full">
                 <div className="min-w-0 flex-1 mr-3">
-                  <p className="text-sm text-gray-600 truncate">{t('documents.stats.processing')}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] truncate">{t('documents.stats.processing')}</p>
                   <p className="text-xl sm:text-2xl font-bold text-yellow-600">{documentStats.pending}</p>
                 </div>
                 <Loader className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 text-yellow-600" />
               </div>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm min-h-[80px] sm:col-span-2 lg:col-span-1">
+            <div className="bg-[var(--component-card)] rounded-xl border border-[var(--glass-border-light)] p-4 shadow-sm min-h-[80px] sm:col-span-2 lg:col-span-1">
               <div className="flex items-center justify-between h-full">
                 <div className="min-w-0 flex-1 mr-3">
-                  <p className="text-sm text-gray-600 truncate">{t('documents.stats.storageUsed')}</p>
-                  <p className="text-xl sm:text-2xl font-bold text-gray-900">{formatFileSize(documentStats.totalSize)}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] truncate">{t('documents.stats.storageUsed')}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-[var(--foreground)]">{formatFileSize(documentStats.totalSize)}</p>
                 </div>
                 <TrendingUp className={`w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 ${theme.primary}`} />
               </div>
@@ -439,7 +439,7 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => setShowUpload(true)}
-                className={`${theme.primaryBg} text-white px-6 py-4 min-h-[48px] rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 font-medium transform hover:scale-105`}
+                className={`${theme.primaryBg} text-[var(--foreground)] px-6 py-4 min-h-[48px] rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2 font-medium transform hover:scale-105`}
               >
                 <Upload className="w-5 h-5" />
                 <span>{t('documents.actions.uploadDocument')}</span>
@@ -447,7 +447,7 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
               <button
                 onClick={handleRefresh}
                 disabled={isLoading}
-                className="bg-white text-gray-700 border border-gray-300 px-4 py-4 min-h-[48px] rounded-xl hover:bg-gray-50 transition-all duration-200 flex items-center justify-center space-x-2"
+                className="bg-[var(--component-card)] text-[var(--foreground-tertiary)] border border-[var(--glass-border-medium)] px-4 py-4 min-h-[48px] rounded-xl hover:bg-[var(--component-surface-primary)] transition-all duration-200 flex items-center justify-center space-x-2"
               >
                 <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
                 <span>{t('documents.actions.refresh')}</span>
@@ -458,13 +458,13 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-3">
               {/* Search Input */}
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--foreground-secondary)]" />
                 <input
                   type="text"
                   placeholder={t('documents.actions.searchPlaceholder')}
                   value={filters.searchTerm}
                   onChange={(e) => setFilters(prev => ({ ...prev, searchTerm: e.target.value }))}
-                  className="w-full pl-10 pr-4 py-4 min-h-[48px] border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+                  className="w-full pl-10 pr-4 py-4 min-h-[48px] border border-[var(--glass-border-medium)] rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-[var(--component-card)]"
                 />
               </div>
 
@@ -475,21 +475,21 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
                   onClick={() => setShowFilters(!showFilters)}
                   className={`p-4 min-h-[48px] min-w-[48px] rounded-xl border transition-all duration-200 flex items-center justify-center ${
                     showFilters 
-                      ? `${theme.primaryBg} text-white border-transparent` 
-                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                      ? `${theme.primaryBg} text-[var(--foreground)] border-transparent` 
+                      : 'bg-[var(--component-card)] text-[var(--foreground-tertiary)] border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                   }`}
                 >
                   <Filter className="w-5 h-5" />
                 </button>
 
                 {/* View Mode Toggle */}
-                <div className="flex items-center bg-white border border-gray-300 rounded-xl p-1">
+                <div className="flex items-center bg-[var(--component-card)] border border-[var(--glass-border-medium)] rounded-xl p-1">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={`p-3 min-h-[44px] min-w-[44px] rounded-lg transition-all duration-200 flex items-center justify-center ${
                       viewMode === 'grid'
-                        ? `${theme.primaryBg} text-white`
-                        : 'text-gray-500 hover:bg-gray-100'
+                        ? `${theme.primaryBg} text-[var(--foreground)]`
+                        : 'text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-secondary)]'
                     }`}
                   >
                     <Grid className="w-5 h-5" />
@@ -498,8 +498,8 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
                     onClick={() => setViewMode('list')}
                     className={`p-3 min-h-[44px] min-w-[44px] rounded-lg transition-all duration-200 flex items-center justify-center ${
                       viewMode === 'list'
-                        ? `${theme.primaryBg} text-white`
-                        : 'text-gray-500 hover:bg-gray-100'
+                        ? `${theme.primaryBg} text-[var(--foreground)]`
+                        : 'text-[var(--foreground-secondary)] hover:bg-[var(--component-surface-secondary)]'
                     }`}
                   >
                     <List className="w-5 h-5" />
@@ -511,7 +511,7 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
 
           {/* Advanced Filters */}
           {showFilters && (
-            <div className="mt-6 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+            <div className="mt-6 bg-[var(--component-card)] rounded-xl border border-[var(--glass-border-light)] p-6 shadow-sm">
               <DocumentSearch
                 filters={filters}
                 onFiltersChange={setFilters}
@@ -541,15 +541,15 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
               <Loader className="w-12 h-12 text-emerald-600 animate-spin mx-auto mb-4" />
-              <h3 className="text-base sm:text-lg font-medium text-gray-900">Loading your documents...</h3>
-              <p className="text-sm sm:text-base text-gray-500">Please wait while we fetch your knowledge base.</p>
+              <h3 className="text-base sm:text-lg font-medium text-[var(--foreground)]">Loading your documents...</h3>
+              <p className="text-sm sm:text-base text-[var(--foreground-secondary)]">Please wait while we fetch your knowledge base.</p>
             </div>
           </div>
         ) : filteredDocuments.length === 0 ? (
           <div className="text-center py-20">
-            <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-6" />
-            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">No Documents Found</h3>
-            <p className="text-sm sm:text-base text-gray-600 mb-6 max-w-md mx-auto">
+            <BookOpen className="w-16 h-16 text-[var(--foreground-secondary)] mx-auto mb-6" />
+            <h3 className="text-lg sm:text-xl font-semibold text-[var(--foreground)] mb-2">No Documents Found</h3>
+            <p className="text-sm sm:text-base text-[var(--foreground-tertiary)] mb-6 max-w-md mx-auto">
               {filters.searchTerm || filters.category !== 'all' || filters.tags.length > 0
                 ? 'No documents match your current filters. Try adjusting your search criteria.'
                 : 'Start building your personal knowledge base by uploading your first document.'
@@ -558,7 +558,7 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
             {(!filters.searchTerm && filters.category === 'all' && filters.tags.length === 0) && (
               <button
                 onClick={() => setShowUpload(true)}
-                className={`${theme.primaryBg} text-white px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 font-medium transform hover:scale-105`}
+                className={`${theme.primaryBg} text-[var(--foreground)] px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 font-medium transform hover:scale-105`}
               >
                 Upload Your First Document
               </button>
@@ -583,13 +583,13 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
       {/* Upload Modal - Mobile Optimized */}
       {showUpload && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full h-[96vh] sm:h-[92vh] max-h-[96vh] sm:max-h-[92vh] overflow-hidden flex flex-col">
-            <div className="flex-shrink-0 p-4 sm:p-6 border-b border-gray-200">
+          <div className="bg-[var(--component-card)] rounded-2xl shadow-2xl max-w-4xl w-full h-[96vh] sm:h-[92vh] max-h-[96vh] sm:max-h-[92vh] overflow-hidden flex flex-col">
+            <div className="flex-shrink-0 p-4 sm:p-6 border-b border-[var(--glass-border-light)]">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Upload Document</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-[var(--foreground)]">Upload Document</h2>
                 <button
                   onClick={() => setShowUpload(false)}
-                  className="text-gray-400 hover:text-gray-600 p-3 min-h-[44px] min-w-[44px] rounded-lg hover:bg-gray-100 flex items-center justify-center"
+                  className="text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] p-3 min-h-[44px] min-w-[44px] rounded-lg hover:bg-[var(--component-surface-secondary)] flex items-center justify-center"
                 >
                   ×
                 </button>
@@ -610,7 +610,7 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
       {/* Document Details Modal - Mobile Optimized */}
       {selectedDocument && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full h-[96vh] sm:h-[92vh] max-h-[96vh] sm:max-h-[92vh] overflow-hidden">
+          <div className="bg-[var(--component-card)] rounded-2xl shadow-2xl max-w-6xl w-full h-[96vh] sm:h-[92vh] max-h-[96vh] sm:max-h-[92vh] overflow-hidden">
             <DocumentDetails
               document={selectedDocument}
               isOpen={true}

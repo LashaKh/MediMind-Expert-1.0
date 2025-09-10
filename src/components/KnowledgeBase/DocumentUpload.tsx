@@ -112,19 +112,19 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       },
       'application/msword': { 
         icon: FileText, 
-        color: 'text-blue-500 bg-blue-50 dark:bg-blue-900/20', 
+        color: 'text-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20', 
         label: 'Word',
         gradient: 'from-blue-500 to-blue-600'
       },
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': { 
         icon: FileText, 
-        color: 'text-blue-500 bg-blue-50 dark:bg-blue-900/20', 
+        color: 'text-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20', 
         label: 'Word',
         gradient: 'from-blue-500 to-blue-600'
       },
       'text/plain': { 
         icon: File, 
-        color: 'text-gray-500 bg-gray-50 dark:bg-gray-900/20', 
+        color: 'text-[var(--foreground-secondary)] bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]/20', 
         label: 'Text',
         gradient: 'from-gray-500 to-gray-600'
       },
@@ -144,7 +144,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
     
     return typeMap[type as keyof typeof typeMap] || { 
       icon: File, 
-      color: 'text-gray-500 bg-gray-50 dark:bg-gray-900/20', 
+      color: 'text-[var(--foreground-secondary)] bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]/20', 
       label: 'File',
       gradient: 'from-gray-500 to-gray-600'
     };
@@ -159,7 +159,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       },
       'clinical-guidelines': { 
         label: t('documents.categories.clinical-guidelines'), 
-        color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+        color: 'bg-[var(--cardiology-accent-blue-light)] text-blue-800 dark:bg-[var(--cardiology-accent-blue-darker)]/30 dark:text-blue-300',
         icon: '🏥'
       },
       'case-studies': { 
@@ -199,7 +199,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
       },
       'other': { 
         label: t('documents.categories.other'), 
-        color: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300',
+        color: 'bg-[var(--component-surface-secondary)] text-[var(--foreground)] dark:bg-[var(--background-dark)]/30 dark:text-[var(--foreground-secondary)]',
         icon: '📄'
       }
     };
@@ -676,18 +676,18 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         className="relative w-full h-full flex flex-col overflow-hidden"
       >
         {/* Elegant Header */}
-        <div className="flex-shrink-0 relative px-6 py-4 border-b border-gray-200/50">
+        <div className="flex-shrink-0 relative px-6 py-4 border-b border-[var(--glass-border-light)]/50">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-purple-600/5" />
           <div className="relative flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
-                <Upload className="w-5 h-5 text-white" />
+                <Upload className="w-5 h-5 text-[var(--foreground)]" />
               </div>
               <div>
                 <h2 className="text-lg font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                   {t('documents.modal.title')}
                 </h2>
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-xs text-[var(--foreground-tertiary)] mt-1">
                   {t('documents.modal.subtitle')}
                 </p>
               </div>
@@ -707,14 +707,14 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                           ? 'bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg' 
                           : isCompleted
                           ? 'bg-green-500'
-                          : 'bg-gray-300'
+                          : 'bg-[var(--component-panel)]'
                       }`}
                       animate={isActive ? { scale: [1, 1.2, 1] } : {}}
                       transition={{ duration: 1, repeat: isActive ? Infinity : 0 }}
                     />
                     {index < 3 && (
                       <div className={`w-6 h-0.5 mx-2 transition-colors duration-300 ${
-                        isCompleted ? 'bg-green-500' : 'bg-gray-300'
+                        isCompleted ? 'bg-green-500' : 'bg-[var(--component-panel)]'
                       }`} />
                     )}
                   </div>
@@ -724,7 +724,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100/80 transition-all duration-200"
+              className="p-2 rounded-xl text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-secondary)]/80 transition-all duration-200"
             >
               <X className="w-4 h-4" />
             </button>
@@ -747,8 +747,8 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                 <motion.div
                   className={`relative overflow-hidden transition-all duration-300 ${
                     isDragOver 
-                      ? 'border-blue-500 bg-blue-50/50 scale-105' 
-                      : 'border-gray-300 bg-gray-50/50 hover:bg-gray-100/50'
+                      ? 'border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)]/50 scale-105' 
+                      : 'border-[var(--glass-border-medium)] bg-[var(--component-surface-primary)]/50 hover:bg-[var(--component-surface-secondary)]/50'
                   }`}
                   style={{
                     borderRadius: '20px',
@@ -769,21 +769,21 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                       transition={{ type: "spring", stiffness: 300 }}
                     >
                       <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-xl">
-                        <Upload className="w-8 h-8 text-white" />
+                        <Upload className="w-8 h-8 text-[var(--foreground)]" />
                       </div>
                     </motion.div>
                     
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    <h3 className="text-xl font-bold text-[var(--foreground)] mb-2">
                       {isDragOver ? t('documents.modal.select.dropFiles') : t('documents.modal.select.title')}
                     </h3>
                     
-                    <p className="text-gray-600 mb-4 max-w-md text-sm">
+                    <p className="text-[var(--foreground-tertiary)] mb-4 max-w-md text-sm">
                       {t('documents.modal.select.subtitle')}
                     </p>
 
                     <motion.button
                       onClick={handleFileSelect}
-                      className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-3"
+                      className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--foreground)] rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-3"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -791,7 +791,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                       <span>{t('documents.modal.select.selectFiles')}</span>
                     </motion.button>
 
-                    <div className="mt-6 flex flex-wrap justify-center gap-3 text-xs text-gray-500">
+                    <div className="mt-6 flex flex-wrap justify-center gap-3 text-xs text-[var(--foreground-secondary)]">
                       <div className="flex items-center space-x-1">
                         <FileText className="w-3 h-3" />
                         <span>{t('documents.fileTypes.pdf')}</span>
@@ -810,7 +810,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                       </div>
                     </div>
                     
-                    <p className="text-xs text-gray-400 mt-3">
+                    <p className="text-xs text-[var(--foreground-secondary)] mt-3">
                       Maximum file size: {maxFileSize}MB • Maximum files: {maxFiles}
                     </p>
                   </div>
@@ -837,8 +837,8 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                 className="space-y-6"
               >
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold text-gray-900">{t('documents.modal.configure.title')}</h3>
-                  <span className="text-sm text-gray-500">{t('documents.modal.configure.filesSelected', { count: uploadedFiles.length })}</span>
+                  <h3 className="text-xl font-bold text-[var(--foreground)]">{t('documents.modal.configure.title')}</h3>
+                  <span className="text-sm text-[var(--foreground-secondary)]">{t('documents.modal.configure.filesSelected', { count: uploadedFiles.length })}</span>
                 </div>
 
                 <div className="grid gap-4">
@@ -850,7 +850,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                       <motion.div
                         key={file.id}
                         layout
-                        className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300"
+                        className="p-6 bg-[var(--component-card)]/80 backdrop-blur-sm rounded-2xl border border-[var(--glass-border-light)]/50 shadow-lg hover:shadow-xl transition-all duration-300"
                         whileHover={{ scale: 1.02 }}
                       >
                         <div className="flex items-start space-x-4">
@@ -861,17 +861,17 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                           <div className="flex-1 space-y-4">
                             <div className="flex items-center justify-between">
                               <div>
-                                <p className="font-semibold text-gray-900 truncate max-w-md">
+                                <p className="font-semibold text-[var(--foreground)] truncate max-w-md">
                                   {file.file.name}
                                 </p>
-                                <p className="text-sm text-gray-500">
+                                <p className="text-sm text-[var(--foreground-secondary)]">
                                   {formatFileSize(file.file.size)} • {typeInfo.label}
                                 </p>
                               </div>
                               
                               <button
                                 onClick={() => removeFile(file.id)}
-                                className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200"
+                                className="p-2 rounded-lg text-[var(--foreground-secondary)] hover:text-red-500 hover:bg-red-50 transition-all duration-200"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -879,26 +879,26 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
 
                             <div className="grid md:grid-cols-2 gap-4">
                               <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                                   {t('documents.modal.configure.documentTitleRequired')}
                                 </label>
                                 <input
                                   type="text"
                                   value={file.title}
                                   onChange={(e) => updateFileMetadata(file.id, 'title', e.target.value)}
-                                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                  className="w-full px-4 py-3 rounded-xl border border-[var(--glass-border-medium)] focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent transition-all duration-200"
                                   placeholder={t('documents.modal.configure.titlePlaceholder')}
                                 />
                               </div>
 
                               <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                                   {t('documents.modal.configure.category')}
                                 </label>
                                 <select
                                   value={file.category}
                                   onChange={(e) => updateFileMetadata(file.id, 'category', e.target.value as DocumentCategory)}
-                                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                  className="w-full px-4 py-3 rounded-xl border border-[var(--glass-border-medium)] focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent transition-all duration-200"
                                 >
                                   <option value="research-papers">🔬 Research Papers</option>
                                   <option value="clinical-guidelines">🏥 Clinical Guidelines</option>
@@ -915,27 +915,27 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                             </div>
 
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                                 {t('documents.modal.configure.description')}
                               </label>
                               <textarea
                                 value={file.description}
                                 onChange={(e) => updateFileMetadata(file.id, 'description', e.target.value)}
                                 rows={2}
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+                                className="w-full px-4 py-3 rounded-xl border border-[var(--glass-border-medium)] focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent transition-all duration-200 resize-none"
                                 placeholder={t('documents.modal.configure.descriptionPlaceholder')}
                               />
                             </div>
 
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                              <label className="block text-sm font-medium text-[var(--foreground-tertiary)] mb-2">
                                 {t('documents.modal.configure.tags')}
                               </label>
                               <input
                                 type="text"
                                 value={file.tags.join(', ')}
                                 onChange={(e) => updateFileMetadata(file.id, 'tags', e.target.value.split(',').map(tag => tag.trim()).filter(Boolean))}
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                className="w-full px-4 py-3 rounded-xl border border-[var(--glass-border-medium)] focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-transparent transition-all duration-200"
                                 placeholder={t('documents.modal.configure.tagsPlaceholder')}
                               />
                             </div>
@@ -949,7 +949,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                 <div className="flex justify-between pt-6">
                   <button
                     onClick={() => setCurrentStep('select')}
-                    className="px-6 py-3 text-gray-600 hover:text-gray-800 font-medium rounded-xl hover:bg-gray-100 transition-all duration-200"
+                    className="px-6 py-3 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] font-medium rounded-xl hover:bg-[var(--component-surface-secondary)] transition-all duration-200"
                   >
                     {t('documents.modal.configure.addMoreFiles')}
                   </button>
@@ -959,8 +959,8 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                     disabled={!canUpload}
                     className={`px-8 py-4 rounded-2xl font-semibold shadow-lg transition-all duration-300 flex items-center space-x-3 ${
                       canUpload
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-xl'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--foreground)] hover:shadow-xl'
+                        : 'bg-[var(--component-panel)] text-[var(--foreground-secondary)] cursor-not-allowed'
                     }`}
                     whileHover={canUpload ? { scale: 1.05 } : {}}
                     whileTap={canUpload ? { scale: 0.95 } : {}}
@@ -988,10 +988,10 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                     animate={{ rotate: 360 }}
                     transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                   >
-                    <Sparkles className="w-8 h-8 text-white" />
+                    <Sparkles className="w-8 h-8 text-[var(--foreground)]" />
                   </motion.div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('documents.modal.upload.title')}</h3>
-                  <p className="text-gray-600">{t('documents.modal.upload.subtitle')}</p>
+                  <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">{t('documents.modal.upload.title')}</h3>
+                  <p className="text-[var(--foreground-tertiary)]">{t('documents.modal.upload.subtitle')}</p>
                 </div>
 
                 <div className="space-y-4">
@@ -1034,12 +1034,12 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", delay: 0.2 }}
                 >
-                  <CheckCircle2 className="w-12 h-12 text-white" />
+                  <CheckCircle2 className="w-12 h-12 text-[var(--foreground)]" />
                 </motion.div>
                 
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Upload Complete!</h3>
-                  <p className="text-gray-600">Your documents have been successfully added to your knowledge base.</p>
+                  <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">Upload Complete!</h3>
+                  <p className="text-[var(--foreground-tertiary)]">Your documents have been successfully added to your knowledge base.</p>
                 </div>
 
                 {success && (
@@ -1054,7 +1054,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
 
                 <motion.button
                   onClick={onClose}
-                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--foreground)] rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

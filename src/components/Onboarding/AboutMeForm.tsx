@@ -106,7 +106,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
     const progress = getProgressWidth();
     if (progress < 25) return 'bg-red-400';
     if (progress < 50) return 'bg-yellow-400';
-    if (progress < 75) return 'bg-blue-400';
+    if (progress < 75) return 'bg-[var(--cardiology-accent-blue)]';
     return 'bg-green-400';
   };
 
@@ -131,19 +131,19 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
           <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-10 sm:w-12 md:w-16 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
         </div>
         
-        <p className="text-xs sm:text-sm md:text-base lg:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-light px-2">
+        <p className="text-xs sm:text-sm md:text-base lg:text-lg text-[var(--foreground-tertiary)] max-w-2xl mx-auto leading-relaxed font-light px-2">
           {t('onboarding.aboutMe.subtitle')}
         </p>
 
         {/* Mobile-Friendly Progress Indicators */}
         <div className="flex flex-col sm:flex-row items-center justify-center mt-3 md:mt-4 space-y-2 sm:space-y-0 sm:space-x-3 md:space-x-4">
-          <div className="flex items-center space-x-2 px-2 md:px-3 py-1 bg-white/60 backdrop-blur-sm rounded-full border border-slate-200 shadow-sm">
-            <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
-            <span className="text-xs text-slate-600 font-medium">{t('onboarding.aboutMe.wordCount', { count: wordCount })}</span>
+          <div className="flex items-center space-x-2 px-2 md:px-3 py-1 bg-[var(--component-card)]/60 backdrop-blur-sm rounded-full border border-[var(--glass-border-light)] shadow-sm">
+            <div className="w-1.5 h-1.5 bg-[var(--cardiology-accent-blue)] rounded-full animate-pulse"></div>
+            <span className="text-xs text-[var(--foreground-tertiary)] font-medium">{t('onboarding.aboutMe.wordCount', { count: wordCount })}</span>
           </div>
-          <div className="flex items-center space-x-2 px-2 md:px-3 py-1 bg-white/60 backdrop-blur-sm rounded-full border border-slate-200 shadow-sm">
+          <div className="flex items-center space-x-2 px-2 md:px-3 py-1 bg-[var(--component-card)]/60 backdrop-blur-sm rounded-full border border-[var(--glass-border-light)] shadow-sm">
             <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-xs text-slate-600 font-medium">{getProgressMessage()}</span>
+            <span className="text-xs text-[var(--foreground-tertiary)] font-medium">{getProgressMessage()}</span>
           </div>
         </div>
       </div>
@@ -155,7 +155,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
         }`}>
           <div className="relative">
             {/* Mobile-Optimized Label */}
-            <label htmlFor="about-me" className="block text-base md:text-lg font-semibold text-slate-800 mb-3 md:mb-4 flex items-center">
+            <label htmlFor="about-me" className="block text-base md:text-lg font-semibold text-[var(--foreground)] mb-3 md:mb-4 flex items-center">
               <span className="mr-2 text-lg md:text-xl">✨</span>
               {t('onboarding.aboutMe.label')}
             </label>
@@ -168,19 +168,19 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                 onChange={(e) => setAboutMe(e.target.value)}
                 placeholder={t('onboarding.aboutMe.placeholder')}
                 rows={4}
-                className="w-full px-3 md:px-4 py-3 md:py-4 text-sm md:text-base border-2 border-slate-200 rounded-lg md:rounded-xl shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 resize-none transition-all duration-300 bg-white/80 backdrop-blur-sm hover:shadow-xl hover:bg-white/90 touch-manipulation min-h-[100px] sm:min-h-[110px] md:min-h-[120px]"
+                className="w-full px-3 md:px-4 py-3 md:py-4 text-sm md:text-base border-2 border-[var(--glass-border-light)] rounded-lg md:rounded-xl shadow-lg focus:outline-none focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/20 focus:border-[var(--cardiology-accent-blue)] resize-none transition-all duration-300 bg-[var(--component-card)]/80 backdrop-blur-sm hover:shadow-xl hover:bg-[var(--component-card)]/90 touch-manipulation min-h-[100px] sm:min-h-[110px] md:min-h-[120px]"
               />
               
               {/* Mobile-Friendly Character Indicator */}
               <div className="absolute top-2 md:top-3 right-2 md:right-3 opacity-0 group-focus-within:opacity-100 transition-opacity duration-300">
-                <div className="px-2 py-1 bg-slate-800 text-white text-xs rounded-full">
+                <div className="px-2 py-1 bg-[var(--background)] text-[var(--foreground)] text-xs rounded-full">
                   {t('onboarding.aboutMe.charactersCount', { count: characterCount })}
                 </div>
               </div>
 
               {/* Mobile-Responsive Progress Bar */}
               <div className="absolute -bottom-1 left-3 md:left-4 right-3 md:right-4">
-                <div className="h-0.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-0.5 bg-[var(--component-surface-secondary)] rounded-full overflow-hidden">
                   <div 
                     className={`h-full transition-all duration-500 ${getProgressColor()}`}
                     style={{ width: `${getProgressWidth()}%` }}
@@ -192,7 +192,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
             {/* Enhanced Stats */}
             <div className="flex justify-between items-center mt-3 px-1">
               <div className="flex items-center space-x-3">
-                <span className="text-xs text-slate-500 font-medium">
+                <span className="text-xs text-[var(--foreground-secondary)] font-medium">
                   {t('onboarding.aboutMe.wordCount', { count: wordCount })}
                 </span>
                 {wordCount > 500 && (
@@ -204,7 +204,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                   </span>
                 )}
               </div>
-              <div className="text-xs text-slate-500">
+              <div className="text-xs text-[var(--foreground-secondary)]">
                 {t('onboarding.aboutMe.recommended')}
               </div>
             </div>
@@ -216,11 +216,11 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
         }`}>
           <div className="mb-4 md:mb-5">
-            <h3 className="text-base md:text-lg font-bold text-slate-800 mb-2 flex items-center">
+            <h3 className="text-base md:text-lg font-bold text-[var(--foreground)] mb-2 flex items-center">
               <span className="mr-2">💡</span>
               {t('onboarding.aboutMe.suggestionsTitle')}
             </h3>
-            <p className="text-slate-600 text-xs md:text-sm">
+            <p className="text-[var(--foreground-tertiary)] text-xs md:text-sm">
               {t('onboarding.aboutMe.suggestionsSubtitle')}
             </p>
           </div>
@@ -235,8 +235,8 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                 className={`
                   group relative p-3 md:p-4 rounded-lg md:rounded-xl cursor-pointer transition-all duration-300 transform touch-manipulation
                   ${selectedSuggestions.includes(index)
-                    ? 'bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 md:scale-105 shadow-lg'
-                    : 'bg-white border-2 border-slate-200 hover:border-slate-300 hover:shadow-xl md:hover:scale-102'
+                    ? 'bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-[var(--cardiology-accent-blue)] md:scale-105 shadow-lg'
+                    : 'bg-[var(--component-card)] border-2 border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:shadow-xl md:hover:scale-102'
                   }
                   ${focusedSuggestion === index ? 'shadow-xl md:scale-102' : ''}
                   min-h-[40px] active:scale-[0.98] md:active:scale-100
@@ -247,7 +247,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                 {selectedSuggestions.includes(index) && (
                   <div className="absolute top-2 md:top-3 right-2 md:right-3">
                     <div className="w-4 h-4 md:w-5 md:h-5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
-                      <svg className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-2.5 h-2.5 md:w-3 md:h-3 text-[var(--foreground)]" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </div>
@@ -260,10 +260,10 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                 </div>
 
                 {/* Mobile-Optimized Content */}
-                <h4 className="text-sm md:text-base font-bold text-slate-800 mb-1">
+                <h4 className="text-sm md:text-base font-bold text-[var(--foreground)] mb-1">
                   {suggestion.title}
                 </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-[var(--foreground-tertiary)] leading-relaxed">
                   {suggestion.description}
                 </p>
 
@@ -289,8 +289,8 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
               <span className="mr-2">📝</span>
               {t('onboarding.aboutMe.exampleTitle')}
             </h3>
-            <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 md:p-4 border border-blue-200">
-              <p className="text-blue-700 italic leading-relaxed text-xs md:text-sm">
+            <div className="bg-[var(--component-card)]/70 backdrop-blur-sm rounded-lg p-3 md:p-4 border border-blue-200">
+              <p className="text-[var(--cardiology-accent-blue-dark)] italic leading-relaxed text-xs md:text-sm">
                 {t('onboarding.aboutMe.exampleText')}
               </p>
             </div>
@@ -306,7 +306,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
             <button
               type="button"
               onClick={onBack}
-              className="group px-4 md:px-5 py-2 md:py-3 text-sm md:text-base font-semibold text-slate-700 bg-white border-2 border-slate-300 rounded-lg md:rounded-xl hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-300/50 transition-all duration-300 flex items-center justify-center space-x-2 touch-manipulation min-h-[40px] active:scale-[0.98]"
+              className="group px-4 md:px-5 py-2 md:py-3 text-sm md:text-base font-semibold text-[var(--foreground)] bg-[var(--component-card)] border-2 border-[var(--glass-border-medium)] rounded-lg md:rounded-xl hover:border-slate-400 hover:bg-[var(--component-surface-primary)] focus:outline-none focus:ring-4 focus:ring-slate-300/50 transition-all duration-300 flex items-center justify-center space-x-2 touch-manipulation min-h-[40px] active:scale-[0.98]"
             >
               <svg className="w-3 h-3 md:w-4 md:h-4 transform transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -318,7 +318,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
               <button
                 type="button"
                 onClick={onSkip}
-                className="px-4 md:px-5 py-2 md:py-3 text-sm md:text-base font-semibold text-slate-600 bg-white border-2 border-slate-300 rounded-lg md:rounded-xl hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-300/50 transition-all duration-300 touch-manipulation min-h-[40px] active:scale-[0.98]"
+                className="px-4 md:px-5 py-2 md:py-3 text-sm md:text-base font-semibold text-[var(--foreground-tertiary)] bg-[var(--component-card)] border-2 border-[var(--glass-border-medium)] rounded-lg md:rounded-xl hover:border-slate-400 hover:bg-[var(--component-surface-primary)] focus:outline-none focus:ring-4 focus:ring-slate-300/50 transition-all duration-300 touch-manipulation min-h-[40px] active:scale-[0.98]"
               >
                 {t('onboarding.aboutMe.skipForNow')}
               </button>
@@ -326,8 +326,8 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                 type="submit"
                 disabled={isAnimatingSubmit}
                 className={`
-                  relative overflow-hidden px-5 md:px-6 py-2 md:py-3 text-sm md:text-base font-bold text-white rounded-lg md:rounded-xl 
-                  focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all duration-300
+                  relative overflow-hidden px-5 md:px-6 py-2 md:py-3 text-sm md:text-base font-bold text-[var(--foreground)] rounded-lg md:rounded-xl 
+                  focus:outline-none focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/50 transition-all duration-300
                   touch-manipulation min-h-[40px] active:scale-[0.98]
                   ${isAnimatingSubmit 
                     ? 'bg-gradient-to-r from-green-500 to-emerald-500 md:scale-105' 
@@ -369,16 +369,16 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
       {/* Floating Success Message */}
       {isAnimatingSubmit && (
         <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-          <div className="bg-white rounded-xl shadow-2xl p-4 md:p-5 border border-green-200 animate-bounce">
+          <div className="bg-[var(--component-card)] rounded-xl shadow-2xl p-4 md:p-5 border border-green-200 animate-bounce">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
-                <svg className="w-4 h-4 md:w-5 md:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-4 h-4 md:w-5 md:h-5 text-[var(--foreground)]" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
               <div>
-                <h3 className="text-base md:text-lg font-bold text-slate-800">{t('onboarding.aboutMe.profileCreated')}</h3>
-                <p className="text-xs md:text-sm text-slate-600">{t('onboarding.aboutMe.settingUpPersonalized')}</p>
+                <h3 className="text-base md:text-lg font-bold text-[var(--foreground)]">{t('onboarding.aboutMe.profileCreated')}</h3>
+                <p className="text-xs md:text-sm text-[var(--foreground-tertiary)]">{t('onboarding.aboutMe.settingUpPersonalized')}</p>
               </div>
             </div>
           </div>

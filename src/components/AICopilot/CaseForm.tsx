@@ -202,10 +202,10 @@ export const CaseForm: React.FC<CaseFormProps> = ({
           />
           
           {/* Privacy Warning */}
-          <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+          <div className="p-4 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-xl">
             <div className="flex items-start space-x-3">
-              <AlertTriangle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-blue-700 dark:text-blue-300">
+              <AlertTriangle className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mt-0.5 flex-shrink-0" />
+              <div className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">
                 <p className="font-medium mb-1">{t('case.privacyNotice')}</p>
                 <p>{t('case.privacyNoticeDetailed')}</p>
               </div>
@@ -251,7 +251,7 @@ export const CaseForm: React.FC<CaseFormProps> = ({
         />
 
         {/* Submit Button */}
-        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="pt-4 border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
           <MobileButton
             type="submit"
             disabled={isSubmitting}

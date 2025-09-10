@@ -34,7 +34,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
         </div>
       </div>
       
-      <div className="relative px-6 py-4 border-b border-slate-200/60">
+      <div className="relative px-6 py-4 border-b border-[var(--glass-border-light)]/60">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <motion.div
@@ -45,7 +45,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl blur-md opacity-30 scale-110" />
               <div className="relative bg-gradient-to-br from-blue-500 to-purple-600 p-3 rounded-2xl shadow-lg">
-                <Search className="h-5 w-5 text-white" />
+                <Search className="h-5 w-5 text-[var(--foreground)]" />
               </div>
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full animate-pulse" />
             </motion.div>
@@ -62,7 +62,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-slate-600 flex items-center gap-2 mt-1"
+                className="text-[var(--foreground-tertiary)] flex items-center gap-2 mt-1"
               >
                 <Sparkles className="h-4 w-4 text-amber-500" />
                 {t('abg.search.intelligentFiltering', 'Intelligent ABG filtering with AI-powered insights')}
@@ -80,7 +80,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
                   exit={{ scale: 0, opacity: 0 }}
                   className="flex items-center gap-2"
                 >
-                  <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 shadow-md">
+                  <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-[var(--foreground)] border-0 shadow-md">
                     <Filter className="h-3 w-3 mr-1" />
                     {t('abg.filtersAdvanced.activeCount', '{{count}} active', { count: activeFiltersCount })}
                   </Badge>
@@ -92,7 +92,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="rounded-full h-12 w-12 p-0 hover:bg-slate-100/70 transition-all duration-200"
+              className="rounded-full h-12 w-12 p-0 hover:bg-[var(--component-surface-secondary)]/70 transition-all duration-200"
               aria-label="Close modal"
             >
               <X className="h-5 w-5" />
@@ -109,9 +109,9 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
         >
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl border border-slate-200/60 shadow-xl">
+            <div className="relative bg-[var(--component-card)]/90 backdrop-blur-xl rounded-2xl border border-[var(--glass-border-light)]/60 shadow-xl">
               <div className="absolute left-5 top-1/2 -translate-y-1/2">
-                <Search className="h-5 w-5 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                <Search className="h-5 w-5 text-slate-400 group-hover:text-[var(--cardiology-accent-blue)] transition-colors" />
               </div>
               <Input
                 ref={searchInputRef}
@@ -127,7 +127,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0, opacity: 0 }}
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-slate-100/70 transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-[var(--component-surface-secondary)]/70 transition-colors"
                     aria-label={t('abg.search.clear', 'Clear search')}
                   >
                     <X className="h-4 w-4 text-slate-400" />
@@ -139,7 +139,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
           
           {/* Search Suggestions */}
           <div className="mt-3 flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-slate-500 font-medium">{t('abg.search.quickSearches', 'Quick searches:')}</span>
+            <span className="text-xs text-[var(--foreground-secondary)] font-medium">{t('abg.search.quickSearches', 'Quick searches:')}</span>
             {quickSearchSuggestions.map((suggestion, index) => (
               <motion.button
                 key={suggestion}
@@ -147,7 +147,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6 + index * 0.1 }}
                 onClick={() => setSearchQuery(suggestion)}
-                className="px-3 py-1 text-xs bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 hover:text-slate-800 transition-all duration-200"
+                className="px-3 py-1 text-xs bg-[var(--component-surface-secondary)] hover:bg-[var(--component-surface-tertiary)] rounded-full text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] transition-all duration-200"
               >
                 {suggestion}
               </motion.button>

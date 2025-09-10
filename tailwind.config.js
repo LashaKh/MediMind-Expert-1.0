@@ -43,189 +43,100 @@ export default {
         'responsive-4xl': 'clamp(2.25rem, 6vw, 3rem)',
       },
       
-      // Medical UI specific colors with better contrast
+      // All colors now use CSS variables from theme-config.css
       colors: {
-        // Touch feedback colors
+        // Touch feedback colors using CSS variables
         'touch-feedback': {
-          light: 'rgba(59, 130, 246, 0.1)',
-          dark: 'rgba(59, 130, 246, 0.2)',
+          light: 'oklch(from var(--primary) l c h / 0.1)',
+          dark: 'oklch(from var(--primary) l c h / 0.2)',
         },
         
-        // Enhanced Medical Color System - WCAG AAA Compliant
-        'medical-blue': {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+        // Medical colors using CSS variables - no hardcoded values
+        'medical-emergency': 'var(--medical-emergency)',
+        'medical-warning': 'var(--medical-warning)',  
+        'medical-success': 'var(--medical-success)',
+        'medical-info': 'var(--medical-info)',
+        
+        // All colors now reference CSS variables from theme-config.css
+        'cardiology': {
+          'red-primary': 'var(--cardiology-red-primary)',
+          'red-secondary': 'var(--cardiology-red-secondary)',
+          'orange-primary': 'var(--cardiology-orange-primary)',  
+          'orange-secondary': 'var(--cardiology-orange-secondary)',
+          'blue-primary': 'var(--cardiology-blue-primary)',
+          'blue-secondary': 'var(--cardiology-blue-secondary)',
+          'emerald-primary': 'var(--cardiology-emerald-primary)',
+          'emerald-secondary': 'var(--cardiology-emerald-secondary)',
         },
         
-        'medical-gray': {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
+        // Gradients available as background utilities
+        'gradient': {
+          'blue': 'var(--gradient-blue)',
+          'indigo': 'var(--gradient-indigo)',
+          'cyan': 'var(--gradient-cyan)', 
+          'purple': 'var(--gradient-purple)',
+          'red': 'var(--gradient-red)',
+          'pink': 'var(--gradient-pink)',
+          'amber': 'var(--gradient-amber)',
+          'teal': 'var(--gradient-teal)',
+          'slate': 'var(--gradient-slate)',
+          'violet': 'var(--gradient-violet)',
+          'cardiology-red': 'var(--gradient-cardiology-red)',
+          'cardiology-orange': 'var(--gradient-cardiology-orange)', 
+          'cardiology-blue': 'var(--gradient-cardiology-blue)',
+          'cardiology-emerald': 'var(--gradient-cardiology-emerald)',
         },
         
-        'medical-success': {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534',
-          900: '#14532d',
-        },
-        
-        'medical-warning': {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
-        },
-        
-        'medical-error': {
-          50: '#fef2f2',
-          100: '#fee2e2',
-          200: '#fecaca',
-          300: '#fca5a5',
-          400: '#f87171',
-          500: '#ef4444',
-          600: '#dc2626',
-          700: '#b91c1c',
-          800: '#991b1b',
-          900: '#7f1d1d',
-        },
-        
-        // Legacy medical status colors (keep for compatibility)
-        'medical': {
-          'critical': '#dc2626',
-          'warning': '#ea580c',
-          'success': '#16a34a',
-          'info': '#2563eb',
-          'neutral': '#6b7280',
-        },
-
-        // Search-specific color scheme
-        'search': {
-          'primary': 'hsl(212, 100%, 46%)', // Professional blue
-          'secondary': 'hsl(341, 75%, 51%)', // Medical accent
-          'surface': 'hsl(0, 0%, 98%)', // Clean white surface
-          'surface-dark': 'hsl(222, 84%, 5%)', // Dark surface
-          'border': 'hsl(214, 32%, 91%)', // Subtle border
-          'border-dark': 'hsl(215, 28%, 17%)', // Dark border
-        },
-
-        // Glassmorphism design tokens
-        'glass': {
-          'white': 'rgba(255, 255, 255, 0.25)',
-          'white-strong': 'rgba(255, 255, 255, 0.4)',
-          'dark': 'rgba(30, 41, 59, 0.25)',
-          'dark-strong': 'rgba(30, 41, 59, 0.4)',
-          'blue': 'rgba(59, 130, 246, 0.1)',
-          'blue-strong': 'rgba(59, 130, 246, 0.2)',
-        },
-
-        // Evidence level color coding
-        'evidence': {
-          'systematic-review': '#10b981', // Strong green
-          'meta-analysis': '#059669', // Emerald
-          'rct': '#3b82f6', // Blue
-          'cohort': '#8b5cf6', // Purple
-          'case-control': '#f59e0b', // Amber
-          'case-series': '#ef4444', // Red
-          'expert-opinion': '#6b7280', // Gray
-        },
-
-        // Specialty-specific accent colors
-        'specialty': {
-          'cardiology': {
-            light: '#fef3c7', // Warm yellow light
-            DEFAULT: '#d97706', // Amber
-            dark: '#92400e', // Dark amber
-            accent: '#dc2626', // Red accent for urgency
-          },
-          'obgyn': {
-            light: '#fce7f3', // Pink light
-            DEFAULT: '#ec4899', // Pink
-            dark: '#be185d', // Dark pink
-            accent: '#7c3aed', // Purple accent
-          },
-          'general': {
-            light: '#e0f2fe', // Cyan light
-            DEFAULT: '#0891b2', // Cyan
-            dark: '#164e63', // Dark cyan
-            accent: '#059669', // Emerald accent
-          },
-        },
-        
-        // Existing color system
+        // Core theme system - all using CSS variables from theme-config.css
         primary: {
-  				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
+  				DEFAULT: 'var(--primary)',
+  				foreground: 'var(--primary-foreground)'
   			},
   			secondary: {
-  				DEFAULT: 'hsl(var(--secondary))',
-  				foreground: 'hsl(var(--secondary-foreground))'
+  				DEFAULT: 'var(--secondary)', 
+  				foreground: 'var(--secondary-foreground)'
   			},
   			accent: {
-  				DEFAULT: 'hsl(var(--accent))',
-  				foreground: 'hsl(var(--accent-foreground))'
+  				DEFAULT: 'var(--accent)',
+  				foreground: 'var(--accent-foreground)'
   			},
-  			dark: {
-  				DEFAULT: '#1a1b1e',
-  				primary: '#1a1b1e',
-  				secondary: '#212529',
-  				muted: '#adb5bd',
-  				border: '#343a40'
-  			},
-  			background: 'hsl(var(--background))',
-  			foreground: 'hsl(var(--foreground))',
+  			background: 'var(--background)',
+  			foreground: 'var(--foreground)',
   			card: {
-  				DEFAULT: 'hsl(var(--card))',
-  				foreground: 'hsl(var(--card-foreground))'
+  				DEFAULT: 'var(--card)',
+  				foreground: 'var(--card-foreground)'
   			},
   			popover: {
-  				DEFAULT: 'hsl(var(--popover))',
-  				foreground: 'hsl(var(--popover-foreground))'
+  				DEFAULT: 'var(--popover)',
+  				foreground: 'var(--popover-foreground)'
   			},
   			muted: {
-  				DEFAULT: 'hsl(var(--muted))',
-  				foreground: 'hsl(var(--muted-foreground))'
+  				DEFAULT: 'var(--muted)',
+  				foreground: 'var(--muted-foreground)'
   			},
   			destructive: {
-  				DEFAULT: 'hsl(var(--destructive))',
-  				foreground: 'hsl(var(--destructive-foreground))'
+  				DEFAULT: 'var(--destructive)',
+  				foreground: 'var(--destructive-foreground)'
   			},
-  			border: 'hsl(var(--border))',
-  			input: 'hsl(var(--input))',
-  			ring: 'hsl(var(--ring))',
+  			border: 'var(--border)',
+  			input: 'var(--input)',
+  			ring: 'var(--ring)',
+  			sidebar: {
+  				DEFAULT: 'var(--sidebar)',
+  				foreground: 'var(--sidebar-foreground)',
+  				primary: 'var(--sidebar-primary)',
+  				'primary-foreground': 'var(--sidebar-primary-foreground)',
+  				accent: 'var(--sidebar-accent)',
+  				'accent-foreground': 'var(--sidebar-accent-foreground)',
+  				border: 'var(--sidebar-border)',
+  				ring: 'var(--sidebar-ring)'
+  			},
   			chart: {
-  				'1': 'hsl(var(--chart-1))',
-  				'2': 'hsl(var(--chart-2))',
-  				'3': 'hsl(var(--chart-3))',
-  				'4': 'hsl(var(--chart-4))',
-  				'5': 'hsl(var(--chart-5))'
+  				'1': 'var(--chart-1)',
+  				'2': 'var(--chart-2)',
+  				'3': 'var(--chart-3)',
+  				'4': 'var(--chart-4)',
+  				'5': 'var(--chart-5)'
   			}
       },
       

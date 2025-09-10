@@ -151,7 +151,7 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
       case 'high': return 'text-red-600';
       case 'moderate': return 'text-yellow-600';
       case 'low': return 'text-green-600';
-      default: return 'text-gray-600';
+      default: return 'text-[var(--foreground-tertiary)]';
     }
   }, []);
 
@@ -163,7 +163,7 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
           <div className="flex items-center space-x-3">
             <div className="relative">
               <div className="relative p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                <Heart className="w-5 h-5 text-white" />
+                <Heart className="w-5 h-5 text-[var(--foreground)]" />
               </div>
             </div>
             <div className="flex-1">
@@ -184,7 +184,7 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
           {/* Compact Age and Sex in Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-gray-700">
+              <label className="text-xs font-semibold text-[var(--foreground-tertiary)]">
                 {t('calculators.cardiology.chads_vasc.age')} *
               </label>
               <input
@@ -193,8 +193,8 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
                 onChange={(e) => setFormData({ ...formData, age: e.target.value })}
                 min={18}
                 max={120}
-                className={`w-full px-3 py-2 text-sm rounded-lg border-2 transition-all duration-200 font-medium min-h-[40px] bg-white/80 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
-                  errors.age ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-300'
+                className={`w-full px-3 py-2 text-sm rounded-lg border-2 transition-all duration-200 font-medium min-h-[40px] bg-[var(--component-card)]/80 focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/20 focus:border-[var(--cardiology-accent-blue)] ${
+                  errors.age ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-[var(--glass-border-medium)]'
                 }`}
                 placeholder="Enter age"
               />
@@ -207,14 +207,14 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-gray-700">
+              <label className="text-xs font-semibold text-[var(--foreground-tertiary)]">
                 {t('calculators.cardiology.chads_vasc.sex')} *
               </label>
               <select
                 value={formData.sex}
                 onChange={(e) => setFormData({ ...formData, sex: e.target.value as 'male' | 'female' })}
-                className={`w-full px-3 py-2 text-sm rounded-lg border-2 transition-all duration-200 font-medium min-h-[40px] bg-white/80 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
-                  errors.sex ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-300'
+                className={`w-full px-3 py-2 text-sm rounded-lg border-2 transition-all duration-200 font-medium min-h-[40px] bg-[var(--component-card)]/80 focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]/20 focus:border-[var(--cardiology-accent-blue)] ${
+                  errors.sex ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-[var(--glass-border-medium)]'
                 }`}
               >
                 <option value="">{t('calculators.common.select_option')}</option>
@@ -233,64 +233,64 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
           {/* Compact Clinical Conditions in Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div className="space-y-2">
-              <label className="flex items-center space-x-2 cursor-pointer p-2 rounded-lg hover:bg-white/50 transition-all duration-200 min-h-[36px] touch-manipulation">
+              <label className="flex items-center space-x-2 cursor-pointer p-2 rounded-lg hover:bg-[var(--component-card)]/50 transition-all duration-200 min-h-[36px] touch-manipulation">
                 <input
                   type="checkbox"
                   checked={formData.hypertension}
                   onChange={(e) => setFormData({ ...formData, hypertension: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                  className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] bg-[var(--component-surface-secondary)] border-[var(--glass-border-medium)] rounded focus:ring-[var(--cardiology-accent-blue)] focus:ring-2"
                 />
-                <span className="text-xs font-semibold text-gray-900">
+                <span className="text-xs font-semibold text-[var(--foreground)]">
                   {t('calculators.cardiology.chads_vasc.hypertension')}
                 </span>
               </label>
 
-              <label className="flex items-center space-x-2 cursor-pointer p-2 rounded-lg hover:bg-white/50 transition-all duration-200 min-h-[36px] touch-manipulation">
+              <label className="flex items-center space-x-2 cursor-pointer p-2 rounded-lg hover:bg-[var(--component-card)]/50 transition-all duration-200 min-h-[36px] touch-manipulation">
                 <input
                   type="checkbox"
                   checked={formData.diabetes}
                   onChange={(e) => setFormData({ ...formData, diabetes: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                  className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] bg-[var(--component-surface-secondary)] border-[var(--glass-border-medium)] rounded focus:ring-[var(--cardiology-accent-blue)] focus:ring-2"
                 />
-                <span className="text-xs font-semibold text-gray-900">
+                <span className="text-xs font-semibold text-[var(--foreground)]">
                   {t('calculators.cardiology.chads_vasc.diabetes')}
                 </span>
               </label>
 
-              <label className="flex items-center space-x-2 cursor-pointer p-2 rounded-lg hover:bg-white/50 transition-all duration-200 min-h-[36px] touch-manipulation">
+              <label className="flex items-center space-x-2 cursor-pointer p-2 rounded-lg hover:bg-[var(--component-card)]/50 transition-all duration-200 min-h-[36px] touch-manipulation">
                 <input
                   type="checkbox"
                   checked={formData.chf}
                   onChange={(e) => setFormData({ ...formData, chf: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                  className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] bg-[var(--component-surface-secondary)] border-[var(--glass-border-medium)] rounded focus:ring-[var(--cardiology-accent-blue)] focus:ring-2"
                 />
-                <span className="text-xs font-semibold text-gray-900">
+                <span className="text-xs font-semibold text-[var(--foreground)]">
                   {t('calculators.cardiology.chads_vasc.chf')}
                 </span>
               </label>
             </div>
 
             <div className="space-y-2">
-              <label className="flex items-center space-x-2 cursor-pointer p-2 rounded-lg hover:bg-white/50 transition-all duration-200 min-h-[36px] touch-manipulation">
+              <label className="flex items-center space-x-2 cursor-pointer p-2 rounded-lg hover:bg-[var(--component-card)]/50 transition-all duration-200 min-h-[36px] touch-manipulation">
                 <input
                   type="checkbox"
                   checked={formData.stroke_tia}
                   onChange={(e) => setFormData({ ...formData, stroke_tia: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                  className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] bg-[var(--component-surface-secondary)] border-[var(--glass-border-medium)] rounded focus:ring-[var(--cardiology-accent-blue)] focus:ring-2"
                 />
-                <span className="text-xs font-semibold text-gray-900">
+                <span className="text-xs font-semibold text-[var(--foreground)]">
                   {t('calculators.cardiology.chads_vasc.stroke_tia')}
                 </span>
               </label>
 
-              <label className="flex items-center space-x-2 cursor-pointer p-2 rounded-lg hover:bg-white/50 transition-all duration-200 min-h-[36px] touch-manipulation">
+              <label className="flex items-center space-x-2 cursor-pointer p-2 rounded-lg hover:bg-[var(--component-card)]/50 transition-all duration-200 min-h-[36px] touch-manipulation">
                 <input
                   type="checkbox"
                   checked={formData.vascularDisease}
                   onChange={(e) => setFormData({ ...formData, vascularDisease: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                  className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)] bg-[var(--component-surface-secondary)] border-[var(--glass-border-medium)] rounded focus:ring-[var(--cardiology-accent-blue)] focus:ring-2"
                 />
-                <span className="text-xs font-semibold text-gray-900">
+                <span className="text-xs font-semibold text-[var(--foreground)]">
                   {t('calculators.cardiology.chads_vasc.vascular_disease')}
                 </span>
               </label>
@@ -302,7 +302,7 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
             <button
               type="submit"
               disabled={isCalculating}
-              className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white text-sm font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none min-h-[40px] touch-manipulation"
+              className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-[var(--foreground)] text-sm font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none min-h-[40px] touch-manipulation"
             >
               {isCalculating ? (
                 <div className="flex items-center justify-center">
@@ -316,7 +316,7 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
             <button
               type="button"
               onClick={handleReset}
-              className="flex-1 px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white text-sm font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-500/30 min-h-[40px] touch-manipulation"
+              className="flex-1 px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-[var(--foreground)] text-sm font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-500/30 min-h-[40px] touch-manipulation"
             >
               {t('calculators.common.reset')}
             </button>
@@ -327,10 +327,10 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
           {/* Compact Score Display */}
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 rounded-lg border border-blue-200">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-gray-700">
+              <span className="text-sm font-semibold text-[var(--foreground-tertiary)]">
                 {t('calculators.cardiology.chads_vasc.score_label')}
               </span>
-              <span className="text-xl font-bold text-blue-600">
+              <span className="text-xl font-bold text-[var(--cardiology-accent-blue-dark)]">
                 {result!.score} {t('calculators.common.points')}
               </span>
             </div>
@@ -338,10 +338,10 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
 
           {/* Compact Risk Display */}
           <div className="grid grid-cols-2 gap-2">
-            <div className="bg-white p-2 rounded-md border border-gray-200">
+            <div className="bg-[var(--component-card)] p-2 rounded-md border border-[var(--glass-border-light)]">
               <div className="flex items-center space-x-1 mb-1">
                 <AlertTriangle className="w-3 h-3 text-yellow-500" />
-                <span className="text-xs font-medium text-gray-600">
+                <span className="text-xs font-medium text-[var(--foreground-tertiary)]">
                   Stroke Risk
                 </span>
               </div>
@@ -350,10 +350,10 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-white p-2 rounded-md border border-gray-200">
+            <div className="bg-[var(--component-card)] p-2 rounded-md border border-[var(--glass-border-light)]">
               <div className="flex items-center space-x-1 mb-1">
                 <Activity className="w-3 h-3 text-orange-500" />
-                <span className="text-xs font-medium text-gray-600">
+                <span className="text-xs font-medium text-[var(--foreground-tertiary)]">
                   Embolism Risk
                 </span>
               </div>
@@ -372,7 +372,7 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
                 ? 'bg-yellow-50 border-yellow-200'
                 : 'bg-green-50 border-green-200'
             }`}>
-              <p className="text-xs font-semibold text-gray-700">
+              <p className="text-xs font-semibold text-[var(--foreground-tertiary)]">
                 {t('calculators.common.risk_category')}:
               </p>
               <p className={`text-sm font-bold ${getRiskColor(result!.riskCategory)}`}>
@@ -380,9 +380,9 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
               </p>
             </div>
 
-            <div className="bg-blue-50 p-2 rounded-md border border-blue-200">
+            <div className="bg-[var(--cardiology-accent-blue-light)] p-2 rounded-md border border-blue-200">
               <div className="flex items-start space-x-2">
-                <Info className="w-3 h-3 text-blue-600 mt-0.5 flex-shrink-0" />
+                <Info className="w-3 h-3 text-[var(--cardiology-accent-blue-dark)] mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-xs font-semibold text-blue-900 mb-1">
                     {t('calculators.common.clinical_recommendation')}:
@@ -397,15 +397,15 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
           <div className="flex justify-center pt-2">
             <button
               onClick={handleReset}
-              className="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white text-sm font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-500/30 min-h-[44px] touch-manipulation"
+              className="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-[var(--foreground)] text-sm font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-500/30 min-h-[44px] touch-manipulation"
             >
               {t('calculators.common.reset')}
             </button>
           </div>
 
           {/* Compact Disclaimer */}
-          <div className="p-2 bg-gray-50 rounded-md">
-            <p className="text-xs text-gray-600">
+          <div className="p-2 bg-[var(--component-surface-primary)] rounded-md">
+            <p className="text-xs text-[var(--foreground-tertiary)]">
               {t('calculators.common.disclaimer')}
             </p>
           </div>

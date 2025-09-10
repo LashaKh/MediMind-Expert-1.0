@@ -158,13 +158,13 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+        className="bg-[var(--component-card)] rounded-2xl shadow-lg border border-[var(--glass-border-light)] overflow-hidden"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-6 text-white">
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-6 text-[var(--foreground)]">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center">
+              <div className="w-16 h-16 bg-[var(--component-card)]/20 rounded-xl flex items-center justify-center">
                 <Sparkles className="w-8 h-8" />
               </div>
               <div>
@@ -181,7 +181,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
               <button
                 onClick={() => setIsFavorite(!isFavorite)}
                 className={`p-2 rounded-lg transition-colors duration-200 ${
-                  isFavorite ? 'bg-red-500 text-white' : 'bg-white/20 hover:bg-white/30'
+                  isFavorite ? 'bg-red-500 text-[var(--foreground)]' : 'bg-[var(--component-card)]/20 hover:bg-[var(--component-card)]/30'
                 }`}
               >
                 <Heart className="w-5 h-5" />
@@ -189,14 +189,14 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
               
               <button
                 onClick={handleShare}
-                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors duration-200"
+                className="p-2 rounded-lg bg-[var(--component-card)]/20 hover:bg-[var(--component-card)]/30 transition-colors duration-200"
               >
                 <Share2 className="w-5 h-5" />
               </button>
               
               <button
                 onClick={handleDownload}
-                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors duration-200"
+                className="p-2 rounded-lg bg-[var(--component-card)]/20 hover:bg-[var(--component-card)]/30 transition-colors duration-200"
               >
                 <Download className="w-5 h-5" />
               </button>
@@ -214,7 +214,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
 
           {/* Progress Bar */}
           <div className="mb-6">
-            <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
+            <div className="flex items-center justify-between text-sm text-[var(--foreground-secondary)] mb-2">
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>
@@ -226,7 +226,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
                 max={duration || 0}
                 value={currentTime}
                 onChange={handleSeek}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                className="w-full h-2 bg-[var(--component-surface-tertiary)] rounded-lg appearance-none cursor-pointer slider"
                 style={{
                   background: `linear-gradient(to right, #8b5cf6 0%, #8b5cf6 ${progressPercentage}%, #e5e7eb ${progressPercentage}%, #e5e7eb 100%)`
                 }}
@@ -242,7 +242,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={togglePlay}
-                className="w-14 h-14 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-shadow duration-200"
+                className="w-14 h-14 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-[var(--foreground)] shadow-lg hover:shadow-xl transition-shadow duration-200"
               >
                 {isPlaying ? (
                   <Pause className="w-6 h-6" />
@@ -255,7 +255,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
               <div className="flex items-center space-x-2">
                 <button
                   onClick={toggleMute}
-                  className="p-2 text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                  className="p-2 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] transition-colors duration-200"
                 >
                   {isMuted || volume === 0 ? (
                     <VolumeX className="w-5 h-5" />
@@ -271,20 +271,20 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
                   step="0.1"
                   value={isMuted ? 0 : volume}
                   onChange={handleVolumeChange}
-                  className="w-20 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                  className="w-20 h-1 bg-[var(--component-surface-tertiary)] rounded-lg appearance-none cursor-pointer slider"
                 />
               </div>
             </div>
 
             {/* Speed Control */}
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-[var(--foreground-tertiary)]">
                 {t('podcast.player.speed')}:
               </span>
               <select
                 value={playbackSpeed}
                 onChange={(e) => changePlaybackSpeed(parseFloat(e.target.value))}
-                className="px-2 py-1 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="px-2 py-1 text-sm border border-[var(--glass-border-light)] rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 {playbackSpeeds.map(speed => (
                   <option key={speed} value={speed}>
@@ -296,39 +296,39 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
           </div>
 
           {/* Metadata */}
-          <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-gray-200">
+          <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-[var(--glass-border-light)]">
             <div className="text-center">
-              <div className="flex items-center justify-center space-x-1 text-gray-600 mb-1">
+              <div className="flex items-center justify-center space-x-1 text-[var(--foreground-tertiary)] mb-1">
                 <Clock className="w-4 h-4" />
                 <span className="text-xs font-medium">
                   {t('podcast.player.duration')}
                 </span>
               </div>
-              <div className="text-sm font-semibold text-gray-900">
+              <div className="text-sm font-semibold text-[var(--foreground)]">
                 {formatTime(podcast?.duration || duration)}
               </div>
             </div>
 
             <div className="text-center">
-              <div className="flex items-center justify-center space-x-1 text-gray-600 mb-1">
+              <div className="flex items-center justify-center space-x-1 text-[var(--foreground-tertiary)] mb-1">
                 <Sparkles className="w-4 h-4" />
                 <span className="text-xs font-medium">
                   {t('podcast.player.style')}
                 </span>
               </div>
-              <div className="text-sm font-semibold text-gray-900 capitalize">
+              <div className="text-sm font-semibold text-[var(--foreground)] capitalize">
                 {t(`podcast.styles.${podcast?.synthesisStyle || 'podcast'}`)}
               </div>
             </div>
 
             <div className="text-center">
-              <div className="flex items-center justify-center space-x-1 text-gray-600 mb-1">
+              <div className="flex items-center justify-center space-x-1 text-[var(--foreground-tertiary)] mb-1">
                 <FileText className="w-4 h-4" />
                 <span className="text-xs font-medium">
                   {t('podcast.player.sources')}
                 </span>
               </div>
-              <div className="text-sm font-semibold text-gray-900">
+              <div className="text-sm font-semibold text-[var(--foreground)]">
                 {podcast?.source_documents?.length || 1} {t('podcast.player.documents')}
               </div>
             </div>
@@ -336,7 +336,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
 
           {/* Transcript Toggle */}
           {podcast?.transcript && (
-            <div className="mt-6 pt-6 border-t border-gray-200">
+            <div className="mt-6 pt-6 border-t border-[var(--glass-border-light)]">
               <button
                 onClick={() => setShowTranscript(!showTranscript)}
                 className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 transition-colors duration-200"
@@ -353,9 +353,9 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="mt-4 p-4 bg-gray-50 rounded-lg max-h-64 overflow-y-auto"
+                    className="mt-4 p-4 bg-[var(--component-surface-primary)] rounded-lg max-h-64 overflow-y-auto"
                   >
-                    <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                    <div className="text-sm text-[var(--foreground-tertiary)] leading-relaxed whitespace-pre-wrap">
                       {podcast.transcript}
                     </div>
                   </motion.div>
@@ -365,12 +365,12 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
           )}
 
           {/* Actions */}
-          <div className="mt-8 pt-6 border-t border-gray-200 flex justify-center">
+          <div className="mt-8 pt-6 border-t border-[var(--glass-border-light)] flex justify-center">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={onNewGeneration}
-              className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:shadow-lg transition-shadow duration-200"
+              className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-[var(--foreground)] rounded-lg font-medium hover:shadow-lg transition-shadow duration-200"
             >
               <Sparkles className="w-5 h-5" />
               <span>{t('podcast.player.createNew')}</span>

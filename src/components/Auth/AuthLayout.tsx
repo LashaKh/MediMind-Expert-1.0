@@ -21,8 +21,8 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, children }) => {
         {/* Logo and Brand */}
         <div className="text-center mb-6 sm:mb-8">
           <div className="flex items-center justify-center mb-4">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-3 w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 touch-target-md">
-              <Stethoscope className="text-white transition-all duration-200 w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14" />
+            <div className="bg-[var(--component-card)]/10 backdrop-blur-sm rounded-2xl p-3 w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 touch-target-md">
+              <Stethoscope className="text-[var(--foreground)] transition-all duration-200 w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14" />
             </div>
           </div>
           
@@ -37,10 +37,10 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, children }) => {
         </div>
 
         {/* Auth Card */}
-        <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-2xl rounded-2xl sm:rounded-3xl px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12 transition-all duration-300">
+        <div className="bg-[var(--component-card)]/95 dark:bg-[var(--background-dark)]/95 backdrop-blur-sm shadow-2xl rounded-2xl sm:rounded-3xl px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12 transition-all duration-300">
           {/* Title */}
           <div className="text-center mb-6">
-            <h2 className="font-bold text-gray-900 dark:text-gray-100 tracking-tight text-xl sm:text-2xl lg:text-3xl">
+            <h2 className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)] tracking-tight text-xl sm:text-2xl lg:text-3xl">
               {title}
             </h2>
           </div>

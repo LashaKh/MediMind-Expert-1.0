@@ -364,7 +364,7 @@ export const STSCalculator: React.FC = () => {
       case 'intermediate': return 'text-yellow-600';
       case 'high': return 'text-orange-600';
       case 'very_high': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-[var(--foreground-tertiary)]';
     }
   };
 
@@ -374,7 +374,7 @@ export const STSCalculator: React.FC = () => {
       case 'intermediate': return 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800';
       case 'high': return 'bg-orange-50 border-orange-200 dark:bg-orange-900/20 dark:border-orange-800';
       case 'very_high': return 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800';
-      default: return 'bg-gray-50 border-gray-200 dark:bg-gray-900/20 dark:border-gray-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] dark:bg-[var(--background-dark)]/20 dark:border-gray-800';
     }
   };
 
@@ -412,44 +412,44 @@ export const STSCalculator: React.FC = () => {
             <div className="flex items-center justify-center space-x-4 mb-8">
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 1 ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 1 ? 'bg-red-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   1
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.sts.demographics_step')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.sts.demographics_step')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 2 ? 'bg-orange-500' : 'bg-gray-200'
+                currentStep >= 2 ? 'bg-orange-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 2 ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 2 ? 'bg-orange-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   2
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.sts.procedure_step')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.sts.procedure_step')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 3 ? 'bg-yellow-500' : 'bg-gray-200'
+                currentStep >= 3 ? 'bg-yellow-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 3 ? 'bg-yellow-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 3 ? 'bg-yellow-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   3
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.sts.clinical_step')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.sts.clinical_step')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 4 ? 'bg-indigo-500' : 'bg-gray-200'
+                currentStep >= 4 ? 'bg-indigo-500' : 'bg-[var(--component-surface-tertiary)]'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 4 ? 'bg-indigo-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 4 ? 'bg-indigo-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                 }`}>
                   4
                 </div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.sts.comorbidities_step')}</span>
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.cardiology.sts.comorbidities_step')}</span>
               </div>
             </div>
 
@@ -459,9 +459,9 @@ export const STSCalculator: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-2xl border border-red-200 dark:border-red-800">
                     <User className="w-6 h-6 text-red-600 dark:text-red-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">Patient Demographics & Anthropometrics</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">Patient Demographics & Anthropometrics</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Basic patient characteristics for surgical risk assessment</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">Basic patient characteristics for surgical risk assessment</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
@@ -552,9 +552,9 @@ export const STSCalculator: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-2xl border border-orange-200 dark:border-orange-800">
                     <Stethoscope className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">Procedure Details & Urgency</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">Procedure Details & Urgency</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Type of cardiac surgical procedure and urgency status</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">Type of cardiac surgical procedure and urgency status</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
@@ -589,7 +589,7 @@ export const STSCalculator: React.FC = () => {
 
                 {/* Valve-specific assessments */}
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
                     <Heart className="w-5 h-5 text-orange-600" />
                     <span>Valve Assessment (if applicable)</span>
                   </h4>
@@ -665,9 +665,9 @@ export const STSCalculator: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-yellow-50 to-indigo-50 dark:from-yellow-900/20 dark:to-indigo-900/20 rounded-2xl border border-yellow-200 dark:border-yellow-800">
                     <Activity className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">Clinical Status & Laboratory Values</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">Clinical Status & Laboratory Values</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Cardiac function, symptoms, and laboratory parameters</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">Cardiac function, symptoms, and laboratory parameters</p>
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
@@ -701,7 +701,7 @@ export const STSCalculator: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
                     <BarChart3 className="w-5 h-5 text-yellow-600" />
                     <span>Laboratory Values</span>
                   </h4>
@@ -759,9 +759,9 @@ export const STSCalculator: React.FC = () => {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl border border-indigo-200 dark:border-indigo-800">
                     <Shield className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.sts.comorbidities_title')}</h3>
+                    <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.sts.comorbidities_title')}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Medical history and additional risk factors for surgical outcomes</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">Medical history and additional risk factors for surgical outcomes</p>
                 </div>
 
                 <div className="space-y-6">
@@ -887,13 +887,13 @@ export const STSCalculator: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3 mb-4">
                     <Target className="w-5 h-5 text-red-500" />
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">Operative Mortality Risk</h4>
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Operative Mortality Risk</h4>
                   </div>
                   <div className="p-6 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/30 rounded-2xl border border-red-200 dark:border-red-800">
                     <div className="text-center">
                       <div className="text-4xl font-bold text-red-600 dark:text-red-400 mb-2">{result.mortalityRisk}%</div>
                       <div className="text-lg text-red-700 dark:text-red-300 mb-3">Predicted Operative Mortality</div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                      <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-3">
                         <div 
                           className="bg-red-500 h-3 rounded-full transition-all duration-1000"
                           style={{ width: `${Math.min(result.mortalityRisk * 5, 100)}%` }}
@@ -907,14 +907,14 @@ export const STSCalculator: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3 mb-4">
                     <BarChart3 className="w-5 h-5 text-orange-500" />
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">Morbidity Predictions</h4>
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Morbidity Predictions</h4>
                   </div>
                   <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/20 dark:border-gray-700/20">
+                    <div className="p-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/20">
                       <div className="text-center">
                         <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">{result.morbidityCombined}%</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Combined Morbidity</div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">Combined Morbidity</div>
+                        <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-2">
                           <div 
                             className="bg-orange-500 h-2 rounded-full transition-all duration-1000"
                             style={{ width: `${Math.min(result.morbidityCombined * 2, 100)}%` }}
@@ -922,11 +922,11 @@ export const STSCalculator: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/20 dark:border-gray-700/20">
+                    <div className="p-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/20">
                       <div className="text-center">
                         <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">{result.strokeRisk}%</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Stroke Risk</div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">Stroke Risk</div>
+                        <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-2">
                           <div 
                             className="bg-purple-500 h-2 rounded-full transition-all duration-1000"
                             style={{ width: `${Math.min(result.strokeRisk * 10, 100)}%` }}
@@ -934,13 +934,13 @@ export const STSCalculator: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl border border-white/20 dark:border-gray-700/20">
+                    <div className="p-4 bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 rounded-2xl border border-white/20 dark:border-[var(--border-strong)]/20">
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">{result.renalFailureRisk}%</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Renal Failure</div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div className="text-2xl font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mb-1">{result.renalFailureRisk}%</div>
+                        <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">Renal Failure</div>
+                        <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-2">
                           <div 
-                            className="bg-blue-500 h-2 rounded-full transition-all duration-1000"
+                            className="bg-[var(--cardiology-accent-blue)] h-2 rounded-full transition-all duration-1000"
                             style={{ width: `${Math.min(result.renalFailureRisk * 5, 100)}%` }}
                           ></div>
                         </div>
@@ -953,7 +953,7 @@ export const STSCalculator: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3 mb-4">
                     <Clock className="w-5 h-5 text-indigo-500" />
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">Additional Outcomes</h4>
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Additional Outcomes</h4>
                   </div>
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                     <div className="p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-900/30 rounded-xl border border-indigo-200 dark:border-indigo-800">
@@ -981,7 +981,7 @@ export const STSCalculator: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <Shield className="w-5 h-5 text-red-500" />
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">STS Risk Stratification</h4>
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">STS Risk Stratification</h4>
                   </div>
                   <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-4 gap-3">
                     <div className={`p-4 rounded-xl border-2 transition-all ${
@@ -1022,15 +1022,15 @@ export const STSCalculator: React.FC = () => {
                 {/* Clinical Recommendations */}
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
-                    <Stethoscope className="w-5 h-5 text-blue-500" />
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">Clinical Management Recommendations</h4>
+                    <Stethoscope className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Clinical Management Recommendations</h4>
                   </div>
                   <div className={`p-6 rounded-2xl border-2 ${getRiskBgColor(result.riskCategory)}`}>
                     <div className="space-y-3">
                       {result.recommendations.map((rec, index) => (
                         <div key={index} className="flex items-start space-x-2">
                           <div className="w-2 h-2 bg-current rounded-full mt-2 flex-shrink-0"></div>
-                          <p className="text-sm text-gray-700 dark:text-gray-300">{rec}</p>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{rec}</p>
                         </div>
                       ))}
                     </div>
@@ -1073,7 +1073,7 @@ export const STSCalculator: React.FC = () => {
 
         {/* Footer Information */}
         <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-          <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <Info className="w-4 h-4" />
             <span>Based on STS National Database risk models • For educational purposes only</span>
             <div className="flex items-center space-x-1">

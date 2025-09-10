@@ -445,15 +445,15 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
           <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-600 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
           <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-orange-600 rounded-2xl blur-lg opacity-40 group-hover:opacity-60 transition-opacity duration-300" />
           <div className="relative flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-400 via-pink-500 to-orange-600 rounded-2xl shadow-2xl border border-white/20">
-            <Sparkles className="w-7 h-7 text-white" />
+            <Sparkles className="w-7 h-7 text-[var(--foreground)]" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl" />
           </div>
         </motion.div>
         <div>
-          <h3 className="text-2xl font-black text-white mb-1">
+          <h3 className="text-2xl font-black text-[var(--foreground)] mb-1">
             Configure Your Podcast
           </h3>
-          <p className="text-sm text-white/70 font-medium">
+          <p className="text-sm text-[var(--foreground)]/70 font-medium">
             Customize the style and content of your revolutionary AI podcast
           </p>
         </div>
@@ -469,7 +469,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <label className="block text-lg font-bold text-white mb-4">
+            <label className="block text-lg font-bold text-[var(--foreground)] mb-4">
               Podcast Title
             </label>
             <div className="relative group">
@@ -483,7 +483,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
                   value={settings.title}
                   onChange={(e) => setSettings(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="Enter a compelling title..."
-                  className="w-full px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl focus:ring-2 focus:ring-purple-400/50 focus:border-purple-400/50 transition-all duration-300 placeholder-white/40 text-white font-medium"
+                  className="w-full px-6 py-4 bg-[var(--component-card)]/10 backdrop-blur-xl border border-white/20 rounded-2xl focus:ring-2 focus:ring-purple-400/50 focus:border-purple-400/50 transition-all duration-300 placeholder-white/40 text-[var(--foreground)] font-medium"
                   maxLength={100}
                 />
                 
@@ -492,11 +492,11 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
               </div>
             </div>
             <div className="flex justify-between mt-2">
-              <p className="text-xs text-white/60 font-medium">
+              <p className="text-xs text-[var(--foreground)]/60 font-medium">
                 Captivating title for your content
               </p>
               <p className={`text-xs font-bold transition-colors ${
-                settings.title.length > 80 ? 'text-orange-400' : 'text-white/60'
+                settings.title.length > 80 ? 'text-orange-400' : 'text-[var(--foreground)]/60'
               }`}>
                 {settings.title.length}/100
               </p>
@@ -509,9 +509,9 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <label className="block text-lg font-bold text-white mb-4">
+            <label className="block text-lg font-bold text-[var(--foreground)] mb-4">
               Description
-              <span className="text-white/50 font-medium ml-2 text-sm">
+              <span className="text-[var(--foreground)]/50 font-medium ml-2 text-sm">
                 (Optional)
               </span>
             </label>
@@ -526,7 +526,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
                   onChange={(e) => setSettings(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Add context or topics to focus on..."
                   rows={3}
-                  className="w-full px-6 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl focus:ring-2 focus:ring-pink-400/50 focus:border-pink-400/50 transition-all duration-300 resize-none placeholder-white/40 text-white font-medium"
+                  className="w-full px-6 py-4 bg-[var(--component-card)]/10 backdrop-blur-xl border border-white/20 rounded-2xl focus:ring-2 focus:ring-pink-400/50 focus:border-pink-400/50 transition-all duration-300 resize-none placeholder-white/40 text-[var(--foreground)] font-medium"
                   maxLength={500}
                 />
                 
@@ -535,7 +535,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
               </div>
             </div>
             <p className={`text-xs font-bold mt-2 text-right transition-colors ${
-              settings.description.length > 400 ? 'text-orange-400' : 'text-white/60'
+              settings.description.length > 400 ? 'text-orange-400' : 'text-[var(--foreground)]/60'
             }`}>
               {settings.description.length}/500
             </p>
@@ -548,7 +548,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <label className="block text-lg font-bold text-white mb-6">
+          <label className="block text-lg font-bold text-[var(--foreground)] mb-6">
             Podcast Style
           </label>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -584,8 +584,8 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
                   <div className={`
                     relative p-6 rounded-2xl cursor-pointer transition-all duration-500 border
                     ${isSelected
-                      ? 'bg-white/15 backdrop-blur-xl border-white/30 shadow-2xl'
-                      : 'bg-white/5 backdrop-blur-xl border-white/10 hover:bg-white/10 hover:border-white/20'
+                      ? 'bg-[var(--component-card)]/15 backdrop-blur-xl border-white/30 shadow-2xl'
+                      : 'bg-[var(--component-card)]/5 backdrop-blur-xl border-white/10 hover:bg-[var(--component-card)]/10 hover:border-white/20'
                     }
                   `}>
                     {/* Prismatic edge highlights */}
@@ -611,28 +611,28 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
                           ${isSelected ? 'shadow-2xl scale-105' : 'shadow-lg'}
                           transition-all duration-300
                         `}>
-                          <Icon className="w-6 h-6 text-white drop-shadow-sm" />
+                          <Icon className="w-6 h-6 text-[var(--foreground)] drop-shadow-sm" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl" />
                         </div>
                       </motion.div>
                       
                       <div className="space-y-2">
                         <h4 className={`font-black text-lg transition-colors duration-300 ${
-                          isSelected ? 'text-gray-900' : 'text-gray-800'
+                          isSelected ? 'text-[var(--foreground)]' : 'text-[var(--foreground)]'
                         }`}>
                           {style.label}
                         </h4>
                         
                         <div className="relative mx-auto w-fit">
                           <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/20 rounded-lg blur-sm" />
-                          <div className="relative flex items-center space-x-2 px-3 py-1 bg-gray-100/80 backdrop-blur-sm border border-gray-200/50 rounded-lg">
-                            <Clock className="w-3 h-3 text-gray-600" />
-                            <span className="text-xs font-bold text-gray-700">{style.duration}</span>
+                          <div className="relative flex items-center space-x-2 px-3 py-1 bg-[var(--component-surface-secondary)]/80 backdrop-blur-sm border border-[var(--glass-border-light)]/50 rounded-lg">
+                            <Clock className="w-3 h-3 text-[var(--foreground-tertiary)]" />
+                            <span className="text-xs font-bold text-[var(--foreground-tertiary)]">{style.duration}</span>
                           </div>
                         </div>
                         
                         <p className={`text-xs leading-relaxed transition-colors duration-300 font-medium ${
-                          isSelected ? 'text-gray-600' : 'text-gray-500'
+                          isSelected ? 'text-[var(--foreground-tertiary)]' : 'text-[var(--foreground-secondary)]'
                         }`}>
                           {style.description}
                         </p>
@@ -649,7 +649,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
                           relative w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-500
                           ${isSelected
                             ? `border-white/40 bg-gradient-to-br ${getStyleColor(style.color)} shadow-lg`
-                            : 'border-white/30 bg-white/10 backdrop-blur-sm hover:bg-white/20'
+                            : 'border-white/30 bg-[var(--component-card)]/10 backdrop-blur-sm hover:bg-[var(--component-card)]/20'
                           }
                         `}>
                           <AnimatePresence>
@@ -659,7 +659,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
                                 animate={{ scale: 1, rotate: 0 }}
                                 exit={{ scale: 0, rotate: 180 }}
                                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                                className="w-2.5 h-2.5 bg-white rounded-full drop-shadow-sm"
+                                className="w-2.5 h-2.5 bg-[var(--component-card)] rounded-full drop-shadow-sm"
                               />
                             )}
                           </AnimatePresence>
@@ -683,13 +683,13 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
             className="relative lg:col-span-1"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl blur-lg" />
-            <div className="relative bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-4">
+            <div className="relative bg-[var(--component-card)]/80 backdrop-blur-sm border border-[var(--glass-border-light)]/50 rounded-2xl p-4">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                  <Clock className="w-4 h-4 text-white" />
+                  <Clock className="w-4 h-4 text-[var(--foreground)]" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-700">Estimated Duration</p>
+                  <p className="text-sm font-semibold text-[var(--foreground-tertiary)]">Estimated Duration</p>
                   <p className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     ~{estimatedDuration} min
                   </p>
@@ -729,8 +729,8 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
                 className={`
                   relative flex-1 flex items-center justify-center space-x-3 py-4 px-8 rounded-2xl font-bold text-lg transition-all duration-300 overflow-hidden
                   ${canGenerate
-                    ? 'text-white shadow-2xl'
-                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    ? 'text-[var(--foreground)] shadow-2xl'
+                    : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-secondary)] cursor-not-allowed'
                   }
                 `}
               >
@@ -779,8 +779,8 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
               className={`
                 relative px-4 py-4 rounded-2xl font-bold text-sm transition-all duration-300 overflow-hidden
                 ${canGenerate
-                  ? 'bg-purple-700 text-white shadow-lg hover:bg-purple-600'
-                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  ? 'bg-purple-700 text-[var(--foreground)] shadow-lg hover:bg-purple-600'
+                  : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-secondary)] cursor-not-allowed'
                 }
               `}
               title="Debug Script Only - Test 4-step debug capture without TTS"
@@ -797,7 +797,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
                 transition={{ delay: 0.7 }}
                 className="text-center mt-3"
               >
-                <p className="text-xs text-white/60 font-medium">
+                <p className="text-xs text-[var(--foreground)]/60 font-medium">
                   {selectedDocuments.length === 0 
                     ? '📄 Please select at least one document to continue'
                     : '✏️ Please enter a title for your podcast'
@@ -815,13 +815,13 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-gray-900 border border-gray-600 rounded-lg p-4 text-xs font-mono"
+              className="bg-[var(--background-dark)] border border-[var(--border-strong)] rounded-lg p-4 text-xs font-mono"
             >
               <h4 className="text-cyan-400 font-bold mb-3 flex items-center">
                 🤖 AI Agent Debug Output
                 <button 
                   onClick={() => setDebugInfo(prev => ({ ...prev || {}, logs: [] }))}
-                  className="ml-auto text-gray-400 hover:text-white text-xs"
+                  className="ml-auto text-[var(--foreground-secondary)] hover:text-[var(--foreground)] text-xs"
                 >
                   Clear
                 </button>
@@ -829,16 +829,16 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
               
               <div className="space-y-2 max-h-48 overflow-y-auto">
                 {debugInfo?.logs?.slice(-10).map((log, index) => (
-                  <div key={index} className="text-gray-300 border-l-2 border-cyan-500 pl-2">
+                  <div key={index} className="text-[var(--foreground-secondary)] border-l-2 border-cyan-500 pl-2">
                     {log}
                   </div>
                 ))}
               </div>
 
               {debugInfo.aiAgentOutputs && (
-                <div className="mt-4 pt-4 border-t border-gray-600">
+                <div className="mt-4 pt-4 border-t border-[var(--border-strong)]">
                   <h5 className="text-yellow-400 font-bold mb-2">📜 Script Generation:</h5>
-                  <div className="text-gray-300 space-y-1">
+                  <div className="text-[var(--foreground-secondary)] space-y-1">
                     <div>Style: <span className="text-cyan-400">{debugInfo.aiAgentOutputs.scriptStyle}</span></div>
                     <div>Chapters: <span className="text-cyan-400">{debugInfo.aiAgentOutputs.chapters?.length || 0}</span></div>
                     <div>Host Voice: <span className="text-green-400">{debugInfo.aiAgentOutputs.speakers?.host?.voiceId}</span></div>
@@ -851,7 +851,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
               )}
 
               {debugInfo.vectorStore && !debugInfo.vectorStore.id && (
-                <div className="mt-4 pt-4 border-t border-gray-600">
+                <div className="mt-4 pt-4 border-t border-[var(--border-strong)]">
                   <div className="text-orange-400">⚠️ No documents processed - using fallback script</div>
                 </div>
               )}
@@ -866,7 +866,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-blue-50 border border-blue-200 rounded-lg p-4"
+              className="bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-lg p-4"
             >
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
@@ -876,7 +876,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
                      generationStatus.status === 'completed' ? 'Generation Complete!' : 
                      'Generation Failed'}
                   </h4>
-                  <p className="text-sm text-blue-700">
+                  <p className="text-sm text-[var(--cardiology-accent-blue-dark)]">
                     {generationStatus.status === 'generating' && generationStatus.progress 
                       ? `Progress: ${Math.round(generationStatus.progress)}%`
                       : generationStatus.status === 'generating' 
@@ -891,9 +891,9 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({
               
               {generationStatus.progress && (
                 <div className="mt-3">
-                  <div className="bg-blue-200 rounded-full h-2">
+                  <div className="bg-[var(--cardiology-accent-blue-medium)] rounded-full h-2">
                     <div 
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      className="bg-[var(--cardiology-accent-blue-dark)] h-2 rounded-full transition-all duration-300"
                       style={{ width: `${generationStatus.progress}%` }}
                     />
                   </div>

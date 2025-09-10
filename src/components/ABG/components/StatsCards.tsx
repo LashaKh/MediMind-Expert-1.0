@@ -96,7 +96,7 @@ export const StatsCards: React.FC<StatsCardsProps> = ({
             <div className="relative p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className={`p-3 rounded-xl bg-gradient-to-br ${card.gradient}`}>
-                  <IconComponent className="h-6 w-6 text-white" />
+                  <IconComponent className="h-6 w-6 text-[var(--foreground)]" />
                 </div>
                 {card.trend && (
                   <div className={`text-sm font-medium ${card.trend.isPositive ? 'text-emerald-600' : 'text-red-600'}`}>
@@ -105,8 +105,8 @@ export const StatsCards: React.FC<StatsCardsProps> = ({
                 )}
               </div>
               <div>
-                <p className="text-2xl font-bold text-slate-900 mb-1">{card.value}</p>
-                <p className="text-sm text-slate-600">{card.subtitle}</p>
+                <p className="text-2xl font-bold text-[var(--foreground)] mb-1">{card.value}</p>
+                <p className="text-sm text-[var(--foreground-tertiary)]">{card.subtitle}</p>
               </div>
             </div>
           </Card>

@@ -61,11 +61,11 @@ export const MobileFloatingButton: React.FC<MobileFloatingButtonProps> = ({
       {/* Icon Container */}
       <div className="relative w-full h-full flex items-center justify-center">
         {isProcessing ? (
-          <Loader2 className="w-7 h-7 text-white animate-spin" />
+          <Loader2 className="w-7 h-7 text-[var(--foreground)] animate-spin" />
         ) : isRecording ? (
-          <Square className="w-6 h-6 text-white" />
+          <Square className="w-6 h-6 text-[var(--foreground)]" />
         ) : (
-          <Mic className="w-7 h-7 text-white" />
+          <Mic className="w-7 h-7 text-[var(--foreground)]" />
         )}
       </div>
 
@@ -78,7 +78,7 @@ export const MobileFloatingButton: React.FC<MobileFloatingButtonProps> = ({
       )}
 
       {/* Haptic Feedback Overlay */}
-      <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 transition-opacity duration-100 active:opacity-100" />
+      <div className="absolute inset-0 rounded-full bg-[var(--component-card)]/20 opacity-0 transition-opacity duration-100 active:opacity-100" />
     </button>
   );
 };

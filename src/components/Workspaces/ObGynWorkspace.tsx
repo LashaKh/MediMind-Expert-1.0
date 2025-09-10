@@ -130,8 +130,8 @@ export const ObGynWorkspace: React.FC = () => {
       value: '0',
       change: '+0%',
       icon: Users,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'text-[var(--cardiology-accent-blue-dark)]',
+      bgColor: 'bg-[var(--cardiology-accent-blue-light)]',
       trend: 'up'
     },
     {
@@ -164,30 +164,30 @@ export const ObGynWorkspace: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white relative">
+    <div className="min-h-screen bg-[var(--component-card)] relative">
       {/* Animated Background Elements - Removed */}
 
       {/* Modern Header Section */}
       <div className="relative">
-        <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg shadow-gray-900/5">
+        <div className="bg-[var(--component-card)]/80 backdrop-blur-xl border-b border-white/20 shadow-lg shadow-gray-900/5">
           <div className="max-w-7xl mx-auto px-6 py-8">
             <div className="flex items-center justify-between">
               <div className="space-y-3">
                 <div className="flex items-center space-x-4">
                   <div className="w-16 h-16 bg-gradient-to-br from-pink-500 via-rose-500 to-purple-600 rounded-2xl shadow-xl flex items-center justify-center group hover:scale-105 transition-transform duration-300">
-                    <Heart className="w-8 h-8 text-white group-hover:animate-pulse" />
+                    <Heart className="w-8 h-8 text-[var(--foreground)] group-hover:animate-pulse" />
                   </div>
                   <div>
                     <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-purple-900 to-indigo-900 bg-clip-text text-transparent">
                       Obstetrics & Gynecology
                     </h1>
-                    <p className="text-xl text-gray-600 font-medium">
+                    <p className="text-xl text-[var(--foreground-tertiary)] font-medium">
                       Advanced Medical Workspace
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-6">
-                  <p className="text-lg text-gray-700">
+                  <p className="text-lg text-[var(--foreground-tertiary)]">
                     Welcome back, <span className="font-semibold text-purple-700">{profile?.full_name || 'Dr. Lasha'}</span>
                   </p>
                   <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-full border border-green-200/50">
@@ -198,8 +198,8 @@ export const ObGynWorkspace: React.FC = () => {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <div className="text-sm text-gray-500">Current Time</div>
-                  <div className="text-lg font-semibold text-gray-900">
+                  <div className="text-sm text-[var(--foreground-secondary)]">Current Time</div>
+                  <div className="text-lg font-semibold text-[var(--foreground)]">
                     {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </div>
                 </div>
@@ -221,7 +221,7 @@ export const ObGynWorkspace: React.FC = () => {
             return (
               <div
                 key={feature.id}
-                className={`group relative bg-white/70 backdrop-blur-xl rounded-3xl border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-700 ${isHovered ? feature.glowColor : ''}`}
+                className={`group relative bg-[var(--component-card)]/70 backdrop-blur-xl rounded-3xl border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-700 ${isHovered ? feature.glowColor : ''}`}
                 onMouseEnter={() => setHoveredCard(feature.id)}
                 onMouseLeave={() => setHoveredCard(null)}
                 style={{
@@ -236,27 +236,27 @@ export const ObGynWorkspace: React.FC = () => {
                   {/* Header Section */}
                   <div className="flex items-start justify-between mb-6">
                     <div className={`w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-2xl shadow-lg flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                      <IconComponent className="w-8 h-8 text-white" />
+                      <IconComponent className="w-8 h-8 text-[var(--foreground)]" />
                     </div>
                     <div className="flex flex-col items-end space-y-2">
-                      <span className={`px-3 py-1 bg-gradient-to-r ${feature.gradient} text-white text-xs font-bold rounded-full shadow-sm`}>
+                      <span className={`px-3 py-1 bg-gradient-to-r ${feature.gradient} text-[var(--foreground)] text-xs font-bold rounded-full shadow-sm`}>
                         {feature.badge}
                       </span>
-                      <span className="text-xs text-gray-500 font-medium">{feature.stats}</span>
+                      <span className="text-xs text-[var(--foreground-secondary)] font-medium">{feature.stats}</span>
                     </div>
                   </div>
 
                   {/* Content Section */}
                   <div className="flex-1 space-y-4">
                     <div>
-                      <h3 className="text-2xl font-bold text-gray-900 group-hover:text-gray-800 transition-colors">
+                      <h3 className="text-2xl font-bold text-[var(--foreground)] group-hover:text-[var(--foreground)] transition-colors">
                         {feature.title}
                       </h3>
-                      <p className="text-sm font-medium text-gray-600 mt-1">
+                      <p className="text-sm font-medium text-[var(--foreground-tertiary)] mt-1">
                         {feature.subtitle}
                       </p>
                     </div>
-                    <p className="text-gray-600 leading-relaxed flex-1">
+                    <p className="text-[var(--foreground-tertiary)] leading-relaxed flex-1">
                       {feature.description}
                     </p>
                   </div>
@@ -264,7 +264,7 @@ export const ObGynWorkspace: React.FC = () => {
                   {/* Action Button */}
                   <button
                     onClick={feature.onClick}
-                    className={`w-full mt-6 bg-gradient-to-r ${feature.gradient} text-white py-4 px-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2 group/btn`}
+                    className={`w-full mt-6 bg-gradient-to-r ${feature.gradient} text-[var(--foreground)] py-4 px-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2 group/btn`}
                   >
                     <span>{feature.buttonText}</span>
                     <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform duration-300" />
@@ -282,8 +282,8 @@ export const ObGynWorkspace: React.FC = () => {
         <div className="space-y-8">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Analytics Overview</h2>
-              <p className="text-gray-600">Monitor your clinical workflow and AI interaction metrics</p>
+              <h2 className="text-3xl font-bold text-[var(--foreground)] mb-2">Analytics Overview</h2>
+              <p className="text-[var(--foreground-tertiary)]">Monitor your clinical workflow and AI interaction metrics</p>
             </div>
             <div className="flex items-center space-x-3">
               <TrendingUp className="w-6 h-6 text-green-600" />
@@ -298,7 +298,7 @@ export const ObGynWorkspace: React.FC = () => {
               return (
                 <div
                   key={card.title}
-                  className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 p-6 group hover:scale-105 animate-in slide-in-from-bottom-4 fade-in duration-700"
+                  className="bg-[var(--component-card)]/80 backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 p-6 group hover:scale-105 animate-in slide-in-from-bottom-4 fade-in duration-700"
                   style={{
                     animationDelay: `${(index + 6) * 100}ms`,
                   }}
@@ -313,8 +313,8 @@ export const ObGynWorkspace: React.FC = () => {
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <div className="text-3xl font-bold text-gray-900">{card.value}</div>
-                    <div className="text-sm text-gray-600 font-medium">{card.title}</div>
+                    <div className="text-3xl font-bold text-[var(--foreground)]">{card.value}</div>
+                    <div className="text-sm text-[var(--foreground-tertiary)] font-medium">{card.title}</div>
                   </div>
                 </div>
               );
@@ -323,11 +323,11 @@ export const ObGynWorkspace: React.FC = () => {
         </div>
 
         {/* Quick Actions Section */}
-        <div className="mt-12 bg-white/60 backdrop-blur-xl rounded-3xl border border-white/20 shadow-xl p-8">
+        <div className="mt-12 bg-[var(--component-card)]/60 backdrop-blur-xl rounded-3xl border border-white/20 shadow-xl p-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Quick Actions</h3>
-              <p className="text-gray-600">Frequently used tools and shortcuts</p>
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">Quick Actions</h3>
+              <p className="text-[var(--foreground-tertiary)]">Frequently used tools and shortcuts</p>
             </div>
             <Sparkles className="w-8 h-8 text-purple-600" />
           </div>
@@ -343,7 +343,7 @@ export const ObGynWorkspace: React.FC = () => {
               return (
                 <button
                   key={action.label}
-                  className={`p-4 bg-gradient-to-br ${action.color} text-white rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group`}
+                  className={`p-4 bg-gradient-to-br ${action.color} text-[var(--foreground)] rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group`}
                 >
                   <IconComponent className="w-6 h-6 mx-auto mb-2 group-hover:scale-110 transition-transform duration-300" />
                   <div className="text-sm font-semibold">{action.label}</div>

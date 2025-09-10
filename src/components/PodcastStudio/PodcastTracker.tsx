@@ -279,7 +279,7 @@ const PodcastTracker: React.FC<PodcastTrackerProps> = ({ podcastId, onComplete }
       case 'pending':
         return <Clock className="w-5 h-5 text-yellow-500 animate-pulse" />;
       case 'generating':
-        return <Zap className="w-5 h-5 text-blue-500 animate-pulse" />;
+        return <Zap className="w-5 h-5 text-[var(--cardiology-accent-blue)] animate-pulse" />;
       case 'completed':
         return <CheckCircle className="w-5 h-5 text-green-500" />;
       case 'failed':
@@ -298,7 +298,7 @@ const PodcastTracker: React.FC<PodcastTrackerProps> = ({ podcastId, onComplete }
       case 'error':
         return <XCircle className="w-4 h-4 text-red-500" />;
       default:
-        return <Info className="w-4 h-4 text-blue-500" />;
+        return <Info className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />;
     }
   };
 
@@ -310,21 +310,21 @@ const PodcastTracker: React.FC<PodcastTrackerProps> = ({ podcastId, onComplete }
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-lg border border-gray-200 p-6"
+      className="bg-[var(--component-card)] rounded-lg border border-[var(--glass-border-light)] p-6"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-3">
           {getStatusIcon()}
           <div>
-            <h3 className="font-semibold text-gray-900">{tracker.title}</h3>
-            <p className="text-sm text-gray-600">{tracker.currentStep}</p>
+            <h3 className="font-semibold text-[var(--foreground)]">{tracker.title}</h3>
+            <p className="text-sm text-[var(--foreground-tertiary)]">{tracker.currentStep}</p>
           </div>
         </div>
         
         <div className="flex items-center space-x-2">
           {tracker.estimatedTimeRemaining && (
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-[var(--foreground-secondary)]">
               ~{formatTime(tracker.estimatedTimeRemaining)}
             </span>
           )}
@@ -332,7 +332,7 @@ const PodcastTracker: React.FC<PodcastTrackerProps> = ({ podcastId, onComplete }
           {tracker.status === 'failed' && (
             <button
               onClick={retryGeneration}
-              className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center space-x-1 px-3 py-1 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] text-sm rounded-lg hover:bg-[var(--cardiology-accent-blue-dark)] transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
               <span>Retry</span>
@@ -343,8 +343,8 @@ const PodcastTracker: React.FC<PodcastTrackerProps> = ({ podcastId, onComplete }
             onClick={() => setShowLogs(!showLogs)}
             className={`flex items-center space-x-1 px-3 py-1 text-sm rounded-lg transition-colors ${
               showLogs 
-                ? 'bg-gray-200 text-gray-700' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-tertiary)]' 
+                : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-tertiary)]'
             }`}
           >
             <Terminal className="w-4 h-4" />
@@ -356,17 +356,17 @@ const PodcastTracker: React.FC<PodcastTrackerProps> = ({ podcastId, onComplete }
       {/* Progress Bar */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">Progress</span>
-          <span className="text-sm text-gray-500">{tracker.progress}%</span>
+          <span className="text-sm font-medium text-[var(--foreground-tertiary)]">Progress</span>
+          <span className="text-sm text-[var(--foreground-secondary)]">{tracker.progress}%</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className="w-full bg-[var(--component-surface-tertiary)] rounded-full h-2">
           <motion.div
             className={`h-2 rounded-full transition-all duration-500 ${
               tracker.status === 'failed' 
                 ? 'bg-red-500' 
                 : tracker.status === 'completed' 
                 ? 'bg-green-500' 
-                : 'bg-blue-500'
+                : 'bg-[var(--cardiology-accent-blue)]'
             }`}
             initial={{ width: 0 }}
             animate={{ width: `${tracker.progress}%` }}
@@ -393,31 +393,31 @@ const PodcastTracker: React.FC<PodcastTrackerProps> = ({ podcastId, onComplete }
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="border-t border-gray-200 pt-4"
+            className="border-t border-[var(--glass-border-light)] pt-4"
           >
             <div className="flex items-center space-x-2 mb-3">
-              <Terminal className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">
+              <Terminal className="w-4 h-4 text-[var(--foreground-secondary)]" />
+              <span className="text-sm font-medium text-[var(--foreground-tertiary)]">
                 Generation Logs ({tracker.logs.length})
               </span>
             </div>
             
             <div
               ref={logRef}
-              className="bg-gray-50 rounded-lg p-3 max-h-48 overflow-y-auto font-mono text-xs"
+              className="bg-[var(--component-surface-primary)] rounded-lg p-3 max-h-48 overflow-y-auto font-mono text-xs"
             >
               {tracker.logs.length === 0 ? (
-                <p className="text-gray-500">No logs yet...</p>
+                <p className="text-[var(--foreground-secondary)]">No logs yet...</p>
               ) : (
                 tracker.logs.map((log, index) => (
                   <div key={index} className="flex items-start space-x-2 mb-1">
-                    <span className="text-gray-400">[{log.timestamp}]</span>
+                    <span className="text-[var(--foreground-secondary)]">[{log.timestamp}]</span>
                     {getLogIcon(log.level)}
                     <span className={`flex-1 ${
                       log.level === 'error' ? 'text-red-600' :
                       log.level === 'warning' ? 'text-yellow-600' :
                       log.level === 'success' ? 'text-green-600' :
-                      'text-gray-700'
+                      'text-[var(--foreground-tertiary)]'
                     }`}>
                       {log.message}
                     </span>

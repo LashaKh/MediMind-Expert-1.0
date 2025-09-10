@@ -101,7 +101,7 @@ export const SimpleDiseasePage: React.FC = () => {
       case 'high': 
         return { 
           color: 'bg-gradient-to-r from-red-500 to-pink-600', 
-          textColor: 'text-white',
+          textColor: 'text-[var(--foreground)]',
           bgColor: 'bg-red-50',
           borderColor: 'border-red-200',
           icon: AlertTriangle, 
@@ -112,7 +112,7 @@ export const SimpleDiseasePage: React.FC = () => {
       case 'medium': 
         return { 
           color: 'bg-gradient-to-r from-amber-500 to-orange-600', 
-          textColor: 'text-white',
+          textColor: 'text-[var(--foreground)]',
           bgColor: 'bg-amber-50',
           borderColor: 'border-amber-200',
           icon: Activity, 
@@ -123,7 +123,7 @@ export const SimpleDiseasePage: React.FC = () => {
       case 'low': 
         return { 
           color: 'bg-gradient-to-r from-green-500 to-emerald-600', 
-          textColor: 'text-white',
+          textColor: 'text-[var(--foreground)]',
           bgColor: 'bg-green-50',
           borderColor: 'border-green-200',
           icon: Shield, 
@@ -134,9 +134,9 @@ export const SimpleDiseasePage: React.FC = () => {
       default: 
         return { 
           color: 'bg-gradient-to-r from-gray-500 to-slate-600', 
-          textColor: 'text-white',
-          bgColor: 'bg-gray-50',
-          borderColor: 'border-gray-200',
+          textColor: 'text-[var(--foreground)]',
+          bgColor: 'bg-[var(--component-surface-primary)]',
+          borderColor: 'border-[var(--glass-border-light)]',
           icon: BookOpen, 
           label: 'Unknown',
           description: 'Severity not specified',
@@ -167,15 +167,15 @@ export const SimpleDiseasePage: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="flex items-center justify-center py-20">
-            <div className="text-center bg-white p-12 rounded-3xl shadow-2xl border border-blue-100">
+            <div className="text-center bg-[var(--component-card)] p-12 rounded-3xl shadow-2xl border border-blue-100">
               <div className="relative mb-8">
                 <div className="animate-spin rounded-full h-20 w-20 border-4 border-blue-200 border-t-blue-600 mx-auto"></div>
-                <Stethoscope className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                <Stethoscope className="w-8 h-8 text-[var(--cardiology-accent-blue-dark)] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Loading Medical Document</h3>
-              <p className="text-gray-600 mb-2">Preparing clinical content...</p>
-              <div className="w-64 bg-gray-200 rounded-full h-2 mx-auto">
-                <div className="bg-blue-600 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+              <h3 className="text-xl font-bold text-[var(--foreground)] mb-2">Loading Medical Document</h3>
+              <p className="text-[var(--foreground-tertiary)] mb-2">Preparing clinical content...</p>
+              <div className="w-64 bg-[var(--component-surface-tertiary)] rounded-full h-2 mx-auto">
+                <div className="bg-[var(--cardiology-accent-blue-dark)] h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
               </div>
             </div>
           </div>
@@ -191,23 +191,23 @@ export const SimpleDiseasePage: React.FC = () => {
           {/* Back Button */}
           <button
             onClick={handleBackClick}
-            className="mb-6 flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors group"
+            className="mb-6 flex items-center space-x-2 text-[var(--cardiology-accent-blue-dark)] hover:text-[var(--cardiology-accent-blue-dark)] transition-colors group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">Back to Diseases</span>
           </button>
 
-          <div className="bg-white rounded-3xl shadow-2xl border border-red-200 p-12 text-center max-w-md mx-auto">
+          <div className="bg-[var(--component-card)] rounded-3xl shadow-2xl border border-red-200 p-12 text-center max-w-md mx-auto">
             <div className="bg-red-100 p-6 rounded-full w-fit mx-auto mb-8">
               <AlertCircle className="w-12 h-12 text-red-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Disease Not Found</h2>
-            <p className="text-gray-600 mb-8 leading-relaxed">
+            <h2 className="text-2xl font-bold text-[var(--foreground)] mb-4">Disease Not Found</h2>
+            <p className="text-[var(--foreground-tertiary)] mb-8 leading-relaxed">
               {error || 'The requested disease could not be found in our medical database.'}
             </p>
             <button
               onClick={handleBackClick}
-              className="px-8 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-medium shadow-lg"
+              className="px-8 py-3 bg-red-600 text-[var(--foreground)] rounded-xl hover:bg-red-700 transition-colors font-medium shadow-lg"
             >
               Return to Disease List
             </button>
@@ -227,14 +227,14 @@ export const SimpleDiseasePage: React.FC = () => {
         {/* Back Button */}
         <button
           onClick={handleBackClick}
-          className="mb-8 flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-all group bg-white px-4 py-2 rounded-xl shadow-sm border border-blue-100 hover:shadow-md"
+          className="mb-8 flex items-center space-x-2 text-[var(--cardiology-accent-blue-dark)] hover:text-[var(--cardiology-accent-blue-dark)] transition-all group bg-[var(--component-card)] px-4 py-2 rounded-xl shadow-sm border border-blue-100 hover:shadow-md"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span className="font-medium">Back to Diseases</span>
         </button>
 
         {/* Enhanced Disease Header */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden mb-8">
+        <div className="bg-[var(--component-card)] rounded-3xl shadow-2xl border border-[var(--glass-border-light)] overflow-hidden mb-8">
           {/* Header Gradient Bar */}
           <div className={`h-2 ${severityConfig.color}`}></div>
           
@@ -249,14 +249,14 @@ export const SimpleDiseasePage: React.FC = () => {
                 
                 {/* Title and Category */}
                 <div className="flex-1 min-w-0">
-                  <h1 className="text-3xl font-bold text-gray-900 mb-3 leading-tight">
+                  <h1 className="text-3xl font-bold text-[var(--foreground)] mb-3 leading-tight">
                     {disease.title}
                   </h1>
                   <div className="flex items-center space-x-4 mb-4">
                     <span className="px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 rounded-xl font-semibold text-sm border border-blue-200">
                       {disease.category}
                     </span>
-                    <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-medium text-sm">
+                    <span className="px-4 py-2 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-xl font-medium text-sm">
                       {disease.specialty.charAt(0).toUpperCase() + disease.specialty.slice(1)}
                     </span>
                   </div>
@@ -274,7 +274,7 @@ export const SimpleDiseasePage: React.FC = () => {
             </div>
 
             {/* Description */}
-            <p className="text-gray-700 text-lg leading-relaxed mb-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+            <p className="text-[var(--foreground-tertiary)] text-lg leading-relaxed mb-6 bg-[var(--component-surface-primary)] p-6 rounded-xl border border-[var(--glass-border-light)]">
               {disease.description}
             </p>
 
@@ -295,7 +295,7 @@ export const SimpleDiseasePage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
               <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
                 <div className="flex items-center space-x-3 mb-2">
-                  <Clock className="w-5 h-5 text-blue-600" />
+                  <Clock className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                   <span className="text-sm font-semibold text-blue-800">Read Time</span>
                 </div>
                 <p className="text-xl font-bold text-blue-900">{disease.readTime}</p>
@@ -335,7 +335,7 @@ export const SimpleDiseasePage: React.FC = () => {
                 className={`px-6 py-3 rounded-xl transition-all flex items-center space-x-2 font-medium ${
                   bookmarked 
                     ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200 border border-yellow-300' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
+                    : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-tertiary)] border border-[var(--glass-border-medium)]'
                 }`}
               >
                 <Bookmark className={`w-5 h-5 ${bookmarked ? 'fill-current' : ''}`} />
@@ -344,13 +344,13 @@ export const SimpleDiseasePage: React.FC = () => {
               
               <button
                 onClick={handleShare}
-                className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors flex items-center space-x-2 font-medium shadow-lg"
+                className="px-6 py-3 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] rounded-xl hover:bg-[var(--cardiology-accent-blue-dark)] transition-colors flex items-center space-x-2 font-medium shadow-lg"
               >
                 <Share2 className="w-5 h-5" />
                 <span>Share</span>
               </button>
               
-              <div className="flex items-center space-x-2 text-sm text-gray-500">
+              <div className="flex items-center space-x-2 text-sm text-[var(--foreground-secondary)]">
                 <Eye className="w-4 h-4" />
                 <span>Professional medical content</span>
               </div>
@@ -365,12 +365,12 @@ export const SimpleDiseasePage: React.FC = () => {
             title={disease.title}
           />
         ) : (
-          <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-12 text-center">
-            <div className="bg-gray-100 p-6 rounded-full w-fit mx-auto mb-6">
-              <AlertCircle className="w-12 h-12 text-gray-400" />
+          <div className="bg-[var(--component-card)] rounded-3xl shadow-2xl border border-[var(--glass-border-light)] p-12 text-center">
+            <div className="bg-[var(--component-surface-secondary)] p-6 rounded-full w-fit mx-auto mb-6">
+              <AlertCircle className="w-12 h-12 text-[var(--foreground-secondary)]" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Content Not Available</h3>
-            <p className="text-gray-600 leading-relaxed">
+            <h3 className="text-xl font-bold text-[var(--foreground)] mb-4">Content Not Available</h3>
+            <p className="text-[var(--foreground-tertiary)] leading-relaxed">
               The clinical content for this disease is not yet available. Please check back later or contact support.
             </p>
           </div>

@@ -32,7 +32,7 @@ export const FloatingRecordButton: React.FC<FloatingRecordButtonProps> = ({
               premium-hover-lift active:scale-95 flex items-center justify-center relative overflow-hidden
               ${canRecord 
                 ? 'transcription-record-btn shadow-blue-500/30' 
-                : 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed text-gray-500 dark:text-gray-400 shadow-none'
+                : 'bg-[var(--component-panel)] dark:bg-[var(--border)] cursor-not-allowed text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] shadow-none'
               }
             `}
             style={{ minHeight: '80px', minWidth: '80px' }}
@@ -51,7 +51,7 @@ export const FloatingRecordButton: React.FC<FloatingRecordButtonProps> = ({
             <button
               onClick={canStop ? onStopRecording : undefined}
               disabled={!canStop}
-              className="medical-touch-target-lg w-20 h-20 rounded-3xl shadow-2xl bg-gradient-to-br from-red-500 via-rose-600 to-red-600 hover:from-red-600 hover:via-rose-700 hover:to-red-700 text-white shadow-red-500/30 transform transition-all duration-300 premium-hover-lift active:scale-95 flex items-center justify-center relative overflow-hidden"
+              className="medical-touch-target-lg w-20 h-20 rounded-3xl shadow-2xl bg-gradient-to-br from-red-500 via-rose-600 to-red-600 hover:from-red-600 hover:via-rose-700 hover:to-red-700 text-[var(--foreground)] shadow-red-500/30 transform transition-all duration-300 premium-hover-lift active:scale-95 flex items-center justify-center relative overflow-hidden"
               style={{ minHeight: '80px', minWidth: '80px' }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-red-400/20 to-rose-500/20 animate-premium-gradient" />

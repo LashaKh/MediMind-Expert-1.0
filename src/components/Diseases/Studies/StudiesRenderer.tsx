@@ -280,9 +280,9 @@ const StudiesRenderer: React.FC<StudiesRendererProps> = ({
   const getYearBadgeColor = (year: string): string => {
     const yearNum = parseInt(year);
     if (yearNum >= 2024) return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
-    if (yearNum >= 2020) return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100';
+    if (yearNum >= 2020) return 'bg-[var(--cardiology-accent-blue-light)] text-blue-800 dark:bg-[var(--cardiology-accent-blue-darker)] dark:text-blue-100';
     if (yearNum >= 2015) return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100';
-    return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
+    return 'bg-[var(--component-surface-secondary)] text-[var(--foreground)] dark:bg-[var(--background-dark)] dark:text-[var(--foreground)]';
   };
 
   const studies = parseStudiesSection(content);
@@ -297,13 +297,13 @@ const StudiesRenderer: React.FC<StudiesRendererProps> = ({
       {showHeader && (
         <div className="flex items-center space-x-3 mb-6">
           <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg">
-            <FlaskConical className="w-6 h-6 text-white" />
+            <FlaskConical className="w-6 h-6 text-[var(--foreground)]" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
               Studies
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
               Research evidence and clinical trials
             </p>
           </div>
@@ -333,7 +333,7 @@ const StudiesRenderer: React.FC<StudiesRendererProps> = ({
               <div className="flex items-start space-x-4">
                 {/* Icon */}
                 <div className="flex-shrink-0 mt-1">
-                  <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg group-hover:bg-gray-100 dark:group-hover:bg-gray-700 transition-colors">
+                  <div className="p-2 bg-[var(--component-surface-primary)] dark:bg-[var(--background)] rounded-lg group-hover:bg-[var(--component-surface-secondary)] dark:group-hover:bg-[var(--card)] transition-colors">
                     <Microscope className="w-5 h-5 text-purple-600" />
                   </div>
                 </div>
@@ -354,13 +354,13 @@ const StudiesRenderer: React.FC<StudiesRendererProps> = ({
                             href={study.pubmedLink} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="text-gray-400 hover:text-purple-600 transition-colors"
+                            className="text-[var(--foreground-secondary)] hover:text-purple-600 transition-colors"
                           >
                             <ExternalLink className="w-4 h-4" />
                           </a>
                         )}
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                      <h3 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                         {study.title}
                       </h3>
                     </div>
@@ -368,13 +368,13 @@ const StudiesRenderer: React.FC<StudiesRendererProps> = ({
                   
                   {/* Description */}
                   <div className="prose prose-sm dark:prose-invert max-w-none mb-4">
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                       {study.description}
                     </p>
                   </div>
                   
                   {/* Author and Journal Info */}
-                  <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center space-x-4 text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                     {study.author && (
                       <div className="flex items-center space-x-1">
                         <Users className="w-4 h-4" />

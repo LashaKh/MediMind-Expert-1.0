@@ -108,13 +108,13 @@ export const TTSTestPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-2xl shadow-xl p-8">
             <div className="text-center">
               <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              <h1 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                 Browser Not Supported
               </h1>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 Your browser doesn't support audio recording. Please use a modern browser like Chrome, Firefox, or Safari.
               </p>
             </div>
@@ -128,37 +128,37 @@ export const TTSTestPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4 md:p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
-        <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20 dark:border-gray-700/30">
+        <div className="bg-[var(--component-card)]/90 dark:bg-[var(--background)]/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20 dark:border-[var(--border-strong)]/30">
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-              <Mic className="w-6 h-6 text-white" />
+              <Mic className="w-6 h-6 text-[var(--foreground)]" />
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
                 Georgian TTS Test
               </h1>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 Test Georgian speech recognition with Enagramm.com API
               </p>
             </div>
           </div>
 
           {/* Auth Status */}
-          <div className="mt-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600">
+          <div className="mt-4 p-4 rounded-xl bg-[var(--component-surface-primary)] dark:bg-[var(--card)]/50 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className={`w-3 h-3 rounded-full ${authStatus.isAuthenticated ? 'bg-green-500' : 'bg-red-500'}`} />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                   {authStatus.isAuthenticated ? 'Connected' : 'Disconnected'}
                 </span>
                 {authStatus.email && (
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                  <span className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                     ({authStatus.email})
                   </span>
                 )}
               </div>
               {authStatus.isAuthenticated && authStatus.tokenExpiresIn && (
-                <span className="text-xs text-gray-500 dark:text-gray-400">
+                <span className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                   Token expires in {Math.floor(authStatus.tokenExpiresIn / 60000)} min
                 </span>
               )}
@@ -207,8 +207,8 @@ export const TTSTestPage: React.FC = () => {
         )}
 
         {/* Recording Section */}
-        <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20 dark:border-gray-700/30">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="bg-[var(--component-card)]/90 dark:bg-[var(--background)]/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20 dark:border-[var(--border-strong)]/30">
+          <h2 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
             Real-time Recording (Max 25 seconds)
           </h2>
 
@@ -220,13 +220,13 @@ export const TTSTestPage: React.FC = () => {
                 onClick={canRecord ? startRecording : canStop ? stopRecording : undefined}
                 disabled={isTranscribing || !authStatus.isAuthenticated}
                 className={`
-                  w-24 h-24 rounded-full flex items-center justify-center text-white font-semibold text-sm
+                  w-24 h-24 rounded-full flex items-center justify-center text-[var(--foreground)] font-semibold text-sm
                   transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95
                   ${canRecord 
                     ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600' 
                     : canStop
                       ? 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700'
-                      : 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-[var(--muted)] cursor-not-allowed'
                   }
                   ${recordingState.isRecording ? 'animate-pulse' : ''}
                 `}
@@ -245,7 +245,7 @@ export const TTSTestPage: React.FC = () => {
               {recordingState.isRecording && (
                 <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                   <div 
-                    className="w-2 h-2 bg-white rounded-full transition-all duration-75"
+                    className="w-2 h-2 bg-[var(--component-card)] rounded-full transition-all duration-75"
                     style={{ 
                       transform: `scale(${1 + recordingState.audioLevel / 100})` 
                     }}
@@ -261,7 +261,7 @@ export const TTSTestPage: React.FC = () => {
                   <p className="text-sm font-medium text-red-600 dark:text-red-400">
                     {recordingState.isPaused ? 'Recording Paused' : 'Recording...'}
                   </p>
-                  <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+                  <div className="flex items-center space-x-4 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     <span className="flex items-center space-x-1">
                       <Clock className="w-4 h-4" />
                       <span>{formatTime(recordingState.duration)}</span>
@@ -276,11 +276,11 @@ export const TTSTestPage: React.FC = () => {
                   </div>
                 </div>
               ) : isTranscribing ? (
-                <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                <p className="text-sm font-medium text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">
                   Processing speech...
                 </p>
               ) : (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                   Click to start recording Georgian speech
                 </p>
               )}
@@ -292,7 +292,7 @@ export const TTSTestPage: React.FC = () => {
                 {canPause && (
                   <button
                     onClick={pauseRecording}
-                    className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
+                    className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-[var(--foreground)] rounded-lg transition-colors duration-200 flex items-center space-x-2"
                   >
                     <Pause className="w-4 h-4" />
                     <span>Pause</span>
@@ -301,7 +301,7 @@ export const TTSTestPage: React.FC = () => {
                 {canResume && (
                   <button
                     onClick={resumeRecording}
-                    className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
+                    className="px-4 py-2 bg-green-500 hover:bg-green-600 text-[var(--foreground)] rounded-lg transition-colors duration-200 flex items-center space-x-2"
                   >
                     <Play className="w-4 h-4" />
                     <span>Resume</span>
@@ -313,8 +313,8 @@ export const TTSTestPage: React.FC = () => {
         </div>
 
         {/* File Upload Section */}
-        <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20 dark:border-gray-700/30">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="bg-[var(--component-card)]/90 dark:bg-[var(--background)]/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20 dark:border-[var(--border-strong)]/30">
+          <h2 className="text-xl font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4">
             File Upload Recognition
           </h2>
 
@@ -330,7 +330,7 @@ export const TTSTestPage: React.FC = () => {
               />
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
+                className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-[var(--foreground)] rounded-lg transition-colors duration-200 flex items-center space-x-2"
               >
                 <Upload className="w-4 h-4" />
                 <span>Select MP3 File</span>
@@ -340,7 +340,7 @@ export const TTSTestPage: React.FC = () => {
                 <button
                   onClick={handleFileUpload}
                   disabled={isTranscribing || !authStatus.isAuthenticated}
-                  className="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
+                  className="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-[var(--muted)] text-[var(--foreground)] rounded-lg transition-colors duration-200 flex items-center space-x-2"
                 >
                   <FileAudio className="w-4 h-4" />
                   <span>Process File</span>
@@ -350,19 +350,19 @@ export const TTSTestPage: React.FC = () => {
 
             {/* Selected File Info */}
             {uploadedFile && (
-              <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+              <div className="p-4 bg-[var(--component-surface-primary)] dark:bg-[var(--card)]/50 rounded-lg border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    <p className="text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">
                       {uploadedFile.name}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                       {formatFileSize(uploadedFile.size)} • MP3
                     </p>
                   </div>
                   <button
                     onClick={() => setUploadedFile(null)}
-                    className="p-2 text-gray-400 hover:text-red-500 transition-colors duration-200"
+                    className="p-2 text-[var(--foreground-secondary)] hover:text-red-500 transition-colors duration-200"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -432,14 +432,14 @@ export const TTSTestPage: React.FC = () => {
 
             {/* Georgian Text Display */}
             <div className="space-y-4">
-              <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-green-200 dark:border-green-700">
-                <p className="text-gray-900 dark:text-white text-lg leading-relaxed font-medium">
+              <div className="p-4 bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg border border-green-200 dark:border-green-700">
+                <p className="text-[var(--foreground)] dark:text-[var(--foreground)] text-lg leading-relaxed font-medium">
                   {transcriptionResult.text || 'No text recognized'}
                 </p>
               </div>
 
               {/* Metadata */}
-              <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center space-x-4 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 <span>
                   Processed: {new Date(transcriptionResult.timestamp).toLocaleString()}
                 </span>
@@ -457,11 +457,11 @@ export const TTSTestPage: React.FC = () => {
         )}
 
         {/* Instructions */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
+        <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
           <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-3">
             Instructions
           </h3>
-          <div className="space-y-2 text-sm text-blue-700 dark:text-blue-400">
+          <div className="space-y-2 text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">
             <p>• Click the red record button to start recording Georgian speech</p>
             <p>• Maximum recording duration is 25 seconds per session</p>
             <p>• Speak clearly and close to the microphone for best results</p>

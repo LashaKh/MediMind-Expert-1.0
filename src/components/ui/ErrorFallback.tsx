@@ -39,9 +39,9 @@ const BaseErrorFallback: React.FC<BaseErrorFallbackProps> = ({
     <div className={`flex items-center justify-center p-4 sm:p-6 ${className}`}>
       <div className="max-w-lg w-full text-center">
         <div className="mb-6">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-[var(--error-background)] rounded-full flex items-center justify-center">
             <svg
-              className="w-6 h-6 sm:w-8 sm:h-8 text-red-600"
+              className="w-6 h-6 sm:w-8 sm:h-8 text-[var(--error-text)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -56,11 +56,11 @@ const BaseErrorFallback: React.FC<BaseErrorFallbackProps> = ({
           </div>
         </div>
         
-        <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">
+        <h2 className="text-base sm:text-lg font-semibold text-[var(--foreground)] mb-3">
           {title || t('common.errors.generic.title')}
         </h2>
         
-        <p className="text-sm sm:text-base text-gray-600 mb-6 leading-relaxed">
+        <p className="text-sm sm:text-base text-[var(--foreground-tertiary)] mb-6 leading-relaxed">
           {message || t('common.errors.generic.message')}
         </p>
         
@@ -68,7 +68,7 @@ const BaseErrorFallback: React.FC<BaseErrorFallbackProps> = ({
           {showRetry && (
             <button
               onClick={handleRetry}
-              className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
+              className="flex-1 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] px-6 py-3 rounded-lg hover:bg-[var(--cardiology-accent-blue-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
             >
               {t('common.errors.actions.tryAgain')}
             </button>
@@ -77,7 +77,7 @@ const BaseErrorFallback: React.FC<BaseErrorFallbackProps> = ({
           {showReload && (
             <button
               onClick={handleReload}
-              className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
+              className="flex-1 bg-muted text-foreground px-6 py-3 rounded-lg hover:bg-muted/80 focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring-primary)] focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
             >
               {t('common.errors.actions.reloadPage')}
             </button>
@@ -86,10 +86,10 @@ const BaseErrorFallback: React.FC<BaseErrorFallbackProps> = ({
         
         {showDetails && error && (
           <details className="mt-6 text-left">
-            <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700 min-h-[44px] touch-manipulation flex items-center">
+            <summary className="cursor-pointer text-sm text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] min-h-[44px] touch-manipulation flex items-center">
               {t('common.errors.actions.errorDetails')}
             </summary>
-            <pre className="mt-3 text-xs text-red-600 bg-red-50 p-4 rounded-lg border overflow-auto max-h-60 font-mono">
+            <pre className="mt-3 text-xs text-[var(--error-text)] bg-[var(--error-background)] p-4 rounded-lg border overflow-auto max-h-60 font-mono">
               {error.message}
               {error.stack && (
                 <>
@@ -154,7 +154,7 @@ export const GenericErrorFallback: React.FC<ErrorFallbackProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[var(--component-surface-primary)]">
       <BaseErrorFallback
         title={t('common.errors.generic.applicationError')}
         message={t('common.errors.generic.applicationMessage')}
@@ -168,12 +168,12 @@ export const GenericErrorFallback: React.FC<ErrorFallbackProps> = ({
 
 // Loading Skeleton Components
 export const CardSkeleton: React.FC<{ className?: string }> = ({ className = "" }) => (
-  <div className={`bg-white rounded-lg border shadow-sm p-6 ${className}`}>
+  <div className={`bg-[var(--component-card)] rounded-lg border shadow-sm p-6 ${className}`}>
     <div className="animate-pulse">
-      <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-      <div className="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
-      <div className="h-3 bg-gray-200 rounded w-2/3 mb-4"></div>
-      <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+      <div className="h-4 bg-[var(--component-surface-tertiary)] rounded w-3/4 mb-4"></div>
+      <div className="h-3 bg-[var(--component-surface-tertiary)] rounded w-1/2 mb-2"></div>
+      <div className="h-3 bg-[var(--component-surface-tertiary)] rounded w-2/3 mb-4"></div>
+      <div className="h-8 bg-[var(--component-surface-tertiary)] rounded w-1/4"></div>
     </div>
   </div>
 );
@@ -184,12 +184,12 @@ export const ListSkeleton: React.FC<{
 }> = ({ itemCount = 5, className = "" }) => (
   <div className={`space-y-3 ${className}`}>
     {Array.from({ length: itemCount }).map((_, index) => (
-      <div key={index} className="bg-white rounded-lg border shadow-sm p-4">
+      <div key={index} className="bg-[var(--component-card)] rounded-lg border shadow-sm p-4">
         <div className="animate-pulse flex space-x-4">
-          <div className="rounded-full bg-gray-200 h-10 w-10"></div>
+          <div className="rounded-full bg-[var(--component-surface-tertiary)] h-10 w-10"></div>
           <div className="flex-1 space-y-2 py-1">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-4 bg-[var(--component-surface-tertiary)] rounded w-3/4"></div>
+            <div className="h-3 bg-[var(--component-surface-tertiary)] rounded w-1/2"></div>
           </div>
         </div>
       </div>
@@ -202,13 +202,13 @@ export const TableSkeleton: React.FC<{
   columns?: number; 
   className?: string;
 }> = ({ rows = 5, columns = 4, className = "" }) => (
-  <div className={`bg-white rounded-lg border shadow-sm overflow-hidden ${className}`}>
+  <div className={`bg-[var(--component-card)] rounded-lg border shadow-sm overflow-hidden ${className}`}>
     <div className="animate-pulse">
       {/* Header */}
-      <div className="bg-gray-50 px-6 py-3 border-b">
+      <div className="bg-[var(--component-surface-primary)] px-6 py-3 border-b">
         <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
           {Array.from({ length: columns }).map((_, index) => (
-            <div key={index} className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div key={index} className="h-4 bg-[var(--component-surface-tertiary)] rounded w-3/4"></div>
           ))}
         </div>
       </div>
@@ -218,7 +218,7 @@ export const TableSkeleton: React.FC<{
         <div key={rowIndex} className="px-6 py-4 border-b border-gray-100">
           <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {Array.from({ length: columns }).map((_, colIndex) => (
-              <div key={colIndex} className="h-3 bg-gray-200 rounded w-2/3"></div>
+              <div key={colIndex} className="h-3 bg-[var(--component-surface-tertiary)] rounded w-2/3"></div>
             ))}
           </div>
         </div>
@@ -236,7 +236,7 @@ export const ContentPlaceholder: React.FC<{
     {Array.from({ length: lines }).map((_, index) => (
       <div 
         key={index} 
-        className="h-3 sm:h-4 bg-gray-200 rounded"
+        className="h-3 sm:h-4 bg-[var(--component-surface-tertiary)] rounded"
         style={{ 
           width: `${Math.random() * 40 + 60}%` // Random width between 60-100%
         }}
@@ -259,7 +259,7 @@ export const LoadingSpinner: React.FC<{
   return (
     <div className={`flex justify-center ${className}`}>
       <svg
-        className={`animate-spin text-blue-600 ${sizeClasses[size]}`}
+        className={`animate-spin text-[var(--cardiology-accent-blue-dark)] ${sizeClasses[size]}`}
         fill="none"
         viewBox="0 0 24 24"
       >
@@ -290,10 +290,10 @@ export const LoadingOverlay: React.FC<{
   if (!isVisible) return null;
 
   return (
-    <div className={`absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 ${className}`}>
-      <div className="text-center bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full">
+    <div className={`absolute inset-0 bg-[var(--component-card)]/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 ${className}`}>
+      <div className="text-center bg-[var(--component-card)] rounded-2xl shadow-xl p-6 max-w-sm w-full">
         <LoadingSpinner size="lg" className="mb-4" />
-        <p className="text-gray-600 text-sm sm:text-base font-medium">{message}</p>
+        <p className="text-[var(--foreground-tertiary)] text-sm sm:text-base font-medium">{message}</p>
       </div>
     </div>
   );

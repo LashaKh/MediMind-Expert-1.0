@@ -17,10 +17,10 @@ export const ReferenceLink: React.FC<ReferenceLinkProps> = ({ href, text, index,
   const isFullText = text.toLowerCase().includes('full text') || text.toLowerCase().includes('open');
 
   const getStyleClasses = () => {
-    if (isPubMed) return 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700';
-    if (isDOI) return 'bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700';
-    if (isFullText) return 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700';
-    return 'bg-gradient-to-r from-gray-500 to-gray-600 text-white hover:from-gray-600 hover:to-gray-700';
+    if (isPubMed) return 'bg-gradient-to-r from-blue-500 to-blue-600 text-[var(--foreground)] hover:from-blue-600 hover:to-blue-700';
+    if (isDOI) return 'bg-gradient-to-r from-purple-500 to-purple-600 text-[var(--foreground)] hover:from-purple-600 hover:to-purple-700';
+    if (isFullText) return 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-[var(--foreground)] hover:from-emerald-600 hover:to-emerald-700';
+    return 'bg-gradient-to-r from-gray-500 to-gray-600 text-[var(--foreground)] hover:from-gray-600 hover:to-gray-700';
   };
 
   const renderIcon = () => {

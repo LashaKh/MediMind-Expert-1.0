@@ -39,21 +39,21 @@ export const GraceFormStep3: React.FC<GraceFormStep3Props> = ({
       {/* Section Header */}
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 shadow-xl shadow-purple-500/25 mb-6 group hover:scale-105 transition-all duration-300">
-          <Calculator className="w-8 h-8 text-white group-hover:rotate-12 transition-transform duration-300" />
+          <Calculator className="w-8 h-8 text-[var(--foreground)] group-hover:rotate-12 transition-transform duration-300" />
         </div>
         <h3 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-purple-800 dark:from-white dark:to-purple-200 bg-clip-text text-transparent mb-3">
           Calculate Risk Score
         </h3>
-        <p className="text-gray-600 dark:text-gray-300 text-lg">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-lg">
           {t('calculators.cardiology.grace.review_data_assessment')}
         </p>
       </div>
 
       {/* Data Summary */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/90 to-gray-50/90 dark:from-gray-800/90 dark:to-gray-900/90 backdrop-blur-xl border border-white/20 dark:border-gray-700/50 shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/90 to-gray-50/90 dark:from-gray-800/90 dark:to-gray-900/90 backdrop-blur-xl border border-white/20 dark:border-[var(--border-strong)]/50 shadow-2xl">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-blue-500/5 to-indigo-500/5" />
         <div className="relative p-8">
-          <h4 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center">
+          <h4 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-6 flex items-center">
             <FileText className="w-6 h-6 mr-3 text-purple-600 dark:text-purple-400" />
             {t('calculators.cardiology.grace.patient_summary')}
           </h4>
@@ -62,8 +62,8 @@ export const GraceFormStep3: React.FC<GraceFormStep3Props> = ({
             {/* Demographics */}
             <div className="group p-6 rounded-2xl bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200/50 dark:border-blue-700/50 hover:scale-105 transition-all duration-300">
               <div className="flex items-center mb-4">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center mr-3">
-                  <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <div className="w-10 h-10 rounded-xl bg-[var(--cardiology-accent-blue)]/20 flex items-center justify-center mr-3">
+                  <User className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                 </div>
                 <h5 className="font-semibold text-blue-800 dark:text-blue-200">
                   {t('calculators.cardiology.grace.demographics')}
@@ -71,8 +71,8 @@ export const GraceFormStep3: React.FC<GraceFormStep3Props> = ({
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Age:</span>
-                  <span className="font-semibold text-gray-800 dark:text-gray-200">{formData.age} years</span>
+                  <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Age:</span>
+                  <span className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{formData.age} years</span>
                 </div>
               </div>
             </div>
@@ -89,16 +89,16 @@ export const GraceFormStep3: React.FC<GraceFormStep3Props> = ({
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     {t('calculators.cardiology.grace.hr_label')}
                   </span>
-                  <span className="font-semibold text-gray-800 dark:text-gray-200">{formData.heartRate} bpm</span>
+                  <span className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{formData.heartRate} bpm</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     {t('calculators.cardiology.grace.sbp_label')}
                   </span>
-                  <span className="font-semibold text-gray-800 dark:text-gray-200">{formData.systolicBP} mmHg</span>
+                  <span className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{formData.systolicBP} mmHg</span>
                 </div>
               </div>
             </div>
@@ -115,16 +115,16 @@ export const GraceFormStep3: React.FC<GraceFormStep3Props> = ({
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     {t('calculators.cardiology.grace.creatinine_short')}
                   </span>
-                  <span className="font-semibold text-gray-800 dark:text-gray-200">{formData.creatinine} mg/dL</span>
+                  <span className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{formData.creatinine} mg/dL</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     {t('calculators.cardiology.grace.killip_short')}
                   </span>
-                  <span className="font-semibold text-gray-800 dark:text-gray-200">Class {formData.killipClass}</span>
+                  <span className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Class {formData.killipClass}</span>
                 </div>
               </div>
             </div>
@@ -132,7 +132,7 @@ export const GraceFormStep3: React.FC<GraceFormStep3Props> = ({
 
           {/* Risk Factors */}
           <div className="mt-8">
-            <h5 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+            <h5 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-4 flex items-center">
               <AlertTriangle className="w-5 h-5 mr-2 text-amber-500" />
               {t('calculators.cardiology.grace.high_risk_features_present')}
             </h5>
@@ -162,9 +162,9 @@ export const GraceFormStep3: React.FC<GraceFormStep3Props> = ({
                 </div>
               )}
               {!formData.cardiacArrest && !formData.stDeviation && !formData.elevatedMarkers && (
-                <div className="flex items-center px-4 py-2 rounded-xl bg-gradient-to-r from-gray-500/20 to-slate-500/20 border border-gray-300/50 dark:border-gray-600/50">
-                  <Check className="w-4 h-4 mr-2 text-gray-600 dark:text-gray-400" />
-                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                <div className="flex items-center px-4 py-2 rounded-xl bg-gradient-to-r from-gray-500/20 to-slate-500/20 border border-[var(--glass-border-medium)]/50 dark:border-[var(--border-strong)]/50">
+                  <Check className="w-4 h-4 mr-2 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" />
+                  <span className="text-sm font-medium text-[var(--foreground)] dark:text-[var(--foreground)]">
                     {t('calculators.cardiology.grace.no_additional_risk_factors')}
                   </span>
                 </div>
@@ -178,7 +178,7 @@ export const GraceFormStep3: React.FC<GraceFormStep3Props> = ({
       <div className="flex justify-between items-center pt-8">
         <button
           onClick={onBack}
-          className="group relative px-8 py-3 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-2xl hover:border-gray-400 dark:hover:border-gray-500 transform hover:scale-105 transition-all duration-300"
+          className="group relative px-8 py-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-semibold rounded-2xl hover:border-[var(--border)] dark:hover:border-[var(--border)] transform hover:scale-105 transition-all duration-300"
         >
           <div className="flex items-center space-x-2">
             <ArrowRight className="w-5 h-5 rotate-180 group-hover:-translate-x-1 transition-transform duration-300" />
@@ -189,7 +189,7 @@ export const GraceFormStep3: React.FC<GraceFormStep3Props> = ({
         <div className="flex space-x-4">
           <button
             onClick={onReset}
-            className="group relative px-8 py-3 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-2xl hover:border-gray-400 dark:hover:border-gray-500 transform hover:scale-105 transition-all duration-300"
+            className="group relative px-8 py-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm border-2 border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] font-semibold rounded-2xl hover:border-[var(--border)] dark:hover:border-[var(--border)] transform hover:scale-105 transition-all duration-300"
           >
             <div className="flex items-center space-x-2">
               <Clock className="w-5 h-5" />
@@ -200,7 +200,7 @@ export const GraceFormStep3: React.FC<GraceFormStep3Props> = ({
           <button
             onClick={onCalculate}
             disabled={isCalculating}
-            className="group relative px-12 py-4 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold text-lg rounded-2xl shadow-xl shadow-purple-500/25 hover:shadow-2xl hover:shadow-purple-500/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            className="group relative px-12 py-4 bg-gradient-to-r from-purple-500 to-indigo-600 text-[var(--foreground)] font-bold text-lg rounded-2xl shadow-xl shadow-purple-500/25 hover:shadow-2xl hover:shadow-purple-500/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             <div className="flex items-center space-x-3">
               {isCalculating ? (

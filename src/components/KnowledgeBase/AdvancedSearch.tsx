@@ -123,20 +123,20 @@ const TagInput: React.FC<{
 
   return (
     <div className="relative">
-      <div className="min-h-[2.5rem] p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 flex flex-wrap items-center gap-1">
+      <div className="min-h-[2.5rem] p-2 border border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] rounded-lg bg-[var(--component-card)] dark:bg-[var(--background)] flex flex-wrap items-center gap-1">
         {tags.map((tag) => (
           <motion.span
             key={tag}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="inline-flex items-center px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-sm rounded-full"
+            className="inline-flex items-center px-2 py-1 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 text-blue-800 dark:text-blue-200 text-sm rounded-full"
           >
             <Tag className="w-3 h-3 mr-1" />
             {tag}
             <button
               onClick={() => removeTag(tag)}
-              className="ml-1 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full p-0.5 transition-colors"
+              className="ml-1 hover:bg-[var(--cardiology-accent-blue-medium)] dark:hover:bg-[var(--cardiology-accent-blue-darker)] rounded-full p-0.5 transition-colors"
             >
               <X className="w-3 h-3" />
             </button>
@@ -153,7 +153,7 @@ const TagInput: React.FC<{
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleKeyDown}
           placeholder={tags.length === 0 ? placeholder : ''}
-          className="flex-1 min-w-[120px] bg-transparent border-none outline-none text-gray-900 dark:text-gray-100 placeholder-gray-500"
+          className="flex-1 min-w-[120px] bg-transparent border-none outline-none text-[var(--foreground)] dark:text-[var(--foreground)] placeholder-gray-500"
         />
       </div>
 
@@ -164,17 +164,17 @@ const TagInput: React.FC<{
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="absolute top-full mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-40 overflow-y-auto"
+            className="absolute top-full mt-1 w-full bg-[var(--component-card)] dark:bg-[var(--background)] border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-lg shadow-lg z-50 max-h-40 overflow-y-auto"
           >
             {filteredSuggestions.map((suggestion) => (
               <button
                 key={suggestion}
                 onClick={() => addTag(suggestion)}
-                className="w-full px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors first:rounded-t-lg last:rounded-b-lg"
+                className="w-full px-3 py-2 text-left hover:bg-[var(--component-surface-primary)] dark:hover:bg-[var(--card)] transition-colors first:rounded-t-lg last:rounded-b-lg"
               >
                 <div className="flex items-center space-x-2">
-                  <Tag className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-900 dark:text-gray-100">{suggestion}</span>
+                  <Tag className="w-4 h-4 text-[var(--foreground-secondary)]" />
+                  <span className="text-[var(--foreground)] dark:text-[var(--foreground)]">{suggestion}</span>
                 </div>
               </button>
             ))}
@@ -201,8 +201,8 @@ const RangeSlider: React.FC<{
     <div className="space-y-3">
       {label && (
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
+          <label className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{label}</label>
+          <span className="text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
             {formatFn(value[0])} - {formatFn(value[1])}
           </span>
         </div>
@@ -216,7 +216,7 @@ const RangeSlider: React.FC<{
           value={value[0]}
           step={step}
           onChange={(e) => onChange([Number(e.target.value), value[1]])}
-          className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-slider"
+          className="absolute w-full h-2 bg-[var(--component-surface-tertiary)] rounded-lg appearance-none cursor-pointer range-slider"
         />
         <input
           type="range"
@@ -225,12 +225,12 @@ const RangeSlider: React.FC<{
           value={value[1]}
           step={step}
           onChange={(e) => onChange([value[0], Number(e.target.value)])}
-          className="absolute w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-slider"
+          className="absolute w-full h-2 bg-[var(--component-surface-tertiary)] rounded-lg appearance-none cursor-pointer range-slider"
         />
         
         {/* Track fill */}
         <div 
-          className="absolute h-2 bg-blue-500 rounded-lg pointer-events-none"
+          className="absolute h-2 bg-[var(--cardiology-accent-blue)] rounded-lg pointer-events-none"
           style={{
             left: `${((value[0] - min) / (max - min)) * 100}%`,
             width: `${((value[1] - value[0]) / (max - min)) * 100}%`
@@ -251,14 +251,14 @@ const FilterChip: React.FC<{
 }> = ({ label, count, isActive, onClick, icon, color = 'blue' }) => {
   const colorClasses = {
     blue: isActive 
-      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 border-blue-300 dark:border-blue-700'
-      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600',
+      ? 'bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 text-blue-800 dark:text-blue-200 border-[var(--cardiology-accent-blue)] dark:border-blue-700'
+      : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--border)]',
     green: isActive
       ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 border-green-300 dark:border-green-700'
-      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600',
+      : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--border)]',
     red: isActive
       ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 border-red-300 dark:border-red-700'
-      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600'
+      : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--border)]'
   };
 
   return (
@@ -274,7 +274,7 @@ const FilterChip: React.FC<{
       {icon}
       <span>{label}</span>
       {count !== undefined && (
-        <span className="px-1.5 py-0.5 text-xs bg-white/20 rounded-full">
+        <span className="px-1.5 py-0.5 text-xs bg-[var(--component-card)]/20 rounded-full">
           {count}
         </span>
       )}
@@ -342,12 +342,12 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
       <div className="flex items-center justify-between">
         <button
           onClick={onToggle}
-          className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          className="flex items-center space-x-2 px-4 py-2 bg-[var(--component-card)] dark:bg-[var(--background)] border border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] rounded-lg hover:bg-[var(--component-surface-primary)] dark:hover:bg-[var(--card)] transition-colors"
         >
-          <SlidersHorizontal className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-          <span className="text-gray-700 dark:text-gray-300">Advanced Filters</span>
+          <SlidersHorizontal className="w-5 h-5 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]" />
+          <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Advanced Filters</span>
           {activeFiltersCount > 0 && (
-            <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-xs rounded-full">
+            <span className="px-2 py-0.5 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 text-blue-800 dark:text-blue-200 text-xs rounded-full">
               {activeFiltersCount}
             </span>
           )}
@@ -355,11 +355,11 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.2 }}
           >
-            <ChevronDown className="w-4 h-4 text-gray-400" />
+            <ChevronDown className="w-4 h-4 text-[var(--foreground-secondary)]" />
           </motion.div>
         </button>
 
-        <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+        <div className="flex items-center space-x-4 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
           <div className="flex items-center space-x-2">
             <BarChart3 className="w-4 h-4" />
             <span>
@@ -370,7 +370,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
           {activeFiltersCount > 0 && (
             <button
               onClick={clearAllFilters}
-              className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 font-medium transition-colors"
+              className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 font-medium transition-colors"
             >
               Clear all filters
             </button>
@@ -384,22 +384,22 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="flex flex-wrap gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"
+          className="flex flex-wrap gap-2 p-3 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-lg"
         >
           {filters.searchTerm && (
-            <span className="inline-flex items-center px-2 py-1 bg-white dark:bg-gray-800 text-sm rounded-full">
+            <span className="inline-flex items-center px-2 py-1 bg-[var(--component-card)] dark:bg-[var(--background)] text-sm rounded-full">
               <Search className="w-3 h-3 mr-1" />
               "{filters.searchTerm}"
               <button
                 onClick={() => onFiltersChange({ ...filters, searchTerm: '' })}
-                className="ml-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full p-0.5"
+                className="ml-1 hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--border)] rounded-full p-0.5"
               >
                 <X className="w-3 h-3" />
               </button>
             </span>
           )}
           {filters.tags && filters.tags.map(tag => (
-            <span key={tag} className="inline-flex items-center px-2 py-1 bg-white dark:bg-gray-800 text-sm rounded-full">
+            <span key={tag} className="inline-flex items-center px-2 py-1 bg-[var(--component-card)] dark:bg-[var(--background)] text-sm rounded-full">
               <Tag className="w-3 h-3 mr-1" />
               {tag}
               <button
@@ -407,7 +407,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
                   ...filters, 
                   tags: (filters.tags || []).filter(t => t !== tag) 
                 })}
-                className="ml-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full p-0.5"
+                className="ml-1 hover:bg-[var(--component-surface-tertiary)] dark:hover:bg-[var(--border)] rounded-full p-0.5"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -423,11 +423,11 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 space-y-6"
+            className="bg-[var(--component-card)] dark:bg-[var(--background)] border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl p-6 space-y-6"
           >
             {/* Quick Filters */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
+              <h3 className="text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
                 <Sparkles className="w-4 h-4" />
                 <span>Quick Filters</span>
               </h3>
@@ -471,7 +471,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
             {/* Categories */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
+              <h3 className="text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
                 <Hash className="w-4 h-4" />
                 <span>Categories</span>
               </h3>
@@ -494,7 +494,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
             {/* File Types */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
+              <h3 className="text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
                 <FileType className="w-4 h-4" />
                 <span>File Types</span>
               </h3>
@@ -520,7 +520,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
             {/* Tags */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
+              <h3 className="text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
                 <Tag className="w-4 h-4" />
                 <span>Tags</span>
               </h3>
@@ -534,13 +534,13 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
             {/* Date Range */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
+              <h3 className="text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
                 <Calendar className="w-4 h-4" />
                 <span>Date Range</span>
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">From</label>
+                  <label className="block text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">From</label>
                   <input
                     type="date"
                     value={(filters.dateRange || {}).from || ''}
@@ -548,11 +548,11 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
                       ...filters,
                       dateRange: { ...(filters.dateRange || {}), from: e.target.value }
                     })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] rounded-lg bg-[var(--component-card)] dark:bg-[var(--card)] text-[var(--foreground)] dark:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">To</label>
+                  <label className="block text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">To</label>
                   <input
                     type="date"
                     value={(filters.dateRange || {}).to || ''}
@@ -560,7 +560,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
                       ...filters,
                       dateRange: { ...(filters.dateRange || {}), to: e.target.value }
                     })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-[var(--glass-border-medium)] dark:border-[var(--border-strong)] rounded-lg bg-[var(--component-card)] dark:bg-[var(--card)] text-[var(--foreground)] dark:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--cardiology-accent-blue)] focus:border-[var(--cardiology-accent-blue)]"
                   />
                 </div>
               </div>
@@ -568,7 +568,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
             {/* File Size Range */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
+              <h3 className="text-sm font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
                 <BarChart3 className="w-4 h-4" />
                 <span>File Size</span>
               </h3>

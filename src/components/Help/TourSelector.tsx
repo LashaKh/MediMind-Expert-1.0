@@ -190,21 +190,21 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden"
+          className="bg-[var(--component-card)] dark:bg-[var(--background-dark)] rounded-3xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="relative p-8 bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 text-white">
+          <div className="relative p-8 bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 text-[var(--foreground)]">
             <button
               onClick={onClose}
-              className="absolute top-6 right-6 p-2 hover:bg-white/20 rounded-full transition-colors duration-200"
+              className="absolute top-6 right-6 p-2 hover:bg-[var(--component-card)]/20 rounded-full transition-colors duration-200"
               aria-label="Close tour selector"
             >
               <X className="w-6 h-6" />
             </button>
             
             <div className="flex items-center space-x-4 mb-6">
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+              <div className="w-16 h-16 bg-[var(--component-card)]/20 rounded-2xl flex items-center justify-center">
                 <Sparkles className="w-8 h-8" />
               </div>
               <div>
@@ -214,7 +214,7 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
             </div>
 
             {/* Progress Overview */}
-            <div className="flex items-center justify-between bg-white/10 backdrop-blur-sm rounded-2xl p-4">
+            <div className="flex items-center justify-between bg-[var(--component-card)]/10 backdrop-blur-sm rounded-2xl p-4">
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <Award className="w-5 h-5" />
@@ -227,7 +227,7 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
               </div>
               <button
                 onClick={handleTakeFullTour}
-                className="flex items-center space-x-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl transition-colors duration-200"
+                className="flex items-center space-x-2 px-4 py-2 bg-[var(--component-card)]/20 hover:bg-[var(--component-card)]/30 rounded-xl transition-colors duration-200"
               >
                 <PlayCircle className="w-4 h-4" />
                 <span className="font-medium">{t('tour.selector.takeFullTour', { defaultValue: 'Take Full Tour' })}</span>
@@ -251,28 +251,28 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
                     className={`
                       relative group cursor-pointer rounded-2xl border-2 transition-all duration-300
                       ${isSelected 
-                        ? 'border-blue-500 shadow-lg shadow-blue-500/25 scale-105' 
-                        : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 hover:shadow-lg'
+                        ? 'border-[var(--cardiology-accent-blue)] shadow-lg shadow-blue-500/25 scale-105' 
+                        : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:border-[var(--cardiology-accent-blue)] hover:shadow-lg'
                       }
-                      ${isCompleted ? 'bg-green-50 dark:bg-green-900/20' : 'bg-white dark:bg-gray-800'}
+                      ${isCompleted ? 'bg-green-50 dark:bg-green-900/20' : 'bg-[var(--component-card)] dark:bg-[var(--background)]'}
                     `}
                     onClick={() => handleSectionSelect(section.id)}
                   >
                     {/* Badges */}
                     <div className="absolute top-4 right-4 flex space-x-2">
                       {section.isPopular && (
-                        <span className="px-2 py-1 bg-orange-500 text-white text-xs font-bold rounded-full">
+                        <span className="px-2 py-1 bg-orange-500 text-[var(--foreground)] text-xs font-bold rounded-full">
                           {t('tour.selector.popular', { defaultValue: 'Popular' })}
                         </span>
                       )}
                       {section.isNew && (
-                        <span className="px-2 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
+                        <span className="px-2 py-1 bg-green-500 text-[var(--foreground)] text-xs font-bold rounded-full">
                           {t('tour.selector.new', { defaultValue: 'New' })}
                         </span>
                       )}
                       {isCompleted && (
                         <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                          <CheckCircle2 className="w-4 h-4 text-white" />
+                          <CheckCircle2 className="w-4 h-4 text-[var(--foreground)]" />
                         </div>
                       )}
                     </div>
@@ -286,10 +286,10 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
                             background: `linear-gradient(135deg, ${section.primaryColor}, ${section.secondaryColor})`
                           }}
                         >
-                          <section.icon className="w-7 h-7 text-white" />
+                          <section.icon className="w-7 h-7 text-[var(--foreground)]" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                          <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-1">
                             {t(`tour.cards.${section.id}.title`, { defaultValue: section.title })}
                           </h3>
                           <p className="text-sm font-medium" style={{ color: section.primaryColor }}>
@@ -299,13 +299,13 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
                       </div>
 
                       {/* Description */}
-                      <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4">
+                      <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-sm leading-relaxed mb-4">
                         {t(`tour.cards.${section.id}.description`, { defaultValue: section.description })}
                       </p>
 
                       {/* Meta Info */}
                       <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center space-x-4 text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                           <div className="flex items-center space-x-1">
                             <Target className="w-3 h-3" />
                             <span>{section.stepCount} {t('tour.selector.steps', { defaultValue: 'steps' })}</span>
@@ -328,13 +328,13 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
                       {/* Features */}
                       <div className="space-y-2 mb-6">
                         {section.features.slice(0, 3).map((feature, idx) => (
-                          <div key={idx} className="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-400">
-                            <div className="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
+                          <div key={idx} className="flex items-center space-x-2 text-xs text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[var(--muted)]"></div>
                             <span>{t(`tour.cards.${section.id}.features.${idx}`, { defaultValue: feature })}</span>
                           </div>
                         ))}
                         {section.features.length > 3 && (
-                          <div className="text-xs text-gray-500 dark:text-gray-500">
+                          <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                             +{section.features.length - 3} {t('tour.selector.moreFeatures', { defaultValue: 'more features' })}
                           </div>
                         )}
@@ -350,7 +350,7 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
                           w-full py-3 px-4 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center space-x-2
                           ${isCompleted 
                             ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50' 
-                            : 'text-white hover:shadow-lg transform hover:scale-105'
+                            : 'text-[var(--foreground)] hover:shadow-lg transform hover:scale-105'
                           }
                         `}
                         style={!isCompleted ? {
@@ -386,13 +386,13 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
               >
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-xl flex items-center justify-center">
-                    <Award className="w-6 h-6 text-white" />
+                    <Award className="w-6 h-6 text-[var(--foreground)]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                    <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                       {t('tour.selector.greatProgress', { defaultValue: 'Great Progress! 🎉' })}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('tour.selector.completedCount', { count: totalCompleted, defaultValue: "You've completed {{count}} tours." })}
                       {' '}
                       {totalCompleted === tourSections.length

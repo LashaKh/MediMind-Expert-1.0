@@ -172,15 +172,15 @@ const PodcastHistory: React.FC<PodcastHistoryProps> = ({
       <div className="space-y-6">
         {/* Header Skeleton */}
         <div className="animate-pulse">
-          <div className="h-10 bg-white/10 rounded-xl w-1/4 mb-4 mx-auto"></div>
-          <div className="h-6 bg-white/10 rounded-lg w-1/2 mx-auto"></div>
+          <div className="h-10 bg-[var(--component-card)]/10 rounded-xl w-1/4 mb-4 mx-auto"></div>
+          <div className="h-6 bg-[var(--component-card)]/10 rounded-lg w-1/2 mx-auto"></div>
         </div>
 
         {/* Grid Skeleton */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {[...Array(8)].map((_, i) => (
             <div key={i} className="animate-pulse">
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl h-64"></div>
+              <div className="bg-[var(--component-card)]/5 backdrop-blur-sm border border-white/10 rounded-3xl h-64"></div>
             </div>
           ))}
         </div>
@@ -205,7 +205,7 @@ const PodcastHistory: React.FC<PodcastHistoryProps> = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-white/80 text-lg"
+          className="text-[var(--foreground)]/80 text-lg"
         >
           {t('podcast.history.subtitle')}
         </motion.p>
@@ -222,13 +222,13 @@ const PodcastHistory: React.FC<PodcastHistoryProps> = ({
         <div className="flex-1 relative group">
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-60 transition-all duration-500" />
           <div className="relative bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/60" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--foreground)]/60" />
             <input
               type="text"
               placeholder={t('podcast.history.search.placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-6 py-4 bg-transparent text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-300 text-base font-medium"
+              className="w-full pl-12 pr-6 py-4 bg-transparent text-[var(--foreground)] placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-300 text-base font-medium"
             />
             <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           </div>
@@ -238,23 +238,23 @@ const PodcastHistory: React.FC<PodcastHistoryProps> = ({
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-60 transition-all duration-500" />
           <div className="relative bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-            <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/60" />
+            <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--foreground)]/60" />
             <select
               value={statusFilter}
               onChange={(e) => {
                 setStatusFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="pl-12 pr-10 py-4 bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-300 appearance-none text-base font-medium cursor-pointer"
+              className="pl-12 pr-10 py-4 bg-transparent text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-300 appearance-none text-base font-medium cursor-pointer"
             >
               {statusOptions.map(option => (
-                <option key={option.value} value={option.value} className="bg-gray-900 text-white">
+                <option key={option.value} value={option.value} className="bg-[var(--background-dark)] text-[var(--foreground)]">
                   {option.label}
                 </option>
               ))}
             </select>
             <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-              <svg className="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-[var(--foreground)]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
             </div>
@@ -294,15 +294,15 @@ const PodcastHistory: React.FC<PodcastHistoryProps> = ({
             className="text-center py-12"
           >
             <div className="w-24 h-24 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
-              <Clock className="w-12 h-12 text-white/60" />
+              <Clock className="w-12 h-12 text-[var(--foreground)]/60" />
             </div>
-            <h3 className="text-lg font-medium text-white/90 mb-2">
+            <h3 className="text-lg font-medium text-[var(--foreground)]/90 mb-2">
               {searchTerm || statusFilter !== 'all' 
                 ? t('podcast.history.empty.noResults')
                 : t('podcast.history.empty.noPodcasts')
               }
             </h3>
-            <p className="text-white/60 mb-6">
+            <p className="text-[var(--foreground)]/60 mb-6">
               {searchTerm || statusFilter !== 'all'
                 ? t('podcast.history.empty.tryDifferentFilter')
                 : t('podcast.history.empty.createFirst')
@@ -311,7 +311,7 @@ const PodcastHistory: React.FC<PodcastHistoryProps> = ({
             {(!searchTerm && statusFilter === 'all') && (
               <button
                 onClick={() => window.history.back()}
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:from-cyan-600 hover:to-purple-700 transition-all duration-200 shadow-lg shadow-purple-500/30 font-semibold"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-[var(--foreground)] rounded-xl hover:from-cyan-600 hover:to-purple-700 transition-all duration-200 shadow-lg shadow-purple-500/30 font-semibold"
               >
                 {t('podcast.history.empty.createButton')}
               </button>
@@ -355,7 +355,7 @@ const PodcastHistory: React.FC<PodcastHistoryProps> = ({
           <button
             onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
             disabled={currentPage === 1}
-            className="px-4 py-2 text-sm font-medium bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white/80 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 hover:text-white transition-all duration-200"
+            className="px-4 py-2 text-sm font-medium bg-[var(--component-card)]/10 backdrop-blur-sm border border-white/20 rounded-xl text-[var(--foreground)]/80 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--component-card)]/20 hover:text-[var(--foreground)] transition-all duration-200"
           >
             {t('common.previous')}
           </button>
@@ -371,8 +371,8 @@ const PodcastHistory: React.FC<PodcastHistoryProps> = ({
                   onClick={() => setCurrentPage(page)}
                   className={`w-10 h-10 text-sm font-semibold rounded-xl transition-all duration-200 ${
                     isActive
-                      ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-lg shadow-purple-500/30'
-                      : 'bg-white/10 backdrop-blur-sm border border-white/20 text-white/60 hover:bg-white/20 hover:text-white'
+                      ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-[var(--foreground)] shadow-lg shadow-purple-500/30'
+                      : 'bg-[var(--component-card)]/10 backdrop-blur-sm border border-white/20 text-[var(--foreground)]/60 hover:bg-[var(--component-card)]/20 hover:text-[var(--foreground)]'
                   }`}
                 >
                   {page}
@@ -384,7 +384,7 @@ const PodcastHistory: React.FC<PodcastHistoryProps> = ({
           <button
             onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 text-sm font-medium bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white/80 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 hover:text-white transition-all duration-200"
+            className="px-4 py-2 text-sm font-medium bg-[var(--component-card)]/10 backdrop-blur-sm border border-white/20 rounded-xl text-[var(--foreground)]/80 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--component-card)]/20 hover:text-[var(--foreground)] transition-all duration-200"
           >
             {t('common.next')}
           </button>

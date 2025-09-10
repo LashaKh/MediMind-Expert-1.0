@@ -267,8 +267,8 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
       case 'healthy': return <CheckCircle className="w-5 h-5 text-green-500" />;
       case 'warning': return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
       case 'critical': return <XCircle className="w-5 h-5 text-red-500" />;
-      case 'down': return <XCircle className="w-5 h-5 text-gray-500" />;
-      default: return <AlertCircle className="w-5 h-5 text-gray-400" />;
+      case 'down': return <XCircle className="w-5 h-5 text-[var(--foreground-secondary)]" />;
+      default: return <AlertCircle className="w-5 h-5 text-[var(--foreground-secondary)]" />;
     }
   };
 
@@ -277,7 +277,7 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
       case 'critical': return <XCircle className="w-5 h-5 text-red-500" />;
       case 'error': return <AlertTriangle className="w-5 h-5 text-red-500" />;
       case 'warning': return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
-      default: return <AlertCircle className="w-5 h-5 text-blue-500" />;
+      default: return <AlertCircle className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />;
     }
   };
 
@@ -296,11 +296,11 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
 
   if (loading) {
     return (
-      <div className={`bg-white rounded-xl shadow-lg p-6 ${className}`}>
+      <div className={`bg-[var(--component-card)] rounded-xl shadow-lg p-6 ${className}`}>
         <div className="flex items-center justify-center h-64">
           <div className="flex items-center space-x-3">
-            <RefreshCw className="w-5 h-5 animate-spin text-blue-600" />
-            <span className="text-gray-600">Loading system health data...</span>
+            <RefreshCw className="w-5 h-5 animate-spin text-[var(--cardiology-accent-blue-dark)]" />
+            <span className="text-[var(--foreground-tertiary)]">Loading system health data...</span>
           </div>
         </div>
       </div>
@@ -311,9 +311,9 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
                        endpoints.some(e => e.status === 'critical' || e.status === 'down') ? 'critical' : 'warning';
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg overflow-hidden ${className}`}>
+    <div className={`bg-[var(--component-card)] rounded-xl shadow-lg overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="p-6 border-b border-gray-200">
+      <div className="p-6 border-b border-[var(--glass-border-light)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className={`p-2 rounded-lg ${
@@ -326,8 +326,8 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
               }`} />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">System Health Dashboard</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="text-lg font-semibold text-[var(--foreground)]">System Health Dashboard</h3>
+              <p className="text-sm text-[var(--foreground-tertiary)]">
                 Real-time monitoring • Last updated {formatTimestamp(lastRefresh.toISOString())}
               </p>
             </div>
@@ -336,7 +336,7 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
             <select
               value={selectedTimeRange}
               onChange={(e) => setSelectedTimeRange(e.target.value as any)}
-              className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-1 border border-[var(--glass-border-medium)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--cardiology-accent-blue)]"
             >
               <option value="1h">Last Hour</option>
               <option value="6h">Last 6 Hours</option>
@@ -345,7 +345,7 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
             </select>
             <button
               onClick={fetchSystemHealth}
-              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] transition-colors"
             >
               <RefreshCw className="w-5 h-5" />
             </button>
@@ -362,7 +362,7 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
           }`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">System Status</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">System Status</p>
                 <p className={`text-lg font-bold capitalize ${
                   overallHealth === 'healthy' ? 'text-green-600' :
                   overallHealth === 'warning' ? 'text-yellow-600' : 'text-red-600'
@@ -374,22 +374,22 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
             </div>
           </div>
 
-          <div className="p-4 rounded-lg bg-blue-50 border-l-4 border-blue-500">
+          <div className="p-4 rounded-lg bg-[var(--cardiology-accent-blue-light)] border-l-4 border-[var(--cardiology-accent-blue)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">Active Users</p>
-                <p className="text-lg font-bold text-blue-600">
+                <p className="text-sm font-medium text-[var(--foreground)]">Active Users</p>
+                <p className="text-lg font-bold text-[var(--cardiology-accent-blue-dark)]">
                   {metrics.length > 0 ? metrics[metrics.length - 1].activeUsers : 0}
                 </p>
               </div>
-              <Activity className="w-5 h-5 text-blue-500" />
+              <Activity className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
             </div>
           </div>
 
           <div className="p-4 rounded-lg bg-purple-50 border-l-4 border-purple-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">Avg Response</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">Avg Response</p>
                 <p className="text-lg font-bold text-purple-600">
                   {metrics.length > 0 ? formatDuration(metrics[metrics.length - 1].responseTime) : '0ms'}
                 </p>
@@ -401,7 +401,7 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
           <div className="p-4 rounded-lg bg-indigo-50 border-l-4 border-indigo-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">Throughput</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">Throughput</p>
                 <p className="text-lg font-bold text-indigo-600">
                   {metrics.length > 0 ? Math.round(metrics[metrics.length - 1].throughput) : 0}/min
                 </p>
@@ -414,9 +414,9 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
         {/* Performance Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Response Time Chart */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
-              <Clock className="w-4 h-4 mr-2 text-gray-600" />
+          <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
+            <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center">
+              <Clock className="w-4 h-4 mr-2 text-[var(--foreground-tertiary)]" />
               Response Time & Error Rate
             </h4>
             <div className="h-48">
@@ -463,9 +463,9 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
           </div>
 
           {/* Resource Usage Chart */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
-              <Server className="w-4 h-4 mr-2 text-gray-600" />
+          <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
+            <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center">
+              <Server className="w-4 h-4 mr-2 text-[var(--foreground-tertiary)]" />
               Resource Usage
             </h4>
             <div className="h-48">
@@ -512,32 +512,32 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
 
         {/* API Endpoints Status */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
-            <Globe className="w-4 h-4 mr-2 text-gray-600" />
+          <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center">
+            <Globe className="w-4 h-4 mr-2 text-[var(--foreground-tertiary)]" />
             API Endpoints Health
           </h4>
           <div className="grid gap-3">
             {endpoints.map((endpoint) => (
-              <div key={endpoint.name} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div key={endpoint.name} className="flex items-center justify-between p-4 bg-[var(--component-surface-primary)] rounded-lg">
                 <div className="flex items-center space-x-3">
                   {getStatusIcon(endpoint.status)}
                   <div>
-                    <p className="font-medium text-gray-900">{endpoint.name}</p>
-                    <p className="text-sm text-gray-600">{endpoint.url}</p>
+                    <p className="font-medium text-[var(--foreground)]">{endpoint.name}</p>
+                    <p className="text-sm text-[var(--foreground-tertiary)]">{endpoint.url}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="flex items-center space-x-4">
                     <div className="text-sm">
-                      <span className="text-gray-600">Response: </span>
+                      <span className="text-[var(--foreground-tertiary)]">Response: </span>
                       <span className="font-medium">{formatDuration(endpoint.responseTime)}</span>
                     </div>
                     <div className="text-sm">
-                      <span className="text-gray-600">Success: </span>
+                      <span className="text-[var(--foreground-tertiary)]">Success: </span>
                       <span className="font-medium">{(endpoint.successRate * 100).toFixed(1)}%</span>
                     </div>
                     <div className="text-sm">
-                      <span className="text-gray-600">Errors: </span>
+                      <span className="text-[var(--foreground-tertiary)]">Errors: </span>
                       <span className={`font-medium ${endpoint.errorCount > 0 ? 'text-red-600' : 'text-green-600'}`}>
                         {endpoint.errorCount}
                       </span>
@@ -554,13 +554,13 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
           {/* Database Health */}
           {databaseHealth && (
             <div>
-              <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
-                <Database className="w-4 h-4 mr-2 text-gray-600" />
+              <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center">
+                <Database className="w-4 h-4 mr-2 text-[var(--foreground-tertiary)]" />
                 Database Health
               </h4>
-              <div className="bg-gray-50 rounded-lg p-4 space-y-4">
+              <div className="bg-[var(--component-surface-primary)] rounded-lg p-4 space-y-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">Connection Pool</p>
+                  <p className="text-sm font-medium text-[var(--foreground-tertiary)] mb-2">Connection Pool</p>
                   <div className="flex items-center space-x-4 text-sm">
                     <span>Active: <strong>{databaseHealth.connectionPool.active}</strong></span>
                     <span>Idle: <strong>{databaseHealth.connectionPool.idle}</strong></span>
@@ -569,7 +569,7 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
                 </div>
                 
                 <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">Query Performance</p>
+                  <p className="text-sm font-medium text-[var(--foreground-tertiary)] mb-2">Query Performance</p>
                   <div className="flex items-center space-x-4 text-sm">
                     <span>Avg: <strong>{formatDuration(databaseHealth.queryPerformance.avgDuration)}</strong></span>
                     <span>Slow: <strong>{databaseHealth.queryPerformance.slowQueries}</strong></span>
@@ -578,12 +578,12 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
                 </div>
                 
                 <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">Storage</p>
+                  <p className="text-sm font-medium text-[var(--foreground-tertiary)] mb-2">Storage</p>
                   <div className="flex items-center justify-between text-sm">
                     <span>{databaseHealth.storage.used.toFixed(1)}GB / {databaseHealth.storage.total}GB</span>
                     <span className="font-medium">{databaseHealth.storage.percentage.toFixed(1)}% used</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                  <div className="w-full bg-[var(--component-surface-tertiary)] rounded-full h-2 mt-2">
                     <div 
                       className={`h-2 rounded-full ${
                         databaseHealth.storage.percentage > 80 ? 'bg-red-500' :
@@ -599,8 +599,8 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
 
           {/* System Alerts */}
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
-              <Shield className="w-4 h-4 mr-2 text-gray-600" />
+            <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center">
+              <Shield className="w-4 h-4 mr-2 text-[var(--foreground-tertiary)]" />
               Recent Alerts
               {alerts.filter(a => !a.resolved).length > 0 && (
                 <span className="ml-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
@@ -608,12 +608,12 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
                 </span>
               )}
             </h4>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
               {alerts.length === 0 ? (
                 <div className="text-center py-8">
                   <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">No active alerts</p>
-                  <p className="text-xs text-gray-500">All systems operating normally</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">No active alerts</p>
+                  <p className="text-xs text-[var(--foreground-secondary)]">All systems operating normally</p>
                 </div>
               ) : (
                 <div className="space-y-3 max-h-48 overflow-y-auto">
@@ -621,13 +621,13 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
                     <div key={alert.id} className={`flex items-start space-x-3 p-3 rounded-lg ${
                       alert.type === 'critical' ? 'bg-red-100' :
                       alert.type === 'error' ? 'bg-orange-100' :
-                      alert.type === 'warning' ? 'bg-yellow-100' : 'bg-blue-100'
+                      alert.type === 'warning' ? 'bg-yellow-100' : 'bg-[var(--cardiology-accent-blue-light)]'
                     }`}>
                       {getAlertIcon(alert.type)}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900">{alert.title}</p>
-                        <p className="text-xs text-gray-600">{alert.message}</p>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-sm font-medium text-[var(--foreground)]">{alert.title}</p>
+                        <p className="text-xs text-[var(--foreground-tertiary)]">{alert.message}</p>
+                        <p className="text-xs text-[var(--foreground-secondary)] mt-1">
                           {formatTimestamp(alert.timestamp)} • {alert.component}
                         </p>
                       </div>
@@ -638,7 +638,7 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
                               a.id === alert.id ? { ...a, resolved: true } : a
                             ));
                           }}
-                          className="text-xs text-gray-500 hover:text-gray-700"
+                          className="text-xs text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)]"
                         >
                           Resolve
                         </button>
@@ -653,8 +653,8 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
 
         {/* Detailed Metrics */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-3">System Performance Trends</h4>
-          <div className="h-64 bg-gray-50 rounded-lg p-4">
+          <h4 className="text-sm font-semibold text-[var(--foreground)] mb-3">System Performance Trends</h4>
+          <div className="h-64 bg-[var(--component-surface-primary)] rounded-lg p-4">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={metrics}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -712,20 +712,20 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
       </div>
 
       {/* Footer Summary */}
-      <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+      <div className="px-6 py-4 bg-[var(--component-surface-primary)] border-t border-[var(--glass-border-light)]">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
           <div>
-            <div className="text-sm text-gray-600">Uptime</div>
+            <div className="text-sm text-[var(--foreground-tertiary)]">Uptime</div>
             <div className="text-lg font-bold text-green-600">99.9%</div>
           </div>
           <div>
-            <div className="text-sm text-gray-600">Healthy Endpoints</div>
-            <div className="text-lg font-bold text-blue-600">
+            <div className="text-sm text-[var(--foreground-tertiary)]">Healthy Endpoints</div>
+            <div className="text-lg font-bold text-[var(--cardiology-accent-blue-dark)]">
               {endpoints.filter(e => e.status === 'healthy').length}/{endpoints.length}
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-600">Active Alerts</div>
+            <div className="text-sm text-[var(--foreground-tertiary)]">Active Alerts</div>
             <div className={`text-lg font-bold ${
               alerts.filter(a => !a.resolved).length > 0 ? 'text-red-600' : 'text-green-600'
             }`}>
@@ -733,8 +733,8 @@ export const SystemHealthDashboard: React.FC<SystemHealthDashboardProps> = ({
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-600">Last Check</div>
-            <div className="text-lg font-bold text-gray-900">
+            <div className="text-sm text-[var(--foreground-tertiary)]">Last Check</div>
+            <div className="text-lg font-bold text-[var(--foreground)]">
               {formatTimestamp(lastRefresh.toISOString())}
             </div>
           </div>

@@ -472,7 +472,7 @@ export const enhancedPrintPage = (): void => {
     @media print {
       .markdown-content h1 { page-break-before: always; }
       .markdown-content h2 { page-break-after: avoid; }
-      .evidence-level { background: #e0e7ff !important; }
+      .evidence-level { background: var(--selection-primary) !important; }
       .clinical-item { break-inside: avoid; }
       .table-container { break-inside: avoid; }
     }

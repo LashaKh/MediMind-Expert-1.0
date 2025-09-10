@@ -333,7 +333,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
       
       {/* Main Modal */}
       <div className={`
-        relative w-full max-w-4xl bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl
+        relative w-full max-w-4xl bg-[var(--component-card)]/95 backdrop-blur-xl rounded-3xl shadow-2xl
         transition-all duration-500 transform
         ${isOpen 
           ? 'scale-100 opacity-100 translate-y-0' 
@@ -350,13 +350,13 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className={`p-4 rounded-2xl bg-gradient-to-br ${specialtyConfig.gradient} shadow-lg`}>
-                <specialtyConfig.icon className="w-8 h-8 text-white" />
+                <specialtyConfig.icon className="w-8 h-8 text-[var(--foreground)]" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-1">
+                <h1 className="text-3xl font-bold text-[var(--foreground)] mb-1">
                   {editingCase ? 'Edit Case Study' : 'Create New Case'}
                 </h1>
-                <p className={`text-lg text-gray-600 bg-gradient-to-r ${specialtyConfig.gradient} bg-clip-text text-transparent font-medium`}>
+                <p className={`text-lg text-[var(--foreground-tertiary)] bg-gradient-to-r ${specialtyConfig.gradient} bg-clip-text text-transparent font-medium`}>
                   {specialtyConfig.title}
                 </p>
               </div>
@@ -366,7 +366,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
               onClick={onClose}
               variant="ghost"
               size="sm"
-              className="p-3 rounded-xl hover:bg-gray-100/80 transition-all duration-200 hover:scale-105"
+              className="p-3 rounded-xl hover:bg-[var(--component-surface-secondary)]/80 transition-all duration-200 hover:scale-105"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -380,8 +380,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   <div className={`
                     relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300
                     ${currentStep >= step.number
-                      ? `bg-gradient-to-r ${specialtyConfig.gradient} text-white shadow-lg`
-                      : 'bg-gray-100 text-gray-400'
+                      ? `bg-gradient-to-r ${specialtyConfig.gradient} text-[var(--foreground)] shadow-lg`
+                      : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-secondary)]'
                     }
                     ${completedSteps.includes(step.number) ? 'ring-4 ring-green-100' : ''}
                   `}>
@@ -396,18 +396,18 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   </div>
                   <div className="hidden md:block">
                     <h3 className={`font-semibold ${
-                      currentStep >= step.number ? 'text-gray-900' : 'text-gray-500'
+                      currentStep >= step.number ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)]'
                     }`}>
                       {step.title}
                     </h3>
-                    <p className="text-sm text-gray-500">{step.description}</p>
+                    <p className="text-sm text-[var(--foreground-secondary)]">{step.description}</p>
                   </div>
                 </div>
                 {index < steps.length - 1 && (
                   <div className={`flex-1 h-0.5 mx-4 transition-all duration-300 ${
                     currentStep > step.number 
                       ? `bg-gradient-to-r ${specialtyConfig.gradient}` 
-                      : 'bg-gray-200'
+                      : 'bg-[var(--component-surface-tertiary)]'
                   }`} />
                 )}
               </div>
@@ -422,13 +422,13 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
                 <Sparkles className={`w-16 h-16 mx-auto text-${specialtyConfig.accentColor}-500 mb-4`} />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Let's start with the basics</h2>
-                <p className="text-gray-600">Provide a clear title and brief overview of your case</p>
+                <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Let's start with the basics</h2>
+                <p className="text-[var(--foreground-tertiary)]">Provide a clear title and brief overview of your case</p>
               </div>
 
               <div className="space-y-6">
                 <div className="relative">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] mb-2">
                     Case Title *
                   </label>
                   <input
@@ -440,10 +440,10 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                       w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200
                       ${errors.title 
                         ? 'border-red-300 focus:border-red-500' 
-                        : 'border-gray-200 focus:border-blue-500'
+                        : 'border-[var(--glass-border-light)] focus:border-[var(--cardiology-accent-blue)]'
                       }
                       focus:outline-none focus:ring-4 focus:ring-blue-100
-                      text-lg bg-white/50 backdrop-blur-sm
+                      text-lg bg-[var(--component-card)]/50 backdrop-blur-sm
                     `}
                   />
                   {errors.title && (
@@ -455,9 +455,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                 </div>
 
                 <div className="relative">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] mb-2">
                     Brief Description *
-                    <span className="text-gray-500 font-normal ml-2">
+                    <span className="text-[var(--foreground-secondary)] font-normal ml-2">
                       ({formData.description.length}/1000 characters)
                     </span>
                   </label>
@@ -471,10 +471,10 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                       w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200 resize-y min-h-[200px]
                       ${errors.description 
                         ? 'border-red-300 focus:border-red-500' 
-                        : 'border-gray-200 focus:border-blue-500'
+                        : 'border-[var(--glass-border-light)] focus:border-[var(--cardiology-accent-blue)]'
                       }
                       focus:outline-none focus:ring-4 focus:ring-blue-100
-                      text-lg bg-white/50 backdrop-blur-sm leading-relaxed
+                      text-lg bg-[var(--component-card)]/50 backdrop-blur-sm leading-relaxed
                     `}
                   />
                   {errors.description && (
@@ -485,9 +485,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   )}
                   
                   {/* Character count and helpful tips */}
-                  <div className="mt-3 p-4 bg-blue-50/80 border border-blue-200/60 rounded-xl backdrop-blur-sm">
+                  <div className="mt-3 p-4 bg-[var(--cardiology-accent-blue-light)]/80 border border-blue-200/60 rounded-xl backdrop-blur-sm">
                     <div className="flex items-start space-x-3">
-                      <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <Info className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] mt-0.5 flex-shrink-0" />
                       <div className="flex-1">
                         <h4 className="font-medium text-blue-900 mb-2">Make your case description more effective:</h4>
                         <ul className="text-sm text-blue-800 space-y-1">
@@ -497,7 +497,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                           <li>• State your working diagnosis or differential</li>
                           <li>• Specify what guidance or discussion you're seeking</li>
                         </ul>
-                        <div className="mt-2 text-xs text-blue-600">
+                        <div className="mt-2 text-xs text-[var(--cardiology-accent-blue-dark)]">
                           {formData.description.length}/1000 characters
                         </div>
                       </div>
@@ -513,8 +513,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
                 <Shield className={`w-16 h-16 mx-auto text-${specialtyConfig.accentColor}-500 mb-4`} />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Patient Information</h2>
-                <p className="text-gray-600">Provide anonymized patient details for case discussion</p>
+                <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Patient Information</h2>
+                <p className="text-[var(--foreground-tertiary)]">Provide anonymized patient details for case discussion</p>
               </div>
 
               {/* Privacy Notice */}
@@ -538,9 +538,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
               </div>
 
               <div className="relative">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] mb-2">
                   Anonymized Patient Information *
-                  <span className="text-gray-500 font-normal ml-2">
+                  <span className="text-[var(--foreground-secondary)] font-normal ml-2">
                     ({formData.anonymizedInfo.length}/2000 characters, minimum 50)
                   </span>
                 </label>
@@ -554,10 +554,10 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                     w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200 resize-none
                     ${errors.anonymizedInfo 
                       ? 'border-red-300 focus:border-red-500' 
-                      : 'border-gray-200 focus:border-blue-500'
+                      : 'border-[var(--glass-border-light)] focus:border-[var(--cardiology-accent-blue)]'
                     }
                     focus:outline-none focus:ring-4 focus:ring-blue-100
-                    text-lg bg-white/50 backdrop-blur-sm
+                    text-lg bg-[var(--component-card)]/50 backdrop-blur-sm
                   `}
                 />
                 {errors.anonymizedInfo && (
@@ -570,11 +570,11 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                 {/* Character count indicator */}
                 <div className="flex justify-between items-center mt-2">
                   <div className={`text-sm ${
-                    formData.anonymizedInfo.length >= 50 ? 'text-green-600' : 'text-gray-500'
+                    formData.anonymizedInfo.length >= 50 ? 'text-green-600' : 'text-[var(--foreground-secondary)]'
                   }`}>
                     {formData.anonymizedInfo.length >= 50 ? '✓ Minimum length met' : `Need ${50 - formData.anonymizedInfo.length} more characters`}
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-[var(--foreground-secondary)]">
                     {formData.anonymizedInfo.length}/2000
                   </div>
                 </div>
@@ -587,8 +587,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
                 <Paperclip className={`w-16 h-16 mx-auto text-${specialtyConfig.accentColor}-500 mb-4`} />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Medical Documents</h2>
-                <p className="text-gray-600">Attach relevant medical files, images, and reports</p>
+                <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Medical Documents</h2>
+                <p className="text-[var(--foreground-tertiary)]">Attach relevant medical files, images, and reports</p>
               </div>
 
               <CaseFileUpload
@@ -600,14 +600,14 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
 
               {/* File Summary */}
               {attachments.length > 0 && (
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <div className="p-4 bg-[var(--cardiology-accent-blue-light)] border border-blue-200 rounded-xl">
                   <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-5 h-5 text-blue-600" />
+                    <CheckCircle className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                     <p className="text-sm font-medium text-blue-800">
                       {attachments.length} file{attachments.length > 1 ? 's' : ''} attached
                     </p>
                   </div>
-                  <p className="text-xs text-blue-600 mt-1">
+                  <p className="text-xs text-[var(--cardiology-accent-blue-dark)] mt-1">
                     These files will be analyzed to provide better context for your case discussion
                   </p>
                 </div>
@@ -620,18 +620,18 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
                 <Brain className={`w-16 h-16 mx-auto text-${specialtyConfig.accentColor}-500 mb-4`} />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Case Classification</h2>
-                <p className="text-gray-600">Help organize and prioritize your case</p>
+                <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">Case Classification</h2>
+                <p className="text-[var(--foreground-tertiary)]">Help organize and prioritize your case</p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] mb-3">
                     Category
                   </label>
                   <div className="space-y-2">
                     {specialtyConfig.categories.map((category) => (
-                      <label key={category.value} className="flex items-center p-4 rounded-xl border-2 border-gray-200 hover:border-blue-300 cursor-pointer transition-all duration-200 bg-white/50 backdrop-blur-sm">
+                      <label key={category.value} className="flex items-center p-4 rounded-xl border-2 border-[var(--glass-border-light)] hover:border-[var(--cardiology-accent-blue)] cursor-pointer transition-all duration-200 bg-[var(--component-card)]/50 backdrop-blur-sm">
                         <input
                           type="radio"
                           name="category"
@@ -640,14 +640,14 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                           onChange={handleInputChange('category')}
                           className="mr-3 w-4 h-4"
                         />
-                        <span className="font-medium text-gray-900">{category.label}</span>
+                        <span className="font-medium text-[var(--foreground)]">{category.label}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] mb-3">
                     Complexity Level *
                   </label>
                   <div className="space-y-2">
@@ -657,10 +657,10 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                       { value: 'high', label: 'High Complexity', description: 'Complex case, multiple specialties', color: 'red' }
                     ].map((complexity) => (
                       <label key={complexity.value} className={`
-                        flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 bg-white/50 backdrop-blur-sm
+                        flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 bg-[var(--component-card)]/50 backdrop-blur-sm
                         ${formData.complexity === complexity.value 
                           ? `border-${complexity.color}-400 bg-${complexity.color}-50` 
-                          : 'border-gray-200 hover:border-blue-300'
+                          : 'border-[var(--glass-border-light)] hover:border-[var(--cardiology-accent-blue)]'
                         }
                       `}>
                         <input
@@ -672,8 +672,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                           className="mr-3 w-4 h-4"
                         />
                         <div>
-                          <span className="font-medium block text-gray-900">{complexity.label}</span>
-                          <span className="text-sm text-gray-600">{complexity.description}</span>
+                          <span className="font-medium block text-[var(--foreground)]">{complexity.label}</span>
+                          <span className="text-sm text-[var(--foreground-tertiary)]">{complexity.description}</span>
                         </div>
                       </label>
                     ))}
@@ -688,7 +688,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] mb-2">
                   Tags (Optional)
                 </label>
                 <input
@@ -696,23 +696,23 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   value={formData.tags}
                   onChange={handleInputChange('tags')}
                   placeholder="hypertension, diabetes, emergency (comma-separated)"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 text-lg bg-white/50 backdrop-blur-sm transition-all duration-200"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-[var(--glass-border-light)] focus:border-[var(--cardiology-accent-blue)] focus:outline-none focus:ring-4 focus:ring-blue-100 text-lg bg-[var(--component-card)]/50 backdrop-blur-sm transition-all duration-200"
                 />
-                <p className="text-sm text-gray-500 mt-2">Add relevant keywords to help organize and find this case later</p>
+                <p className="text-sm text-[var(--foreground-secondary)] mt-2">Add relevant keywords to help organize and find this case later</p>
               </div>
             </div>
           )}
         </div>
 
         {/* Footer Actions */}
-        <div className="relative z-10 p-8 border-t border-white/20 bg-white/80 backdrop-blur-sm">
+        <div className="relative z-10 p-8 border-t border-white/20 bg-[var(--component-card)]/80 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               {currentStep > 1 && (
                 <Button
                   onClick={handlePrevious}
                   variant="outline"
-                  className="px-6 py-3 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200 text-gray-900"
+                  className="px-6 py-3 rounded-xl border-2 hover:bg-[var(--component-surface-primary)] transition-all duration-200 text-[var(--foreground)]"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Previous
@@ -724,7 +724,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
               {currentStep < 4 ? (
                 <Button
                   onClick={handleNext}
-                  className={`px-8 py-3 rounded-xl bg-gradient-to-r ${specialtyConfig.gradient} text-white hover:shadow-lg transform hover:scale-105 transition-all duration-200 [&]:text-white [&]:hover:text-white`}
+                  className={`px-8 py-3 rounded-xl bg-gradient-to-r ${specialtyConfig.gradient} text-[var(--foreground)] hover:shadow-lg transform hover:scale-105 transition-all duration-200 [&]:text-[var(--foreground)] [&]:hover:text-[var(--foreground)]`}
                 >
                   Next
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -733,9 +733,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className={`px-8 py-3 rounded-xl bg-gradient-to-r ${specialtyConfig.gradient} text-white hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                  className={`px-8 py-3 rounded-xl bg-gradient-to-r ${specialtyConfig.gradient} text-[var(--foreground)] hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                     isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                  } [&]:text-white [&]:hover:text-white`}
+                  } [&]:text-[var(--foreground)] [&]:hover:text-[var(--foreground)]`}
                 >
                   {isSubmitting ? (
                     <>

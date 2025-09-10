@@ -36,7 +36,7 @@
   
   /* Replace GPU-intensive effects with simple alternatives */
   .prismatic-glow {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: var(--shadow-primary) !important;
   }
   
   .floating-animation {
@@ -80,11 +80,11 @@
   @keyframes caseCardHover {
     from {
       transform: scale(1) translateY(0px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-secondary);
     }
     to {
       transform: scale(1.02) translateY(-8px);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      box-shadow: var(--shadow-glass-light);
     }
   }
 
@@ -658,15 +658,15 @@
 
 /* Gradient system for premium buttons */
 .gradient-luxury-purple {
-  background: linear-gradient(135deg, #8B5CF6, #A855F7, #C084FC, #E879F9);
+  background: var(--gradient-premium-purple);
 }
 
 .gradient-luxury-blue {
-  background: linear-gradient(135deg, #3B82F6, #6366F1, #8B5CF6, #A855F7);
+  background: var(--gradient-premium-purple);
 }
 
 .gradient-luxury-emerald {
-  background: linear-gradient(135deg, #10B981, #06B6D4, #3B82F6, #6366F1);
+  background: var(--gradient-premium-teal);
 }
 
 /* Responsive adjustments for premium elements */

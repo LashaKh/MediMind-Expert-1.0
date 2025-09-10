@@ -409,7 +409,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
       case 'low': return 'text-green-600';
       case 'intermediate': return 'text-yellow-600';
       case 'high': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-[var(--foreground-tertiary)]';
     }
   };
 
@@ -418,7 +418,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
       case 'low': return 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800';
       case 'intermediate': return 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800';
       case 'high': return 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800';
-      default: return 'bg-gray-50 border-gray-200 dark:bg-gray-900/20 dark:border-gray-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] dark:bg-[var(--background-dark)]/20 dark:border-gray-800';
     }
   };
 
@@ -428,7 +428,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
       case 'consider': return 'text-yellow-600';
       case 'reasonable': return 'text-orange-600';
       case 'indicated': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-[var(--foreground-tertiary)]';
     }
   };
 
@@ -452,12 +452,12 @@ export const HCMRiskSCDCalculator: React.FC = () => {
         {/* Sophisticated Progress System */}
         <div className="relative">
           {/* Main Progress Bar */}
-          <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2 mb-8 overflow-hidden">
+          <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--background)] rounded-full h-2 mb-8 overflow-hidden">
             <div 
               className="bg-gradient-to-r from-red-500 to-orange-500 h-2 rounded-full transition-all duration-700 ease-out relative"
               style={{ width: `${getStepProgress()}%` }}
             >
-              <div className="absolute inset-0 bg-white/20 animate-pulse rounded-full" />
+              <div className="absolute inset-0 bg-[var(--component-card)]/20 animate-pulse rounded-full" />
             </div>
           </div>
           
@@ -471,8 +471,8 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                 <div 
                   className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm relative transition-all duration-300 ${
                     currentStep >= step 
-                      ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-lg' 
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                      ? 'bg-gradient-to-r from-red-500 to-orange-500 text-[var(--foreground)] shadow-lg' 
+                      : 'bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                   }`}
                 >
                   {completedSteps.includes(step) && currentStep > step ? (
@@ -486,13 +486,13 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                 </div>
                 <div className="hidden sm:block">
                   <div className={`font-semibold text-sm ${
-                    currentStep >= step ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'
+                    currentStep >= step ? 'text-red-600 dark:text-red-400' : 'text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]'
                   }`}>
                     {step === 1 && 'Demographics'}
                     {step === 2 && 'Clinical Data'}
                     {step === 3 && 'Risk Factors'}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                  <div className="text-xs text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">
                     {step === 1 && 'Age & Measurements'}
                     {step === 2 && 'Echo Parameters'}
                     {step === 3 && 'SCD Risk Factors'}
@@ -521,13 +521,13 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                     <div className={`text-2xl font-bold ${getRiskColor(realTimeRisk)}`}>
                       {realTimeRisk.toFixed(1)}%
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {getRiskLevel(realTimeRisk)}
                     </div>
                   </div>
                 </div>
                 
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-2">
                   <div 
                     className={`h-2 rounded-full transition-all duration-500 ${
                       realTimeRisk < 4 ? 'bg-green-500' : 
@@ -547,7 +547,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
           <div className="relative">
             <div className="flex items-start space-x-6">
               <div className="p-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl shadow-lg">
-                <Zap className="w-8 h-8 text-white" />
+                <Zap className="w-8 h-8 text-[var(--foreground)]" />
               </div>
               <div className="flex-1">
                 <h4 className="text-2xl font-bold bg-gradient-to-r from-red-700 to-orange-700 bg-clip-text text-transparent mb-3">
@@ -584,13 +584,13 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                 <div className="text-center mb-12">
                   <div className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-red-50/90 to-orange-50/90 dark:from-red-900/30 dark:to-orange-900/30 rounded-3xl border-2 border-red-200/50 dark:border-red-800/50 backdrop-blur-sm">
                     <div className="p-3 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl shadow-lg">
-                      <User className="w-8 h-8 text-white" />
+                      <User className="w-8 h-8 text-[var(--foreground)]" />
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold bg-gradient-to-r from-red-700 to-orange-700 bg-clip-text text-transparent">
                         {t('calculators.hcm_risk_scd.demographics')}
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                         {t('calculators.hcm_risk_scd.demographics_info')}
                       </p>
                     </div>
@@ -612,8 +612,8 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                           <User className="w-5 h-5 text-red-600 dark:text-red-400" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">Patient Age</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Age at evaluation</p>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Patient Age</h4>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Age at evaluation</p>
                         </div>
                       </div>
                       <CalculatorInput
@@ -644,8 +644,8 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                           <Heart className="w-5 h-5 text-red-600 dark:text-red-400" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">Max Wall Thickness</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Greatest LV thickness</p>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Max Wall Thickness</h4>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Greatest LV thickness</p>
                         </div>
                       </div>
                       <CalculatorInput
@@ -677,8 +677,8 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                           <Activity className="w-5 h-5 text-red-600 dark:text-red-400" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">Left Atrial Diameter</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Parasternal long axis</p>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Left Atrial Diameter</h4>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Parasternal long axis</p>
                         </div>
                       </div>
                       <CalculatorInput
@@ -710,8 +710,8 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                           <TrendingUp className="w-5 h-5 text-red-600 dark:text-red-400" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">Max LVOT Gradient</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Peak outflow tract gradient</p>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Max LVOT Gradient</h4>
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Peak outflow tract gradient</p>
                         </div>
                       </div>
                       <CalculatorInput
@@ -736,7 +736,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                   <div className="relative">
                     <div className="flex items-center space-x-4 mb-6">
                       <div className="p-3 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl">
-                        <Info className="w-6 h-6 text-white" />
+                        <Info className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <div>
                         <h4 className="text-xl font-bold text-red-800 dark:text-red-200">
@@ -746,21 +746,21 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                       </div>
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-                      <div className="bg-white/50 dark:bg-gray-800/50 p-4 rounded-2xl backdrop-blur-sm">
+                      <div className="bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 p-4 rounded-2xl backdrop-blur-sm">
                         <div className="flex items-center space-x-2 mb-2">
                           <Calendar className="w-4 h-4 text-red-600 dark:text-red-400" />
                           <span className="font-semibold text-red-800 dark:text-red-200">Age Range</span>
                         </div>
                         <p className="text-sm text-red-700 dark:text-red-300">{t('calculators.hcm_risk_scd.age_range_info')}</p>
                       </div>
-                      <div className="bg-white/50 dark:bg-gray-800/50 p-4 rounded-2xl backdrop-blur-sm">
+                      <div className="bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 p-4 rounded-2xl backdrop-blur-sm">
                         <div className="flex items-center space-x-2 mb-2">
                           <Heart className="w-4 h-4 text-red-600 dark:text-red-400" />
                           <span className="font-semibold text-red-800 dark:text-red-200">Diagnosis</span>
                         </div>
                         <p className="text-sm text-red-700 dark:text-red-300">{t('calculators.hcm_risk_scd.diagnosis_required')}</p>
                       </div>
-                      <div className="bg-white/50 dark:bg-gray-800/50 p-4 rounded-2xl backdrop-blur-sm">
+                      <div className="bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 p-4 rounded-2xl backdrop-blur-sm">
                         <div className="flex items-center space-x-2 mb-2">
                           <Shield className="w-4 h-4 text-red-600 dark:text-red-400" />
                           <span className="font-semibold text-red-800 dark:text-red-200">Prevention</span>
@@ -792,13 +792,13 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                 <div className="text-center mb-12">
                   <div className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-orange-50/90 to-yellow-50/90 dark:from-orange-900/30 dark:to-yellow-900/30 rounded-3xl border-2 border-orange-200/50 dark:border-orange-800/50 backdrop-blur-sm">
                     <div className="p-3 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl shadow-lg">
-                      <AlertTriangle className="w-8 h-8 text-white" />
+                      <AlertTriangle className="w-8 h-8 text-[var(--foreground)]" />
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-700 to-yellow-700 bg-clip-text text-transparent">
                         {t('calculators.hcm_risk_scd.risk_factors')}
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                         {t('calculators.hcm_risk_scd.risk_factors_info')}
                       </p>
                     </div>
@@ -811,13 +811,13 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                   <div className="space-y-6">
                     <div className="flex items-center space-x-3 mb-6">
                       <div className="p-3 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl shadow-lg">
-                        <Heart className="w-6 h-6 text-white" />
+                        <Heart className="w-6 h-6 text-[var(--foreground)]" />
                       </div>
                       <div>
-                        <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                        <h4 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">
                           {t('calculators.hcm_risk_scd.traditional_risk_factors')}
                         </h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Clinical risk indicators</p>
+                        <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Clinical risk indicators</p>
                       </div>
                     </div>
 
@@ -872,7 +872,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                     <div className="relative">
                       <div className="flex items-center space-x-4 mb-6">
                         <div className="p-3 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl">
-                          <Shield className="w-6 h-6 text-white" />
+                          <Shield className="w-6 h-6 text-[var(--foreground)]" />
                         </div>
                         <div>
                           <h4 className="text-xl font-bold text-orange-800 dark:text-orange-200">
@@ -883,7 +883,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                       </div>
                       
                       <div className="space-y-4">
-                        <div className="bg-white/50 dark:bg-gray-800/50 p-4 rounded-2xl backdrop-blur-sm">
+                        <div className="bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 p-4 rounded-2xl backdrop-blur-sm">
                           <div className="flex items-center space-x-2 mb-2">
                             <Heart className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                             <span className="font-semibold text-orange-800 dark:text-orange-200">Family History</span>
@@ -891,7 +891,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                           <p className="text-sm text-orange-700 dark:text-orange-300">{t('calculators.hcm_risk_scd.family_history_info')}</p>
                         </div>
                         
-                        <div className="bg-white/50 dark:bg-gray-800/50 p-4 rounded-2xl backdrop-blur-sm">
+                        <div className="bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 p-4 rounded-2xl backdrop-blur-sm">
                           <div className="flex items-center space-x-2 mb-2">
                             <Zap className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                             <span className="font-semibold text-orange-800 dark:text-orange-200">Non-sustained VT</span>
@@ -899,7 +899,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                           <p className="text-sm text-orange-700 dark:text-orange-300">{t('calculators.hcm_risk_scd.nsvt_info')}</p>
                         </div>
                         
-                        <div className="bg-white/50 dark:bg-gray-800/50 p-4 rounded-2xl backdrop-blur-sm">
+                        <div className="bg-[var(--component-card)]/50 dark:bg-[var(--background)]/50 p-4 rounded-2xl backdrop-blur-sm">
                           <div className="flex items-center space-x-2 mb-2">
                             <Brain className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                             <span className="font-semibold text-orange-800 dark:text-orange-200">Unexplained Syncope</span>
@@ -939,13 +939,13 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                 <div className="text-center mb-12">
                   <div className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-purple-50/90 to-red-50/90 dark:from-purple-900/30 dark:to-red-900/30 rounded-3xl border-2 border-purple-200/50 dark:border-purple-800/50 backdrop-blur-sm">
                     <div className="p-3 bg-gradient-to-r from-purple-500 to-red-500 rounded-2xl shadow-lg">
-                      <Calculator className="w-8 h-8 text-white" />
+                      <Calculator className="w-8 h-8 text-[var(--foreground)]" />
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-700 to-red-700 bg-clip-text text-transparent">
                         Calculate Risk Score
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                         Final HCM Risk-SCD assessment
                       </p>
                     </div>
@@ -958,7 +958,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                   <div className="relative">
                     <div className="flex items-center space-x-4 mb-8">
                       <div className="p-4 bg-gradient-to-r from-purple-500 to-red-500 rounded-2xl shadow-lg">
-                        <Eye className="w-8 h-8 text-white" />
+                        <Eye className="w-8 h-8 text-[var(--foreground)]" />
                       </div>
                       <div>
                         <h4 className="text-2xl font-bold text-purple-800 dark:text-purple-200">
@@ -971,33 +971,33 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       {/* Patient Data Summary */}
                       <div className="space-y-4">
-                        <h5 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+                        <h5 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
                           <User className="w-5 h-5 text-purple-600" />
                           <span>Patient Demographics</span>
                         </h5>
                         <div className="space-y-3">
-                          <div className="flex justify-between items-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-xl backdrop-blur-sm">
-                            <span className="text-gray-600 dark:text-gray-400">Age</span>
-                            <span className="font-semibold text-gray-900 dark:text-gray-100">{formData.age} years</span>
+                          <div className="flex justify-between items-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-xl backdrop-blur-sm">
+                            <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Age</span>
+                            <span className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{formData.age} years</span>
                           </div>
-                          <div className="flex justify-between items-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-xl backdrop-blur-sm">
-                            <span className="text-gray-600 dark:text-gray-400">Max Wall Thickness</span>
-                            <span className="font-semibold text-gray-900 dark:text-gray-100">{formData.maxWallThickness} mm</span>
+                          <div className="flex justify-between items-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-xl backdrop-blur-sm">
+                            <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Max Wall Thickness</span>
+                            <span className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{formData.maxWallThickness} mm</span>
                           </div>
-                          <div className="flex justify-between items-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-xl backdrop-blur-sm">
-                            <span className="text-gray-600 dark:text-gray-400">LA Diameter</span>
-                            <span className="font-semibold text-gray-900 dark:text-gray-100">{formData.leftAtrialDiameter} mm</span>
+                          <div className="flex justify-between items-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-xl backdrop-blur-sm">
+                            <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">LA Diameter</span>
+                            <span className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{formData.leftAtrialDiameter} mm</span>
                           </div>
-                          <div className="flex justify-between items-center p-3 bg-white/60 dark:bg-gray-800/60 rounded-xl backdrop-blur-sm">
-                            <span className="text-gray-600 dark:text-gray-400">LVOT Gradient</span>
-                            <span className="font-semibold text-gray-900 dark:text-gray-100">{formData.maxLVOTGradient} mmHg</span>
+                          <div className="flex justify-between items-center p-3 bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 rounded-xl backdrop-blur-sm">
+                            <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">LVOT Gradient</span>
+                            <span className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{formData.maxLVOTGradient} mmHg</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Risk Factors Summary */}
                       <div className="space-y-4">
-                        <h5 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+                        <h5 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)] flex items-center space-x-2">
                           <AlertTriangle className="w-5 h-5 text-red-600" />
                           <span>Risk Factors Present</span>
                         </h5>
@@ -1007,7 +1007,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                               ? 'bg-red-50/80 dark:bg-red-900/20' 
                               : 'bg-green-50/80 dark:bg-green-900/20'
                           }`}>
-                            <span className="text-gray-600 dark:text-gray-400">Family History SCD</span>
+                            <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Family History SCD</span>
                             <span className={`font-semibold ${
                               formData.familyHistorySCD ? 'text-red-600' : 'text-green-600'
                             }`}>
@@ -1019,7 +1019,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                               ? 'bg-red-50/80 dark:bg-red-900/20' 
                               : 'bg-green-50/80 dark:bg-green-900/20'
                           }`}>
-                            <span className="text-gray-600 dark:text-gray-400">Non-sustained VT</span>
+                            <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Non-sustained VT</span>
                             <span className={`font-semibold ${
                               formData.nonSustainedVT ? 'text-red-600' : 'text-green-600'
                             }`}>
@@ -1031,7 +1031,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                               ? 'bg-red-50/80 dark:bg-red-900/20' 
                               : 'bg-green-50/80 dark:bg-green-900/20'
                           }`}>
-                            <span className="text-gray-600 dark:text-gray-400">Unexplained Syncope</span>
+                            <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Unexplained Syncope</span>
                             <span className={`font-semibold ${
                               formData.unexplainedSyncope ? 'text-red-600' : 'text-green-600'
                             }`}>
@@ -1123,13 +1123,13 @@ export const HCMRiskSCDCalculator: React.FC = () => {
               <div className="text-center mb-16">
                 <div className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-red-50/90 to-purple-50/90 dark:from-red-900/30 dark:to-purple-900/30 rounded-3xl border-2 border-red-200/50 dark:border-red-800/50 backdrop-blur-sm mb-8">
                   <div className="p-4 bg-gradient-to-r from-red-500 to-purple-500 rounded-2xl shadow-lg">
-                    <Zap className="w-10 h-10 text-white" />
+                    <Zap className="w-10 h-10 text-[var(--foreground)]" />
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold bg-gradient-to-r from-red-700 to-purple-700 bg-clip-text text-transparent">
                       HCM Risk-SCD Assessment Complete
                     </h2>
-                    <p className="text-lg text-gray-600 dark:text-gray-400 mt-1">
+                    <p className="text-lg text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                       Evidence-based sudden cardiac death risk analysis
                     </p>
                   </div>
@@ -1148,7 +1148,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
                       <AlertCircle className="w-5 h-5 text-yellow-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.hcm_risk_scd.exclusion_present')}</h4>
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_risk_scd.exclusion_present')}</h4>
                     </div>
                     <div className="p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
                       <ul className="space-y-2">
@@ -1163,15 +1163,15 @@ export const HCMRiskSCDCalculator: React.FC = () => {
 
                     <div className="space-y-4">
                       <div className="flex items-center space-x-3">
-                        <Stethoscope className="w-5 h-5 text-blue-500" />
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.hcm_risk_scd.management_recommendations')}</h4>
+                        <Stethoscope className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_risk_scd.management_recommendations')}</h4>
                       </div>
-                      <div className="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+                      <div className="p-6 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-xl">
                         <div className="space-y-3">
                           {result.recommendations.map((rec, index) => (
                             <div key={index} className="flex items-start space-x-2">
-                              <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                              <p className="text-sm text-blue-700 dark:text-blue-300">{rec}</p>
+                              <div className="w-2 h-2 bg-[var(--cardiology-accent-blue-dark)] rounded-full mt-2 flex-shrink-0"></div>
+                              <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">{rec}</p>
                             </div>
                           ))}
                         </div>
@@ -1201,7 +1201,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                                   fill="none"
                                   stroke="currentColor"
                                   strokeWidth="20"
-                                  className="text-gray-200 dark:text-gray-700"
+                                  className="text-[var(--foreground)] dark:text-[var(--foreground-tertiary)]"
                                 />
                                 
                                 {/* Animated Risk Arc */}
@@ -1250,7 +1250,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                                   }`}>
                                     {result.fiveYearRisk}%
                                   </div>
-                                  <div className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                                  <div className="text-xl font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-1">
                                     5-Year SCD Risk
                                   </div>
                                   <div className={`px-4 py-2 rounded-full text-sm font-bold ${
@@ -1265,33 +1265,33 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                               
                               {/* Animated Needle */}
                               <div 
-                                className="absolute top-1/2 left-1/2 w-1 bg-gray-800 dark:bg-gray-200 origin-bottom transition-transform duration-2000 ease-out"
+                                className="absolute top-1/2 left-1/2 w-1 bg-[var(--background)] dark:bg-[var(--component-surface-tertiary)] origin-bottom transition-transform duration-2000 ease-out"
                                 style={{
                                   height: '120px',
                                   transform: `translate(-50%, -100%) rotate(${-90 + (result.fiveYearRisk / 25) * 180}deg)`,
                                   transformOrigin: 'bottom center'
                                 }}
                               >
-                                <div className="w-3 h-3 bg-gray-800 dark:bg-gray-200 rounded-full absolute -top-1 -left-1" />
+                                <div className="w-3 h-3 bg-[var(--background)] dark:bg-[var(--component-surface-tertiary)] rounded-full absolute -top-1 -left-1" />
                               </div>
                               
                               {/* Center Dot */}
-                              <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-gray-800 dark:bg-gray-200 rounded-full transform -translate-x-1/2 -translate-y-1/2 z-10" />
+                              <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-[var(--background)] dark:bg-[var(--component-surface-tertiary)] rounded-full transform -translate-x-1/2 -translate-y-1/2 z-10" />
                             </div>
                             
                             {/* Risk Scale Labels */}
                             <div className="flex justify-between mt-6 px-8">
                               <div className="text-center">
                                 <div className="text-green-600 font-bold">0%</div>
-                                <div className="text-xs text-gray-500">Low</div>
+                                <div className="text-xs text-[var(--foreground-secondary)]">Low</div>
                               </div>
                               <div className="text-center">
                                 <div className="text-yellow-600 font-bold">4%</div>
-                                <div className="text-xs text-gray-500">Intermediate</div>
+                                <div className="text-xs text-[var(--foreground-secondary)]">Intermediate</div>
                               </div>
                               <div className="text-center">
                                 <div className="text-red-600 font-bold">6%+</div>
-                                <div className="text-xs text-gray-500">High</div>
+                                <div className="text-xs text-[var(--foreground-secondary)]">High</div>
                               </div>
                             </div>
                           </div>
@@ -1300,10 +1300,10 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                         {/* ICD Recommendation Card */}
                         <div className="flex-1 space-y-6">
                           <div className="text-center lg:text-left">
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                            <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">
                               ICD Recommendation
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400">
+                            <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                               Based on HCM Risk-SCD assessment
                             </p>
                           </div>
@@ -1335,13 +1335,13 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                                      result.icdRecommendation === 'reasonable' ? 'Reasonable' :
                                      'Indicated'}
                                   </div>
-                                  <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                  <div className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                                     {result.icdRecommendation === 'consider' ? 'Shared Decision-Making' : 'ICD for Primary Prevention'}
                                   </div>
                                 </div>
                               </div>
                               
-                              <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                              <div className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
                                 {result.interpretation}
                               </div>
                             </div>
@@ -1354,13 +1354,13 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3 mb-4">
                       <Target className="w-5 h-5 text-red-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.hcm_risk_scd.five_year_risk_title')}</h4>
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_risk_scd.five_year_risk_title')}</h4>
                     </div>
                     <div className="p-6 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/30 rounded-2xl border border-red-200 dark:border-red-800">
                       <div className="text-center">
                         <div className="text-4xl font-bold text-red-600 dark:text-red-400 mb-2">{result.fiveYearRisk}%</div>
                         <div className="text-lg text-red-700 dark:text-red-300 mb-3">{t('calculators.hcm_risk_scd.five_year_risk')}</div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                        <div className="w-full bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-3">
                           <div 
                             className="bg-red-500 h-3 rounded-full transition-all duration-1000"
                             style={{ width: `${Math.min(result.fiveYearRisk * 4, 100)}%` }}
@@ -1373,8 +1373,8 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                   {/* ICD Recommendation */}
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
-                      <Zap className="w-5 h-5 text-blue-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.hcm_risk_scd.icd_recommendation_title')}</h4>
+                      <Zap className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.hcm_risk_scd.icd_recommendation_title')}</h4>
                     </div>
                     <div className={`p-6 rounded-2xl border-2 ${
                       result.icdRecommendation === 'not_indicated' ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' :
@@ -1389,7 +1389,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                            result.icdRecommendation === 'reasonable' ? 'Reasonable' :
                            'Indicated'}
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">{t('calculators.hcm_risk_scd.based_on_guidelines')}</p>
+                        <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.hcm_risk_scd.based_on_guidelines')}</p>
                       </div>
                     </div>
                   </div>
@@ -1400,7 +1400,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                     <div className="relative">
                       <div className="flex items-center space-x-4 mb-10">
                         <div className="p-4 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl shadow-lg">
-                          <Shield className="w-8 h-8 text-white" />
+                          <Shield className="w-8 h-8 text-[var(--foreground)]" />
                         </div>
                         <div>
                           <h4 className="text-2xl font-bold bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
@@ -1549,7 +1549,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                     <div className="relative">
                       <div className="flex items-center space-x-4 mb-10">
                         <div className="p-4 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
-                          <Stethoscope className="w-8 h-8 text-white" />
+                          <Stethoscope className="w-8 h-8 text-[var(--foreground)]" />
                         </div>
                         <div>
                           <h4 className="text-2xl font-bold bg-gradient-to-r from-indigo-700 to-blue-700 bg-clip-text text-transparent">
@@ -1564,7 +1564,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                         <div className="space-y-6">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
-                              <Target className="w-6 h-6 text-white" />
+                              <Target className="w-6 h-6 text-[var(--foreground)]" />
                             </div>
                             <div>
                               <h5 className="text-xl font-bold text-indigo-800 dark:text-indigo-200">Primary Actions</h5>
@@ -1574,15 +1574,15 @@ export const HCMRiskSCDCalculator: React.FC = () => {
 
                           <div className="space-y-4">
                             {result.recommendations.slice(0, Math.ceil(result.recommendations.length / 2)).map((rec, index) => (
-                              <div key={index} className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-indigo-200/30 dark:border-indigo-800/30 hover:bg-white dark:hover:bg-gray-800 transition-all duration-300">
+                              <div key={index} className="group bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 backdrop-blur-sm rounded-2xl p-6 border border-indigo-200/30 dark:border-indigo-800/30 hover:bg-[var(--component-card)] dark:hover:bg-[var(--background)] transition-all duration-300">
                                 <div className="flex items-start space-x-4">
                                   <div className="flex-shrink-0 mt-1">
                                     <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full flex items-center justify-center">
-                                      <span className="text-white font-bold text-sm">{index + 1}</span>
+                                      <span className="text-[var(--foreground)] font-bold text-sm">{index + 1}</span>
                                     </div>
                                   </div>
                                   <div className="flex-1">
-                                    <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-medium">
+                                    <p className="text-sm text-[var(--foreground)] dark:text-[var(--foreground)] leading-relaxed font-medium">
                                       {rec}
                                     </p>
                                   </div>
@@ -1599,30 +1599,30 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                         <div className="space-y-6">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl shadow-lg">
-                              <Layers className="w-6 h-6 text-white" />
+                              <Layers className="w-6 h-6 text-[var(--foreground)]" />
                             </div>
                             <div>
                               <h5 className="text-xl font-bold text-blue-800 dark:text-blue-200">Follow-up Care</h5>
-                              <p className="text-sm text-blue-600 dark:text-blue-400">Ongoing management strategies</p>
+                              <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">Ongoing management strategies</p>
                             </div>
                           </div>
 
                           <div className="space-y-4">
                             {result.recommendations.slice(Math.ceil(result.recommendations.length / 2)).map((rec, index) => (
-                              <div key={index} className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-200/30 dark:border-blue-800/30 hover:bg-white dark:hover:bg-gray-800 transition-all duration-300">
+                              <div key={index} className="group bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-200/30 dark:border-blue-800/30 hover:bg-[var(--component-card)] dark:hover:bg-[var(--background)] transition-all duration-300">
                                 <div className="flex items-start space-x-4">
                                   <div className="flex-shrink-0 mt-1">
                                     <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
-                                      <span className="text-white font-bold text-sm">{Math.ceil(result.recommendations.length / 2) + index + 1}</span>
+                                      <span className="text-[var(--foreground)] font-bold text-sm">{Math.ceil(result.recommendations.length / 2) + index + 1}</span>
                                     </div>
                                   </div>
                                   <div className="flex-1">
-                                    <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-medium">
+                                    <p className="text-sm text-[var(--foreground)] dark:text-[var(--foreground)] leading-relaxed font-medium">
                                       {rec}
                                     </p>
                                   </div>
                                   <div className="flex-shrink-0">
-                                    <Clock className="w-5 h-5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <Clock className="w-5 h-5 text-[var(--cardiology-accent-blue)] opacity-0 group-hover:opacity-100 transition-opacity" />
                                   </div>
                                 </div>
                               </div>
@@ -1679,7 +1679,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                     <div className="relative">
                       <div className="flex items-center space-x-4 mb-10">
                         <div className="p-4 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl shadow-lg">
-                          <Award className="w-8 h-8 text-white" />
+                          <Award className="w-8 h-8 text-[var(--foreground)]" />
                         </div>
                         <div>
                           <h4 className="text-2xl font-bold bg-gradient-to-r from-emerald-700 to-teal-700 bg-clip-text text-transparent">
@@ -1692,10 +1692,10 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {/* Validation Metrics */}
                         <div className="space-y-6">
-                          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl p-6 border border-emerald-200/30 dark:border-emerald-800/30">
+                          <div className="bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 backdrop-blur-sm rounded-3xl p-6 border border-emerald-200/30 dark:border-emerald-800/30">
                             <div className="flex items-center space-x-3 mb-4">
                               <div className="p-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl">
-                                <TrendingUp className="w-6 h-6 text-white" />
+                                <TrendingUp className="w-6 h-6 text-[var(--foreground)]" />
                               </div>
                               <div>
                                 <h5 className="text-lg font-bold text-emerald-800 dark:text-emerald-200">Validation Statistics</h5>
@@ -1704,32 +1704,32 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                             </div>
                             <div className="space-y-4">
                               <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-700 dark:text-gray-300">C-Index</span>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">C-Index</span>
                                 <div className="flex items-center space-x-2">
-                                  <div className="w-24 h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                  <div className="w-24 h-2 bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full">
                                     <div className="w-[70%] h-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"></div>
                                   </div>
                                   <span className="text-sm font-bold text-emerald-600">0.70</span>
                                 </div>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-700 dark:text-gray-300">Calibration</span>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Calibration</span>
                                 <div className="flex items-center space-x-2">
                                   <CheckCircle className="w-4 h-4 text-emerald-500" />
                                   <span className="text-sm font-bold text-emerald-600">Excellent</span>
                                 </div>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-700 dark:text-gray-300">Cohort Size</span>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Cohort Size</span>
                                 <span className="text-sm font-bold text-emerald-600">3,675 patients</span>
                               </div>
                             </div>
                           </div>
 
-                          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl p-6 border border-teal-200/30 dark:border-teal-800/30">
+                          <div className="bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 backdrop-blur-sm rounded-3xl p-6 border border-teal-200/30 dark:border-teal-800/30">
                             <div className="flex items-center space-x-3 mb-4">
                               <div className="p-3 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-2xl">
-                                <Globe className="w-6 h-6 text-white" />
+                                <Globe className="w-6 h-6 text-[var(--foreground)]" />
                               </div>
                               <div>
                                 <h5 className="text-lg font-bold text-teal-800 dark:text-teal-200">International Validation</h5>
@@ -1739,15 +1739,15 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                             <div className="space-y-3">
                               <div className="flex items-center space-x-2">
                                 <CheckCircle className="w-4 h-4 text-teal-500" />
-                                <span className="text-sm text-gray-700 dark:text-gray-300">European cohorts</span>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">European cohorts</span>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <CheckCircle className="w-4 h-4 text-teal-500" />
-                                <span className="text-sm text-gray-700 dark:text-gray-300">US cohorts</span>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">US cohorts</span>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <CheckCircle className="w-4 h-4 text-teal-500" />
-                                <span className="text-sm text-gray-700 dark:text-gray-300">Asian cohorts</span>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Asian cohorts</span>
                               </div>
                             </div>
                           </div>
@@ -1755,36 +1755,36 @@ export const HCMRiskSCDCalculator: React.FC = () => {
 
                         {/* Clinical Guidelines */}
                         <div className="space-y-6">
-                          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl p-6 border border-blue-200/30 dark:border-blue-800/30">
+                          <div className="bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 backdrop-blur-sm rounded-3xl p-6 border border-blue-200/30 dark:border-blue-800/30">
                             <div className="flex items-center space-x-3 mb-4">
                               <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl">
-                                <BookOpen className="w-6 h-6 text-white" />
+                                <BookOpen className="w-6 h-6 text-[var(--foreground)]" />
                               </div>
                               <div>
                                 <h5 className="text-lg font-bold text-blue-800 dark:text-blue-200">Guideline Endorsements</h5>
-                                <p className="text-sm text-blue-600 dark:text-blue-400">Professional society recommendations</p>
+                                <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">Professional society recommendations</p>
                               </div>
                             </div>
                             <div className="space-y-3">
                               <div className="flex items-center space-x-2">
-                                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                                <span className="text-sm text-gray-700 dark:text-gray-300">2014 ESC HCM Guidelines</span>
+                                <div className="w-3 h-3 bg-[var(--cardiology-accent-blue)] rounded-full"></div>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">2014 ESC HCM Guidelines</span>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                                <span className="text-sm text-gray-700 dark:text-gray-300">2022 ESC VA/SCD Guidelines</span>
+                                <div className="w-3 h-3 bg-[var(--cardiology-accent-blue)] rounded-full"></div>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">2022 ESC VA/SCD Guidelines</span>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                                <span className="text-sm text-gray-700 dark:text-gray-300">2020 AHA/ACC HCM Guidelines</span>
+                                <div className="w-3 h-3 bg-[var(--cardiology-accent-blue)] rounded-full"></div>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">2020 AHA/ACC HCM Guidelines</span>
                               </div>
                             </div>
                           </div>
 
-                          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl p-6 border border-purple-200/30 dark:border-purple-800/30">
+                          <div className="bg-[var(--component-card)]/70 dark:bg-[var(--background)]/70 backdrop-blur-sm rounded-3xl p-6 border border-purple-200/30 dark:border-purple-800/30">
                             <div className="flex items-center space-x-3 mb-4">
                               <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl">
-                                <Zap className="w-6 h-6 text-white" />
+                                <Zap className="w-6 h-6 text-[var(--foreground)]" />
                               </div>
                               <div>
                                 <h5 className="text-lg font-bold text-purple-800 dark:text-purple-200">Clinical Impact</h5>
@@ -1793,7 +1793,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                             </div>
                             <div className="space-y-3">
                               <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-700 dark:text-gray-300">ICD Decision Support</span>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">ICD Decision Support</span>
                                 <div className="flex items-center space-x-1">
                                   <Star className="w-4 h-4 text-yellow-500 fill-current" />
                                   <Star className="w-4 h-4 text-yellow-500 fill-current" />
@@ -1803,11 +1803,11 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                                 </div>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-700 dark:text-gray-300">Clinical Adoption</span>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Clinical Adoption</span>
                                 <span className="text-sm font-bold text-purple-600">Worldwide</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-700 dark:text-gray-300">Evidence Grade</span>
+                                <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">Evidence Grade</span>
                                 <div className="inline-flex items-center space-x-1 bg-purple-100 dark:bg-purple-900/30 rounded-full px-3 py-1">
                                   <span className="text-sm font-bold text-purple-600">Class I</span>
                                 </div>
@@ -1822,7 +1822,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
                             <div className="p-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl">
-                              <CheckCircle className="w-6 h-6 text-white" />
+                              <CheckCircle className="w-6 h-6 text-[var(--foreground)]" />
                             </div>
                             <div>
                               <div className="text-xl font-bold text-emerald-800 dark:text-emerald-200">Clinically Validated Algorithm</div>
@@ -1846,7 +1846,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                     <div className="relative">
                       <div className="flex items-center space-x-4 mb-10">
                         <div className="p-4 bg-gradient-to-r from-violet-500 to-purple-500 rounded-2xl shadow-lg">
-                          <FileText className="w-8 h-8 text-white" />
+                          <FileText className="w-8 h-8 text-[var(--foreground)]" />
                         </div>
                         <div>
                           <h4 className="text-2xl font-bold bg-gradient-to-r from-violet-700 to-purple-700 bg-clip-text text-transparent">
@@ -1859,10 +1859,10 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                       {/* Formula Architecture */}
                       <div className="space-y-8">
                         {/* Variables & Scoring */}
-                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-violet-200/50 dark:border-violet-800/50">
+                        <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm rounded-3xl p-8 border border-violet-200/50 dark:border-violet-800/50">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-r from-violet-500 to-purple-500 rounded-2xl">
-                              <Calculator className="w-6 h-6 text-white" />
+                              <Calculator className="w-6 h-6 text-[var(--foreground)]" />
                             </div>
                             <div>
                               <h5 className="text-xl font-bold text-violet-800 dark:text-violet-200">Variables & Scoring</h5>
@@ -1884,7 +1884,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                                 <div className="flex items-start space-x-4">
                                   <div className="flex-shrink-0 mt-1">
                                     <div className="w-8 h-8 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full flex items-center justify-center">
-                                      <span className="text-white font-bold text-sm">{index + 1}</span>
+                                      <span className="text-[var(--foreground)] font-bold text-sm">{index + 1}</span>
                                     </div>
                                   </div>
                                   <div className="flex-1">
@@ -1898,24 +1898,24 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                         </div>
 
                         {/* Formula Display */}
-                        <div className="bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-900/50 dark:to-gray-900/50 backdrop-blur-sm rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50">
+                        <div className="bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-900/50 dark:to-gray-900/50 backdrop-blur-sm rounded-3xl p-8 border border-[var(--glass-border-light)]/50 dark:border-slate-800/50">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-r from-slate-600 to-gray-600 rounded-2xl">
-                              <Lightbulb className="w-6 h-6 text-white" />
+                              <Lightbulb className="w-6 h-6 text-[var(--foreground)]" />
                             </div>
                             <div>
-                              <h5 className="text-xl font-bold text-slate-800 dark:text-slate-200">Mathematical Formula</h5>
-                              <p className="text-sm text-slate-600 dark:text-slate-400">Prognostic index and risk calculation</p>
+                              <h5 className="text-xl font-bold text-[var(--foreground)] dark:text-slate-200">Mathematical Formula</h5>
+                              <p className="text-sm text-[var(--foreground-tertiary)] dark:text-slate-400">Prognostic index and risk calculation</p>
                             </div>
                           </div>
 
                           <div className="space-y-6">
-                            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800/50">
+                            <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-2xl p-6 border border-[var(--glass-border-light)]/50 dark:border-slate-800/50">
                               <div className="flex items-center space-x-2 mb-4">
                                 <div className="w-3 h-3 bg-violet-500 rounded-full"></div>
-                                <div className="font-bold text-slate-800 dark:text-slate-200">Prognostic Index Formula</div>
+                                <div className="font-bold text-[var(--foreground)] dark:text-slate-200">Prognostic Index Formula</div>
                               </div>
-                              <div className="font-mono text-sm leading-relaxed text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4">
+                              <div className="font-mono text-sm leading-relaxed text-[var(--foreground)] dark:text-slate-300 bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]/50 rounded-xl p-4">
                                 <div className="mb-2">PI = 0.15939858×(Wall thickness) – 0.00294271×(Wall thickness)²</div>
                                 <div className="mb-2">+ 0.0259082×(LA diameter) + 0.00446131×(LVOT gradient)</div>
                                 <div className="mb-2">+ 0.4583082×(Family history) + 0.82639195×(NSVT)</div>
@@ -1923,12 +1923,12 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                               </div>
                             </div>
 
-                            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800/50">
+                            <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-2xl p-6 border border-[var(--glass-border-light)]/50 dark:border-slate-800/50">
                               <div className="flex items-center space-x-2 mb-4">
                                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                                <div className="font-bold text-slate-800 dark:text-slate-200">5-Year SCD Risk Formula</div>
+                                <div className="font-bold text-[var(--foreground)] dark:text-slate-200">5-Year SCD Risk Formula</div>
                               </div>
-                              <div className="font-mono text-sm leading-relaxed text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4">
+                              <div className="font-mono text-sm leading-relaxed text-[var(--foreground)] dark:text-slate-300 bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]/50 rounded-xl p-4">
                                 p̂SCD at 5 years = 1 – 0.998^exp(Prognostic Index)
                               </div>
                             </div>
@@ -1939,56 +1939,56 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                   </div>
 
                   {/* Revolutionary Literature Database */}
-                  <div className="medical-card p-10 bg-gradient-to-br from-slate-50/50 to-gray-50/50 dark:from-slate-900/20 dark:to-gray-900/20 border-2 border-slate-200/30 dark:border-slate-800/30 relative overflow-hidden">
+                  <div className="medical-card p-10 bg-gradient-to-br from-slate-50/50 to-gray-50/50 dark:from-slate-900/20 dark:to-gray-900/20 border-2 border-[var(--glass-border-light)]/30 dark:border-slate-800/30 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-slate-500/5 to-gray-500/5 rounded-full blur-3xl" />
                     <div className="relative">
                       <div className="flex items-center space-x-4 mb-10">
                         <div className="p-4 bg-gradient-to-r from-slate-600 to-gray-600 rounded-2xl shadow-lg">
-                          <BookOpen className="w-8 h-8 text-white" />
+                          <BookOpen className="w-8 h-8 text-[var(--foreground)]" />
                         </div>
                         <div>
                           <h4 className="text-2xl font-bold bg-gradient-to-r from-slate-700 to-gray-700 bg-clip-text text-transparent">
                             Literature & References
                           </h4>
-                          <p className="text-slate-600 dark:text-slate-400">Comprehensive scientific evidence base</p>
+                          <p className="text-[var(--foreground-tertiary)] dark:text-slate-400">Comprehensive scientific evidence base</p>
                         </div>
                       </div>
 
                       <div className="space-y-8">
                         {/* Original Reference */}
-                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-blue-200/50 dark:border-blue-800/50">
+                        <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm rounded-3xl p-8 border border-blue-200/50 dark:border-blue-800/50">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl">
-                              <Star className="w-6 h-6 text-white" />
+                              <Star className="w-6 h-6 text-[var(--foreground)]" />
                             </div>
                             <div>
                               <h5 className="text-xl font-bold text-blue-800 dark:text-blue-200">Original/Primary Reference</h5>
-                              <p className="text-sm text-blue-600 dark:text-blue-400">Landmark publication establishing the algorithm</p>
+                              <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400">Landmark publication establishing the algorithm</p>
                             </div>
                           </div>
                           <div className="p-6 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200/30 dark:border-blue-800/30">
                             <div className="font-bold text-blue-800 dark:text-blue-200 mb-2">O'Mahony C, Jichi F, Pavlou M, et al.</div>
-                            <div className="text-sm text-blue-700 dark:text-blue-300 leading-relaxed">
+                            <div className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed">
                               A novel clinical risk prediction model for sudden cardiac death in hypertrophic cardiomyopathy (HCM risk-SCD). <em>European Heart Journal</em>. 2014;35(30):2010-2020.
                             </div>
                             <div className="flex items-center space-x-4 mt-4">
-                              <div className="inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 rounded-full px-4 py-2">
-                                <Users className="w-4 h-4 text-blue-600" />
-                                <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">3,675 patients</span>
+                              <div className="inline-flex items-center space-x-2 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-full px-4 py-2">
+                                <Users className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
+                                <span className="text-sm font-semibold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">3,675 patients</span>
                               </div>
-                              <div className="inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 rounded-full px-4 py-2">
-                                <Globe className="w-4 h-4 text-blue-600" />
-                                <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">Multi-center</span>
+                              <div className="inline-flex items-center space-x-2 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-full px-4 py-2">
+                                <Globe className="w-4 h-4 text-[var(--cardiology-accent-blue-dark)]" />
+                                <span className="text-sm font-semibold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">Multi-center</span>
                               </div>
                             </div>
                           </div>
                         </div>
 
                         {/* Validation Studies */}
-                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-green-200/50 dark:border-green-800/50">
+                        <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm rounded-3xl p-8 border border-green-200/50 dark:border-green-800/50">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl">
-                              <CheckCircle className="w-6 h-6 text-white" />
+                              <CheckCircle className="w-6 h-6 text-[var(--foreground)]" />
                             </div>
                             <div>
                               <h5 className="text-xl font-bold text-green-800 dark:text-green-200">International Validation Studies</h5>
@@ -2014,7 +2014,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                                 <div className="flex items-start space-x-4">
                                   <div className="flex-shrink-0 mt-1">
                                     <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
-                                      <span className="text-white font-bold text-sm">{index + 1}</span>
+                                      <span className="text-[var(--foreground)] font-bold text-sm">{index + 1}</span>
                                     </div>
                                   </div>
                                   <div className="flex-1">
@@ -2035,10 +2035,10 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                         </div>
 
                         {/* Guidelines & Contemporary References */}
-                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-orange-200/50 dark:border-orange-800/50">
+                        <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm rounded-3xl p-8 border border-orange-200/50 dark:border-orange-800/50">
                           <div className="flex items-center space-x-3 mb-6">
                             <div className="p-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl">
-                              <FileText className="w-6 h-6 text-white" />
+                              <FileText className="w-6 h-6 text-[var(--foreground)]" />
                             </div>
                             <div>
                               <h5 className="text-xl font-bold text-orange-800 dark:text-orange-200">Guidelines & Contemporary References</h5>
@@ -2070,7 +2070,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                                 <div className="flex items-start space-x-4">
                                   <div className="flex-shrink-0 mt-1">
                                     <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                                      <span className="text-white font-bold text-sm">{index + 1}</span>
+                                      <span className="text-[var(--foreground)] font-bold text-sm">{index + 1}</span>
                                     </div>
                                   </div>
                                   <div className="flex-1">
@@ -2099,7 +2099,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                     <div className="relative">
                       <div className="flex items-center space-x-4 mb-10">
                         <div className="p-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl shadow-lg">
-                          <Users className="w-8 h-8 text-white" />
+                          <Users className="w-8 h-8 text-[var(--foreground)]" />
                         </div>
                         <div>
                           <h4 className="text-2xl font-bold bg-gradient-to-r from-cyan-700 to-blue-700 bg-clip-text text-transparent">
@@ -2109,14 +2109,14 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 border border-cyan-200/50 dark:border-cyan-800/50">
+                      <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm rounded-3xl p-8 border border-cyan-200/50 dark:border-cyan-800/50">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                           {/* Profile Overview */}
                           <div className="lg:col-span-2 space-y-6">
                             <div className="p-6 bg-gradient-to-r from-cyan-50/50 to-blue-50/50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-2xl border border-cyan-200/30 dark:border-cyan-800/30">
                               <div className="flex items-center space-x-3 mb-4">
                                 <div className="p-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl">
-                                  <User className="w-5 h-5 text-white" />
+                                  <User className="w-5 h-5 text-[var(--foreground)]" />
                                 </div>
                                 <h5 className="text-lg font-bold text-cyan-800 dark:text-cyan-200">Clinical Background</h5>
                               </div>
@@ -2133,11 +2133,11 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                             <div className="p-6 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200/30 dark:border-blue-800/30">
                               <div className="flex items-center space-x-3 mb-4">
                                 <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl">
-                                  <Award className="w-5 h-5 text-white" />
+                                  <Award className="w-5 h-5 text-[var(--foreground)]" />
                                 </div>
                                 <h5 className="text-lg font-bold text-blue-800 dark:text-blue-200">Research Contributions</h5>
                               </div>
-                              <div className="text-sm text-blue-700 dark:text-blue-300 leading-relaxed">
+                              <div className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed">
                                 <p>
                                   Dr. O'Mahony's research has focused on developing and validating clinical risk prediction models for sudden cardiac death in HCM. His work has been instrumental in establishing evidence-based guidelines for ICD implantation and has been adopted internationally by major cardiology societies.
                                 </p>
@@ -2150,7 +2150,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                             <div className="p-6 bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl border border-purple-200/30 dark:border-purple-800/30">
                               <div className="flex items-center space-x-3 mb-4">
                                 <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl">
-                                  <TrendingUp className="w-5 h-5 text-white" />
+                                  <TrendingUp className="w-5 h-5 text-[var(--foreground)]" />
                                 </div>
                                 <h5 className="text-lg font-bold text-purple-800 dark:text-purple-200">Academic Impact</h5>
                               </div>
@@ -2173,7 +2173,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                             <div className="p-6 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border border-green-200/30 dark:border-green-800/30">
                               <div className="flex items-center space-x-3 mb-4">
                                 <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl">
-                                  <Globe className="w-5 h-5 text-white" />
+                                  <Globe className="w-5 h-5 text-[var(--foreground)]" />
                                 </div>
                                 <h5 className="text-lg font-bold text-green-800 dark:text-green-200">Global Recognition</h5>
                               </div>
@@ -2200,7 +2200,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
                               <div className="p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl">
-                                <FileText className="w-6 h-6 text-white" />
+                                <FileText className="w-6 h-6 text-[var(--foreground)]" />
                               </div>
                               <div>
                                 <div className="text-lg font-bold text-cyan-800 dark:text-cyan-200">Complete Publication List</div>
@@ -2211,7 +2211,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
                               href="https://pubmed.ncbi.nlm.nih.gov/?term=o%27mahony+constantinos%5Bauthor%5D" 
                               target="_blank" 
                               rel="noopener noreferrer" 
-                              className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-2xl hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl"
+                              className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-[var(--foreground)] px-6 py-3 rounded-2xl hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl"
                             >
                               <span>View Publications</span>
                               <ArrowRight className="w-4 h-4" />
@@ -2248,7 +2248,7 @@ export const HCMRiskSCDCalculator: React.FC = () => {
 
         {/* Footer Information */}
         <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-          <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
             <Info className="w-4 h-4" />
             <span>Based on HCM Risk-SCD by O'Mahony et al. • For educational purposes only</span>
             <div className="flex items-center space-x-1">

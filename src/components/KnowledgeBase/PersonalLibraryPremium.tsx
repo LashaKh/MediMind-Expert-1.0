@@ -390,9 +390,9 @@ const PremiumFileIcon: React.FC<{ fileType: string; className?: string; showGrad
     } else if (normalizedType.includes('excel') || normalizedType.includes('csv') || normalizedType.includes('spreadsheet')) {
       return { Icon: FileSpreadsheet, color: 'from-green-500 to-emerald-500', solid: 'text-green-500' };
     } else if (normalizedType.includes('word') || normalizedType.includes('doc')) {
-      return { Icon: FileText, color: 'from-blue-500 to-indigo-500', solid: 'text-blue-500' };
+      return { Icon: FileText, color: 'from-blue-500 to-indigo-500', solid: 'text-[var(--cardiology-accent-blue)]' };
     } else {
-      return { Icon: File, color: 'from-gray-500 to-gray-600', solid: 'text-gray-500' };
+      return { Icon: File, color: 'from-gray-500 to-gray-600', solid: 'text-muted-foreground' };
     }
   };
 
@@ -400,7 +400,7 @@ const PremiumFileIcon: React.FC<{ fileType: string; className?: string; showGrad
   
   if (showGradient) {
     return (
-      <div className={`${className} rounded-lg bg-gradient-to-br ${color} p-2 text-white shadow-lg`}>
+      <div className={`${className} rounded-lg bg-gradient-to-br ${color} p-2 text-[var(--foreground)] shadow-lg`}>
         <Icon className="w-full h-full" />
       </div>
     );
@@ -447,34 +447,34 @@ const ChunkedDocumentCard: React.FC<{
         animate="visible"
         whileHover={!prefersReducedMotion ? "hover" : undefined}
         whileTap={!prefersReducedMotion ? "tap" : undefined}
-        className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300"
+        className="bg-gradient-to-r from-[var(--background)] to-[var(--muted)] border-2 border-[var(--cardiology-accent-blue)] rounded-xl shadow-sm hover:shadow-lg transition-all duration-300"
       >
         {/* Group Header */}
         <div 
-          className="p-4 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl transition-colors"
+          className="p-4 cursor-pointer hover:bg-[var(--badge-info)] rounded-xl transition-colors"
           onClick={onToggle}
         >
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               {isExpanded ? (
-                <ChevronDown className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <ChevronDown className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
               ) : (
-                <ChevronRightIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <ChevronRightIcon className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
               )}
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-800 rounded-lg flex items-center justify-center">
-                <Layers className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="w-10 h-10 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)] rounded-lg flex items-center justify-center">
+                <Layers className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
               </div>
             </div>
             
             <div className="flex-1">
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
+              <h3 className="font-semibold text-foreground group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-300 transition-colors truncate">
                 {group.baseTitle}
               </h3>
               <div className="flex items-center space-x-4 mt-1">
-                <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                <span className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 font-medium">
                   📚 {group.documents.length}/{group.totalParts} parts
                 </span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)] text-blue-800 dark:text-blue-200">
                   Chunked Document
                 </span>
               </div>
@@ -482,7 +482,7 @@ const ChunkedDocumentCard: React.FC<{
 
             <button
               onClick={(e) => { e.stopPropagation(); onView(group.documents[0]); }}
-              className="p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800"
+              className="p-2 text-[var(--foreground-secondary)] hover:text-primary transition-colors rounded-lg hover:bg-[var(--hover-accent)]"
               title="View first part"
             >
               <FileText className="w-5 h-5" />
@@ -497,41 +497,41 @@ const ChunkedDocumentCard: React.FC<{
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="bg-gray-50 dark:bg-gray-800/50 border-t border-blue-200 dark:border-blue-800"
+              className="bg-[var(--muted)] border-t border-[var(--cardiology-accent-blue)]"
             >
               <div className="p-2 space-y-1">
                 {group.documents.map((document, partIndex) => (
                   <div
                     key={document.id}
-                    className="flex items-center justify-between p-3 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors border-l-4 border-blue-200 dark:border-blue-700"
+                    className="flex items-center justify-between p-3 rounded-lg hover:bg-[var(--component-card)] dark:hover:bg-[var(--card)] transition-colors border-l-4 border-blue-200 dark:border-blue-700"
                   >
                     <div className="flex items-center space-x-3 flex-1">
                       <div className={`
                         w-4 h-4 rounded border transition-all duration-200
                         ${selectedDocuments.has(document.id)
-                          ? 'bg-blue-500 border-blue-500'
-                          : 'border-gray-300 hover:border-blue-400'
+                          ? 'bg-[var(--cardiology-accent-blue)] border-[var(--cardiology-accent-blue)]'
+                          : 'border-[var(--glass-border-medium)] hover:border-primary'
                         }
                         flex items-center justify-center cursor-pointer
                       `}
                       onClick={() => onSelect(document.id)}>
-                        {selectedDocuments.has(document.id) && <CheckCircle className="w-3 h-3 text-white" />}
+                        {selectedDocuments.has(document.id) && <CheckCircle className="w-3 h-3 text-[var(--foreground)]" />}
                       </div>
-                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <span className="text-sm text-foreground-secondary">
                         Part {partIndex + 1} • {formatFileSize(document.file_size || 0)}
                       </span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <button
                         onClick={() => onView(document)}
-                        className="p-1.5 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800"
+                        className="p-1.5 text-[var(--foreground-secondary)] hover:text-primary transition-colors rounded-lg hover:bg-[var(--hover-accent)]"
                         title="View this part"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => onDelete(document.id, document.title)}
-                        className="p-1.5 text-gray-400 hover:text-red-600 transition-colors rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20"
+                        className="p-1.5 text-[var(--foreground-secondary)] hover:text-red-600 transition-colors rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20"
                         title="Delete this part"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -556,8 +556,8 @@ const ChunkedDocumentCard: React.FC<{
       whileHover={!prefersReducedMotion ? "hover" : undefined}
       whileTap={!prefersReducedMotion ? "tap" : undefined}
       className={`
-        group relative bg-white dark:bg-gray-800
-        border border-gray-200 dark:border-gray-700
+        group relative bg-background
+        border border-border
         rounded-xl shadow-sm hover:shadow-xl
         transition-all duration-300 ease-out
         cursor-pointer overflow-hidden
@@ -569,8 +569,8 @@ const ChunkedDocumentCard: React.FC<{
         absolute top-3 left-3 z-10 transition-all duration-200
         scale-100 opacity-100
       `}>
-        <div className="w-6 h-6 rounded-full border-2 bg-blue-500 border-blue-500 flex items-center justify-center shadow-lg">
-          <Layers className="w-3 h-3 text-white" />
+        <div className="w-6 h-6 rounded-full border-2 bg-[var(--cardiology-accent-blue)] border-[var(--cardiology-accent-blue)] flex items-center justify-center shadow-lg">
+          <Layers className="w-3 h-3 text-[var(--foreground)]" />
         </div>
       </div>
 
@@ -578,15 +578,15 @@ const ChunkedDocumentCard: React.FC<{
       <div className="aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 relative overflow-hidden">
         {/* Group Icon */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
-            <Layers className="w-8 h-8 text-gray-600 dark:text-gray-300" />
+          <div className="w-16 h-16 bg-[var(--component-card)]/10 rounded-full flex items-center justify-center backdrop-blur-sm">
+            <Layers className="w-8 h-8 text-muted-foreground" />
           </div>
         </div>
         
         {/* Parts Count Overlay */}
         <div className="absolute top-3 right-3">
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-2 py-1">
-            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+          <div className="bg-[var(--component-card)]/90 dark:bg-[var(--background)]/90 backdrop-blur-sm rounded-full px-2 py-1">
+            <span className="text-xs font-medium text-foreground-secondary">
               {group.documents.length}/{group.totalParts}
             </span>
           </div>
@@ -603,16 +603,16 @@ const ChunkedDocumentCard: React.FC<{
             <div className="flex items-center space-x-2">
               <button
                 onClick={(e) => { e.stopPropagation(); onView(group.documents[0]); }}
-                className="p-2 bg-white/90 dark:bg-gray-800/90 rounded-full hover:scale-110 transition-transform shadow-lg"
+                className="p-2 bg-[var(--component-card)]/90 dark:bg-[var(--background)]/90 rounded-full hover:scale-110 transition-transform shadow-lg"
               >
-                <Eye className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                <Eye className="w-5 h-5 text-foreground-secondary" />
               </button>
               {onDeleteAll && (
                 <button
                   onClick={(e) => { e.stopPropagation(); onDeleteAll(group.documents.map(d => d.id), group.baseTitle); }}
                   className="p-2 bg-red-500/90 rounded-full hover:scale-110 transition-transform shadow-lg"
                 >
-                  <Trash2 className="w-5 h-5 text-white" />
+                  <Trash2 className="w-5 h-5 text-[var(--foreground)]" />
                 </button>
               )}
             </div>
@@ -622,23 +622,23 @@ const ChunkedDocumentCard: React.FC<{
 
       {/* Document Info - Standardized */}
       <div className="p-4">
-        <h3 className="font-semibold text-gray-900 dark:text-gray-100 truncate group-hover:text-blue-600 transition-colors">
+        <h3 className="font-semibold text-foreground truncate group-hover:text-[var(--cardiology-accent-blue-dark)] transition-colors">
           {group.baseTitle}
         </h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
+        <p className="text-sm text-muted-foreground truncate mt-1">
           Chunked Document • {group.documents.length} parts
         </p>
 
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-center space-x-2">
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">
               📚 {group.documents.length} parts
             </span>
-            <span className="text-xs text-gray-500 dark:text-gray-400">
+            <span className="text-xs text-muted-foreground">
               {formatFileSize(group.documents.reduce((acc, doc) => acc + (doc.file_size || 0), 0))}
             </span>
           </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
+          <div className="text-xs text-muted-foreground">
             {new Date(group.documents[0]?.created_at).toLocaleDateString()}
           </div>
         </div>
@@ -654,20 +654,20 @@ const ChunkedDocumentCard: React.FC<{
             >
               {group.documents.map((document, partIndex) => (
                 <div key={document.id} className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400 truncate flex-1">
+                  <span className="text-muted-foreground truncate flex-1">
                     Part {partIndex + 1} • {formatFileSize(document.file_size || 0)}
                   </span>
                   <div className="flex items-center space-x-1 ml-2">
                     <button
                       onClick={() => onView(document)}
-                      className="p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                      className="p-1 text-[var(--foreground-secondary)] hover:text-primary transition-colors"
                       title="View this part"
                     >
                       <Eye className="w-3 h-3" />
                     </button>
                     <button
                       onClick={() => onDelete(document.id, document.title)}
-                      className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                      className="p-1 text-[var(--foreground-secondary)] hover:text-red-600 transition-colors"
                       title="Delete this part"
                     >
                       <Trash2 className="w-3 h-3" />
@@ -733,7 +733,7 @@ const DocumentCard: React.FC<{
       case 'pending':
         return <Loader className="w-4 h-4 text-yellow-500 animate-spin" />;
       default:
-        return <Clock className="w-4 h-4 text-gray-400" />;
+        return <Clock className="w-4 h-4 text-[var(--foreground-secondary)]" />;
     }
   };
 
@@ -752,11 +752,11 @@ const DocumentCard: React.FC<{
         whileHover={!prefersReducedMotion ? "hover" : undefined}
         whileTap={!prefersReducedMotion ? "tap" : undefined}
         className={`
-          group bg-white dark:bg-gray-800 
-          border border-gray-200 dark:border-gray-700
+          group bg-background 
+          border border-border
           rounded-xl shadow-sm hover:shadow-lg
           transition-all duration-300 ease-out
-          ${isSelected ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' : ''}
+          ${isSelected ? 'ring-2 ring-[var(--cardiology-accent-blue)] bg-[var(--badge-info)]' : ''}
           ${densityClasses[displayDensity]}
           cursor-pointer
         `}
@@ -770,12 +770,12 @@ const DocumentCard: React.FC<{
             <div className={`
               w-5 h-5 rounded border-2 transition-all duration-200
               ${isSelected 
-                ? 'bg-blue-500 border-blue-500' 
-                : 'border-gray-300 group-hover:border-blue-400'
+                ? 'bg-[var(--cardiology-accent-blue)] border-[var(--cardiology-accent-blue)]' 
+                : 'border-[var(--glass-border-medium)] group-hover:border-primary'
               }
               flex items-center justify-center
             `}>
-              {isSelected && <CheckCircle className="w-3 h-3 text-white" />}
+              {isSelected && <CheckCircle className="w-3 h-3 text-[var(--foreground)]" />}
             </div>
           </div>
           
@@ -788,14 +788,14 @@ const DocumentCard: React.FC<{
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between">
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate group-hover:text-blue-600 transition-colors">
+                <h3 className="text-sm font-semibold text-foreground truncate group-hover:text-[var(--cardiology-accent-blue-dark)] transition-colors">
                   {document.title}
                 </h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">
+                <p className="text-xs text-muted-foreground truncate mt-1">
                   {document.file_name}
                 </p>
                 {showMetadata && (
-                  <div className="flex items-center space-x-4 mt-2 text-xs text-gray-400">
+                  <div className="flex items-center space-x-4 mt-2 text-xs text-[var(--foreground-secondary)]">
                     <span>{document.formattedSize}</span>
                     <span>{document.formattedDate}</span>
                     <span className="capitalize">{document.category}</span>
@@ -812,15 +812,15 @@ const DocumentCard: React.FC<{
                 `}>
                   <button
                     onClick={(e) => { e.stopPropagation(); onView(); }}
-                    className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] transition-colors"
                   >
-                    <Eye className="w-4 h-4 text-gray-500" />
+                    <Eye className="w-4 h-4 text-muted-foreground" />
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); onDownload(); }}
-                    className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] transition-colors"
                   >
-                    <Download className="w-4 h-4 text-gray-500" />
+                    <Download className="w-4 h-4 text-muted-foreground" />
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); onDelete(); }}
@@ -838,13 +838,13 @@ const DocumentCard: React.FC<{
                 {document.tags.slice(0, 3).map((tag, i) => (
                   <span
                     key={i}
-                    className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full"
+                    className="px-2 py-1 text-xs bg-muted text-muted-foreground rounded-full"
                   >
                     {tag}
                   </span>
                 ))}
                 {document.tags.length > 3 && (
-                  <span className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 rounded-full">
+                  <span className="px-2 py-1 text-xs bg-muted text-muted-foreground rounded-full">
                     +{document.tags.length - 3}
                   </span>
                 )}
@@ -865,11 +865,11 @@ const DocumentCard: React.FC<{
       whileHover={!prefersReducedMotion ? "hover" : undefined}
       whileTap={!prefersReducedMotion ? "tap" : undefined}
       className={`
-        group relative bg-white dark:bg-gray-800
-        border border-gray-200 dark:border-gray-700
+        group relative bg-background
+        border border-border
         rounded-xl shadow-sm hover:shadow-xl
         transition-all duration-300 ease-out
-        ${isSelected ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' : ''}
+        ${isSelected ? 'ring-2 ring-[var(--cardiology-accent-blue)] bg-[var(--badge-info)]' : ''}
         ${densityClasses[displayDensity]}
         cursor-pointer overflow-hidden
       `}
@@ -885,12 +885,12 @@ const DocumentCard: React.FC<{
         <div className={`
           w-6 h-6 rounded-full border-2 transition-all duration-200
           ${isSelected 
-            ? 'bg-blue-500 border-blue-500' 
-            : 'bg-white/80 backdrop-blur border-gray-300'
+            ? 'bg-[var(--cardiology-accent-blue)] border-[var(--cardiology-accent-blue)]' 
+            : 'bg-[var(--component-card)]/80 backdrop-blur border-[var(--glass-border-medium)]'
           }
           flex items-center justify-center shadow-lg
         `}>
-          {isSelected && <CheckCircle className="w-4 h-4 text-white" />}
+          {isSelected && <CheckCircle className="w-4 h-4 text-[var(--foreground)]" />}
         </div>
       </div>
 
@@ -903,7 +903,7 @@ const DocumentCard: React.FC<{
         
         {/* Status Overlay */}
         <div className="absolute top-3 right-3">
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full p-1.5">
+          <div className="bg-[var(--component-card)]/90 dark:bg-[var(--background)]/90 backdrop-blur-sm rounded-full p-1.5">
             {getStatusIndicator()}
           </div>
         </div>
@@ -920,21 +920,21 @@ const DocumentCard: React.FC<{
               <div className="flex items-center space-x-2">
                 <button
                   onClick={(e) => { e.stopPropagation(); onView(); }}
-                  className="p-2 bg-white/90 dark:bg-gray-800/90 rounded-full hover:scale-110 transition-transform shadow-lg"
+                  className="p-2 bg-[var(--component-card)]/90 dark:bg-[var(--background)]/90 rounded-full hover:scale-110 transition-transform shadow-lg"
                 >
-                  <Eye className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  <Eye className="w-5 h-5 text-foreground-secondary" />
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); onDownload(); }}
-                  className="p-2 bg-white/90 dark:bg-gray-800/90 rounded-full hover:scale-110 transition-transform shadow-lg"
+                  className="p-2 bg-[var(--component-card)]/90 dark:bg-[var(--background)]/90 rounded-full hover:scale-110 transition-transform shadow-lg"
                 >
-                  <Download className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  <Download className="w-5 h-5 text-foreground-secondary" />
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); onDelete(); }}
                   className="p-2 bg-red-500/90 rounded-full hover:scale-110 transition-transform shadow-lg"
                 >
-                  <Trash2 className="w-5 h-5 text-white" />
+                  <Trash2 className="w-5 h-5 text-[var(--foreground)]" />
                 </button>
               </div>
             </motion.div>
@@ -944,15 +944,15 @@ const DocumentCard: React.FC<{
 
       {/* Document Info */}
       <div className="p-4">
-        <h3 className="font-semibold text-gray-900 dark:text-gray-100 truncate group-hover:text-blue-600 transition-colors">
+        <h3 className="font-semibold text-foreground truncate group-hover:text-[var(--cardiology-accent-blue-dark)] transition-colors">
           {document.title}
         </h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
+        <p className="text-sm text-muted-foreground truncate mt-1">
           {document.file_name}
         </p>
         
         {showMetadata && (
-          <div className="flex items-center justify-between mt-3 text-xs text-gray-400">
+          <div className="flex items-center justify-between mt-3 text-xs text-[var(--foreground-secondary)]">
             <span>{document.formattedSize}</span>
             <span>{document.formattedDate}</span>
           </div>
@@ -964,13 +964,13 @@ const DocumentCard: React.FC<{
             {document.tags.slice(0, 2).map((tag, i) => (
               <span
                 key={i}
-                className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full"
+                className="px-2 py-1 text-xs bg-muted text-muted-foreground rounded-full"
               >
                 {tag}
               </span>
             ))}
             {document.tags.length > 2 && (
-              <span className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 rounded-full">
+              <span className="px-2 py-1 text-xs bg-muted text-muted-foreground rounded-full">
                 +{document.tags.length - 2}
               </span>
             )}
@@ -1049,12 +1049,12 @@ export const PersonalLibraryPremium: React.FC = () => {
         };
       default:
         return {
-          primary: 'text-blue-600',
-          primaryBg: 'bg-blue-600',
-          primaryLight: 'bg-blue-50',
+          primary: 'text-[var(--cardiology-accent-blue-dark)]',
+          primaryBg: 'bg-[var(--cardiology-accent-blue-dark)]',
+          primaryLight: 'bg-[var(--cardiology-accent-blue-light)]',
           primaryGradient: 'from-blue-500 to-blue-600',
           border: 'border-blue-200',
-          accent: 'bg-blue-100'
+          accent: 'bg-[var(--cardiology-accent-blue-light)]'
         };
     }
   };
@@ -1499,10 +1499,10 @@ export const PersonalLibraryPremium: React.FC = () => {
           className="text-center"
         >
           <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center">
-            <Shield className="w-10 h-10 text-gray-500 dark:text-gray-400" />
+            <Shield className="w-10 h-10 text-muted-foreground" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Authentication Required</h2>
-          <p className="text-gray-600 dark:text-gray-400">Please sign in to access your personal knowledge base.</p>
+          <h2 className="text-2xl font-bold text-foreground mb-2">Authentication Required</h2>
+          <p className="text-muted-foreground">Please sign in to access your personal knowledge base.</p>
         </motion.div>
       </div>
     );
@@ -1511,7 +1511,7 @@ export const PersonalLibraryPremium: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Enhanced Header */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-40">
+      <div className="bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-xl border-b border-border/50 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
           {/* Hero Stats Grid */}
           <motion.div 
@@ -1520,57 +1520,57 @@ export const PersonalLibraryPremium: React.FC = () => {
             className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
           >
             {/* Total Documents */}
-            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 shadow-lg backdrop-blur-sm">
+            <div className="bg-gradient-to-br from-background to-muted rounded-2xl border border-border/50 p-6 shadow-lg backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total Library</p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{documentStats.total}</p>
-                  <p className="text-xs text-gray-500 mt-1">documents</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Total Library</p>
+                  <p className="text-3xl font-bold text-foreground">{documentStats.total}</p>
+                  <p className="text-xs text-muted-foreground mt-1">documents</p>
                 </div>
                 <div className={`p-3 rounded-xl bg-gradient-to-br ${theme.primaryGradient} shadow-lg`}>
-                  <Archive className="w-6 h-6 text-white" />
+                  <Archive className="w-6 h-6 text-[var(--foreground)]" />
                 </div>
               </div>
             </div>
 
             {/* Completed */}
-            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 shadow-lg backdrop-blur-sm">
+            <div className="bg-gradient-to-br from-background to-muted rounded-2xl border border-border/50 p-6 shadow-lg backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Ready</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Ready</p>
                   <p className="text-3xl font-bold text-green-600">{documentStats.completed}</p>
                   <p className="text-xs text-green-500 mt-1">processed</p>
                 </div>
                 <div className="p-3 rounded-xl bg-gradient-to-br from-green-500 to-green-600 shadow-lg">
-                  <CheckCircle className="w-6 h-6 text-white" />
+                  <CheckCircle className="w-6 h-6 text-[var(--foreground)]" />
                 </div>
               </div>
             </div>
 
             {/* Processing */}
-            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 shadow-lg backdrop-blur-sm">
+            <div className="bg-gradient-to-br from-background to-muted rounded-2xl border border-border/50 p-6 shadow-lg backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Processing</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Processing</p>
                   <p className="text-3xl font-bold text-amber-600">{documentStats.pending}</p>
                   <p className="text-xs text-amber-500 mt-1">in queue</p>
                 </div>
                 <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 shadow-lg">
-                  <Activity className="w-6 h-6 text-white animate-pulse" />
+                  <Activity className="w-6 h-6 text-[var(--foreground)] animate-pulse" />
                 </div>
               </div>
             </div>
 
             {/* Storage Used */}
-            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 shadow-lg backdrop-blur-sm col-span-2 lg:col-span-1">
+            <div className="bg-gradient-to-br from-background to-muted rounded-2xl border border-border/50 p-6 shadow-lg backdrop-blur-sm col-span-2 lg:col-span-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Storage</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{formatFileSize(documentStats.totalSize)}</p>
-                  <p className="text-xs text-gray-500 mt-1">total used</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Storage</p>
+                  <p className="text-2xl font-bold text-foreground">{formatFileSize(documentStats.totalSize)}</p>
+                  <p className="text-xs text-muted-foreground mt-1">total used</p>
                 </div>
                 <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg">
-                  <Cloud className="w-6 h-6 text-white" />
+                  <Cloud className="w-6 h-6 text-[var(--foreground)]" />
                 </div>
               </div>
             </div>
@@ -1581,7 +1581,7 @@ export const PersonalLibraryPremium: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-6"
+            className="bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-xl rounded-2xl border border-border/50 shadow-lg p-6"
           >
             {/* Controls Container */}
             <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
@@ -1590,14 +1590,14 @@ export const PersonalLibraryPremium: React.FC = () => {
                 <button
                   onClick={() => setShowUpload(true)}
                   className={`
-                    group relative px-6 py-3 rounded-xl font-semibold text-white shadow-lg
+                    group relative px-6 py-3 rounded-xl font-semibold text-[var(--foreground)] shadow-lg
                     bg-gradient-to-r ${theme.primaryGradient}
                     hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] 
                     transition-all duration-300 overflow-hidden
                     flex items-center space-x-2 min-h-[48px]
                   `}
                 >
-                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-[var(--component-card)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <Upload className="w-5 h-5 relative z-10" />
                   <span className="relative z-10">Upload Documents</span>
                 </button>
@@ -1606,12 +1606,12 @@ export const PersonalLibraryPremium: React.FC = () => {
                   onClick={handleRefresh}
                   disabled={isLoading}
                   className={`
-                    px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-600 
-                    bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm
-                    hover:bg-white dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500
+                    px-5 py-3 rounded-xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] 
+                    bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm
+                    hover:bg-[var(--component-card)] dark:hover:bg-[var(--card)] hover:border-[var(--glass-border-medium)] dark:hover:border-[var(--border)]
                     disabled:opacity-50 disabled:cursor-not-allowed
                     transition-all duration-200 flex items-center space-x-2 min-h-[48px] shadow-sm hover:shadow-md
-                    text-gray-700 dark:text-gray-200
+                    text-[var(--foreground-tertiary)] dark:text-[var(--foreground)]
                   `}
                 >
                   <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
@@ -1623,10 +1623,10 @@ export const PersonalLibraryPremium: React.FC = () => {
                   disabled={isMonitoring}
                   className={`
                     px-5 py-3 rounded-xl border border-blue-200 dark:border-blue-600 
-                    bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-sm
-                    hover:bg-blue-100/80 dark:hover:bg-blue-800/30 hover:border-blue-300 dark:hover:border-blue-500
+                    bg-[var(--cardiology-accent-blue-light)]/80 dark:bg-[var(--cardiology-accent-blue-darker)]/20 backdrop-blur-sm
+                    hover:bg-[var(--cardiology-accent-blue-light)]/80 dark:hover:bg-[var(--cardiology-accent-blue-darker)]/30 hover:border-[var(--cardiology-accent-blue)] dark:hover:border-[var(--cardiology-accent-blue)]
                     disabled:opacity-50 disabled:cursor-not-allowed
-                    text-blue-700 dark:text-blue-200 transition-all duration-200 
+                    text-[var(--cardiology-accent-blue-dark)] dark:text-blue-200 transition-all duration-200 
                     flex items-center space-x-2 min-h-[48px] shadow-sm hover:shadow-md
                   `}
                   title="Check OpenAI processing status for uploaded files"
@@ -1639,7 +1639,7 @@ export const PersonalLibraryPremium: React.FC = () => {
               {/* Search Bar with Enhanced Styling */}
               <div className="flex-1 w-full lg:w-auto relative">
                 <div className="relative group">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--foreground-secondary)] group-focus-within:text-[var(--cardiology-accent-blue)] transition-colors duration-200" />
                   <input
                     type="text"
                     placeholder="Search your knowledge base..."
@@ -1647,13 +1647,13 @@ export const PersonalLibraryPremium: React.FC = () => {
                     onChange={(e) => setFilters(prev => ({ ...prev, searchTerm: e.target.value }))}
                     className={`
                       w-full pl-12 pr-4 py-3 rounded-xl 
-                      border border-gray-200 dark:border-gray-600 
-                      bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm
-                      hover:bg-white dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500
-                      focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500
-                      placeholder:text-gray-500 dark:placeholder:text-gray-400
+                      border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] 
+                      bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm
+                      hover:bg-[var(--component-card)] dark:hover:bg-[var(--card)] hover:border-[var(--glass-border-medium)] dark:hover:border-[var(--border)]
+                      focus:bg-background focus:ring-2 focus:ring-[var(--input-focus-ring)]/20 focus:border-[var(--input-focus-ring)]
+                      placeholder:text-muted-foreground dark:placeholder:text-[var(--foreground-secondary)]
                       transition-all duration-200 shadow-sm focus:shadow-md min-h-[48px]
-                      text-gray-900 dark:text-gray-100
+                      text-foreground
                     `}
                   />
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -1669,8 +1669,8 @@ export const PersonalLibraryPremium: React.FC = () => {
                   className={`
                     p-3 rounded-xl border transition-all duration-200 min-h-[48px] min-w-[48px] shadow-sm hover:shadow-md
                     ${showAdvancedSearch 
-                      ? `${theme.primaryBg} text-white border-transparent shadow-lg` 
-                      : 'border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500 text-gray-600 dark:text-gray-300'
+                      ? `${theme.primaryBg} text-[var(--foreground)] border-transparent shadow-lg` 
+                      : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm hover:bg-[var(--component-card)] dark:hover:bg-[var(--card)] hover:border-[var(--glass-border-medium)] dark:hover:border-[var(--border)] text-muted-foreground'
                     }
                   `}
                 >
@@ -1688,11 +1688,11 @@ export const PersonalLibraryPremium: React.FC = () => {
                 <button
                   onClick={() => setShowSortOptions(!showSortOptions)}
                   className={`
-                    p-3 rounded-xl border border-gray-200 dark:border-gray-600 
-                    bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm
-                    hover:bg-white dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500
+                    p-3 rounded-xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] 
+                    bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm
+                    hover:bg-[var(--component-card)] dark:hover:bg-[var(--card)] hover:border-[var(--glass-border-medium)] dark:hover:border-[var(--border)]
                     transition-all duration-200 min-h-[48px] min-w-[48px] shadow-sm hover:shadow-md
-                    text-gray-600 dark:text-gray-300
+                    text-muted-foreground
                   `}
                   title="Sort Options"
                 >
@@ -1705,10 +1705,10 @@ export const PersonalLibraryPremium: React.FC = () => {
                       initial={{ opacity: 0, scale: 0.95, y: -10 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                      className="absolute top-full mt-2 right-0 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-50"
+                      className="absolute top-full mt-2 right-0 w-48 bg-background rounded-xl shadow-xl border border-border z-50"
                     >
                       <div className="p-2">
-                        <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sort By</p>
+                        <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Sort By</p>
                         {['name', 'date', 'size', 'type', 'category'].map((sortOption) => (
                           <button
                             key={sortOption}
@@ -1721,9 +1721,9 @@ export const PersonalLibraryPremium: React.FC = () => {
                               setShowSortOptions(false);
                             }}
                             className={`
-                              w-full px-3 py-2 rounded-lg text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors
+                              w-full px-3 py-2 rounded-lg text-left hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] transition-colors
                               flex items-center justify-between
-                              ${state.sortBy === sortOption ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600' : ''}
+                              ${state.sortBy === sortOption ? 'bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 text-[var(--cardiology-accent-blue-dark)]' : ''}
                             `}
                           >
                             <span className="capitalize">{sortOption}</span>
@@ -1741,14 +1741,14 @@ export const PersonalLibraryPremium: React.FC = () => {
               </div>
 
               {/* Enhanced View Mode Toggle */}
-              <div className="flex items-center bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-1 border border-gray-200/50 dark:border-gray-700/50 shadow-sm">
+              <div className="flex items-center bg-[var(--component-surface-secondary)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm rounded-xl p-1 border border-border/50 shadow-sm">
                 <button
                   onClick={() => setState(prev => ({ ...prev, viewMode: 'grid' }))}
                   className={`
                     p-2.5 rounded-lg transition-all duration-200 min-h-[40px] min-w-[40px]
                     ${state.viewMode === 'grid'
-                      ? `${theme.primaryBg} text-white shadow-md`
-                      : 'text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-700/60 hover:text-gray-700 dark:hover:text-gray-300'
+                      ? `${theme.primaryBg} text-[var(--foreground)] shadow-md`
+                      : 'text-muted-foreground hover:bg-[var(--component-card)]/60 dark:hover:bg-[var(--card)]/60 hover:text-[var(--foreground-tertiary)] dark:hover:text-[var(--foreground-secondary)]'
                     }
                   `}
                   title="Grid View"
@@ -1760,8 +1760,8 @@ export const PersonalLibraryPremium: React.FC = () => {
                   className={`
                     p-2.5 rounded-lg transition-all duration-200 min-h-[40px] min-w-[40px]
                     ${state.viewMode === 'list'
-                      ? `${theme.primaryBg} text-white shadow-md`
-                      : 'text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-700/60 hover:text-gray-700 dark:hover:text-gray-300'
+                      ? `${theme.primaryBg} text-[var(--foreground)] shadow-md`
+                      : 'text-muted-foreground hover:bg-[var(--component-card)]/60 dark:hover:bg-[var(--card)]/60 hover:text-[var(--foreground-tertiary)] dark:hover:text-[var(--foreground-secondary)]'
                     }
                   `}
                   title="List View"
@@ -1775,11 +1775,11 @@ export const PersonalLibraryPremium: React.FC = () => {
                 <button
                   onClick={() => setShowViewOptions(!showViewOptions)}
                   className={`
-                    p-3 rounded-xl border border-gray-200 dark:border-gray-600 
-                    bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm
-                    hover:bg-white dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500
+                    p-3 rounded-xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] 
+                    bg-[var(--component-card)]/80 dark:bg-[var(--background)]/80 backdrop-blur-sm
+                    hover:bg-[var(--component-card)] dark:hover:bg-[var(--card)] hover:border-[var(--glass-border-medium)] dark:hover:border-[var(--border)]
                     transition-all duration-200 min-h-[48px] min-w-[48px] shadow-sm hover:shadow-md
-                    text-gray-600 dark:text-gray-300
+                    text-muted-foreground
                   `}
                   title="Display Options"
                 >
@@ -1792,12 +1792,12 @@ export const PersonalLibraryPremium: React.FC = () => {
                       initial={{ opacity: 0, scale: 0.95, y: -10 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                      className="absolute top-full mt-2 right-0 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-50"
+                      className="absolute top-full mt-2 right-0 w-56 bg-background rounded-xl shadow-xl border border-border z-50"
                     >
                       <div className="p-4 space-y-4">
                         {/* Display Density */}
                         <div>
-                          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Display Density</p>
+                          <p className="text-sm font-semibold text-foreground-secondary mb-2">Display Density</p>
                           <div className="space-y-1">
                             {(['compact', 'comfortable', 'spacious'] as DisplayDensity[]).map((density) => (
                               <button
@@ -1806,8 +1806,8 @@ export const PersonalLibraryPremium: React.FC = () => {
                                 className={`
                                   w-full px-3 py-2 rounded-lg text-left text-sm transition-colors
                                   ${state.displayDensity === density 
-                                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600' 
-                                    : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                                    ? 'bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 text-[var(--cardiology-accent-blue-dark)]' 
+                                    : 'hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)]'
                                   }
                                 `}
                               >
@@ -1818,18 +1818,18 @@ export const PersonalLibraryPremium: React.FC = () => {
                         </div>
 
                         {/* Toggle Options */}
-                        <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                        <div className="border-t border-border pt-4">
                           <label className="flex items-center justify-between">
-                            <span className="text-sm text-gray-700 dark:text-gray-300">Show Metadata</span>
+                            <span className="text-sm text-foreground-secondary">Show Metadata</span>
                             <button
                               onClick={() => setState(prev => ({ ...prev, showMetadata: !prev.showMetadata }))}
                               className={`
                                 w-10 h-6 rounded-full transition-colors relative
-                                ${state.showMetadata ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'}
+                                ${state.showMetadata ? 'bg-[var(--cardiology-accent-blue)]' : 'bg-[var(--component-panel)] dark:bg-[var(--border)]'}
                               `}
                             >
                               <div className={`
-                                w-4 h-4 rounded-full bg-white transition-transform absolute top-1
+                                w-4 h-4 rounded-full bg-[var(--component-card)] transition-transform absolute top-1
                                 ${state.showMetadata ? 'translate-x-5' : 'translate-x-1'}
                               `} />
                             </button>
@@ -1851,11 +1851,11 @@ export const PersonalLibraryPremium: React.FC = () => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl"
+                className="mt-4 p-4 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-xl"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-blue-600" />
+                    <CheckCircle className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                     <span className="text-sm font-medium text-blue-900 dark:text-blue-100">
                       {state.selectedDocuments.size} document{state.selectedDocuments.size !== 1 ? 's' : ''} selected
                     </span>
@@ -1863,13 +1863,13 @@ export const PersonalLibraryPremium: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={handleSelectAll}
-                      className="px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg transition-colors"
+                      className="px-3 py-1.5 text-sm text-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--hover-accent)] rounded-lg transition-colors"
                     >
                       {state.selectedDocuments.size === processedDocuments.length ? 'Deselect All' : 'Select All'}
                     </button>
                     <button
                       onClick={() => setState(prev => ({ ...prev, selectedDocuments: new Set() }))}
-                      className="px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg transition-colors"
+                      className="px-3 py-1.5 text-sm text-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--hover-accent)] rounded-lg transition-colors"
                     >
                       Clear Selection
                     </button>
@@ -1914,12 +1914,12 @@ export const PersonalLibraryPremium: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 flex items-center space-x-3"
+            className="mb-6 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 flex items-center space-x-3"
           >
-            <Activity className="w-5 h-5 text-blue-500 flex-shrink-0" />
+            <Activity className="w-5 h-5 text-[var(--cardiology-accent-blue)] flex-shrink-0" />
             <div>
               <h3 className="font-medium text-blue-800 dark:text-blue-200">File Processing Status</h3>
-              <p className="text-sm text-blue-600 dark:text-blue-300">{monitoringStatus}</p>
+              <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">{monitoringStatus}</p>
             </div>
           </motion.div>
         )}
@@ -1935,10 +1935,10 @@ export const PersonalLibraryPremium: React.FC = () => {
               <div className="mb-8">
                 <PremiumLoader size="lg" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Loading your library...</h3>
-              <p className="text-gray-600 dark:text-gray-400">Fetching your documents and organizing your knowledge base.</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Loading your library...</h3>
+              <p className="text-muted-foreground">Fetching your documents and organizing your knowledge base.</p>
               <div className="mt-6 max-w-xs mx-auto">
-                <LiquidLoader progress={75} color="#3B82F6" />
+                <LiquidLoader progress={75} color="var(--cardiology-accent-blue)" />
               </div>
             </motion.div>
           </div>
@@ -1949,15 +1949,15 @@ export const PersonalLibraryPremium: React.FC = () => {
             className="text-center py-20"
           >
             <div className="w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center">
-              <BookOpen className="w-12 h-12 text-gray-400" />
+              <BookOpen className="w-12 h-12 text-[var(--foreground-secondary)]" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            <h3 className="text-2xl font-bold text-foreground mb-4">
               {filters.searchTerm || filters.category !== 'all' || filters.tags.length > 0
                 ? 'No documents match your search'
                 : 'Your knowledge base awaits'
               }
             </h3>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+            <p className="text-lg text-muted-foreground mb-8 max-w-md mx-auto">
               {filters.searchTerm || filters.category !== 'all' || filters.tags.length > 0
                 ? 'Try adjusting your search criteria or filters to find what you\'re looking for.'
                 : 'Start building your personal medical knowledge library by uploading your first document.'
@@ -1967,7 +1967,7 @@ export const PersonalLibraryPremium: React.FC = () => {
               <button
                 onClick={() => setShowUpload(true)}
                 className={`
-                  px-8 py-4 rounded-xl font-semibold text-white shadow-lg
+                  px-8 py-4 rounded-xl font-semibold text-[var(--foreground)] shadow-lg
                   bg-gradient-to-r ${theme.primaryGradient}
                   hover:shadow-xl hover:scale-105 transition-all duration-300
                   flex items-center space-x-2 mx-auto
@@ -1987,9 +1987,9 @@ export const PersonalLibraryPremium: React.FC = () => {
             {/* Results Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                <h2 className="text-lg font-semibold text-foreground">
                   {processedDocumentGroups.length} item{processedDocumentGroups.length !== 1 ? 's' : ''} 
-                  <span className="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">
+                  <span className="text-sm font-normal text-muted-foreground ml-2">
                     ({processedDocuments.length} document{processedDocuments.length !== 1 ? 's' : ''})
                   </span>
                 </h2>
@@ -2000,7 +2000,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                 )}
               </div>
               
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-muted-foreground">
                 Last updated: {new Date().toLocaleTimeString()}
               </div>
             </div>
@@ -2097,16 +2097,16 @@ export const PersonalLibraryPremium: React.FC = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+              className="bg-background rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
             >
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="p-6 border-b border-border">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Upload Documents</h2>
+                  <h2 className="text-2xl font-bold text-foreground">Upload Documents</h2>
                   <button
                     onClick={() => setShowUpload(false)}
-                    className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="p-2 rounded-xl hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] transition-colors"
                   >
-                    <X className="w-6 h-6 text-gray-500" />
+                    <X className="w-6 h-6 text-muted-foreground" />
                   </button>
                 </div>
               </div>
@@ -2134,7 +2134,7 @@ export const PersonalLibraryPremium: React.FC = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden"
+              className="bg-background rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden"
             >
               <DocumentDetails
                 document={selectedDocument}

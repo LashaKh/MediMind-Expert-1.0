@@ -96,7 +96,7 @@ export const useMobileOptimization = (): MobileOptimizationConfig => {
     
     // Gradient complexity - simple solid colors on mobile
     gradients: shouldOptimize 
-      ? 'bg-white/95 border border-slate-200/50'
+      ? 'bg-[var(--component-card)]/95 border border-[var(--glass-border-light)]/50'
       : 'bg-gradient-to-br from-white via-slate-50/30 to-transparent',
     
     // Animation controls - completely disabled on mobile
@@ -112,7 +112,7 @@ export const useMobileOptimization = (): MobileOptimizationConfig => {
     gpuIntensiveEffects: shouldOptimize ? '' : 'backdrop-blur-xl backdrop-saturate-150 drop-shadow-2xl',
     
     // Simple alternatives for mobile
-    simpleAlternatives: shouldOptimize ? 'bg-white/95 shadow-lg border border-slate-200/50' : ''
+    simpleAlternatives: shouldOptimize ? 'bg-[var(--component-card)]/95 shadow-lg border border-[var(--glass-border-light)]/50' : ''
   };
 
   return {

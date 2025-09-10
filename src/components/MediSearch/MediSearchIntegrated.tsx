@@ -348,7 +348,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
     return (
       <div 
         key={result.id}
-        className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-200/50 overflow-hidden transition-all duration-500 hover:-translate-y-1"
+        className="group relative bg-[var(--component-card)] rounded-2xl shadow-lg hover:shadow-2xl border border-[var(--glass-border-light)]/50 overflow-hidden transition-all duration-500 hover:-translate-y-1"
         style={{ animationDelay: `${index * 100}ms` }}
       >
         {/* Hover Glow Effect */}
@@ -358,20 +358,20 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
           {/* Header */}
           <div className="flex items-start justify-between mb-6">
             <div className="flex-1 mr-4">
-              <h3 className="text-xl font-bold text-gray-900 leading-tight mb-3 group-hover:text-indigo-900 transition-colors duration-200">
+              <h3 className="text-xl font-bold text-[var(--foreground)] leading-tight mb-3 group-hover:text-indigo-900 transition-colors duration-200">
                 {result.title}
               </h3>
               <div className="flex flex-wrap items-center gap-3 mb-4">
-                <div className={`inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r ${evidence.gradient} text-white rounded-full text-sm font-semibold shadow-lg ${evidence.glow}`}>
+                <div className={`inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r ${evidence.gradient} text-[var(--foreground)] rounded-full text-sm font-semibold shadow-lg ${evidence.glow}`}>
                   <EvidenceIcon className="w-4 h-4" />
                   <span>{evidence.level}</span>
-                  <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                  <span className="bg-[var(--component-card)]/20 px-2 py-0.5 rounded-full text-xs">
                     {Math.round((result.relevanceScore || 0.8) * 100)}%
                   </span>
                 </div>
                 
                 {result.publicationDate && (
-                  <div className="flex items-center gap-2 text-gray-500 text-sm">
+                  <div className="flex items-center gap-2 text-[var(--foreground-secondary)] text-sm">
                     <CalendarIcon className="w-4 h-4" />
                     <span>{formatDate(result.publicationDate)}</span>
                   </div>
@@ -385,10 +385,10 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                 disabled={!user}
                 className={`p-2 rounded-lg transition-all duration-200 relative group ${
                   !user 
-                    ? 'text-gray-300 cursor-not-allowed' 
+                    ? 'text-[var(--foreground-secondary)] cursor-not-allowed' 
                     : isFavorited 
                       ? 'text-red-500 bg-red-50 hover:bg-red-100' 
-                      : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+                      : 'text-[var(--foreground-secondary)] hover:text-red-500 hover:bg-red-50'
                 }`}
                 title={!user ? t('search.auth.loginToSave', 'Please log in to save results') : isFavorited ? t('search.actions.removeFromFavorites', 'Remove from favorites') : t('search.actions.addToFavorites', 'Add to favorites')}
               >
@@ -396,27 +396,27 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                 
                 {/* Authentication tooltip */}
                 {!user && (
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-[var(--background)] text-[var(--foreground)] text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                     {t('search.auth.loginToSave', 'Please log in to save results')}
                   </div>
                 )}
               </button>
-              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200">
+              <button className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-secondary)] rounded-lg transition-all duration-200">
                 <ShareIcon className="w-5 h-5" />
               </button>
             </div>
           </div>
           
           {/* Content */}
-                      <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+                      <p className="text-[var(--foreground-tertiary)] leading-relaxed mb-6 text-lg">
               {result.snippet || t('search.results.noDescription', 'No description available.')}
             </p>
           
           {/* Metadata */}
-          <div className="flex flex-wrap items-center gap-4 mb-6 text-sm text-gray-600">
+          <div className="flex flex-wrap items-center gap-4 mb-6 text-sm text-[var(--foreground-tertiary)]">
             {result.evidenceLevel && (
               <div className="flex items-center gap-2">
-                <AcademicCapIcon className="w-4 h-4 text-blue-500" />
+                <AcademicCapIcon className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />
                 <span className="capitalize">{result.evidenceLevel.replace('-', ' ')}</span>
               </div>
             )}
@@ -437,20 +437,20 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
           {/* Footer */}
           <div className="pt-4 border-t border-gray-100">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3 text-gray-600 text-sm min-w-0 flex-1">
+              <div className="flex items-center gap-3 text-[var(--foreground-tertiary)] text-sm min-w-0 flex-1">
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <LinkIcon className="w-4 h-4 flex-shrink-0" />
-                  <span className="font-semibold text-gray-900 truncate">{result.source || t('search.results.defaultSource', 'Medical Journal')}</span>
+                  <span className="font-semibold text-[var(--foreground)] truncate">{result.source || t('search.results.defaultSource', 'Medical Journal')}</span>
                 </div>
                 
                 {/* Provider Badge */}
                 {result.provider && (
                   <div className={`px-2 py-1 text-xs font-medium rounded-full flex-shrink-0 ${
                     result.provider === 'brave' ? 'bg-green-100 text-green-700' :
-                    result.provider === 'exa' ? 'bg-blue-100 text-blue-700' :
+                    result.provider === 'exa' ? 'bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)]' :
                     result.provider === 'perplexity' ? 'bg-purple-100 text-purple-700' :
                     result.provider === 'clinicaltrials' ? 'bg-orange-100 text-orange-700' :
-                    'bg-gray-100 text-gray-700'
+                    'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)]'
                   }`}>
                     {result.provider === 'brave' ? 'Brave' :
                      result.provider === 'exa' ? 'Exa AI' :
@@ -465,7 +465,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                 href={result.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ml-3 p-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 flex-shrink-0 group"
+                className="ml-3 p-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-[var(--foreground)] rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 flex-shrink-0 group"
                 title={t('search.results.openExternal', 'Open External Link')}
               >
                 <ArrowTopRightOnSquareIcon className="w-4 h-4" />
@@ -508,7 +508,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
             {/* Title Section */}
           <div className="text-center mb-12">
             <div className="flex items-center justify-center mb-6">
-              <div className="flex items-center gap-4 p-4 bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50">
+              <div className="flex items-center gap-4 p-4 bg-[var(--component-card)]/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50">
                 <div className="relative">
                   <CpuChipIcon className="w-8 h-8 text-indigo-600" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
@@ -516,34 +516,34 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                 <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-gray-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent">
                   MediSearch AI
                 </h1>
-                 <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full text-white text-sm font-semibold">
+                 <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full text-[var(--foreground)] text-sm font-semibold">
                   <SparklesSolid className="w-4 h-4" />
                   <span>{t('search.badges.revolutionary', 'Revolutionary')}</span>
                 </div>
               </div>
             </div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-[var(--foreground-tertiary)] max-w-3xl mx-auto leading-relaxed">
               {t('search.hero.subtitle', "Discover breakthrough medical research and clinical trials with AI-powered precision. Access the world's most advanced medical literature search engine.")}
             </p>
             
             {/* Live Stats */}
             <div className="flex items-center justify-center gap-8 mt-8">
-              <div className="flex items-center gap-2 text-gray-700">
+              <div className="flex items-center gap-2 text-[var(--foreground-tertiary)]">
                 <GlobeAltIcon className="w-5 h-5 text-indigo-600" />
                 <span className="font-semibold">{searchStats.papers.toLocaleString()}+</span>
-                <span className="text-gray-500">{t('search.stats.researchPapers', 'Research Papers')}</span>
+                <span className="text-[var(--foreground-secondary)]">{t('search.stats.researchPapers', 'Research Papers')}</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-700">
+              <div className="flex items-center gap-2 text-[var(--foreground-tertiary)]">
                 <BoltIcon className="w-5 h-5 text-green-600" />
                 <span className="font-semibold">{searchStats.speed.toFixed(3)}s</span>
-                <span className="text-gray-500">{t('search.stats.searchSpeed', 'Search Speed')}</span>
+                <span className="text-[var(--foreground-secondary)]">{t('search.stats.searchSpeed', 'Search Speed')}</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-700">
-                <ShieldCheckIcon className="w-5 h-5 text-blue-600" />
+              <div className="flex items-center gap-2 text-[var(--foreground-tertiary)]">
+                <ShieldCheckIcon className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                   <span className="font-semibold">{selectedProviders.length}</span>
-                  <span className="text-gray-500">{t('search.stats.activeProviders', 'Active Providers')}</span>
+                  <span className="text-[var(--foreground-secondary)]">{t('search.stats.activeProviders', 'Active Providers')}</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-700">
+                <div className="flex items-center gap-2 text-[var(--foreground-tertiary)]">
                   <CpuChipIcon className="w-5 h-5 text-purple-600" />
                   <span className="font-semibold">
                     {selectedProviders.length > 0 
@@ -551,7 +551,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                           .reduce((acc, m) => acc + m.successRate, 0) / selectedProviders.length)
                       : 0}%
                   </span>
-                  <span className="text-gray-500">{t('search.stats.successRate', 'Success Rate')}</span>
+                  <span className="text-[var(--foreground-secondary)]">{t('search.stats.successRate', 'Success Rate')}</span>
               </div>
             </div>
           </div>
@@ -561,10 +561,10 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
               <div className="relative">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
-                  <div className="relative bg-white rounded-2xl shadow-2xl border border-gray-200/50 overflow-hidden" data-tour="search-input">
+                  <div className="relative bg-[var(--component-card)] rounded-2xl shadow-2xl border border-[var(--glass-border-light)]/50 overflow-hidden" data-tour="search-input">
                     <div className="flex items-center p-6">
                       <div className="relative mr-4">
-                        <MagnifyingGlassIcon className="w-6 h-6 text-gray-400 group-focus-within:text-indigo-600 transition-colors duration-200" />
+                        <MagnifyingGlassIcon className="w-6 h-6 text-[var(--foreground-secondary)] group-focus-within:text-indigo-600 transition-colors duration-200" />
                         <div className="absolute inset-0 rounded-full bg-indigo-500/20 scale-0 group-focus-within:scale-150 transition-transform duration-300"></div>
                       </div>
                       <input
@@ -579,8 +579,8 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                         }
                         className={`flex-1 text-lg bg-transparent border-none outline-none ${
                           selectedProviders.length === 0 
-                            ? 'text-gray-400 placeholder-gray-400' 
-                            : 'text-gray-900 placeholder-gray-400'
+                            ? 'text-[var(--foreground-secondary)] placeholder-gray-400' 
+                            : 'text-[var(--foreground)] placeholder-gray-400'
                         }`}
                         disabled={state.isLoading || selectedProviders.length === 0}
                       />
@@ -588,7 +588,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                         {searchQuery && (
                           <button
                             onClick={clearSearch}
-                            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                            className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-secondary)] rounded-lg transition-all duration-200"
                           >
                             <XMarkIcon className="w-5 h-5" />
                           </button>
@@ -605,8 +605,8 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                           disabled={state.isLoading || selectedProviders.length === 0 || !searchQuery.trim()}
                           className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 ${
                             state.isLoading || selectedProviders.length === 0 || !searchQuery.trim()
-                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                              : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 active:scale-95'
+                              ? 'bg-[var(--component-panel)] text-[var(--foreground-secondary)] cursor-not-allowed'
+                              : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-[var(--foreground)] hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 active:scale-95'
                           }`}
                           title={
                             selectedProviders.length === 0 
@@ -647,29 +647,29 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
           {/* Collapsible Favorites Section */}
           {user && likedState.stats.totalCount > 0 && (
             <div className="max-w-4xl mx-auto mb-8">
-              <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
+              <div className="bg-[var(--component-card)]/90 backdrop-blur-xl rounded-2xl shadow-lg border border-[var(--glass-border-light)]/50 overflow-hidden">
                 {/* Favorites Header - Always visible */}
                 <button
                   onClick={() => setShowFavoritesSection(!showFavoritesSection)}
-                  className="w-full p-6 text-left hover:bg-gray-50/50 transition-colors duration-200 flex items-center justify-between"
+                  className="w-full p-6 text-left hover:bg-[var(--component-surface-primary)]/50 transition-colors duration-200 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-red-50 rounded-lg">
                       <HeartSolid className="w-6 h-6 text-red-500" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">Saved Search Results</h3>
-                      <p className="text-sm text-gray-600">
+                      <h3 className="text-lg font-semibold text-[var(--foreground)]">Saved Search Results</h3>
+                      <p className="text-sm text-[var(--foreground-tertiary)]">
                         {likedState.stats.totalCount} saved results available
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-[var(--foreground-secondary)]">
                       {showFavoritesSection ? 'Hide' : 'Show'}
                     </span>
                     <ChevronDownIcon 
-                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                      className={`w-5 h-5 text-[var(--foreground-secondary)] transition-transform duration-200 ${
                         showFavoritesSection ? 'rotate-180' : ''
                       }`}
                     />
@@ -678,12 +678,12 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
 
                 {/* Favorites Content - Collapsible */}
                 {showFavoritesSection && (
-                  <div className="border-t border-gray-200">
+                  <div className="border-t border-[var(--glass-border-light)]">
                     <div className="p-6">
                       {likedState.isLoading ? (
                           <div className="text-center py-8">
                           <div className="w-8 h-8 border-2 border-red-200 border-t-red-500 rounded-full animate-spin mx-auto mb-3"></div>
-                          <p className="text-gray-600">{t('search.saved.loading', 'Loading your saved results...')}</p>
+                          <p className="text-[var(--foreground-tertiary)]">{t('search.saved.loading', 'Loading your saved results...')}</p>
                         </div>
                       ) : likedState.likedResults.length > 0 ? (
                         <div className="space-y-4 max-h-96 overflow-y-auto">
@@ -692,23 +692,23 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                             const EvidenceIcon = evidence.icon;
                             
                             return (
-                              <div key={liked.result_id} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-200">
+                              <div key={liked.result_id} className="bg-[var(--component-surface-primary)] rounded-lg p-4 hover:bg-[var(--component-surface-secondary)] transition-colors duration-200">
                                 <div className="flex items-start justify-between">
                                   <div className="flex-1 mr-4">
-                                    <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                                    <h4 className="font-semibold text-[var(--foreground)] mb-2 line-clamp-2">
                                       {liked.title}
                                     </h4>
-                                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                    <p className="text-sm text-[var(--foreground-tertiary)] mb-3 line-clamp-2">
                                       {liked.snippet}
                                     </p>
                                     <div className="flex items-center gap-3">
-                                      <div className={`inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r ${evidence.gradient} text-white rounded-full text-xs font-semibold`}>
+                                      <div className={`inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r ${evidence.gradient} text-[var(--foreground)] rounded-full text-xs font-semibold`}>
                                         <EvidenceIcon className="w-3 h-3" />
                                           <span>{Math.round((liked.relevance_score || 0.8) * 100)}%</span>
                                       </div>
-                                      <span className="text-xs text-gray-500">{liked.source}</span>
+                                      <span className="text-xs text-[var(--foreground-secondary)]">{liked.source}</span>
                                       {liked.created_at && (
-                                        <span className="text-xs text-gray-500">{formatDate(liked.created_at)}</span>
+                                        <span className="text-xs text-[var(--foreground-secondary)]">{formatDate(liked.created_at)}</span>
                                       )}
                                     </div>
                                   </div>
@@ -743,8 +743,8 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                             );
                           })}
                           {likedState.likedResults.length > 5 && (
-                             <div className="text-center py-4 border-t border-gray-200">
-                               <p className="text-sm text-gray-600">
+                             <div className="text-center py-4 border-t border-[var(--glass-border-light)]">
+                               <p className="text-sm text-[var(--foreground-tertiary)]">
                                  {t('search.saved.showingOf', 'Showing {shown} of {total} saved results', { shown: 5, total: likedState.stats.totalCount })}
                                </p>
                              </div>
@@ -752,9 +752,9 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                         </div>
                       ) : (
                         <div className="text-center py-8">
-                          <HeartIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                            <p className="text-gray-600 font-medium">{t('search.saved.emptyTitle', 'No saved results yet')}</p>
-                            <p className="text-sm text-gray-500">{t('search.saved.emptyDesc', 'Start saving interesting search results by clicking the heart icon')}</p>
+                          <HeartIcon className="w-12 h-12 text-[var(--foreground-secondary)] mx-auto mb-3" />
+                            <p className="text-[var(--foreground-tertiary)] font-medium">{t('search.saved.emptyTitle', 'No saved results yet')}</p>
+                            <p className="text-sm text-[var(--foreground-secondary)]">{t('search.saved.emptyDesc', 'Start saving interesting search results by clicking the heart icon')}</p>
                         </div>
                       )}
                     </div>
@@ -767,29 +767,29 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
           {/* Collapsible Bookmarked News Section */}
           {user && bookmarkedNewsState.stats.totalCount > 0 && (
             <div className="max-w-4xl mx-auto mb-8">
-              <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
+              <div className="bg-[var(--component-card)]/90 backdrop-blur-xl rounded-2xl shadow-lg border border-[var(--glass-border-light)]/50 overflow-hidden">
                 {/* Bookmarked News Header - Always visible */}
                 <button
                   onClick={() => setShowBookmarkedNewsSection(!showBookmarkedNewsSection)}
-                  className="w-full p-6 text-left hover:bg-gray-50/50 transition-colors duration-200 flex items-center justify-between"
+                  className="w-full p-6 text-left hover:bg-[var(--component-surface-primary)]/50 transition-colors duration-200 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-50 rounded-lg">
-                      <NewspaperIcon className="w-6 h-6 text-blue-500" />
+                    <div className="p-2 bg-[var(--cardiology-accent-blue-light)] rounded-lg">
+                      <NewspaperIcon className="w-6 h-6 text-[var(--cardiology-accent-blue)]" />
                     </div>
                     <div>
-                       <h3 className="text-lg font-semibold text-gray-900">{t('news.bookmarked.title', 'Bookmarked News')}</h3>
-                      <p className="text-sm text-gray-600">
+                       <h3 className="text-lg font-semibold text-[var(--foreground)]">{t('news.bookmarked.title', 'Bookmarked News')}</h3>
+                      <p className="text-sm text-[var(--foreground-tertiary)]">
                         {t('news.bookmarked.countLabel', '{count} bookmarked articles available', { count: bookmarkedNewsState.stats.totalCount })}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-[var(--foreground-secondary)]">
                       {showBookmarkedNewsSection ? t('news.bookmarked.hide', 'Hide') : t('news.bookmarked.show', 'Show')}
                     </span>
                     <ChevronDownIcon 
-                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                      className={`w-5 h-5 text-[var(--foreground-secondary)] transition-transform duration-200 ${
                         showBookmarkedNewsSection ? 'rotate-180' : ''
                       }`}
                     />
@@ -798,33 +798,33 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
 
                 {/* Bookmarked News Content - Collapsible */}
                 {showBookmarkedNewsSection && (
-                  <div className="border-t border-gray-200">
+                  <div className="border-t border-[var(--glass-border-light)]">
                     <div className="p-6">
                       {bookmarkedNewsState.isLoading ? (
                           <div className="text-center py-8">
                             <div className="w-8 h-8 border-2 border-blue-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-3"></div>
-                            <p className="text-gray-600">{t('news.bookmarked.loading', 'Loading your bookmarked news...')}</p>
+                            <p className="text-[var(--foreground-tertiary)]">{t('news.bookmarked.loading', 'Loading your bookmarked news...')}</p>
                           </div>
                       ) : bookmarkedNewsState.bookmarkedArticles.length > 0 ? (
                         <div className="space-y-4 max-h-96 overflow-y-auto">
                           {bookmarkedNewsState.bookmarkedArticles.slice(0, 5).map((article: MedicalNewsArticle) => (
-                            <div key={article.id} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-200">
+                            <div key={article.id} className="bg-[var(--component-surface-primary)] rounded-lg p-4 hover:bg-[var(--component-surface-secondary)] transition-colors duration-200">
                               <div className="flex items-start justify-between">
                                 <div className="flex-1 mr-4">
-                                  <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                                  <h4 className="font-semibold text-[var(--foreground)] mb-2 line-clamp-2">
                                     {article.title}
                                   </h4>
-                                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                  <p className="text-sm text-[var(--foreground-tertiary)] mb-3 line-clamp-2">
                                     {article.summary}
                                   </p>
                                   <div className="flex items-center gap-3">
-                                    <div className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                                    <div className="inline-flex items-center gap-1 px-2 py-1 bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)] rounded-full text-xs font-semibold">
                                       <NewspaperIcon className="w-3 h-3" />
                                       <span>{article.category}</span>
                                     </div>
-                                    <span className="text-xs text-gray-500">{article.sourceName}</span>
+                                    <span className="text-xs text-[var(--foreground-secondary)]">{article.sourceName}</span>
                                     {article.publishedDate && (
-                                      <span className="text-xs text-gray-500">
+                                      <span className="text-xs text-[var(--foreground-secondary)]">
                                         {new Date(article.publishedDate).toLocaleDateString()}
                                       </span>
                                     )}
@@ -833,7 +833,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                                 <div className="flex gap-2">
                                   <button
                                     onClick={() => bookmarkedNewsState.removeBookmark(article.id)}
-                                    className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                                    className="p-2 text-[var(--cardiology-accent-blue)] hover:bg-[var(--cardiology-accent-blue-light)] rounded-lg transition-colors duration-200"
                                     title={t('news.bookmarked.removeBookmark', 'Remove bookmark')}
                                   >
                                     <NewspaperIcon className="w-4 h-4" />
@@ -852,8 +852,8 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                             </div>
                           ))}
                           {bookmarkedNewsState.bookmarkedArticles.length > 5 && (
-                             <div className="text-center py-4 border-t border-gray-200">
-                               <p className="text-sm text-gray-600">
+                             <div className="text-center py-4 border-t border-[var(--glass-border-light)]">
+                               <p className="text-sm text-[var(--foreground-tertiary)]">
                                  {t('news.bookmarked.showingOf', 'Showing {shown} of {total} bookmarked articles', { shown: 5, total: bookmarkedNewsState.stats.totalCount })}
                                </p>
                              </div>
@@ -861,9 +861,9 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                         </div>
                       ) : (
                         <div className="text-center py-8">
-                          <NewspaperIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                          <p className="text-gray-600 font-medium">{t('news.bookmarked.emptyTitle', 'No bookmarked news yet')}</p>
-                          <p className="text-sm text-gray-500">{t('news.bookmarked.emptyDesc', 'Start bookmarking interesting news articles by clicking the bookmark icon')}</p>
+                          <NewspaperIcon className="w-12 h-12 text-[var(--foreground-secondary)] mx-auto mb-3" />
+                          <p className="text-[var(--foreground-tertiary)] font-medium">{t('news.bookmarked.emptyTitle', 'No bookmarked news yet')}</p>
+                          <p className="text-sm text-[var(--foreground-secondary)]">{t('news.bookmarked.emptyDesc', 'Start bookmarking interesting news articles by clicking the bookmark icon')}</p>
                         </div>
                       )}
                     </div>
@@ -876,7 +876,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
             {/* Tabs */}
           <div className="mt-8" data-tour="search-tabs">
             <div className="flex items-center justify-center">
-              <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 p-1">
+              <div className="bg-[var(--component-card)]/90 backdrop-blur-xl rounded-2xl shadow-lg border border-[var(--glass-border-light)]/50 p-1">
                 <div className="flex items-center gap-1">
                   {tabs.map((tab) => {
                     if (state.results.length === 0 && tab.id !== 'news' && tab.id !== 'trending') return null;
@@ -887,8 +887,8 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                           onClick={() => setActiveTab(tab.id)}
                           className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
                             activeTab === tab.id
-                              ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg'
-                              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                              ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-[var(--foreground)] shadow-lg'
+                              : 'text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] hover:bg-[var(--component-surface-secondary)]'
                           }`}
                         >
                           <tab.icon className="w-5 h-5" />
@@ -896,8 +896,8 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                           {tab.count !== undefined && tab.count > 0 && (
                             <span className={`ml-2 px-2.5 py-0.5 text-xs rounded-full font-bold ${
                               activeTab === tab.id
-                                ? 'bg-white/20 text-white'
-                                : 'bg-gray-200 text-gray-700'
+                                ? 'bg-[var(--component-card)]/20 text-[var(--foreground)]'
+                                : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-tertiary)]'
                             }`}>
                               {tab.count}
                             </span>
@@ -919,7 +919,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
           <div className="mb-6">
             <button
               onClick={() => setShowTrialFilters(!showTrialFilters)}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--foreground-tertiary)] bg-[var(--component-card)] border border-[var(--glass-border-medium)] rounded-md hover:bg-[var(--component-surface-primary)] transition-colors"
             >
                 <AdjustmentsHorizontalIcon className="w-4 h-4" />
               {showTrialFilters ? t('search.hideFilters', 'Hide Filters') : t('search.advancedFilters', 'Advanced Filters')}
@@ -950,19 +950,19 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
                 </div>
               </div>
             </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">
                 {t('search.searchingBio', 'Analyzing Medical Literature')}
               </h3>
             <div className="flex justify-center gap-8 text-sm">
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-[var(--foreground-tertiary)]">
                   <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
                   <span>{t('search.loadingSteps.scanningDatabases', 'Scanning databases')}</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-[var(--foreground-tertiary)]">
                   <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse animation-delay-500"></div>
                   <span>{t('search.loadingSteps.processingResults', 'Processing results')}</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-[var(--foreground-tertiary)]">
                   <div className="w-2 h-2 bg-pink-500 rounded-full animate-pulse animation-delay-1000"></div>
                   <span>{t('search.loadingSteps.rankingRelevance', 'Ranking relevance')}</span>
               </div>
@@ -980,16 +980,16 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
           {/* Empty State */}
           {!state.isLoading && !state.error && state.results.length === 0 && (
             <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-3 bg-white/90 backdrop-blur-xl rounded-2xl px-6 py-4 shadow-lg border border-gray-200/50 mb-6">
+              <div className="inline-flex items-center gap-3 bg-[var(--component-card)]/90 backdrop-blur-xl rounded-2xl px-6 py-4 shadow-lg border border-[var(--glass-border-light)]/50 mb-6">
                 <BeakerIcon className="w-6 h-6 text-indigo-600" />
-                <span className="text-lg font-semibold text-gray-900">{t('search.banners.readyForDiscovery', 'Ready for Discovery')}</span>
+                <span className="text-lg font-semibold text-[var(--foreground)]">{t('search.banners.readyForDiscovery', 'Ready for Discovery')}</span>
               </div>
               <div className="flex items-center justify-center gap-8 text-sm">
-                <div className="flex items-center gap-2 text-gray-600">
+                <div className="flex items-center gap-2 text-[var(--foreground-tertiary)]">
                   <GlobeAltIcon className="w-4 h-4" />
                   <span>{t('search.banners.papersReady', '50M+ Papers Ready')}</span>
                 </div>
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex items-center gap-2 text-[var(--foreground-tertiary)]">
                   <BoltIcon className="w-4 h-4" />
                   <span>{t('search.banners.aiPoweredSearch', 'AI-Powered Search')}</span>
                 </div>
@@ -1001,10 +1001,10 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
           {!state.isLoading && !state.error && filteredResults.length > 0 && activeTab !== 'news' && activeTab !== 'trending' && (
             <div className="space-y-6">
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">
                   {t('search.discoveryFound', 'Revolutionary Discoveries Found')}
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-[var(--foreground-tertiary)]">
                   {filteredResults.length} {filteredResults.length === 1 ? 'result' : 'results'} found in {tabs.find(t => t.id === activeTab)?.label.toLowerCase()}
                 </p>
               </div>
@@ -1021,13 +1021,13 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
             <div className="text-center py-12">
               <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                 {tabs.find(t => t.id === activeTab)?.icon && 
-                  React.createElement(tabs.find(t => t.id === activeTab)!.icon, { className: "w-10 h-10 text-gray-500" })
+                  React.createElement(tabs.find(t => t.id === activeTab)!.icon, { className: "w-10 h-10 text-[var(--foreground-secondary)]" })
                 }
                 </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">
                 {t('search.noResultsInTab', 'No {{type}} found', { type: tabs.find(t => t.id === activeTab)?.label.toLowerCase() })}
               </h3>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-[var(--foreground-tertiary)]">
                 {t('search.checkOtherTabs', 'Check other tabs for more results')}
               </p>
                   </div>
@@ -1036,33 +1036,33 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
           {/* No Results Found */}
           {!state.isLoading && !state.error && state.results.length === 0 && searchQuery && (
             <div className="text-center py-12">
-              <BeakerIcon className="w-16 h-16 text-gray-300 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('search.discovery.noDiscoveriesTitle', 'No Revolutionary Discoveries Yet')}</h3>
-              <p className="text-gray-600 mb-8">
+              <BeakerIcon className="w-16 h-16 text-[var(--foreground-secondary)] mx-auto mb-6" />
+              <h3 className="text-2xl font-bold text-[var(--foreground)] mb-2">{t('search.discovery.noDiscoveriesTitle', 'No Revolutionary Discoveries Yet')}</h3>
+              <p className="text-[var(--foreground-tertiary)] mb-8">
                 Our AI couldn't find breakthrough research matching your criteria, but new discoveries happen daily.
               </p>
               
-              <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-gray-200/50 max-w-2xl mx-auto">
-                <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center justify-center gap-2">
+              <div className="bg-[var(--component-card)]/90 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-[var(--glass-border-light)]/50 max-w-2xl mx-auto">
+                <h4 className="text-lg font-semibold text-[var(--foreground)] mb-4 flex items-center justify-center gap-2">
                   <LightBulbIcon className="w-5 h-5 text-yellow-500" />
                   {t('search.discovery.tipsTitle', 'Discovery Enhancement Tips')}
                 </h4>
                 <div className="grid md:grid-cols-2 gap-4 text-left">
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <BoltIcon className="w-5 h-5 text-blue-500" />
-                    <span className="text-gray-700">{t('search.discovery.tips.broaderTerms', 'Try broader medical terms')}</span>
+                  <div className="flex items-center gap-3 p-3 bg-[var(--component-surface-primary)] rounded-lg">
+                    <BoltIcon className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
+                    <span className="text-[var(--foreground-tertiary)]">{t('search.discovery.tips.broaderTerms', 'Try broader medical terms')}</span>
               </div>
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-[var(--component-surface-primary)] rounded-lg">
                     <BeakerIcon className="w-5 h-5 text-green-500" />
-                    <span className="text-gray-700">{t('search.discovery.tips.clinicalTerms', 'Use clinical terminology')}</span>
+                    <span className="text-[var(--foreground-tertiary)]">{t('search.discovery.tips.clinicalTerms', 'Use clinical terminology')}</span>
             </div>
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-[var(--component-surface-primary)] rounded-lg">
                     <AcademicCapIcon className="w-5 h-5 text-purple-500" />
-                    <span className="text-gray-700">{t('search.discovery.tips.abbreviations', 'Check medical abbreviations')}</span>
+                    <span className="text-[var(--foreground-tertiary)]">{t('search.discovery.tips.abbreviations', 'Check medical abbreviations')}</span>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-[var(--component-surface-primary)] rounded-lg">
                     <AdjustmentsHorizontalIcon className="w-5 h-5 text-orange-500" />
-                    <span className="text-gray-700">{t('search.discovery.tips.adjustFilters', 'Adjust discovery filters')}</span>
+                    <span className="text-[var(--foreground-tertiary)]">{t('search.discovery.tips.adjustFilters', 'Adjust discovery filters')}</span>
                   </div>
                 </div>
               </div>
@@ -1074,7 +1074,7 @@ const MediSearchIntegrated: React.FC<{ className?: string }> = ({ className = ''
             <div className="mb-6">
               <button
                 onClick={() => setShowNewsFilters(!showNewsFilters)}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--foreground-tertiary)] bg-[var(--component-card)] border border-[var(--glass-border-medium)] rounded-md hover:bg-[var(--component-surface-primary)] transition-colors"
                 disabled={newsState.isLoading}
               >
                 <AdjustmentsHorizontalIcon className="w-4 h-4" />

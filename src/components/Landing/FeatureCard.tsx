@@ -61,12 +61,12 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
 
         <h3 className={`
           text-xl mb-3
-          font-semibold text-gray-900 dark:text-white
+          font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]
         `}>
           {title}
         </h3>
 
-        <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed">
           {description}
         </p>
 

@@ -25,12 +25,12 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
       {/* Section Header */}
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-xl shadow-blue-500/25 mb-6 group hover:scale-105 transition-all duration-300">
-          <User className="w-8 h-8 text-white group-hover:rotate-12 transition-transform duration-300" />
+          <User className="w-8 h-8 text-[var(--foreground)] group-hover:rotate-12 transition-transform duration-300" />
         </div>
         <h3 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 dark:from-white dark:to-blue-200 bg-clip-text text-transparent mb-3">
           {t('calculators.cardiology.grace.demographics_section')}
         </h3>
-        <p className="text-gray-600 dark:text-gray-300 text-lg">
+        <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-lg">
           {t('calculators.cardiology.grace.baseline_patient_info')}
         </p>
       </div>
@@ -39,8 +39,8 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Age Input */}
         <div className="group">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-            <User className="w-4 h-4 mr-2 text-blue-500" />
+          <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3 flex items-center">
+            <User className="w-4 h-4 mr-2 text-[var(--cardiology-accent-blue)]" />
             {t('calculators.cardiology.grace.age_label')}
           </label>
           <div className="relative">
@@ -50,7 +50,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
               max={120}
               value={formData.age}
               onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-              className="w-full px-6 py-4 text-lg font-semibold bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-white/80 dark:hover:bg-gray-800/80 group-hover:shadow-lg"
+              className="w-full px-6 py-4 text-lg font-semibold bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm border-2 border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 rounded-2xl focus:border-[var(--cardiology-accent-blue)] focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-[var(--component-card)]/80 dark:hover:bg-[var(--background)]/80 group-hover:shadow-lg"
               placeholder={t('calculators.cardiology.grace.age_placeholder')}
             />
             {errors.age && (
@@ -67,7 +67,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
 
         {/* Heart Rate Input */}
         <div className="group">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+          <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3 flex items-center">
             <Activity className="w-4 h-4 mr-2 text-red-500" />
             {t('calculators.cardiology.grace.heart_rate_label')}
           </label>
@@ -78,7 +78,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
               max={300}
               value={formData.heartRate}
               onChange={(e) => setFormData({ ...formData, heartRate: e.target.value })}
-              className="w-full px-6 py-4 text-lg font-semibold bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-white/80 dark:hover:bg-gray-800/80 group-hover:shadow-lg"
+              className="w-full px-6 py-4 text-lg font-semibold bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm border-2 border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-[var(--component-card)]/80 dark:hover:bg-[var(--background)]/80 group-hover:shadow-lg"
               placeholder={t('calculators.cardiology.grace.heart_rate_placeholder')}
             />
             {errors.heartRate && (
@@ -95,7 +95,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
 
         {/* Systolic BP Input */}
         <div className="group">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+          <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3 flex items-center">
             <Thermometer className="w-4 h-4 mr-2 text-orange-500" />
             {t('calculators.cardiology.grace.systolic_bp_label')}
           </label>
@@ -106,7 +106,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
               max={300}
               value={formData.systolicBP}
               onChange={(e) => setFormData({ ...formData, systolicBP: e.target.value })}
-              className="w-full px-6 py-4 text-lg font-semibold bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-white/80 dark:hover:bg-gray-800/80 group-hover:shadow-lg"
+              className="w-full px-6 py-4 text-lg font-semibold bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm border-2 border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 rounded-2xl focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-[var(--component-card)]/80 dark:hover:bg-[var(--background)]/80 group-hover:shadow-lg"
               placeholder={t('calculators.cardiology.grace.systolic_bp_placeholder')}
             />
             {errors.systolicBP && (
@@ -123,7 +123,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
 
         {/* Creatinine Input */}
         <div className="group">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+          <label className="block text-sm font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3 flex items-center">
             <Droplets className="w-4 h-4 mr-2 text-cyan-500" />
             {t('calculators.cardiology.grace.creatinine_label')}
           </label>
@@ -135,7 +135,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
               max={15.0}
               value={formData.creatinine}
               onChange={(e) => setFormData({ ...formData, creatinine: e.target.value })}
-              className="w-full px-6 py-4 text-lg font-semibold bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-white/80 dark:hover:bg-gray-800/80 group-hover:shadow-lg"
+              className="w-full px-6 py-4 text-lg font-semibold bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm border-2 border-[var(--glass-border-light)]/50 dark:border-[var(--border-strong)]/50 rounded-2xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-[var(--component-card)]/80 dark:hover:bg-[var(--background)]/80 group-hover:shadow-lg"
               placeholder={t('calculators.cardiology.grace.creatinine_placeholder')}
             />
             {errors.creatinine && (
@@ -156,7 +156,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
         <button
           onClick={onNext}
           disabled={!isStepComplete}
-          className="group relative px-12 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold text-lg rounded-2xl shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="group relative px-12 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-[var(--foreground)] font-bold text-lg rounded-2xl shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
           <div className="flex items-center space-x-2">
             <span>{t('calculators.cardiology.grace.continue_to_clinical_data')}</span>

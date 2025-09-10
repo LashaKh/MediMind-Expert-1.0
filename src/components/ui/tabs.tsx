@@ -87,7 +87,7 @@ export const TabsList: React.FC<TabsListProps> = ({
   return (
     <div
       className={cn(
-        "inline-flex h-10 items-center justify-center rounded-md bg-gray-100 dark:bg-gray-800 p-1 text-gray-500 dark:text-gray-400",
+        "inline-flex h-10 items-center justify-center rounded-md bg-[var(--component-surface-secondary)] dark:bg-[var(--background)] p-1 text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]",
         className
       )}
       id={id}
@@ -174,8 +174,8 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({
       className={cn(
         "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
         isActive
-          ? "bg-white dark:bg-gray-700 text-gray-950 dark:text-gray-50 shadow-sm"
-          : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-50",
+          ? "bg-[var(--component-card)] dark:bg-[var(--card)] text-gray-950 dark:text-[var(--foreground)] shadow-sm"
+          : "text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] hover:text-[var(--foreground)] dark:hover:text-[var(--foreground)]",
         className
       )}
       onClick={handleClick}

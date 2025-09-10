@@ -38,7 +38,7 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
       label: 'North America',
       description: 'United States, Canada, Mexico',
       icon: GlobeAmericasIcon,
-      color: 'text-blue-600',
+      color: 'text-[var(--cardiology-accent-blue-dark)]',
       countries: ['US', 'CA', 'MX']
     },
     {
@@ -90,7 +90,7 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
       label: 'Hospital Outpatient',
       description: 'Ambulatory surgery, specialty clinics',
       icon: BuildingOffice2Icon,
-      color: 'text-blue-600',
+      color: 'text-[var(--cardiology-accent-blue-dark)]',
       category: 'ambulatory'
     },
     {
@@ -134,7 +134,7 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
       label: 'Pediatric',
       description: 'Children and adolescents (0-18 years)',
       ageRange: '0-18',
-      color: 'text-blue-600'
+      color: 'text-[var(--cardiology-accent-blue-dark)]'
     },
     {
       id: 'adult',
@@ -212,19 +212,19 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-[var(--foreground)] mb-6 flex items-center gap-2">
           <MapPinSolid className="w-6 h-6 text-teal-600" />
           {t('filters.geographicContext.title', 'Geographic & Context')}
         </h3>
-        <p className="text-gray-600 mb-6">
+        <p className="text-[var(--foreground-tertiary)] mb-6">
           {t('filters.geographicContext.description', 'Filter by geographic relevance, practice settings, and patient populations')}
         </p>
       </div>
 
       {/* Geographic Regions */}
       <div className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-          <MapPinIcon className="w-5 h-5 text-gray-600" />
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+          <MapPinIcon className="w-5 h-5 text-[var(--foreground-tertiary)]" />
           {t('filters.geographicContext.regions', 'Geographic Regions')}
           {filters.geographicRelevance && filters.geographicRelevance.length > 0 && (
             <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
@@ -243,21 +243,21 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleGeographicChange(region.id, e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mt-0.5"
+                  className="w-5 h-5 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500 mt-0.5"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <IconComponent className={`w-4 h-4 ${region.color}`} />
-                    <span className="font-medium text-gray-900">{region.label}</span>
+                    <span className="font-medium text-[var(--foreground)]">{region.label}</span>
                   </div>
-                  <p className="text-sm text-gray-600">{region.description}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">{region.description}</p>
                 </div>
               </label>
             );
@@ -267,8 +267,8 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
 
       {/* Practice Settings */}
       <div className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-          <BuildingOffice2Icon className="w-5 h-5 text-gray-600" />
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+          <BuildingOffice2Icon className="w-5 h-5 text-[var(--foreground-tertiary)]" />
           {t('filters.geographicContext.practice', 'Practice Settings')}
           {filters.practiceSettings && filters.practiceSettings.length > 0 && (
             <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
@@ -287,21 +287,21 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handlePracticeSettingChange(setting.id, e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mt-0.5"
+                  className="w-5 h-5 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500 mt-0.5"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <IconComponent className={`w-4 h-4 ${setting.color}`} />
-                    <span className="font-medium text-gray-900">{setting.label}</span>
+                    <span className="font-medium text-[var(--foreground)]">{setting.label}</span>
                   </div>
-                  <p className="text-sm text-gray-600">{setting.description}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">{setting.description}</p>
                 </div>
               </label>
             );
@@ -311,8 +311,8 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
 
       {/* Patient Populations */}
       <div className="space-y-4">
-        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-          <UserGroupIcon className="w-5 h-5 text-gray-600" />
+        <h4 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
+          <UserGroupIcon className="w-5 h-5 text-[var(--foreground-tertiary)]" />
           {t('filters.geographicContext.populations', 'Patient Populations')}
           {filters.patientPopulations && filters.patientPopulations.length > 0 && (
             <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
@@ -330,24 +330,24 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:bg-[var(--component-surface-primary)]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handlePatientPopulationChange(population.id, e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mt-0.5"
+                  className="w-5 h-5 text-indigo-600 border-[var(--glass-border-medium)] rounded focus:ring-indigo-500 mt-0.5"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`w-4 h-4 rounded-full ${population.color.replace('text-', 'bg-')}`}></span>
-                    <span className="font-medium text-gray-900">{population.label}</span>
-                    <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700">
+                    <span className="font-medium text-[var(--foreground)]">{population.label}</span>
+                    <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)]">
                       {population.ageRange}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">{population.description}</p>
+                  <p className="text-sm text-[var(--foreground-tertiary)]">{population.description}</p>
                 </div>
               </label>
             );
@@ -373,9 +373,9 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
 
       {/* Summary */}
       {(filters.geographicRelevance || filters.practiceSettings || filters.patientPopulations) && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h5 className="font-medium text-gray-900 mb-2">{t('filters.geographicContext.summary', 'Geographic & Context Summary')}</h5>
-          <div className="text-sm text-gray-600 space-y-1">
+        <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
+          <h5 className="font-medium text-[var(--foreground)] mb-2">{t('filters.geographicContext.summary', 'Geographic & Context Summary')}</h5>
+          <div className="text-sm text-[var(--foreground-tertiary)] space-y-1">
             {filters.geographicRelevance && filters.geographicRelevance.length > 0 && (
               <div>
                 <strong>{t('filters.geographicContext.summaryRegions', 'Geographic regions:')}</strong> {filters.geographicRelevance.map(id => geographicRegions.find(r => r.id === id)?.label || id).join(', ')}

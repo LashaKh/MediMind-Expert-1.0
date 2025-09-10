@@ -377,7 +377,7 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
       case 'high':
         return { color: 'text-red-600 dark:text-red-400', bgColor: 'bg-red-50 dark:bg-red-900/20', borderColor: 'border-red-200 dark:border-red-800' };
       default:
-        return { color: 'text-gray-600 dark:text-gray-400', bgColor: 'bg-gray-50 dark:bg-gray-900/20', borderColor: 'border-gray-200 dark:border-gray-800' };
+        return { color: 'text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]', bgColor: 'bg-[var(--component-surface-primary)] dark:bg-[var(--background-dark)]/20', borderColor: 'border-[var(--glass-border-light)] dark:border-gray-800' };
     }
   }, []);
 
@@ -393,7 +393,7 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
             <div className="flex items-start space-x-3">
               <Shield className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.precise_dapt.bleeding_assessment_tool')}</h3>
+                <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.precise_dapt.bleeding_assessment_tool')}</h3>
                 <p className="text-red-800 dark:text-red-200 mt-2 text-sm leading-relaxed">
                   {t('calculators.cardiology.precise_dapt.tool_description')}
                 </p>
@@ -404,11 +404,11 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
           {/* Step Indicators */}
           <div className="flex justify-center mb-8">
             <div className="flex items-center space-x-4">
-              <div className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${currentStep === 1 ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'}`}>
+              <div className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${currentStep === 1 ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200' : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'}`}>
                 <span className="font-medium">{t('calculators.cardiology.precise_dapt.patient_labs')}</span>
               </div>
-              <div className="w-6 h-px bg-gray-300 dark:bg-gray-600"></div>
-              <div className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${currentStep === 2 ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'}`}>
+              <div className="w-6 h-px bg-[var(--component-panel)] dark:bg-[var(--border)]"></div>
+              <div className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${currentStep === 2 ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200' : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'}`}>
                 <span className="font-medium">{t('calculators.cardiology.precise_dapt.bleeding_history')}</span>
               </div>
             </div>
@@ -417,12 +417,12 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
           {currentStep === 1 && (
             <div className="space-y-6">
               {/* Demographics & Lab Values */}
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+              <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
                 <div className="flex items-center space-x-3 mb-4">
-                  <FileText className="w-6 h-6 text-blue-600" />
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.precise_dapt.demographics_labs_section')}</h3>
+                  <FileText className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)]" />
+                  <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.precise_dapt.demographics_labs_section')}</h3>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.cardiology.precise_dapt.laboratory_description')}</p>
+                <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.cardiology.precise_dapt.laboratory_description')}</p>
                 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
                   <div ref={ageRef}>
@@ -481,7 +481,7 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
               <div className="flex justify-end">
                 <CalculatorButton
                   onClick={() => setCurrentStep(2)}
-                  className="bg-red-600 hover:bg-red-700 text-white px-8 py-3"
+                  className="bg-red-600 hover:bg-red-700 text-[var(--foreground)] px-8 py-3"
                 >
                   {t('calculators.cardiology.precise_dapt.next_bleeding_history')}
                 </CalculatorButton>
@@ -495,9 +495,9 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
               <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-6">
                 <div className="flex items-center space-x-3 mb-4">
                   <Droplets className="w-6 h-6 text-orange-600" />
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.precise_dapt.bleeding_history_section')}</h3>
+                  <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.precise_dapt.bleeding_history_section')}</h3>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.cardiology.precise_dapt.bleeding_history_description')}</p>
+                <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.cardiology.precise_dapt.bleeding_history_description')}</p>
                 
                 <div className="mt-6" ref={previousBleedRef}>
                   <CalculatorCheckbox
@@ -513,7 +513,7 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
               <div className="flex justify-between">
                 <CalculatorButton
                   onClick={() => setCurrentStep(1)}
-                  className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3"
+                  className="bg-[var(--muted-foreground)] hover:bg-[var(--border)] text-[var(--foreground)] px-8 py-3"
                 >
                   Back
                 </CalculatorButton>
@@ -521,7 +521,7 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
                 <CalculatorButton
                   onClick={handleCalculate}
                   loading={isCalculating}
-                  className="bg-red-600 hover:bg-red-700 text-white px-8 py-3"
+                  className="bg-red-600 hover:bg-red-700 text-[var(--foreground)] px-8 py-3"
                 >
                   {t('calculators.cardiology.precise_dapt.calculate_button')}
                 </CalculatorButton>
@@ -542,7 +542,7 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
               {/* Risk Assessment Section */}
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.precise_dapt.bleeding_risk')}</h4>
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.precise_dapt.bleeding_risk')}</h4>
                   <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mt-2 ${
                     result.bleedingRisk === 'low' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' :
                     result.bleedingRisk === 'intermediate' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200' :
@@ -550,43 +550,43 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
                   }`}>
                     {t(`calculators.cardiology.precise_dapt.${result.bleedingRisk}_risk`)}
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">
                     {t('calculators.cardiology.precise_dapt.overall_bleeding_risk', { risk: result.riskPercentage.toString() })}
                   </p>
                 </div>
 
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.precise_dapt.major_bleeding')}</h4>
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-2">
+                <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.precise_dapt.major_bleeding')}</h4>
+                  <div className="text-2xl font-bold text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mt-2">
                     {result.riskPercentage}%
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                     {t('calculators.cardiology.precise_dapt.annual_major_bleeding')}
                   </p>
                 </div>
 
                 <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.precise_dapt.safe_duration')}</h4>
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.precise_dapt.safe_duration')}</h4>
                   <div className="text-lg font-semibold text-green-600 dark:text-green-400 mt-2">
                     {result.riskAnalysis.safeDuration}
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-1">
                     {t('calculators.cardiology.precise_dapt.recommended_dapt_duration')}
                   </p>
                 </div>
               </div>
 
               {/* Clinical Recommendation */}
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+              <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
                 <div className="flex items-center space-x-3 mb-3">
-                  <Brain className="w-6 h-6 text-blue-600" />
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.precise_dapt.clinical_recommendation')}</h4>
+                  <Brain className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)]" />
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.precise_dapt.clinical_recommendation')}</h4>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 mb-3">
+                <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3">
                   {result.daptRecommendation}
                 </p>
-                <div className="bg-white dark:bg-gray-800 rounded-md p-3 border border-blue-200 dark:border-blue-700">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-md p-3 border border-blue-200 dark:border-blue-700">
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     {result.durationGuidance}
                   </p>
                 </div>
@@ -596,13 +596,13 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
               <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
                 <div className="flex items-center space-x-3 mb-3">
                   <TrendingUp className="w-6 h-6 text-green-600" />
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.precise_dapt.clinical_benefit_analysis')}</h4>
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.precise_dapt.clinical_benefit_analysis')}</h4>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 mb-3">
+                <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mb-3">
                   {result.riskAnalysis.clinicalBenefit}
                 </p>
-                <div className="bg-white dark:bg-gray-800 rounded-md p-3 border border-green-200 dark:border-green-700">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-md p-3 border border-green-200 dark:border-green-700">
+                  <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                     {result.riskAnalysis.clinicalGuidance}
                   </p>
                 </div>
@@ -613,13 +613,13 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
                 <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6">
                   <div className="flex items-center space-x-3 mb-3">
                     <AlertTriangle className="w-6 h-6 text-amber-600" />
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.precise_dapt.contributing_risk_factors')}</h4>
+                    <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.precise_dapt.contributing_risk_factors')}</h4>
                   </div>
                   <ul className="space-y-2">
                     {result.riskFactors.map((factor, index) => (
                       <li key={index} className="flex items-start space-x-2">
                         <div className="w-1.5 h-1.5 bg-amber-600 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-sm text-gray-700 dark:text-gray-300">{factor}</span>
+                        <span className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{factor}</span>
                       </li>
                     ))}
                   </ul>
@@ -627,10 +627,10 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
               )}
 
               {/* Score Interpretation Guide */}
-              <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+              <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--background)]/50 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-lg p-6">
                 <div className="flex items-center space-x-3 mb-4">
-                  <BarChart3 className="w-6 h-6 text-gray-600" />
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.precise_dapt.score_interpretation')}</h4>
+                  <BarChart3 className="w-6 h-6 text-[var(--foreground-tertiary)]" />
+                  <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.cardiology.precise_dapt.score_interpretation')}</h4>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                   <div className="space-y-2">
@@ -665,14 +665,14 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-3 pt-6">
                 <CalculatorButton
                   onClick={handleReset}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                  className="flex-1 bg-[var(--cardiology-accent-blue-dark)] hover:bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)]"
                 >
                   {t('calculators.cardiology.precise_dapt.new_assessment')}
                 </CalculatorButton>
                 
                 <CalculatorButton
                   onClick={() => setShowResult(false)}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white"
+                  className="flex-1 bg-[var(--border)] hover:bg-[var(--card)] text-[var(--foreground)]"
                 >
                   {t('calculators.cardiology.precise_dapt.modify_inputs')}
                 </CalculatorButton>
@@ -683,7 +683,7 @@ const PRECISEDAPTCalculatorComponent: React.FC = () => {
       )}
 
       {/* Footer */}
-      <div className="text-center text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-4">
+      <div className="text-center text-sm text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)] border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)] pt-4">
         <span>{t('calculators.cardiology.precise_dapt.based_on_precise_dapt')}</span>
         <br />
         <span className="text-red-600 font-semibold">{t('calculators.cardiology.precise_dapt.bleeding_safety_validated')}</span>

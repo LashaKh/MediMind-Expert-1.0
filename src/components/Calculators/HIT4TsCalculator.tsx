@@ -293,11 +293,11 @@ const HIT4TsCalculatorComponent: React.FC = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-xl blur-md opacity-60"></div>
                 <div className="relative bg-gradient-to-r from-blue-500 to-indigo-500 p-3 rounded-xl">
-                  <Droplets className="w-6 h-6 text-white" />
+                  <Droplets className="w-6 h-6 text-[var(--foreground)]" />
                 </div>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">
+                <h1 className="text-2xl font-bold text-[var(--foreground)]">
                   4Ts Score Calculator
                 </h1>
                 <p className="text-blue-200 text-sm">
@@ -308,9 +308,9 @@ const HIT4TsCalculatorComponent: React.FC = () => {
 
             {/* Score Badge */}
             {Object.keys(selectedOptions).length > 0 && (
-              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
+              <div className="flex items-center space-x-2 bg-[var(--component-card)]/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
                 <Sparkles className="w-4 h-4 text-yellow-300" />
-                <span className="text-white font-semibold text-sm">
+                <span className="text-[var(--foreground)] font-semibold text-sm">
                   Score: {getCurrentScore()}/8
                 </span>
               </div>
@@ -323,27 +323,27 @@ const HIT4TsCalculatorComponent: React.FC = () => {
       <div className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-xl border border-blue-200/60 dark:border-blue-800/60 overflow-hidden">
         <button
           onClick={() => setShowWhenToUse(!showWhenToUse)}
-          className="w-full p-4 text-left hover:bg-white/50 dark:hover:bg-white/5 transition-all duration-300 group"
+          className="w-full p-4 text-left hover:bg-[var(--component-card)]/50 dark:hover:bg-[var(--component-card)]/5 transition-all duration-300 group"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg group-hover:scale-110 transition-transform duration-300">
-                <Info className="w-4 h-4 text-white" />
+                <Info className="w-4 h-4 text-[var(--foreground)]" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)] group-hover:text-[var(--cardiology-accent-blue-dark)] dark:group-hover:text-blue-400 transition-colors">
                   When to Use This Calculator
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-sm">
                   Clinical guidelines and appropriate patient populations
                 </p>
               </div>
             </div>
             <div className="transform transition-transform duration-300 group-hover:scale-110">
               {showWhenToUse ? (
-                <ChevronDown className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <ChevronDown className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
               ) : (
-                <ChevronRight className="w-5 h-5 text-gray-400" />
+                <ChevronRight className="w-5 h-5 text-[var(--foreground-secondary)]" />
               )}
             </div>
           </div>
@@ -353,11 +353,11 @@ const HIT4TsCalculatorComponent: React.FC = () => {
           showWhenToUse ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className="px-4 pb-4 pt-2">
-            <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg p-4 border border-white/40">
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3 text-sm">
+            <div className="bg-[var(--component-card)]/60 dark:bg-[var(--background)]/60 backdrop-blur-sm rounded-lg p-4 border border-white/40">
+              <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed mb-3 text-sm">
                 The 4Ts score for Heparin-Induced Thrombocytopenia (HIT) is a clinical scoring system used to estimate the pretest probability of HIT, a potentially life-threatening condition that can occur in patients receiving heparin therapy.
               </p>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3 text-sm">
+              <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] leading-relaxed mb-3 text-sm">
                 This calculator is applicable to patients who have been exposed to heparin and are experiencing a significant drop in platelet count or new thrombosis.
               </p>
               <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
@@ -384,23 +384,23 @@ const HIT4TsCalculatorComponent: React.FC = () => {
               key={parameter.name}
               className="transform transition-all duration-300 hover:scale-[1.02]"
             >
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
+              <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl shadow-lg border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] overflow-hidden hover:shadow-xl transition-all duration-300">
                 {/* Compact Parameter Header */}
-                <div className="bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-700 p-4 border-b border-gray-200 dark:border-gray-600">
+                <div className="bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-700 p-4 border-b border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
                   <div className="flex items-center space-x-3">
                     <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg">
-                      <IconComponent className="w-4 h-4 text-white" />
+                      <IconComponent className="w-4 h-4 text-[var(--foreground)]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 truncate">
+                      <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-[var(--foreground)] truncate">
                         {parameter.title}
                       </h3>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">
+                      <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-sm">
                         {parameter.subtitle}
                       </p>
                     </div>
                     {selectedPoints !== undefined && (
-                      <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1 rounded-full font-bold text-sm">
+                      <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-[var(--foreground)] px-3 py-1 rounded-full font-bold text-sm">
                         {selectedPoints} pts
                       </div>
                     )}
@@ -416,16 +416,16 @@ const HIT4TsCalculatorComponent: React.FC = () => {
                         onClick={() => handleOptionSelect(parameter.name, option.points)}
                         className={`relative w-full p-3 rounded-lg border-2 transition-all duration-300 text-left group ${
                           selectedPoints === option.points
-                            ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 shadow-md'
-                            : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-sm'
+                            ? 'border-[var(--cardiology-accent-blue)] bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 shadow-md'
+                            : 'border-[var(--glass-border-light)] dark:border-[var(--border-strong)] hover:border-[var(--cardiology-accent-blue)] dark:hover:border-[var(--cardiology-accent-blue)] hover:shadow-sm'
                         }`}
                       >
                         <div className="flex items-center space-x-3">
                           {/* Points badge */}
                           <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${
                             selectedPoints === option.points
-                              ? `bg-gradient-to-r ${option.color} text-white shadow-md`
-                              : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                              ? `bg-gradient-to-r ${option.color} text-[var(--foreground)] shadow-md`
+                              : 'bg-[var(--component-surface-secondary)] dark:bg-[var(--card)] text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]'
                           }`}>
                             {option.points}
                           </div>
@@ -434,7 +434,7 @@ const HIT4TsCalculatorComponent: React.FC = () => {
                             <p className={`text-sm font-medium transition-colors ${
                               selectedPoints === option.points
                                 ? 'text-blue-900 dark:text-blue-100'
-                                : 'text-gray-800 dark:text-gray-200'
+                                : 'text-[var(--foreground)] dark:text-[var(--foreground)]'
                             }`}>
                               {option.description}
                             </p>
@@ -443,11 +443,11 @@ const HIT4TsCalculatorComponent: React.FC = () => {
                           {/* Selection indicator */}
                           <div className={`w-5 h-5 rounded-full border-2 transition-all duration-300 ${
                             selectedPoints === option.points
-                              ? 'border-blue-500 bg-blue-500'
-                              : 'border-gray-300 dark:border-gray-500 group-hover:border-blue-400'
+                              ? 'border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue)]'
+                              : 'border-[var(--glass-border-medium)] dark:border-[var(--border)] group-hover:border-blue-400'
                           }`}>
                             {selectedPoints === option.points && (
-                              <CheckCircle className="w-5 h-5 text-white -m-0.5" />
+                              <CheckCircle className="w-5 h-5 text-[var(--foreground)] -m-0.5" />
                             )}
                           </div>
                         </div>
@@ -469,8 +469,8 @@ const HIT4TsCalculatorComponent: React.FC = () => {
           disabled={!isFormValid() || isCalculating}
           className={`group relative px-8 py-3 rounded-xl font-bold text-base transition-all duration-300 ${
             isFormValid() && !isCalculating
-              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl hover:shadow-blue-500/25 transform hover:scale-105'
-              : 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-[var(--foreground)] shadow-xl hover:shadow-blue-500/25 transform hover:scale-105'
+              : 'bg-[var(--component-panel)] dark:bg-[var(--card)] text-[var(--foreground-secondary)] cursor-not-allowed'
           }`}
         >
           {/* Button background animation */}
@@ -497,7 +497,7 @@ const HIT4TsCalculatorComponent: React.FC = () => {
         <div ref={resultsRef} className={`transform transition-all duration-700 ${
           showResult ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
         }`}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] overflow-hidden">
             {/* Compact Results Header */}
             <div className={`p-6 bg-gradient-to-r ${
               result.riskCategory === 'low' ? 'from-green-500 to-emerald-500' :
@@ -506,18 +506,18 @@ const HIT4TsCalculatorComponent: React.FC = () => {
             }`}>
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-1">
+                  <h2 className="text-2xl font-bold text-[var(--foreground)] mb-1">
                     4Ts Score Results
                   </h2>
-                  <p className="text-white/90">
+                  <p className="text-[var(--foreground)]/90">
                     Risk assessment completed
                   </p>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-white mb-1">
+                  <div className="text-3xl font-bold text-[var(--foreground)] mb-1">
                     {result.score}/8
                   </div>
-                  <div className="text-white/90 text-sm font-medium">
+                  <div className="text-[var(--foreground)]/90 text-sm font-medium">
                     Total Points
                   </div>
                 </div>
@@ -568,16 +568,16 @@ const HIT4TsCalculatorComponent: React.FC = () => {
               </div>
 
               {/* Compact Recommendations */}
-              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 mb-4">
-                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
-                  <Shield className="w-5 h-5 text-blue-600" />
+              <div className="bg-[var(--component-surface-primary)] dark:bg-[var(--card)]/50 rounded-xl p-4 mb-4">
+                <h4 className="font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3 flex items-center space-x-2">
+                  <Shield className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
                   <span>Clinical Recommendations</span>
                 </h4>
                 <ul className="space-y-2">
                   {result.recommendations.map((rec, index) => (
                     <li key={index} className="flex items-start space-x-2">
-                      <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                      <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                      <div className="w-1.5 h-1.5 bg-[var(--cardiology-accent-blue-dark)] rounded-full mt-2 flex-shrink-0"></div>
+                      <span className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-sm leading-relaxed">
                         {rec}
                       </span>
                     </li>
@@ -597,7 +597,7 @@ const HIT4TsCalculatorComponent: React.FC = () => {
         <div className="mt-6 flex justify-center">
           <button
             onClick={resetCalculator}
-            className="px-6 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300"
+            className="px-6 py-2 text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hover:text-[var(--foreground)] dark:hover:text-[var(--foreground)] font-medium rounded-lg hover:bg-[var(--component-surface-secondary)] dark:hover:bg-[var(--card)] transition-all duration-300"
           >
             Calculate Again
           </button>

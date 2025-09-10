@@ -158,7 +158,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
   const getSpeakerInfo = (speaker: 'host1' | 'host2') => {
     return speaker === 'host1' 
       ? { name: 'Dr. Sarah Chen', color: 'text-purple-600', bg: 'bg-purple-100' }
-      : { name: 'Dr. Michael Rodriguez', color: 'text-blue-600', bg: 'bg-blue-100' };
+      : { name: 'Dr. Michael Rodriguez', color: 'text-[var(--cardiology-accent-blue-dark)]', bg: 'bg-[var(--cardiology-accent-blue-light)]' };
   };
 
   return (
@@ -176,20 +176,20 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden"
+            className="bg-[var(--component-card)] rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-blue-50">
+            <div className="flex items-center justify-between p-6 border-b border-[var(--glass-border-light)] bg-gradient-to-r from-purple-50 to-blue-50">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-                  <DocumentTextIcon className="w-6 h-6 text-white" />
+                  <DocumentTextIcon className="w-6 h-6 text-[var(--foreground)]" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900">
+                  <h2 className="text-xl font-bold text-[var(--foreground)]">
                     {t('podcast.transcript.title')}
                   </h2>
                   {podcastTitle && (
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-[var(--foreground-tertiary)]">
                       {podcastTitle}
                     </p>
                   )}
@@ -199,7 +199,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
               <div className="flex items-center space-x-2">
                 <button
                   onClick={handleDownload}
-                  className="p-2 text-gray-600 hover:text-purple-600 transition-colors duration-200"
+                  className="p-2 text-[var(--foreground-tertiary)] hover:text-purple-600 transition-colors duration-200"
                   title={t('podcast.transcript.download')}
                 >
                   <ArrowDownTrayIcon className="w-5 h-5" />
@@ -207,7 +207,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
                 
                 <button
                   onClick={handleShare}
-                  className="p-2 text-gray-600 hover:text-blue-600 transition-colors duration-200"
+                  className="p-2 text-[var(--foreground-tertiary)] hover:text-[var(--cardiology-accent-blue-dark)] transition-colors duration-200"
                   title={t('podcast.transcript.share')}
                 >
                   <ShareIcon className="w-5 h-5" />
@@ -215,7 +215,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
                 
                 <button
                   onClick={onClose}
-                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                  className="p-2 text-[var(--foreground-secondary)] hover:text-[var(--foreground-tertiary)] transition-colors duration-200"
                 >
                   <XMarkIcon className="w-6 h-6" />
                 </button>
@@ -223,20 +223,20 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
             </div>
 
             {/* Search */}
-            <div className="p-4 border-b border-gray-200">
+            <div className="p-4 border-b border-[var(--glass-border-light)]">
               <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--foreground-secondary)]" />
                 <input
                   type="text"
                   placeholder={t('podcast.transcript.search.placeholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                  className="w-full pl-10 pr-4 py-2 border border-[var(--glass-border-light)] rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 />
               </div>
               
               {searchTerm && (
-                <div className="mt-2 text-sm text-gray-600">
+                <div className="mt-2 text-sm text-[var(--foreground-tertiary)]">
                   {t('podcast.transcript.search.results', { 
                     count: filteredTranscript.length,
                     total: parsedTranscript.length 
@@ -248,7 +248,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
             {/* Content */}
             <div className="flex-1 overflow-y-auto max-h-[calc(90vh-200px)]">
               {parsedTranscript.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+                <div className="flex flex-col items-center justify-center h-64 text-[var(--foreground-secondary)]">
                   <DocumentTextIcon className="w-12 h-12 mb-3" />
                   <p className="text-lg font-medium mb-1">
                     {t('podcast.transcript.empty.title')}
@@ -277,14 +277,14 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
                             ? 'bg-gradient-to-r from-purple-100 to-blue-100 border-2 border-purple-300 shadow-sm'
                             : isHighlighted
                               ? 'bg-yellow-50 border border-yellow-200'
-                              : 'hover:bg-gray-50 border border-transparent'
+                              : 'hover:bg-[var(--component-surface-primary)] border border-transparent'
                           }
                         `}
                         onClick={() => handleEntryClick(entry)}
                       >
                         {/* Speaker Avatar */}
                         <div className={`
-                          w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0
+                          w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-[var(--foreground)] flex-shrink-0
                           ${entry.speaker === 'host1' 
                             ? 'bg-gradient-to-br from-purple-500 to-purple-600' 
                             : 'bg-gradient-to-br from-blue-500 to-blue-600'
@@ -300,7 +300,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
                               {speakerInfo.name}
                             </span>
                             
-                            <div className="flex items-center space-x-2 text-xs text-gray-500">
+                            <div className="flex items-center space-x-2 text-xs text-[var(--foreground-secondary)]">
                               <ClockIcon className="w-3 h-3" />
                               <span>{formatTime(entry.startTime)}</span>
                               {onSeek && (
@@ -310,7 +310,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
                           </div>
 
                           {/* Text */}
-                          <p className="text-gray-700 leading-relaxed">
+                          <p className="text-[var(--foreground-tertiary)] leading-relaxed">
                             {searchTerm ? (
                               <span
                                 dangerouslySetInnerHTML={{
@@ -334,8 +334,8 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
 
             {/* Footer */}
             {parsedTranscript.length > 0 && (
-              <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
-                <div className="flex items-center justify-between text-sm text-gray-600">
+              <div className="px-6 py-4 border-t border-[var(--glass-border-light)] bg-[var(--component-surface-primary)]">
+                <div className="flex items-center justify-between text-sm text-[var(--foreground-tertiary)]">
                   <div className="flex items-center space-x-4">
                     <span>
                       {t('podcast.transcript.stats.entries', { count: parsedTranscript.length })}

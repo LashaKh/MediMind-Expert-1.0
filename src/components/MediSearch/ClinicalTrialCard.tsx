@@ -41,19 +41,19 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
         };
       case 'ACTIVE_NOT_RECRUITING':
         return {
-          color: 'text-blue-700 bg-blue-100',
+          color: 'text-[var(--cardiology-accent-blue-dark)] bg-[var(--cardiology-accent-blue-light)]',
           icon: ClockIcon,
           label: t('search.clinicalTrials.status.active', 'Active')
         };
       case 'COMPLETED':
         return {
-          color: 'text-gray-700 bg-gray-100',
+          color: 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-secondary)]',
           icon: CheckCircleIcon,
           label: t('search.clinicalTrials.status.completed', 'Completed')
         };
       default:
         return {
-          color: 'text-gray-600 bg-gray-100',
+          color: 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-secondary)]',
           icon: InformationCircleIcon,
           label: status
         };
@@ -71,15 +71,15 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
   const StatusIcon = statusDisplay.icon;
 
   return (
-    <div className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden ${className}`}>
+    <div className={`bg-[var(--component-card)] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden ${className}`}>
       <div className="p-6">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-2">
+            <h3 className="text-lg font-semibold text-[var(--foreground)] mb-1 line-clamp-2">
               {trial.title}
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[var(--foreground-tertiary)]">
               NCT ID: {trial.clinicalTrialData?.nctId}
             </p>
           </div>
@@ -94,10 +94,10 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
           {/* Phase */}
           {trial.clinicalTrialData?.phase && (
             <div className="flex items-start gap-2">
-              <BeakerIcon className="w-5 h-5 text-gray-400 mt-0.5" />
+              <BeakerIcon className="w-5 h-5 text-[var(--foreground-secondary)] mt-0.5" />
               <div>
-                <p className="text-xs text-gray-500">{t('search.clinicalTrials.phase', 'Phase')}</p>
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-xs text-[var(--foreground-secondary)]">{t('search.clinicalTrials.phase', 'Phase')}</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">
                   {getPhaseDisplay(trial.clinicalTrialData.phase)}
                 </p>
               </div>
@@ -107,10 +107,10 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
           {/* Enrollment */}
           {trial.clinicalTrialData?.enrollment && (
             <div className="flex items-start gap-2">
-              <UserGroupIcon className="w-5 h-5 text-gray-400 mt-0.5" />
+              <UserGroupIcon className="w-5 h-5 text-[var(--foreground-secondary)] mt-0.5" />
               <div>
-                <p className="text-xs text-gray-500">{t('search.clinicalTrials.enrollment', 'Enrollment')}</p>
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-xs text-[var(--foreground-secondary)]">{t('search.clinicalTrials.enrollment', 'Enrollment')}</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">
                   {trial.clinicalTrialData.enrollment.toLocaleString()} {t('search.clinicalTrials.participants', 'participants')}
                 </p>
               </div>
@@ -120,10 +120,10 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
           {/* Start Date */}
           {trial.clinicalTrialData?.startDate && (
             <div className="flex items-start gap-2">
-              <CalendarIcon className="w-5 h-5 text-gray-400 mt-0.5" />
+              <CalendarIcon className="w-5 h-5 text-[var(--foreground-secondary)] mt-0.5" />
               <div>
-                <p className="text-xs text-gray-500">{t('search.clinicalTrials.startDate', 'Start Date')}</p>
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-xs text-[var(--foreground-secondary)]">{t('search.clinicalTrials.startDate', 'Start Date')}</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">
                   {new Date(trial.clinicalTrialData.startDate).toLocaleDateString()}
                 </p>
               </div>
@@ -133,10 +133,10 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
           {/* Location Count */}
           {trial.clinicalTrialData?.locations && trial.clinicalTrialData.locations.length > 0 && (
             <div className="flex items-start gap-2">
-              <MapPinIcon className="w-5 h-5 text-gray-400 mt-0.5" />
+              <MapPinIcon className="w-5 h-5 text-[var(--foreground-secondary)] mt-0.5" />
               <div>
-                <p className="text-xs text-gray-500">{t('search.clinicalTrials.locations', 'Locations')}</p>
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-xs text-[var(--foreground-secondary)]">{t('search.clinicalTrials.locations', 'Locations')}</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">
                   {trial.clinicalTrialData.locations.length} {t('search.clinicalTrials.sites', 'sites')}
                 </p>
               </div>
@@ -145,34 +145,34 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
         </div>
 
         {/* Description */}
-        <p className="text-sm text-gray-700 mb-4 line-clamp-3">
+        <p className="text-sm text-[var(--foreground-tertiary)] mb-4 line-clamp-3">
           {trial.snippet}
         </p>
 
         {/* Eligibility Summary */}
         {trial.clinicalTrialData?.eligibility && (
-          <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-            <p className="text-sm font-medium text-gray-700 mb-1">
+          <div className="mb-4 p-3 bg-[var(--component-surface-primary)] rounded-lg">
+            <p className="text-sm font-medium text-[var(--foreground-tertiary)] mb-1">
               {t('search.clinicalTrials.eligibility', 'Eligibility')}:
             </p>
             <div className="flex flex-wrap gap-2 text-xs">
               {trial.clinicalTrialData.eligibility.gender && (
-                <span className="px-2 py-1 bg-white rounded-md text-gray-600">
+                <span className="px-2 py-1 bg-[var(--component-card)] rounded-md text-[var(--foreground-tertiary)]">
                   {t('search.clinicalTrials.gender', 'Gender')}: {trial.clinicalTrialData.eligibility.gender}
                 </span>
               )}
               {trial.clinicalTrialData.eligibility.minAge && (
-                <span className="px-2 py-1 bg-white rounded-md text-gray-600">
+                <span className="px-2 py-1 bg-[var(--component-card)] rounded-md text-[var(--foreground-tertiary)]">
                   {t('search.clinicalTrials.minAge', 'Min Age')}: {trial.clinicalTrialData.eligibility.minAge}
                 </span>
               )}
               {trial.clinicalTrialData.eligibility.maxAge && (
-                <span className="px-2 py-1 bg-white rounded-md text-gray-600">
+                <span className="px-2 py-1 bg-[var(--component-card)] rounded-md text-[var(--foreground-tertiary)]">
                   {t('search.clinicalTrials.maxAge', 'Max Age')}: {trial.clinicalTrialData.eligibility.maxAge}
                 </span>
               )}
               {trial.clinicalTrialData.eligibility.acceptsHealthyVolunteers !== undefined && (
-                <span className="px-2 py-1 bg-white rounded-md text-gray-600">
+                <span className="px-2 py-1 bg-[var(--component-card)] rounded-md text-[var(--foreground-tertiary)]">
                   {trial.clinicalTrialData.eligibility.acceptsHealthyVolunteers
                     ? t('search.clinicalTrials.acceptsHealthy', 'Accepts Healthy Volunteers')
                     : t('search.clinicalTrials.patientsOnly', 'Patients Only')}
@@ -185,16 +185,16 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
         {/* Nearest Location */}
         {trial.clinicalTrialData?.locations && trial.clinicalTrialData.locations.length > 0 && (
           <div className="mb-4">
-            <p className="text-sm font-medium text-gray-700 mb-1">
+            <p className="text-sm font-medium text-[var(--foreground-tertiary)] mb-1">
               {t('search.clinicalTrials.nearestLocation', 'Nearest Location')}:
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[var(--foreground-tertiary)]">
               {trial.clinicalTrialData.locations[0].facility}
               {trial.clinicalTrialData.locations[0].city && `, ${trial.clinicalTrialData.locations[0].city}`}
               {trial.clinicalTrialData.locations[0].state && `, ${trial.clinicalTrialData.locations[0].state}`}
               {trial.clinicalTrialData.locations[0].country && `, ${trial.clinicalTrialData.locations[0].country}`}
               {trial.clinicalTrialData.locations[0].distance && (
-                <span className="text-blue-600 ml-1">
+                <span className="text-[var(--cardiology-accent-blue-dark)] ml-1">
                   ({trial.clinicalTrialData.locations[0].distance} {t('search.clinicalTrials.miles', 'miles')})
                 </span>
               )}
@@ -206,7 +206,7 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
         <div className="flex gap-3">
           <button
             onClick={() => onViewDetails?.(trial)}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
+            className="flex-1 px-4 py-2 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] rounded-lg hover:bg-[var(--cardiology-accent-blue-dark)] transition-colors font-medium text-sm"
           >
             {t('search.clinicalTrials.checkEligibility', 'Check Eligibility')}
           </button>
@@ -214,7 +214,7 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
             href={trial.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-700"
+            className="flex items-center gap-2 px-4 py-2 border border-[var(--glass-border-medium)] rounded-lg hover:bg-[var(--component-surface-primary)] transition-colors text-sm text-[var(--foreground-tertiary)]"
           >
             {t('search.clinicalTrials.viewDetails', 'View Details')}
             <ArrowTopRightOnSquareIcon className="w-4 h-4" />
@@ -223,7 +223,7 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
 
         {/* Last Updated */}
         {trial.clinicalTrialData?.lastUpdateDate && (
-          <p className="text-xs text-gray-500 mt-3 text-center">
+          <p className="text-xs text-[var(--foreground-secondary)] mt-3 text-center">
             {t('search.clinicalTrials.lastUpdated', 'Last updated')}: {new Date(trial.clinicalTrialData.lastUpdateDate).toLocaleDateString()}
           </p>
         )}

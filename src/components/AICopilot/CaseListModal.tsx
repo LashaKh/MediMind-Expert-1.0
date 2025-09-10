@@ -174,8 +174,8 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
       default:
         return {
           color: 'gray',
-          bg: 'bg-gray-50 border-gray-200',
-          text: 'text-gray-700',
+          bg: 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)]',
+          text: 'text-[var(--foreground-tertiary)]',
           icon: Clock4,
           gradient: 'from-gray-400 to-slate-500'
         };
@@ -204,8 +204,8 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
         className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6"
         style={{
           background: `
-            radial-gradient(ellipse at center, rgba(59, 130, 246, 0.15), rgba(0, 0, 0, 0.4)),
-            linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6))
+            'var(--gradient-modal-primary)',
+            var(--gradient-modal-secondary)
           `,
           backdropFilter: 'blur(24px) saturate(180%) contrast(120%)',
           WebkitBackdropFilter: 'blur(24px) saturate(180%) contrast(120%)',
@@ -220,16 +220,16 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                      transform transition-all duration-700 ease-out"
           style={{
             background: `
-              linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%),
-              radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 60%),
-              radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.06), transparent 60%)
+              var(--gradient-modal-overlay),
+              radial-gradient(circle at top left, oklch(from var(--primary) l c h / 0.08), transparent 60%),
+              radial-gradient(circle at bottom right, oklch(from var(--accent) l c h / 0.06), transparent 60%)
             `,
             borderRadius: '32px',
             boxShadow: `
-              0 32px 64px -12px rgba(0, 0, 0, 0.35),
-              0 0 0 1px rgba(255, 255, 255, 0.8),
-              inset 0 1px 0 rgba(255, 255, 255, 1),
-              0 0 200px -40px rgba(59, 130, 246, 0.3)
+              var(--shadow-modal-heavy),
+              0 0 0 1px oklch(from var(--background) l c h / 0.8),
+              inset 0 1px 0 oklch(from var(--background) l c h / 1),
+              0 0 200px -40px oklch(from var(--primary) l c h / 0.3)
             `,
             animation: 'modalSlideIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)'
           }}
@@ -246,14 +246,14 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-all duration-500" />
                   <div className="relative p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
-                    <FileText className="w-8 h-8 text-white" />
+                    <FileText className="w-8 h-8 text-[var(--foreground)]" />
                   </div>
                 </div>
                 <div>
                   <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent mb-2">
                     Case Study Library
                   </h1>
-                  <div className="flex items-center space-x-4 text-gray-600">
+                  <div className="flex items-center space-x-4 text-[var(--foreground-tertiary)]">
                     <span className="text-lg font-medium">
                       {filteredAndSortedCases.length} of {cases.length} cases
                     </span>
@@ -269,7 +269,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                 onClick={onClose}
                 variant="ghost"
                 size="lg"
-                className="p-3 rounded-2xl hover:bg-gray-100/80 transition-all duration-300 hover:scale-105 hover:rotate-90"
+                className="p-3 rounded-2xl hover:bg-[var(--component-surface-secondary)]/80 transition-all duration-300 hover:scale-105 hover:rotate-90"
               >
                 <X className="w-6 h-6" />
               </Button>
@@ -281,7 +281,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-all duration-500" />
                 <div className="relative">
-                  <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-300" />
+                  <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--foreground-secondary)] group-focus-within:text-[var(--cardiology-accent-blue)] transition-colors duration-300" />
                   <input
                     ref={searchInputRef}
                     type="text"
@@ -289,10 +289,10 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-14 pr-6 py-4 text-lg border-0 rounded-2xl
-                             bg-white/70 backdrop-blur-xl shadow-lg
-                             focus:outline-none focus:ring-4 focus:ring-blue-500/20
+                             bg-[var(--component-card)]/70 backdrop-blur-xl shadow-lg
+                             focus:outline-none focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/20
                              transition-all duration-300 placeholder-gray-400
-                             hover:shadow-xl hover:bg-white/80"
+                             hover:shadow-xl hover:bg-[var(--component-card)]/80"
                     style={{
                       boxShadow: 'inset 0 2px 10px rgba(0, 0, 0, 0.03), 0 8px 32px rgba(0, 0, 0, 0.08)'
                     }}
@@ -308,9 +308,9 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     <select
                       value={filter}
                       onChange={(e) => setFilter(e.target.value as FilterStatus)}
-                      className="appearance-none bg-white/80 backdrop-blur-xl border-0 rounded-xl px-6 py-3 pr-12
-                               text-gray-700 font-medium shadow-lg hover:shadow-xl transition-all duration-300
-                               focus:outline-none focus:ring-4 focus:ring-blue-500/20 cursor-pointer"
+                      className="appearance-none bg-[var(--component-card)]/80 backdrop-blur-xl border-0 rounded-xl px-6 py-3 pr-12
+                               text-[var(--foreground-tertiary)] font-medium shadow-lg hover:shadow-xl transition-all duration-300
+                               focus:outline-none focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/20 cursor-pointer"
                       style={{
                         boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.02), 0 6px 20px rgba(0, 0, 0, 0.08)'
                       }}
@@ -320,7 +320,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                       <option value="archived">Archived</option>
                       <option value="review">In Review</option>
                     </select>
-                    <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--foreground-secondary)]" />
                   </div>
 
                   {/* Sort Filter */}
@@ -328,9 +328,9 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as SortOption)}
-                      className="appearance-none bg-white/80 backdrop-blur-xl border-0 rounded-xl px-6 py-3 pr-12
-                               text-gray-700 font-medium shadow-lg hover:shadow-xl transition-all duration-300
-                               focus:outline-none focus:ring-4 focus:ring-blue-500/20 cursor-pointer"
+                      className="appearance-none bg-[var(--component-card)]/80 backdrop-blur-xl border-0 rounded-xl px-6 py-3 pr-12
+                               text-[var(--foreground-tertiary)] font-medium shadow-lg hover:shadow-xl transition-all duration-300
+                               focus:outline-none focus:ring-4 focus:ring-[var(--cardiology-accent-blue)]/20 cursor-pointer"
                       style={{
                         boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.02), 0 6px 20px rgba(0, 0, 0, 0.08)'
                       }}
@@ -341,20 +341,20 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                       <option value="complexity">By Complexity</option>
                       <option value="status">By Status</option>
                     </select>
-                    <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--foreground-secondary)]" />
                   </div>
                 </div>
 
                 {/* View Mode Toggle */}
-                <div className="flex items-center space-x-2 bg-white/60 backdrop-blur-xl rounded-xl p-1 shadow-lg">
+                <div className="flex items-center space-x-2 bg-[var(--component-card)]/60 backdrop-blur-xl rounded-xl p-1 shadow-lg">
                   <Button
                     onClick={() => setViewMode('grid')}
                     variant={viewMode === 'grid' ? 'default' : 'ghost'}
                     size="sm"
                     className={`p-2 rounded-lg transition-all duration-300 ${
                       viewMode === 'grid' 
-                        ? 'bg-blue-500 text-white shadow-lg' 
-                        : 'hover:bg-white/80'
+                        ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)] shadow-lg' 
+                        : 'hover:bg-[var(--component-card)]/80'
                     }`}
                   >
                     <Grid3X3 className="w-4 h-4" />
@@ -365,8 +365,8 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     size="sm"
                     className={`p-2 rounded-lg transition-all duration-300 ${
                       viewMode === 'list' 
-                        ? 'bg-blue-500 text-white shadow-lg' 
-                        : 'hover:bg-white/80'
+                        ? 'bg-[var(--cardiology-accent-blue)] text-[var(--foreground)] shadow-lg' 
+                        : 'hover:bg-[var(--component-card)]/80'
                     }`}
                   >
                     <List className="w-4 h-4" />
@@ -383,13 +383,13 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-2xl opacity-60" />
                   <div className="relative w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
-                    <FileText className="w-12 h-12 text-white" />
+                    <FileText className="w-12 h-12 text-[var(--foreground)]" />
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-[var(--foreground)] mb-3">
                   {searchTerm || filter !== 'all' ? 'No Cases Found' : 'No Cases Yet'}
                 </h3>
-                <p className="text-gray-600 text-lg max-w-md mx-auto">
+                <p className="text-[var(--foreground-tertiary)] text-lg max-w-md mx-auto">
                   {searchTerm || filter !== 'all' 
                     ? 'Try adjusting your filters or search terms to find what you\'re looking for.'
                     : 'Start building your case library by creating your first medical case study.'
@@ -439,7 +439,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         relative h-full p-6 rounded-3xl overflow-hidden
                         transition-all duration-500 ease-out
                         ${isActive 
-                          ? 'ring-4 ring-blue-500/40 shadow-2xl shadow-blue-500/25' 
+                          ? 'ring-4 ring-[var(--cardiology-accent-blue)]/40 shadow-2xl shadow-blue-500/25' 
                           : 'shadow-lg hover:shadow-2xl'
                         }
                       `}
@@ -461,7 +461,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         <div className="relative z-10 flex items-start justify-between mb-4">
                           <div className="flex items-center space-x-3">
                             <div className={`p-2 rounded-xl bg-gradient-to-br ${complexityConfig.gradient} shadow-lg`}>
-                              <complexityConfig.icon className="w-4 h-4 text-white" />
+                              <complexityConfig.icon className="w-4 h-4 text-[var(--foreground)]" />
                             </div>
                                                          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${complexityConfig.bg} ${complexityConfig.text} border`}>
                                {(caseItem.metadata?.complexity || 'medium').toUpperCase()}
@@ -474,7 +474,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                                 onClick={(e) => handleEditClick(e, caseItem)}
                                 variant="ghost"
                                 size="sm"
-                                className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-blue-50 hover:text-blue-600"
+                                className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[var(--cardiology-accent-blue-light)] hover:text-[var(--cardiology-accent-blue-dark)]"
                                 title="Edit case"
                               >
                                 <Edit3 className="w-4 h-4" />
@@ -495,19 +495,19 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         {/* Case Content */}
                         <div className="relative z-10 space-y-4">
                           <div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
+                            <h3 className="text-xl font-bold text-[var(--foreground)] mb-2 line-clamp-2 leading-tight">
                               {caseItem.title}
                             </h3>
-                            <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
+                            <p className="text-[var(--foreground-tertiary)] text-sm line-clamp-3 leading-relaxed">
                               {caseItem.description}
                             </p>
                           </div>
 
                                                      {/* Case Info */}
                            {caseItem.metadata?.category && (
-                             <div className="flex items-center space-x-2 p-3 bg-blue-50/50 rounded-xl border border-blue-100">
-                               <Activity className="w-4 h-4 text-blue-500" />
-                               <span className="text-sm font-medium text-blue-700 capitalize">
+                             <div className="flex items-center space-x-2 p-3 bg-[var(--cardiology-accent-blue-light)]/50 rounded-xl border border-blue-100">
+                               <Activity className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />
+                               <span className="text-sm font-medium text-[var(--cardiology-accent-blue-dark)] capitalize">
                                  {caseItem.metadata.category}
                                </span>
                              </div>
@@ -519,13 +519,13 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                               {caseItem.metadata.tags.slice(0, 3).map((tag, index) => (
                                 <span
                                   key={index}
-                                  className="px-3 py-1 text-xs font-medium bg-white/80 text-gray-700 rounded-full border border-gray-200 backdrop-blur-sm"
+                                  className="px-3 py-1 text-xs font-medium bg-[var(--component-card)]/80 text-[var(--foreground-tertiary)] rounded-full border border-[var(--glass-border-light)] backdrop-blur-sm"
                                 >
                                   #{tag}
                                 </span>
                               ))}
                               {caseItem.metadata.tags.length > 3 && (
-                                <span className="px-3 py-1 text-xs font-medium bg-gray-100 text-gray-500 rounded-full">
+                                <span className="px-3 py-1 text-xs font-medium bg-[var(--component-surface-secondary)] text-[var(--foreground-secondary)] rounded-full">
                                   +{caseItem.metadata.tags.length - 3} more
                                 </span>
                               )}
@@ -540,19 +540,19 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                               <statusConfig.icon className="w-3 h-3" />
                               <span>{statusConfig.label}</span>
                             </div>
-                            <div className="flex items-center space-x-1 text-xs text-gray-500">
+                            <div className="flex items-center space-x-1 text-xs text-[var(--foreground-secondary)]">
                               <Calendar className="w-3 h-3" />
                               <span>{new Date(caseItem.createdAt).toLocaleDateString()}</span>
                             </div>
                           </div>
                           
-                          <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" />
+                          <ArrowRight className="w-4 h-4 text-[var(--foreground-secondary)] group-hover:text-[var(--cardiology-accent-blue)] group-hover:translate-x-1 transition-all duration-300" />
                         </div>
 
                         {/* Active Case Indicator */}
                         {isActive && (
-                          <div className="absolute top-4 left-4 flex items-center space-x-2 px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full shadow-lg">
-                            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                          <div className="absolute top-4 left-4 flex items-center space-x-2 px-3 py-1 bg-[var(--cardiology-accent-blue)] text-[var(--foreground)] text-xs font-semibold rounded-full shadow-lg">
+                            <div className="w-2 h-2 bg-[var(--component-card)] rounded-full animate-pulse" />
                             <span>ACTIVE</span>
                           </div>
                         )}
@@ -587,14 +587,14 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                   <div className="relative">
                     <div className="absolute inset-0 bg-red-500 rounded-2xl blur-lg opacity-60" />
                     <div className="relative w-16 h-16 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl flex items-center justify-center shadow-xl">
-                      <Trash2 className="w-8 h-8 text-white" />
+                      <Trash2 className="w-8 h-8 text-[var(--foreground)]" />
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-1">
+                    <h3 className="text-2xl font-bold text-[var(--foreground)] mb-1">
                       Delete Case Study
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-[var(--foreground-tertiary)]">
                       This action cannot be undone
                     </p>
                   </div>
@@ -604,7 +604,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
               {/* Content */}
               <div className="p-8 space-y-6">
                 <div className="p-6 bg-red-50/80 border border-red-200/60 rounded-2xl backdrop-blur-sm">
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-[var(--foreground-tertiary)] leading-relaxed">
                     You're about to permanently delete{' '}
                     <span className="font-bold text-red-700">
                       "{showDeleteConfirm.case.title}"
@@ -619,14 +619,14 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     onClick={() => setShowDeleteConfirm(null)}
                     variant="outline"
                     disabled={isDeleting === showDeleteConfirm.case.id}
-                    className="flex-1 sm:flex-none py-3 px-6 rounded-xl bg-white/80 hover:bg-white border-gray-300 font-medium transition-all duration-300"
+                    className="flex-1 sm:flex-none py-3 px-6 rounded-xl bg-[var(--component-card)]/80 hover:bg-[var(--component-card)] border-[var(--glass-border-medium)] font-medium transition-all duration-300"
                   >
                     Keep Case
                   </Button>
                   <Button
                     onClick={handleConfirmDelete}
                     disabled={isDeleting === showDeleteConfirm.case.id}
-                    className="flex-1 sm:flex-none py-3 px-6 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="flex-1 sm:flex-none py-3 px-6 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-[var(--foreground)] font-medium shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     {isDeleting === showDeleteConfirm.case.id ? (
                       <span className="flex items-center justify-center">

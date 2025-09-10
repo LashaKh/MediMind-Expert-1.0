@@ -621,12 +621,12 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--component-card)]">
       <div className="max-w-7xl mx-auto px-3 lg:px-4 py-4">
         {/* Compact Search Bar */}
         <div className="relative max-w-2xl mx-auto mb-6">
           <div className={`relative transition-all duration-300 ${searchFocused ? 'scale-102' : ''}`}>
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[var(--foreground-secondary)] w-5 h-5" />
             <input
               ref={searchInputRef}
               type="text"
@@ -635,7 +635,7 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
               onChange={(e) => handleSearch(e.target.value)}
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
-              className="w-full pl-12 pr-4 py-4 min-h-[48px] text-sm border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 placeholder-gray-500"
+              className="w-full pl-12 pr-4 py-4 min-h-[48px] text-sm border border-[var(--glass-border-medium)] rounded-lg bg-[var(--component-card)] shadow-sm focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 placeholder-gray-500"
             />
             <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
               <Sparkles className="w-4 h-4 text-purple-400" />
@@ -644,14 +644,14 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
 
           {/* Search Suggestions */}
           {searchTerm && searchSuggestions.length > 0 && searchFocused && (
-            <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+            <div className="absolute top-full mt-2 w-full bg-[var(--component-card)] rounded-lg shadow-lg border border-[var(--glass-border-light)] py-2 z-50">
               {searchSuggestions.map((suggestion, index) => (
                 <button
                   key={suggestion}
                   onClick={() => handleSearch(suggestion)}
-                  className="w-full px-4 py-2 text-left hover:bg-gray-50 flex items-center space-x-2 transition-colors text-sm"
+                  className="w-full px-4 py-2 text-left hover:bg-[var(--component-surface-primary)] flex items-center space-x-2 transition-colors text-sm"
                 >
-                  <Tag className="w-3 h-3 text-gray-400" />
+                  <Tag className="w-3 h-3 text-[var(--foreground-secondary)]" />
                   <span>{suggestion}</span>
                 </button>
               ))}
@@ -670,8 +670,8 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
                   onClick={() => setSelectedFilter(filter as FilterBy)}
                   className={`px-4 py-3 min-h-[44px] rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-1 ${
                     selectedFilter === filter
-                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-md transform scale-105'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-sm'
+                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-[var(--foreground)] shadow-md transform scale-105'
+                      : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-tertiary)] hover:shadow-sm'
                   }`}
                 >
                   {filter === 'featured' && <Star className="w-3 h-3" />}
@@ -680,7 +680,7 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
                   {filter === 'recent' && <Clock className="w-3 h-3" />}
                   <span className="capitalize">{filter}</span>
                   {filter !== 'all' && (
-                    <span className="ml-1 px-1.5 py-0.5 bg-white/20 rounded-full text-xs">
+                    <span className="ml-1 px-1.5 py-0.5 bg-[var(--component-card)]/20 rounded-full text-xs">
                       {filteredResources.filter(r => {
                         switch(filter) {
                           case 'featured': return r.featured;
@@ -703,7 +703,7 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortBy)}
-                  className="w-full sm:w-auto px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-purple-500/20 cursor-pointer appearance-none pr-8 text-sm"
+                  className="w-full sm:w-auto px-4 py-3 min-h-[44px] border border-[var(--glass-border-medium)] rounded-lg bg-[var(--component-card)] shadow-sm focus:ring-2 focus:ring-purple-500/20 cursor-pointer appearance-none pr-8 text-sm"
                 >
                   <option value="relevance">Relevance</option>
                   <option value="rating">Highest Rated</option>
@@ -712,11 +712,11 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
                   <option value="year">Newest</option>
                   <option value="trending">Trending</option>
                 </select>
-                <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--foreground-secondary)] pointer-events-none" />
               </div>
 
               {/* View Mode Toggle */}
-              <div className="flex items-center bg-gray-100 rounded-lg p-1 min-h-[44px]">
+              <div className="flex items-center bg-[var(--component-surface-secondary)] rounded-lg p-1 min-h-[44px]">
                 {[
                   { mode: 'cards', icon: Layers },
                   { mode: 'grid', icon: Grid },
@@ -727,8 +727,8 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
                     onClick={() => setViewMode(mode as ViewMode)}
                     className={`p-3 min-h-[40px] min-w-[40px] rounded-md transition-all duration-200 flex items-center justify-center ${
                       viewMode === mode 
-                        ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-sm' 
-                        : 'hover:bg-gray-200 text-gray-600'
+                        ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-[var(--foreground)] shadow-sm' 
+                        : 'hover:bg-[var(--component-surface-tertiary)] text-[var(--foreground-tertiary)]'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -742,7 +742,7 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-xl font-bold text-[var(--foreground)]">
               {filteredResources.length} Resources Found
             </h2>
             {searchTerm && (
@@ -762,7 +762,7 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
           </div>
 
           {/* Quick Stats */}
-          <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
+          <div className="hidden md:flex items-center space-x-4 text-sm text-[var(--foreground-tertiary)]">
             <div className="flex items-center space-x-1">
               <Star className="w-4 h-4 text-yellow-500" />
               <span>Avg {stats.avgRating}/5.0</span>
@@ -772,7 +772,7 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
               <span>{stats.trendingCount} trending</span>
             </div>
             <div className="flex items-center space-x-1">
-              <Bookmark className="w-4 h-4 text-blue-500" />
+              <Bookmark className="w-4 h-4 text-[var(--cardiology-accent-blue)]" />
               <span>{resources.filter(r => r.bookmarked).length} bookmarked</span>
             </div>
           </div>
@@ -814,7 +814,7 @@ interface LoadingStateProps {
 
 const LoadingState: React.FC<LoadingStateProps> = ({ specialtyColors }) => {
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
+    <div className="min-h-screen bg-[var(--component-card)] flex items-center justify-center">
       <div className="text-center">
         <div className="relative mb-6">
           <div className={`w-12 h-12 border-4 border-${specialtyColors.primary}-200 rounded-full animate-spin`}>
@@ -824,8 +824,8 @@ const LoadingState: React.FC<LoadingStateProps> = ({ specialtyColors }) => {
             <BookOpen className={`w-6 h-6 text-${specialtyColors.primary}-600 animate-pulse`} />
           </div>
         </div>
-        <h2 className="text-lg font-bold text-gray-900 mb-2">Loading Knowledge Base</h2>
-        <p className="text-gray-600 text-sm">Preparing your medical resources...</p>
+        <h2 className="text-lg font-bold text-[var(--foreground)] mb-2">Loading Knowledge Base</h2>
+        <p className="text-[var(--foreground-tertiary)] text-sm">Preparing your medical resources...</p>
       </div>
     </div>
   );
@@ -888,7 +888,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
   if (viewMode === 'list') {
     return (
       <div 
-        className="group bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-[1.01]"
+        className="group bg-[var(--component-card)] border border-[var(--glass-border-light)] rounded-lg p-4 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-[1.01]"
         style={{ animationDelay: `${animationDelay}ms` }}
         onClick={onSelect}
         onMouseEnter={() => setIsHovered(true)}
@@ -909,13 +909,13 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
                   {resource.category === 'book' ? 'Book' : 'Guideline'}
                 </span>
                 {resource.featured && (
-                  <span className="px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full text-xs font-medium flex items-center space-x-1">
+                  <span className="px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-[var(--foreground)] rounded-full text-xs font-medium flex items-center space-x-1">
                     <Star className="w-2.5 h-2.5" />
                     <span>Featured</span>
                   </span>
                 )}
                 {resource.trending && (
-                  <span className="px-2 py-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full text-xs font-medium flex items-center space-x-1">
+                  <span className="px-2 py-1 bg-gradient-to-r from-pink-500 to-purple-600 text-[var(--foreground)] rounded-full text-xs font-medium flex items-center space-x-1">
                     <TrendingUp className="w-2.5 h-2.5" />
                     <span>Trending</span>
                   </span>
@@ -923,11 +923,11 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
               </div>
             </div>
             
-            <h3 className="font-semibold text-gray-900 mb-2 text-sm group-hover:text-purple-600 transition-colors line-clamp-2">
+            <h3 className="font-semibold text-[var(--foreground)] mb-2 text-sm group-hover:text-purple-600 transition-colors line-clamp-2">
               {resource.title}
             </h3>
             
-            <div className="flex items-center space-x-3 text-xs text-gray-600 mb-2">
+            <div className="flex items-center space-x-3 text-xs text-[var(--foreground-tertiary)] mb-2">
               {resource.rating && (
                 <div className="flex items-center space-x-1">
                   <Star className="w-3 h-3 text-yellow-500 fill-current" />
@@ -936,7 +936,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
               )}
               {resource.citations && (
                 <div className="flex items-center space-x-1">
-                  <BarChart3 className="w-3 h-3 text-blue-500" />
+                  <BarChart3 className="w-3 h-3 text-[var(--cardiology-accent-blue)]" />
                   <span>{resource.citations.toLocaleString()} citations</span>
                 </div>
               )}
@@ -949,18 +949,18 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
             </div>
 
             {resource.description && (
-              <p className="text-gray-600 mb-2 line-clamp-2 text-xs">{resource.description}</p>
+              <p className="text-[var(--foreground-tertiary)] mb-2 line-clamp-2 text-xs">{resource.description}</p>
             )}
 
             {resource.tags && (
               <div className="flex flex-wrap gap-1">
                 {resource.tags.slice(0, 3).map(tag => (
-                  <span key={tag} className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs">
+                  <span key={tag} className="px-2 py-1 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-md text-xs">
                     {tag}
                   </span>
                 ))}
                 {resource.tags.length > 3 && (
-                  <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs">
+                  <span className="px-2 py-1 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-md text-xs">
                     +{resource.tags.length - 3} more
                   </span>
                 )}
@@ -970,12 +970,12 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
 
           <div className="flex flex-col items-end space-y-2">
             {resource.year && (
-              <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
+              <span className="px-2 py-1 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-full text-xs font-medium">
                 {resource.year}
               </span>
             )}
             <button 
-              className={`p-1.5 rounded-md bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-white hover:shadow-lg transition-all duration-200 ${isHovered ? 'scale-110' : ''}`}
+              className={`p-1.5 rounded-md bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-[var(--foreground)] hover:shadow-lg transition-all duration-200 ${isHovered ? 'scale-110' : ''}`}
             >
               <ArrowRight className="w-3 h-3" />
             </button>
@@ -987,7 +987,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
 
   return (
     <div 
-      className={`group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden ${
+      className={`group bg-[var(--component-card)] border border-[var(--glass-border-light)] rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden ${
         viewMode === 'cards' 
           ? 'h-full hover:scale-105 hover:-translate-y-1' 
           : 'hover:scale-[1.02]'
@@ -1015,19 +1015,19 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
         
         <div className="relative p-3 h-full flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
+            <div className="p-1.5 bg-[var(--component-card)]/20 rounded-lg backdrop-blur-sm">
               {resource.category === 'book' ? (
-                <BookOpen className="w-4 h-4 text-white" />
+                <BookOpen className="w-4 h-4 text-[var(--foreground)]" />
               ) : (
-                <FileText className="w-4 h-4 text-white" />
+                <FileText className="w-4 h-4 text-[var(--foreground)]" />
               )}
             </div>
             <div>
-              <span className="text-white/90 text-xs font-medium">
+              <span className="text-[var(--foreground)]/90 text-xs font-medium">
                 {resource.category === 'book' ? 'Medical Book' : 'Clinical Guideline'}
               </span>
               {resource.year && (
-                <div className="text-white/70 text-xs">{resource.year}</div>
+                <div className="text-[var(--foreground)]/70 text-xs">{resource.year}</div>
               )}
             </div>
           </div>
@@ -1044,7 +1044,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
               </div>
             )}
             {resource.bookmarked && (
-              <div className="p-1 bg-blue-500/20 rounded-md backdrop-blur-sm">
+              <div className="p-1 bg-[var(--cardiology-accent-blue)]/20 rounded-md backdrop-blur-sm">
                 <Bookmark className="w-3 h-3 text-blue-200 fill-current" />
               </div>
             )}
@@ -1055,11 +1055,11 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
       {/* Card Content */}
       <div className="p-3">
         <div className="mb-3">
-          <h3 className="font-semibold text-gray-900 text-sm mb-2 group-hover:text-purple-600 transition-colors line-clamp-2">
+          <h3 className="font-semibold text-[var(--foreground)] text-sm mb-2 group-hover:text-purple-600 transition-colors line-clamp-2">
             {resource.title}
           </h3>
           
-          <div className="flex items-center space-x-3 text-xs text-gray-600 mb-2">
+          <div className="flex items-center space-x-3 text-xs text-[var(--foreground-tertiary)] mb-2">
             {resource.rating && (
               <div className="flex items-center space-x-1">
                 <Star className="w-3 h-3 text-yellow-500 fill-current" />
@@ -1068,7 +1068,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
             )}
             {resource.citations && (
               <div className="flex items-center space-x-1">
-                <BarChart3 className="w-3 h-3 text-blue-500" />
+                <BarChart3 className="w-3 h-3 text-[var(--cardiology-accent-blue)]" />
                 <span className="font-semibold text-sm">{resource.citations.toLocaleString()}</span>
               </div>
             )}
@@ -1083,7 +1083,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
 
         {resource.authors && (
           <div className="mb-2">
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-[var(--foreground-tertiary)]">
               <span className="font-medium">Authors:</span> {resource.authors.slice(0, 1).join(', ')}{resource.authors.length > 1 && '...'}
             </p>
           </div>
@@ -1092,14 +1092,14 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
         {resource.organization && (
           <div className="mb-2">
             <div className="flex items-center space-x-1">
-              <Building className="w-3 h-3 text-gray-400" />
-              <span className="text-xs text-gray-600 font-medium">{resource.organization}</span>
+              <Building className="w-3 h-3 text-[var(--foreground-secondary)]" />
+              <span className="text-xs text-[var(--foreground-tertiary)] font-medium">{resource.organization}</span>
             </div>
           </div>
         )}
 
         {resource.description && (
-          <p className="text-gray-600 text-xs mb-3 line-clamp-2">{resource.description}</p>
+          <p className="text-[var(--foreground-tertiary)] text-xs mb-3 line-clamp-2">{resource.description}</p>
         )}
 
         {/* Difficulty Badge */}
@@ -1119,12 +1119,12 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
         {resource.tags && (
           <div className="flex flex-wrap gap-1 mb-3">
             {resource.tags.slice(0, 2).map(tag => (
-              <span key={tag} className="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded text-xs font-medium">
+              <span key={tag} className="px-1.5 py-0.5 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded text-xs font-medium">
                 {tag}
               </span>
             ))}
             {resource.tags.length > 2 && (
-              <span className="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
+              <span className="px-1.5 py-0.5 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded text-xs">
                 +{resource.tags.length - 2}
               </span>
             )}
@@ -1135,19 +1135,19 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
           <div className="flex items-center space-x-2">
             {resource.readTime && (
-              <div className="flex items-center space-x-1 text-xs text-gray-500">
+              <div className="flex items-center space-x-1 text-xs text-[var(--foreground-secondary)]">
                 <Clock className="w-3 h-3" />
                 <span>{resource.readTime} min</span>
               </div>
             )}
             {resource.lastUpdated && (
-              <div className="text-xs text-gray-400">
+              <div className="text-xs text-[var(--foreground-secondary)]">
                 Updated {new Date(resource.lastUpdated).toLocaleDateString()}
               </div>
             )}
           </div>
           
-          <button className={`p-1.5 rounded-lg bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-white hover:shadow-lg transition-all duration-300 ${
+          <button className={`p-1.5 rounded-lg bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-[var(--foreground)] hover:shadow-lg transition-all duration-300 ${
             isHovered ? 'scale-110 rotate-12' : ''
           }`}>
             <ArrowUpRight className="w-3 h-3" />
@@ -1171,36 +1171,36 @@ const EmptyState: React.FC<EmptyStateProps> = ({ searchTerm, onClearSearch, spec
       <div className="mb-6">
         <div className="relative inline-block">
           <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-4 mx-auto">
-            <Search className="w-10 h-10 text-gray-400" />
+            <Search className="w-10 h-10 text-[var(--foreground-secondary)]" />
           </div>
           <div className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-            <X className="w-3 h-3 text-white" />
+            <X className="w-3 h-3 text-[var(--foreground)]" />
           </div>
         </div>
       </div>
       
-      <h3 className="text-xl font-bold text-gray-900 mb-3">No resources found</h3>
+      <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">No resources found</h3>
       
       {searchTerm ? (
         <div>
-          <p className="text-gray-600 mb-4">
+          <p className="text-[var(--foreground-tertiary)] mb-4">
             We couldn't find any resources matching <strong>"{searchTerm}"</strong>
           </p>
           <div className="space-y-3">
             <button
               onClick={onClearSearch}
-              className={`px-6 py-2 bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-white rounded-lg hover:shadow-lg transition-all duration-300 font-semibold text-sm`}
+              className={`px-6 py-2 bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-[var(--foreground)] rounded-lg hover:shadow-lg transition-all duration-300 font-semibold text-sm`}
             >
               Clear search and browse all resources
             </button>
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-[var(--foreground-secondary)]">
               <p>Try searching for:</p>
               <div className="flex flex-wrap justify-center gap-2 mt-2">
                 {['guidelines', 'cardiology', 'ESC', 'ACOG', 'textbook'].map(suggestion => (
                   <button
                     key={suggestion}
                     onClick={() => onClearSearch()}
-                    className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors text-xs"
+                    className="px-2 py-1 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-full hover:bg-[var(--component-surface-tertiary)] transition-colors text-xs"
                   >
                     {suggestion}
                   </button>
@@ -1210,7 +1210,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ searchTerm, onClearSearch, spec
           </div>
         </div>
       ) : (
-        <p className="text-gray-600 mb-4">
+        <p className="text-[var(--foreground-tertiary)] mb-4">
           No resources match your current filters. Try adjusting your search criteria.
         </p>
       )}
@@ -1232,7 +1232,7 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
 }) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+      <div className="bg-[var(--component-card)] rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         {/* Modal Header */}
         <div className={`h-32 bg-gradient-to-r ${
           resource.category === 'book' 
@@ -1247,18 +1247,18 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
           
           <div className="relative p-6 h-full flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+              <div className="p-3 bg-[var(--component-card)]/20 rounded-xl backdrop-blur-sm">
                 {resource.category === 'book' ? (
-                  <BookOpen className="w-6 h-6 text-white" />
+                  <BookOpen className="w-6 h-6 text-[var(--foreground)]" />
                 ) : (
-                  <FileText className="w-6 h-6 text-white" />
+                  <FileText className="w-6 h-6 text-[var(--foreground)]" />
                 )}
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white mb-1 line-clamp-2">
+                <h1 className="text-xl font-bold text-[var(--foreground)] mb-1 line-clamp-2">
                   {resource.title}
                 </h1>
-                <div className="flex items-center space-x-3 text-white/80">
+                <div className="flex items-center space-x-3 text-[var(--foreground)]/80">
                   <span className="text-sm">
                     {resource.category === 'book' ? 'Medical Book' : 'Clinical Guideline'}
                   </span>
@@ -1272,9 +1272,9 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
 
             <button
               onClick={onClose}
-              className="p-2 bg-white/20 rounded-lg backdrop-blur-sm hover:bg-white/30 transition-colors"
+              className="p-2 bg-[var(--component-card)]/20 rounded-lg backdrop-blur-sm hover:bg-[var(--component-card)]/30 transition-colors"
             >
-              <X className="w-5 h-5 text-white" />
+              <X className="w-5 h-5 text-[var(--foreground)]" />
             </button>
           </div>
         </div>
@@ -1287,18 +1287,18 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
               {/* Description */}
               {resource.description && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Description</h3>
-                  <p className="text-gray-700 leading-relaxed text-sm">{resource.description}</p>
+                  <h3 className="font-semibold text-[var(--foreground)] mb-2">Description</h3>
+                  <p className="text-[var(--foreground-tertiary)] leading-relaxed text-sm">{resource.description}</p>
                 </div>
               )}
 
               {/* Authors */}
               {resource.authors && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Authors</h3>
+                  <h3 className="font-semibold text-[var(--foreground)] mb-2">Authors</h3>
                   <div className="flex flex-wrap gap-2">
                     {resource.authors.map(author => (
-                      <span key={author} className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-sm">
+                      <span key={author} className="px-2 py-1 bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] rounded-md text-sm">
                         {author}
                       </span>
                     ))}
@@ -1309,7 +1309,7 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
               {/* Tags */}
               {resource.tags && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Topics</h3>
+                  <h3 className="font-semibold text-[var(--foreground)] mb-2">Topics</h3>
                   <div className="flex flex-wrap gap-2">
                     {resource.tags.map(tag => (
                       <span key={tag} className={`px-2 py-1 bg-${specialtyColors.primary}-100 text-${specialtyColors.primary}-800 rounded-md text-sm font-medium`}>
@@ -1324,12 +1324,12 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
             {/* Sidebar */}
             <div className="space-y-4">
               {/* Quick Stats */}
-              <div className="bg-gray-50 rounded-xl p-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Resource Stats</h3>
+              <div className="bg-[var(--component-surface-primary)] rounded-xl p-4">
+                <h3 className="font-semibold text-[var(--foreground)] mb-3">Resource Stats</h3>
                 <div className="space-y-3">
                   {resource.rating && (
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Rating</span>
+                      <span className="text-[var(--foreground-tertiary)] text-sm">Rating</span>
                       <div className="flex items-center space-x-1">
                         <Star className="w-4 h-4 text-yellow-500 fill-current" />
                         <span className="font-semibold text-sm">{resource.rating}/5.0</span>
@@ -1338,19 +1338,19 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
                   )}
                   {resource.citations && (
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Citations</span>
+                      <span className="text-[var(--foreground-tertiary)] text-sm">Citations</span>
                       <span className="font-semibold text-sm">{resource.citations.toLocaleString()}</span>
                     </div>
                   )}
                   {resource.views && (
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Views</span>
+                      <span className="text-[var(--foreground-tertiary)] text-sm">Views</span>
                       <span className="font-semibold text-sm">{resource.views.toLocaleString()}</span>
                     </div>
                   )}
                   {resource.difficulty && (
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Difficulty</span>
+                      <span className="text-[var(--foreground-tertiary)] text-sm">Difficulty</span>
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                         resource.difficulty === 'beginner' ? 'bg-green-100 text-green-800' :
                         resource.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-800' :
@@ -1362,7 +1362,7 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
                   )}
                   {resource.readTime && (
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Read Time</span>
+                      <span className="text-[var(--foreground-tertiary)] text-sm">Read Time</span>
                       <span className="font-semibold text-sm">{resource.readTime} min</span>
                     </div>
                   )}
@@ -1371,16 +1371,16 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
 
               {/* Actions */}
               <div className="space-y-2">
-                <button className={`w-full py-2 px-3 bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 text-sm`}>
+                <button className={`w-full py-2 px-3 bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-[var(--foreground)] rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 text-sm`}>
                   <Eye className="w-4 h-4" />
                   <span>Open Resource</span>
                 </button>
                 <div className="grid grid-cols-2 gap-2">
-                  <button className="py-2 px-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center space-x-1 text-sm">
+                  <button className="py-2 px-2 border border-[var(--glass-border-medium)] rounded-lg text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-primary)] transition-colors flex items-center justify-center space-x-1 text-sm">
                     <Bookmark className="w-3 h-3" />
                     <span>Save</span>
                   </button>
-                  <button className="py-2 px-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center space-x-1 text-sm">
+                  <button className="py-2 px-2 border border-[var(--glass-border-medium)] rounded-lg text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-primary)] transition-colors flex items-center justify-center space-x-1 text-sm">
                     <Share2 className="w-3 h-3" />
                     <span>Share</span>
                   </button>
@@ -1389,7 +1389,7 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
 
               {/* Last Updated */}
               {resource.lastUpdated && (
-                <div className="text-xs text-gray-500 text-center">
+                <div className="text-xs text-[var(--foreground-secondary)] text-center">
                   Last updated: {new Date(resource.lastUpdated).toLocaleDateString()}
                 </div>
               )}

@@ -163,8 +163,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'High-quality systematic reviews and meta-analyses',
       icon: DocumentTextIcon,
       iconActive: DocumentTextIcon,
-      color: 'text-blue-600',
-      badgeColor: 'bg-blue-100 text-blue-700',
+      color: 'text-[var(--cardiology-accent-blue-dark)]',
+      badgeColor: 'bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)]',
       category: 'content',
       isPopular: true,
       filters: {
@@ -243,8 +243,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Official government health information',
       icon: ShieldCheckIcon,
       iconActive: ShieldCheckSolid,
-      color: 'text-blue-700',
-      badgeColor: 'bg-blue-100 text-blue-800',
+      color: 'text-[var(--cardiology-accent-blue-dark)]',
+      badgeColor: 'bg-[var(--cardiology-accent-blue-light)] text-blue-800',
       category: 'quality',
       filters: {
         sourceAuthority: {
@@ -392,11 +392,11 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       {/* Header with save option */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-[var(--foreground)] flex items-center gap-2">
             <BoltSolid className="w-5 h-5 text-yellow-500" />
             {t('filters.quickFilters.title', 'Quick Filters')}
           </h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-[var(--foreground-tertiary)] mt-1">
             {t('filters.quickFilters.subtitle', 'Popular filter combinations for common medical searches')}
           </p>
         </div>
@@ -422,15 +422,15 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
             onClick={() => setSelectedCategory(category.id as any)}
             className={`px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-200 min-h-[44px] flex items-center justify-center whitespace-nowrap touch-manipulation ${
               selectedCategory === category.id
-                ? 'bg-indigo-600 text-white shadow-lg'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                ? 'bg-indigo-600 text-[var(--foreground)] shadow-lg'
+                : 'bg-[var(--component-surface-secondary)] text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-tertiary)] hover:text-[var(--foreground)]'
             }`}
           >
             {category.name}
             <span className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-full ${
               selectedCategory === category.id
-                ? 'bg-white/20 text-white'
-                : 'bg-gray-200 text-gray-500'
+                ? 'bg-[var(--component-card)]/20 text-[var(--foreground)]'
+                : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
             }`}>
               {category.count}
             </span>
@@ -447,19 +447,19 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
             <button
               key={filter.id}
               onClick={() => onFilterSelect(filter.filters, filter.name)}
-              className="group relative p-4 bg-white rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-300 text-left min-h-[80px] touch-manipulation active:scale-95"
+              className="group relative p-4 bg-[var(--component-card)] rounded-xl border border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)] hover:shadow-lg transition-all duration-300 text-left min-h-[80px] touch-manipulation active:scale-95"
               style={{ animationDelay: `${index * 50}ms` }}
             >
               {/* Premium badge */}
               {filter.isPremium && (
-                <div className="absolute top-2 right-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full">
+                <div className="absolute top-2 right-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-[var(--foreground)] text-xs font-bold rounded-full">
                   Premium
                 </div>
               )}
 
               {/* Popular badge */}
               {filter.isPopular && !filter.isPremium && (
-                <div className="absolute top-2 right-2 px-2 py-1 bg-gradient-to-r from-green-400 to-emerald-500 text-white text-xs font-bold rounded-full">
+                <div className="absolute top-2 right-2 px-2 py-1 bg-gradient-to-r from-green-400 to-emerald-500 text-[var(--foreground)] text-xs font-bold rounded-full">
                   Popular
                 </div>
               )}
@@ -472,10 +472,10 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
 
                 {/* Content */}
                 <div className="flex-1">
-                  <h4 className="font-semibold text-gray-900 group-hover:text-indigo-900 transition-colors duration-200">
+                  <h4 className="font-semibold text-[var(--foreground)] group-hover:text-indigo-900 transition-colors duration-200">
                     {filter.name}
                   </h4>
-                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                  <p className="text-sm text-[var(--foreground-tertiary)] mt-1 line-clamp-2">
                     {filter.description}
                   </p>
                 </div>
@@ -491,22 +491,22 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       {/* Empty state */}
       {filteredFilters.length === 0 && (
         <div className="text-center py-8">
-          <MagnifyingGlassIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">{t('filters.quickFilters.empty', 'No quick filters found for this category')}</p>
+          <MagnifyingGlassIcon className="w-12 h-12 text-[var(--foreground-secondary)] mx-auto mb-3" />
+          <p className="text-[var(--foreground-secondary)]">{t('filters.quickFilters.empty', 'No quick filters found for this category')}</p>
         </div>
       )}
 
       {/* Save dialog - Mobile responsive */}
       {showSaveDialog && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('filters.quickFilters.saveDialog.title', 'Save Filter Combination')}</h3>
+          <div className="bg-[var(--component-card)] rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl">
+            <h3 className="text-lg font-semibold text-[var(--foreground)] mb-4">{t('filters.quickFilters.saveDialog.title', 'Save Filter Combination')}</h3>
             <input
               type="text"
               value={filterName}
               onChange={(e) => setFilterName(e.target.value)}
               placeholder={t('filters.quickFilters.saveDialog.placeholder', 'Enter filter name...')}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4 min-h-[44px] text-base touch-manipulation"
+              className="w-full px-4 py-3 border border-[var(--glass-border-light)] rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4 min-h-[44px] text-base touch-manipulation"
               inputMode="text"
               autoComplete="off"
               autoFocus
@@ -514,14 +514,14 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
             <div className="flex gap-3">
               <button
                 onClick={() => setShowSaveDialog(false)}
-                className="flex-1 px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 min-h-[44px] touch-manipulation"
+                className="flex-1 px-4 py-2 text-[var(--foreground-tertiary)] hover:text-[var(--foreground)] transition-colors duration-200 min-h-[44px] touch-manipulation"
               >
                 {t('common.cancel', 'Cancel')}
               </button>
               <button
                 onClick={handleSaveCurrentFilters}
                 disabled={!filterName.trim()}
-                className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-h-[44px] touch-manipulation"
+                className="flex-1 px-4 py-2 bg-indigo-600 text-[var(--foreground)] rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-h-[44px] touch-manipulation"
               >
                 {t('common.save', 'Save')}
               </button>

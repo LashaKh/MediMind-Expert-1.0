@@ -13,13 +13,13 @@ interface FormattedTextProps {
 }
 
 const FormattedParagraph: React.FC<FormattedTextProps> = ({ children, className = '' }) => (
-  <p className={`mb-3 text-slate-800 dark:text-slate-200 leading-relaxed ${className}`}>
+  <p className={`mb-3 text-[var(--foreground)] dark:text-slate-200 leading-relaxed ${className}`}>
     {children}
   </p>
 );
 
 const FormattedHeading: React.FC<FormattedTextProps & { level: number }> = ({ children, level, className = '' }) => {
-  const baseClasses = 'font-bold text-slate-900 dark:text-slate-100 mb-2 mt-4';
+  const baseClasses = 'font-bold text-[var(--foreground)] dark:text-slate-100 mb-2 mt-4';
   
   switch (level) {
     case 1:
@@ -40,14 +40,14 @@ const FormattedList: React.FC<FormattedTextProps & { ordered?: boolean }> = ({ c
     : 'list-disc list-inside mb-3 space-y-1';
     
   return (
-    <Tag className={`${listClasses} text-slate-800 dark:text-slate-200 ${className}`}>
+    <Tag className={`${listClasses} text-[var(--foreground)] dark:text-slate-200 ${className}`}>
       {children}
     </Tag>
   );
 };
 
 const FormattedListItem: React.FC<FormattedTextProps> = ({ children, className = '' }) => (
-  <li className={`text-slate-800 dark:text-slate-200 leading-relaxed ${className}`}>
+  <li className={`text-[var(--foreground)] dark:text-slate-200 leading-relaxed ${className}`}>
     {children}
   </li>
 );
@@ -155,7 +155,7 @@ function formatInlineText(text: string): React.ReactNode {
   parts.forEach((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       formattedParts.push(
-        <strong key={`bold-${index}`} className="font-semibold text-slate-900 dark:text-slate-100">
+        <strong key={`bold-${index}`} className="font-semibold text-[var(--foreground)] dark:text-slate-100">
           {part.slice(2, -2)}
         </strong>
       );

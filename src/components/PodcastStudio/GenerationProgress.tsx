@@ -179,10 +179,10 @@ const GenerationProgress: React.FC<GenerationProgressProps> = ({
   const getColorClasses = (color: string) => {
     const classes = {
       blue: {
-        bg: 'bg-blue-100',
-        text: 'text-blue-700',
-        icon: 'text-blue-600',
-        progress: 'bg-blue-600'
+        bg: 'bg-[var(--cardiology-accent-blue-light)]',
+        text: 'text-[var(--cardiology-accent-blue-dark)]',
+        icon: 'text-[var(--cardiology-accent-blue-dark)]',
+        progress: 'bg-[var(--cardiology-accent-blue-dark)]'
       },
       purple: {
         bg: 'bg-purple-100',
@@ -203,10 +203,10 @@ const GenerationProgress: React.FC<GenerationProgressProps> = ({
         progress: 'bg-red-600'
       },
       gray: {
-        bg: 'bg-gray-100',
-        text: 'text-gray-700',
-        icon: 'text-gray-600',
-        progress: 'bg-gray-600'
+        bg: 'bg-[var(--component-surface-secondary)]',
+        text: 'text-[var(--foreground-tertiary)]',
+        icon: 'text-[var(--foreground-tertiary)]',
+        progress: 'bg-[var(--border)]'
       }
     };
     return classes[color as keyof typeof classes] || classes.gray;
@@ -226,14 +226,14 @@ const GenerationProgress: React.FC<GenerationProgressProps> = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-lg border border-gray-200 p-4"
+        className="bg-[var(--component-card)] rounded-lg border border-[var(--glass-border-light)] p-4"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <Activity className="w-5 h-5 text-gray-400" />
+            <Activity className="w-5 h-5 text-[var(--foreground-secondary)]" />
             <div>
-              <h4 className="font-medium text-gray-900">Generation Controls</h4>
-              <p className="text-sm text-gray-600">Monitor and manage your podcast generation</p>
+              <h4 className="font-medium text-[var(--foreground)]">Generation Controls</h4>
+              <p className="text-sm text-[var(--foreground-tertiary)]">Monitor and manage your podcast generation</p>
             </div>
           </div>
           
@@ -241,7 +241,7 @@ const GenerationProgress: React.FC<GenerationProgressProps> = ({
             {currentStatus !== 'completed' && currentStatus !== 'failed' && (
               <button
                 onClick={onCancel}
-                className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                className="flex items-center space-x-2 px-4 py-2 border border-[var(--glass-border-medium)] rounded-lg text-[var(--foreground-tertiary)] hover:bg-[var(--component-surface-primary)] transition-colors duration-200"
               >
                 <X className="w-4 h-4" />
                 <span>Cancel</span>
@@ -274,7 +274,7 @@ const GenerationProgress: React.FC<GenerationProgressProps> = ({
                     setError(error.userMessage || 'Failed to restart queue processor');
                   }
                 }}
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                className="flex items-center space-x-2 px-4 py-2 bg-[var(--cardiology-accent-blue-dark)] text-[var(--foreground)] rounded-lg hover:bg-[var(--cardiology-accent-blue-dark)] transition-colors duration-200"
               >
                 <RefreshCw className="w-4 h-4" />
                 <span>Restart</span>

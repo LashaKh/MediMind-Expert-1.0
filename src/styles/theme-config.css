@@ -1,0 +1,1109 @@
+/* 
+ * MediMind Expert - Centralized Theme Configuration
+ * SINGLE SOURCE OF TRUTH for all color definitions
+ * This file MUST be imported first in index.css
+ */
+
+/* ============================================================================= */
+/* LIGHT THEME - Default Theme Configuration */
+/* ============================================================================= */
+
+:root {
+  --background: oklch(0.97 0.02 257);
+  --foreground: oklch(0.2223 0.0060 271.1393);
+  --card: oklch(0.995 0.005 257);
+  --card-foreground: oklch(0.2223 0.0060 271.1393);
+  --popover: oklch(0.995 0.005 257);
+  --popover-foreground: oklch(0.2223 0.0060 271.1393);
+  --primary: oklch(0.3327 0.0772 257.1001);
+  --primary-foreground: oklch(1.0000 0 0);
+  --secondary: oklch(0.5241 0.1259 252.3236);
+  --secondary-foreground: oklch(1.0000 0 0);
+  --muted: oklch(0.9816 0.0017 247.8390);
+  --muted-foreground: oklch(0.5575 0.0165 244.8933);
+  --accent: oklch(0.7392 0.1154 242.0535);
+  --accent-foreground: oklch(0.2223 0.0060 271.1393);
+  --destructive: oklch(0.6368 0.2078 25.3313);
+  --destructive-foreground: oklch(1.0000 0 0);
+  --border: oklch(0.9288 0.0126 255.5078);
+  --input: oklch(0.9288 0.0126 255.5078);
+  --ring: oklch(0.7392 0.1154 242.0535);
+  --chart-1: oklch(0.3327 0.0772 257.1001);
+  --chart-2: oklch(0.5241 0.1259 252.3236);
+  --chart-3: oklch(0.7392 0.1154 242.0535);
+  --chart-4: oklch(0.8208 0.0833 237.1834);
+  --chart-5: oklch(0.8960 0.0484 232.9212);
+  --sidebar: oklch(0.9816 0.0017 247.8390);
+  --sidebar-foreground: oklch(0.2223 0.0060 271.1393);
+  --sidebar-primary: oklch(0.3327 0.0772 257.1001);
+  --sidebar-primary-foreground: oklch(1.0000 0 0);
+  --sidebar-accent: oklch(0.7392 0.1154 242.0535);
+  --sidebar-accent-foreground: oklch(0.2223 0.0060 271.1393);
+  --sidebar-border: oklch(0.9288 0.0126 255.5078);
+  --sidebar-ring: oklch(0.7392 0.1154 242.0535);
+  --font-sans: Inter;
+  --font-serif: Georgia;
+  --font-mono: monospace;
+  --radius: 0.5rem;
+  --shadow-2xs: 0px 2px 8px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0px 2px 8px 0px hsl(0 0% 0% / 0.05);
+  --shadow-sm: 0px 2px 8px 0px hsl(0 0% 0% / 0.10), 0px 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow: 0px 2px 8px 0px hsl(0 0% 0% / 0.10), 0px 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow-md: 0px 2px 8px 0px hsl(0 0% 0% / 0.10), 0px 2px 4px -1px hsl(0 0% 0% / 0.10);
+  --shadow-lg: 0px 2px 8px 0px hsl(0 0% 0% / 0.10), 0px 4px 6px -1px hsl(0 0% 0% / 0.10);
+  --shadow-xl: 0px 2px 8px 0px hsl(0 0% 0% / 0.10), 0px 8px 10px -1px hsl(0 0% 0% / 0.10);
+  --shadow-2xl: 0px 2px 8px 0px hsl(0 0% 0% / 0.25);
+  --tracking-normal: 0px;
+  --spacing: 0.25rem;
+  
+  /* === BACKWARD COMPATIBILITY - Map new theme to old medical variables === */
+  --brand-primary-500: var(--primary);
+  --brand-primary-600: oklch(0.2827 0.0672 257.1001);
+  --brand-primary-700: oklch(0.2327 0.0572 257.1001);
+  --brand-secondary-500: var(--secondary);
+  --brand-accent-500: var(--accent);
+  --medical-emergency: var(--destructive);
+  --medical-warning: oklch(0.7500 0.1400 65);
+  --medical-success: oklch(0.6800 0.1200 142);
+  --medical-info: var(--primary)
+  
+  /* === MEDICAL-SPECIFIC COLORS === */
+  --medical-emergency: oklch(0.6200 0.1900 15);    /* Emergency red */
+  --medical-warning: oklch(0.7500 0.1400 65);      /* Warning amber */
+  --medical-success: oklch(0.6800 0.1200 142);     /* Success green */
+  --medical-info: var(--brand-primary-500);        /* Info blue */
+  
+  /* === COMPONENT-SPECIFIC GRADIENTS === */
+  /* Sidebar Navigation Gradients - replacing hardcoded Tailwind classes */
+  --gradient-blue: linear-gradient(135deg, var(--brand-primary-600), var(--brand-primary-700));
+  --gradient-indigo: linear-gradient(135deg, var(--brand-primary-600), var(--brand-accent-600));
+  --gradient-cyan: linear-gradient(135deg, var(--brand-primary-600), var(--brand-secondary-600));
+  --gradient-purple: linear-gradient(135deg, var(--brand-accent-600), var(--brand-accent-700));
+  --gradient-red: linear-gradient(135deg, oklch(0.55 0.15 15), oklch(0.50 0.15 20));
+  --gradient-pink: linear-gradient(135deg, var(--brand-accent-600), oklch(0.55 0.15 340));
+  --gradient-amber: linear-gradient(135deg, oklch(0.70 0.15 75), oklch(0.65 0.15 65));
+  --gradient-teal: linear-gradient(135deg, var(--brand-secondary-600), var(--brand-secondary-700));
+  --gradient-slate: linear-gradient(135deg, oklch(0.45 0.05 245), oklch(0.40 0.05 245));
+  --gradient-violet: linear-gradient(135deg, var(--brand-accent-600), var(--brand-accent-700));
+
+  /* Feature Card Gradients for CardiologyWorkspace */
+  --gradient-cardiology-red: linear-gradient(135deg, #ef4444, #dc2626);
+  --gradient-cardiology-orange: linear-gradient(135deg, #f97316, #ea580c);
+  --gradient-cardiology-blue: linear-gradient(135deg, #3b82f6, #2563eb);
+  --gradient-cardiology-emerald: linear-gradient(135deg, #10b981, #059669);
+  
+  /* Feature Color Variables */
+  --cardiology-red-primary: #ef4444;
+  --cardiology-red-secondary: #dc2626;
+  --cardiology-orange-primary: #f97316;
+  --cardiology-orange-secondary: #ea580c;
+  --cardiology-blue-primary: #3b82f6;
+  --cardiology-blue-secondary: #2563eb;
+  --cardiology-emerald-primary: #10b981;
+  --cardiology-emerald-secondary: #059669;
+
+  /* Premium Medical Gradients */
+  --gradient-premium-cardio: linear-gradient(135deg, var(--cardiology-red-primary) 0%, var(--cardiology-orange-primary) 25%, var(--cardiology-orange-secondary) 50%, var(--cardiology-orange-secondary) 100%);
+  --gradient-premium-health: linear-gradient(-45deg, var(--cardiology-emerald-primary), var(--cardiology-blue-primary), var(--cardiology-blue-secondary), var(--cardiology-emerald-primary));
+  --gradient-premium-risk: conic-gradient(from 180deg at 50% 50%, var(--medical-success) 0deg, var(--medical-warning) 90deg, var(--medical-emergency) 180deg, var(--medical-success) 270deg, var(--medical-success) 360deg);
+
+  /* Workspace Background Gradients */
+  --gradient-workspace-red: linear-gradient(135deg, var(--cardiology-red-primary), var(--cardiology-red-secondary));
+  --gradient-workspace-blue: linear-gradient(135deg, var(--cardiology-blue-primary), var(--cardiology-blue-secondary));
+  --gradient-workspace-emerald: linear-gradient(135deg, var(--cardiology-emerald-primary), var(--cardiology-emerald-secondary));
+  --gradient-workspace-orange: linear-gradient(135deg, var(--cardiology-orange-primary), var(--cardiology-orange-secondary));
+
+  /* Cardiology Accent Colors */
+  --cardiology-accent-red: #f87171;
+  --cardiology-accent-blue: #3b82f6;
+  --cardiology-accent-emerald: #34d399;
+  --cardiology-accent-purple: #8b5cf6;
+  --cardiology-accent-orange: #fb923c;
+
+  /* Premium Gradients */
+  --gradient-premium-skeleton: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  --gradient-premium-purple: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  --gradient-premium-teal: linear-gradient(135deg, #14b8a6 0%, #0d9488 50%, #0f766e 100%);
+  --gradient-premium-rose: linear-gradient(135deg, #f43f5e 0%, #e11d48 50%, #be123c 100%);
+  --gradient-premium-amber: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+
+  /* Glassmorphism Shadows */
+  --shadow-glass-light: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+  --shadow-glass-heavy: 0 50px 100px -20px rgba(0, 0, 0, 0.25);
+  --shadow-glass-negative: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
+
+  /* Medical UI Specific */
+  --medical-shadow-emerald: 0 1px 2px rgba(5, 150, 105, 0.1);
+  --medical-shadow-black-light: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --medical-shadow-black-medium: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --medical-shadow-black-heavy: 0 12px 24px rgba(0, 0, 0, 0.15);
+
+  /* === UI COMPONENT COLORS - For Button, Badge, Input, etc. === */
+
+  /* Button Variants */
+  --button-destructive: oklch(0.6200 0.1800 15);        /* Red for destructive buttons */
+  --button-destructive-hover: oklch(0.5800 0.1700 15);  /* Red hover */
+  --button-destructive-foreground: oklch(1.0000 0 0);   /* White text */
+
+  /* Badge Variants */
+  --badge-success: oklch(0.9200 0.0400 142 / 0.80);     /* Light green background */
+  --badge-success-foreground: oklch(0.2500 0.0500 142); /* Dark green text */
+  --badge-warning: oklch(0.9200 0.0400 65 / 0.80);      /* Light amber background */
+  --badge-warning-foreground: oklch(0.2500 0.0500 65);  /* Dark amber text */
+  --badge-info: oklch(0.9200 0.0400 242 / 0.80);        /* Light blue background */
+  --badge-info-foreground: oklch(0.2500 0.0500 242);    /* Dark blue text */
+
+  /* Input Colors */
+  --input-placeholder: oklch(0.5500 0.0100 255);        /* Placeholder text color */
+  --input-focus-ring: var(--brand-primary-500);          /* Focus ring color */
+
+  /* Medical Drawer Colors */
+  --drawer-success: oklch(0.9200 0.0400 142 / 0.80);    /* Success state background */
+  --drawer-success-foreground: oklch(0.2500 0.0500 142); /* Success text */
+  --drawer-active: oklch(0.2500 0.0500 242);           /* Active state color */
+
+  /* Error Colors */
+  --error-text: oklch(0.6200 0.1800 15);                /* Error text color */
+  --error-background: oklch(0.9600 0.0200 15 / 0.80);  /* Error background */
+
+  /* Chunked Upload Progress Colors */
+  --progress-info: oklch(0.9200 0.0400 242 / 0.80);     /* Info background */
+  --progress-info-foreground: oklch(0.2500 0.0500 242); /* Info text */
+}
+
+/* ============================================================================= */
+/* DARK THEME - Alternative Theme Configuration */
+/* ============================================================================= */
+
+.dark {
+  /* === BRAND COLORS REMAIN THE SAME === */
+  /* Brand colors are consistent across themes */
+  
+  /* === SEMANTIC COLOR ASSIGNMENTS - DARK THEME === */
+  
+  /* NEW DARK THEME VARIABLES */
+  --background: oklch(0.2223 0.0060 271.1393);
+  --foreground: oklch(0.9816 0.0017 247.8390);
+  --card: oklch(0.2621 0.0095 248.1897);
+  --card-foreground: oklch(0.9816 0.0017 247.8390);
+  --popover: oklch(0.2621 0.0095 248.1897);
+  --popover-foreground: oklch(0.9816 0.0017 247.8390);
+  
+  --primary: oklch(0.7392 0.1154 242.0535);
+  --primary-foreground: oklch(0.2223 0.0060 271.1393);
+  --secondary: oklch(0.5241 0.1259 252.3236);
+  --secondary-foreground: oklch(0.9816 0.0017 247.8390);
+  --accent: oklch(0.5241 0.1259 252.3236);
+  --accent-foreground: oklch(0.9816 0.0017 247.8390);
+  --muted: oklch(0.3451 0.0133 248.2124);
+  --muted-foreground: oklch(0.7692 0.0145 248.0166);
+  --destructive: oklch(0.3958 0.1331 25.7230);
+  --destructive-foreground: oklch(0.9816 0.0017 247.8390);
+  
+  --border: oklch(0.3451 0.0133 248.2124);
+  --input: oklch(0.3451 0.0133 248.2124);
+  --ring: oklch(0.7392 0.1154 242.0535);
+  
+  /* === SIDEBAR SYSTEM === */
+  --sidebar: oklch(0.2621 0.0095 248.1897);
+  --sidebar-foreground: oklch(0.9816 0.0017 247.8390);
+  --sidebar-primary: oklch(0.7392 0.1154 242.0535);
+  --sidebar-primary-foreground: oklch(0.2223 0.0060 271.1393);
+  --sidebar-accent: oklch(0.5241 0.1259 252.3236);
+  --sidebar-accent-foreground: oklch(0.9816 0.0017 247.8390);
+  --sidebar-border: oklch(0.3451 0.0133 248.2124);
+  --sidebar-ring: oklch(0.7392 0.1154 242.0535);
+  
+  /* === MEDICAL-SPECIFIC COLORS - DARK ADJUSTMENTS === */
+  --medical-emergency: oklch(0.7000 0.1700 15);    /* Brighter emergency red */
+  --medical-warning: oklch(0.8000 0.1300 65);      /* Brighter warning amber */
+  --medical-success: oklch(0.7200 0.1100 142);     /* Brighter success green */
+  --medical-info: var(--brand-primary-400);        /* Brighter info blue */
+  
+  /* === COMPONENT-SPECIFIC GRADIENTS - DARK ADJUSTMENTS === */
+  /* Adjust gradients for better visibility in dark mode */
+  --gradient-blue: linear-gradient(135deg, var(--brand-primary-500), var(--brand-primary-600));
+  --gradient-indigo: linear-gradient(135deg, var(--brand-primary-500), var(--brand-accent-500));
+  --gradient-cyan: linear-gradient(135deg, var(--brand-primary-500), var(--brand-secondary-500));
+  --gradient-purple: linear-gradient(135deg, var(--brand-accent-500), var(--brand-accent-600));
+  --gradient-red: linear-gradient(135deg, oklch(0.65 0.15 15), oklch(0.60 0.15 20));
+  --gradient-pink: linear-gradient(135deg, var(--brand-accent-500), oklch(0.65 0.15 340));
+  --gradient-amber: linear-gradient(135deg, oklch(0.80 0.15 75), oklch(0.75 0.15 65));
+  --gradient-teal: linear-gradient(135deg, var(--brand-secondary-500), var(--brand-secondary-600));
+  --gradient-slate: linear-gradient(135deg, oklch(0.55 0.05 245), oklch(0.50 0.05 245));
+  --gradient-violet: linear-gradient(135deg, var(--brand-accent-500), var(--brand-accent-600));
+  
+  /* Feature Card Gradients - adjusted for dark mode */
+  --gradient-cardiology-red: linear-gradient(135deg, #f87171, #ef4444);
+  --gradient-cardiology-orange: linear-gradient(135deg, #fb923c, #f97316);
+  --gradient-cardiology-blue: linear-gradient(135deg, #60a5fa, #3b82f6);
+  --gradient-cardiology-emerald: linear-gradient(135deg, #34d399, #10b981);
+
+  /* Premium Medical Gradients - Dark Mode */
+  --gradient-premium-cardio: linear-gradient(135deg, var(--cardiology-red-secondary) 0%, var(--cardiology-orange-secondary) 25%, var(--cardiology-orange-primary) 50%, var(--cardiology-orange-secondary) 100%);
+  --gradient-premium-health: linear-gradient(-45deg, var(--cardiology-emerald-secondary), var(--cardiology-blue-secondary), var(--cardiology-blue-primary), var(--cardiology-emerald-secondary));
+  --gradient-premium-risk: conic-gradient(from 180deg at 50% 50%, var(--medical-success) 0deg, var(--medical-warning) 90deg, var(--medical-emergency) 180deg, var(--medical-success) 270deg, var(--medical-success) 360deg);
+
+  /* Workspace Background Gradients - Dark Mode */
+  --gradient-workspace-red: linear-gradient(135deg, var(--cardiology-red-secondary), var(--cardiology-red-primary));
+  --gradient-workspace-blue: linear-gradient(135deg, var(--cardiology-blue-secondary), var(--cardiology-blue-primary));
+  --gradient-workspace-emerald: linear-gradient(135deg, var(--cardiology-emerald-secondary), var(--cardiology-emerald-primary));
+  --gradient-workspace-orange: linear-gradient(135deg, var(--cardiology-orange-secondary), var(--cardiology-orange-primary));
+
+  /* Cardiology Accent Colors - Dark Mode (brighter for dark theme) */
+  --cardiology-accent-red: #fca5a5;      /* Lighter red for dark */
+  --cardiology-accent-blue: #60a5fa;     /* Lighter blue for dark */
+  --cardiology-accent-emerald: #6ee7b7;   /* Lighter emerald for dark */
+  --cardiology-accent-purple: #a78bfa;    /* Lighter purple for dark */
+  --cardiology-accent-orange: #fdba74;    /* Lighter orange for dark */
+
+  /* Premium Gradients - Dark Mode (adjusted for dark theme) */
+  --gradient-premium-skeleton: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  --gradient-premium-purple: linear-gradient(90deg, #7c3aed 0%, #8b5cf6 50%, #a855f7 100%);
+  --gradient-premium-teal: linear-gradient(135deg, #14b8a6 0%, #0d9488 50%, #0f766e 100%);
+  --gradient-premium-rose: linear-gradient(135deg, #f43f5e 0%, #e11d48 50%, #be123c 100%);
+  --gradient-premium-amber: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+
+  /* Glassmorphism Shadows - Dark Mode */
+  --shadow-glass-light: 0 35px 60px -12px rgba(0, 0, 0, 0.4);
+  --shadow-glass-heavy: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
+  --shadow-glass-negative: 0 20px 40px -12px rgba(0, 0, 0, 0.35);
+
+  /* Medical UI Specific - Dark Mode */
+  --medical-shadow-emerald: 0 1px 2px rgba(52, 211, 153, 0.2);  /* Brighter emerald shadow */
+  --medical-shadow-black-light: 0 4px 8px rgba(0, 0, 0, 0.3);    /* Darker shadows for dark */
+  --medical-shadow-black-medium: 0 2px 4px rgba(0, 0, 0, 0.25);
+  --medical-shadow-black-heavy: 0 12px 24px rgba(0, 0, 0, 0.4);
+
+  /* Transcription Theme Colors */
+  --transcription-primary: #4A9EFF;
+  --transcription-primary-hover: #87BFFF;
+  --transcription-primary-light: #B8D4FF;
+  --transcription-primary-dark: #2B7FFF;
+  --transcription-white: #FFFFFF;
+  --transcription-gray-50: #F8FAFC;
+  --transcription-gray-100: #F1F5F9;
+  --transcription-gray-200: #E2E8F0;
+  --transcription-gray-300: #CBD5E1;
+  --transcription-gray-400: #94A3B8;
+  --transcription-gray-500: #64748B;
+  --transcription-gray-600: #475569;
+  --transcription-gray-700: #334155;
+  --transcription-gray-800: #1E293B;
+  --transcription-gray-900: #0F172A;
+
+  /* Transcription Shadows */
+  --shadow-transcription-card: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-transcription-button: 0 4px 6px -1px rgba(74, 158, 255, 0.2);
+  --shadow-transcription-hover: 0 12px 32px -8px rgba(74, 158, 255, 0.25);
+  --shadow-transcription-active: 0 2px 4px -1px rgba(74, 158, 255, 0.15);
+
+  /* Modal Effects */
+  --gradient-modal-primary: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.15), rgba(0, 0, 0, 0.4));
+  --gradient-modal-secondary: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+  --gradient-modal-overlay: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
+  --shadow-modal-heavy: 0 32px 64px -12px rgba(0, 0, 0, 0.35);
+
+  /* File Type Colors */
+  --file-type-pdf: #ef4444;
+  --file-type-image: #8b5cf6;
+  --file-type-word: #3b82f6;
+  --file-type-excel: #10b981;
+  --file-type-default: #6b7280;
+
+  /* Transcription Theme Colors - Dark Mode */
+  --transcription-primary: #87BFFF;        /* Brighter for dark theme */
+  --transcription-primary-hover: #B8D4FF;  /* Even brighter hover */
+  --transcription-primary-light: #D1E7FF;
+  --transcription-primary-dark: #4A9EFF;
+  --transcription-white: #1E293B;          /* Dark surface instead of white */
+  --transcription-gray-50: #0F172A;        /* Darkest gray */
+  --transcription-gray-100: #1E293B;
+  --transcription-gray-200: #334155;
+  --transcription-gray-300: #475569;
+  --transcription-gray-400: #64748B;
+  --transcription-gray-500: #94A3B8;
+  --transcription-gray-600: #CBD5E1;
+  --transcription-gray-700: #E2E8F0;
+  --transcription-gray-800: #F1F5F9;
+  --transcription-gray-900: #F8FAFC;       /* Lightest for dark theme */
+
+  /* Transcription Shadows - Dark Mode */
+  --shadow-transcription-card: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  --shadow-transcription-button: 0 4px 6px -1px rgba(135, 191, 255, 0.25);
+  --shadow-transcription-hover: 0 12px 32px -8px rgba(135, 191, 255, 0.3);
+  --shadow-transcription-active: 0 2px 4px -1px rgba(135, 191, 255, 0.2);
+
+  /* Modal Effects - Dark Mode */
+  --gradient-modal-primary: radial-gradient(ellipse at center, rgba(135, 191, 255, 0.2), rgba(0, 0, 0, 0.6));
+  --gradient-modal-secondary: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8));
+  --gradient-modal-overlay: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.9) 100%);
+  --shadow-modal-heavy: 0 32px 64px -12px rgba(0, 0, 0, 0.6);
+
+  /* File Type Colors - Dark Mode (brighter versions) */
+  --file-type-pdf: #f87171;
+  --file-type-image: #a78bfa;
+  --file-type-word: #60a5fa;
+  --file-type-excel: #34d399;
+  --file-type-default: #9ca3af;
+
+  /* Shadow System - Dark Mode */
+  --shadow-primary: 0 8px 25px -8px oklch(from var(--brand-primary-400) l c h / 0.3);
+  --shadow-secondary: 0 4px 15px -4px oklch(from var(--brand-secondary-400) l c h / 0.25);
+  --shadow-ring: 0 0 0 2px oklch(from var(--ring) l c h / 0.25);
+
+  /* === UI COMPONENT COLORS - DARK THEME === */
+
+  /* Button Variants - Dark Mode */
+  --button-destructive: oklch(0.7000 0.1600 15);        /* Brighter red for dark */
+  --button-destructive-hover: oklch(0.7500 0.1700 15);  /* Brighter red hover */
+  --button-destructive-foreground: oklch(0.1500 0.0200 15); /* Dark text */
+
+  /* Badge Variants - Dark Mode */
+  --badge-success: oklch(0.3000 0.0400 142 / 0.80);     /* Dark green background */
+  --badge-success-foreground: oklch(0.8500 0.0300 142); /* Light green text */
+  --badge-warning: oklch(0.3500 0.0400 65 / 0.80);      /* Dark amber background */
+  --badge-warning-foreground: oklch(0.9000 0.0300 65);  /* Light amber text */
+  --badge-info: oklch(0.3000 0.0400 242 / 0.80);        /* Dark blue background */
+  --badge-info-foreground: oklch(0.8500 0.0300 242);    /* Light blue text */
+
+  /* Input Colors - Dark Mode */
+  --input-placeholder: oklch(0.7000 0.0200 254);        /* Lighter placeholder for dark */
+  --input-focus-ring: var(--brand-primary-400);          /* Brighter focus ring */
+
+  /* Medical Drawer Colors - Dark Mode */
+  --drawer-success: oklch(0.3000 0.0400 142 / 0.80);    /* Dark success background */
+  --drawer-success-foreground: oklch(0.8500 0.0300 142); /* Light success text */
+  --drawer-active: oklch(0.8500 0.0300 242);           /* Light active color */
+
+  /* Error Colors - Dark Mode */
+  --error-text: oklch(0.7000 0.1700 15);                /* Brighter error text */
+  --error-background: oklch(0.3500 0.0300 15 / 0.80);  /* Dark error background */
+
+  /* Chunked Upload Progress Colors - Dark Mode */
+  --progress-info: oklch(0.3000 0.0400 242 / 0.80);     /* Dark info background */
+  --progress-info-foreground: oklch(0.8500 0.0300 242); /* Light info text */
+
+  /* === ADDITIONAL UI COMPONENT COLORS === */
+
+  /* Hover States */
+  --hover-accent: oklch(0.9200 0.0400 242 / 0.60);       /* Light accent hover */
+  --hover-error: oklch(0.9600 0.0200 15 / 0.60);         /* Light error hover */
+
+  /* Focus States */
+  --focus-ring-primary: var(--brand-primary-500);         /* Primary focus ring */
+  --focus-ring-secondary: var(--brand-secondary-500);     /* Secondary focus ring */
+
+  /* Selection States */
+  --selection-primary: oklch(0.9200 0.0400 242 / 0.80);  /* Primary selection background */
+  --selection-primary-foreground: oklch(0.2500 0.0500 242); /* Primary selection text */
+
+  /* Status Indicator Colors */
+  --status-active: oklch(0.6800 0.1200 142);            /* Active/green status */
+  --status-inactive: oklch(0.5500 0.0100 255);          /* Inactive/gray status */
+
+  /* === ADDITIONAL UI COMPONENT COLORS - DARK THEME === */
+
+  /* Hover States - Dark Mode */
+  --hover-accent: oklch(0.3500 0.0400 242 / 0.80);       /* Dark accent hover */
+  --hover-error: oklch(0.4000 0.0300 15 / 0.80);         /* Dark error hover */
+
+  /* Focus States - Dark Mode */
+  --focus-ring-primary: var(--brand-primary-400);         /* Brighter primary focus ring */
+  --focus-ring-secondary: var(--brand-secondary-400);     /* Brighter secondary focus ring */
+
+  /* Selection States - Dark Mode */
+  --selection-primary: oklch(0.3500 0.0400 242 / 0.80);  /* Dark selection background */
+  --selection-primary-foreground: oklch(0.8500 0.0300 242); /* Light selection text */
+
+  /* Status Indicator Colors - Dark Mode */
+  --status-active: oklch(0.7200 0.1100 142);            /* Brighter active status */
+  --status-inactive: oklch(0.7000 0.0200 254);          /* Brighter inactive status */
+}
+
+/* ============================================================================= */
+/* COLOR SYSTEM UTILITIES */
+/* ============================================================================= */
+
+/* HSL Compatibility Layer for Tailwind */
+:root {
+  /* Convert OKLCH to HSL equivalents for Tailwind compatibility */
+  --background-hsl: 242 20% 98%;
+  --foreground-hsl: 260 5% 20%;
+  --card-hsl: 242 10% 99%;
+  --card-foreground-hsl: 260 6% 22%;
+  --popover-hsl: 242 5% 100%;
+  --popover-foreground-hsl: 260 5% 20%;
+  --primary-hsl: 242 75% 64%;
+  --primary-foreground-hsl: 0 0% 100%;
+  --secondary-hsl: 245 20% 94%;
+  --secondary-foreground-hsl: 258 10% 30%;
+  --muted-hsl: 245 15% 95%;
+  --muted-foreground-hsl: 255 5% 50%;
+  --accent-hsl: 268 75% 60%;
+  --accent-foreground-hsl: 0 0% 100%;
+  --destructive-hsl: 15 90% 64%;
+  --destructive-foreground-hsl: 0 0% 100%;
+  --border-hsl: 245 30% 90%;
+  --input-hsl: 242 10% 99%;
+  --ring-hsl: 242 75% 64%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background-hsl: 245 15% 18%;
+  --foreground-hsl: 245 5% 96%;
+  --card-hsl: 248 25% 24%;
+  --card-foreground-hsl: 248 10% 94%;
+  --popover-hsl: 251 30% 26%;
+  --popover-foreground-hsl: 248 5% 96%;
+  --primary-hsl: 242 85% 74%;
+  --primary-foreground-hsl: 260 10% 15%;
+  --secondary-hsl: 254 25% 32%;
+  --secondary-foreground-hsl: 251 10% 90%;
+  --muted-hsl: 251 30% 30%;
+  --muted-foreground-hsl: 254 10% 70%;
+  --accent-hsl: 268 85% 70%;
+  --accent-foreground-hsl: 270 10% 15%;
+  --destructive-hsl: 15 80% 70%;
+  --destructive-foreground-hsl: 15 10% 15%;
+  --border-hsl: 254 35% 40%;
+  --input-hsl: 251 30% 28%;
+  --ring-hsl: 242 85% 74%;
+}
+
+/* ============================================================================= */
+/* THEME DEBUGGING UTILITIES (Development Only) */
+/* ============================================================================= */
+
+/* Uncomment during development to visualize theme boundaries */
+/*
+[data-theme-debug] * {
+  outline: 1px solid var(--primary) !important;
+}
+
+[data-theme-debug] .sidebar-container {
+  outline: 2px solid var(--accent) !important;
+}
+
+[data-theme-debug] [class*="card"] {
+  outline: 1px solid var(--secondary) !important;
+}
+*/
+
+:root {
+  /* ============================================================================= */
+  /* COMPONENT BACKGROUND SYSTEM - Extended Variables */
+  /* ============================================================================= */
+  
+  /* Card System - Glassmorphic Backgrounds */
+  --component-card: oklch(0.9900 0.0050 242 / 0.65);              /* Main card background */
+  --component-card-hover: oklch(0.9950 0.0030 242 / 0.75);        /* Card hover state */
+  --component-card-border: oklch(0.9000 0.0300 242 / 0.35);       /* Card borders */
+  --component-card-shadow: oklch(0.5000 0.0800 245 / 0.15);       /* Card shadows */
+  
+  /* Modal and Dialog Backgrounds */
+  --component-modal: oklch(0.9950 0.0030 242 / 0.85);             /* Modal backgrounds */
+  --component-modal-overlay: oklch(0.2000 0.0200 260 / 0.60);     /* Modal overlay */
+  --component-modal-border: oklch(0.9200 0.0250 242 / 0.50);      /* Modal borders */
+  
+  /* Surface Backgrounds */
+  --component-surface-primary: oklch(0.9900 0.0050 242 / 0.70);   /* Primary surfaces */
+  --component-surface-secondary: oklch(0.9850 0.0080 245 / 0.60); /* Secondary surfaces */
+  --component-surface-tertiary: oklch(0.9800 0.0100 248 / 0.50);  /* Tertiary surfaces */
+  
+  /* Header and Navigation */
+  --component-header: oklch(0.9900 0.0050 242 / 0.80);            /* Header background */
+  --component-nav: oklch(0.9850 0.0080 245 / 0.75);               /* Navigation background */
+  --component-nav-item-hover: oklch(0.9950 0.0030 242 / 0.85);    /* Nav item hover */
+  
+  /* Form Elements - Enhanced */
+  --component-input: oklch(0.9950 0.0030 242 / 0.70);             /* Input backgrounds */
+  --component-input-focus: oklch(0.9980 0.0020 242 / 0.85);       /* Input focus state */
+  --component-input-border: oklch(0.9000 0.0300 242 / 0.45);      /* Input borders */
+  --component-input-border-focus: var(--brand-primary-500);       /* Input focus border */
+  
+  /* Button System - Glassmorphic */
+  --component-button-primary: var(--brand-primary-500);           /* Primary buttons */
+  --component-button-primary-hover: var(--brand-primary-600);     /* Primary button hover */
+  --component-button-secondary: oklch(0.9600 0.0150 245 / 0.70);  /* Secondary buttons */
+  --component-button-secondary-hover: oklch(0.9400 0.0200 245 / 0.85); /* Secondary hover */
+  --component-button-ghost: oklch(0.9800 0.0100 242 / 0.50);      /* Ghost buttons */
+  --component-button-ghost-hover: oklch(0.9700 0.0150 242 / 0.70); /* Ghost hover */
+  
+  /* Sidebar System */
+  --component-sidebar: oklch(0.9900 0.0050 242 / 0.75);           /* Sidebar background */
+  --component-sidebar-item: oklch(0.9850 0.0080 245 / 0.60);      /* Sidebar items */
+  --component-sidebar-item-active: var(--brand-primary-100);      /* Active sidebar item */
+  --component-sidebar-item-hover: oklch(0.9950 0.0030 242 / 0.80); /* Sidebar item hover */
+  
+  /* Content Areas */
+  --component-workspace: oklch(0.9950 0.0030 242 / 0.40);         /* Main workspace */
+  --component-panel: oklch(0.9900 0.0050 242 / 0.65);             /* Panels */
+  --component-panel-header: oklch(0.9850 0.0080 245 / 0.70);      /* Panel headers */
+  
+  /* ============================================================================= */
+  /* GLASSMORPHISM EFFECT SYSTEM */
+  /* ============================================================================= */
+  
+  /* Backdrop Filter Values */
+  --glass-blur-light: blur(12px) saturate(1.2);                   /* Light glassmorphism */
+  --glass-blur-medium: blur(16px) saturate(1.3);                  /* Medium glassmorphism */
+  --glass-blur-heavy: blur(20px) saturate(1.4);                   /* Heavy glassmorphism */
+  
+  /* Glass Surface Opacity Levels */
+  --glass-opacity-subtle: 0.40;                                   /* Subtle glass effect */
+  --glass-opacity-medium: 0.65;                                   /* Medium glass effect */
+  --glass-opacity-strong: 0.85;                                   /* Strong glass effect */
+  
+  /* Glass Border System */
+  --glass-border-subtle: oklch(0.9500 0.0200 242 / 0.30);         /* Subtle glass borders */
+  --glass-border-medium: oklch(0.9200 0.0300 242 / 0.45);         /* Medium glass borders */
+  --glass-border-strong: oklch(0.9000 0.0400 242 / 0.60);         /* Strong glass borders */
+  
+  /* ============================================================================= */
+  /* COMPONENT-SPECIFIC GRADIENT OVERLAYS */
+  /* ============================================================================= */
+  
+  /* Card Gradient Overlays */
+  --overlay-card-light: linear-gradient(135deg, 
+    oklch(1.0000 0 0 / 0.15), 
+    oklch(0.9800 0.0100 242 / 0.10), 
+    transparent);
+  
+  --overlay-card-accent: linear-gradient(135deg, 
+    var(--brand-primary-50), 
+    var(--brand-secondary-50), 
+    transparent);
+  
+  /* Workspace Background Overlays */
+  --overlay-workspace: linear-gradient(135deg, 
+    oklch(0.9950 0.0030 242 / 0.50), 
+    oklch(0.9900 0.0050 245 / 0.40), 
+    oklch(0.9850 0.0080 248 / 0.30));
+  
+  /* Interactive Element Overlays */
+  --overlay-interactive-hover: linear-gradient(135deg, 
+    oklch(1.0000 0 0 / 0.20), 
+    oklch(0.9900 0.0050 242 / 0.15), 
+    transparent);
+  
+  /* ============================================================================= */
+  /* MEDICAL UI SPECIFIC VARIABLES */
+  /* ============================================================================= */
+  
+  /* Medical Card Backgrounds */
+  --medical-card-primary: oklch(0.9900 0.0050 242 / 0.70);        /* Primary medical cards */
+  --medical-card-calculator: oklch(0.9950 0.0030 242 / 0.75);     /* Calculator cards */
+  --medical-card-result: oklch(0.9850 0.0080 245 / 0.80);         /* Result displays */
+  --medical-card-warning: oklch(0.9400 0.0600 45 / 0.75);         /* Warning cards */
+  --medical-card-success: oklch(0.9400 0.0600 145 / 0.75);        /* Success cards */
+  --medical-card-error: oklch(0.9400 0.0800 15 / 0.75);           /* Error cards */
+  
+  /* Transcription Interface Backgrounds */
+  --transcription-panel: oklch(0.9950 0.0030 242 / 0.85);         /* Transcription panel */
+  --transcription-controls: oklch(0.9900 0.0050 242 / 0.70);      /* Control panels */
+  --transcription-input: oklch(0.9980 0.0020 242 / 0.90);         /* Input areas */
+  
+  /* AI Chat Interface */
+  --chat-window: oklch(0.9950 0.0030 242 / 0.80);                 /* Chat window background */
+  --chat-message-user: oklch(0.9800 0.0100 248 / 0.70);          /* User messages */
+  --chat-message-ai: oklch(0.9900 0.0050 242 / 0.75);            /* AI messages */
+  --chat-input: oklch(0.9980 0.0020 242 / 0.85);                  /* Chat input area */
+  
+  /* ============================================================================= */
+  /* DATA VISUALIZATION & CHART SYSTEM */
+  /* ============================================================================= */
+  
+  /* Chart Line Colors */
+  --chart-line-1: var(--brand-primary-500);                       /* Primary data line */
+  --chart-line-2: var(--brand-secondary-500);                     /* Secondary data line */
+  --chart-line-3: var(--brand-accent-500);                        /* Accent data line */
+  --chart-line-4: oklch(0.6800 0.1400 145);                       /* Success line color */
+  --chart-line-5: oklch(0.7200 0.1600 45);                        /* Warning line color */
+  --chart-line-6: oklch(0.6400 0.1800 15);                        /* Error line color */
+  
+  /* Chart Area/Fill Colors */
+  --chart-area-1: oklch(from var(--chart-line-1) l c h / 0.20);   /* Primary area fill */
+  --chart-area-2: oklch(from var(--chart-line-2) l c h / 0.20);   /* Secondary area fill */
+  --chart-area-3: oklch(from var(--chart-line-3) l c h / 0.20);   /* Accent area fill */
+  --chart-area-4: oklch(from var(--chart-line-4) l c h / 0.20);   /* Success area fill */
+  --chart-area-5: oklch(from var(--chart-line-5) l c h / 0.20);   /* Warning area fill */
+  --chart-area-6: oklch(from var(--chart-line-6) l c h / 0.20);   /* Error area fill */
+  
+  /* Chart Grid and Axes */
+  --chart-grid: oklch(0.9000 0.0200 242 / 0.40);                  /* Chart grid lines */
+  --chart-axis: oklch(0.7000 0.0150 245);                         /* Axis text color */
+  --chart-background: oklch(0.9950 0.0030 242 / 0.90);            /* Chart background */
+  
+  /* ============================================================================= */
+  /* STATUS INDICATOR SYSTEM */
+  /* ============================================================================= */
+  
+  /* Connection Status */
+  --status-online: oklch(0.6800 0.1400 145);                      /* Online/connected */
+  --status-offline: oklch(0.6000 0.0150 260);                     /* Offline/disconnected */
+  --status-busy: oklch(0.7200 0.1600 45);                         /* Busy/processing */
+  --status-error: oklch(0.6400 0.1800 15);                        /* Error state */
+  --status-warning: oklch(0.7200 0.1600 45);                      /* Warning state */
+  --status-success: oklch(0.6800 0.1400 145);                     /* Success state */
+  
+  /* Progress Indicators */
+  --progress-bar-fill: var(--brand-primary-500);                  /* Progress bar fill */
+  --progress-bar-background: oklch(0.9400 0.0200 242 / 0.50);     /* Progress bar track */
+  --progress-bar-text: var(--foreground);                         /* Progress text */
+
+  /* Shadow System */
+  --shadow-primary: 0 8px 25px -8px oklch(from var(--brand-primary-500) l c h / 0.25);
+  --shadow-secondary: 0 4px 15px -4px oklch(from var(--brand-secondary-500) l c h / 0.2);
+  --shadow-ring: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+  
+  /* Loading States */
+  --loading-spinner: var(--brand-primary-500);                    /* Spinner color */
+  --loading-background: oklch(0.9800 0.0100 242 / 0.70);          /* Loading overlay */
+  --loading-text: var(--foreground-secondary);                    /* Loading text */
+  
+  /* ============================================================================= */
+  /* NOTIFICATION & FEEDBACK SYSTEM */
+  /* ============================================================================= */
+  
+  /* Tooltip System */
+  --tooltip-background: oklch(0.2000 0.0300 260 / 0.95);          /* Tooltip background */
+  --tooltip-foreground: oklch(0.9800 0.0100 242);                 /* Tooltip text */
+  --tooltip-border: oklch(0.3000 0.0400 260 / 0.80);              /* Tooltip border */
+  --tooltip-arrow: var(--tooltip-background);                     /* Tooltip arrow */
+  
+  /* Notification Types */
+  --notification-info: oklch(0.9400 0.0600 242 / 0.85);           /* Info notifications */
+  --notification-success: oklch(0.9400 0.0600 145 / 0.85);        /* Success notifications */
+  --notification-warning: oklch(0.9400 0.0800 45 / 0.85);         /* Warning notifications */
+  --notification-error: oklch(0.9400 0.0800 15 / 0.85);           /* Error notifications */
+  
+  /* Alert System */
+  --alert-info: oklch(0.9600 0.0400 242 / 0.90);                  /* Info alerts */
+  --alert-success: oklch(0.9600 0.0400 145 / 0.90);               /* Success alerts */
+  --alert-warning: oklch(0.9600 0.0600 45 / 0.90);                /* Warning alerts */
+  --alert-error: oklch(0.9600 0.0600 15 / 0.90);                  /* Error alerts */
+}
+
+/* ============================================================================= */
+/* COMPLETE TAILWIND COLOR MAPPING SYSTEM */
+/* ============================================================================= */
+
+:root {
+  /* All Tailwind Background Classes → Theme Variables */
+  --tw-bg-white: var(--component-card);
+  --tw-bg-gray-50: var(--component-surface-primary);
+  --tw-bg-gray-100: var(--component-surface-secondary);
+  --tw-bg-gray-200: var(--component-surface-tertiary);
+  --tw-bg-gray-300: var(--component-panel);
+  --tw-bg-gray-400: var(--muted);
+  --tw-bg-gray-500: var(--muted-foreground);
+  --tw-bg-gray-600: var(--border);
+  --tw-bg-gray-700: var(--card);
+  --tw-bg-gray-800: var(--background);
+  --tw-bg-gray-900: oklch(0.1800 0.0200 260);
+  
+  /* Slate colors */
+  --tw-bg-slate-50: var(--component-surface-primary);
+  --tw-bg-slate-100: var(--component-surface-secondary);
+  --tw-bg-slate-200: var(--component-surface-tertiary);
+  --tw-bg-slate-300: var(--component-panel);
+  --tw-bg-slate-400: var(--muted);
+  --tw-bg-slate-500: var(--muted-foreground);
+  --tw-bg-slate-600: var(--border);
+  --tw-bg-slate-700: var(--card);
+  --tw-bg-slate-800: var(--background);
+  --tw-bg-slate-900: oklch(0.1800 0.0200 260);
+  
+  /* Neutral colors */
+  --tw-bg-neutral-50: var(--component-surface-primary);
+  --tw-bg-neutral-100: var(--component-surface-secondary);
+  --tw-bg-neutral-200: var(--component-surface-tertiary);
+  --tw-bg-neutral-300: var(--component-panel);
+  --tw-bg-neutral-400: var(--muted);
+  --tw-bg-neutral-500: var(--muted-foreground);
+  --tw-bg-neutral-600: var(--border);
+  --tw-bg-neutral-700: var(--card);
+  --tw-bg-neutral-800: var(--background);
+  --tw-bg-neutral-900: oklch(0.1800 0.0200 260);
+  
+  /* Stone colors */
+  --tw-bg-stone-50: var(--component-surface-primary);
+  --tw-bg-stone-100: var(--component-surface-secondary);
+  --tw-bg-stone-200: var(--component-surface-tertiary);
+  --tw-bg-stone-300: var(--component-panel);
+  --tw-bg-stone-400: var(--muted);
+  --tw-bg-stone-500: var(--muted-foreground);
+  --tw-bg-stone-600: var(--border);
+  --tw-bg-stone-700: var(--card);
+  --tw-bg-stone-800: var(--background);
+  --tw-bg-stone-900: oklch(0.1800 0.0200 260);
+  
+  /* Zinc colors */
+  --tw-bg-zinc-50: var(--component-surface-primary);
+  --tw-bg-zinc-100: var(--component-surface-secondary);
+  --tw-bg-zinc-200: var(--component-surface-tertiary);
+  --tw-bg-zinc-300: var(--component-panel);
+  --tw-bg-zinc-400: var(--muted);
+  --tw-bg-zinc-500: var(--muted-foreground);
+  --tw-bg-zinc-600: var(--border);
+  --tw-bg-zinc-700: var(--card);
+  --tw-bg-zinc-800: var(--background);
+  --tw-bg-zinc-900: oklch(0.1800 0.0200 260);
+
+  /* Colored backgrounds - redirect to cardiology theme colors */
+  --tw-bg-red-50: oklch(0.9700 0.0300 15 / 0.70);
+  --tw-bg-red-100: oklch(0.9500 0.0400 15 / 0.70);
+  --tw-bg-red-200: oklch(0.9200 0.0600 15 / 0.70);
+  --tw-bg-red-300: oklch(0.8800 0.0800 15 / 0.70);
+  --tw-bg-red-400: oklch(0.8200 0.1000 15 / 0.70);
+  --tw-bg-red-500: var(--cardiology-red-primary);
+  --tw-bg-red-600: var(--cardiology-red-secondary);
+  --tw-bg-red-700: oklch(0.4000 0.1600 15);
+  --tw-bg-red-800: oklch(0.3000 0.1400 15);
+  --tw-bg-red-900: oklch(0.2000 0.1200 15);
+
+  --tw-bg-orange-50: oklch(0.9700 0.0300 45 / 0.70);
+  --tw-bg-orange-100: oklch(0.9500 0.0400 45 / 0.70);
+  --tw-bg-orange-200: oklch(0.9200 0.0600 45 / 0.70);
+  --tw-bg-orange-300: oklch(0.8800 0.0800 45 / 0.70);
+  --tw-bg-orange-400: oklch(0.8200 0.1000 45 / 0.70);
+  --tw-bg-orange-500: var(--cardiology-orange-primary);
+  --tw-bg-orange-600: var(--cardiology-orange-secondary);
+  --tw-bg-orange-700: oklch(0.4000 0.1600 45);
+  --tw-bg-orange-800: oklch(0.3000 0.1400 45);
+  --tw-bg-orange-900: oklch(0.2000 0.1200 45);
+
+  --tw-bg-yellow-50: oklch(0.9700 0.0300 75 / 0.70);
+  --tw-bg-yellow-100: oklch(0.9500 0.0400 75 / 0.70);
+  --tw-bg-yellow-200: oklch(0.9200 0.0600 75 / 0.70);
+  --tw-bg-yellow-300: oklch(0.8800 0.0800 75 / 0.70);
+  --tw-bg-yellow-400: oklch(0.8200 0.1000 75 / 0.70);
+  --tw-bg-yellow-500: oklch(0.7200 0.1600 75);
+  --tw-bg-yellow-600: oklch(0.6200 0.1500 75);
+  --tw-bg-yellow-700: oklch(0.5000 0.1400 75);
+  --tw-bg-yellow-800: oklch(0.4000 0.1200 75);
+  --tw-bg-yellow-900: oklch(0.3000 0.1000 75);
+
+  --tw-bg-green-50: oklch(0.9700 0.0300 145 / 0.70);
+  --tw-bg-green-100: oklch(0.9500 0.0400 145 / 0.70);
+  --tw-bg-green-200: oklch(0.9200 0.0600 145 / 0.70);
+  --tw-bg-green-300: oklch(0.8800 0.0800 145 / 0.70);
+  --tw-bg-green-400: oklch(0.8200 0.1000 145 / 0.70);
+  --tw-bg-green-500: var(--cardiology-emerald-primary);
+  --tw-bg-green-600: var(--cardiology-emerald-secondary);
+  --tw-bg-green-700: oklch(0.4000 0.1600 145);
+  --tw-bg-green-800: oklch(0.3000 0.1400 145);
+  --tw-bg-green-900: oklch(0.2000 0.1200 145);
+
+  --tw-bg-emerald-50: oklch(0.9700 0.0300 145 / 0.70);
+  --tw-bg-emerald-100: oklch(0.9500 0.0400 145 / 0.70);
+  --tw-bg-emerald-200: oklch(0.9200 0.0600 145 / 0.70);
+  --tw-bg-emerald-300: oklch(0.8800 0.0800 145 / 0.70);
+  --tw-bg-emerald-400: oklch(0.8200 0.1000 145 / 0.70);
+  --tw-bg-emerald-500: var(--cardiology-emerald-primary);
+  --tw-bg-emerald-600: var(--cardiology-emerald-secondary);
+  --tw-bg-emerald-700: oklch(0.4000 0.1600 145);
+  --tw-bg-emerald-800: oklch(0.3000 0.1400 145);
+  --tw-bg-emerald-900: oklch(0.2000 0.1200 145);
+
+  --tw-bg-teal-50: oklch(0.9700 0.0300 185 / 0.70);
+  --tw-bg-teal-100: oklch(0.9500 0.0400 185 / 0.70);
+  --tw-bg-teal-200: oklch(0.9200 0.0600 185 / 0.70);
+  --tw-bg-teal-300: oklch(0.8800 0.0800 185 / 0.70);
+  --tw-bg-teal-400: oklch(0.8200 0.1000 185 / 0.70);
+  --tw-bg-teal-500: oklch(0.6200 0.1400 185);
+  --tw-bg-teal-600: oklch(0.5200 0.1300 185);
+  --tw-bg-teal-700: oklch(0.4200 0.1200 185);
+  --tw-bg-teal-800: oklch(0.3200 0.1000 185);
+  --tw-bg-teal-900: oklch(0.2200 0.0800 185);
+
+  --tw-bg-cyan-50: oklch(0.9700 0.0300 215 / 0.70);
+  --tw-bg-cyan-100: oklch(0.9500 0.0400 215 / 0.70);
+  --tw-bg-cyan-200: oklch(0.9200 0.0600 215 / 0.70);
+  --tw-bg-cyan-300: oklch(0.8800 0.0800 215 / 0.70);
+  --tw-bg-cyan-400: oklch(0.8200 0.1000 215 / 0.70);
+  --tw-bg-cyan-500: oklch(0.6200 0.1400 215);
+  --tw-bg-cyan-600: oklch(0.5200 0.1300 215);
+  --tw-bg-cyan-700: oklch(0.4200 0.1200 215);
+  --tw-bg-cyan-800: oklch(0.3200 0.1000 215);
+  --tw-bg-cyan-900: oklch(0.2200 0.0800 215);
+
+  --tw-bg-blue-50: oklch(0.9700 0.0300 242 / 0.70);
+  --tw-bg-blue-100: oklch(0.9500 0.0400 242 / 0.70);
+  --tw-bg-blue-200: oklch(0.9200 0.0600 242 / 0.70);
+  --tw-bg-blue-300: oklch(0.8800 0.0800 242 / 0.70);
+  --tw-bg-blue-400: oklch(0.8200 0.1000 242 / 0.70);
+  --tw-bg-blue-500: var(--cardiology-blue-primary);
+  --tw-bg-blue-600: var(--cardiology-blue-secondary);
+  --tw-bg-blue-700: oklch(0.4000 0.1600 242);
+  --tw-bg-blue-800: oklch(0.3000 0.1400 242);
+  --tw-bg-blue-900: oklch(0.2000 0.1200 242);
+
+  --tw-bg-indigo-50: oklch(0.9700 0.0300 272 / 0.70);
+  --tw-bg-indigo-100: oklch(0.9500 0.0400 272 / 0.70);
+  --tw-bg-indigo-200: oklch(0.9200 0.0600 272 / 0.70);
+  --tw-bg-indigo-300: oklch(0.8800 0.0800 272 / 0.70);
+  --tw-bg-indigo-400: oklch(0.8200 0.1000 272 / 0.70);
+  --tw-bg-indigo-500: oklch(0.6200 0.1400 272);
+  --tw-bg-indigo-600: oklch(0.5200 0.1300 272);
+  --tw-bg-indigo-700: oklch(0.4200 0.1200 272);
+  --tw-bg-indigo-800: oklch(0.3200 0.1000 272);
+  --tw-bg-indigo-900: oklch(0.2200 0.0800 272);
+
+  --tw-bg-violet-50: oklch(0.9700 0.0300 295 / 0.70);
+  --tw-bg-violet-100: oklch(0.9500 0.0400 295 / 0.70);
+  --tw-bg-violet-200: oklch(0.9200 0.0600 295 / 0.70);
+  --tw-bg-violet-300: oklch(0.8800 0.0800 295 / 0.70);
+  --tw-bg-violet-400: oklch(0.8200 0.1000 295 / 0.70);
+  --tw-bg-violet-500: oklch(0.6200 0.1400 295);
+  --tw-bg-violet-600: oklch(0.5200 0.1300 295);
+  --tw-bg-violet-700: oklch(0.4200 0.1200 295);
+  --tw-bg-violet-800: oklch(0.3200 0.1000 295);
+  --tw-bg-violet-900: oklch(0.2200 0.0800 295);
+
+  --tw-bg-purple-50: oklch(0.9700 0.0300 320 / 0.70);
+  --tw-bg-purple-100: oklch(0.9500 0.0400 320 / 0.70);
+  --tw-bg-purple-200: oklch(0.9200 0.0600 320 / 0.70);
+  --tw-bg-purple-300: oklch(0.8800 0.0800 320 / 0.70);
+  --tw-bg-purple-400: oklch(0.8200 0.1000 320 / 0.70);
+  --tw-bg-purple-500: oklch(0.6200 0.1400 320);
+  --tw-bg-purple-600: oklch(0.5200 0.1300 320);
+  --tw-bg-purple-700: oklch(0.4200 0.1200 320);
+  --tw-bg-purple-800: oklch(0.3200 0.1000 320);
+  --tw-bg-purple-900: oklch(0.2200 0.0800 320);
+
+  --tw-bg-fuchsia-50: oklch(0.9700 0.0300 340 / 0.70);
+  --tw-bg-fuchsia-100: oklch(0.9500 0.0400 340 / 0.70);
+  --tw-bg-fuchsia-200: oklch(0.9200 0.0600 340 / 0.70);
+  --tw-bg-fuchsia-300: oklch(0.8800 0.0800 340 / 0.70);
+  --tw-bg-fuchsia-400: oklch(0.8200 0.1000 340 / 0.70);
+  --tw-bg-fuchsia-500: oklch(0.6200 0.1400 340);
+  --tw-bg-fuchsia-600: oklch(0.5200 0.1300 340);
+  --tw-bg-fuchsia-700: oklch(0.4200 0.1200 340);
+  --tw-bg-fuchsia-800: oklch(0.3200 0.1000 340);
+  --tw-bg-fuchsia-900: oklch(0.2200 0.0800 340);
+
+  --tw-bg-pink-50: oklch(0.9700 0.0300 360 / 0.70);
+  --tw-bg-pink-100: oklch(0.9500 0.0400 360 / 0.70);
+  --tw-bg-pink-200: oklch(0.9200 0.0600 360 / 0.70);
+  --tw-bg-pink-300: oklch(0.8800 0.0800 360 / 0.70);
+  --tw-bg-pink-400: oklch(0.8200 0.1000 360 / 0.70);
+  --tw-bg-pink-500: oklch(0.6200 0.1400 360);
+  --tw-bg-pink-600: oklch(0.5200 0.1300 360);
+  --tw-bg-pink-700: oklch(0.4200 0.1200 360);
+  --tw-bg-pink-800: oklch(0.3200 0.1000 360);
+  --tw-bg-pink-900: oklch(0.2200 0.0800 360);
+
+  --tw-bg-rose-50: oklch(0.9700 0.0300 15 / 0.70);
+  --tw-bg-rose-100: oklch(0.9500 0.0400 15 / 0.70);
+  --tw-bg-rose-200: oklch(0.9200 0.0600 15 / 0.70);
+  --tw-bg-rose-300: oklch(0.8800 0.0800 15 / 0.70);
+  --tw-bg-rose-400: oklch(0.8200 0.1000 15 / 0.70);
+  --tw-bg-rose-500: oklch(0.6200 0.1400 15);
+  --tw-bg-rose-600: oklch(0.5200 0.1300 15);
+  --tw-bg-rose-700: oklch(0.4200 0.1200 15);
+  --tw-bg-rose-800: oklch(0.3200 0.1000 15);
+  --tw-bg-rose-900: oklch(0.2200 0.0800 15);
+
+  /* ============================================================================= */
+  /* COMPLETE TEXT COLOR MAPPING SYSTEM */
+  /* ============================================================================= */
+  
+  /* Text colors for all Tailwind utilities */
+  --tw-text-white: var(--foreground);
+  --tw-text-black: var(--background);
+  
+  --tw-text-gray-50: oklch(0.9700 0.0100 260);
+  --tw-text-gray-100: oklch(0.9300 0.0150 260);
+  --tw-text-gray-200: oklch(0.8800 0.0200 260);
+  --tw-text-gray-300: oklch(0.8200 0.0250 260);
+  --tw-text-gray-400: var(--muted-foreground);
+  --tw-text-gray-500: var(--foreground-secondary);
+  --tw-text-gray-600: var(--foreground-tertiary);
+  --tw-text-gray-700: oklch(0.4000 0.0300 260);
+  --tw-text-gray-800: oklch(0.3000 0.0250 260);
+  --tw-text-gray-900: var(--foreground);
+
+  --tw-text-slate-50: oklch(0.9700 0.0100 260);
+  --tw-text-slate-100: oklch(0.9300 0.0150 260);
+  --tw-text-slate-200: oklch(0.8800 0.0200 260);
+  --tw-text-slate-300: oklch(0.8200 0.0250 260);
+  --tw-text-slate-400: var(--muted-foreground);
+  --tw-text-slate-500: var(--foreground-secondary);
+  --tw-text-slate-600: var(--foreground-tertiary);
+  --tw-text-slate-700: oklch(0.4000 0.0300 260);
+  --tw-text-slate-800: oklch(0.3000 0.0250 260);
+  --tw-text-slate-900: var(--foreground);
+
+  --tw-text-neutral-50: oklch(0.9700 0.0100 260);
+  --tw-text-neutral-100: oklch(0.9300 0.0150 260);
+  --tw-text-neutral-200: oklch(0.8800 0.0200 260);
+  --tw-text-neutral-300: oklch(0.8200 0.0250 260);
+  --tw-text-neutral-400: var(--muted-foreground);
+  --tw-text-neutral-500: var(--foreground-secondary);
+  --tw-text-neutral-600: var(--foreground-tertiary);
+  --tw-text-neutral-700: oklch(0.4000 0.0300 260);
+  --tw-text-neutral-800: oklch(0.3000 0.0250 260);
+  --tw-text-neutral-900: var(--foreground);
+
+  --tw-text-stone-50: oklch(0.9700 0.0100 260);
+  --tw-text-stone-100: oklch(0.9300 0.0150 260);
+  --tw-text-stone-200: oklch(0.8800 0.0200 260);
+  --tw-text-stone-300: oklch(0.8200 0.0250 260);
+  --tw-text-stone-400: var(--muted-foreground);
+  --tw-text-stone-500: var(--foreground-secondary);
+  --tw-text-stone-600: var(--foreground-tertiary);
+  --tw-text-stone-700: oklch(0.4000 0.0300 260);
+  --tw-text-stone-800: oklch(0.3000 0.0250 260);
+  --tw-text-stone-900: var(--foreground);
+
+  --tw-text-zinc-50: oklch(0.9700 0.0100 260);
+  --tw-text-zinc-100: oklch(0.9300 0.0150 260);
+  --tw-text-zinc-200: oklch(0.8800 0.0200 260);
+  --tw-text-zinc-300: oklch(0.8200 0.0250 260);
+  --tw-text-zinc-400: var(--muted-foreground);
+  --tw-text-zinc-500: var(--foreground-secondary);
+  --tw-text-zinc-600: var(--foreground-tertiary);
+  --tw-text-zinc-700: oklch(0.4000 0.0300 260);
+  --tw-text-zinc-800: oklch(0.3000 0.0250 260);
+  --tw-text-zinc-900: var(--foreground);
+
+  /* Colored text - use cardiology theme colors */
+  --tw-text-red-500: var(--error-text);
+  --tw-text-red-600: var(--error-text);
+  --tw-text-red-700: oklch(0.4000 0.1600 15);
+  --tw-text-orange-500: var(--cardiology-accent-orange);
+  --tw-text-orange-600: var(--cardiology-accent-orange);
+  --tw-text-yellow-500: oklch(0.7200 0.1600 75);
+  --tw-text-yellow-600: oklch(0.6200 0.1500 75);
+  --tw-text-green-500: var(--status-success);
+  --tw-text-green-600: var(--cardiology-accent-emerald);
+  --tw-text-emerald-500: var(--cardiology-accent-emerald);
+  --tw-text-emerald-600: var(--cardiology-accent-emerald);
+  --tw-text-blue-500: var(--cardiology-accent-blue);
+  --tw-text-blue-600: var(--cardiology-accent-blue);
+  --tw-text-indigo-500: oklch(0.6200 0.1400 272);
+  --tw-text-indigo-600: oklch(0.5200 0.1300 272);
+  --tw-text-violet-500: oklch(0.6200 0.1400 295);
+  --tw-text-violet-600: oklch(0.5200 0.1300 295);
+  --tw-text-purple-500: oklch(0.6200 0.1400 320);
+  --tw-text-purple-600: oklch(0.5200 0.1300 320);
+  
+  /* ============================================================================= */
+  /* COMPLETE BORDER COLOR MAPPING SYSTEM */
+  /* ============================================================================= */
+  
+  /* Border colors for all Tailwind utilities */
+  --tw-border-white: var(--component-card-border);
+  --tw-border-gray-100: var(--glass-border-subtle);
+  --tw-border-gray-200: var(--glass-border-medium);
+  --tw-border-gray-300: var(--border);
+  --tw-border-gray-400: var(--muted);
+  --tw-border-gray-500: var(--muted-foreground);
+  --tw-border-gray-600: oklch(0.4000 0.0300 260);
+  --tw-border-gray-700: var(--card);
+  --tw-border-slate-100: var(--glass-border-subtle);
+  --tw-border-slate-200: var(--glass-border-medium);
+  --tw-border-slate-300: var(--border);
+  --tw-border-neutral-200: var(--glass-border-medium);
+  --tw-border-neutral-300: var(--border);
+  --tw-border-stone-200: var(--glass-border-medium);
+  --tw-border-stone-300: var(--border);
+  --tw-border-zinc-200: var(--glass-border-medium);
+  --tw-border-zinc-300: var(--border);
+  
+  /* Colored borders */
+  --tw-border-red-500: var(--error-text);
+  --tw-border-orange-500: var(--cardiology-accent-orange);
+  --tw-border-yellow-500: oklch(0.7200 0.1600 75);
+  --tw-border-green-500: var(--status-success);
+  --tw-border-emerald-500: var(--cardiology-accent-emerald);
+  --tw-border-blue-500: var(--cardiology-accent-blue);
+  --tw-border-indigo-500: oklch(0.6200 0.1400 272);
+  --tw-border-violet-500: oklch(0.6200 0.1400 295);
+  --tw-border-purple-500: oklch(0.6200 0.1400 320);
+
+  /* Badge system - complete mapping */
+  --badge-default: var(--component-card);
+  --badge-default-foreground: var(--foreground);
+  --badge-secondary: var(--component-surface-secondary);
+  --badge-secondary-foreground: var(--foreground-secondary);
+  --badge-success: oklch(0.9400 0.0600 145 / 0.85);
+  --badge-success-foreground: oklch(0.2000 0.1200 145);
+  --badge-warning: oklch(0.9400 0.0800 45 / 0.85);
+  --badge-warning-foreground: oklch(0.2000 0.1200 45);
+  --badge-error: oklch(0.9400 0.0800 15 / 0.85);
+  --badge-error-foreground: oklch(0.2000 0.1200 15);
+  --badge-info: oklch(0.9400 0.0600 242 / 0.85);
+  --badge-info-foreground: oklch(0.2000 0.1200 242);
+}
+
+/* ============================================================================= */
+/* TAILWIND THEME INTEGRATION */
+/* ============================================================================= */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+
+  --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
+  --tracking-tight: calc(var(--tracking-normal) - 0.025em);
+  --tracking-normal: var(--tracking-normal);
+  --tracking-wide: calc(var(--tracking-normal) + 0.025em);
+  --tracking-wider: calc(var(--tracking-normal) + 0.05em);
+  --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+}
+
+body {
+  letter-spacing: var(--tracking-normal);
+}

@@ -189,8 +189,8 @@ export const getMedicalColorScheme = (sectionType: string) => {
       icon: 'Activity', 
       gradient: 'from-slate-500 to-gray-600', 
       bg: 'from-slate-50 to-gray-50', 
-      text: 'text-slate-900', 
-      border: 'border-slate-200' 
+      text: 'text-[var(--foreground)]', 
+      border: 'border-[var(--glass-border-light)]' 
     }
   };
   

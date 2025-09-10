@@ -12,7 +12,7 @@ export const obgynCalculatorCategories: OBGYNCalculatorCategory[] = [
     id: 'pregnancy-dating',
     label: 'Pregnancy Dating',
     icon: 'Calendar',
-    color: 'text-blue-600',
+    color: 'text-[var(--cardiology-accent-blue-dark)]',
     calculators: [
       {
         id: 'edd-calculator',

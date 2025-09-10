@@ -173,7 +173,7 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
       case 'high': return 'text-green-600 bg-green-50 border-green-200';
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'low': return 'text-red-600 bg-red-50 border-red-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      default: return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-primary)] border-[var(--glass-border-light)]';
     }
   }, []);
 
@@ -182,13 +182,13 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
       case 'high': return 'bg-green-50 border-green-200 text-green-800';
       case 'moderate': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
       case 'low': return 'bg-red-50 border-red-200 text-red-800';
-      default: return 'bg-gray-50 border-gray-200 text-gray-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] text-[var(--foreground)]';
     }
   };
 
   const getTrimesterInfo = (gestationalAge: string) => {
     const { weeks } = parseGestationalAge(gestationalAge);
-    if (weeks < 14) return { trimester: 'First', color: 'text-blue-600', bg: 'bg-blue-50' };
+    if (weeks < 14) return { trimester: 'First', color: 'text-[var(--cardiology-accent-blue-dark)]', bg: 'bg-[var(--cardiology-accent-blue-light)]' };
     if (weeks < 28) return { trimester: 'Second', color: 'text-green-600', bg: 'bg-green-50' };
     return { trimester: 'Third', color: 'text-purple-600', bg: 'bg-purple-50' };
   };
@@ -226,22 +226,22 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
 
             {/* Progress Indicator */}
             <div className="flex items-center justify-center space-x-4 mb-8">
-              <div className={`flex items-center space-x-2 ${currentStep >= 1 ? 'text-pink-600' : 'text-gray-400'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 1 ? 'bg-pink-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
+              <div className={`flex items-center space-x-2 ${currentStep >= 1 ? 'text-pink-600' : 'text-[var(--foreground-secondary)]'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 1 ? 'bg-pink-600 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'}`}>
                   1
                 </div>
                 <span className="font-medium">{t('calculators.gestational_age.progress.step1')}</span>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-400" />
-              <div className={`flex items-center space-x-2 ${currentStep >= 2 ? 'text-pink-600' : 'text-gray-400'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 2 ? 'bg-pink-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
+              <ChevronRight className="w-5 h-5 text-[var(--foreground-secondary)]" />
+              <div className={`flex items-center space-x-2 ${currentStep >= 2 ? 'text-pink-600' : 'text-[var(--foreground-secondary)]'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 2 ? 'bg-pink-600 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'}`}>
                   2
                 </div>
                 <span className="font-medium">{t('calculators.gestational_age.progress.step2')}</span>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-400" />
-              <div className={`flex items-center space-x-2 ${currentStep >= 3 ? 'text-pink-600' : 'text-gray-400'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 3 ? 'bg-pink-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
+              <ChevronRight className="w-5 h-5 text-[var(--foreground-secondary)]" />
+              <div className={`flex items-center space-x-2 ${currentStep >= 3 ? 'text-pink-600' : 'text-[var(--foreground-secondary)]'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 3 ? 'bg-pink-600 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'}`}>
                   3
                 </div>
                 <span className="font-medium">{t('calculators.gestational_age.progress.step3')}</span>
@@ -254,8 +254,8 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                 {currentStep === 1 && (
                   <div className="space-y-6">
                     <div className="text-center mb-8">
-                      <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('calculators.gestational_age.method_selection.title')}</h3>
-                      <p className="text-gray-600 dark:text-gray-400">{t('calculators.gestational_age.method_selection.description')}</p>
+                      <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.gestational_age.method_selection.title')}</h3>
+                      <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.gestational_age.method_selection.description')}</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -265,19 +265,19 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                           setCalculationMethod('lmp');
                           setCurrentStep(2);
                         }}
-                        className="bg-white dark:bg-gray-800 border-2 border-yellow-200 dark:border-yellow-800 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow min-h-[44px] touch-manipulation"
+                        className="bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-yellow-200 dark:border-yellow-800 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow min-h-[44px] touch-manipulation"
                       >
                         <div className="flex items-center space-x-3 mb-4">
                           <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
                             <Calendar className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
                           </div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.gestational_age.method_selection.lmp.title')}</h4>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.gestational_age.method_selection.lmp.title')}</h4>
                         </div>
                         <div className="space-y-3">
                           <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg px-3 py-2">
                             <span className="text-xs font-medium text-yellow-700 dark:text-yellow-300">{t('calculators.gestational_age.method_selection.lmp.accuracy')}</span>
                           </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 text-left">
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-left">
                             {t('calculators.gestational_age.method_selection.lmp.description')}
                           </p>
                         </div>
@@ -289,19 +289,19 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                           setCalculationMethod('ultrasound');
                           setCurrentStep(2);
                         }}
-                        className="bg-white dark:bg-gray-800 border-2 border-green-200 dark:border-green-800 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow min-h-[44px] touch-manipulation"
+                        className="bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-green-200 dark:border-green-800 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow min-h-[44px] touch-manipulation"
                       >
                         <div className="flex items-center space-x-3 mb-4">
                           <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
                             <Activity className="w-5 h-5 text-green-600 dark:text-green-400" />
                           </div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.gestational_age.method_selection.ultrasound.title')}</h4>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.gestational_age.method_selection.ultrasound.title')}</h4>
                         </div>
                         <div className="space-y-3">
                           <div className="bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2">
                             <span className="text-xs font-medium text-green-700 dark:text-green-300">{t('calculators.gestational_age.method_selection.ultrasound.accuracy')}</span>
                           </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 text-left">
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-left">
                             {t('calculators.gestational_age.method_selection.ultrasound.description')}
                           </p>
                         </div>
@@ -313,19 +313,19 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                           setCalculationMethod('edd');
                           setCurrentStep(2);
                         }}
-                        className="bg-white dark:bg-gray-800 border-2 border-purple-200 dark:border-purple-800 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow min-h-[44px] touch-manipulation"
+                        className="bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-purple-200 dark:border-purple-800 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow min-h-[44px] touch-manipulation"
                       >
                         <div className="flex items-center space-x-3 mb-4">
                           <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
                             <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                           </div>
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.gestational_age.method_selection.edd.title')}</h4>
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.gestational_age.method_selection.edd.title')}</h4>
                         </div>
                         <div className="space-y-3">
-                          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg px-3 py-2">
-                            <span className="text-xs font-medium text-blue-700 dark:text-blue-300">{t('calculators.gestational_age.method_selection.edd.accuracy')}</span>
+                          <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 rounded-lg px-3 py-2">
+                            <span className="text-xs font-medium text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">{t('calculators.gestational_age.method_selection.edd.accuracy')}</span>
                           </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 text-left">
+                          <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] text-left">
                             {t('calculators.gestational_age.method_selection.edd.description')}
                           </p>
                         </div>
@@ -338,11 +338,11 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                 {currentStep === 2 && (
                   <div className="space-y-6">
                     <div className="text-center mb-8">
-                      <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('calculators.gestational_age.reference.title')}</h3>
-                      <p className="text-gray-600 dark:text-gray-400">{t('calculators.gestational_age.reference.description')}</p>
+                      <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.gestational_age.reference.title')}</h3>
+                      <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.gestational_age.reference.description')}</p>
                     </div>
 
-                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                    <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl p-6 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
                       <DatePicker
                         label={t('calculators.gestational_age.reference.date_label')}
                         value={formData.referenceDate}
@@ -413,8 +413,8 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                 {currentStep === 3 && (
                   <div className="space-y-6">
                     <div className="text-center mb-8">
-                      <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('calculators.gestational_age.progress.step3')}</h3>
-                      <p className="text-gray-600 dark:text-gray-400">{t('calculators.gestational_age.calculation.description')}</p>
+                      <h3 className="text-2xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)] mb-2">{t('calculators.gestational_age.progress.step3')}</h3>
+                      <p className="text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{t('calculators.gestational_age.calculation.description')}</p>
                     </div>
 
                     {/* Summary Card */}
@@ -489,19 +489,19 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                   <div className="space-y-6">
                     {/* Main Results Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">{t('calculators.gestational_age.results.gestational_age')}</h4>
+                      <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl p-6 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">{t('calculators.gestational_age.results.gestational_age')}</h4>
                         <div className="flex items-center space-x-3">
                           <div className="text-3xl font-bold text-pink-600">{result ? result.gestationalAge : ''}</div>
-                          <div className="text-sm text-gray-600">{t('calculators.gestational_age.results.reference_date')}: {formatDate(formData.referenceDate)}</div>
+                          <div className="text-sm text-[var(--foreground-tertiary)]">{t('calculators.gestational_age.results.reference_date')}: {formatDate(formData.referenceDate)}</div>
                         </div>
                       </div>
 
-                      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">{t('calculators.gestational_age.results.trimester')}</h4>
+                      <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl p-6 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">{t('calculators.gestational_age.results.trimester')}</h4>
                         <div className="flex items-center space-x-3">
                           <div className={`px-3 py-1 rounded-lg text-sm font-semibold ${
-                            result?.trimester === 'First' ? 'bg-blue-100 text-blue-800' :
+                            result?.trimester === 'First' ? 'bg-[var(--cardiology-accent-blue-light)] text-blue-800' :
                             result?.trimester === 'Second' ? 'bg-green-100 text-green-800' :
                             'bg-purple-100 text-purple-800'
                           }`}>
@@ -514,8 +514,8 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">{t('calculators.gestational_age.results.calculation_method')}</h4>
+                      <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl p-6 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">{t('calculators.gestational_age.results.calculation_method')}</h4>
                         <div className="flex items-center space-x-3">
                           <div className={`px-3 py-1 rounded-lg text-sm font-semibold ${getConfidenceColor(
                             calculationMethod === 'ultrasound' ? 'high' :
@@ -529,10 +529,10 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">{t('calculators.gestational_age.results.estimated_due_date')}</h4>
+                      <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl p-6 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)]">
+                        <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)] mb-3">{t('calculators.gestational_age.results.estimated_due_date')}</h4>
                         <div className="flex items-center space-x-3">
-                          <div className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                          <div className="text-xl font-semibold text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                             {result?.estimatedDeliveryDate ? formatDate(result.estimatedDeliveryDate) : ''}
                           </div>
                         </div>
@@ -581,7 +581,7 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
 
             {/* Footer Information */}
             <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-              <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 <Info className="w-4 h-4" />
                 <span>{t('calculators.gestational_age.footer.disclaimer')}</span>
                 <div className="flex items-center space-x-1">
@@ -621,12 +621,12 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
             {/* Methods Section */}
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6">
               <div className="flex items-start space-x-4 mb-6">
-                <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-                  <Calculator className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <div className="p-3 bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/30 rounded-xl">
+                  <Calculator className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-blue-800 dark:text-blue-200 mb-3">{t('calculators.gestational_age.about.methods.title')}</h3>
-                  <p className="text-blue-700 dark:text-blue-300 leading-relaxed">
+                  <p className="text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300 leading-relaxed">
                     {t('calculators.gestational_age.about.methods.description')}
                   </p>
                 </div>
@@ -634,7 +634,7 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                 {/* LMP Method */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-yellow-200 dark:border-yellow-800">
+                <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl p-6 border border-yellow-200 dark:border-yellow-800">
                   <div className="flex items-center space-x-3 mb-4">
                     <Calendar className="w-5 h-5 text-yellow-600" />
                     <h4 className="font-semibold text-yellow-800 dark:text-yellow-200">{t('calculators.gestational_age.about.methods.lmp_method.title')}</h4>
@@ -643,10 +643,10 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                     <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg px-3 py-2">
                       <span className="text-xs font-medium text-yellow-700 dark:text-yellow-300">{t('calculators.gestational_age.about.methods.lmp_method.accuracy')}</span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.gestational_age.about.methods.lmp_method.description')}
                     </p>
-                    <div className="space-y-1 text-xs text-gray-500">
+                    <div className="space-y-1 text-xs text-[var(--foreground-secondary)]">
                       <p>• {t('calculators.gestational_age.about.methods.lmp_method.features.accessible')}</p>
                       <p>• {t('calculators.gestational_age.about.methods.lmp_method.features.recall')}</p>
                       <p>• {t('calculators.gestational_age.about.methods.lmp_method.features.regular')}</p>
@@ -655,7 +655,7 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                 </div>
 
                 {/* Ultrasound Method */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-green-200 dark:border-green-800">
+                <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl p-6 border border-green-200 dark:border-green-800">
                   <div className="flex items-center space-x-3 mb-4">
                     <Activity className="w-5 h-5 text-green-600" />
                     <h4 className="font-semibold text-green-800 dark:text-green-200">{t('calculators.gestational_age.about.methods.ultrasound_method.title')}</h4>
@@ -664,10 +664,10 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                     <div className="bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2">
                       <span className="text-xs font-medium text-green-700 dark:text-green-300">{t('calculators.gestational_age.about.methods.ultrasound_method.accuracy')}</span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.gestational_age.about.methods.ultrasound_method.description')}
                     </p>
-                    <div className="space-y-1 text-xs text-gray-500">
+                    <div className="space-y-1 text-xs text-[var(--foreground-secondary)]">
                       <p>• {t('calculators.gestational_age.about.methods.ultrasound_method.features.range')}</p>
                       <p>• {t('calculators.gestational_age.about.methods.ultrasound_method.features.formula')}</p>
                       <p>• {t('calculators.gestational_age.about.methods.ultrasound_method.features.standard')}</p>
@@ -676,7 +676,7 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                 </div>
 
                 {/* EDD Method */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
+                <div className="bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl p-6 border border-purple-200 dark:border-purple-800">
                   <div className="flex items-center space-x-3 mb-4">
                     <Target className="w-5 h-5 text-purple-600" />
                     <h4 className="font-semibold text-purple-800 dark:text-purple-200">{t('calculators.gestational_age.about.methods.edd_method.title')}</h4>
@@ -685,10 +685,10 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
                     <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg px-3 py-2">
                       <span className="text-xs font-medium text-purple-700 dark:text-purple-300">{t('calculators.gestational_age.about.methods.edd_method.accuracy')}</span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                       {t('calculators.gestational_age.about.methods.edd_method.description')}
                     </p>
-                    <div className="space-y-1 text-xs text-gray-500">
+                    <div className="space-y-1 text-xs text-[var(--foreground-secondary)]">
                       <p>• {t('calculators.gestational_age.about.methods.edd_method.features.established')}</p>
                       <p>• {t('calculators.gestational_age.about.methods.edd_method.features.reverse')}</p>
                       <p>• {t('calculators.gestational_age.about.methods.edd_method.features.consistent')}</p>
@@ -772,10 +772,10 @@ const GestationalAgeCalculatorComponent: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
+                <div className="bg-[var(--cardiology-accent-blue-light)] dark:bg-[var(--cardiology-accent-blue-darker)]/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
                   <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">{t('calculators.gestational_age.about.trimesters.first.title')}</h4>
-                  <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mb-2">{t('calculators.gestational_age.about.trimesters.first.weeks')}</p>
-                  <p className="text-xs text-blue-700 dark:text-blue-300">{t('calculators.gestational_age.about.trimesters.first.description')}</p>
+                  <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 font-medium mb-2">{t('calculators.gestational_age.about.trimesters.first.weeks')}</p>
+                  <p className="text-xs text-[var(--cardiology-accent-blue-dark)] dark:text-blue-300">{t('calculators.gestational_age.about.trimesters.first.description')}</p>
                 </div>
                 <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
                   <h4 className="font-semibold text-green-800 dark:text-green-200 mb-2">{t('calculators.gestational_age.about.trimesters.second.title')}</h4>

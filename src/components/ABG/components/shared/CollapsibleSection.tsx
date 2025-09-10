@@ -57,12 +57,12 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
             </div>
           )}
           <div>
-            <h3 className="text-base font-bold text-slate-800">{title}</h3>
-            {subtitle && <p className="text-xs text-slate-600">{subtitle}</p>}
+            <h3 className="text-base font-bold text-[var(--foreground)]">{title}</h3>
+            {subtitle && <p className="text-xs text-[var(--foreground-tertiary)]">{subtitle}</p>}
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-[var(--foreground-secondary)]">
             {isCollapsed ? 'Show' : 'Hide'}
           </span>
           {isCollapsed ? 
@@ -78,7 +78,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
         </div>
       ) : (
         collapsedPreview && (
-          <div className="bg-slate-50 rounded-lg p-4">
+          <div className="bg-[var(--component-surface-primary)] rounded-lg p-4">
             {collapsedPreview}
           </div>
         )

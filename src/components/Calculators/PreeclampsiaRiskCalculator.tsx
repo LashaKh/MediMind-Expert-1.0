@@ -178,7 +178,7 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'high': return 'text-orange-600 bg-orange-50 border-orange-200';
       case 'very-high': return 'text-red-600 bg-red-50 border-red-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      default: return 'text-[var(--foreground-tertiary)] bg-[var(--component-surface-primary)] border-[var(--glass-border-light)]';
     }
   }, []);
 
@@ -188,7 +188,7 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
       case 'moderate': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
       case 'high': return 'bg-orange-50 border-orange-200 text-orange-800';
       case 'very-high': return 'bg-red-50 border-red-200 text-red-800';
-      default: return 'bg-gray-50 border-gray-200 text-gray-800';
+      default: return 'bg-[var(--component-surface-primary)] border-[var(--glass-border-light)] text-[var(--foreground)]';
     }
   }, []);
 
@@ -233,23 +233,23 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
                 {isMobile ? (
                   // Mobile: Compact vertical progress
                   <div className="flex flex-col items-center space-y-3 mb-8">
-                    <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-xl px-4 py-2 border border-gray-200 dark:border-gray-700 shadow-sm">
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Step</span>
+                    <div className="flex items-center space-x-2 bg-[var(--component-card)] dark:bg-[var(--background)] rounded-xl px-4 py-2 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] shadow-sm">
+                      <span className="text-sm font-medium text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">Step</span>
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                        currentStep >= 1 ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-500'
+                        currentStep >= 1 ? 'bg-pink-500 text-[var(--foreground)]' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                       }`}>
                         {currentStep}
                       </div>
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">of 3</span>
+                      <span className="text-sm font-medium text-[var(--foreground-secondary)] dark:text-[var(--foreground-secondary)]">of 3</span>
                     </div>
-                    <div className="w-full max-w-xs bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div className="w-full max-w-xs bg-[var(--component-surface-tertiary)] dark:bg-[var(--card)] rounded-full h-2">
                       <div 
                         className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full transition-all duration-500"
                         style={{ width: `${(currentStep / 3) * 100}%` }}
                       ></div>
                     </div>
                     <div className="text-center">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                      <h3 className="text-lg font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">
                         {currentStep === 1 && t('calculators.preeclampsia_risk.progress.step_1')}
                         {currentStep === 2 && t('calculators.preeclampsia_risk.progress.step_2')}
                         {currentStep === 3 && t('calculators.preeclampsia_risk.progress.step_3')}
@@ -261,33 +261,33 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
                   <div className="flex items-center justify-center space-x-4 mb-8">
                     <div className="flex items-center space-x-2">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                        currentStep >= 1 ? 'bg-pink-500 text-white shadow-lg' : 'bg-gray-200 text-gray-500'
+                        currentStep >= 1 ? 'bg-pink-500 text-[var(--foreground)] shadow-lg' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                       }`}>
                         1
                       </div>
-                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400 hidden lg:inline">{t('calculators.preeclampsia_risk.progress.step_1')}</span>
+                      <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hidden lg:inline">{t('calculators.preeclampsia_risk.progress.step_1')}</span>
                     </div>
                     <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                      currentStep >= 2 ? 'bg-rose-500' : 'bg-gray-200'
+                      currentStep >= 2 ? 'bg-rose-500' : 'bg-[var(--component-surface-tertiary)]'
                     }`}></div>
                     <div className="flex items-center space-x-2">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                        currentStep >= 2 ? 'bg-rose-500 text-white shadow-lg' : 'bg-gray-200 text-gray-500'
+                        currentStep >= 2 ? 'bg-rose-500 text-[var(--foreground)] shadow-lg' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                       }`}>
                         2
                       </div>
-                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400 hidden lg:inline">{t('calculators.preeclampsia_risk.progress.step_2')}</span>
+                      <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hidden lg:inline">{t('calculators.preeclampsia_risk.progress.step_2')}</span>
                     </div>
                     <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                      currentStep >= 3 ? 'bg-purple-500' : 'bg-gray-200'
+                      currentStep >= 3 ? 'bg-purple-500' : 'bg-[var(--component-surface-tertiary)]'
                     }`}></div>
                     <div className="flex items-center space-x-2">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                        currentStep >= 3 ? 'bg-purple-500 text-white shadow-lg' : 'bg-gray-200 text-gray-500'
+                        currentStep >= 3 ? 'bg-purple-500 text-[var(--foreground)] shadow-lg' : 'bg-[var(--component-surface-tertiary)] text-[var(--foreground-secondary)]'
                       }`}>
                         3
                       </div>
-                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400 hidden lg:inline">{t('calculators.preeclampsia_risk.progress.step_3')}</span>
+                      <span className="text-sm font-medium text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] hidden lg:inline">{t('calculators.preeclampsia_risk.progress.step_3')}</span>
                     </div>
                   </div>
                 )}
@@ -298,17 +298,17 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-2xl border border-pink-200 dark:border-pink-800">
                         <User className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.preeclampsia_risk.risk_methods')}</h3>
+                        <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.preeclampsia_risk.risk_methods')}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.preeclampsia_risk.multiple_risk_factors')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.preeclampsia_risk.multiple_risk_factors')}</p>
                     </div>
 
                     <div className="space-y-6">
                       {/* Patient Demographics */}
-                      <div className="p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl">
+                      <div className="p-6 bg-[var(--component-card)] dark:bg-[var(--background)] border-2 border-[var(--glass-border-light)] dark:border-[var(--border-strong)] rounded-xl">
                         <div className="flex items-center space-x-3 mb-4">
-                          <User className="w-5 h-5 text-blue-600" />
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t('calculators.preeclampsia_risk.maternal_characteristics')}</h4>
+                          <User className="w-5 h-5 text-[var(--cardiology-accent-blue-dark)]" />
+                          <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.preeclampsia_risk.maternal_characteristics')}</h4>
                         </div>
                         
                         <div className={`grid gap-6 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
@@ -361,7 +361,7 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
                         </div>
                         
                         <div className={`space-y-4 ${!isMobile && 'grid grid-cols-1 lg:grid-cols-2 gap-4'}`}>
-                          <div className={`${isMobile ? 'bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm' : ''}`}>
+                          <div className={`${isMobile ? 'bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg p-4 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] shadow-sm' : ''}`}>
                             <CalculatorCheckbox
                               id="previousPreeclampsia"
                               checked={formData.previousPreeclampsia}
@@ -371,7 +371,7 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
                             />
                           </div>
 
-                          <div className={`${isMobile ? 'bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm' : ''}`}>
+                          <div className={`${isMobile ? 'bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg p-4 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] shadow-sm' : ''}`}>
                             <CalculatorCheckbox
                               id="chronicHypertension"
                               checked={formData.chronicHypertension}
@@ -381,7 +381,7 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
                             />
                           </div>
 
-                          <div className={`${isMobile ? 'bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm' : ''}`}>
+                          <div className={`${isMobile ? 'bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg p-4 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] shadow-sm' : ''}`}>
                             <CalculatorCheckbox
                               id="diabetes"
                               checked={formData.diabetes}
@@ -391,7 +391,7 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
                             />
                           </div>
 
-                          <div className={`${isMobile ? 'bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm' : ''}`}>
+                          <div className={`${isMobile ? 'bg-[var(--component-card)] dark:bg-[var(--background)] rounded-lg p-4 border border-[var(--glass-border-light)] dark:border-[var(--border-strong)] shadow-sm' : ''}`}>
                             <CalculatorCheckbox
                               id="multipleGestation"
                               checked={formData.multipleGestation}
@@ -422,7 +422,7 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
 
                     {/* Mobile-Responsive Navigation */}
                     {isMobile ? (
-                      <div className="sticky bottom-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-4 -mx-8 -mb-8">
+                      <div className="sticky bottom-0 bg-[var(--component-card)] dark:bg-[var(--background-dark)] border-t border-[var(--glass-border-light)] dark:border-[var(--border-strong)] p-4 -mx-8 -mb-8">
                         <CalculatorButton
                           onClick={() => setCurrentStep(2)}
                           variant="primary"
@@ -454,9 +454,9 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-rose-50 to-purple-50 dark:from-rose-900/20 dark:to-purple-900/20 rounded-2xl border border-rose-200 dark:border-rose-800">
                         <Stethoscope className="w-6 h-6 text-rose-600 dark:text-rose-400" />
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.preeclampsia_risk.clinical_parameters')}</h3>
+                        <h3 className="text-xl font-bold text-[var(--foreground)] dark:text-[var(--foreground)]">{t('calculators.preeclampsia_risk.clinical_parameters')}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('calculators.preeclampsia_risk.clinical_parameters_subtitle')}</p>
+                      <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)] mt-2">{t('calculators.preeclampsia_risk.clinical_parameters_subtitle')}</p>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
@@ -591,11 +591,11 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
                       <div className="flex items-center space-x-3 mb-3">
-                        <Heart className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                        <Heart className="w-6 h-6 text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400" />
                         <h4 className="font-semibold text-blue-800 dark:text-blue-200">Risk Assessment</h4>
                       </div>
                       <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{formatRiskPercentage(parseFloat(result.value.toString()))}</p>
-                      <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">Preeclampsia risk estimate</p>
+                      <p className="text-sm text-[var(--cardiology-accent-blue-dark)] dark:text-blue-400 mt-1">Preeclampsia risk estimate</p>
                     </div>
 
                     <div className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl">
@@ -613,15 +613,15 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
                   {/* Clinical Recommendations */}
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
-                      <Stethoscope className="w-5 h-5 text-blue-500" />
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100">Clinical Recommendations</h4>
+                      <Stethoscope className="w-5 h-5 text-[var(--cardiology-accent-blue)]" />
+                      <h4 className="font-semibold text-[var(--foreground)] dark:text-[var(--foreground)]">Clinical Recommendations</h4>
                     </div>
                     <div className={`p-6 rounded-2xl border-2 ${getRiskBgColor(result.category)}`}>
                       <div className="space-y-3">
                         {result.recommendations.map((rec, index) => (
                           <div key={index} className="flex items-start space-x-2">
                             <div className="w-2 h-2 bg-current rounded-full mt-2 flex-shrink-0"></div>
-                            <p className="text-sm text-gray-700 dark:text-gray-300">{rec}</p>
+                            <p className="text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">{rec}</p>
                           </div>
                         ))}
                       </div>
@@ -681,7 +681,7 @@ const PreeclampsiaRiskCalculatorComponent: React.FC = () => {
 
             {/* Footer Information */}
             <div className="text-center pt-8 border-t border-white/20 dark:border-gray-800/20">
-              <div className="flex items-center justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-center space-x-3 text-sm text-[var(--foreground-tertiary)] dark:text-[var(--foreground-secondary)]">
                 <Info className="w-4 h-4" />
                 <span>Based on ACOG Practice Bulletin No. 222 • For educational purposes only</span>
                 <div className="flex items-center space-x-1">

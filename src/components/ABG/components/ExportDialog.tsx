@@ -175,7 +175,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
-              <Download className="h-5 w-5 text-blue-600" />
+              <Download className="h-5 w-5 text-[var(--cardiology-accent-blue-dark)]" />
               <h2 className="text-xl font-semibold">{t('abg.export.title', 'Export ABG Results')}</h2>
             </div>
             <Button
@@ -204,8 +204,8 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                   className={cn(
                     "p-4 border rounded-lg text-center transition-colors",
                     exportOptions.format === format
-                      ? "border-blue-500 bg-blue-50 text-blue-700"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-[var(--cardiology-accent-blue)] bg-[var(--cardiology-accent-blue-light)] text-[var(--cardiology-accent-blue-dark)]"
+                      : "border-[var(--glass-border-light)] hover:border-[var(--glass-border-medium)]"
                   )}
                 >
                   <div className="text-2xl mb-2">{getFormatIcon(format)}</div>
