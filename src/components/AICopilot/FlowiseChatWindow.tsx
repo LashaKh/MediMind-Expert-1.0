@@ -740,31 +740,31 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       return {
         icon: <Heart className="w-5 h-5" />,
         title: 'Cardiology Expert',
-        gradient: 'from-rose-500 via-pink-500 to-red-500',
-        bgGradient: 'from-rose-50/80 via-pink-50/80 to-red-50/80',
-        borderColor: 'border-rose-200/60',
-        accentColor: 'rose',
-        glowColor: 'rose-500'
+        gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+        bgGradient: 'from-[#90cdf4]/20 via-[#63b3ed]/10 to-transparent',
+        borderColor: 'border-[#63b3ed]/60',
+        accentColor: '[#2b6cb0]',
+        glowColor: '[#63b3ed]'
       };
     } else if (profile?.medical_specialty === 'obgyn') {
       return {
         icon: <Stethoscope className="w-5 h-5" />,
         title: 'OB/GYN Expert',
-        gradient: 'from-violet-500 via-purple-500 to-indigo-500',
-        bgGradient: 'from-violet-50/80 via-purple-50/80 to-indigo-50/80',
-        borderColor: 'border-violet-200/60',
-        accentColor: 'violet',
-        glowColor: 'violet-500'
+        gradient: 'from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4]',
+        bgGradient: 'from-[#90cdf4]/20 via-[#63b3ed]/10 to-transparent',
+        borderColor: 'border-[#63b3ed]/60',
+        accentColor: '[#63b3ed]',
+        glowColor: '[#90cdf4]'
       };
     } else {
       return {
         icon: <Sparkles className="w-5 h-5" />,
         title: 'Medical AI Expert',
-        gradient: 'from-blue-500 via-indigo-500 to-purple-500',
-        bgGradient: 'from-blue-50/80 via-indigo-50/80 to-purple-50/80',
-        borderColor: 'border-blue-200/60',
-        accentColor: 'blue',
-        glowColor: 'blue-500'
+        gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+        bgGradient: 'from-[#90cdf4]/20 via-[#63b3ed]/10 to-transparent',
+        borderColor: 'border-[#2b6cb0]/60',
+        accentColor: '[#2b6cb0]',
+        glowColor: '[#63b3ed]'
       };
     }
   };
@@ -786,8 +786,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         {animationClasses.orbCount >= 1 && (
           <div 
             className={optimizeClasses(
-              `absolute top-0 left-0 w-96 h-96 bg-gradient-radial from-${specialtyConfig.glowColor}/8 via-${specialtyConfig.glowColor}/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
-              `absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-${specialtyConfig.glowColor}/4 to-transparent rounded-full ${animationClasses.blur}`,
+              `absolute top-0 left-0 w-96 h-96 bg-gradient-radial from-[#63b3ed]/8 via-[#63b3ed]/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
+              `absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-[#63b3ed]/4 to-transparent rounded-full ${animationClasses.blur}`,
               shouldOptimize
             )}
           />
@@ -795,8 +795,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         {animationClasses.orbCount >= 2 && (
           <div 
             className={optimizeClasses(
-              `absolute bottom-0 right-0 w-80 h-80 bg-gradient-radial from-blue-500/6 via-indigo-500/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
-              `absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-br from-blue-500/3 to-transparent rounded-full ${animationClasses.blur}`,
+              `absolute bottom-0 right-0 w-80 h-80 bg-gradient-radial from-[#2b6cb0]/6 via-[#90cdf4]/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
+              `absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-br from-[#2b6cb0]/3 to-transparent rounded-full ${animationClasses.blur}`,
               shouldOptimize
             )}
             style={getOptimizedDelay('-3s', shouldOptimize)}
@@ -805,8 +805,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         {animationClasses.orbCount >= 3 && (
           <div 
             className={optimizeClasses(
-              `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-radial from-emerald-500/5 via-teal-500/2 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
-              `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-emerald-500/3 to-transparent rounded-full ${animationClasses.blur}`,
+              `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-radial from-[#90cdf4]/5 via-[#63b3ed]/2 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
+              `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-[#90cdf4]/3 to-transparent rounded-full ${animationClasses.blur}`,
               shouldOptimize
             )}
             style={getOptimizedDelay('-6s', shouldOptimize)}
@@ -825,9 +825,9 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
           <div className="absolute inset-0 overflow-hidden">
             {!shouldOptimize && (
               <>
-                <div className={`absolute -top-16 -left-16 w-32 h-32 bg-gradient-radial from-${specialtyConfig.glowColor}/8 via-${specialtyConfig.glowColor}/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-60`} />
+                <div className={`absolute -top-16 -left-16 w-32 h-32 bg-gradient-radial from-[#63b3ed]/8 via-[#63b3ed]/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-60`} />
                 <div 
-                  className={`absolute -top-12 -right-12 w-28 h-28 bg-gradient-radial from-indigo-500/6 via-blue-500/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-40`}
+                  className={`absolute -top-12 -right-12 w-28 h-28 bg-gradient-radial from-[#2b6cb0]/6 via-[#90cdf4]/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-40`}
                   style={getOptimizedDelay('-4s', shouldOptimize)}
                 />
               </>
@@ -867,7 +867,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-white/25 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     
                     {/* Performance-optimized ambient glow */}
-                    <div className={`absolute -inset-1 rounded-xl sm:rounded-2xl bg-gradient-to-br ${specialtyConfig.gradient} opacity-15 group-hover:opacity-25 transition-opacity duration-500 blur-lg`} />
+                    <div className={`absolute -inset-1 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] opacity-15 group-hover:opacity-25 transition-opacity duration-500 blur-lg`} />
                   </div>
                   
                   {/* Mobile-optimized status indicator */}
@@ -897,8 +897,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                   <div className="flex items-center space-x-1.5 sm:space-x-3">
                     <span className={`
                       px-1.5 sm:px-2.5 py-0.5 rounded text-xs font-bold uppercase tracking-wider
-                      bg-gradient-to-r from-${specialtyConfig.accentColor}-50/90 to-${specialtyConfig.accentColor}-100/90
-                      text-${specialtyConfig.accentColor}-700 border border-${specialtyConfig.accentColor}-200/40
+                      bg-gradient-to-r from-[#90cdf4]/90 to-[#63b3ed]/90
+                      text-[#1a365d] border border-[#63b3ed]/40
                       ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)} shadow-sm whitespace-nowrap truncate max-w-[120px] sm:max-w-none
                     `}>
                       {profile?.medical_specialty === 'cardiology' ? 'Cardiology' : 
@@ -1007,7 +1007,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         title="Chat History"
                         description="View and manage all your previous AI conversations."
                         icon={History}
-                        gradient="from-emerald-500 to-teal-600"
+                        gradient="from-[#1a365d] to-[#2b6cb0]"
                         badge="Browse"
                       >
                         <Button
@@ -1031,13 +1031,13 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     </div>
 
                     {/* Case Management Actions Group */}
-                    <div className="flex items-center space-x-1 bg-violet-50/40 backdrop-blur-sm rounded-xl p-1 border border-violet-200/60 shadow-sm">
+                    <div className="flex items-center space-x-1 bg-[#90cdf4]/20 backdrop-blur-sm rounded-xl p-1 border border-[#63b3ed]/60 shadow-sm">
                       {/* Mobile-optimized Cases button with badge */}
                       <EnhancedTooltip
                         title="My Cases"
                         description="View and switch between your saved clinical cases."
                         icon={FileText}
-                        gradient="from-violet-500 to-purple-600"
+                        gradient="from-[#2b6cb0] to-[#63b3ed]"
                         badge="Switch Cases"
                       >
                         <Button
@@ -1049,16 +1049,16 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           }}
                           className={`
                             group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
-                            bg-white/80 hover:bg-violet-50/80
-                            border border-transparent hover:border-violet-200/60
+                            bg-white/80 hover:bg-[#90cdf4]/20
+                            border border-transparent hover:border-[#63b3ed]/60
                             hover:shadow-md hover:scale-105 active:scale-95
                             transition-all duration-200
                           `}
                           title={`${t('chat.patientCases', 'Patient Cases')}: ${caseHistory.length}`}
                         >
-                          <FileText className="w-4 h-4 text-violet-600 group-hover:text-violet-800 transition-colors duration-200" />
+                          <FileText className="w-4 h-4 text-[#2b6cb0] group-hover:text-[#1a365d] transition-colors duration-200" />
                           {caseHistory.length > 0 && (
-                            <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-violet-500 to-purple-600 text-white text-xs font-bold flex items-center justify-center shadow-md shadow-violet-500/30">
+                            <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white text-xs font-bold flex items-center justify-center shadow-md shadow-[#63b3ed]/30">
                               {caseHistory.length > 9 ? '9+' : caseHistory.length}
                             </div>
                           )}
@@ -1074,8 +1074,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           size="sm"
                           className={`
                             group relative min-h-[44px] px-4 rounded-lg font-medium text-sm
-                            bg-white/80 hover:bg-violet-50/80 text-violet-700
-                            border border-transparent hover:border-violet-200/60
+                            bg-white/80 hover:bg-[#90cdf4]/20 text-[#2b6cb0]
+                            border border-transparent hover:border-[#63b3ed]/60
                             hover:shadow-md hover:scale-105 active:scale-95
                             disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
                             transition-all duration-200
@@ -1104,11 +1104,11 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
           {(isLoading || isAnalyzing) && (
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white/60 to-transparent overflow-hidden">
               <div 
-                className={`h-full bg-gradient-to-r ${specialtyConfig.gradient} shadow-sm`}
+                className={`h-full bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] shadow-sm`}
                 style={{ 
                   width: '35%',
                   animation: 'elegantSlide 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite',
-                  filter: `drop-shadow(0 0 6px rgb(var(--${specialtyConfig.glowColor}-500) / 0.4))`
+                  filter: `drop-shadow(0 0 6px rgb(99 179 237 / 0.4))`
                 }} 
               />
             </div>

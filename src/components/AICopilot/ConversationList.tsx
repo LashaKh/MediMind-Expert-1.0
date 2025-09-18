@@ -154,9 +154,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   const getSpecialtyIcon = (specialty: 'cardiology' | 'obgyn' | undefined) => {
     switch (specialty) {
       case 'cardiology':
-        return <Heart className="w-3 h-3 text-red-500" />;
+        return <Heart className="w-3 h-3 text-[#2b6cb0]" />;
       case 'obgyn':
-        return <Brain className="w-3 h-3 text-purple-500" />;
+        return <Brain className="w-3 h-3 text-[#2b6cb0]" />;
       default:
         return <MessageCircle className="w-3 h-3 text-gray-400" />;
     }
@@ -165,9 +165,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   const getSpecialtyColor = (specialty: 'cardiology' | 'obgyn' | undefined) => {
     switch (specialty) {
       case 'cardiology':
-        return 'bg-red-50 text-red-700 border-red-200';
+        return 'bg-[#90cdf4]/10 text-[#1a365d] border-[#63b3ed]/30';
       case 'obgyn':
-        return 'bg-purple-50 text-purple-700 border-purple-200';
+        return 'bg-[#90cdf4]/10 text-[#1a365d] border-[#63b3ed]/30';
       default:
         return 'bg-gray-50 text-gray-700 border-gray-200';
     }
@@ -176,7 +176,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   const getConversationTypeIcon = (type: ConversationType | undefined) => {
     switch (type) {
       case 'case-study':
-        return <Stethoscope className="w-4 h-4 text-blue-600" />;
+        return <Stethoscope className="w-4 h-4 text-[#2b6cb0]" />;
       case 'general':
       default:
         return <MessageCircle className="w-4 h-4 text-gray-600" />;
@@ -186,7 +186,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   const getConversationTypeColor = (type: ConversationType | undefined) => {
     switch (type) {
       case 'case-study':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
+        return 'bg-[#90cdf4]/10 text-[#1a365d] border-[#63b3ed]/30';
       case 'general':
       default:
         return 'bg-gray-50 text-gray-700 border-gray-200';
@@ -211,7 +211,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             {/* Mobile Header Row */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="p-2 md:p-2.5 rounded-xl md:rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25">
+                <div className="p-2 md:p-2.5 rounded-xl md:rounded-2xl bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] shadow-lg shadow-[#2b6cb0]/25">
                   <MessageCircle className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -231,10 +231,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   size="sm"
                   className="
                     min-h-[44px] px-3 md:px-4 py-2.5 rounded-xl
-                    bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold text-sm
-                    shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30
+                    bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white font-semibold text-sm
+                    shadow-lg shadow-[#2b6cb0]/25 hover:shadow-xl hover:shadow-[#2b6cb0]/30
                     active:scale-95 transition-all duration-200
-                    focus:outline-none focus:ring-2 focus:ring-blue-500/20
+                    focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20
                   "
                 >
                   <Plus className="w-4 h-4 md:mr-2" />
@@ -248,10 +248,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   variant="outline"
                   className="
                     min-h-[44px] px-3 md:px-3 py-2.5 rounded-xl
-                    bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 font-semibold text-sm border-green-200
-                    shadow-lg shadow-green-500/10 hover:shadow-xl hover:shadow-green-500/20
+                    bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 text-[#1a365d] font-semibold text-sm border-[#63b3ed]/30
+                    shadow-lg shadow-[#63b3ed]/10 hover:shadow-xl hover:shadow-[#63b3ed]/20
                     active:scale-95 transition-all duration-200
-                    focus:outline-none focus:ring-2 focus:ring-green-500/20
+                    focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20
                   "
                 >
                   <span className="hidden md:inline">Refresh</span>
@@ -269,7 +269,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     text-slate-600 hover:text-slate-800 shadow-lg shadow-slate-900/5
                     hover:shadow-xl hover:shadow-slate-900/10 active:scale-95
                     transition-all duration-200
-                    focus:outline-none focus:ring-2 focus:ring-slate-500/20
+                    focus:outline-none focus:ring-2 focus:ring-[#90cdf4]/20
                   "
                 >
                   <X className="w-4 h-4" />
@@ -291,7 +291,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     bg-gradient-to-r from-white/90 to-slate-50/90 border border-slate-200/60
                     rounded-xl md:rounded-2xl shadow-lg shadow-slate-900/5 backdrop-blur-xl
                     placeholder:text-slate-400 placeholder:font-medium
-                    focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-200/60
+                    focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#63b3ed]/60
                     hover:shadow-xl hover:shadow-slate-900/10
                     transition-all duration-200 min-h-[52px]
                   "
@@ -367,7 +367,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     w-full pl-10 pr-4 py-2.5 text-sm font-semibold text-slate-700
                     bg-gradient-to-r from-white/90 to-slate-50/90 border border-slate-200/60
                     rounded-xl shadow-md shadow-slate-900/5 backdrop-blur-xl
-                    focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-200/60
+                    focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#63b3ed]/60
                     hover:shadow-lg hover:shadow-slate-900/10 hover:-translate-y-0.5
                     transition-all duration-300 ease-out appearance-none cursor-pointer
                   "
@@ -388,7 +388,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     w-full pl-10 pr-4 py-2.5 text-sm font-semibold text-slate-700
                     bg-gradient-to-r from-white/90 to-slate-50/90 border border-slate-200/60
                     rounded-xl shadow-md shadow-slate-900/5 backdrop-blur-xl
-                    focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-200/60
+                    focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#63b3ed]/60
                     hover:shadow-lg hover:shadow-slate-900/10 hover:-translate-y-0.5
                     transition-all duration-300 ease-out appearance-none cursor-pointer
                   "
@@ -410,7 +410,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                 <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-100 to-slate-50 shadow-lg">
                   <MessageCircle className="w-12 h-12 text-slate-400" />
                 </div>
-                <div className="absolute -top-1 -right-1 p-2 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg">
+                <div className="absolute -top-1 -right-1 p-2 rounded-full bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] shadow-lg">
                   <Search className="w-3 h-3 text-white" />
                 </div>
               </div>
@@ -431,8 +431,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   onClick={handleCreateNew}
                   className="
                     relative px-6 py-3 rounded-xl
-                    bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold
-                    shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30
+                    bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white font-semibold
+                    shadow-lg shadow-[#2b6cb0]/25 hover:shadow-xl hover:shadow-[#2b6cb0]/30
                     hover:scale-105 hover:-translate-y-0.5 active:scale-95
                     transition-all duration-300 ease-out
                   "
@@ -450,11 +450,11 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   className={`group relative rounded-xl md:rounded-2xl cursor-pointer transition-all duration-200 ${
                     activeConversationId === conv.id
                       ? conv.type === 'case-study'
-                        ? 'bg-gradient-to-r from-blue-50 to-sky-50 border-2 border-blue-200/60 shadow-lg shadow-blue-500/10'
-                        : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200/60 shadow-lg shadow-blue-500/10'
+                        ? 'bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 border-2 border-[#63b3ed]/60 shadow-lg shadow-[#2b6cb0]/10'
+                        : 'bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 border-2 border-[#63b3ed]/60 shadow-lg shadow-[#2b6cb0]/10'
                       : conv.type === 'case-study'
-                        ? 'bg-gradient-to-r from-blue-50/30 to-sky-50/30 border-2 border-blue-200/30 hover:border-blue-300/60 hover:shadow-lg hover:shadow-blue-500/10 active:scale-[0.98]'
-                        : 'bg-gradient-to-r from-white/90 to-slate-50/90 border-2 border-slate-200/40 hover:border-slate-300/60 hover:shadow-lg hover:shadow-slate-900/10 active:scale-[0.98]'
+                        ? 'bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 border-2 border-[#63b3ed]/30 hover:border-[#63b3ed]/60 hover:shadow-lg hover:shadow-[#2b6cb0]/10 active:scale-[0.98]'
+                        : 'bg-gradient-to-r from-white/90 to-slate-50/90 border-2 border-slate-200/40 hover:border-[#63b3ed]/40 hover:shadow-lg hover:shadow-[#2b6cb0]/5 active:scale-[0.98]'
                   }`}
                   onClick={() => editingId !== conv.id && handleSelectConversation(conv.id)}
                 >
@@ -472,8 +472,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                           }}
                           className="
                             w-full px-4 py-3 text-sm font-semibold text-slate-800
-                            bg-white/90 border-2 border-blue-200/60 rounded-xl
-                            focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300/60
+                            bg-white/90 border-2 border-[#63b3ed]/60 rounded-xl
+                            focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#63b3ed]
                             shadow-lg backdrop-blur-sm
                           "
                           autoFocus
@@ -482,7 +482,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                           <Button 
                             size="sm" 
                             onClick={handleSaveEdit}
-                            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold"
+                            className="px-4 py-2 bg-[#2b6cb0] hover:bg-[#1a365d] text-white rounded-lg font-semibold"
                           >
                             {t('conversations.save')}
                           </Button>
@@ -505,21 +505,21 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                             <div className={`
                               p-2 md:p-2.5 rounded-lg md:rounded-xl shadow-md transition-all duration-200 relative flex-shrink-0
                               ${conv.type === 'case-study'
-                                ? 'bg-gradient-to-br from-blue-50 to-sky-100 border border-blue-200/50'
+                                ? 'bg-gradient-to-br from-[#90cdf4]/20 to-[#63b3ed]/30 border border-[#63b3ed]/50'
                                 : conv.specialty === 'cardiology' 
-                                  ? 'bg-gradient-to-br from-red-50 to-rose-100 border border-red-200/50' 
+                                  ? 'bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/20 border border-[#63b3ed]/40' 
                                   : conv.specialty === 'obgyn'
-                                    ? 'bg-gradient-to-br from-purple-50 to-violet-100 border border-purple-200/50'
+                                    ? 'bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/20 border border-[#63b3ed]/40'
                                     : 'bg-gradient-to-br from-slate-50 to-gray-100 border border-slate-200/50'
                               }
                             `}>
                               {conv.type === 'case-study' ? (
-                                <Stethoscope className="w-4 h-4 md:w-3 md:h-3 text-blue-600" />
+                                <Stethoscope className="w-4 h-4 md:w-3 md:h-3 text-[#2b6cb0]" />
                               ) : (
                                 getSpecialtyIcon(conv.specialty)
                               )}
                               {conv.type === 'case-study' && (
-                                <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full border border-white"></div>
+                                <div className="absolute -top-1 -right-1 w-2 h-2 bg-[#2b6cb0] rounded-full border border-white"></div>
                               )}
                             </div>
                             
@@ -549,8 +549,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                               size="sm"
                               className="
                                 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200
-                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-white/80 hover:bg-blue-50 shadow-md
-                                active:scale-95 hover:shadow-lg border border-blue-200/30
+                                min-h-[44px] min-w-[44px] p-0 rounded-lg bg-white/80 hover:bg-[#90cdf4]/10 shadow-md
+                                active:scale-95 hover:shadow-lg border border-[#63b3ed]/30
                               "
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -558,7 +558,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                               }}
                               title="Load messages"
                             >
-                              <MessageCircle className="w-4 h-4 text-blue-600" />
+                              <MessageCircle className="w-4 h-4 text-[#2b6cb0]" />
                             </Button>
                             <Button
                               variant="ghost"
@@ -649,11 +649,11 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   
                   {/* Subtle gradient overlay for active state */}
                   {activeConversationId === conv.id && (
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 to-indigo-500/5 pointer-events-none" />
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#2b6cb0]/5 to-[#63b3ed]/5 pointer-events-none" />
                   )}
                   
                   {/* Hover gradient overlay */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-slate-500/5 to-gray-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#90cdf4]/5 to-[#63b3ed]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 </div>
               ))}
             </div>

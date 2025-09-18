@@ -245,9 +245,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
       return {
         icon: Heart,
         title: 'Cardiology Case',
-        gradient: 'from-red-500 via-pink-500 to-rose-600',
-        bgGradient: 'from-red-50 via-pink-50 to-rose-50',
-        accentColor: 'red',
+        gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+        bgGradient: 'from-[#90cdf4]/10 via-[#63b3ed]/5 to-[#2b6cb0]/5',
+        accentColor: 'blue',
         categories: [
           { value: 'diagnosis', label: 'Diagnosis & Assessment' },
           { value: 'interventional', label: 'Interventional Cardiology' },
@@ -261,9 +261,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
       return {
         icon: Stethoscope,
         title: 'OB/GYN Case',
-        gradient: 'from-purple-500 via-violet-500 to-indigo-600',
-        bgGradient: 'from-purple-50 via-violet-50 to-indigo-50',
-        accentColor: 'purple',
+        gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+        bgGradient: 'from-[#90cdf4]/10 via-[#63b3ed]/5 to-[#2b6cb0]/5',
+        accentColor: 'blue',
         categories: [
           { value: 'obstetrics', label: 'Obstetrics' },
           { value: 'gynecology', label: 'Gynecology' },
@@ -277,8 +277,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
     return {
       icon: Brain,
       title: 'Medical Case',
-      gradient: 'from-blue-500 via-indigo-500 to-purple-600',
-      bgGradient: 'from-blue-50 via-indigo-50 to-purple-50',
+      gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+      bgGradient: 'from-[#90cdf4]/10 via-[#63b3ed]/5 to-[#2b6cb0]/5',
       accentColor: 'blue',
       categories: [
         { value: 'diagnosis', label: 'Diagnosis' },
@@ -421,7 +421,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
           {currentStep === 1 && (
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
-                <Sparkles className={`w-16 h-16 mx-auto text-${specialtyConfig.accentColor}-500 mb-4`} />
+                <Sparkles className="w-16 h-16 mx-auto text-[#2b6cb0] mb-4" />
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Let's start with the basics</h2>
                 <p className="text-gray-600">Provide a clear title and brief overview of your case</p>
               </div>
@@ -440,9 +440,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                       w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200
                       ${errors.title 
                         ? 'border-red-300 focus:border-red-500' 
-                        : 'border-gray-200 focus:border-blue-500'
+                        : 'border-gray-200 focus:border-[#63b3ed]'
                       }
-                      focus:outline-none focus:ring-4 focus:ring-blue-100
+                      focus:outline-none focus:ring-4 focus:ring-[#90cdf4]/30
                       text-lg bg-white/50 backdrop-blur-sm
                     `}
                   />
@@ -471,9 +471,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                       w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200 resize-y min-h-[200px]
                       ${errors.description 
                         ? 'border-red-300 focus:border-red-500' 
-                        : 'border-gray-200 focus:border-blue-500'
+                        : 'border-gray-200 focus:border-[#63b3ed]'
                       }
-                      focus:outline-none focus:ring-4 focus:ring-blue-100
+                      focus:outline-none focus:ring-4 focus:ring-[#90cdf4]/30
                       text-lg bg-white/50 backdrop-blur-sm leading-relaxed
                     `}
                   />
@@ -485,19 +485,19 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   )}
                   
                   {/* Character count and helpful tips */}
-                  <div className="mt-3 p-4 bg-blue-50/80 border border-blue-200/60 rounded-xl backdrop-blur-sm">
+                  <div className="mt-3 p-4 bg-[#90cdf4]/10 border border-[#63b3ed]/30 rounded-xl backdrop-blur-sm">
                     <div className="flex items-start space-x-3">
-                      <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <Info className="w-5 h-5 text-[#2b6cb0] mt-0.5 flex-shrink-0" />
                       <div className="flex-1">
-                        <h4 className="font-medium text-blue-900 mb-2">Make your case description more effective:</h4>
-                        <ul className="text-sm text-blue-800 space-y-1">
+                        <h4 className="font-medium text-[#1a365d] mb-2">Make your case description more effective:</h4>
+                        <ul className="text-sm text-[#2b6cb0] space-y-1">
                           <li>• Include chief complaint and presenting symptoms</li>
                           <li>• Mention relevant medical history and medications</li>
                           <li>• Describe key examination or diagnostic findings</li>
                           <li>• State your working diagnosis or differential</li>
                           <li>• Specify what guidance or discussion you're seeking</li>
                         </ul>
-                        <div className="mt-2 text-xs text-blue-600">
+                        <div className="mt-2 text-xs text-[#2b6cb0]">
                           {formData.description.length}/1000 characters
                         </div>
                       </div>
@@ -512,7 +512,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
           {currentStep === 2 && (
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
-                <Shield className={`w-16 h-16 mx-auto text-${specialtyConfig.accentColor}-500 mb-4`} />
+                <Shield className="w-16 h-16 mx-auto text-[#2b6cb0] mb-4" />
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Patient Information</h2>
                 <p className="text-gray-600">Provide anonymized patient details for case discussion</p>
               </div>
@@ -554,9 +554,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                     w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200 resize-none
                     ${errors.anonymizedInfo 
                       ? 'border-red-300 focus:border-red-500' 
-                      : 'border-gray-200 focus:border-blue-500'
+                      : 'border-gray-200 focus:border-[#63b3ed]'
                     }
-                    focus:outline-none focus:ring-4 focus:ring-blue-100
+                    focus:outline-none focus:ring-4 focus:ring-[#90cdf4]/30
                     text-lg bg-white/50 backdrop-blur-sm
                   `}
                 />
@@ -586,7 +586,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
           {currentStep === 3 && (
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
-                <Paperclip className={`w-16 h-16 mx-auto text-${specialtyConfig.accentColor}-500 mb-4`} />
+                <Paperclip className="w-16 h-16 mx-auto text-[#2b6cb0] mb-4" />
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Medical Documents</h2>
                 <p className="text-gray-600">Attach relevant medical files, images, and reports</p>
               </div>
@@ -600,14 +600,14 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
 
               {/* File Summary */}
               {attachments.length > 0 && (
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <div className="p-4 bg-[#90cdf4]/10 border border-[#63b3ed]/30 rounded-xl">
                   <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-5 h-5 text-blue-600" />
-                    <p className="text-sm font-medium text-blue-800">
+                    <CheckCircle className="w-5 h-5 text-[#2b6cb0]" />
+                    <p className="text-sm font-medium text-[#1a365d]">
                       {attachments.length} file{attachments.length > 1 ? 's' : ''} attached
                     </p>
                   </div>
-                  <p className="text-xs text-blue-600 mt-1">
+                  <p className="text-xs text-[#2b6cb0] mt-1">
                     These files will be analyzed to provide better context for your case discussion
                   </p>
                 </div>
@@ -619,7 +619,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
           {currentStep === 4 && (
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
-                <Brain className={`w-16 h-16 mx-auto text-${specialtyConfig.accentColor}-500 mb-4`} />
+                <Brain className="w-16 h-16 mx-auto text-[#2b6cb0] mb-4" />
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Case Classification</h2>
                 <p className="text-gray-600">Help organize and prioritize your case</p>
               </div>
@@ -631,7 +631,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   </label>
                   <div className="space-y-2">
                     {specialtyConfig.categories.map((category) => (
-                      <label key={category.value} className="flex items-center p-4 rounded-xl border-2 border-gray-200 hover:border-blue-300 cursor-pointer transition-all duration-200 bg-white/50 backdrop-blur-sm">
+                      <label key={category.value} className="flex items-center p-4 rounded-xl border-2 border-gray-200 hover:border-[#63b3ed] cursor-pointer transition-all duration-200 bg-white/50 backdrop-blur-sm">
                         <input
                           type="radio"
                           name="category"
@@ -659,8 +659,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                       <label key={complexity.value} className={`
                         flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 bg-white/50 backdrop-blur-sm
                         ${formData.complexity === complexity.value 
-                          ? `border-${complexity.color}-400 bg-${complexity.color}-50` 
-                          : 'border-gray-200 hover:border-blue-300'
+                          ? 'border-[#63b3ed] bg-[#90cdf4]/10' 
+                          : 'border-gray-200 hover:border-[#63b3ed]'
                         }
                       `}>
                         <input
@@ -696,7 +696,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   value={formData.tags}
                   onChange={handleInputChange('tags')}
                   placeholder="hypertension, diabetes, emergency (comma-separated)"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 text-lg bg-white/50 backdrop-blur-sm transition-all duration-200"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-200 focus:border-[#63b3ed] focus:outline-none focus:ring-4 focus:ring-[#90cdf4]/30 text-lg bg-white/50 backdrop-blur-sm transition-all duration-200"
                 />
                 <p className="text-sm text-gray-500 mt-2">Add relevant keywords to help organize and find this case later</p>
               </div>

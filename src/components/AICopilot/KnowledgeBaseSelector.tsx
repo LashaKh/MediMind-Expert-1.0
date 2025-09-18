@@ -77,11 +77,11 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
       tooltipDesc: t('knowledgeBase.curatedTooltipDesc', 'AI will answer using established cardiology knowledge from medical experts and trusted sources.'),
       icon: Globe,
       color: {
-        gradient: 'from-blue-500 to-indigo-600',
-        bg: 'from-blue-500/10 to-indigo-500/10',
-        border: 'border-blue-200/50',
-        text: 'text-blue-700',
-        hover: 'hover:from-blue-500/20 hover:to-indigo-500/20'
+        gradient: 'from-[#1a365d] to-[#2b6cb0]',
+        bg: 'from-[#1a365d]/10 to-[#2b6cb0]/10',
+        border: 'border-[#63b3ed]/50',
+        text: 'text-[#1a365d]',
+        hover: 'hover:from-[#1a365d]/20 hover:to-[#2b6cb0]/20'
       },
       badge: t('knowledgeBase.badgeVerified'),
       count: t('knowledgeBase.sourcesCount')
@@ -94,11 +94,11 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
       tooltipDesc: t('knowledgeBase.personalTooltipDesc', 'AI will answer using information from your uploaded documents and personal files.'),
       icon: User,
       color: {
-        gradient: 'from-emerald-500 to-teal-600',
-        bg: 'from-emerald-500/10 to-teal-500/10',
-        border: 'border-emerald-200/50',
-        text: 'text-emerald-700',
-        hover: 'hover:from-emerald-500/20 hover:to-teal-500/20'
+        gradient: 'from-[#2b6cb0] to-[#63b3ed]',
+        bg: 'from-[#2b6cb0]/10 to-[#63b3ed]/10',
+        border: 'border-[#90cdf4]/50',
+        text: 'text-[#2b6cb0]',
+        hover: 'hover:from-[#2b6cb0]/20 hover:to-[#63b3ed]/20'
       },
       badge: personalDocumentCount > 0 ? t('knowledgeBase.badgeReady') : t('knowledgeBase.badgeEmpty'),
       count: t('knowledgeBase.personalCount', { count: personalDocumentCount || 0 })
@@ -180,9 +180,9 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
                 <div className={`
                   w-3 h-3 rounded-full border-2 border-white shadow-sm
                   ${option.type === 'curated' 
-                    ? 'bg-blue-500' 
+                    ? 'bg-[#2b6cb0]' 
                     : personalDocumentCount > 0
-                      ? 'bg-emerald-500'
+                      ? 'bg-[#63b3ed]'
                       : 'bg-amber-500'
                   }
                 `} />

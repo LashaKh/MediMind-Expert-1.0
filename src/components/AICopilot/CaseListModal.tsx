@@ -185,11 +185,11 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'active':
-        return { color: 'blue', icon: Activity, label: 'Active' };
+        return { color: '[#2b6cb0]', icon: Activity, label: 'Active' };
       case 'archived':
         return { color: 'gray', icon: Archive, label: 'Archived' };
       case 'review':
-        return { color: 'amber', icon: Eye, label: 'In Review' };
+        return { color: '[#63b3ed]', icon: Eye, label: 'In Review' };
       default:
         return { color: 'gray', icon: Clock, label: status };
     }
@@ -204,7 +204,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
         className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6"
         style={{
           background: `
-            radial-gradient(ellipse at center, rgba(59, 130, 246, 0.15), rgba(0, 0, 0, 0.4)),
+            radial-gradient(ellipse at center, rgba(43, 108, 176, 0.15), rgba(0, 0, 0, 0.4)),
             linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6))
           `,
           backdropFilter: 'blur(24px) saturate(180%) contrast(120%)',
@@ -221,22 +221,22 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
           style={{
             background: `
               linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%),
-              radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 60%),
-              radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.06), transparent 60%)
+              radial-gradient(circle at top left, rgba(43, 108, 176, 0.08), transparent 60%),
+              radial-gradient(circle at bottom right, rgba(99, 179, 237, 0.06), transparent 60%)
             `,
             borderRadius: '32px',
             boxShadow: `
               0 32px 64px -12px rgba(0, 0, 0, 0.35),
               0 0 0 1px rgba(255, 255, 255, 0.8),
               inset 0 1px 0 rgba(255, 255, 255, 1),
-              0 0 200px -40px rgba(59, 130, 246, 0.3)
+              0 0 200px -40px rgba(43, 108, 176, 0.3)
             `,
             animation: 'modalSlideIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)'
           }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Prismatic Border Effects */}
-          <div className="absolute inset-0 rounded-[32px] p-px bg-gradient-to-br from-white via-blue-100 to-purple-100 opacity-60" />
+          <div className="absolute inset-0 rounded-[32px] p-px bg-gradient-to-br from-white via-[#90cdf4] to-[#63b3ed] opacity-60" />
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
           
           {/* Revolutionary Header */}
@@ -244,13 +244,13 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-6">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-all duration-500" />
-                  <div className="relative p-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-all duration-500" />
+                  <div className="relative p-4 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
                     <FileText className="w-8 h-8 text-white" />
                   </div>
                 </div>
                 <div>
-                  <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent mb-2">
+                  <h1 className="text-4xl font-bold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] bg-clip-text text-transparent mb-2">
                     Case Study Library
                   </h1>
                   <div className="flex items-center space-x-4 text-gray-600">
@@ -258,7 +258,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                       {filteredAndSortedCases.length} of {cases.length} cases
                     </span>
                     <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                      <div className="w-2 h-2 bg-[#63b3ed] rounded-full animate-pulse" />
                       <span className="text-sm">Real-time sync</span>
                     </div>
                   </div>
@@ -279,9 +279,9 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
             <div className="mt-8 space-y-6">
               {/* Premium Search Bar */}
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-all duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 via-[#63b3ed]/20 to-[#90cdf4]/20 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-all duration-500" />
                 <div className="relative">
-                  <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-300" />
+                  <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#2b6cb0] transition-colors duration-300" />
                   <input
                     ref={searchInputRef}
                     type="text"
@@ -290,7 +290,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-14 pr-6 py-4 text-lg border-0 rounded-2xl
                              bg-white/70 backdrop-blur-xl shadow-lg
-                             focus:outline-none focus:ring-4 focus:ring-blue-500/20
+                             focus:outline-none focus:ring-4 focus:ring-[#2b6cb0]/20
                              transition-all duration-300 placeholder-gray-400
                              hover:shadow-xl hover:bg-white/80"
                     style={{
@@ -310,7 +310,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                       onChange={(e) => setFilter(e.target.value as FilterStatus)}
                       className="appearance-none bg-white/80 backdrop-blur-xl border-0 rounded-xl px-6 py-3 pr-12
                                text-gray-700 font-medium shadow-lg hover:shadow-xl transition-all duration-300
-                               focus:outline-none focus:ring-4 focus:ring-blue-500/20 cursor-pointer"
+                               focus:outline-none focus:ring-4 focus:ring-[#2b6cb0]/20 cursor-pointer"
                       style={{
                         boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.02), 0 6px 20px rgba(0, 0, 0, 0.08)'
                       }}
@@ -330,7 +330,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                       onChange={(e) => setSortBy(e.target.value as SortOption)}
                       className="appearance-none bg-white/80 backdrop-blur-xl border-0 rounded-xl px-6 py-3 pr-12
                                text-gray-700 font-medium shadow-lg hover:shadow-xl transition-all duration-300
-                               focus:outline-none focus:ring-4 focus:ring-blue-500/20 cursor-pointer"
+                               focus:outline-none focus:ring-4 focus:ring-[#2b6cb0]/20 cursor-pointer"
                       style={{
                         boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.02), 0 6px 20px rgba(0, 0, 0, 0.08)'
                       }}
@@ -353,7 +353,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     size="sm"
                     className={`p-2 rounded-lg transition-all duration-300 ${
                       viewMode === 'grid' 
-                        ? 'bg-blue-500 text-white shadow-lg' 
+                        ? 'bg-[#2b6cb0] text-white shadow-lg' 
                         : 'hover:bg-white/80'
                     }`}
                   >
@@ -365,7 +365,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     size="sm"
                     className={`p-2 rounded-lg transition-all duration-300 ${
                       viewMode === 'list' 
-                        ? 'bg-blue-500 text-white shadow-lg' 
+                        ? 'bg-[#2b6cb0] text-white shadow-lg' 
                         : 'hover:bg-white/80'
                     }`}
                   >
@@ -381,8 +381,8 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
             {filteredAndSortedCases.length === 0 ? (
               <div className="text-center py-16">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-2xl opacity-60" />
-                  <div className="relative w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-full blur-2xl opacity-60" />
+                  <div className="relative w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-full flex items-center justify-center shadow-2xl">
                     <FileText className="w-12 h-12 text-white" />
                   </div>
                 </div>
@@ -439,7 +439,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         relative h-full p-6 rounded-3xl overflow-hidden
                         transition-all duration-500 ease-out
                         ${isActive 
-                          ? 'ring-4 ring-blue-500/40 shadow-2xl shadow-blue-500/25' 
+                          ? 'ring-4 ring-[#2b6cb0]/40 shadow-2xl shadow-[#2b6cb0]/25' 
                           : 'shadow-lg hover:shadow-2xl'
                         }
                       `}
@@ -450,12 +450,12 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         `,
                         border: `1px solid rgba(255, 255, 255, ${isActive ? '0.8' : '0.4'})`,
                         boxShadow: isActive 
-                          ? `0 25px 50px -12px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.9)`
+                          ? `0 25px 50px -12px rgba(43, 108, 176, 0.25), 0 0 0 1px rgba(43, 108, 176, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.9)`
                           : `0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.8)`
                       }}>
                         {/* Gradient Orbs */}
                         <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${complexityConfig.gradient} opacity-10 rounded-full blur-2xl`} />
-                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500 to-purple-500 opacity-5 rounded-full blur-xl" />
+                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#2b6cb0] to-[#63b3ed] opacity-5 rounded-full blur-xl" />
                         
                         {/* Card Header */}
                         <div className="relative z-10 flex items-start justify-between mb-4">
@@ -474,7 +474,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                                 onClick={(e) => handleEditClick(e, caseItem)}
                                 variant="ghost"
                                 size="sm"
-                                className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-blue-50 hover:text-blue-600"
+                                className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#90cdf4]/20 hover:text-[#2b6cb0]"
                                 title="Edit case"
                               >
                                 <Edit3 className="w-4 h-4" />
@@ -505,9 +505,9 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
 
                                                      {/* Case Info */}
                            {caseItem.metadata?.category && (
-                             <div className="flex items-center space-x-2 p-3 bg-blue-50/50 rounded-xl border border-blue-100">
-                               <Activity className="w-4 h-4 text-blue-500" />
-                               <span className="text-sm font-medium text-blue-700 capitalize">
+                             <div className="flex items-center space-x-2 p-3 bg-[#90cdf4]/20 rounded-xl border border-[#63b3ed]/30">
+                               <Activity className="w-4 h-4 text-[#2b6cb0]" />
+                               <span className="text-sm font-medium text-[#1a365d] capitalize">
                                  {caseItem.metadata.category}
                                </span>
                              </div>
@@ -546,12 +546,12 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                             </div>
                           </div>
                           
-                          <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" />
+                          <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-[#2b6cb0] group-hover:translate-x-1 transition-all duration-300" />
                         </div>
 
                         {/* Active Case Indicator */}
                         {isActive && (
-                          <div className="absolute top-4 left-4 flex items-center space-x-2 px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full shadow-lg">
+                          <div className="absolute top-4 left-4 flex items-center space-x-2 px-3 py-1 bg-[#2b6cb0] text-white text-xs font-semibold rounded-full shadow-lg">
                             <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
                             <span>ACTIVE</span>
                           </div>

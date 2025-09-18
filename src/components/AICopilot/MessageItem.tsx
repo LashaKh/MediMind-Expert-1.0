@@ -15,7 +15,7 @@ export const UserMessageItem: React.FC<MessageItemProps> = ({ message, className
     <div className={`flex justify-end group ${className}`}>
       <div className="flex items-end space-x-3 max-w-2xl lg:max-w-3xl">
         <div className="relative">
-          <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 text-white rounded-2xl rounded-br-md px-6 py-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] text-white rounded-2xl rounded-br-md px-6 py-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <div className="text-sm whitespace-pre-wrap break-words leading-relaxed">
               {message.content}
             </div>
@@ -46,15 +46,15 @@ export const UserMessageItem: React.FC<MessageItemProps> = ({ message, className
           </div>
           
           {/* Subtle glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-indigo-400/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/20 via-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
         </div>
         
         {/* Enhanced User avatar */}
         <div className="relative flex-shrink-0">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center shadow-md">
-            <User className="w-5 h-5 text-blue-600" />
+          <div className="w-10 h-10 bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] rounded-xl flex items-center justify-center shadow-md">
+            <User className="w-5 h-5 text-[#1a365d]" />
           </div>
-          <div className="absolute -inset-1 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute -inset-1 bg-gradient-to-br from-[#63b3ed]/20 to-[#90cdf4]/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
       </div>
     </div>
@@ -113,13 +113,13 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
       <div className="flex items-start space-x-3 w-full max-w-4xl">
         {/* Enhanced AI avatar */}
         <div className="relative flex-shrink-0">
-          <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center">
             <Brain className="w-5 h-5 text-white relative z-10" />
           </div>
         </div>
         
         <div className="relative flex-1 w-full">
-          <div className="bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-xl text-gray-900 rounded-2xl rounded-bl-md px-6 py-4 shadow-lg border border-white/30 hover:shadow-xl transition-all duration-300 hover:border-white/50 w-full">
+          <div className="bg-gradient-to-br from-[#90cdf4]/10 via-white/95 to-white/95 backdrop-blur-xl text-gray-900 rounded-2xl rounded-bl-md px-6 py-4 shadow-lg border border-[#63b3ed]/20 hover:shadow-xl transition-all duration-300 hover:border-[#63b3ed]/30 w-full">
             <MedicalMarkdownRenderer 
               content={message.content}
               className="text-sm leading-relaxed"
@@ -186,7 +186,7 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
           </div>
           
           {/* Subtle glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 to-blue-400/10 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0]/10 to-[#63b3ed]/10 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
         </div>
       </div>
     </div>
