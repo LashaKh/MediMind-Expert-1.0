@@ -57,6 +57,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { useSpecialty, MedicalSpecialty } from '../../stores/useAppStore';
 import { useTranslation } from '../../hooks/useTranslation';
 import { Card, CardHeader, CardTitle, CardDescription } from '../ui/card';
+import { getCategoryIconClass, getSpecialtyGradientClass } from '../../utils/calculatorTheme';
 
 // Lazy-loaded Cardiology Calculator Components
 // Phase 1: Core Risk Assessment  
@@ -167,7 +168,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'risk-assessment',
       label: t('calculators.categories.risk_assessment'),
     icon: Heart,
-    color: 'text-red-600',
+    color: getCategoryIconClass(0),
     calculators: [
       {
         id: 'ascvd',
@@ -187,7 +188,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'acute-care',
       label: t('calculators.categories.acute_care'),
     icon: Activity,
-    color: 'text-blue-600',
+    color: getCategoryIconClass(1),
     calculators: [
       {
         id: 'timi-risk',
@@ -219,7 +220,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'therapy-management',
       label: t('calculators.categories.therapy_management'), 
     icon: Zap,
-    color: 'text-purple-600',
+    color: getCategoryIconClass(2),
     calculators: [
       {
         id: 'dapt',
@@ -245,7 +246,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'heart-failure',
       label: t('calculators.categories.heart_failure'),
     icon: HeartHandshake,
-    color: 'text-green-600',
+    color: getCategoryIconClass(3),
     calculators: [
       {
         id: 'heart-failure-staging',
@@ -278,7 +279,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'surgical-risk',
       label: t('calculators.categories.surgical_risk'),
     icon: Wrench,
-    color: 'text-orange-600',
+    color: getCategoryIconClass(0),
     calculators: [
       {
         id: 'sts',
@@ -298,7 +299,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'cardiomyopathy',
       label: t('calculators.categories.cardiomyopathy'),
     icon: Dna,
-    color: 'text-indigo-600',
+    color: getCategoryIconClass(1),
     calculators: [
       {
         id: 'hcm-risk-scd',
@@ -670,22 +671,22 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
 
   return (
     <div className="h-full w-full overflow-auto">
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/40 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950/30 relative">
+      <div className="min-h-screen bg-calc-bg-main-light dark:bg-calc-bg-main-dark relative">
           {/* Epic Animated background elements */}
           <div className="fixed inset-0 overflow-hidden pointer-events-none">
             {/* Primary floating orbs */}
-            <div className="absolute top-1/6 left-1/5 w-[500px] h-[500px] bg-gradient-to-r from-blue-400/15 via-violet-400/15 to-purple-600/15 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-1/5 right-1/4 w-[600px] h-[600px] bg-gradient-to-r from-pink-400/10 via-rose-400/10 to-indigo-600/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-            <div className="absolute top-1/3 right-1/6 w-[400px] h-[400px] bg-gradient-to-r from-emerald-400/10 via-teal-400/10 to-cyan-500/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+            <div className={`absolute top-1/6 left-1/5 w-[500px] h-[500px] ${getSpecialtyGradientClass(specialty)} opacity-15 rounded-full blur-3xl animate-pulse`}></div>
+            <div className={`absolute bottom-1/5 right-1/4 w-[600px] h-[600px] ${getSpecialtyGradientClass(specialty)} opacity-10 rounded-full blur-3xl animate-pulse`} style={{ animationDelay: '2s' }}></div>
+            <div className={`absolute top-1/3 right-1/6 w-[400px] h-[400px] ${getSpecialtyGradientClass(specialty)} opacity-12 rounded-full blur-3xl animate-pulse`} style={{ animationDelay: '4s' }}></div>
             
             {/* Secondary accent orbs */}
-            <div className="absolute top-2/3 left-1/3 w-[300px] h-[300px] bg-gradient-to-r from-amber-400/8 to-orange-500/12 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-            <div className="absolute bottom-1/2 left-1/12 w-[250px] h-[250px] bg-gradient-to-r from-violet-400/8 to-purple-500/12 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '3s' }}></div>
+            <div className={`absolute top-2/3 left-1/3 w-[300px] h-[300px] ${getSpecialtyGradientClass(specialty)} opacity-8 rounded-full blur-2xl animate-pulse`} style={{ animationDelay: '1s' }}></div>
+            <div className={`absolute bottom-1/2 left-1/12 w-[250px] h-[250px] ${getSpecialtyGradientClass(specialty)} opacity-10 rounded-full blur-2xl animate-pulse`} style={{ animationDelay: '3s' }}></div>
             
             {/* Floating sparkles */}
-            <div className="absolute top-1/4 left-1/2 w-2 h-2 bg-gradient-to-r from-blue-400 to-violet-500 rounded-full blur-sm animate-bounce opacity-60" style={{ animationDelay: '0.5s' }}></div>
-            <div className="absolute top-1/2 left-1/3 w-1.5 h-1.5 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full blur-sm animate-bounce opacity-50" style={{ animationDelay: '1.5s' }}></div>
-            <div className="absolute top-2/3 right-1/3 w-2.5 h-2.5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full blur-sm animate-bounce opacity-70" style={{ animationDelay: '2.5s' }}></div>
+            <div className="absolute top-1/4 left-1/2 w-2 h-2 bg-calc-theme-secondary rounded-full blur-sm animate-bounce opacity-60" style={{ animationDelay: '0.5s' }}></div>
+            <div className="absolute top-1/2 left-1/3 w-1.5 h-1.5 bg-calc-theme-accent rounded-full blur-sm animate-bounce opacity-50" style={{ animationDelay: '1.5s' }}></div>
+            <div className="absolute top-2/3 right-1/3 w-2.5 h-2.5 bg-calc-theme-light rounded-full blur-sm animate-bounce opacity-70" style={{ animationDelay: '2.5s' }}></div>
           </div>
 
           {/* Main content container with perfect centering */}
@@ -696,10 +697,10 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                 {/* Streamlined title */}
                 <div className="relative inline-block">
                   {/* Background glow */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600/15 via-violet-600/15 to-purple-600/15 rounded-2xl blur-xl scale-105 animate-pulse"></div>
+                  <div className={`absolute inset-0 ${getSpecialtyGradientClass(specialty)} opacity-15 rounded-2xl blur-xl scale-105 animate-pulse`}></div>
                   
                   <h1 className="relative text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
-                    <span className="bg-gradient-to-r from-blue-600 via-violet-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">
+                    <span className={`${getSpecialtyGradientClass(specialty)} bg-clip-text text-transparent drop-shadow-sm`}>
                       {t('tour.calculators.hero.title', 'Medical Calculator Excellence')}
                     </span>
                   </h1>

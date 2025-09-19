@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Heart, AlertTriangle, Activity, Info, AlertCircle } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
+import { getCategoryIconClass, getSpecialtyGradientClass } from '../../utils/calculatorTheme';
+import { MedicalSpecialty } from '../../stores/useAppStore';
 
 interface CHA2DS2VAScFormData {
   age: string;
@@ -148,9 +150,9 @@ const CHA2DS2VAScCalculatorComponent: React.FC = () => {
 
   const getRiskColor = useMemo(() => (riskCategory: string) => {
     switch (riskCategory) {
-      case 'high': return 'text-red-600';
-      case 'moderate': return 'text-yellow-600';
-      case 'low': return 'text-green-600';
+      case 'high': return 'text-calc-category-1';
+      case 'moderate': return 'text-calc-category-3';
+      case 'low': return 'text-calc-category-4';
       default: return 'text-gray-600';
     }
   }, []);

@@ -63,9 +63,9 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                 style={{ minWidth: 'var(--medical-mobile-touch-md)', minHeight: 'var(--medical-mobile-touch-md)' }}
               >
                 <div className="flex flex-col items-center justify-center">
-                  <FileText className="w-4 h-4 text-[#2b6cb0] mb-0.5" />
+                  <FileText className="w-4 h-4 text-[#1a365d] mb-0.5" />
                   {sessionsCount > 0 && (
-                    <span className="text-xs font-bold text-[#2b6cb0] leading-none">
+                    <span className="text-xs font-bold text-[#1a365d] leading-none">
                       {sessionsCount > 99 ? '99+' : sessionsCount}
                     </span>
                   )}

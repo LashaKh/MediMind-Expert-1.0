@@ -108,11 +108,11 @@
   transform: none;
 }
 
-/* Secondary Button Styles - Light Theme */
+/* Secondary Button Styles - Light Theme with Better Contrast */
 .transcription-btn-secondary {
-  background: rgba(144, 205, 244, 0.1);
+  background: #ffffff;
   color: #1a365d !important;
-  border: 1px solid rgba(99, 179, 237, 0.3);
+  border: 2px solid #63b3ed;
   border-radius: var(--transcription-button-radius);
   padding: 12px 24px;
   font-weight: 600;
@@ -122,9 +122,10 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  box-shadow: 0 2px 4px rgba(26, 54, 93, 0.1);
 }
 
-/* Force Dark Text for Light Theme Visibility */
+/* Force Dark Text and Icons for Maximum Visibility */
 .transcription-btn-secondary,
 .transcription-btn-secondary *,
 .transcription-btn-secondary h1,
@@ -139,20 +140,52 @@
 .transcription-btn-secondary .text-xs,
 .transcription-btn-secondary .mediscribe-mobile-control-text,
 .transcription-btn-secondary .mediscribe-mobile-control-subtext,
-.transcription-btn-secondary .opacity-70 {
+.transcription-btn-secondary .opacity-70,
+.transcription-btn-secondary svg {
   color: #1a365d !important;
+  fill: #1a365d !important;
+  stroke: #1a365d !important;
 }
 
 .transcription-btn-secondary:hover:not(:disabled) {
-  background: rgba(99, 179, 237, 0.2);
-  border-color: rgba(99, 179, 237, 0.5);
+  background: rgba(99, 179, 237, 0.1);
+  border-color: #2b6cb0;
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(26, 54, 93, 0.15);
 }
 
-/* HOVER STATE - Maintain Dark Text */
+.transcription-btn-secondary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(26, 54, 93, 0.1);
+}
+
+/* HOVER STATE - Maintain Dark Text and Icons */
 .transcription-btn-secondary:hover:not(:disabled),
-.transcription-btn-secondary:hover:not(:disabled) * {
+.transcription-btn-secondary:hover:not(:disabled) *,
+.transcription-btn-secondary:hover:not(:disabled) svg {
   color: #1a365d !important;
+  fill: #1a365d !important;
+  stroke: #1a365d !important;
+}
+
+/* ACTIVE STATE - Maintain Dark Text and Icons */
+.transcription-btn-secondary:active:not(:disabled),
+.transcription-btn-secondary:active:not(:disabled) *,
+.transcription-btn-secondary:active:not(:disabled) svg {
+  color: #1a365d !important;
+  fill: #1a365d !important;
+  stroke: #1a365d !important;
+}
+
+/* DISABLED STATE - Reduced opacity but still readable */
+.transcription-btn-secondary:disabled,
+.transcription-btn-secondary:disabled *,
+.transcription-btn-secondary:disabled svg {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: #1a365d !important;
+  fill: #1a365d !important;
+  stroke: #1a365d !important;
 }
 
 

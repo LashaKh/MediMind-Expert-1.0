@@ -113,16 +113,16 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
             {/* Left: Icon and Text */}
             <div className="flex items-center space-x-2">
               {/* Icon */}
-              <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
-                <CurrentEngineIcon className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-[#1a365d]/10 flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
+                <CurrentEngineIcon className="w-4 h-4 text-[#1a365d]" />
               </div>
               
               {/* Text */}
               <div className="text-left">
-                <h3 className="text-sm font-bold mediscribe-mobile-control-text">
+                <h3 className="text-sm font-bold text-[#1a365d] mediscribe-mobile-control-text">
                   {currentEngine.name}
                 </h3>
-                <p className="text-xs opacity-70 mediscribe-mobile-control-subtext">
+                <p className="text-xs opacity-70 text-[#1a365d] mediscribe-mobile-control-subtext">
                   Transcription Quality
                 </p>
               </div>
@@ -130,8 +130,8 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
             
             {/* Right: Indicator */}
             <div className="flex items-center space-x-1">
-              <div className={`w-2 h-2 rounded-full bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] ${recordingState.isRecording ? 'animate-pulse' : ''}`} />
-              <ChevronDown className={`w-4 h-4 opacity-70 ${engineDropdownOpen ? 'rotate-180' : 'rotate-0'} transition-all duration-200`} />
+              <div className={`w-2 h-2 rounded-full bg-[#1a365d] ${recordingState.isRecording ? 'animate-pulse' : ''}`} />
+              <ChevronDown className={`w-4 h-4 opacity-70 text-[#1a365d] ${engineDropdownOpen ? 'rotate-180' : 'rotate-0'} transition-all duration-200`} />
             </div>
           </button>
           
@@ -140,7 +140,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
             <div className="hidden md:block absolute top-full mt-2 left-0 right-0 z-50 animate-in slide-in-from-top-2 duration-200">
               
               {/* Backdrop */}
-              <div className="absolute inset-0 transcription-card backdrop-blur-2xl rounded-2xl" />
+              <div className="absolute inset-0 bg-white/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-[#63b3ed]/30" />
               
               {/* Content */}
               <div className="relative p-2">
@@ -159,33 +159,33 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                       className={`
                         w-full p-4 rounded-2xl text-left transition-all duration-200 ease-out group/item
                         ${isSelected 
-                          ? 'bg-blue-50 border-2 border-blue-200' 
-                          : 'hover:bg-gray-50 border-2 border-transparent hover:border-gray-200'
+                          ? 'bg-white border-2 border-[#63b3ed] shadow-lg' 
+                          : 'hover:bg-white/90 border-2 border-transparent hover:border-[#63b3ed]/50 bg-white/80'
                         }
                       `}
                     >
                       <div className="flex items-center space-x-4">
                         
                         {/* Icon */}
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] flex items-center justify-center shadow-md group-hover/item:scale-110 transition-all duration-200">
+                        <div className="w-10 h-10 rounded-xl bg-[#1a365d] flex items-center justify-center shadow-md group-hover/item:scale-110 transition-all duration-200">
                           <EngineIcon className="w-5 h-5 text-white" />
                         </div>
                         
                         {/* Content */}
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
-                            <h4 className="font-bold text-gray-700">
+                            <h4 className="font-bold text-[#1a365d]">
                               {engine.name}
                             </h4>
                             
                             {isSelected && (
-                              <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] flex items-center justify-center shadow-md">
+                              <div className="w-6 h-6 rounded-full bg-[#1a365d] flex items-center justify-center shadow-md">
                                 <Check className="w-3 h-3 text-white" />
                               </div>
                             )}
                           </div>
                           
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-[#1a365d]/70">
                             {engine.description}
                           </p>
                         </div>
@@ -320,16 +320,32 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
               {/* Left: Icon and Text */}
               <div className="flex items-center space-x-2">
                 {/* Icon */}
-                <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
-                  <Brain className="w-4 h-4 text-white" />
+                <div className={`w-8 h-8 md:w-6 md:h-6 rounded-lg flex items-center justify-center shadow-sm mediscribe-mobile-control-icon ${
+                  enableSpeakerDiarization 
+                    ? 'bg-white/20' 
+                    : 'bg-[#1a365d]/10'
+                }`}>
+                  <Brain className={`w-4 h-4 ${
+                    enableSpeakerDiarization 
+                      ? 'text-white' 
+                      : 'text-[#1a365d]'
+                  }`} />
                 </div>
                 
                 {/* Text */}
                 <div className="text-left">
-                  <h3 className="text-sm font-bold mediscribe-mobile-control-text">
+                  <h3 className={`text-sm font-bold mediscribe-mobile-control-text ${
+                    enableSpeakerDiarization 
+                      ? 'text-white' 
+                      : 'text-[#1a365d]'
+                  }`}>
                     Speakers
                   </h3>
-                  <p className="text-xs opacity-70 mediscribe-mobile-control-subtext">
+                  <p className={`text-xs opacity-70 mediscribe-mobile-control-subtext ${
+                    enableSpeakerDiarization 
+                      ? 'text-white' 
+                      : 'text-[#1a365d]'
+                  }`}>
                     {enableSpeakerDiarization ? `${speakerCount} voices` : 'Voice separation'}
                   </p>
                 </div>

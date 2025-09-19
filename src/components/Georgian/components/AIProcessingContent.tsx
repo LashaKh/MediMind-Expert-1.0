@@ -200,20 +200,20 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
 
   return (
     <>
-    <div className="relative flex flex-col h-full max-h-full bg-gradient-to-br from-slate-50/80 via-white/90 to-blue-50/60 dark:from-slate-900/80 dark:via-slate-800/90 dark:to-blue-950/60 overflow-hidden">
+    <div className="relative flex flex-col h-full max-h-full bg-gradient-to-br from-[#90cdf4]/20 via-white/90 to-[#63b3ed]/10 dark:from-[#1a365d]/80 dark:via-[#2b6cb0]/60 dark:to-[#1a365d]/40 overflow-hidden">
       
       {/* Compact Header */}
-      <div className="flex-shrink-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50">
+      <div className="flex-shrink-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-[#63b3ed]/50 dark:border-[#2b6cb0]/50">
         <div className="px-4 py-3">
           {/* Navigation Tabs */}
           <div className="flex items-center justify-between">
-            <div className="flex bg-slate-100 dark:bg-slate-800 rounded-xl p-1.5 shadow-inner">
+            <div className="flex bg-[#90cdf4]/20 dark:bg-[#1a365d]/60 rounded-xl p-1.5 shadow-inner">
               <button
                 onClick={() => setViewMode('templates')}
                 className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   viewMode === 'templates'
-                    ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    ? 'bg-white dark:bg-[#2b6cb0] text-[#1a365d] dark:text-white shadow-sm'
+                    : 'text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4]'
                 }`}
               >
                 <Stethoscope className="w-4 h-4" />
@@ -223,8 +223,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                 onClick={() => setViewMode('history')}
                 className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   viewMode === 'history'
-                    ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    ? 'bg-white dark:bg-[#2b6cb0] text-[#1a365d] dark:text-white shadow-sm'
+                    : 'text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4]'
                 }`}
               >
                 <FileText className="w-4 h-4" />
@@ -235,13 +235,13 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
             {/* History View Controls */}
             {viewMode === 'history' && processingHistory.length > 0 && (
               <div className="flex items-center space-x-2">
-                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+                <div className="flex bg-[#90cdf4]/20 dark:bg-[#1a365d]/60 rounded-lg p-1">
                   <button
                     onClick={() => setLayoutMode('grid')}
                     className={`p-1.5 rounded-md transition-all ${
                       layoutMode === 'grid'
-                        ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
-                        : 'text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                        ? 'bg-white dark:bg-[#2b6cb0] text-[#1a365d] dark:text-white shadow-sm'
+                        : 'text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4]'
                     }`}
                   >
                     <Grid3X3 className="w-4 h-4" />
@@ -250,8 +250,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                     onClick={() => setLayoutMode('list')}
                     className={`p-1.5 rounded-md transition-all ${
                       layoutMode === 'list'
-                        ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
-                        : 'text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                        ? 'bg-white dark:bg-[#2b6cb0] text-[#1a365d] dark:text-white shadow-sm'
+                        : 'text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4]'
                     }`}
                   >
                     <List className="w-4 h-4" />
@@ -260,20 +260,20 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
 
                 <div className="flex items-center space-x-2">
                   <div className="relative">
-                    <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#63b3ed]" />
                     <input
                       type="text"
                       placeholder="Search..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-32 pl-9 pr-3 py-1.5 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-32 pl-9 pr-3 py-1.5 text-sm border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-[#2b6cb0] focus:border-transparent text-[#1a365d] dark:text-[#90cdf4]"
                     />
                   </div>
 
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="px-2 py-1.5 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="px-2 py-1.5 text-sm border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-[#2b6cb0] focus:border-transparent text-[#1a365d] dark:text-[#90cdf4]"
                   >
                     <option value="newest">Newest</option>
                     <option value="oldest">Oldest</option>
@@ -347,13 +347,13 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 rounded-3xl flex items-center justify-center mb-6">
-                    <FileText className="w-10 h-10 text-slate-400" />
+                  <div className="w-20 h-20 bg-gradient-to-br from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#1a365d]/60 dark:to-[#2b6cb0]/60 rounded-3xl flex items-center justify-center mb-6">
+                    <FileText className="w-10 h-10 text-[#63b3ed] dark:text-[#90cdf4]" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-600 dark:text-slate-400 mb-3">
+                  <h3 className="text-xl font-bold text-[#1a365d] dark:text-[#90cdf4] mb-3">
                     {searchQuery ? 'No matching analyses found' : 'No analysis history yet'}
                   </h3>
-                  <p className="text-slate-500 dark:text-slate-500 max-w-md">
+                  <p className="text-[#2b6cb0] dark:text-[#63b3ed] max-w-md">
                     {searchQuery 
                       ? 'Try adjusting your search terms or filters.'
                       : hasTranscript 
@@ -418,32 +418,32 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
               maxHeight: '80vh'
             }}
           >
-            <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-2xl overflow-hidden">
+            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-2xl overflow-hidden">
               
               {/* Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200/50 dark:border-slate-700/50">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-[#63b3ed]/50 dark:border-[#2b6cb0]/50">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-full flex items-center justify-center">
                     <Brain className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-900 dark:text-slate-100">AI Medical Assistant</h3>
-                    <p className="text-xs text-slate-600 dark:text-slate-400">Ask me anything about your transcript</p>
+                    <h3 className="font-semibold text-[#1a365d] dark:text-[#90cdf4]">AI Medical Assistant</h3>
+                    <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed]">Ask me anything about your transcript</p>
                   </div>
                 </div>
                 
                 <button
                   onClick={handleCloseChat}
-                  className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors duration-200 flex items-center justify-center"
+                  className="w-8 h-8 rounded-full bg-[#90cdf4]/20 dark:bg-[#1a365d]/60 hover:bg-[#63b3ed]/30 dark:hover:bg-[#2b6cb0]/60 transition-colors duration-200 flex items-center justify-center"
                 >
-                  <X className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                  <X className="w-4 h-4 text-[#1a365d] dark:text-[#90cdf4]" />
                 </button>
               </div>
               
               {/* Input Area */}
               <form onSubmit={handleCustomSubmit} className="p-6">
                 <div className="relative">
-                  <div className="relative bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-200 dark:border-slate-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-all duration-200">
+                  <div className="relative bg-[#90cdf4]/10 dark:bg-[#1a365d]/50 rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 focus-within:border-[#2b6cb0] dark:focus-within:border-[#63b3ed] transition-all duration-200">
                     <textarea
                       ref={textareaRef}
                       value={customInstruction}
@@ -452,7 +452,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       placeholder="✨ What would you like to know about this medical case?"
                       disabled={processing}
                       rows={4}
-                      className="w-full resize-none bg-transparent px-4 py-3 pr-20 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none disabled:opacity-60 font-medium leading-relaxed"
+                      className="w-full resize-none bg-transparent px-4 py-3 pr-20 text-sm text-[#1a365d] dark:text-[#90cdf4] placeholder-[#2b6cb0]/60 dark:placeholder-[#63b3ed]/60 focus:outline-none disabled:opacity-60 font-medium leading-relaxed"
                       maxLength={500}
                     />
                     
@@ -462,7 +462,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       <div className={`text-xs transition-colors duration-200 ${
                         customInstruction.length > 450 ? 'text-red-500' : 
                         customInstruction.length > 400 ? 'text-amber-500' : 
-                        'text-slate-400 dark:text-slate-500'
+                        'text-[#2b6cb0]/60 dark:text-[#63b3ed]/60'
                       }`}>
                         <span className="tabular-nums">{customInstruction.length}</span>
                         <span className="opacity-60">/500</span>
@@ -472,7 +472,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       <button
                         type="submit"
                         disabled={processing || !customInstruction.trim()}
-                        className="group/send relative flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-slate-300 disabled:to-slate-400 rounded-xl shadow-md hover:shadow-lg disabled:shadow-sm transition-all duration-200 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+                        className="group/send relative flex items-center justify-center w-10 h-10 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] hover:from-[#1a365d] hover:to-[#2b6cb0] disabled:from-[#63b3ed]/50 disabled:to-[#90cdf4]/50 rounded-xl shadow-md hover:shadow-lg disabled:shadow-sm transition-all duration-200 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
                       >
                         {processing ? (
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -484,9 +484,9 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                   </div>
                   
                   {/* Keyboard Shortcut */}
-                  <div className="flex items-center justify-between mt-3 text-xs text-slate-500 dark:text-slate-400">
-                    <div>Press <kbd className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">Esc</kbd> to close</div>
-                    <div><kbd className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-600 rounded text-xs">⌘ Enter</kbd> to send</div>
+                  <div className="flex items-center justify-between mt-3 text-xs text-[#2b6cb0]/60 dark:text-[#63b3ed]/60">
+                    <div>Press <kbd className="px-1.5 py-0.5 bg-[#90cdf4]/30 dark:bg-[#1a365d]/60 rounded text-xs">Esc</kbd> to close</div>
+                    <div><kbd className="px-1.5 py-0.5 bg-[#90cdf4]/30 dark:bg-[#1a365d]/60 rounded text-xs">⌘ Enter</kbd> to send</div>
                   </div>
                 </div>
               </form>
@@ -501,32 +501,32 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
         <>
           {/* Full-screen processing overlay for major visual feedback */}
           <div className="fixed inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center animate-in fade-in duration-300">
-            <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-2xl p-8 mx-4 max-w-sm w-full text-center animate-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-2xl p-8 mx-4 max-w-sm w-full text-center animate-in slide-in-from-bottom-4 duration-500">
               {/* Animated medical icon */}
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg animate-pulse">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg animate-pulse">
                 <HeartHandshake className="w-8 h-8 text-white animate-bounce" />
               </div>
               
               {/* Processing text */}
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">
+              <h3 className="text-lg font-bold text-[#1a365d] dark:text-[#90cdf4] mb-2">
                 Generating Medical Report
               </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+              <p className="text-sm text-[#2b6cb0] dark:text-[#63b3ed] mb-4">
                 Our specialized AI is analyzing your transcript and preparing a comprehensive medical report...
               </p>
               
               {/* Progress indicator */}
-              <div className="flex items-center justify-center space-x-2 text-xs text-slate-500 dark:text-slate-400">
+              <div className="flex items-center justify-center space-x-2 text-xs text-[#2b6cb0]/60 dark:text-[#63b3ed]/60">
                 <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                 </div>
                 <span className="ml-2">Processing...</span>
               </div>
               
               {/* Estimated time */}
-              <div className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+              <div className="mt-3 text-xs text-[#2b6cb0]/60 dark:text-[#63b3ed]/60">
                 Estimated time: 30-45 seconds
               </div>
             </div>

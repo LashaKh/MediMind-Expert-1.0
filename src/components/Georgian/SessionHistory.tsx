@@ -93,7 +93,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(false);
-  const [filterBy, setFilterBy] = useState<'all' | 'transcribed' | 'recent' | 'favorites'>('all');
+  const [filterBy, setFilterBy] = useState<'all' | 'transcribed' | 'favorites'>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const [hoveredSession, setHoveredSession] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
@@ -119,7 +119,6 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
       const matchesFilter = 
         filterBy === 'all' ||
         (filterBy === 'transcribed' && session.transcript) ||
-        (filterBy === 'recent' && new Date(session.createdAt).getTime() > Date.now() - 86400000) ||
         (filterBy === 'favorites' && favorites.has(session.id));
       
       return matchesSearch && matchesFilter;
@@ -259,9 +258,9 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'complete': return 'text-emerald-500';
-      case 'transcribed': return 'text-blue-500';
-      case 'recent': return 'text-amber-500';
-      default: return 'text-slate-400';
+      case 'transcribed': return 'text-[#2b6cb0]';
+      case 'recent': return 'text-[#63b3ed]';
+      default: return 'text-[#90cdf4]';
     }
   };
 
@@ -380,12 +379,12 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 {/* Compact status badges */}
                 <div className="flex items-center space-x-1 mt-2">
                   {session.transcript && (
-                    <span className="px-2 py-0.5 text-xs font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-lg">
+                    <span className="px-2 py-0.5 text-xs font-medium bg-emerald-100 text-emerald-700 rounded-lg">
                       Transcribed
                     </span>
                   )}
                   {session.processingResults && session.processingResults.length > 0 && (
-                    <span className="px-2 py-0.5 text-xs font-medium bg-medical-blue-100 dark:bg-medical-blue-900/30 text-medical-blue-700 dark:text-medical-blue-300 rounded-lg">
+                    <span className="px-2 py-0.5 text-xs font-medium bg-[#90cdf4]/20 text-[#1a365d] rounded-lg">
                       AI: {session.processingResults.length}
                     </span>
                   )}
@@ -466,9 +465,9 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col overflow-hidden bg-gradient-to-br from-slate-50/50 via-white to-blue-50/30 dark:from-gray-900/50 dark:via-gray-800 dark:to-blue-900/10">
+    <div className="h-full flex flex-col overflow-hidden bg-white">
       {/* Clean Compact Header */}
-      <div className="relative bg-white/90 dark:bg-medical-gray-800/90 backdrop-blur-xl border-b border-medical-gray-200/50 dark:border-medical-gray-700/50 p-4 shadow-sm">
+      <div className="relative bg-white border-b border-[#90cdf4]/30 p-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
@@ -476,8 +475,8 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
               className={`
                 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md
                 ${isHistoryCollapsed 
-                  ? 'bg-medical-gray-600 text-white hover:bg-medical-gray-700' 
-                  : 'bg-medical-blue-600 text-white hover:bg-medical-blue-700'
+                  ? 'transcription-btn-secondary' 
+                  : 'transcription-btn-primary'
                 }
               `}
               title={isHistoryCollapsed ? "Expand sessions" : "Collapse sessions"}
@@ -490,25 +489,23 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             </button>
             
             <div>
-              <h2 className="text-lg font-bold text-medical-gray-900 dark:text-white">
+              <h2 className="text-lg font-bold text-[#1a365d]">
                 History
               </h2>
-              <p className="text-sm text-medical-gray-600 dark:text-medical-gray-400">
+              <p className="text-sm text-[#2b6cb0]">
                 {sessions.length} recordings
               </p>
             </div>
           </div>
           
           {/* Compact Create Button */}
-          <MedicalButton
+          <button
             onClick={() => onCreateSession()}
-            variant="primary"
-            size="md"
-            leftIcon={Plus}
-            className="shadow-sm hover:shadow-md transition-all duration-200"
+            className="transcription-btn-primary flex items-center space-x-2 px-4 py-2 shadow-sm hover:shadow-md transition-all duration-200"
           >
-            New
-          </MedicalButton>
+            <Plus className="w-4 h-4 text-white" />
+            <span className="text-white font-semibold">New</span>
+          </button>
         </div>
         
         {/* Compact Search and Filters - Only show when expanded */}
@@ -518,7 +515,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
               {/* Compact Search */}
               <div className="flex-1 relative">
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                  <Search className="text-medical-gray-400 w-4 h-4" />
+                  <Search className="text-[#1a365d]/50 w-4 h-4" />
                 </div>
                 <MedicalInput
                   ref={searchInputRef}
@@ -541,15 +538,15 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
 
               {/* Compact Filter Options */}
               <div className="flex items-center space-x-1">
-                {['all', 'transcribed', 'recent', 'favorites'].map((filter) => (
+                {['all', 'transcribed', 'favorites'].map((filter) => (
                   <button
                     key={filter}
                     onClick={() => setFilterBy(filter as any)}
                     className={`
                       px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 capitalize
                       ${filterBy === filter
-                        ? 'bg-medical-blue-600 text-white shadow-sm'
-                        : 'text-medical-gray-600 dark:text-medical-gray-400 hover:text-medical-blue-600 dark:hover:text-medical-blue-400 hover:bg-medical-blue-50 dark:hover:bg-medical-blue-900/30'
+                        ? 'transcription-btn-primary text-white'
+                        : 'transcription-btn-secondary'
                       }
                     `}
                   >
@@ -569,30 +566,30 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             <div className="flex items-center justify-center py-20">
               <div className="text-center space-y-6">
                 <div className="relative">
-                  <div className="w-16 h-16 border-4 border-medical-blue-200 border-t-medical-blue-600 border-r-medical-blue-600 rounded-full animate-spin" />
-                  <div className="absolute inset-0 w-16 h-16 border-2 border-medical-blue-400/30 rounded-full animate-ping" />
+                  <div className="w-16 h-16 border-4 border-[#90cdf4] border-t-[#1a365d] border-r-[#1a365d] rounded-full animate-spin" />
+                  <div className="absolute inset-0 w-16 h-16 border-2 border-[#63b3ed]/30 rounded-full animate-ping" />
                 </div>
                 <div className="space-y-2">
-                  <p className="text-lg font-semibold text-medical-gray-700 dark:text-medical-gray-200">Loading Sessions</p>
-                  <p className="text-sm text-medical-gray-500 dark:text-medical-gray-400">Retrieving your medical transcriptions...</p>
+                  <p className="text-lg font-semibold text-[#1a365d]">Loading Sessions</p>
+                  <p className="text-sm text-[#2b6cb0]">Retrieving your medical transcriptions...</p>
                 </div>
               </div>
             </div>
           ) : Object.keys(groupedSessions).length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 px-6">
               <div className="relative mb-8">
-                <div className="w-24 h-24 bg-gradient-to-br from-medical-blue-100 to-purple-100 dark:from-medical-blue-900/30 dark:to-purple-900/30 rounded-3xl flex items-center justify-center shadow-2xl">
-                  <Stethoscope className="w-12 h-12 text-medical-blue-600 dark:text-medical-blue-400" />
+                <div className="w-24 h-24 bg-gradient-to-br from-[#90cdf4]/30 to-[#63b3ed]/30 rounded-3xl flex items-center justify-center shadow-2xl">
+                  <Stethoscope className="w-12 h-12 text-[#1a365d]" />
                 </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] rounded-full flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
               </div>
               
-              <h3 className="text-2xl font-bold text-medical-gray-900 dark:text-white mb-3">
+              <h3 className="text-2xl font-bold text-[#1a365d] mb-3">
                 {searchQuery || filterBy !== 'all' ? 'No Sessions Found' : 'Ready to Begin'}
               </h3>
-              <p className="text-medical-gray-600 dark:text-medical-gray-400 text-center mb-8 max-w-md leading-relaxed">
+              <p className="text-[#2b6cb0] text-center mb-8 max-w-md leading-relaxed">
                 {searchQuery || filterBy !== 'all' 
                   ? 'Try adjusting your search terms or filters to find what you\'re looking for.'
                   : 'Create your first medical transcription session to begin capturing patient consultations with AI-powered analysis.'
@@ -600,15 +597,13 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
               </p>
               
               {!searchQuery && filterBy === 'all' && (
-                <MedicalButton
+                <button
                   onClick={() => onCreateSession()}
-                  variant="primary"
-                  size="xl"
-                  leftIcon={Plus}
-                  className="shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 bg-gradient-to-r from-medical-blue-600 via-medical-blue-700 to-purple-600 hover:from-medical-blue-700 hover:via-medical-blue-800 hover:to-purple-700"
+                  className="transcription-btn-primary flex items-center space-x-3 px-6 py-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-lg font-semibold"
                 >
-                  Create Your First Session
-                </MedicalButton>
+                  <Plus className="w-5 h-5 text-white" />
+                  <span className="text-white">Create Your First Session</span>
+                </button>
               )}
             </div>
           ) : (
@@ -617,11 +612,11 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 <div key={groupName}>
                   {/* Compact Group Header */}
                   <div className="flex items-center space-x-3 mb-3">
-                    <h4 className="text-sm font-bold text-medical-gray-900 dark:text-white">
+                    <h4 className="text-sm font-bold text-[#1a365d]">
                       {groupName}
                     </h4>
-                    <div className="h-px flex-1 bg-gradient-to-r from-medical-gray-300 via-medical-gray-200 to-transparent dark:from-medical-gray-600 dark:via-medical-gray-700 dark:to-transparent" />
-                    <span className="text-xs text-medical-gray-500 dark:text-medical-gray-400 font-medium">
+                    <div className="h-px flex-1 bg-gradient-to-r from-[#90cdf4]/50 via-[#90cdf4]/30 to-transparent" />
+                    <span className="text-xs text-[#2b6cb0] font-medium">
                       {groupSessions.length}
                     </span>
                   </div>
@@ -644,8 +639,8 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
 
       {/* Compact Footer - Only show when expanded */}
       {!isHistoryCollapsed && (
-        <div className="relative px-4 py-2 bg-white/80 dark:bg-medical-gray-800/80 border-t border-medical-gray-200/50 dark:border-medical-gray-700/50">
-          <div className="flex items-center justify-center text-xs text-medical-gray-500 dark:text-medical-gray-400">
+        <div className="relative px-4 py-2 bg-white border-t border-[#90cdf4]/30">
+          <div className="flex items-center justify-center text-xs text-[#2b6cb0]">
             <span>{sessions.length} sessions • </span>
             <Shield className="w-3 h-3 mx-1 text-emerald-500" />
             <span>Secure</span>
@@ -664,7 +659,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             }} 
           />
           <div 
-            className="fixed z-[10000] w-48 bg-white dark:bg-medical-gray-800 border border-medical-gray-200 dark:border-medical-gray-700 rounded-xl shadow-2xl"
+            className="fixed z-[10000] w-48 bg-white border border-[#90cdf4]/50 rounded-xl shadow-2xl"
             style={{
               top: dropdownPosition.top,
               left: dropdownPosition.left
@@ -679,9 +674,9 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   setActiveDropdown(null);
                   setDropdownPosition(null);
                 }}
-                className="w-full px-3 py-2 text-left text-sm font-medium text-medical-gray-700 dark:text-medical-gray-200 hover:bg-medical-blue-50 dark:hover:bg-medical-blue-900/30 rounded-lg transition-all duration-200 flex items-center space-x-2"
+                className="w-full px-3 py-2 text-left text-sm font-medium text-[#1a365d] hover:bg-[#90cdf4]/10 rounded-lg transition-all duration-200 flex items-center space-x-2"
               >
-                <Copy className="w-3 h-3 text-medical-blue-500" />
+                <Copy className="w-3 h-3 text-[#2b6cb0]" />
                 <span>Duplicate</span>
               </button>
               <button
@@ -694,7 +689,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   setActiveDropdown(null);
                   setDropdownPosition(null);
                 }}
-                className="w-full px-3 py-2 text-left text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 flex items-center space-x-2"
+                className="w-full px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 flex items-center space-x-2"
               >
                 <Trash2 className="w-3 h-3" />
                 <span>Delete</span>
@@ -714,11 +709,11 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+          background: linear-gradient(to bottom, #1a365d, #2b6cb0);
           border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #2563eb, #7c3aed);
+          background: linear-gradient(to bottom, #1a365d, #63b3ed);
         }
         
         @keyframes shimmer {

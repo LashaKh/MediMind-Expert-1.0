@@ -51,7 +51,7 @@ const PREMIUM_TEMPLATES: Template[] = [
     instruction: 'Generate a comprehensive Cardiologist Emergency Room consultation report for Heart Failure diagnosis (I50.0 - Congestive Heart Failure / გულის შეგუბებითი უკმარისობა). Include clinical summary, diagnostic assessment, treatment plan, risk stratification, and disposition recommendations based on this medical transcript.',
     description: 'ER Cardiologist consultation report for heart failure diagnosis with comprehensive clinical analysis',
     icon: HeartHandshake,
-    color: 'from-blue-600 via-indigo-600 to-blue-700',
+    color: 'from-[#2b6cb0] via-[#1a365d] to-[#2b6cb0]',
     priority: 'high',
     estimatedTime: '45s',
     isFeatured: true
@@ -63,7 +63,7 @@ const PREMIUM_TEMPLATES: Template[] = [
     instruction: 'Generate a comprehensive NSTEMI diagnosis report (I24.9 - Non-ST elevation myocardial infarction / გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი) including clinical presentation, diagnostic criteria, risk stratification, treatment protocol, and disposition recommendations based on this medical transcript.',
     description: 'Specialized NSTEMI diagnosis and management protocol with ICD-10 coding',
     icon: HeartHandshake,
-    color: 'from-red-600 via-rose-600 to-red-700',
+    color: 'from-[#1a365d] via-[#2b6cb0] to-[#1a365d]',
     priority: 'high',
     estimatedTime: '45s',
     isFeatured: true,
@@ -78,7 +78,7 @@ const PREMIUM_TEMPLATES: Template[] = [
     instruction: 'Create a comprehensive clinical summary of this medical consultation including chief complaint, history of present illness, assessment, and plan (SOAP format)',
     description: 'Structured clinical summary in SOAP format',
     icon: Stethoscope,
-    color: 'from-red-500 to-pink-600',
+    color: 'from-[#63b3ed] to-[#2b6cb0]',
     priority: 'high',
     estimatedTime: '30s'
   },
@@ -89,7 +89,7 @@ const PREMIUM_TEMPLATES: Template[] = [
     instruction: 'Extract and categorize all symptoms, signs, and clinical findings mentioned in this consultation, organized by body system',
     description: 'Systematic symptom and sign extraction',
     icon: Activity,
-    color: 'from-orange-500 to-red-600',
+    color: 'from-[#90cdf4] to-[#63b3ed]',
     priority: 'high',
     estimatedTime: '25s'
   },
@@ -100,7 +100,7 @@ const PREMIUM_TEMPLATES: Template[] = [
     instruction: 'Identify primary and differential diagnoses discussed, including ICD-10 codes where applicable and clinical reasoning',
     description: 'Diagnosis identification with differential',
     icon: Zap,
-    color: 'from-purple-500 to-indigo-600',
+    color: 'from-[#1a365d] to-[#63b3ed]',
     priority: 'high',
     estimatedTime: '35s'
   },
@@ -113,7 +113,7 @@ const PREMIUM_TEMPLATES: Template[] = [
     instruction: 'Extract all medications mentioned including drug names, dosages, frequencies, routes of administration, and any drug interactions or side effects discussed',
     description: 'Complete medication analysis with interactions',
     icon: Shield,
-    color: 'from-blue-500 to-indigo-600',
+    color: 'from-[#2b6cb0] to-[#1a365d]',
     priority: 'high',
     estimatedTime: '40s'
   },
@@ -126,7 +126,7 @@ const PREMIUM_TEMPLATES: Template[] = [
     instruction: 'Identify and assess clinical risk factors, safety concerns, red flags, and urgent issues that require immediate attention',
     description: 'Clinical risk and safety evaluation',
     icon: AlertTriangle,
-    color: 'from-red-600 to-rose-600',
+    color: 'from-[#63b3ed] to-[#90cdf4]',
     priority: 'high',
     estimatedTime: '40s'
   },
@@ -137,7 +137,7 @@ const PREMIUM_TEMPLATES: Template[] = [
     instruction: 'Extract patient demographics, past medical history, family history, social history, and allergies mentioned in the consultation',
     description: 'Comprehensive patient background',
     icon: User,
-    color: 'from-amber-500 to-orange-600',
+    color: 'from-[#90cdf4] to-[#2b6cb0]',
     priority: 'medium',
     estimatedTime: '30s'
   },
@@ -150,7 +150,7 @@ const PREMIUM_TEMPLATES: Template[] = [
     instruction: 'Extract follow-up appointments, monitoring requirements, when to return if symptoms worsen, and patient education provided',
     description: 'Patient follow-up and education summary',
     icon: FileText,
-    color: 'from-violet-500 to-purple-600',
+    color: 'from-[#2b6cb0] to-[#90cdf4]',
     priority: 'low',
     estimatedTime: '20s'
   }
@@ -169,12 +169,12 @@ const getCategoryIcon = (category: string): React.ElementType => {
 
 const getCategoryColor = (category: string): string => {
   switch (category) {
-    case 'Cardiologist Consults': return 'from-blue-500 to-indigo-600';
-    case 'Clinical Assessment': return 'from-slate-500 to-slate-600';
-    case 'Medication Management': return 'from-emerald-500 to-teal-600';
-    case 'Patient Management': return 'from-amber-500 to-orange-500';
-    case 'Documentation': return 'from-violet-500 to-purple-600';
-    default: return 'from-slate-500 to-gray-600';
+    case 'Cardiologist Consults': return 'from-[#2b6cb0] to-[#1a365d]';
+    case 'Clinical Assessment': return 'from-[#63b3ed] to-[#2b6cb0]';
+    case 'Medication Management': return 'from-[#90cdf4] to-[#63b3ed]';
+    case 'Patient Management': return 'from-[#1a365d] to-[#90cdf4]';
+    case 'Documentation': return 'from-[#2b6cb0] to-[#90cdf4]';
+    default: return 'from-[#63b3ed] to-[#90cdf4]';
   }
 };
 
@@ -254,22 +254,22 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
     return (
       <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
         <div className="relative mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700 rounded-3xl flex items-center justify-center shadow-xl">
-            <Stethoscope className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+          <div className="w-20 h-20 bg-gradient-to-br from-[#90cdf4]/30 via-[#63b3ed]/20 to-[#90cdf4]/30 dark:from-[#1a365d]/60 dark:via-[#2b6cb0]/40 dark:to-[#1a365d]/60 rounded-3xl flex items-center justify-center shadow-xl">
+            <Stethoscope className="w-10 h-10 text-[#2b6cb0] dark:text-[#63b3ed]" />
           </div>
-          <div className="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-br from-rose-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
+          <div className="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-2xl flex items-center justify-center shadow-lg">
             <Sparkles className="w-4 h-4 text-white" />
           </div>
         </div>
         
         <div className="max-w-md">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 dark:from-white dark:via-slate-100 dark:to-white bg-clip-text text-transparent mb-4">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#1a365d] dark:from-[#90cdf4] dark:via-[#63b3ed] dark:to-[#90cdf4] bg-clip-text text-transparent mb-4">
             Premium Medical Templates
           </h3>
-          <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          <p className="text-[#2b6cb0] dark:text-[#63b3ed] leading-relaxed mb-6">
             Start recording or upload an audio file to access our comprehensive suite of medical analysis templates designed for healthcare professionals.
           </p>
-          <div className="flex items-center justify-center space-x-2 text-sm text-blue-600 dark:text-blue-400">
+          <div className="flex items-center justify-center space-x-2 text-sm text-[#1a365d] dark:text-[#90cdf4]">
             <Heart className="w-4 h-4" />
             <span>Specialized for Cardiology Practice</span>
           </div>
@@ -283,13 +283,13 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
       {/* Search and Filter Header */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#63b3ed] dark:text-[#63b3ed]" />
           <input
             type="text"
             placeholder="Search templates..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-xl text-sm placeholder-[#2b6cb0]/60 dark:placeholder-[#63b3ed]/60 focus:outline-none focus:ring-2 focus:ring-[#2b6cb0] focus:border-transparent transition-all duration-200 text-[#1a365d] dark:text-[#90cdf4]"
           />
         </div>
         
@@ -298,8 +298,8 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
               showFilters 
-                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' 
-                : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                ? 'bg-[#90cdf4]/30 text-[#1a365d] dark:bg-[#2b6cb0]/30 dark:text-[#90cdf4]' 
+                : 'bg-[#90cdf4]/10 text-[#2b6cb0] dark:bg-[#1a365d]/30 dark:text-[#63b3ed] hover:bg-[#63b3ed]/20 dark:hover:bg-[#2b6cb0]/30'
             }`}
           >
             <Filter className="w-4 h-4" />
@@ -310,12 +310,12 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
 
       {/* Filter Options */}
       {showFilters && (
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 space-y-3">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Priority Level</h4>
+            <h4 className="text-sm font-semibold text-[#1a365d] dark:text-[#90cdf4]">Priority Level</h4>
             <button
               onClick={() => setPriorityFilter('all')}
-              className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+              className="text-xs text-[#2b6cb0] dark:text-[#63b3ed] hover:underline"
             >
               Clear
             </button>
@@ -327,8 +327,8 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                 onClick={() => setPriorityFilter(priority)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
                   priorityFilter === priority
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                    : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
+                    ? 'bg-[#90cdf4]/30 text-[#1a365d] dark:bg-[#2b6cb0]/30 dark:text-[#90cdf4]'
+                    : 'bg-[#90cdf4]/10 text-[#2b6cb0] dark:bg-[#1a365d]/30 dark:text-[#63b3ed] hover:bg-[#63b3ed]/20 dark:hover:bg-[#2b6cb0]/20'
                 }`}
               >
                 {priority === 'all' ? 'All Priorities' : `${priority.charAt(0).toUpperCase() + priority.slice(1)} Priority`}
@@ -343,16 +343,16 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-8 h-8 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center shadow-lg">
                 <HeartHandshake className="w-4 h-4 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200">
+              <h3 className="text-xl font-bold text-[#1a365d] dark:text-[#90cdf4]">
                 Cardiologist Consults
               </h3>
             </div>
-            <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg">
-              <Star className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-              <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">FEATURED</span>
+            <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#1a365d]/30 dark:to-[#2b6cb0]/30 rounded-lg">
+              <Star className="w-3 h-3 text-[#2b6cb0] dark:text-[#90cdf4]" />
+              <span className="text-xs font-semibold text-[#1a365d] dark:text-[#63b3ed]">FEATURED</span>
             </div>
           </div>
 
@@ -440,22 +440,22 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
           return (
             <div
               key={category}
-              className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden"
+              className="bg-white dark:bg-gray-800 rounded-xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-sm overflow-hidden"
             >
               {/* Category Header */}
               <button
                 onClick={() => toggleCategory(category)}
-                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 premium-transition premium-focus"
+                className="w-full flex items-center justify-between p-4 hover:bg-[#90cdf4]/10 dark:hover:bg-[#1a365d]/30 premium-transition premium-focus"
               >
                 <div className="flex items-center space-x-3">
                   <div className={`w-8 h-8 bg-gradient-to-br ${categoryColor} rounded-lg flex items-center justify-center shadow-sm`}>
                     <CategoryIcon className="w-4 h-4 text-white" />
                   </div>
                   <div className="text-left">
-                    <h4 className="font-semibold text-slate-800 dark:text-slate-200">
+                    <h4 className="font-semibold text-[#1a365d] dark:text-[#90cdf4]">
                       {category}
                     </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed]">
                       {templates.length} template{templates.length !== 1 ? 's' : ''}
                     </p>
                   </div>
@@ -472,23 +472,23 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                   </div>
                   
                   {isExpanded ? (
-                    <ChevronUp className="w-4 h-4 text-slate-400" />
+                    <ChevronUp className="w-4 h-4 text-[#63b3ed]" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                    <ChevronDown className="w-4 h-4 text-[#63b3ed]" />
                   )}
                 </div>
               </button>
 
               {/* Category Content */}
               {isExpanded && (
-                <div className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 accordion-content accordion-expand">
+                <div className="border-t border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 bg-[#90cdf4]/10 dark:bg-[#1a365d]/30 accordion-content accordion-expand">
                   <div className="p-4 space-y-2">
                     {templates.map((template) => {
                       const IconComponent = template.icon;
                       const priorityColors = {
-                        high: 'border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-900/10',
-                        medium: 'border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/10',
-                        low: 'border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700/50'
+                        high: 'border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 bg-[#90cdf4]/20 dark:bg-[#1a365d]/20',
+                        medium: 'border-[#90cdf4]/50 dark:border-[#63b3ed]/50 bg-[#90cdf4]/10 dark:bg-[#2b6cb0]/10',
+                        low: 'border-[#90cdf4]/30 dark:border-[#63b3ed]/30 bg-white dark:bg-[#1a365d]/10'
                       };
 
                       return (
@@ -505,23 +505,23 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                             </div>
                             
                             <div className="flex-1 min-w-0">
-                              <h5 className="font-medium text-slate-800 dark:text-slate-200 truncate">
+                              <h5 className="font-medium text-[#1a365d] dark:text-[#90cdf4] truncate">
                                 {template.title}
                               </h5>
-                              <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-1">
+                              <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed] line-clamp-1">
                                 {template.description}
                               </p>
                             </div>
                           </div>
                           
                           <div className="flex items-center space-x-2 flex-shrink-0 ml-3">
-                            <div className="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400">
+                            <div className="flex items-center space-x-1 text-xs text-[#2b6cb0]/60 dark:text-[#63b3ed]/60">
                               <Clock className="w-3 h-3" />
                               <span>{template.estimatedTime}</span>
                             </div>
                             
-                            <div className="w-6 h-6 bg-slate-100 dark:bg-slate-600 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
-                              <Zap className="w-3 h-3 text-slate-600 dark:text-slate-400" />
+                            <div className="w-6 h-6 bg-[#90cdf4]/20 dark:bg-[#1a365d]/40 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+                              <Zap className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
                             </div>
                           </div>
                         </div>
@@ -538,18 +538,18 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
       {/* No Results State */}
       {Object.values(categorizedTemplates).every(templates => templates.length === 0) && searchQuery && (
         <div className="text-center py-12">
-          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Search className="w-8 h-8 text-slate-400" />
+          <div className="w-16 h-16 bg-[#90cdf4]/20 dark:bg-[#1a365d]/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Search className="w-8 h-8 text-[#63b3ed]" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-600 dark:text-slate-400 mb-2">
+          <h3 className="text-lg font-semibold text-[#1a365d] dark:text-[#90cdf4] mb-2">
             No templates found
           </h3>
-          <p className="text-sm text-slate-500 dark:text-slate-500 mb-4">
+          <p className="text-sm text-[#2b6cb0] dark:text-[#63b3ed] mb-4">
             Try adjusting your search terms or filters
           </p>
           <button
             onClick={() => setSearchQuery('')}
-            className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
+            className="text-[#2b6cb0] dark:text-[#63b3ed] hover:underline text-sm font-medium"
           >
             Clear search
           </button>

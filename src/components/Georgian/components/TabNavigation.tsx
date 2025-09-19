@@ -28,7 +28,6 @@ const enhancedTabs = [
     label: 'Record', 
     sublabel: 'Live transcription',
     icon: FileText, 
-    activeIcon: Activity,
     className: 'transcription-tab'
   },
   { 
@@ -36,7 +35,6 @@ const enhancedTabs = [
     label: 'Context', 
     sublabel: 'Document analysis',
     icon: MessageSquare, 
-    activeIcon: Brain,
     className: 'transcription-tab'
   },
   { 
@@ -44,7 +42,6 @@ const enhancedTabs = [
     label: 'AI Processing', 
     sublabel: 'Smart analysis',
     icon: Sparkles, 
-    activeIcon: Zap,
     className: 'transcription-tab'
   }
 ] as const;
@@ -72,27 +69,45 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
           <div className="flex space-x-1 sm:space-x-2 mediscribe-mobile-tabs lg:space-x-2">
             {enhancedTabs.map((tab) => {
               const Icon = tab.icon;
-              const ActiveIcon = tab.activeIcon;
               const isActive = activeTab === tab.id;
-              const DisplayIcon = isActive ? ActiveIcon : Icon;
               
               return (
                 <button
                   key={tab.id}
                   onClick={() => onTabChange(tab.id as TabId)}
-                  className={`${tab.className} ${isActive ? 'active' : ''} mediscribe-mobile-tab group relative flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-4 py-2.5 transition-all duration-300 lg:px-4 lg:py-2.5 lg:space-x-2`}
+                  className={`group relative flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-4 py-2.5 transition-all duration-300 lg:px-4 lg:py-2.5 lg:space-x-2 ${
+                    isActive 
+                      ? 'transcription-btn-primary' 
+                      : 'transcription-btn-secondary'
+                  } mediscribe-mobile-tab`}
                 >
                   {/* Icon Container */}
-                  <div className="w-6 h-6 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-md flex items-center justify-center transition-all duration-300 mediscribe-mobile-tab-icon">
-                    <DisplayIcon className="w-4 h-4 sm:w-4 sm:h-4 lg:w-4 lg:h-4 transition-transform duration-300 group-hover:scale-110" />
+                  <div className={`w-6 h-6 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-md flex items-center justify-center transition-all duration-300 ${
+                    isActive 
+                      ? 'bg-white/20' 
+                      : 'bg-[#1a365d]/10'
+                  } mediscribe-mobile-tab-icon`}>
+                    <Icon className={`w-4 h-4 sm:w-4 sm:h-4 lg:w-4 lg:h-4 transition-transform duration-300 group-hover:scale-110 ${
+                      isActive 
+                        ? 'text-white' 
+                        : 'text-[#1a365d]'
+                    }`} />
                   </div>
                   
                   {/* Labels */}
                   <div className="flex flex-col items-start min-w-0">
-                    <span className="text-xs sm:text-sm lg:text-sm font-bold leading-tight mediscribe-mobile-tab-label">
+                    <span className={`text-xs sm:text-sm lg:text-sm font-bold leading-tight ${
+                      isActive 
+                        ? 'text-white' 
+                        : 'text-[#1a365d]'
+                    } mediscribe-mobile-tab-label`}>
                       {tab.label}
                     </span>
-                    <span className="text-[11px] sm:text-xs lg:text-xs font-medium leading-tight opacity-80 mediscribe-mobile-tab-sublabel">
+                    <span className={`text-[11px] sm:text-xs lg:text-xs font-medium leading-tight opacity-80 ${
+                      isActive 
+                        ? 'text-white' 
+                        : 'text-[#1a365d]'
+                    } mediscribe-mobile-tab-sublabel`}>
                       {tab.sublabel}
                     </span>
                   </div>
@@ -113,12 +128,28 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 `}
                 title={`${isHistoryOpen ? 'Hide' : 'Show'} History (${sessionCount} recordings)`}
               >
-                <div className="w-5 h-5 rounded-md bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                  <History className="w-3 h-3 text-white" />
+                <div className={`w-5 h-5 rounded-md flex items-center justify-center ${
+                  isHistoryOpen 
+                    ? 'bg-white/20' 
+                    : 'bg-[#1a365d]/10'
+                }`}>
+                  <History className={`w-3 h-3 ${
+                    isHistoryOpen 
+                      ? 'text-white' 
+                      : 'text-[#1a365d]'
+                  }`} />
                 </div>
                 <div className="hidden xl:flex flex-col items-start min-w-0">
-                  <span className="text-xs font-bold leading-tight">History</span>
-                  <span className="text-[10px] font-medium leading-tight opacity-80">
+                  <span className={`text-xs font-bold leading-tight ${
+                    isHistoryOpen 
+                      ? 'text-white' 
+                      : 'text-[#1a365d]'
+                  }`}>History</span>
+                  <span className={`text-[10px] font-medium leading-tight opacity-80 ${
+                    isHistoryOpen 
+                      ? 'text-white' 
+                      : 'text-[#1a365d]'
+                  }`}>
                     {sessionCount} recordings
                   </span>
                 </div>
@@ -156,10 +187,10 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 </div>
                 
                 <div className="flex flex-col items-start min-w-0">
-                  <span className="text-xs font-bold leading-tight">
+                  <span className="text-xs font-bold leading-tight text-white">
                     {isRecording ? 'Stop' : 'Record'}
                   </span>
-                  <span className="text-[10px] font-medium leading-tight opacity-80">
+                  <span className="text-[10px] font-medium leading-tight opacity-80 text-white">
                     {isRecording ? 'End session' : 'Start recording'}
                   </span>
                 </div>

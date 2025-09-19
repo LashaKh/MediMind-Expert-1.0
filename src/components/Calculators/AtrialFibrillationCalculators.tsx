@@ -12,6 +12,8 @@ import { Button } from '../ui/button';
 import { Tooltip } from '../ui/tooltip';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { useTranslation } from '../../hooks/useTranslation';
+import { getCategoryIconClass, getSpecialtyGradientClass } from '../../utils/calculatorTheme';
+import { MedicalSpecialty } from '../../stores/useAppStore';
 
 interface CHA2DS2VAScFormData {
   age: string;
@@ -258,18 +260,18 @@ export const AtrialFibrillationCalculators: React.FC = () => {
 
   const getRiskColor = (category: string) => {
     switch (category) {
-      case 'low': return 'text-green-600';
-      case 'moderate': return 'text-yellow-600';
-      case 'high': return 'text-red-600';
+      case 'low': return 'text-calc-category-4';
+      case 'moderate': return 'text-calc-category-3';
+      case 'high': return 'text-calc-category-1';
       default: return 'text-gray-600';
     }
   };
 
   const getRiskBgColor = (category: string) => {
     switch (category) {
-      case 'low': return 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800';
-      case 'moderate': return 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800';
-      case 'high': return 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800';
+      case 'low': return 'bg-calc-category-4/10 border-calc-category-4/30 dark:bg-calc-category-4/20 dark:border-calc-category-4/30';
+      case 'moderate': return 'bg-calc-category-3/10 border-calc-category-3/30 dark:bg-calc-category-3/20 dark:border-calc-category-3/30';
+      case 'high': return 'bg-calc-category-1/10 border-calc-category-1/30 dark:bg-calc-category-1/20 dark:border-calc-category-1/30';
       default: return 'bg-gray-50 border-gray-200 dark:bg-gray-900/20 dark:border-gray-800';
     }
   };
@@ -285,19 +287,19 @@ export const AtrialFibrillationCalculators: React.FC = () => {
     >
       <div className="space-y-8">
         {/* Atrial Fibrillation Alert */}
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6">
+        <div className="bg-gradient-to-r from-calc-theme-secondary/10 to-calc-theme-accent/10 dark:from-calc-theme-secondary/20 dark:to-calc-theme-accent/20 border-2 border-calc-theme-secondary/30 dark:border-calc-theme-primary/30 rounded-2xl p-6">
           <div className="flex items-start space-x-4">
-            <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-              <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <div className="p-3 bg-calc-theme-secondary/10 dark:bg-calc-theme-primary/30 rounded-xl">
+              <Activity className="w-6 h-6 text-calc-theme-secondary dark:text-calc-theme-accent" />
             </div>
             <div className="flex-1">
-              <h4 className="text-lg font-bold text-blue-800 dark:text-blue-200 mb-2">{t('calculators.cardiology.atrial_fibrillation.alert_title')}</h4>
-              <p className="text-blue-700 dark:text-blue-300 leading-relaxed">
+              <h4 className="text-lg font-bold text-calc-theme-primary dark:text-calc-theme-light mb-2">{t('calculators.cardiology.atrial_fibrillation.alert_title')}</h4>
+              <p className="text-calc-theme-secondary dark:text-calc-theme-accent leading-relaxed">
                 {t('calculators.cardiology.atrial_fibrillation.alert_description')}
               </p>
-              <div className="mt-3 inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg px-3 py-1">
-                <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">{t('calculators.cardiology.atrial_fibrillation.alert_badge')}</span>
+              <div className="mt-3 inline-flex items-center space-x-2 bg-calc-theme-secondary/10 dark:bg-calc-theme-primary/30 rounded-lg px-3 py-1">
+                <Award className="w-4 h-4 text-calc-theme-secondary dark:text-calc-theme-accent" />
+                <span className="text-xs font-semibold text-calc-theme-secondary dark:text-calc-theme-accent">{t('calculators.cardiology.atrial_fibrillation.alert_badge')}</span>
               </div>
             </div>
           </div>
@@ -305,10 +307,10 @@ export const AtrialFibrillationCalculators: React.FC = () => {
 
         {/* Calculator Tabs */}
         <Tabs value={activeCalc} onValueChange={setActiveCalc} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-1">
+          <TabsList className="grid w-full grid-cols-2 bg-calc-theme-secondary/10 dark:bg-calc-theme-primary/20 border border-calc-theme-secondary/30 dark:border-calc-theme-primary/30 rounded-xl p-1">
             <TabsTrigger 
               value="cha2ds2vasc" 
-              className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-blue-800 data-[state=active]:shadow-md transition-all duration-200"
+              className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-calc-theme-primary data-[state=active]:shadow-md transition-all duration-200"
             >
               <Heart className="w-4 h-4" />
               <span className="font-medium">{t('calculators.cardiology.atrial_fibrillation.tab_cha2ds2vasc')}</span>
@@ -316,7 +318,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
             </TabsTrigger>
             <TabsTrigger 
               value="hasbled" 
-              className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-red-800 data-[state=active]:shadow-md transition-all duration-200"
+              className="flex items-center space-x-2 rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-calc-category-1 data-[state=active]:shadow-md transition-all duration-200"
             >
               <AlertTriangle className="w-4 h-4" />
               <span className="font-medium">{t('calculators.cardiology.atrial_fibrillation.tab_hasbled')}</span>
@@ -330,7 +332,7 @@ export const AtrialFibrillationCalculators: React.FC = () => {
               {/* Form Container with Stunning Design */}
               <div className="relative overflow-hidden">
                 {/* Background Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-purple-950/30" />
+                <div className="absolute inset-0 bg-gradient-to-br from-calc-theme-secondary/10 via-calc-theme-primary/10 to-calc-theme-accent/10 dark:from-calc-theme-secondary/30 dark:via-calc-theme-primary/30 dark:to-calc-theme-accent/30" />
                 
                 {/* Glassmorphism Effect */}
                 <div className="relative backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-2xl shadow-black/5 dark:shadow-black/20">
@@ -338,11 +340,11 @@ export const AtrialFibrillationCalculators: React.FC = () => {
                     {/* Header with Icon */}
                     <div className="text-center mb-8">
                       <div className="flex items-center justify-center mb-4">
-                        <div className="relative p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg shadow-blue-500/25 transform hover:scale-105 transition-all duration-300">
+                        <div className="relative p-4 bg-gradient-to-br from-calc-theme-secondary to-calc-theme-primary rounded-2xl shadow-lg shadow-calc-theme-secondary/25 transform hover:scale-105 transition-all duration-300">
                           <Heart className="w-8 h-8 text-white animate-pulse" />
                         </div>
                       </div>
-                      <h3 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent mb-3">
+                      <h3 className="text-3xl font-bold bg-gradient-to-r from-calc-theme-secondary to-calc-theme-primary dark:from-calc-theme-accent dark:to-calc-theme-light bg-clip-text text-transparent mb-3">
                   {t('calculators.cardiology.atrial_fibrillation.cha2ds2vasc.title')}
                 </h3>
                       <p className="text-lg text-gray-600 dark:text-gray-300 font-medium">

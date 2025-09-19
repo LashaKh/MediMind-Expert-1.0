@@ -62,31 +62,31 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
   
   if (isDiagnosis) {
     if (lower.includes('i50.0') || lower.includes('heart failure') || lower.includes('გულის შეგუბებითი უკმარისობა')) {
-      return { type: 'Heart Failure ER Report (I50.0)', icon: HeartHandshake, color: 'from-blue-600 to-indigo-700', isDiagnosis: true };
+      return { type: 'Heart Failure ER Report (I50.0)', icon: HeartHandshake, color: 'from-[#2b6cb0] to-[#1a365d]', isDiagnosis: true };
     }
     if (lower.includes('i24.9') || lower.includes('nstemi') || lower.includes('გულის მწვავე იშემიური ავადმყოფობა')) {
-      return { type: 'NSTEMI ER Report (I24.9)', icon: HeartHandshake, color: 'from-red-600 to-rose-700', isDiagnosis: true };
+      return { type: 'NSTEMI ER Report (I24.9)', icon: HeartHandshake, color: 'from-[#1a365d] to-[#2b6cb0]', isDiagnosis: true };
     }
-    return { type: 'Diagnosis ER Report', icon: HeartHandshake, color: 'from-rose-600 to-red-700', isDiagnosis: true };
+    return { type: 'Diagnosis ER Report', icon: HeartHandshake, color: 'from-[#63b3ed] to-[#90cdf4]', isDiagnosis: true };
   }
   
   if (lower.includes('symptom') || lower.includes('diagnos')) {
-    return { type: 'Clinical Assessment', icon: Stethoscope, color: 'from-red-500 to-pink-600', isDiagnosis: false };
+    return { type: 'Clinical Assessment', icon: Stethoscope, color: 'from-[#63b3ed] to-[#2b6cb0]', isDiagnosis: false };
   }
   if (lower.includes('medication') || lower.includes('drug') || lower.includes('dosage')) {
-    return { type: 'Medication Review', icon: Shield, color: 'from-blue-500 to-indigo-600', isDiagnosis: false };
+    return { type: 'Medication Review', icon: Shield, color: 'from-[#2b6cb0] to-[#1a365d]', isDiagnosis: false };
   }
   if (lower.includes('summary') || lower.includes('summarize')) {
-    return { type: 'Clinical Summary', icon: FileText, color: 'from-purple-500 to-violet-600', isDiagnosis: false };
+    return { type: 'Clinical Summary', icon: FileText, color: 'from-[#90cdf4] to-[#63b3ed]', isDiagnosis: false };
   }
   if (lower.includes('procedure') || lower.includes('treatment')) {
-    return { type: 'Treatment Plan', icon: Activity, color: 'from-green-500 to-emerald-600', isDiagnosis: false };
+    return { type: 'Treatment Plan', icon: Activity, color: 'from-[#1a365d] to-[#63b3ed]', isDiagnosis: false };
   }
   if (lower.includes('demographic') || lower.includes('history')) {
-    return { type: 'Patient History', icon: User, color: 'from-orange-500 to-amber-600', isDiagnosis: false };
+    return { type: 'Patient History', icon: User, color: 'from-[#90cdf4] to-[#2b6cb0]', isDiagnosis: false };
   }
   
-  return { type: 'General Analysis', icon: Brain, color: 'from-indigo-500 to-purple-600', isDiagnosis: false };
+  return { type: 'General Analysis', icon: Brain, color: 'from-[#2b6cb0] to-[#90cdf4]', isDiagnosis: false };
 };
 
 const copyToClipboard = async (content: string) => {

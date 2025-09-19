@@ -9,6 +9,8 @@ import {
   CalculatorButton, 
   ResultsDisplay 
 } from '../ui/calculator-ui';
+import { getCategoryIconClass, getSpecialtyGradientClass } from '../../utils/calculatorTheme';
+import { MedicalSpecialty } from '../../stores/useAppStore';
 
 interface TIMIFormData {
   age: string;
@@ -210,17 +212,17 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
     >
       <div className="space-y-10">
         {/* Emergency Alert - Enhanced */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-red-50 via-red-25 to-orange-50 dark:from-red-950/30 dark:via-red-900/20 dark:to-orange-950/30 border-2 border-red-200/60 dark:border-red-800/40 rounded-3xl p-8 backdrop-blur-xl shadow-2xl shadow-red-500/10">
-          <div className="absolute inset-0 bg-gradient-to-r from-red-400/5 to-orange-400/5"></div>
+        <div className="relative overflow-hidden bg-gradient-to-br from-calc-category-1/10 via-calc-category-1/5 to-calc-category-2/10 dark:from-calc-category-1/30 dark:via-calc-category-1/20 dark:to-calc-category-2/30 border-2 border-calc-category-1/30 dark:border-calc-category-1/40 rounded-3xl p-8 backdrop-blur-xl shadow-2xl shadow-calc-category-1/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-calc-category-1/5 to-calc-category-2/5"></div>
           <div className="relative flex items-start space-x-6">
-            <div className="p-4 bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900/40 dark:to-red-800/40 rounded-2xl shadow-lg backdrop-blur-sm">
-              <Zap className="w-8 h-8 text-red-600 dark:text-red-400 animate-pulse" />
+            <div className="p-4 bg-gradient-to-br from-calc-category-1/10 to-calc-category-1/20 dark:from-calc-category-1/40 dark:to-calc-category-1/40 rounded-2xl shadow-lg backdrop-blur-sm">
+              <Zap className="w-8 h-8 text-calc-category-1 dark:text-calc-category-1 animate-pulse" />
             </div>
             <div className="flex-1">
-                <h4 className="text-2xl font-bold text-red-800 dark:text-red-200 mb-3">
+                <h4 className="text-2xl font-bold text-calc-category-1 dark:text-calc-category-1 mb-3">
                   {t('calculators.cardiology.timi.emergency_tool')}
                 </h4>
-              <p className="text-red-700 dark:text-red-300 leading-relaxed text-lg">
+              <p className="text-calc-category-1 dark:text-calc-category-1 leading-relaxed text-lg">
                   {t('calculators.cardiology.timi.tool_description')}
               </p>
             </div>
@@ -229,12 +231,12 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
 
           {/* Results Display - World-Class Design */}
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-purple-400/10 to-indigo-400/10 rounded-4xl blur-3xl transform -rotate-1"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-calc-theme-secondary/10 via-calc-theme-accent/10 to-calc-theme-primary/10 rounded-4xl blur-3xl transform -rotate-1"></div>
             <div className="relative bg-gradient-to-br from-white/90 via-white/70 to-white/90 dark:from-gray-900/90 dark:via-gray-800/70 dark:to-gray-900/90 backdrop-blur-2xl border border-white/20 dark:border-gray-700/20 rounded-4xl p-10 shadow-2xl">
               
               {/* Hero Score Display */}
               <div className="text-center mb-12">
-                <div className="inline-flex items-center justify-center w-40 h-40 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-2xl shadow-blue-500/30 mb-8 transform hover:scale-105 transition-all duration-500">
+                <div className="inline-flex items-center justify-center w-40 h-40 rounded-full bg-gradient-to-br from-calc-theme-secondary to-calc-theme-accent shadow-2xl shadow-calc-theme-secondary/30 mb-8 transform hover:scale-105 transition-all duration-500">
                   <div className="text-center">
                     <div className="text-5xl font-black text-white mb-1">
                       {result.score}
@@ -248,18 +250,18 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                 </h2>
                 
                 {/* DEBUG: Language indicator - REMOVE AFTER TESTING */}
-                <div className="mb-4 p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg text-center">
-                  <span className="text-sm text-yellow-800 dark:text-yellow-200">
+                <div className="mb-4 p-2 bg-calc-category-3/10 dark:bg-calc-category-3/20 rounded-lg text-center">
+                  <span className="text-sm text-calc-category-3 dark:text-calc-category-3">
                     DEBUG: Current Language = {currentLanguage} | Title = {t('calculators.cardiology.timi.title')}
                   </span>
                 </div>
                 
                 <div className={`inline-flex items-center px-10 py-5 rounded-2xl text-2xl font-bold shadow-xl transform hover:scale-105 transition-all duration-300 ${
                   result.riskCategory === 'high' 
-                    ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-red-500/30' 
+                    ? 'bg-gradient-to-r from-calc-category-1 to-calc-category-1 text-white shadow-calc-category-1/30' 
                     : result.riskCategory === 'intermediate'
-                    ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-orange-500/30'
-                    : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-green-500/30'
+                    ? 'bg-gradient-to-r from-calc-category-3 to-calc-category-2 text-white shadow-calc-category-2/30'
+                    : 'bg-gradient-to-r from-calc-category-4 to-calc-theme-light text-white shadow-calc-category-4/30'
                 }`}>
                   <Heart className="w-8 h-8 mr-4" />
                   {getInterpretation(result.riskCategory, result.score, result.adverseOutcomeRisk)}
@@ -268,8 +270,8 @@ const TIMIRiskCalculatorComponent: React.FC = () => {
                 {/* Detailed Risk Analysis - Enhanced */}
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                   {/* 14-Day Risk Breakdown - Enhanced */}
-                  <div className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-purple-25 to-indigo-50 dark:from-purple-950/30 dark:via-purple-900/20 dark:to-indigo-950/30 border border-purple-200/60 dark:border-purple-800/40 rounded-3xl p-8 backdrop-blur-xl shadow-xl shadow-purple-500/10 transform hover:scale-105 transition-all duration-300">
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-400/5 to-indigo-400/5"></div>
+                  <div className="relative overflow-hidden bg-gradient-to-br from-calc-theme-accent/10 via-calc-theme-accent/5 to-calc-theme-primary/10 dark:from-calc-theme-accent/30 dark:via-calc-theme-accent/20 dark:to-calc-theme-primary/30 border border-calc-theme-accent/30 dark:border-calc-theme-primary/40 rounded-3xl p-8 backdrop-blur-xl shadow-xl shadow-calc-theme-accent/10 transform hover:scale-105 transition-all duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-r from-calc-theme-accent/5 to-calc-theme-primary/5"></div>
                     <div className="relative flex items-center space-x-4 mb-6">
                       <div className="p-3 bg-gradient-to-br from-purple-100 to-indigo-200 dark:from-purple-900/40 dark:to-indigo-800/40 rounded-2xl shadow-lg">
                         <BarChart3 className="w-7 h-7 text-purple-600 dark:text-purple-400" />

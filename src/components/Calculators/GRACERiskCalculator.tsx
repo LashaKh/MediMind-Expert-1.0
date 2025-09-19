@@ -10,6 +10,8 @@ import {
   type GRACEResult 
 } from './GRACE';
 import { GRACE2Validator, type GRACEFormData } from '../../utils/grace2Validator';
+import { getCategoryIconClass, getSpecialtyGradientClass } from '../../utils/calculatorTheme';
+import { MedicalSpecialty } from '../../stores/useAppStore';
 
 const GRACERiskCalculatorComponent: React.FC = () => {
   const { t } = useTranslation();
@@ -149,11 +151,11 @@ const GRACERiskCalculatorComponent: React.FC = () => {
   const getUrgencyInfo = useMemo(() => (urgency: string) => {
     switch (urgency) {
       case 'high':
-        return { color: 'text-red-600', bg: 'bg-red-50', icon: AlertTriangle };
+        return { color: 'text-calc-category-1', bg: 'bg-calc-category-1/10', icon: AlertTriangle };
       case 'moderate':
-        return { color: 'text-yellow-600', bg: 'bg-yellow-50', icon: Clock };
+        return { color: 'text-calc-category-3', bg: 'bg-calc-category-3/10', icon: Clock };
       default:
-        return { color: 'text-green-600', bg: 'bg-green-50', icon: Shield };
+        return { color: 'text-calc-category-4', bg: 'bg-calc-category-4/10', icon: Shield };
     }
   }, []);
 

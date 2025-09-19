@@ -9,6 +9,8 @@ import {
   CalculatorButton, 
   ResultsDisplay 
 } from '../ui/calculator-ui';
+import { getCategoryIconClass, getSpecialtyGradientClass } from '../../utils/calculatorTheme';
+import { MedicalSpecialty } from '../../stores/useAppStore';
 
 interface ASCVDFormData {
   age: string;
@@ -514,11 +516,11 @@ const ASCVDCalculatorComponent: React.FC = () => {
       case 'low':
         return 'text-emerald-600 dark:text-emerald-400';
       case 'borderline':
-        return 'text-yellow-600 dark:text-yellow-400';
+        return 'text-calc-category-3 dark:text-calc-category-3';
       case 'intermediate':
-        return 'text-orange-600 dark:text-orange-400';
+        return 'text-calc-category-2 dark:text-calc-category-2';
       case 'high':
-        return 'text-red-600 dark:text-red-400';
+        return 'text-calc-category-1 dark:text-calc-category-1';
       default:
         return 'text-gray-600 dark:text-gray-400';
     }
@@ -529,11 +531,11 @@ const ASCVDCalculatorComponent: React.FC = () => {
       case 'low':
         return 'from-emerald-500/10 via-emerald-400/5 to-green-500/10 border-emerald-200/50 dark:border-emerald-400/30';
       case 'borderline':
-        return 'from-yellow-500/10 via-yellow-400/5 to-amber-500/10 border-yellow-200/50 dark:border-yellow-400/30';
+        return 'from-calc-category-3/10 via-calc-category-3/5 to-calc-category-3/10 border-calc-category-3/20 dark:border-calc-category-3/30';
       case 'intermediate':
-        return 'from-orange-500/10 via-orange-400/5 to-red-500/10 border-orange-200/50 dark:border-orange-400/30';
+        return 'from-calc-category-2/10 via-calc-category-2/5 to-calc-category-1/10 border-calc-category-2/20 dark:border-calc-category-2/30';
       case 'high':
-        return 'from-red-500/10 via-red-400/5 to-rose-500/10 border-red-200/50 dark:border-red-400/30';
+        return 'from-calc-category-1/10 via-calc-category-1/5 to-calc-category-1/10 border-calc-category-1/20 dark:border-calc-category-1/30';
       default:
         return 'from-gray-500/10 via-gray-400/5 to-gray-500/10 border-gray-200/50 dark:border-gray-400/30';
     }
@@ -570,29 +572,29 @@ const ASCVDCalculatorComponent: React.FC = () => {
             <div className="flex items-center justify-center space-x-4 mb-8">
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 1 ? 'bg-calc-theme-secondary text-white' : 'bg-gray-200 text-gray-500'
                 }`}>
                   1
                 </div>
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.ascvd.demographics_section')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 2 ? 'bg-blue-500' : 'bg-gray-200'
+                currentStep >= 2 ? 'bg-calc-theme-accent' : 'bg-gray-200'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 2 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 2 ? 'bg-calc-theme-accent text-white' : 'bg-gray-200 text-gray-500'
                 }`}>
                   2
                 </div>
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('calculators.cardiology.ascvd.lab_values_section')}</span>
               </div>
               <div className={`w-16 h-1 rounded-full transition-all duration-300 ${
-                currentStep >= 3 ? 'bg-blue-500' : 'bg-gray-200'
+                currentStep >= 3 ? 'bg-calc-theme-light' : 'bg-gray-200'
               }`}></div>
               <div className="flex items-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                  currentStep >= 3 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'
+                  currentStep >= 3 ? 'bg-calc-theme-light text-white' : 'bg-gray-200 text-gray-500'
                 }`}>
                   3
                 </div>
@@ -604,8 +606,8 @@ const ASCVDCalculatorComponent: React.FC = () => {
             {currentStep === 1 && (
               <div className="space-y-6 animate-fadeIn">
                 <div className="text-center mb-8">
-                  <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
-                    <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-calc-theme-secondary/10 to-calc-theme-primary/10 dark:from-calc-theme-secondary/20 dark:to-calc-theme-primary/20 rounded-2xl border border-calc-theme-secondary/30 dark:border-calc-theme-primary/30">
+                    <User className="w-6 h-6 text-calc-theme-secondary dark:text-calc-theme-primary" />
                     <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.ascvd.demographics_section')}</h3>
                   </div>
                 </div>
@@ -673,8 +675,8 @@ const ASCVDCalculatorComponent: React.FC = () => {
             {currentStep === 2 && (
               <div className="space-y-6 animate-fadeIn">
                 <div className="text-center mb-8">
-                  <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl border border-purple-200 dark:border-purple-800">
-                    <Droplet className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                  <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-calc-theme-accent/10 to-calc-theme-light/10 dark:from-calc-theme-accent/20 dark:to-calc-theme-light/20 rounded-2xl border border-calc-theme-accent/30 dark:border-calc-theme-light/30">
+                    <Droplet className="w-6 h-6 text-calc-theme-accent dark:text-calc-theme-light" />
                     <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.ascvd.lab_values_section')}</h3>
                   </div>
                 </div>
@@ -745,8 +747,8 @@ const ASCVDCalculatorComponent: React.FC = () => {
             {currentStep === 3 && (
               <div className="space-y-6 animate-fadeIn">
                 <div className="text-center mb-8">
-                  <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-2xl border border-orange-200 dark:border-orange-800">
-                    <AlertTriangle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                  <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-calc-theme-light/10 to-calc-theme-primary/10 dark:from-calc-theme-light/20 dark:to-calc-theme-primary/20 rounded-2xl border border-calc-theme-light/30 dark:border-calc-theme-primary/30">
+                    <AlertTriangle className="w-6 h-6 text-calc-theme-light dark:text-calc-theme-primary" />
                     <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('calculators.cardiology.ascvd.risk_factors_section')}</h3>
                   </div>
                 </div>
@@ -893,12 +895,12 @@ const ASCVDCalculatorComponent: React.FC = () => {
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
                   {/* Lifetime Risk */}
                   {result.lifetimeRisk && (
-                    <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500/10 via-blue-400/5 to-indigo-500/10 border border-blue-200/50 dark:border-blue-400/30 backdrop-blur-xl hover:scale-105 transition-all duration-300">
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-blue-500/10"></div>
+                    <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-calc-theme-secondary/10 via-calc-theme-secondary/5 to-calc-theme-primary/10 border border-calc-theme-secondary/20 dark:border-calc-theme-secondary/30 backdrop-blur-xl hover:scale-105 transition-all duration-300">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-calc-theme-secondary/10"></div>
                       <div className="relative p-6">
                         <div className="flex items-center space-x-3 mb-4">
-                          <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center backdrop-blur-sm">
-                            <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                          <div className="w-12 h-12 rounded-2xl bg-calc-theme-secondary/20 flex items-center justify-center backdrop-blur-sm">
+                            <BarChart3 className="w-6 h-6 text-calc-theme-secondary dark:text-calc-theme-primary" />
                           </div>
                           <div>
                             <h4 className="font-bold text-gray-900 dark:text-gray-100 text-lg">{t('calculators.cardiology.ascvd.lifetime_risk_title')}</h4>
@@ -906,7 +908,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                           </div>
                         </div>
                         <div className="space-y-3">
-                          <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                          <div className="text-3xl font-bold text-calc-theme-secondary dark:text-calc-theme-primary">
                             {result.lifetimeRisk.toFixed(1)}%
                           </div>
                           <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -918,12 +920,12 @@ const ASCVDCalculatorComponent: React.FC = () => {
                   )}
 
                   {/* Risk Category Details */}
-                  <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-500/10 via-purple-400/5 to-pink-500/10 border border-purple-200/50 dark:border-purple-400/30 backdrop-blur-xl hover:scale-105 transition-all duration-300">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-purple-500/10"></div>
+                  <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-calc-theme-accent/10 via-calc-theme-accent/5 to-calc-theme-light/10 border border-calc-theme-accent/20 dark:border-calc-theme-accent/30 backdrop-blur-xl hover:scale-105 transition-all duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-calc-theme-accent/10"></div>
                     <div className="relative p-6">
                       <div className="flex items-center space-x-3 mb-4">
-                        <div className="w-12 h-12 rounded-2xl bg-purple-500/20 flex items-center justify-center backdrop-blur-sm">
-                          <Target className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                        <div className="w-12 h-12 rounded-2xl bg-calc-theme-accent/20 flex items-center justify-center backdrop-blur-sm">
+                          <Target className="w-6 h-6 text-calc-theme-accent dark:text-calc-theme-light" />
                         </div>
                         <div>
                           <h4 className="font-bold text-gray-900 dark:text-gray-100 text-lg">{t('calculators.cardiology.ascvd.risk_classification_title')}</h4>
@@ -931,7 +933,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                        <div className="text-2xl font-bold text-calc-theme-accent dark:text-calc-theme-light">
                           {result.riskCategory.charAt(0).toUpperCase() + result.riskCategory.slice(1)} Risk
                         </div>
                         <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -960,39 +962,39 @@ const ASCVDCalculatorComponent: React.FC = () => {
                         </div>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                        <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500/20 via-blue-400/10 to-indigo-500/20 border border-blue-200/50 dark:border-blue-400/30 backdrop-blur-sm hover:scale-105 transition-all duration-300">
-                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-blue-500/10"></div>
+                        <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-calc-theme-secondary/20 via-calc-theme-secondary/10 to-calc-theme-primary/20 border border-calc-theme-secondary/20 dark:border-calc-theme-secondary/30 backdrop-blur-sm hover:scale-105 transition-all duration-300">
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-calc-theme-secondary/10"></div>
                           <div className="relative p-4">
-                            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                            <div className="text-2xl font-bold text-calc-theme-secondary dark:text-calc-theme-primary mb-2">
                               {result.therapyBenefit.statin.toFixed(1)}%
                             </div>
                             <div className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('calculators.cardiology.ascvd.statin_therapy')}</div>
                           </div>
                         </div>
-                        <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-500/20 via-green-400/10 to-emerald-500/20 border border-green-200/50 dark:border-green-400/30 backdrop-blur-sm hover:scale-105 transition-all duration-300">
-                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-green-500/10"></div>
+                        <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-calc-theme-light/20 via-calc-theme-light/10 to-calc-theme-accent/20 border border-calc-theme-light/20 dark:border-calc-theme-light/30 backdrop-blur-sm hover:scale-105 transition-all duration-300">
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-calc-theme-light/10"></div>
                           <div className="relative p-4">
-                            <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">
+                            <div className="text-2xl font-bold text-calc-theme-light dark:text-calc-theme-accent mb-2">
                               {result.therapyBenefit.bpControl.toFixed(1)}%
                             </div>
                             <div className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('calculators.cardiology.ascvd.bp_control')}</div>
                           </div>
                         </div>
                         {result.therapyBenefit.smoking > 0 && (
-                          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-red-500/20 via-red-400/10 to-pink-500/20 border border-red-200/50 dark:border-red-400/30 backdrop-blur-sm hover:scale-105 transition-all duration-300">
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-red-500/10"></div>
+                          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-calc-category-1/20 via-calc-category-1/10 to-calc-category-1/20 border border-calc-category-1/20 dark:border-calc-category-1/30 backdrop-blur-sm hover:scale-105 transition-all duration-300">
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-calc-category-1/10"></div>
                             <div className="relative p-4">
-                              <div className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
+                              <div className="text-2xl font-bold text-calc-category-1 dark:text-calc-category-1 mb-2">
                                 {result.therapyBenefit.smoking.toFixed(1)}%
                               </div>
                               <div className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('calculators.cardiology.ascvd.smoking_cessation')}</div>
                             </div>
                           </div>
                         )}
-                        <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-500/20 via-orange-400/10 to-amber-500/20 border border-orange-200/50 dark:border-orange-400/30 backdrop-blur-sm hover:scale-105 transition-all duration-300">
-                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-orange-500/10"></div>
+                        <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-calc-category-2/20 via-calc-category-2/10 to-calc-category-3/20 border border-calc-category-2/20 dark:border-calc-category-2/30 backdrop-blur-sm hover:scale-105 transition-all duration-300">
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-calc-category-2/10"></div>
                           <div className="relative p-4">
-                            <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-2">
+                            <div className="text-2xl font-bold text-calc-category-2 dark:text-calc-category-3 mb-2">
                               {result.therapyBenefit.aspirin.toFixed(1)}%
                             </div>
                             <div className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('calculators.cardiology.ascvd.aspirin_therapy')}</div>
@@ -1043,7 +1045,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                     href="https://www.ahajournals.org/doi/pdf/10.1161/01.cir.0000437741.48606.98"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center px-4 py-2 rounded-xl bg-blue-500/20 border border-blue-200/50 dark:border-blue-400/30 text-blue-700 dark:text-blue-300 hover:bg-blue-500/30 transition-all duration-300"
+                    className="group inline-flex items-center px-4 py-2 rounded-xl bg-calc-theme-secondary/20 border border-calc-theme-secondary/20 dark:border-calc-theme-secondary/30 text-calc-theme-secondary dark:text-calc-theme-accent hover:bg-calc-theme-secondary/30 transition-all duration-300"
                   >
                     <ExternalLink className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                     <span className="font-medium">{t('calculators.cardiology.ascvd.evidence_link_text')}</span>
@@ -1052,12 +1054,12 @@ const ASCVDCalculatorComponent: React.FC = () => {
               </div>
 
               {/* Creator Section */}
-              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-500/10 via-indigo-400/5 to-blue-500/10 border border-indigo-200/50 dark:border-indigo-400/30 backdrop-blur-xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-indigo-500/10"></div>
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-calc-theme-primary/10 via-calc-theme-primary/5 to-calc-theme-secondary/10 border border-calc-theme-primary/20 dark:border-calc-theme-primary/30 backdrop-blur-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-calc-theme-primary/10"></div>
                 <div className="relative p-6 space-y-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 flex items-center justify-center backdrop-blur-sm">
-                      <User className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                    <div className="w-12 h-12 rounded-2xl bg-calc-theme-primary/20 flex items-center justify-center backdrop-blur-sm">
+                      <User className="w-6 h-6 text-calc-theme-primary dark:text-calc-theme-secondary" />
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
@@ -1067,7 +1069,7 @@ const ASCVDCalculatorComponent: React.FC = () => {
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <p className="text-lg font-bold text-indigo-700 dark:text-indigo-300">
+                    <p className="text-lg font-bold text-calc-theme-primary dark:text-calc-theme-accent">
                       {t('calculators.cardiology.ascvd.creator_name')}
                     </p>
                     <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
