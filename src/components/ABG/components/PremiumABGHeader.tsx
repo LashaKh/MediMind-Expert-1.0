@@ -31,7 +31,7 @@ export const PremiumABGHeader: React.FC<PremiumABGHeaderProps> = ({
         {/* Top row: context + history button */}
         <div className="flex items-center justify-between mb-5">
           <div className="inline-flex items-center gap-2 abg-hero-badge" data-tour="abg-ai-badge">
-            <Sparkles className="h-3.5 w-3.5 text-blue-600" />
+            <Sparkles className="h-3.5 w-3.5 text-[#2b6cb0]" />
             <span className="text-xs font-medium text-slate-700">{t('abg.header.medicalGradeAI', 'Medical‑grade AI')}</span>
           </div>
           
@@ -42,10 +42,10 @@ export const PremiumABGHeader: React.FC<PremiumABGHeaderProps> = ({
             data-tour="abg-history-button"
             className="
               relative group overflow-hidden
-              bg-gradient-to-r from-blue-500 to-purple-600 
-              hover:from-blue-600 hover:to-purple-700
+              bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] 
+              hover:from-[#1a365d] hover:to-[#2b6cb0]
               border-0 text-white
-              shadow-lg hover:shadow-xl hover:shadow-blue-500/25
+              shadow-lg hover:shadow-xl hover:shadow-[#2b6cb0]/25
               transition-all duration-300 ease-in-out
               transform hover:scale-105 hover:-translate-y-0.5
               font-semibold tracking-wide
@@ -57,7 +57,7 @@ export const PremiumABGHeader: React.FC<PremiumABGHeaderProps> = ({
               hover:before:opacity-100
               after:absolute after:inset-0 after:rounded-xl 
               after:shadow-inner after:shadow-white/10
-              focus:ring-2 focus:ring-purple-300 focus:ring-offset-2
+              focus:ring-2 focus:ring-[#63b3ed] focus:ring-offset-2
               focus:outline-none
             "
             aria-label={t('abg.header.viewHistoryAria', 'View analysis history')}

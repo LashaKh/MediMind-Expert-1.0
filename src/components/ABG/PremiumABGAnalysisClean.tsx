@@ -120,7 +120,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
       className
     )}>
       {/* Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-purple-50 via-pink-50 to-emerald-50 -z-10" />
+      <div className="fixed inset-0 bg-gradient-to-br from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#2b6cb0]/10 -z-10" />
       
       <div className="max-w-5xl mx-auto p-5 space-y-4">
         {/* Header */}

@@ -75,8 +75,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, article, onClose
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-              <ShareIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <div className="p-2 bg-[#90cdf4]/20 dark:bg-[#2b6cb0]/30 rounded-lg">
+              <ShareIcon className="w-5 h-5 text-[#2b6cb0] dark:text-[#63b3ed]" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t('news.share.title', 'Share Article')}</h3>
           </div>
@@ -106,9 +106,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, article, onClose
             <button
               onClick={handleNativeShare}
               disabled={isSharing}
-              className="w-full flex items-center gap-4 p-4 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl transition-colors min-h-[60px] touch-manipulation disabled:opacity-50"
+              className="w-full flex items-center gap-4 p-4 bg-[#90cdf4]/20 dark:bg-[#2b6cb0]/20 hover:bg-[#90cdf4]/30 dark:hover:bg-[#2b6cb0]/30 rounded-xl transition-colors min-h-[60px] touch-manipulation disabled:opacity-50"
             >
-              <div className="p-2 bg-blue-500 rounded-lg">
+              <div className="p-2 bg-[#2b6cb0] rounded-lg">
                 <ShareIcon className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1 text-left">
@@ -144,9 +144,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, article, onClose
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => handlePlatformShare('twitter', shareUrls.twitter)}
-              className="flex flex-col items-center gap-2 p-4 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl transition-colors min-h-[80px] touch-manipulation"
+              className="flex flex-col items-center gap-2 p-4 bg-[#90cdf4]/20 dark:bg-[#2b6cb0]/20 hover:bg-[#90cdf4]/30 dark:hover:bg-[#2b6cb0]/30 rounded-xl transition-colors min-h-[80px] touch-manipulation"
             >
-              <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#2b6cb0] rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">𝕏</span>
               </div>
               <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{t('news.share.twitter', 'Twitter')}</span>
@@ -154,9 +154,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, article, onClose
 
             <button
               onClick={() => handlePlatformShare('linkedin', shareUrls.linkedin)}
-              className="flex flex-col items-center gap-2 p-4 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl transition-colors min-h-[80px] touch-manipulation"
+              className="flex flex-col items-center gap-2 p-4 bg-[#90cdf4]/20 dark:bg-[#2b6cb0]/20 hover:bg-[#90cdf4]/30 dark:hover:bg-[#2b6cb0]/30 rounded-xl transition-colors min-h-[80px] touch-manipulation"
             >
-              <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#1a365d] rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">in</span>
               </div>
               <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{t('news.share.linkedin', 'LinkedIn')}</span>
@@ -164,9 +164,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, article, onClose
 
             <button
               onClick={() => handlePlatformShare('facebook', shareUrls.facebook)}
-              className="flex flex-col items-center gap-2 p-4 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-xl transition-colors min-h-[80px] touch-manipulation"
+              className="flex flex-col items-center gap-2 p-4 bg-[#90cdf4]/20 dark:bg-[#2b6cb0]/20 hover:bg-[#90cdf4]/30 dark:hover:bg-[#2b6cb0]/30 rounded-xl transition-colors min-h-[80px] touch-manipulation"
             >
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#2b6cb0] rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">f</span>
               </div>
               <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{t('news.share.facebook', 'Facebook')}</span>

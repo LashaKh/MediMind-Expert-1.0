@@ -103,7 +103,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
         labels: ['Arterial Blood Gas', 'Venous Blood Gas'],
         datasets: [{
           data: [arterialCount, venousCount],
-          backgroundColor: ['#3b82f6', '#8b5cf6'],
+          backgroundColor: ['#2b6cb0', '#1a365d'],
           borderWidth: 2,
           borderColor: '#fff'
         }]
@@ -116,7 +116,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
             results.filter(r => (r.gemini_confidence || 0) >= 0.6 && (r.gemini_confidence || 0) < 0.8).length,
             results.filter(r => (r.gemini_confidence || 0) < 0.6).length
           ],
-          backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+          backgroundColor: ['#63b3ed', '#90cdf4', '#ef4444'],
           borderWidth: 2,
           borderColor: '#fff'
         }]
@@ -242,31 +242,31 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
           <>
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="h-5 w-5 text-blue-600" />
+                <TrendingUp className="h-5 w-5 text-[#2b6cb0]" />
                 <h3 className="font-semibold">{t('abg.trends.volume.dailyTitle', 'Daily Analysis Volume')}</h3>
               </div>
               <SimpleLineChart
                 data={trendData.map(p => p.count)}
                 title={t('abg.trends.volume.lineTitle', 'Number of Analyses per Day')}
-                color="#3b82f6"
+                color="#2b6cb0"
               />
             </Card>
 
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Activity className="h-5 w-5 text-green-600" />
+                <Activity className="h-5 w-5 text-[#63b3ed]" />
                 <h3 className="font-semibold">{t('abg.trends.volume.statsTitle', 'Volume Statistics')}</h3>
               </div>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-[#2b6cb0]">
                       {Math.max(...trendData.map(p => p.count), 0)}
                     </div>
                     <div className="text-sm text-gray-600">{t('abg.trends.volume.peakDaily', 'Peak Daily')}</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">
+                    <div className="text-2xl font-bold text-[#63b3ed]">
                       {Math.round(trendData.reduce((sum, p) => sum + p.count, 0) / Math.max(trendData.length, 1))}
                     </div>
                     <div className="text-sm text-gray-600">{t('abg.trends.volume.dailyAverage', 'Daily Average')}</div>
@@ -287,25 +287,25 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
           <>
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Target className="h-5 w-5 text-green-600" />
+                <Target className="h-5 w-5 text-[#63b3ed]" />
                 <h3 className="font-semibold">{t('abg.trends.quality.title', 'Quality Trends')}</h3>
               </div>
               <SimpleLineChart
                 data={trendData.map(p => p.avgConfidence)}
                 title={t('abg.trends.quality.confidenceTitle', 'Average Confidence Score (%)')}
-                color="#10b981"
+                color="#63b3ed"
               />
             </Card>
 
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Activity className="h-5 w-5 text-purple-600" />
+                <Activity className="h-5 w-5 text-[#90cdf4]" />
                 <h3 className="font-semibold">{t('abg.trends.quality.successTitle', 'Success Rate')}</h3>
               </div>
               <SimpleLineChart
                 data={trendData.map(p => p.successRate)}
                 title={t('abg.trends.quality.successLine', 'Success Rate (%)')}
-                color="#8b5cf6"
+                color="#90cdf4"
               />
             </Card>
           </>
@@ -315,25 +315,25 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
           <>
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Clock className="h-5 w-5 text-orange-600" />
+                <Clock className="h-5 w-5 text-[#1a365d]" />
                 <h3 className="font-semibold">{t('abg.trends.performance.title', 'Processing Time')}</h3>
               </div>
               <SimpleLineChart
                 data={trendData.map(p => p.avgProcessingTime)}
                 title={t('abg.trends.performance.lineTitle', 'Average Processing Time (ms)')}
-                color="#f59e0b"
+                color="#1a365d"
               />
             </Card>
 
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Activity className="h-5 w-5 text-blue-600" />
+                <Activity className="h-5 w-5 text-[#2b6cb0]" />
                 <h3 className="font-semibold">{t('abg.trends.performance.metrics', 'Performance Metrics')}</h3>
               </div>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">
+                    <div className="text-2xl font-bold text-[#63b3ed]">
                       {Math.min(...trendData.map(p => p.avgProcessingTime).filter(t => t > 0), Infinity) || 0}
                     </div>
                     <div className="text-sm text-gray-600">{t('abg.trends.performance.fastest', 'Fastest (ms)')}</div>
@@ -354,27 +354,27 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
           <>
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <PieChart className="h-5 w-5 text-blue-600" />
+                <PieChart className="h-5 w-5 text-[#2b6cb0]" />
                 <h3 className="font-semibold">{t('abg.trends.distribution.typesTitle', 'Analysis Types')}</h3>
               </div>
               <SimpleBarChart
                 data={distributionData.typeDistribution.datasets[0].data}
                 labels={distributionData.typeDistribution.labels}
                 title={t('abg.trends.distribution.typeLine', 'Analysis Type Distribution')}
-                color="#3b82f6"
+                color="#2b6cb0"
               />
             </Card>
 
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Target className="h-5 w-5 text-green-600" />
+                <Target className="h-5 w-5 text-[#63b3ed]" />
                 <h3 className="font-semibold">{t('abg.trends.distribution.confidenceTitle', 'Confidence Distribution')}</h3>
               </div>
               <SimpleBarChart
                 data={distributionData.confidenceDistribution.datasets[0].data}
                 labels={distributionData.confidenceDistribution.labels}
                 title={t('abg.trends.distribution.confidenceLine', 'Confidence Score Distribution')}
-                color="#10b981"
+                color="#63b3ed"
               />
             </Card>
           </>
@@ -384,27 +384,27 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
       {/* Summary Insights */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <Activity className="h-5 w-5 text-blue-600" />
+          <Activity className="h-5 w-5 text-[#2b6cb0]" />
           {t('abg.trends.insights.title', 'Key Insights')}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 bg-blue-50 rounded-lg">
-            <h4 className="font-medium text-blue-800 mb-2">{t('abg.trends.insights.volume', 'Volume Trend')}</h4>
-            <p className="text-sm text-blue-700">
+          <div className="p-4 bg-[#90cdf4]/20 rounded-lg">
+            <h4 className="font-medium text-[#1a365d] mb-2">{t('abg.trends.insights.volume', 'Volume Trend')}</h4>
+            <p className="text-sm text-[#2b6cb0]">
               {trendData.length > 0 && trendData[trendData.length - 1].count > trendData[0]?.count
                 ? t('abg.trends.insights.increasing', 'Analysis volume is increasing over time')
                 : t('abg.trends.insights.stable', 'Analysis volume is stable or decreasing')}
             </p>
           </div>
-          <div className="p-4 bg-green-50 rounded-lg">
-            <h4 className="font-medium text-green-800 mb-2">{t('abg.trends.insights.quality', 'Quality Score')}</h4>
-            <p className="text-sm text-green-700">
+          <div className="p-4 bg-[#63b3ed]/20 rounded-lg">
+            <h4 className="font-medium text-[#1a365d] mb-2">{t('abg.trends.insights.quality', 'Quality Score')}</h4>
+            <p className="text-sm text-[#2b6cb0]">
               {t('abg.trends.insights.avgConfidence', 'Average confidence: {{val}}%', { val: Math.round(trendData.reduce((sum, p) => sum + p.avgConfidence, 0) / Math.max(trendData.length, 1)) })}
             </p>
           </div>
-          <div className="p-4 bg-orange-50 rounded-lg">
-            <h4 className="font-medium text-orange-800 mb-2">{t('abg.trends.insights.performance', 'Performance')}</h4>
-            <p className="text-sm text-orange-700">
+          <div className="p-4 bg-[#2b6cb0]/20 rounded-lg">
+            <h4 className="font-medium text-[#1a365d] mb-2">{t('abg.trends.insights.performance', 'Performance')}</h4>
+            <p className="text-sm text-[#2b6cb0]">
               {t('abg.trends.insights.avgProcessing', 'Avg processing: {{ms}}ms', { ms: Math.round(trendData.reduce((sum, p) => sum + p.avgProcessingTime, 0) / Math.max(trendData.length, 1)) })}
             </p>
           </div>

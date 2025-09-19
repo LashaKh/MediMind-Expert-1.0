@@ -74,7 +74,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
   return (
     <div className={`bg-white rounded-lg shadow-sm border border-gray-200 p-6 ${className}`}>
       <div className="flex items-center gap-2 mb-6">
-        <FunnelIcon className="w-5 h-5 text-blue-600" />
+        <FunnelIcon className="w-5 h-5 text-[#2b6cb0]" />
         <h3 className="text-lg font-semibold text-gray-900">
           {t('search.clinicalTrials.filters', 'Clinical Trial Filters')}
         </h3>
@@ -94,7 +94,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
               onChange={(e) => setLocationAddress(e.target.value)}
               onBlur={handleLocationChange}
               placeholder={t('search.clinicalTrials.locationPlaceholder', 'City, State or ZIP')}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-[#2b6cb0] focus:border-[#2b6cb0] text-sm"
             />
             <select
               value={locationRadius}
@@ -102,7 +102,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
                 setLocationRadius(Number(e.target.value));
                 if (locationAddress) handleLocationChange();
               }}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="px-3 py-2 border border-gray-300 rounded-md focus:ring-[#2b6cb0] focus:border-[#2b6cb0] text-sm"
             >
               <option value={10}>10 miles</option>
               <option value={25}>25 miles</option>
@@ -133,7 +133,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
                       : current.filter(s => s !== option.value);
                     handleFilterChange({ recruitmentStatus: updated });
                   }}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-[#2b6cb0] border-gray-300 rounded focus:ring-[#2b6cb0]"
                 />
                 <span className="ml-2 text-sm text-gray-700">{option.label}</span>
               </label>
@@ -161,7 +161,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
                       : current.filter(p => p !== option.value);
                     handleFilterChange({ phase: updated });
                   }}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-[#2b6cb0] border-gray-300 rounded focus:ring-[#2b6cb0]"
                 />
                 <span className="ml-2 text-sm text-gray-700">{option.label}</span>
               </label>
@@ -188,7 +188,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
                   }
                 });
               }}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-[#2b6cb0] focus:border-[#2b6cb0] text-sm"
               min="0"
               max="120"
             />
@@ -204,7 +204,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
                   }
                 });
               }}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-[#2b6cb0] focus:border-[#2b6cb0] text-sm"
               min="0"
               max="120"
             />
@@ -220,7 +220,7 @@ export const ClinicalTrialsFilters: React.FC<ClinicalTrialsFiltersProps> = ({
           <select
             value={filters.gender || 'all'}
             onChange={(e) => handleFilterChange({ gender: e.target.value as any })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-[#2b6cb0] focus:border-[#2b6cb0] text-sm"
           >
             {genderOptions.map((option) => (
               <option key={option.value} value={option.value}>

@@ -177,16 +177,16 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
 
   return (
     <div className={cn(
-      "min-h-screen bg-gradient-to-br from-slate-50/80 via-blue-50/60 to-indigo-50/80",
+      "min-h-screen bg-gradient-to-br from-slate-50/80 via-[#90cdf4]/60 to-[#63b3ed]/80",
       "transition-all duration-1000 ease-out transform",
       pageVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
       className
     )}>
       {/* Sophisticated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-400/10 to-indigo-600/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-purple-400/10 to-pink-600/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-blue-100/20 via-transparent to-indigo-100/20 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-[#63b3ed]/10 to-[#2b6cb0]/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-[#90cdf4]/10 to-[#1a365d]/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-[#90cdf4]/20 via-transparent to-[#63b3ed]/20 rounded-full blur-3xl" />
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -224,13 +224,13 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
                     )}>
                       {t('abg.history.title', 'ABG History')}
                     </h1>
-                    <div className="absolute -bottom-1 left-0 h-1 w-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" />
+                    <div className="absolute -bottom-1 left-0 h-1 w-16 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-full" />
                   </div>
                   
                   {analytics.total > 0 && (
                     <Badge 
                       variant="secondary" 
-                      className="bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-700 border-emerald-200/50 px-3 py-1.5 rounded-full font-medium"
+                      className="bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 text-[#2b6cb0] border-[#63b3ed]/50 px-3 py-1.5 rounded-full font-medium"
                     >
                       <Sparkles className="h-3 w-3 mr-1.5" />
                       {t('abg.history.resultsCount', '{{count}} Results', { count: analytics.total })}
@@ -241,12 +241,12 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
                 <div className="flex items-center gap-6 text-sm text-slate-600">
                   {patientId ? (
                     <div className="flex items-center gap-2">
-                      <Target className="h-4 w-4 text-blue-500" />
+                      <Target className="h-4 w-4 text-[#2b6cb0]" />
                       <span className="font-medium">{t('abg.history.filteredByPatient', 'Filtered by patient')}</span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <Activity className="h-4 w-4 text-emerald-500" />
+                      <Activity className="h-4 w-4 text-[#63b3ed]" />
                       <span>{t('abg.history.comprehensiveView', 'Comprehensive history view')}</span>
                     </div>
                   )}
@@ -271,7 +271,7 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
                       "group relative overflow-hidden transition-all duration-200",
                       "bg-white/80 hover:bg-white border-slate-200/60 hover:border-slate-300",
                       "hover:shadow-lg hover:-translate-y-0.5",
-                      selectionMode && "bg-blue-50 border-blue-300 text-blue-700"
+                      selectionMode && "bg-[#90cdf4]/50 border-[#2b6cb0] text-[#1a365d]"
                     )}
                   >
                     {selectionMode ? (
@@ -304,8 +304,8 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
               <Button
                 onClick={() => navigate('/abg-analysis')}
                 className={cn(
-                  "group relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600",
-                  "hover:from-blue-700 hover:to-indigo-700 transition-all duration-300",
+                  "group relative overflow-hidden bg-gradient-to-r from-[#2b6cb0] to-[#1a365d]",
+                  "hover:from-[#1a365d] hover:to-[#2b6cb0] transition-all duration-300",
                   "shadow-lg hover:shadow-xl hover:-translate-y-0.5 rounded-xl",
                   "border-0 px-6 py-2.5"
                 )}
@@ -324,11 +324,11 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
             "transition-all duration-300 ease-out",
             pageVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           )}>
-            <Card className="bg-gradient-to-r from-blue-50/80 via-indigo-50/80 to-purple-50/80 backdrop-blur-sm border-blue-200/60 p-4 mb-6">
+            <Card className="bg-gradient-to-r from-[#90cdf4]/80 via-[#63b3ed]/80 to-[#2b6cb0]/80 backdrop-blur-sm border-[#63b3ed]/60 p-4 mb-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <CheckSquare className="h-5 w-5 text-blue-600" />
+                    <CheckSquare className="h-5 w-5 text-[#2b6cb0]" />
                     <span className="font-medium text-slate-900">
                       {selectedResults.size === 0 
                         ? t('abg.history.bulk.selectHelp', 'Select items to delete or export')
@@ -345,7 +345,7 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
                       onClick={selectAllResults}
                       disabled={selectedResults.size === results.length}
                       className={cn(
-                        "h-8 px-3 text-blue-700 hover:bg-blue-100/60",
+                        "h-8 px-3 text-[#1a365d] hover:bg-[#90cdf4]/60",
                         selectedResults.size === results.length && "opacity-50 cursor-not-allowed"
                       )}
                     >
@@ -409,16 +409,16 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
               {/* Total Results Card */}
               <Card className={cn(
                 "group relative overflow-hidden bg-white/80 backdrop-blur-sm",
-                "border border-slate-200/60 hover:border-blue-300/60 transition-all duration-300",
+                "border border-slate-200/60 hover:border-[#63b3ed]/60 transition-all duration-300",
                 "hover:shadow-xl hover:-translate-y-1 cursor-pointer"
               )}>
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <div className="p-2 bg-blue-100/80 rounded-xl">
-                      <FileText className="h-5 w-5 text-blue-600" />
+                    <div className="p-2 bg-[#90cdf4]/80 rounded-xl">
+                      <FileText className="h-5 w-5 text-[#2b6cb0]" />
                     </div>
-                    <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
+                    <Badge variant="secondary" className="bg-[#90cdf4]/50 text-[#1a365d] border-[#63b3ed]">
                       {t('abg.history.cards.total', 'Total')}
                     </Badge>
                   </div>
@@ -432,16 +432,16 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
               {/* This Week Card */}
               <Card className={cn(
                 "group relative overflow-hidden bg-white/80 backdrop-blur-sm",
-                "border border-slate-200/60 hover:border-emerald-300/60 transition-all duration-300",
+                "border border-slate-200/60 hover:border-[#63b3ed]/60 transition-all duration-300",
                 "hover:shadow-xl hover:-translate-y-1 cursor-pointer"
               )}>
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <div className="p-2 bg-emerald-100/80 rounded-xl">
-                      <Calendar className="h-5 w-5 text-emerald-600" />
+                    <div className="p-2 bg-[#90cdf4]/80 rounded-xl">
+                      <Calendar className="h-5 w-5 text-[#2b6cb0]" />
                     </div>
-                    <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 border-emerald-200">
+                    <Badge variant="secondary" className="bg-[#90cdf4]/50 text-[#1a365d] border-[#63b3ed]">
                       {t('abg.history.cards.recent', 'Recent')}
                     </Badge>
                   </div>
@@ -455,16 +455,16 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
               {/* Monthly Trend Card */}
               <Card className={cn(
                 "group relative overflow-hidden bg-white/80 backdrop-blur-sm",
-                "border border-slate-200/60 hover:border-purple-300/60 transition-all duration-300",
+                "border border-slate-200/60 hover:border-[#63b3ed]/60 transition-all duration-300",
                 "hover:shadow-xl hover:-translate-y-1 cursor-pointer"
               )}>
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <div className="p-2 bg-purple-100/80 rounded-xl">
-                      <BarChart3 className="h-5 w-5 text-purple-600" />
+                    <div className="p-2 bg-[#90cdf4]/80 rounded-xl">
+                      <BarChart3 className="h-5 w-5 text-[#2b6cb0]" />
                     </div>
-                    <Badge variant="secondary" className="bg-purple-50 text-purple-700 border-purple-200">
+                    <Badge variant="secondary" className="bg-[#90cdf4]/50 text-[#1a365d] border-[#63b3ed]">
                       {t('abg.history.cards.trend', 'Trend')}
                     </Badge>
                   </div>
@@ -510,14 +510,14 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-emerald-500" />
+                    <TrendingUp className="h-4 w-4 text-[#63b3ed]" />
                     <span className="text-sm font-medium text-slate-700">
                       {t('abg.history.progress.activity', 'Analysis Activity')}
                     </span>
                   </div>
                   <div className="h-2 w-32 bg-slate-200/60 rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full transition-all duration-1000 ease-out"
+                      className="h-full bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] rounded-full transition-all duration-1000 ease-out"
                       style={{ width: `${Math.min(100, (analytics.thisWeek / Math.max(1, analytics.avgPerWeek)) * 100)}%` }}
                     />
                   </div>

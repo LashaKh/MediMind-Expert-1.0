@@ -137,14 +137,14 @@ export const FilterButton: React.FC<FilterButtonProps> = ({
           onClick={onClick}
           className={`group relative p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 ${
             hasActiveFilters
-              ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white'
-              : 'bg-white text-gray-600 hover:text-indigo-600'
-          } border-2 ${hasActiveFilters ? 'border-transparent' : 'border-gray-200 hover:border-indigo-200'}`}
+              ? 'bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white'
+              : 'bg-white text-gray-600 hover:text-[#2b6cb0]'
+          } border-2 ${hasActiveFilters ? 'border-transparent' : 'border-gray-200 hover:border-[#63b3ed]'}`}
           title={`${t('search.advancedFilters', 'Advanced Filters')} (${filterSummary})`}
         >
           {/* Glow effect when active */}
           {hasActiveFilters && (
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full blur opacity-50 -z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-full blur opacity-50 -z-10"></div>
           )}
           
           {isOpen ? (
@@ -178,7 +178,7 @@ export const FilterButton: React.FC<FilterButtonProps> = ({
           onClick={onClick}
           className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
             hasActiveFilters
-              ? 'bg-indigo-100 text-indigo-700 border border-indigo-200'
+              ? 'bg-[#90cdf4]/20 text-[#1a365d] border border-[#63b3ed]'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 border border-transparent'
           }`}
           title={filterSummary}
@@ -194,7 +194,7 @@ export const FilterButton: React.FC<FilterButtonProps> = ({
           <span>{t('filters.button.label', 'Filters')}</span>
           
           {hasActiveFilters && (
-            <div className="bg-indigo-500 text-white text-xs font-bold rounded-full px-2 py-0.5 min-w-[1.25rem] text-center">
+            <div className="bg-[#2b6cb0] text-white text-xs font-bold rounded-full px-2 py-0.5 min-w-[1.25rem] text-center">
               {activeCount}
             </div>
           )}
@@ -224,16 +224,16 @@ export const FilterButton: React.FC<FilterButtonProps> = ({
         onClick={onClick}
         className={`group relative p-3 rounded-xl transition-all duration-300 ${
           isOpen
-            ? 'bg-indigo-100 text-indigo-700 border-2 border-indigo-200'
+            ? 'bg-[#90cdf4]/20 text-[#1a365d] border-2 border-[#63b3ed]'
             : hasActiveFilters
-            ? 'bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 border-2 border-indigo-200 hover:from-indigo-100 hover:to-purple-100'
-            : 'text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 border-2 border-transparent hover:border-indigo-100'
+            ? 'bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 text-[#1a365d] border-2 border-[#63b3ed] hover:from-[#90cdf4]/30 hover:to-[#63b3ed]/30'
+            : 'text-gray-400 hover:text-[#2b6cb0] hover:bg-[#90cdf4]/20 border-2 border-transparent hover:border-[#63b3ed]'
         }`}
         title={`${t('search.advancedFilters', 'Advanced Filters')} (${filterSummary})`}
       >
         {/* Background glow effect */}
         {hasActiveFilters && !isOpen && (
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-xl opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
         )}
         
         <div className="relative flex items-center gap-2">
@@ -247,7 +247,7 @@ export const FilterButton: React.FC<FilterButtonProps> = ({
           
           {/* Smart filters indicator */}
           {hasActiveFilters && (
-            <SparklesIcon className="w-4 h-4 text-purple-500 animate-pulse" />
+            <SparklesIcon className="w-4 h-4 text-[#2b6cb0] animate-pulse" />
           )}
         </div>
         

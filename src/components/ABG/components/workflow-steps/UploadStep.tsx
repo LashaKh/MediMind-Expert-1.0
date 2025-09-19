@@ -93,7 +93,7 @@ export const UploadStep: React.FC<UploadStepProps> = ({
       {/* ABG Type Selection */}
       <div className="abg-card abg-glass p-6" data-tour="abg-type-selection">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center">
             <Settings className="h-5 w-5 text-white" />
           </div>
           <div>
@@ -110,11 +110,11 @@ export const UploadStep: React.FC<UploadStepProps> = ({
                 "relative cursor-pointer group",
                 "p-4 rounded-xl border-2 transition-all duration-300",
                 "hover:shadow-lg",
-                type.color === 'blue' ? "hover:border-blue-400" : "hover:border-purple-400",
+                type.color === 'blue' ? "hover:border-[#63b3ed]" : "hover:border-[#90cdf4]",
                 abgType === type.value 
                   ? type.color === 'blue' 
-                    ? "border-blue-500 bg-blue-50 shadow-md" 
-                    : "border-purple-500 bg-purple-50 shadow-md"
+                    ? "border-[#2b6cb0] bg-[#90cdf4]/20 shadow-md" 
+                    : "border-[#63b3ed] bg-[#63b3ed]/20 shadow-md"
                   : "border-slate-200 bg-white"
               )}
             >
@@ -131,8 +131,8 @@ export const UploadStep: React.FC<UploadStepProps> = ({
                   "w-3.5 h-3.5 rounded-full border-2 transition-colors",
                   abgType === type.value 
                     ? type.color === 'blue' 
-                      ? "border-blue-500 bg-blue-500" 
-                      : "border-purple-500 bg-purple-500"
+                      ? "border-[#2b6cb0] bg-[#2b6cb0]" 
+                      : "border-[#63b3ed] bg-[#63b3ed]"
                     : "border-slate-300"
                 )}>
                   {abgType === type.value && (
@@ -150,7 +150,7 @@ export const UploadStep: React.FC<UploadStepProps> = ({
       {/* Case Context */}
       <div className="abg-card abg-glass p-6">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center">
             <FileText className="h-5 w-5 text-white" />
           </div>
           <div>
@@ -198,7 +198,7 @@ export const UploadStep: React.FC<UploadStepProps> = ({
               <Button
                 variant="outline"
                 onClick={() => onShowCamera(true)}
-                className="bg-white border-slate-300 hover:border-blue-400 hover:bg-blue-50"
+                className="bg-white border-slate-300 hover:border-[#63b3ed] hover:bg-[#90cdf4]/20"
                 size="md"
               >
                 <Camera className="h-5 w-5 mr-2" />
@@ -255,17 +255,17 @@ export const UploadStep: React.FC<UploadStepProps> = ({
       {isProcessing && unifiedProgress && (
         <div className="abg-card abg-glass p-5 mt-6">
           <div className="flex items-center gap-4 mb-4">
-            <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+            <Loader2 className="h-6 w-6 animate-spin text-[#2b6cb0]" />
             <div className="flex-1">
               <div className="text-base font-semibold text-slate-800">{unifiedProgress.currentTask}</div>
               <div className="text-xs text-slate-600">{unifiedProgress.stageDescription}</div>
             </div>
-            <div className="text-base font-mono font-bold text-blue-600">{unifiedProgress.overallProgress}%</div>
+            <div className="text-base font-mono font-bold text-[#2b6cb0]">{unifiedProgress.overallProgress}%</div>
           </div>
           
           <div className="w-full bg-slate-200 rounded-full h-2.5 mb-3">
             <div 
-              className="bg-gradient-to-r from-blue-500 to-blue-600 h-2.5 rounded-full transition-all duration-500" 
+              className="bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] h-2.5 rounded-full transition-all duration-500" 
               style={{ width: `${unifiedProgress.overallProgress}%` }}
             />
           </div>
@@ -273,14 +273,14 @@ export const UploadStep: React.FC<UploadStepProps> = ({
           <div className="flex gap-4 justify-center">
             <div className={cn(
               "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all",
-              unifiedProgress.phase === 'extraction' ? "bg-blue-100 text-blue-800 shadow-md" : "bg-slate-100 text-slate-600"
+              unifiedProgress.phase === 'extraction' ? "bg-[#90cdf4]/30 text-[#1a365d] shadow-md" : "bg-slate-100 text-slate-600"
             )}>
               <FileText className="h-4 w-4" />
               Text Extraction
             </div>
             <div className={cn(
               "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all",
-              unifiedProgress.phase === 'interpretation' ? "bg-green-100 text-green-800 shadow-md" : "bg-slate-100 text-slate-600"
+              unifiedProgress.phase === 'interpretation' ? "bg-[#63b3ed]/30 text-[#1a365d] shadow-md" : "bg-slate-100 text-slate-600"
             )}>
               <Brain className="h-4 w-4" />
               Clinical Analysis

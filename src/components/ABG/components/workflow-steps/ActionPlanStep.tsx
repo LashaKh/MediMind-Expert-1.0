@@ -104,7 +104,7 @@ export const ActionPlanStep: React.FC<ActionPlanStepProps> = ({
             onClick={() => setIsClinicalInterpretationCollapsed(!isClinicalInterpretationCollapsed)}
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+              <div className="w-9 h-9 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-lg flex items-center justify-center">
                 <CheckCircle2 className="h-4 w-4 text-white" />
               </div>
               <div>

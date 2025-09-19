@@ -97,32 +97,9 @@ export const MediSearchPage: React.FC<MediSearchPageProps> = ({ className = '' }
       initialTab={searchParams.get('tab') as any}
     >
       <div className={`w-full min-h-screen bg-gray-50 ${className}`}>
-        {/* Search Page Header */}
-        <div className="bg-white border-b border-gray-200 px-4 py-6 md:px-6 lg:px-8" data-tour="search-header">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Medical Literature Search
-            </h1>
-            <p className="text-gray-600 text-lg">
-              Search through medical journals, guidelines, and clinical research
-            </p>
-            
-            {/* Specialty indicator */}
-            {specialty && (
-              <div className="mt-4">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                  {specialty}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* Main Search Interface */}
-        <div className="px-4 md:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <MediSearch />
-          </div>
+        <div className="w-full">
+          <MediSearch />
         </div>
       </div>
     </SearchContextProvider>

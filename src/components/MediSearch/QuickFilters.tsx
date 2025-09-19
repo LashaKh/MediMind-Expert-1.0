@@ -93,8 +93,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Latest cardiology treatment guidelines and protocols',
       icon: HeartIcon,
       iconActive: HeartSolid,
-      color: 'text-red-600',
-      badgeColor: 'bg-red-100 text-red-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'specialty',
       isPopular: true,
       filters: {
@@ -117,8 +117,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Latest oncology research papers and clinical trials',
       icon: BeakerIcon,
       iconActive: BeakerIcon,
-      color: 'text-purple-600',
-      badgeColor: 'bg-purple-100 text-purple-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'specialty',
       isPopular: true,
       filters: {
@@ -141,8 +141,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Comprehensive neurology textbooks and handbooks',
       icon: CpuChipIcon,
       iconActive: CpuChipIcon,
-      color: 'text-indigo-600',
-      badgeColor: 'bg-indigo-100 text-indigo-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'specialty',
       filters: {
         contentTypes: {
@@ -163,8 +163,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'High-quality systematic reviews and meta-analyses',
       icon: DocumentTextIcon,
       iconActive: DocumentTextIcon,
-      color: 'text-blue-600',
-      badgeColor: 'bg-blue-100 text-blue-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'content',
       isPopular: true,
       filters: {
@@ -184,8 +184,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Evidence-based clinical practice guidelines',
       icon: ClipboardDocumentCheckIcon,
       iconActive: ClipboardDocumentCheckIcon,
-      color: 'text-green-600',
-      badgeColor: 'bg-green-100 text-green-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'content',
       isPopular: true,
       filters: {
@@ -205,8 +205,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'CME materials, case studies, and learning resources',
       icon: AcademicCapIcon,
       iconActive: AcademicCapIcon,
-      color: 'text-yellow-600',
-      badgeColor: 'bg-yellow-100 text-yellow-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'content',
       filters: {
         contentTypes: {
@@ -224,8 +224,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Highly cited research from top journals',
       icon: StarIcon,
       iconActive: StarSolid,
-      color: 'text-amber-600',
-      badgeColor: 'bg-amber-100 text-amber-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'quality',
       isPopular: true,
       filters: {
@@ -243,8 +243,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Official government health information',
       icon: ShieldCheckIcon,
       iconActive: ShieldCheckSolid,
-      color: 'text-blue-700',
-      badgeColor: 'bg-blue-100 text-blue-800',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'quality',
       filters: {
         sourceAuthority: {
@@ -262,8 +262,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Patient-friendly health information and resources',
       icon: UserIcon,
       iconActive: UserIcon,
-      color: 'text-teal-600',
-      badgeColor: 'bg-teal-100 text-teal-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'audience',
       filters: {
         contentTypes: {
@@ -280,8 +280,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Educational content for medical students',
       icon: UsersIcon,
       iconActive: UsersIcon,
-      color: 'text-violet-600',
-      badgeColor: 'bg-violet-100 text-violet-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'audience',
       filters: {
         targetAudience: ['medical-student'],
@@ -300,8 +300,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Most recent medical research and discoveries',
       icon: ClockIcon,
       iconActive: ClockIcon,
-      color: 'text-orange-600',
-      badgeColor: 'bg-orange-100 text-orange-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'recent',
       isPopular: true,
       filters: {
@@ -318,8 +318,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Freely available medical literature',
       icon: LockClosedIcon,
       iconActive: LockClosedIcon,
-      color: 'text-emerald-600',
-      badgeColor: 'bg-emerald-100 text-emerald-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'access',
       filters: {
         accessType: ['open-access'],
@@ -335,8 +335,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       description: 'Revolutionary medical discoveries and innovations',
       icon: SparklesIcon,
       iconActive: SparklesSolid,
-      color: 'text-pink-600',
-      badgeColor: 'bg-pink-100 text-pink-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       category: 'quality',
       isPremium: true,
       filters: {
@@ -393,7 +393,7 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <BoltSolid className="w-5 h-5 text-yellow-500" />
+            <BoltSolid className="w-5 h-5 text-[#2b6cb0]" />
             {t('filters.quickFilters.title', 'Quick Filters')}
           </h3>
           <p className="text-sm text-gray-600 mt-1">
@@ -405,7 +405,7 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
         {hasActiveFilters && onSaveCurrentFilters && (
           <button
             onClick={() => setShowSaveDialog(true)}
-            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors duration-200 min-h-[44px] touch-manipulation"
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#2b6cb0] hover:text-[#1a365d] hover:bg-[#90cdf4]/20 rounded-lg transition-colors duration-200 min-h-[44px] touch-manipulation"
           >
             <BookmarkIcon className="w-4 h-4" />
             <span className="hidden sm:inline">{t('filters.quickFilters.saveCurrent', 'Save Current')}</span>
@@ -422,7 +422,7 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
             onClick={() => setSelectedCategory(category.id as any)}
             className={`px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-200 min-h-[44px] flex items-center justify-center whitespace-nowrap touch-manipulation ${
               selectedCategory === category.id
-                ? 'bg-indigo-600 text-white shadow-lg'
+                ? 'bg-[#2b6cb0] text-white shadow-lg'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
             }`}
           >
@@ -472,7 +472,7 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
 
                 {/* Content */}
                 <div className="flex-1">
-                  <h4 className="font-semibold text-gray-900 group-hover:text-indigo-900 transition-colors duration-200">
+                  <h4 className="font-semibold text-gray-900 group-hover:text-[#1a365d] transition-colors duration-200">
                     {filter.name}
                   </h4>
                   <p className="text-sm text-gray-600 mt-1 line-clamp-2">
@@ -482,7 +482,7 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
               </div>
 
               {/* Hover effect */}
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#2b6cb0]/5 to-[#1a365d]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
           );
         })}
@@ -506,7 +506,7 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
               value={filterName}
               onChange={(e) => setFilterName(e.target.value)}
               placeholder={t('filters.quickFilters.saveDialog.placeholder', 'Enter filter name...')}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4 min-h-[44px] text-base touch-manipulation"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2b6cb0] focus:border-[#2b6cb0] mb-4 min-h-[44px] text-base touch-manipulation"
               inputMode="text"
               autoComplete="off"
               autoFocus
@@ -521,7 +521,7 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
               <button
                 onClick={handleSaveCurrentFilters}
                 disabled={!filterName.trim()}
-                className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-h-[44px] touch-manipulation"
+                className="flex-1 px-4 py-2 bg-[#2b6cb0] text-white rounded-lg hover:bg-[#1a365d] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-h-[44px] touch-manipulation"
               >
                 {t('common.save', 'Save')}
               </button>

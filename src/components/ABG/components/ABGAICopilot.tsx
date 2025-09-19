@@ -94,20 +94,20 @@ export const ABGAICopilot: React.FC<ABGAICopilotProps> = ({
       <div className="h-full flex flex-col">
         {/* Context Header */}
         {showContextSummary && contextMode !== 'none' && (
-          <div className="flex-shrink-0 p-4 bg-gradient-to-r from-red-50 to-rose-50 border-b border-red-200">
+          <div className="flex-shrink-0 p-4 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 border-b border-[#2b6cb0]/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center">
                   <TestTube2 className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-red-900">ABG Analysis Context</span>
+                    <span className="font-medium text-[#1a365d]">ABG Analysis Context</span>
                     <Badge variant="secondary" className="text-xs">
                       {contextMode === 'multiple' ? `${allResults.length} results` : '1 result'}
                     </Badge>
                   </div>
-                  <div className="text-sm text-red-700">
+                  <div className="text-sm text-[#2b6cb0]">
                     {activeResult && getABGSummary(activeResult)}
                   </div>
                 </div>

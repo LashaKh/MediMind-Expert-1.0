@@ -123,8 +123,8 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
     };
     if (confidence >= 0.8) return { 
       level: 'High', 
-      color: 'text-blue-700', 
-      gradient: 'from-blue-500 to-blue-600',
+      color: 'text-[#1a365d]', 
+      gradient: 'from-[#2b6cb0] to-[#1a365d]',
       description: 'High confidence in analysis'
     };
     if (confidence >= 0.7) return { 
@@ -191,10 +191,10 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
     switch (severity) {
       case 'mild':
         return {
-          gradient: 'from-emerald-500 to-teal-500',
-          bgColor: 'bg-emerald-50',
-          borderColor: 'border-emerald-200',
-          textColor: 'text-emerald-700'
+          gradient: 'from-[#63b3ed] to-[#2b6cb0]',
+          bgColor: 'bg-[#90cdf4]/20',
+          borderColor: 'border-[#63b3ed]/40',
+          textColor: 'text-[#1a365d]'
         };
       case 'moderate':
         return {
@@ -212,10 +212,10 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
         };
       default:
         return {
-          gradient: 'from-blue-500 to-purple-500',
-          bgColor: 'bg-blue-50',
-          borderColor: 'border-blue-200',
-          textColor: 'text-blue-700'
+          gradient: 'from-[#2b6cb0] to-[#1a365d]',
+          bgColor: 'bg-[#90cdf4]/20',
+          borderColor: 'border-[#63b3ed]/40',
+          textColor: 'text-[#1a365d]'
         };
     }
   };
@@ -224,14 +224,14 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
   if (isLoading) {
     return (
       <div className={cn("abg-premium", className)}>
-        <div className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-blue-50 to-emerald-50 rounded-2xl border border-white/20 shadow-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-400/10 via-blue-400/10 to-emerald-400/10 animate-pulse" />
+        <div className="relative overflow-hidden bg-gradient-to-br from-[#90cdf4]/20 via-[#63b3ed]/20 to-[#2b6cb0]/20 rounded-2xl border border-white/20 shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 animate-pulse" />
           
           <div className="relative p-8">
             <div className="flex items-center justify-center mb-6">
               <div className="relative">
-                <Brain className="h-16 w-16 text-purple-500 animate-pulse" />
-                <div className="absolute inset-0 bg-purple-500 opacity-20 rounded-full animate-ping" />
+                <Brain className="h-16 w-16 text-[#2b6cb0] animate-pulse" />
+                <div className="absolute inset-0 bg-[#2b6cb0] opacity-20 rounded-full animate-ping" />
               </div>
             </div>
             
@@ -245,9 +245,9 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
               
               <div className="flex justify-center">
                 <div className="flex space-x-2">
-                  <div className="w-3 h-3 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-3 h-3 bg-emerald-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className="w-3 h-3 bg-[#2b6cb0] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-3 h-3 bg-[#63b3ed] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-3 h-3 bg-[#90cdf4] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             </div>
@@ -311,12 +311,12 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
             <div className="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
               <div className="p-6">
                 <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                  <TrendingUp className="h-6 w-6 text-blue-600" />
+                  <TrendingUp className="h-6 w-6 text-[#2b6cb0]" />
                   {t('abg.interpretation.metrics', 'Analysis Metrics')}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Confidence Score */}
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200">
+                  <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-[#90cdf4]/20 to-[#63b3ed]/30 rounded-xl border border-[#63b3ed]/40">
                     <div className={`w-12 h-12 bg-gradient-to-br ${getConfidenceLevel(analysisMetrics.confidence).gradient} rounded-xl flex items-center justify-center`}>
                       <TrendingUp className="h-6 w-6 text-white" />
                     </div>
@@ -330,8 +330,8 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
                   </div>
 
                   {/* Processing Time */}
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl border border-orange-200">
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
+                  <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-[#2b6cb0]/20 to-[#1a365d]/30 rounded-xl border border-[#2b6cb0]/40">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center">
                       <Activity className="h-6 w-6 text-white" />
                     </div>
                     <div>
@@ -344,8 +344,8 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
                   </div>
 
                   {/* Analysis Quality */}
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl border border-emerald-200">
-                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center">
+                  <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-[#63b3ed]/20 to-[#90cdf4]/30 rounded-xl border border-[#63b3ed]/40">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#63b3ed] to-[#90cdf4] rounded-xl flex items-center justify-center">
                       <Zap className="h-6 w-6 text-white" />
                     </div>
                     <div>
@@ -380,19 +380,19 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
               // Determine section type and styling
               let sectionConfig = {
                 icon: Activity,
-                gradient: 'from-blue-500 to-blue-600',
-                bgColor: 'bg-blue-50',
-                borderColor: 'border-blue-200'
+                gradient: 'from-[#2b6cb0] to-[#1a365d]',
+                bgColor: 'bg-[#90cdf4]/20',
+                borderColor: 'border-[#63b3ed]/40'
               };
 
               if (title.includes('Acid-Base')) {
-                sectionConfig = { icon: Zap, gradient: 'from-purple-500 to-purple-600', bgColor: 'bg-purple-50', borderColor: 'border-purple-200' };
+                sectionConfig = { icon: Zap, gradient: 'from-[#63b3ed] to-[#2b6cb0]', bgColor: 'bg-[#63b3ed]/20', borderColor: 'border-[#63b3ed]/40' };
               } else if (title.includes('Oxygenation')) {
-                sectionConfig = { icon: TrendingUp, gradient: 'from-emerald-500 to-emerald-600', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200' };
+                sectionConfig = { icon: TrendingUp, gradient: 'from-[#90cdf4] to-[#63b3ed]', bgColor: 'bg-[#90cdf4]/20', borderColor: 'border-[#90cdf4]/40' };
               } else if (title.includes('Electrolyte') || title.includes('Metabolite')) {
-                sectionConfig = { icon: Target, gradient: 'from-orange-500 to-orange-600', bgColor: 'bg-orange-50', borderColor: 'border-orange-200' };
+                sectionConfig = { icon: Target, gradient: 'from-[#2b6cb0] to-[#1a365d]', bgColor: 'bg-[#2b6cb0]/20', borderColor: 'border-[#2b6cb0]/40' };
               } else if (title.includes('Summary') || title.includes('Important') || title.includes('Most Important Details')) {
-                sectionConfig = { icon: AlertTriangle, gradient: 'from-indigo-500 to-indigo-600', bgColor: 'bg-indigo-50', borderColor: 'border-indigo-200' };
+                sectionConfig = { icon: AlertTriangle, gradient: 'from-[#1a365d] to-[#2b6cb0]', bgColor: 'bg-[#1a365d]/20', borderColor: 'border-[#1a365d]/40' };
               }
 
               const IconComponent = sectionConfig.icon;

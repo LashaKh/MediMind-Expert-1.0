@@ -41,7 +41,7 @@ const PROVIDER_CONFIGS = {
     description: 'Fast web search with medical content filtering',
     icon: GlobeAltIcon,
     badge: 'Fast',
-    badgeColor: 'bg-green-500',
+    badgeColor: 'bg-[#63b3ed]',
     features: ['Real-time results', 'Privacy focused', 'Medical filtering']
   },
   exa: {
@@ -49,7 +49,7 @@ const PROVIDER_CONFIGS = {
     description: 'AI-powered search for high-quality medical content',
     icon: CpuChipIcon,
     badge: 'AI-Powered',
-    badgeColor: 'bg-blue-500',
+    badgeColor: 'bg-[#2b6cb0]',
     features: ['Quality ranking', 'Domain filtering', 'Semantic search']
   },
   perplexity: {
@@ -57,7 +57,7 @@ const PROVIDER_CONFIGS = {
     description: 'Advanced AI research with medical synthesis',
     icon: BoltIcon,
     badge: 'Research',
-    badgeColor: 'bg-purple-500',
+    badgeColor: 'bg-[#1a365d]',
     features: ['AI synthesis', 'Citation analysis', 'Medical domains']
   },
   clinicaltrials: {
@@ -65,7 +65,7 @@ const PROVIDER_CONFIGS = {
     description: 'Official clinical trials database',
     icon: BeakerIcon,
     badge: 'Official',
-    badgeColor: 'bg-orange-500',
+    badgeColor: 'bg-[#90cdf4]',
     features: ['Phase filtering', 'Location search', 'Recruitment status']
   }
 } as const;
@@ -110,7 +110,7 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
         <div className="relative">
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-              <ChartBarIcon className="w-5 h-5 text-indigo-600" />
+              <ChartBarIcon className="w-5 h-5 text-[#2b6cb0]" />
               {t('search.providers.title', 'Search Providers')}
             </h3>
             <span className="text-sm text-gray-500">
@@ -121,7 +121,7 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
           {/* Floating Expand Button */}
           <button
             onClick={() => setIsCollapsed(false)}
-            className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-10"
+            className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-[#2b6cb0] hover:bg-[#1a365d] text-white p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-10"
             title={t('search.providers.expand', 'Expand search providers')}
           >
             <ChevronDownIcon className="w-5 h-5" />
@@ -132,7 +132,7 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-              <ChartBarIcon className="w-5 h-5 text-indigo-600" />
+              <ChartBarIcon className="w-5 h-5 text-[#2b6cb0]" />
               {t('search.providers.title', 'Search Providers')}
             </h3>
             <div className="flex items-center gap-3">
@@ -162,14 +162,14 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
                   key={providerId}
                   className={`relative p-4 rounded-xl border-2 transition-all duration-200 ${
                     isSelected
-                      ? 'border-indigo-300 bg-indigo-50 shadow-md'
+                      ? 'border-[#63b3ed] bg-[#90cdf4]/20 shadow-md'
                       : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3 flex-1">
-                      <div className={`p-2 rounded-lg ${isSelected ? 'bg-indigo-100' : 'bg-gray-100'}`}>
-                        <IconComponent className={`w-5 h-5 ${isSelected ? 'text-indigo-600' : 'text-gray-600'}`} />
+                      <div className={`p-2 rounded-lg ${isSelected ? 'bg-[#90cdf4]/30' : 'bg-gray-100'}`}>
+                        <IconComponent className={`w-5 h-5 ${isSelected ? 'text-[#2b6cb0]' : 'text-gray-600'}`} />
                       </div>
                       
                       <div className="flex-1">
@@ -225,7 +225,7 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
                       disabled={isLastProvider}
                       className={`flex items-center justify-center w-6 h-6 rounded-full border-2 transition-all duration-200 ${
                         isSelected
-                          ? 'bg-indigo-600 border-indigo-600 text-white'
+                          ? 'bg-[#2b6cb0] border-[#2b6cb0] text-white'
                           : 'border-gray-300 hover:border-gray-400'
                       } ${
                         isLastProvider ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
@@ -256,7 +256,7 @@ export const ProviderSelection: React.FC<ProviderSelectionProps> = ({
                 <span className="text-gray-700">
                   {t('search.providers.summary', 'Selected providers will search in parallel for comprehensive results')}
                 </span>
-                <span className="font-medium text-indigo-600">
+                <span className="font-medium text-[#2b6cb0]">
                   {selectedProviders.length} {t('search.providers.active', 'active')}
                 </span>
               </div>

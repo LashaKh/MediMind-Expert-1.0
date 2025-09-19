@@ -242,11 +242,11 @@ export const InterpretationResults: React.FC<InterpretationResultsProps> = ({
         };
       default:
         return {
-          border: 'border-green-200',
-          bg: 'bg-green-50',
-          text: 'text-green-900',
-          icon: 'text-green-600',
-          badge: 'bg-green-100 text-green-800'
+          border: 'border-[#63b3ed]/40',
+          bg: 'bg-[#90cdf4]/20',
+          text: 'text-[#1a365d]',
+          icon: 'text-[#2b6cb0]',
+          badge: 'bg-[#63b3ed]/30 text-[#1a365d]'
         };
     }
   };
@@ -255,7 +255,7 @@ export const InterpretationResults: React.FC<InterpretationResultsProps> = ({
     return (
       <Card className="p-6">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#2b6cb0]" />
           <div className="text-center">
             <h3 className="font-semibold">Generating Clinical Interpretation...</h3>
             <p className="text-sm text-muted-foreground mt-1">
@@ -298,7 +298,7 @@ export const InterpretationResults: React.FC<InterpretationResultsProps> = ({
       <Card className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <CheckCircle2 className="h-5 w-5 text-green-600" />
+            <CheckCircle2 className="h-5 w-5 text-[#63b3ed]" />
             <div>
               <h3 className="text-lg font-semibold">Clinical Interpretation</h3>
               <p className="text-sm text-muted-foreground">AI-generated clinical analysis</p>
@@ -331,7 +331,7 @@ export const InterpretationResults: React.FC<InterpretationResultsProps> = ({
               disabled={copySuccess}
             >
               {copySuccess ? (
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <CheckCircle2 className="h-4 w-4 text-[#63b3ed]" />
               ) : (
                 <Copy className="h-4 w-4" />
               )}

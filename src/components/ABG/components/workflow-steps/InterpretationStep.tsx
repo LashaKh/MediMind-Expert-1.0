@@ -84,7 +84,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
               return (
                 <div key={index} className="flex justify-between items-center py-1">
                   <span className="font-medium">{key.trim()}:</span>
-                  <span className="font-mono text-blue-600">{value.trim()}</span>
+                  <span className="font-mono text-[#2b6cb0]">{value.trim()}</span>
                 </div>
               );
             }
@@ -118,7 +118,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
               onClick={() => onToggleExtractedText(!isExtractedTextCollapsed)}
             >
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <div className="w-9 h-9 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-lg flex items-center justify-center">
                   <FileText className="h-4 w-4 text-white" />
                 </div>
                 <div>
@@ -160,7 +160,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                       : t('abg.analysis.waitingData', 'Waiting for data')
                     }
                   </span>
-                  <span className="text-blue-500 font-medium">{t('abg.common.clickToExpand', 'Click to expand')}</span>
+                  <span className="text-[#2b6cb0] font-medium">{t('abg.common.clickToExpand', 'Click to expand')}</span>
                 </div>
               </div>
             )}
@@ -173,7 +173,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
               onClick={() => onToggleClinicalInterpretation(!isClinicalInterpretationCollapsed)}
             >
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                <div className="w-9 h-9 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-lg flex items-center justify-center">
                   <CheckCircle2 className="h-4 w-4 text-white" />
                 </div>
                 <div>
@@ -237,7 +237,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                 </div>
                 <div className="mt-3 text-xs text-slate-400 flex items-center justify-between">
                   <span>{t('abg.interpretation.subtitle', 'AI-generated clinical analysis')}</span>
-                  <span className="text-blue-500 font-medium">{t('abg.common.clickToExpand', 'Click to expand')}</span>
+                  <span className="text-[#2b6cb0] font-medium">{t('abg.common.clickToExpand', 'Click to expand')}</span>
                 </div>
               </div>
             )}
@@ -401,28 +401,28 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                     className="relative w-full h-auto p-0 overflow-hidden border-0 bg-transparent hover:bg-transparent"
                     disabled={isProcessing}
                   >
-                    <div className="relative w-full bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 rounded-2xl border border-emerald-200/80 shadow-lg shadow-emerald-200/50 hover:shadow-xl hover:shadow-emerald-300/50 transition-all duration-500 group-hover:border-emerald-300/80">
+                    <div className="relative w-full bg-gradient-to-br from-[#90cdf4]/20 via-[#63b3ed]/20 to-[#2b6cb0]/20 rounded-2xl border border-[#63b3ed]/40 shadow-lg shadow-[#63b3ed]/20 hover:shadow-xl hover:shadow-[#2b6cb0]/30 transition-all duration-500 group-hover:border-[#2b6cb0]/60">
                       {/* Animated background */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-100/50 via-green-100/50 to-teal-100/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#63b3ed]/30 via-[#90cdf4]/30 to-[#2b6cb0]/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       
                       {/* Shine effect */}
                       <div className="abg-action-card-shine"></div>
                       
                       {/* Content */}
                       <div className="relative p-4 text-center">
-                        <div className="abg-action-card-icon w-10 h-10 mx-auto mb-3 bg-gradient-to-br from-emerald-100 to-green-200 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg">
+                        <div className="abg-action-card-icon w-10 h-10 mx-auto mb-3 bg-gradient-to-br from-[#90cdf4]/40 to-[#63b3ed]/60 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg">
                           {isProcessing ? (
-                            <Activity className="h-5 w-5 text-emerald-600 animate-pulse" />
+                            <Activity className="h-5 w-5 text-[#2b6cb0] animate-pulse" />
                           ) : (
-                            <ChevronRight className="h-5 w-5 text-emerald-600 group-hover:text-emerald-700 transition-all duration-300 group-hover:translate-x-0.5" />
+                            <ChevronRight className="h-5 w-5 text-[#2b6cb0] group-hover:text-[#1a365d] transition-all duration-300 group-hover:translate-x-0.5" />
                           )}
                         </div>
-                        <h5 className="font-bold text-emerald-700 mb-1 group-hover:text-emerald-800 transition-colors duration-300 text-sm">
+                        <h5 className="font-bold text-[#1a365d] mb-1 group-hover:text-[#2b6cb0] transition-colors duration-300 text-sm">
                           {isProcessing ? t('common.processing', 'Processing...') : t('abg.workflow.steps.actionPlan.label', 'Get Action Plan')}
                         </h5>
                         
                         {/* Subtle accent line */}
-                        <div className="abg-action-card-accent-line text-emerald-300"></div>
+                        <div className="abg-action-card-accent-line text-[#63b3ed]"></div>
                       </div>
                     </div>
                   </Button>

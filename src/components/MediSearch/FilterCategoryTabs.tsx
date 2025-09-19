@@ -56,7 +56,6 @@ export type FilterCategoryId =
   | 'quick-filters'
   | 'content-format'
   | 'authority-quality'
-  | 'medical-domain'
   | 'publication-access'
   | 'geographic-context'
   | 'advanced-options';
@@ -98,8 +97,8 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
       description: t('filters.categories.quickFiltersDesc', 'Popular filter combinations for common searches'),
       icon: BoltIcon,
       iconActive: BoltSolid,
-      color: 'text-yellow-600',
-      badgeColor: 'bg-yellow-100 text-yellow-700',
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]',
       isPopular: true
     },
     {
@@ -108,8 +107,8 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
       description: t('filters.categories.contentFormatDesc', 'Filter by content type, file format, and document structure'),
       icon: DocumentTextIcon,
       iconActive: DocumentTextSolid,
-      color: 'text-blue-600',
-      badgeColor: 'bg-blue-100 text-blue-700'
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]'
     },
     {
       id: 'authority-quality',
@@ -117,18 +116,8 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
       description: t('filters.categories.authorityQualityDesc', 'Source credibility, peer review status, and evidence quality'),
       icon: ShieldCheckIcon,
       iconActive: ShieldCheckSolid,
-      color: 'text-green-600',
-      badgeColor: 'bg-green-100 text-green-700'
-    },
-    {
-      id: 'medical-domain',
-      label: t('filters.categories.medicalDomain', 'Medical Domain'),
-      description: t('filters.categories.medicalDomainDesc', 'Medical specialties, subspecialties, and clinical topics'),
-      icon: HeartIcon,
-      iconActive: HeartSolid,
-      color: 'text-red-600',
-      badgeColor: 'bg-red-100 text-red-700',
-      isPopular: true
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]'
     },
     {
       id: 'publication-access',
@@ -136,8 +125,8 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
       description: t('filters.categories.publicationAccessDesc', 'Publication date, access type, and availability'),
       icon: CalendarIcon,
       iconActive: CalendarSolid,
-      color: 'text-indigo-600',
-      badgeColor: 'bg-indigo-100 text-indigo-700'
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]'
     },
     {
       id: 'geographic-context',
@@ -145,8 +134,8 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
       description: t('filters.categories.geographicContextDesc', 'Geographic relevance, practice settings, and patient populations'),
       icon: MapPinIcon,
       iconActive: MapPinSolid,
-      color: 'text-teal-600',
-      badgeColor: 'bg-teal-100 text-teal-700'
+      color: 'text-[#2b6cb0]',
+      badgeColor: 'bg-[#90cdf4]/20 text-[#1a365d]'
     },
     {
       id: 'advanced-options',
@@ -189,16 +178,7 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
       >
         {/* Background gradient for active state */}
         {isActive && (
-          <div className={`absolute inset-0 bg-gradient-to-r opacity-5 rounded-xl ${
-            category.color.includes('yellow') ? 'from-yellow-400 to-orange-400' :
-            category.color.includes('blue') ? 'from-blue-400 to-cyan-400' :
-            category.color.includes('green') ? 'from-green-400 to-emerald-400' :
-            category.color.includes('red') ? 'from-red-400 to-pink-400' :
-            category.color.includes('purple') ? 'from-purple-400 to-indigo-400' :
-            category.color.includes('indigo') ? 'from-indigo-400 to-blue-400' :
-            category.color.includes('teal') ? 'from-teal-400 to-cyan-400' :
-            'from-gray-400 to-slate-400'
-          }`}></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] opacity-5 rounded-xl"></div>
         )}
 
         {/* Icon */}
@@ -275,7 +255,7 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
         <select
           value={activeCategory}
           onChange={(e) => onCategoryChange(e.target.value as FilterCategoryId)}
-          className="w-full p-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          className="w-full p-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-[#2b6cb0] focus:border-[#2b6cb0]"
         >
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
@@ -298,7 +278,7 @@ export const FilterCategoryTabs: React.FC<FilterCategoryTabsProps> = ({
           <span>{t('filters.summary.activeFilters', 'Active filters')}: {Object.values(categoryCounts).reduce((sum, count) => sum + count, 0)}</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+          <div className="w-2 h-2 bg-[#2b6cb0] rounded-full"></div>
           <span>{t('filters.summary.categories', 'Categories')}: {Object.keys(categoryCounts).filter(key => categoryCounts[key as FilterCategoryId] > 0).length}</span>
         </div>
       </div>

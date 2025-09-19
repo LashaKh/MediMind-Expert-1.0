@@ -22,19 +22,25 @@
   --revolutionary-gray-800: #1e293b;
   --revolutionary-gray-900: #0f172a;
   
-  /* Brand Colors */
-  --revolutionary-indigo-50: #eef2ff;
-  --revolutionary-indigo-100: #e0e7ff;
-  --revolutionary-indigo-500: #6366f1;
-  --revolutionary-indigo-600: #4f46e5;
-  --revolutionary-indigo-700: #4338ca;
-  --revolutionary-indigo-900: #312e81;
+  /* Theme Colors - Updated to match theme palette */
+  --revolutionary-theme-deep-navy: #1a365d;
+  --revolutionary-theme-vibrant-blue: #2b6cb0;
+  --revolutionary-theme-light-blue: #63b3ed;
+  --revolutionary-theme-lighter-blue: #90cdf4;
   
-  --revolutionary-purple-500: #a855f7;
-  --revolutionary-purple-600: #9333ea;
+  /* Brand Colors - Using theme colors */
+  --revolutionary-indigo-50: #90cdf4;
+  --revolutionary-indigo-100: #63b3ed;
+  --revolutionary-indigo-500: #2b6cb0;
+  --revolutionary-indigo-600: #2b6cb0;
+  --revolutionary-indigo-700: #1a365d;
+  --revolutionary-indigo-900: #1a365d;
   
-  --revolutionary-blue-500: #3b82f6;
-  --revolutionary-blue-600: #2563eb;
+  --revolutionary-purple-500: #2b6cb0;
+  --revolutionary-purple-600: #1a365d;
+  
+  --revolutionary-blue-500: #63b3ed;
+  --revolutionary-blue-600: #2b6cb0;
   
   /* Status Colors */
   --revolutionary-green-500: #22c55e;

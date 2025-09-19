@@ -953,29 +953,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                   </div>
                 )}
                 
-                {/* ABG Context Indicator - Mobile optimized */}
-                {abgContext && (
-                  <div className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 bg-gradient-to-r from-red-50 to-rose-50 rounded-lg sm:rounded-xl border border-red-200/40 shadow-sm">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-red-500 to-rose-600 rounded-md sm:rounded-lg flex items-center justify-center">
-                      <TestTube2 className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
-                    </div>
-                    <div className="hidden md:flex flex-col min-w-0">
-                      <span className="text-sm font-medium text-red-900 truncate">{t('chat.abg.active', 'ABG Analysis Active')}</span>
-                      <span className="text-xs text-red-600 truncate">{abgContext.type}</span>
-                    </div>
-                    <Badge variant="secondary" className="text-xs bg-red-100 text-red-800 border-red-200 hidden sm:inline-flex">
-                      Context
-                    </Badge>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setAbgContext(null)}
-                      className="p-1 h-6 w-6 text-red-500 hover:text-red-700 hover:bg-red-100 rounded"
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </div>
-                )}
                 
                 {!activeCase && (
                   <>
@@ -1122,7 +1099,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       {/* ABG Context Banner - Prominent display when context is active */}
       {abgContext && (
         <div className="relative z-20 mx-3 sm:mx-4 -mb-1">
-          <div className={`bg-gradient-to-r from-red-50 via-rose-50 to-red-50 border border-red-200/50 rounded-xl p-3 sm:p-4 shadow-lg ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)}`}>
+          <div className={`bg-gradient-to-r from-[#90cdf4]/20 via-[#63b3ed]/20 to-[#90cdf4]/20 border border-[#63b3ed]/40 rounded-xl p-3 sm:p-4 shadow-lg ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)}`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -1130,12 +1107,12 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
-                    <span className="font-semibold text-red-900">{t('chat.abg.contextActive', 'Blood Gas Analysis Context Active')}</span>
-                    <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">
+                    <span className="font-semibold text-[#1a365d]">{t('chat.abg.contextActive', 'Blood Gas Analysis Context Active')}</span>
+                    <Badge variant="secondary" className="bg-[#90cdf4]/30 text-red-600 border-[#63b3ed]/40">
                       {abgContext.type}
                     </Badge>
                   </div>
-                  <p className="text-sm text-red-700 mt-1">
+                  <p className="text-sm text-[#2b6cb0] mt-1">
                     {isContextLoading ? 
                       t('chat.abg.loading', 'Context is being loaded...') : 
                       t('chat.abg.loaded', 'Context loaded! Ask questions about this ABG analysis, interpretation, or treatment recommendations.')
@@ -1154,7 +1131,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => setAbgContext(null)}
-                className="text-red-500 hover:text-red-700 hover:bg-red-100 p-2"
+                className="text-[#2b6cb0] hover:text-[#1a365d] hover:bg-[#90cdf4]/20 p-2"
               >
                 <X className="h-4 w-4" />
               </Button>

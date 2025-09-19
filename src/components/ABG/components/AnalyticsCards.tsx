@@ -131,7 +131,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       value: stats.totalResults,
       subtitle: `In the last ${getTimeRangeLabel(timeRange)}`,
       icon: FileText,
-      gradient: 'from-blue-500 to-blue-600',
+      gradient: 'from-[#2b6cb0] to-[#1a365d]',
       trend: {
         value: Math.abs(stats.recentTrend),
         isPositive: stats.recentTrend > 0,
@@ -140,7 +140,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       badge: {
         text: stats.totalResults > 50 ? 'High Volume' : stats.totalResults > 10 ? 'Active' : 'Light',
         variant: 'outline',
-        color: stats.totalResults > 50 ? 'text-green-600' : stats.totalResults > 10 ? 'text-blue-600' : 'text-gray-600'
+        color: stats.totalResults > 50 ? 'text-[#63b3ed]' : stats.totalResults > 10 ? 'text-[#2b6cb0]' : 'text-gray-600'
       }
     },
     {
@@ -148,7 +148,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       value: `${stats.successRate}%`,
       subtitle: 'Complete analyses with interpretation',
       icon: CheckCircle,
-      gradient: 'from-green-500 to-green-600',
+      gradient: 'from-[#63b3ed] to-[#2b6cb0]',
       badge: {
         text: stats.successRate >= 90 ? 'Excellent' : stats.successRate >= 75 ? 'Good' : 'Needs Improvement',
         variant: stats.successRate >= 90 ? 'default' : stats.successRate >= 75 ? 'secondary' : 'destructive'
@@ -159,11 +159,11 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       value: formatProcessingTime(stats.avgProcessingTime),
       subtitle: 'Time per analysis',
       icon: Clock,
-      gradient: 'from-purple-500 to-purple-600',
+      gradient: 'from-[#1a365d] to-[#2b6cb0]',
       badge: {
         text: stats.avgProcessingTime < 5000 ? 'Fast' : stats.avgProcessingTime < 10000 ? 'Normal' : 'Slow',
         variant: 'outline',
-        color: stats.avgProcessingTime < 5000 ? 'text-green-600' : stats.avgProcessingTime < 10000 ? 'text-blue-600' : 'text-orange-600'
+        color: stats.avgProcessingTime < 5000 ? 'text-[#63b3ed]' : stats.avgProcessingTime < 10000 ? 'text-[#2b6cb0]' : 'text-orange-600'
       }
     },
     {
@@ -171,11 +171,11 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       value: `${stats.avgConfidence}%`,
       subtitle: 'AI analysis confidence score',
       icon: Target,
-      gradient: 'from-orange-500 to-orange-600',
+      gradient: 'from-[#90cdf4] to-[#63b3ed]',
       badge: {
         text: stats.avgConfidence >= 80 ? 'High' : stats.avgConfidence >= 60 ? 'Medium' : 'Low',
         variant: 'outline',
-        color: stats.avgConfidence >= 80 ? 'text-green-600' : stats.avgConfidence >= 60 ? 'text-yellow-600' : 'text-red-600'
+        color: stats.avgConfidence >= 80 ? 'text-[#2b6cb0]' : stats.avgConfidence >= 60 ? 'text-yellow-600' : 'text-red-600'
       }
     },
     {
@@ -183,7 +183,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       value: stats.patientCount,
       subtitle: 'Patients with analyses',
       icon: Users,
-      gradient: 'from-teal-500 to-teal-600',
+      gradient: 'from-[#63b3ed] to-[#90cdf4]',
       trend: {
         value: stats.patientCount,
         isPositive: true,
@@ -195,7 +195,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       value: `${stats.qualityScore}%`,
       subtitle: 'Overall system performance',
       icon: Award,
-      gradient: 'from-indigo-500 to-indigo-600',
+      gradient: 'from-[#2b6cb0] to-[#63b3ed]',
       badge: {
         text: stats.performanceRating.charAt(0).toUpperCase() + stats.performanceRating.slice(1),
         variant: stats.performanceRating === 'excellent' ? 'default' : 
@@ -207,7 +207,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       value: stats.thisWeek,
       subtitle: 'Analyses in last 7 days',
       icon: Calendar,
-      gradient: 'from-pink-500 to-pink-600',
+      gradient: 'from-[#90cdf4] to-[#2b6cb0]',
       trend: {
         value: Math.abs(additionalMetrics.dailyTrend),
         isPositive: additionalMetrics.dailyTrend > 0,
@@ -219,7 +219,7 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       value: `${additionalMetrics.fastResults}:${additionalMetrics.slowResults}`,
       subtitle: 'Fast vs. slow processing',
       icon: Zap,
-      gradient: 'from-yellow-500 to-yellow-600',
+      gradient: 'from-[#1a365d] to-[#90cdf4]',
       badge: {
         text: additionalMetrics.fastResults > additionalMetrics.slowResults ? 'Optimized' : 'Review Needed',
         variant: additionalMetrics.fastResults > additionalMetrics.slowResults ? 'default' : 'destructive'
@@ -306,47 +306,47 @@ export const AnalyticsCards: React.FC<AnalyticsCardsProps> = ({
       {/* Additional Summary Cards */}
       <Card className="md:col-span-2 lg:col-span-4 p-6">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <BarChart3 className="h-5 w-5 text-blue-600" />
+          <BarChart3 className="h-5 w-5 text-[#2b6cb0]" />
           Analysis Breakdown
         </h3>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Analysis Type Distribution */}
-          <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-            <div className="text-2xl font-bold text-blue-700">
+          <div className="text-center p-4 bg-gradient-to-br from-[#90cdf4]/20 to-[#63b3ed]/30 rounded-lg">
+            <div className="text-2xl font-bold text-[#1a365d]">
               {additionalMetrics.arterialResults}
             </div>
-            <div className="text-sm text-blue-600">Arterial Blood Gas</div>
-            <div className="text-xs text-blue-500 mt-1">
+            <div className="text-sm text-[#2b6cb0]">Arterial Blood Gas</div>
+            <div className="text-xs text-[#63b3ed] mt-1">
               {results.length > 0 ? Math.round((additionalMetrics.arterialResults / results.length) * 100) : 0}% of total
             </div>
           </div>
 
-          <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
-            <div className="text-2xl font-bold text-purple-700">
+          <div className="text-center p-4 bg-gradient-to-br from-[#63b3ed]/20 to-[#2b6cb0]/30 rounded-lg">
+            <div className="text-2xl font-bold text-[#1a365d]">
               {additionalMetrics.venousResults}
             </div>
-            <div className="text-sm text-purple-600">Venous Blood Gas</div>
-            <div className="text-xs text-purple-500 mt-1">
+            <div className="text-sm text-[#2b6cb0]">Venous Blood Gas</div>
+            <div className="text-xs text-[#63b3ed] mt-1">
               {results.length > 0 ? Math.round((additionalMetrics.venousResults / results.length) * 100) : 0}% of total
             </div>
           </div>
 
           {/* Confidence Distribution */}
-          <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-            <div className="text-2xl font-bold text-green-700">
+          <div className="text-center p-4 bg-gradient-to-br from-[#90cdf4]/20 to-[#63b3ed]/30 rounded-lg">
+            <div className="text-2xl font-bold text-[#1a365d]">
               {additionalMetrics.highConfidenceResults}
             </div>
-            <div className="text-sm text-green-600">High Confidence</div>
-            <div className="text-xs text-green-500 mt-1">≥80% confidence score</div>
+            <div className="text-sm text-[#2b6cb0]">High Confidence</div>
+            <div className="text-xs text-[#63b3ed] mt-1">≥80% confidence score</div>
           </div>
 
-          <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
-            <div className="text-2xl font-bold text-orange-700">
+          <div className="text-center p-4 bg-gradient-to-br from-[#2b6cb0]/20 to-[#1a365d]/30 rounded-lg">
+            <div className="text-2xl font-bold text-[#1a365d]">
               {additionalMetrics.lowConfidenceResults}
             </div>
-            <div className="text-sm text-orange-600">Review Needed</div>
-            <div className="text-xs text-orange-500 mt-1">&lt;60% confidence score</div>
+            <div className="text-sm text-[#2b6cb0]">Review Needed</div>
+            <div className="text-xs text-[#63b3ed] mt-1">&lt;60% confidence score</div>
           </div>
         </div>
       </Card>

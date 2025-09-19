@@ -69,40 +69,40 @@ const categoryConfig = {
     label: 'Immediate Actions',
     icon: AlertTriangle,
     gradient: 'from-red-500 to-red-600',
-    bgColor: 'bg-red-50',
-    borderColor: 'border-red-200',
+    bgColor: 'bg-[#90cdf4]/20',
+    borderColor: 'border-[#63b3ed]/40',
     description: 'Critical interventions requiring immediate attention'
   },
   monitoring: {
     label: 'Monitoring Plan',
     icon: Monitor,
-    gradient: 'from-blue-500 to-blue-600',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-200',
+    gradient: 'from-[#2b6cb0] to-[#1a365d]',
+    bgColor: 'bg-[#90cdf4]/20',
+    borderColor: 'border-[#63b3ed]/40',
     description: 'Ongoing monitoring and assessment requirements'
   },
   medication: {
     label: 'Medications',
     icon: Pill,
-    gradient: 'from-emerald-500 to-emerald-600',
-    bgColor: 'bg-emerald-50',
-    borderColor: 'border-emerald-200',
+    gradient: 'from-[#63b3ed] to-[#2b6cb0]',
+    bgColor: 'bg-[#63b3ed]/20',
+    borderColor: 'border-[#63b3ed]/40',
     description: 'Pharmaceutical interventions and adjustments'
   },
   diagnostic: {
     label: 'Diagnostic Tests',
     icon: Activity,
-    gradient: 'from-purple-500 to-purple-600',
-    bgColor: 'bg-purple-50',
-    borderColor: 'border-purple-200',
+    gradient: 'from-[#1a365d] to-[#2b6cb0]',
+    bgColor: 'bg-[#2b6cb0]/20',
+    borderColor: 'border-[#2b6cb0]/40',
     description: 'Additional testing and laboratory work'
   },
   followup: {
     label: 'Follow-up Care',
     icon: Calendar,
-    gradient: 'from-orange-500 to-orange-600',
-    bgColor: 'bg-orange-50',
-    borderColor: 'border-orange-200',
+    gradient: 'from-[#90cdf4] to-[#63b3ed]',
+    bgColor: 'bg-[#90cdf4]/20',
+    borderColor: 'border-[#90cdf4]/40',
     description: 'Long-term care planning and follow-up'
   }
 };
@@ -111,8 +111,8 @@ const priorityConfig = {
   critical: {
     label: 'Critical',
     gradient: 'from-red-500 to-red-600',
-    bgColor: 'bg-red-100',
-    textColor: 'text-red-700',
+    bgColor: 'bg-[#90cdf4]/30',
+    textColor: 'text-[#1a365d]',
     icon: AlertCircle
   },
   high: {
@@ -224,14 +224,14 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
   if (isLoading) {
     return (
       <div className={cn("abg-premium", className)}>
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50 rounded-2xl border border-white/20 shadow-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-blue-400/10 to-purple-400/10 animate-pulse" />
+        <div className="relative overflow-hidden bg-gradient-to-br from-[#90cdf4]/20 via-[#63b3ed]/20 to-[#2b6cb0]/20 rounded-2xl border border-white/20 shadow-xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#2b6cb0]/10 animate-pulse" />
           
           <div className="relative p-8">
             <div className="flex items-center justify-center mb-6">
               <div className="relative">
-                <ClipboardList className="h-16 w-16 text-emerald-500 animate-pulse" />
-                <div className="absolute inset-0 bg-emerald-500 opacity-20 rounded-full animate-ping" />
+                <ClipboardList className="h-16 w-16 text-[#2b6cb0] animate-pulse" />
+                <div className="absolute inset-0 bg-[#2b6cb0] opacity-20 rounded-full animate-ping" />
               </div>
             </div>
             
@@ -245,9 +245,9 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
               
               <div className="flex justify-center">
                 <div className="flex space-x-2">
-                  <div className="w-3 h-3 bg-emerald-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-3 h-3 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className="w-3 h-3 bg-[#2b6cb0] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-3 h-3 bg-[#63b3ed] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-3 h-3 bg-[#90cdf4] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             </div>
@@ -363,7 +363,7 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
     )}>
       <div className="space-y-6">
         {/* Header */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-blue-600 to-purple-600 rounded-2xl shadow-2xl">
+        <div className="relative overflow-hidden bg-gradient-to-br from-[#2b6cb0] via-[#1a365d] to-[#63b3ed] rounded-2xl shadow-2xl">
           <div className="absolute inset-0 bg-black/10" />
           <div className="relative p-8 text-white">
             <div className="flex items-center justify-between mb-6">
@@ -372,7 +372,7 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
                   <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
                     <ClipboardList className="h-8 w-8 text-white" />
                   </div>
-                  <CheckCircle2 className="absolute -top-2 -right-2 h-6 w-6 text-emerald-300" />
+                  <CheckCircle2 className="absolute -top-2 -right-2 h-6 w-6 text-[#90cdf4]" />
                 </div>
                 <div>
                   <h2 className="text-3xl font-bold mb-2">Action Plan</h2>
@@ -415,7 +415,7 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-xl flex items-center justify-center">
                     <Target className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -439,7 +439,7 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
 
               <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center">
                     <CheckCircle2 className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -451,7 +451,7 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
 
               <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#63b3ed] to-[#90cdf4] rounded-xl flex items-center justify-center">
                     <TrendingUp className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -471,7 +471,7 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
                 </div>
                 <div className="w-full bg-white/20 rounded-full h-3 overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full transition-all duration-500 relative"
+                    className="h-full bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] rounded-full transition-all duration-500 relative"
                     style={{ width: `${progressPercentage}%` }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-pulse" />
@@ -486,7 +486,7 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
         {actionPlan.clinicalGoals && actionPlan.clinicalGoals.length > 0 && (
           <div className="bg-white rounded-2xl border border-slate-200 shadow-xl p-6">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center">
                 <Star className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -497,11 +497,11 @@ export const PremiumActionPlanResults: React.FC<PremiumActionPlanResultsProps> =
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {actionPlan.clinicalGoals.map((goal, index) => (
-                <div key={index} className="flex items-start gap-3 p-4 bg-indigo-50 rounded-xl border border-indigo-200">
-                  <div className="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Target className="h-3 w-3 text-indigo-600" />
+                <div key={index} className="flex items-start gap-3 p-4 bg-[#90cdf4]/20 rounded-xl border border-[#63b3ed]/40">
+                  <div className="w-6 h-6 bg-[#63b3ed]/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Target className="h-3 w-3 text-[#1a365d]" />
                   </div>
-                  <p className="text-indigo-700 font-medium leading-relaxed">{goal}</p>
+                  <p className="text-[#1a365d] font-medium leading-relaxed">{goal}</p>
                 </div>
               ))}
             </div>

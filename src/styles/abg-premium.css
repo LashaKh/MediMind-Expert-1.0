@@ -2,25 +2,25 @@
 
 /* Advanced Color Gradients for Medical Interface */
 :root {
-  /* Medical Professional Color Palette */
-  --medical-primary: #2563eb;
-  --medical-primary-dark: #1d4ed8;
-  --medical-primary-light: #3b82f6;
-  --medical-secondary: #06b6d4;
-  --medical-accent: #8b5cf6;
+  /* Medical Professional Color Palette - Blue Theme */
+  --medical-primary: #2b6cb0;
+  --medical-primary-dark: #1a365d;
+  --medical-primary-light: #63b3ed;
+  --medical-secondary: #90cdf4;
+  --medical-accent: #63b3ed;
   --medical-success: #10b981;
   --medical-warning: #f59e0b;
   --medical-error: #ef4444;
   --medical-critical: #dc2626;
 
-  /* Sophisticated Gradients */
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-medical: linear-gradient(135deg, #2563eb 0%, #06b6d4 50%, #8b5cf6 100%);
-  --gradient-analysis: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
+  /* Sophisticated Gradients - Blue Theme */
+  --gradient-primary: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%);
+  --gradient-medical: linear-gradient(135deg, #1a365d 0%, #2b6cb0 50%, #63b3ed 100%);
+  --gradient-analysis: linear-gradient(135deg, #90cdf4 0%, #63b3ed 50%, #2b6cb0 100%);
   --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
   --gradient-warning: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
   --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  --gradient-hover: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  --gradient-hover: linear-gradient(135deg, rgba(26, 54, 93, 0.1) 0%, rgba(43, 108, 176, 0.1) 100%);
 
   /* Glassmorphism Variables */
   --glass-bg: rgba(255, 255, 255, 0.08);
@@ -33,8 +33,8 @@
   --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.08);
   --shadow-large: 0 8px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.06);
   --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.08);
-  --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.3);
-  --shadow-medical: 0 4px 20px rgba(37, 99, 235, 0.15);
+  --shadow-glow: 0 0 20px rgba(43, 108, 176, 0.3);
+  --shadow-medical: 0 4px 20px rgba(43, 108, 176, 0.15);
 
   /* Premium Animations */
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -89,8 +89,8 @@
 }
 
 .abg-hero-badge {
-  background: rgba(37, 99, 235, 0.08);
-  border: 1px solid rgba(37, 99, 235, 0.15);
+  background: rgba(43, 108, 176, 0.08);
+  border: 1px solid rgba(43, 108, 176, 0.15);
   padding: 0.25rem 0.5rem;
   border-radius: var(--radius-full);
 }
@@ -98,9 +98,9 @@
 .abg-hero-aurora {
   position: absolute;
   inset: -20% -10% -40% -10%;
-  background: radial-gradient(60% 50% at 10% 30%, rgba(37,99,235,0.15), transparent 60%),
-              radial-gradient(50% 40% at 90% 20%, rgba(139,92,246,0.18), transparent 60%),
-              radial-gradient(60% 50% at 50% 90%, rgba(16,185,129,0.14), transparent 60%);
+  background: radial-gradient(60% 50% at 10% 30%, rgba(26,54,93,0.15), transparent 60%),
+              radial-gradient(50% 40% at 90% 20%, rgba(43,108,176,0.18), transparent 60%),
+              radial-gradient(60% 50% at 50% 90%, rgba(99,179,237,0.14), transparent 60%);
   filter: blur(26px);
 }
 
@@ -188,7 +188,7 @@
 .abg-progress-container {
   position: relative;
   height: 6px;
-  background: rgba(37, 99, 235, 0.1);
+  background: rgba(43, 108, 176, 0.1);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -242,7 +242,7 @@
 .abg-metric-card {
   @apply relative;
   background: white;
-  border: 1px solid rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(43, 108, 176, 0.1);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   transition: var(--transition-smooth);
@@ -252,7 +252,7 @@
 .abg-metric-card:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-medical);
-  border-color: rgba(37, 99, 235, 0.2);
+  border-color: rgba(43, 108, 176, 0.2);
 }
 
 .abg-metric-value {
@@ -326,7 +326,7 @@
 /* File Upload Area */
 .abg-upload-zone {
   @apply relative;
-  border: 2px dashed rgba(37, 99, 235, 0.3);
+  border: 2px dashed rgba(43, 108, 176, 0.3);
   border-radius: var(--radius-lg);
   background: var(--gradient-hover);
   transition: var(--transition-smooth);
@@ -340,13 +340,13 @@
 
 .abg-upload-zone:hover {
   border-color: var(--medical-primary);
-  background: rgba(37, 99, 235, 0.05);
+  background: rgba(43, 108, 176, 0.05);
   transform: translateY(-1px);
 }
 
 .abg-upload-zone.dragover {
   border-color: var(--medical-secondary);
-  background: rgba(6, 182, 212, 0.1);
+  background: rgba(144, 205, 244, 0.1);
   box-shadow: var(--shadow-medical);
 }
 
@@ -392,7 +392,7 @@
 .abg-interpretation-item {
   @apply relative;
   background: white;
-  border: 1px solid rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(43, 108, 176, 0.1);
   border-radius: var(--radius-lg);
   padding: 1.25rem;
   margin-bottom: 1rem;
@@ -402,7 +402,7 @@
 
 .abg-interpretation-item:hover {
   box-shadow: var(--shadow-medium);
-  border-color: rgba(37, 99, 235, 0.2);
+  border-color: rgba(43, 108, 176, 0.2);
 }
 
 .abg-interpretation-item::before {
@@ -420,7 +420,7 @@
 .abg-loading-spinner {
   width: 2rem;
   height: 2rem;
-  border: 3px solid rgba(37, 99, 235, 0.1);
+  border: 3px solid rgba(43, 108, 176, 0.1);
   border-top: 3px solid var(--medical-primary);
   border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
@@ -535,9 +535,9 @@
 
 .abg-next-steps-header-icon {
   position: relative;
-  background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 50%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 50%, #63b3ed 100%);
   box-shadow: 
-    0 10px 25px -5px rgba(79, 70, 229, 0.25),
+    0 10px 25px -5px rgba(26, 54, 93, 0.25),
     0 0 0 1px rgba(255, 255, 255, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -546,30 +546,30 @@
 .abg-next-steps-header-icon:hover {
   transform: scale(1.05) rotate(5deg);
   box-shadow: 
-    0 15px 35px -5px rgba(79, 70, 229, 0.35),
+    0 15px 35px -5px rgba(26, 54, 93, 0.35),
     0 0 0 1px rgba(255, 255, 255, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .abg-next-steps-badge {
-  background: linear-gradient(90deg, #10b981, #06b6d4);
-  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(90deg, #2b6cb0, #63b3ed);
+  box-shadow: 0 2px 10px rgba(43, 108, 176, 0.3);
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
 @keyframes pulse-glow {
   0%, 100% { 
-    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 2px 10px rgba(43, 108, 176, 0.3);
     transform: scale(1);
   }
   50% { 
-    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5);
+    box-shadow: 0 4px 20px rgba(43, 108, 176, 0.5);
     transform: scale(1.05);
   }
 }
 
 .abg-next-steps-title {
-  background: linear-gradient(135deg, #1e293b 0%, #3b82f6 50%, #4f46e5 100%);
+  background: linear-gradient(135deg, #1e293b 0%, #2b6cb0 50%, #1a365d 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -588,7 +588,7 @@
 }
 
 .abg-action-card-primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 50%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 50%, #63b3ed 100%);
   position: relative;
   overflow: hidden;
 }
@@ -601,9 +601,9 @@
   right: 0;
   bottom: 0;
   background: linear-gradient(135deg, 
-    rgba(59, 130, 246, 0.2) 0%, 
-    rgba(79, 70, 229, 0.2) 50%, 
-    rgba(139, 92, 246, 0.2) 100%);
+    rgba(43, 108, 176, 0.2) 0%, 
+    rgba(26, 54, 93, 0.2) 50%, 
+    rgba(99, 179, 237, 0.2) 100%);
   opacity: 0;
   transition: opacity 0.5s ease;
   border-radius: 1rem;

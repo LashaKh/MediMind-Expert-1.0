@@ -37,32 +37,32 @@ const steps: StepConfig[] = [
     label: 'Upload',
     icon: Upload,
     description: 'Select blood gas report',
-    color: 'from-blue-500 to-cyan-500',
-    gradient: 'bg-gradient-to-br from-blue-500 to-cyan-500'
+    color: 'from-[#2b6cb0] to-[#90cdf4]',
+    gradient: 'bg-gradient-to-br from-[#2b6cb0] to-[#90cdf4]'
   },
   {
     step: WorkflowStep.ANALYSIS,
     label: 'Analysis',
     icon: Search,
     description: 'AI vision processing',
-    color: 'from-purple-500 to-pink-500',
-    gradient: 'bg-gradient-to-br from-purple-500 to-pink-500'
+    color: 'from-[#1a365d] to-[#63b3ed]',
+    gradient: 'bg-gradient-to-br from-[#1a365d] to-[#63b3ed]'
   },
   {
     step: WorkflowStep.INTERPRETATION,
     label: 'Interpretation',
     icon: Brain,
     description: 'Clinical analysis',
-    color: 'from-emerald-500 to-teal-500',
-    gradient: 'bg-gradient-to-br from-emerald-500 to-teal-500'
+    color: 'from-[#63b3ed] to-[#90cdf4]',
+    gradient: 'bg-gradient-to-br from-[#63b3ed] to-[#90cdf4]'
   },
   {
     step: WorkflowStep.ACTION_PLAN,
     label: 'Action Plan',
     icon: ClipboardList,
     description: 'Treatment recommendations',
-    color: 'from-orange-500 to-red-500',
-    gradient: 'bg-gradient-to-br from-orange-500 to-red-500'
+    color: 'from-[#2b6cb0] to-[#1a365d]',
+    gradient: 'bg-gradient-to-br from-[#2b6cb0] to-[#1a365d]'
   }
 ];
 
@@ -121,7 +121,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
       return (
         <div className="relative">
           <CheckCircle2 className="h-6 w-6 text-white drop-shadow-sm" />
-          <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20 animate-ping" />
+          <div className="absolute inset-0 rounded-full bg-[#63b3ed] opacity-20 animate-ping" />
         </div>
       );
     }
@@ -186,7 +186,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
   return (
     <div className={cn("abg-premium relative py-6", className)} data-tour="abg-workflow">
       {/* Ambient glow */}
-      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(1200px_200px_at_50%_-20%,rgba(59,130,246,0.08),transparent),radial-gradient(1200px_200px_at_50%_100%,rgba(16,185,129,0.06),transparent)]" />
+      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(1200px_200px_at_50%_-20%,rgba(43,108,176,0.08),transparent),radial-gradient(1200px_200px_at_50%_100%,rgba(99,179,237,0.06),transparent)]" />
       
       {/* Main Progress Container */}
       <div className="relative" aria-live="polite" data-tour="abg-progress-tracker">
@@ -203,7 +203,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
           <div
             className={cn(
               "relative h-full rounded-full transition-all duration-1000 ease-out",
-              "bg-gradient-to-r from-blue-500 via-purple-500 to-emerald-500"
+              "bg-gradient-to-r from-[#2b6cb0] via-[#1a365d] to-[#63b3ed]"
             )}
             style={{ width: `${animatedProgress}%` }}
           >
@@ -219,8 +219,8 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
             )}
             style={{ left: `calc(${animatedProgress}% - 10px)` }}
           >
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-emerald-500" />
-            <div className="pointer-events-none absolute inset-0 rounded-full opacity-40 motion-safe:animate-ping bg-emerald-400" />
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#2b6cb0] via-[#1a365d] to-[#63b3ed]" />
+            <div className="pointer-events-none absolute inset-0 rounded-full opacity-40 motion-safe:animate-ping bg-[#90cdf4]" />
           </div>
         </div>
 
@@ -246,7 +246,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
                 <div className={cn(
                   "relative z-10 w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-xl",
                   "border-2 backdrop-blur supports-[backdrop-filter]:bg-white/40 bg-white/70",
-                  status === 'completed' && "bg-gradient-to-br from-emerald-500 to-emerald-600 border-emerald-300 shadow-emerald-200",
+                  status === 'completed' && "bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] border-[#90cdf4] shadow-[#90cdf4]/30",
                   status === 'current' && `${step.gradient} border-white shadow-2xl`,
                   status === 'upcoming' && "border-slate-300 shadow-slate-200",
                   status === 'error' && "bg-gradient-to-br from-red-500 to-red-600 border-red-300 shadow-red-200",
@@ -273,8 +273,8 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
                 {index < steps.length - 1 && (
                   <div className={cn(
                     "absolute top-8 left-16 w-full h-0.5 transition-all duration-500",
-                    getConnectorStatus(index) === 'completed' && "bg-gradient-to-r from-emerald-500 to-purple-500",
-                    getConnectorStatus(index) === 'current' && "bg-gradient-to-r from-purple-500 to-slate-300",
+                    getConnectorStatus(index) === 'completed' && "bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0]",
+                    getConnectorStatus(index) === 'current' && "bg-gradient-to-r from-[#2b6cb0] to-slate-300",
                     getConnectorStatus(index) === 'upcoming' && "bg-slate-300"
                   )} />
                 )}
@@ -283,7 +283,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
                 <div className="mt-3 text-center max-w-[130px]">
                   <h4 className={cn(
                     "text-[13px] font-semibold transition-colors duration-300 mb-1",
-                    status === 'completed' && "text-emerald-700",
+                    status === 'completed' && "text-[#2b6cb0]",
                     status === 'current' && "text-slate-900",
                     status === 'upcoming' && "text-slate-500",
                     status === 'error' && "text-red-700"
@@ -292,7 +292,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
                   </h4>
                   <p className={cn(
                     "text-[11px] transition-colors duration-300 leading-relaxed",
-                    status === 'completed' && "text-emerald-600",
+                    status === 'completed' && "text-[#63b3ed]",
                     status === 'current' && "text-slate-600",
                     status === 'upcoming' && "text-slate-400",
                     status === 'error' && "text-red-600"
@@ -305,7 +305,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
                 {status === 'current' && processingStatus && (
                   <div className="mt-2 px-3 py-1 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full">
                     <div className="flex items-center gap-2">
-                      <Activity className="h-3 w-3 text-blue-600 animate-pulse" />
+                      <Activity className="h-3 w-3 text-[#2b6cb0] animate-pulse" />
                       <span className="text-xs font-medium text-slate-700">
                         {processingStatus}
                       </span>
@@ -320,7 +320,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
         {/* Completion State */}
         {currentStep === WorkflowStep.COMPLETED && (
             <div className="mt-6 flex justify-center">
-            <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-2xl shadow-lg">
+            <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] text-white rounded-2xl shadow-lg">
               <CheckCircle2 className="h-6 w-6" />
                 <span className="font-semibold">{t('abg.workflow.completeTitle', 'Analysis Complete!')}</span>
               <Zap className="h-5 w-5 animate-pulse" />
@@ -342,7 +342,7 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
         <div className="mt-5 flex justify-center">
           <div className="px-3.5 py-1.5 bg-white/80 backdrop-blur-sm supports-[backdrop-filter]:bg-white/60 border border-white/40 rounded-xl shadow-sm">
             <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse" />
+              <div className="w-1.5 h-1.5 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-full animate-pulse" />
               <span className="text-[13px] font-medium text-slate-700">
                 {t('abg.workflow.progressComplete', '{{percent}}% Complete', { percent: Math.round(animatedProgress) })}
               </span>

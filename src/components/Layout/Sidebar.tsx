@@ -43,19 +43,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
-  // Color mapping for dynamic gradients
+  // Theme-based gradient mapping using THEME_COLORS.md palette
   const getGradientColors = (colorString: string) => {
-    const colorMap: Record<string, string> = {
-      'from-blue-500 to-cyan-500': 'linear-gradient(to right, #3b82f6, #06b6d4)',
-      'from-indigo-500 to-purple-500': 'linear-gradient(to right, #6366f1, #a855f7)',
-      'from-purple-500 to-pink-500': 'linear-gradient(to right, #a855f7, #ec4899)',
-      'from-violet-500 to-purple-500': 'linear-gradient(to right, #8b5cf6, #a855f7)',
-      'from-amber-500 to-orange-500': 'linear-gradient(to right, #f59e0b, #f97316)',
-      'from-red-500 to-rose-500': 'linear-gradient(to right, #ef4444, #f43f5e)',
-      'from-rose-500 to-pink-500': 'linear-gradient(to right, #f43f5e, #ec4899)',
-      'from-slate-500 to-gray-500': 'linear-gradient(to right, #64748b, #6b7280)',
+    const themeGradients: Record<string, string> = {
+      // Core AI - Primary theme gradient
+      'theme-core-ai': 'linear-gradient(to right, #1a365d, #2b6cb0, #63b3ed)',
+      // Clinical Tools - Secondary theme gradient
+      'theme-clinical': 'linear-gradient(to right, #2b6cb0, #63b3ed)',
+      // Knowledge - Light theme gradient
+      'theme-knowledge': 'linear-gradient(to right, #63b3ed, #90cdf4)',
+      // Profile - Primary to secondary
+      'theme-profile': 'linear-gradient(to right, #1a365d, #2b6cb0)',
+      // Special items
+      'theme-mediscribe': 'linear-gradient(to right, #1a365d, #2b6cb0, #63b3ed)',
+      'theme-abg': 'linear-gradient(to right, #2b6cb0, #63b3ed)',
+      'theme-search': 'linear-gradient(to right, #1a365d, #2b6cb0)',
+      'theme-podcast': 'linear-gradient(to right, #63b3ed, #90cdf4)',
+      'theme-profile-item': 'linear-gradient(to right, #90cdf4, #63b3ed)',
     };
-    return colorMap[colorString] || 'linear-gradient(to right, #64748b, #6b7280)';
+    return themeGradients[colorString] || 'linear-gradient(to right, #2b6cb0, #63b3ed)';
   };
 
   // PROFESSIONAL 3-TIER IMPORTANCE-BASED SEGMENTATION
@@ -71,7 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: t('navigation.aiCoPilot', 'AI Co-Pilot'),
           subtitle: 'Medical consultation AI',
           path: '/ai-copilot',
-          color: 'from-blue-600 to-indigo-600',
+          color: 'theme-core-ai',
           shadowColor: 'shadow-blue-500/30',
           importance: 'critical'
         },
@@ -80,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: 'MediScribe',
           subtitle: 'Voice transcription for medical notes',
           path: '/mediscribe',
-          color: 'from-blue-600 to-cyan-600',
+          color: 'theme-mediscribe',
           shadowColor: 'shadow-blue-500/30',
           importance: 'critical'
         }
@@ -98,8 +104,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: t('navigation.calculators', 'Medical Calculators'),
           subtitle: 'Clinical risk assessment tools',
           path: '/calculators',
-          color: 'from-purple-600 to-violet-600',
-          shadowColor: 'shadow-purple-500/30',
+          color: 'theme-clinical',
+          shadowColor: 'shadow-blue-500/30',
           importance: 'high'
         },
         {
@@ -107,8 +113,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: 'Blood Gas Analysis',
           subtitle: 'ABG interpretation & analysis',
           path: '/abg-analysis',
-          color: 'from-red-600 to-rose-600',
-          shadowColor: 'shadow-red-500/30',
+          color: 'theme-abg',
+          shadowColor: 'shadow-blue-500/30',
           importance: 'high'
         },
         {
@@ -116,8 +122,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: t('navigation.mediSearch', 'MediSearch'),
           subtitle: 'Medical literature & news',
           path: '/search',
-          color: 'from-indigo-600 to-blue-600',
-          shadowColor: 'shadow-indigo-500/30',
+          color: 'theme-search',
+          shadowColor: 'shadow-blue-500/30',
           importance: 'high'
         },
         {
@@ -125,8 +131,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: t('navigation.podcastStudio', 'Podcast Studio'),
           subtitle: 'AI-powered medical podcasts',
           path: '/podcast-studio',
-          color: 'from-pink-600 to-rose-600',
-          shadowColor: 'shadow-pink-500/30',
+          color: 'theme-podcast',
+          shadowColor: 'shadow-blue-500/30',
           importance: 'medium'
         }
       ]
@@ -143,8 +149,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: t('navigation.knowledgeBase', 'Knowledge Base'),
           subtitle: 'Medical reference library',
           path: '/knowledge-base',
-          color: 'from-amber-600 to-orange-600',
-          shadowColor: 'shadow-amber-500/30',
+          color: 'theme-knowledge',
+          shadowColor: 'shadow-blue-500/30',
           importance: 'medium'
         },
         {
@@ -152,8 +158,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: 'Disease Library',
           subtitle: 'Comprehensive disease database',
           path: '/diseases',
-          color: 'from-teal-600 to-cyan-600',
-          shadowColor: 'shadow-teal-500/30',
+          color: 'theme-knowledge',
+          shadowColor: 'shadow-blue-500/30',
           importance: 'medium'
         },
         {
@@ -161,8 +167,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: t('navigation.profile', 'Profile & Settings'),
           subtitle: 'Account preferences',
           path: '/profile',
-          color: 'from-slate-600 to-gray-600',
-          shadowColor: 'shadow-slate-500/30',
+          color: 'theme-profile-item',
+          shadowColor: 'shadow-blue-500/30',
           importance: 'low'
         },
         {
@@ -170,8 +176,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           label: 'Analytics Dashboard',
           subtitle: 'Usage insights & metrics',
           path: '/analytics',
-          color: 'from-violet-600 to-purple-600',
-          shadowColor: 'shadow-violet-500/30',
+          color: 'theme-knowledge',
+          shadowColor: 'shadow-blue-500/30',
           importance: 'low',
           adminOnly: true
         }
@@ -361,10 +367,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
             `}>
               <div className="relative flex-shrink-0">
                 <div className={`
-                  relative bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg shadow-lg overflow-hidden 
+                  relative rounded-lg shadow-lg overflow-hidden 
                   ${isMobile && window.innerHeight < 500 ? 'w-8 h-8' : 'w-10 h-10'}
                   transition-shadow duration-300
-                `}>
+                `}
+                style={{ background: 'linear-gradient(to right, #1a365d, #2b6cb0)' }}>
                   {profile?.profile_picture_url ? (
                     <img
                       src={profile.profile_picture_url}
@@ -381,7 +388,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
               {(!isCollapsed || isMobile) && (
                 <div className="flex flex-col min-w-0 flex-1">
                   <h2 className={`
-                    font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent truncate tracking-tight
+                    font-bold bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] dark:from-[#63b3ed] dark:to-[#90cdf4] bg-clip-text text-transparent truncate tracking-tight
                     ${isMobile && window.innerHeight < 500 ? 'text-sm' : 'text-lg'}
                   `}
                   style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 700 }}>
@@ -449,21 +456,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                     <div className="px-3 py-2">
                       <div className={`
                         flex items-center space-x-3 mb-2 
-                        ${section.priority === 1 ? 'border-l-4 border-blue-500 pl-3' : ''}
-                        ${section.priority === 2 ? 'border-l-4 border-purple-500 pl-3' : ''}
-                        ${section.priority === 3 ? 'border-l-4 border-amber-500 pl-3' : ''}
+                        ${section.priority === 1 ? 'border-l-4 border-[#1a365d] pl-3' : ''}
+                        ${section.priority === 2 ? 'border-l-4 border-[#2b6cb0] pl-3' : ''}
+                        ${section.priority === 3 ? 'border-l-4 border-[#63b3ed] pl-3' : ''}
                       `}>
                         <div className={`
                           w-2 h-2 rounded-full
-                          ${section.priority === 1 ? 'bg-blue-500 shadow-lg shadow-blue-500/40' : ''}
-                          ${section.priority === 2 ? 'bg-purple-500 shadow-lg shadow-purple-500/40' : ''}
-                          ${section.priority === 3 ? 'bg-amber-500 shadow-lg shadow-amber-500/40' : ''}
+                          ${section.priority === 1 ? 'bg-[#1a365d] shadow-lg shadow-[#1a365d]/40' : ''}
+                          ${section.priority === 2 ? 'bg-[#2b6cb0] shadow-lg shadow-[#2b6cb0]/40' : ''}
+                          ${section.priority === 3 ? 'bg-[#63b3ed] shadow-lg shadow-[#63b3ed]/40' : ''}
                         `} />
                         <h4 className={`
                           font-bold text-xs uppercase tracking-wider
-                          ${section.priority === 1 ? 'text-blue-700 dark:text-blue-300' : ''}
-                          ${section.priority === 2 ? 'text-purple-700 dark:text-purple-300' : ''}
-                          ${section.priority === 3 ? 'text-amber-700 dark:text-amber-300' : ''}
+                          ${section.priority === 1 ? 'text-[#1a365d] dark:text-[#63b3ed]' : ''}
+                          ${section.priority === 2 ? 'text-[#2b6cb0] dark:text-[#63b3ed]' : ''}
+                          ${section.priority === 3 ? 'text-[#63b3ed] dark:text-[#90cdf4]' : ''}
                         `}
                         style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 700 }}>
                           {section.title}
@@ -520,22 +527,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                               ${isCollapsed && !isMobile ? 'w-12 h-12 mx-auto' : 'w-full'}
                               ${section.priority === 1 ? 'h-12' : section.priority === 2 ? 'h-11' : 'h-10'}
                               ${active 
-                                ? `bg-gradient-to-r ${item.color} shadow-lg ${item.shadowColor}`
+                                ? `shadow-lg ${item.shadowColor}`
                                 : `bg-gray-100/60 dark:bg-gray-800/60 border
-                                   ${section.priority === 1 ? 'border-blue-300/40 dark:border-blue-600/40' : ''}
-                                   ${section.priority === 2 ? 'border-purple-300/40 dark:border-purple-600/40' : ''}
-                                   ${section.priority === 3 ? 'border-amber-300/40 dark:border-amber-600/40' : ''}
+                                   ${section.priority === 1 ? 'border-[#1a365d]/40 dark:border-[#63b3ed]/40' : ''}
+                                   ${section.priority === 2 ? 'border-[#2b6cb0]/40 dark:border-[#63b3ed]/40' : ''}
+                                   ${section.priority === 3 ? 'border-[#63b3ed]/40 dark:border-[#90cdf4]/40' : ''}
                                    group-hover:shadow-md group-hover:border-white/30 dark:group-hover:border-white/20`
                               }
                               ${section.priority === 1 ? 'transform group-hover:scale-[1.03] group-active:scale-[0.97]' : 
                                 section.priority === 2 ? 'transform group-hover:scale-[1.02] group-active:scale-[0.98]' :
                                 'transform group-hover:scale-[1.015] group-active:scale-[0.985]'}
                             `}
-                            style={!active && isHovered ? {
+                            style={active ? {
                               background: getGradientColors(item.color),
-                              boxShadow: section.priority === 1 ? '0 6px 16px rgba(0, 0, 0, 0.18)' : 
-                                        section.priority === 2 ? '0 4px 12px rgba(0, 0, 0, 0.15)' : 
-                                        '0 2px 8px rgba(0, 0, 0, 0.12)',
+                              boxShadow: section.priority === 1 ? '0 6px 16px rgba(26, 54, 93, 0.3)' : 
+                                        section.priority === 2 ? '0 4px 12px rgba(43, 108, 176, 0.25)' : 
+                                        '0 2px 8px rgba(99, 179, 237, 0.2)',
+                              transition: 'all 200ms ease-out',
+                            } : !active && isHovered ? {
+                              background: getGradientColors(item.color),
+                              boxShadow: section.priority === 1 ? '0 6px 16px rgba(26, 54, 93, 0.25)' : 
+                                        section.priority === 2 ? '0 4px 12px rgba(43, 108, 176, 0.2)' : 
+                                        '0 2px 8px rgba(99, 179, 237, 0.15)',
                               transition: 'all 200ms ease-out',
                             } : {
                               transition: 'all 200ms ease-out',
@@ -697,16 +710,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
             {(!isCollapsed || isMobile) ? (
               <div className="space-y-2">
                 {/* Compact Activity Indicator */}
-                <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30">
+                <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-[#63b3ed]/20 to-[#90cdf4]/20 border border-[#63b3ed]/30">
                   <div className="flex items-center space-x-2">
-                    <Activity className="w-3 h-3 text-green-500" />
+                    <Activity className="w-3 h-3 text-[#63b3ed]" />
                     <span className="text-xs font-medium text-gray-700 dark:text-gray-300 tracking-wide" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 500 }}>
                       {t('profile.systemStatus', 'System Status')}
                     </span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-xs text-green-600 dark:text-green-400 font-semibold tracking-wide" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 600 }}>
+                    <div className="w-1.5 h-1.5 bg-[#63b3ed] rounded-full animate-pulse" />
+                    <span className="text-xs text-[#2b6cb0] dark:text-[#63b3ed] font-semibold tracking-wide" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 600 }}>
                       {t('profile.online', 'Online')}
                     </span>
                   </div>
@@ -725,10 +738,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
             ) : (
               // Collapsed footer
               <div className="flex flex-col items-center space-y-1">
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center">
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-r from-[#63b3ed] to-[#90cdf4] flex items-center justify-center">
                   <Activity className="w-3 h-3 text-white" />
                 </div>
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                <div className="w-1.5 h-1.5 bg-[#63b3ed] rounded-full animate-pulse" />
               </div>
             )}
           </div>

@@ -19,7 +19,6 @@ import { FilterCategoryTabs, type FilterCategoryId } from './FilterCategoryTabs'
 import { QuickFilters } from './QuickFilters';
 import { ContentFormatFilters } from './filters/ContentFormatFilters';
 import { AuthorityQualityFilters } from './filters/AuthorityQualityFilters';
-import { MedicalDomainFilters } from './filters/MedicalDomainFilters';
 import { PublicationAccessFilters } from './filters/PublicationAccessFilters';
 import { GeographicContextFilters } from './filters/GeographicContextFilters';
 import { AdvancedOptionsFilters } from './filters/AdvancedOptionsFilters';
@@ -66,7 +65,6 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
       'quick-filters': 0,
       'content-format': 0,
       'authority-quality': 0,
-      'medical-domain': 0,
       'publication-access': 0,
       'geographic-context': 0,
       'advanced-options': 0
@@ -88,15 +86,6 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
     }
     if (filters.peerReviewStatus?.length) counts['authority-quality'] += filters.peerReviewStatus.length;
     if (filters.citationTier?.length) counts['authority-quality'] += filters.citationTier.length;
-
-    // Medical Domain
-    if (filters.medicalSpecialties) {
-      Object.values(filters.medicalSpecialties).forEach(arr => {
-        if (arr?.length) counts['medical-domain'] += arr.length;
-      });
-    }
-    if (filters.subspecialties?.length) counts['medical-domain'] += filters.subspecialties.length;
-    if (filters.diseaseCategories?.length) counts['medical-domain'] += filters.diseaseCategories.length;
 
     // Publication & Access
     if (filters.recencyPeriod) counts['publication-access'] += 1;
@@ -175,13 +164,6 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
             onFiltersChange={onFiltersChange}
           />
         );
-      case 'medical-domain':
-        return (
-          <MedicalDomainFilters
-            filters={filters}
-            onFiltersChange={onFiltersChange}
-          />
-        );
       case 'publication-access':
         return (
           <PublicationAccessFilters
@@ -219,10 +201,10 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
       />
 
       {/* Modal - Mobile responsive */}
-      <div className={`fixed inset-0 flex items-center justify-center z-50 p-2 sm:p-4 ${className}`}>
-        <div className="w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] bg-white shadow-2xl rounded-lg transform transition-transform duration-300 flex flex-col">
+      <div className={`fixed inset-x-0 top-4 bottom-4 flex items-center justify-center z-50 p-2 sm:p-4 lg:p-6 ${className}`}>
+        <div className="w-full max-w-4xl max-h-[calc(100vh-12rem)] bg-white shadow-2xl rounded-lg transform transition-transform duration-300 flex flex-col">
         {/* Header - Mobile responsive */}
-        <div className="flex-shrink-0 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-t-lg">
+        <div className="flex-shrink-0 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white rounded-t-lg">
           <div className="flex items-center justify-between p-4 sm:p-6">
             <div className="flex items-center gap-3">
               <FunnelIcon className="w-6 h-6" />
@@ -230,7 +212,7 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
                 <h2 className="text-xl font-bold">
                   {t('filters.modal.title', 'Advanced Medical Filters')}
                 </h2>
-                <p className="text-indigo-100 text-sm">
+                <p className="text-[#90cdf4] text-sm">
                   {t('filters.modal.subtitle', 'Refine your search with precision filtering')}
                 </p>
               </div>
@@ -323,7 +305,7 @@ export const AdvancedFilterModal: React.FC<AdvancedFilterModalProps> = ({
               <button
                 onClick={handleSaveFilters}
                 disabled={isLoading}
-                className="flex items-center justify-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-h-[44px] touch-manipulation order-1 sm:order-2"
+                className="flex items-center justify-center gap-2 px-6 py-2 bg-[#2b6cb0] text-white rounded-lg hover:bg-[#1a365d] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-h-[44px] touch-manipulation order-1 sm:order-2"
               >
                 <CheckCircleIcon className="w-4 h-4" />
                 {t('filters.save', 'Save Filters')}

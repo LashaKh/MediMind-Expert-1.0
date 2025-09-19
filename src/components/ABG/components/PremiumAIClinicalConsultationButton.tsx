@@ -105,9 +105,9 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
           contextInfo: 'Your ABG values and interpretation will be shared with our AI specialist for comprehensive discussion.',
           icon: Brain,
           accentIcon: Lightbulb,
-          gradient: 'from-indigo-600 via-purple-600 to-pink-600',
-          glowGradient: 'from-indigo-400 via-purple-400 to-pink-400',
-          accentColor: 'from-purple-400 to-pink-400',
+          gradient: 'from-[#2b6cb0] via-[#1a365d] to-[#63b3ed]',
+          glowGradient: 'from-[#63b3ed] via-[#2b6cb0] to-[#90cdf4]',
+          accentColor: 'from-[#63b3ed] to-[#90cdf4]',
           features: ['Expert interpretation review', 'Evidence-based insights', 'Clinical reasoning', 'Differential diagnosis']
         };
       case 'action-plan':
@@ -122,9 +122,9 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
             : 'Your complete action plan will be reviewed with clinical recommendations.',
           icon: Target,
           accentIcon: TrendingUp,
-          gradient: 'from-blue-600 via-indigo-600 to-purple-600',
-          glowGradient: 'from-blue-400 via-indigo-400 to-purple-400',
-          accentColor: 'from-blue-400 to-indigo-400',
+          gradient: 'from-[#2b6cb0] via-[#1a365d] to-[#63b3ed]',
+          glowGradient: 'from-[#63b3ed] via-[#2b6cb0] to-[#90cdf4]',
+          accentColor: 'from-[#63b3ed] to-[#90cdf4]',
           features: ['Strategic guidance', 'Implementation protocols', 'Expert recommendations', 'Risk assessment']
         };
       case 'complete':
@@ -136,9 +136,9 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
           contextInfo: 'Your complete ABG analysis including values, interpretation, and action plan will be available for comprehensive discussion.',
           icon: Stethoscope,
           accentIcon: Atom,
-          gradient: 'from-emerald-600 via-teal-600 to-cyan-600',
-          glowGradient: 'from-emerald-400 via-teal-400 to-cyan-400',
-          accentColor: 'from-emerald-400 to-teal-400',
+          gradient: 'from-[#2b6cb0] via-[#1a365d] to-[#63b3ed]',
+          glowGradient: 'from-[#63b3ed] via-[#2b6cb0] to-[#90cdf4]',
+          accentColor: 'from-[#63b3ed] to-[#90cdf4]',
           features: ['Complete case review', 'Clinical expertise', 'Personalized insights', 'Treatment optimization']
         };
     }
@@ -324,7 +324,7 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
                     transitionDelay: `${index * 100}ms` 
                   }}
                 >
-                  <CheckCircle className="h-4 w-4 text-emerald-300 flex-shrink-0" />
+                  <CheckCircle className="h-4 w-4 text-[#90cdf4] flex-shrink-0" />
                   <span className="font-medium">{feature}</span>
                 </div>
               ))}
@@ -335,15 +335,15 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
               {/* Enhanced trust indicators */}
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2 text-white/80 text-sm">
-                  <Shield className="h-4 w-4 text-emerald-300" />
+                  <Shield className="h-4 w-4 text-[#90cdf4]" />
                   <span className="font-medium">Medical Grade AI</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/80 text-sm">
-                  <Users className="h-4 w-4 text-blue-300" />
+                  <Users className="h-4 w-4 text-[#63b3ed]" />
                   <span className="font-medium">Expert Curated</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/80 text-sm">
-                  <Microscope className="h-4 w-4 text-purple-300" />
+                  <Microscope className="h-4 w-4 text-[#2b6cb0]" />
                   <span className="font-medium">Evidence Based</span>
                 </div>
               </div>

@@ -522,8 +522,8 @@ export const ABGResultsList: React.FC<ABGResultsListProps> = ({
                       onResultToggle(result.id);
                     }}
                     className={cn(
-                      "h-8 w-8 p-0 hover:bg-blue-100/60 transition-all duration-200",
-                      selectedResults.has(result.id) && "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                      "h-8 w-8 p-0 hover:bg-[#90cdf4]/60 transition-all duration-200",
+                      selectedResults.has(result.id) && "bg-[#90cdf4]/50 text-[#2b6cb0] hover:bg-[#90cdf4]"
                     )}
                   >
                     {selectedResults.has(result.id) ? (
@@ -539,7 +539,7 @@ export const ABGResultsList: React.FC<ABGResultsListProps> = ({
                   variant="ghost"
                   size="sm"
                   onClick={() => onResultSelect?.(result)}
-                  className="hover:bg-blue-100/60 text-blue-600 hover:text-blue-700"
+                  className="hover:bg-[#90cdf4]/60 text-[#2b6cb0] hover:text-[#1a365d]"
                 >
                   <Eye className="h-4 w-4" />
                 </Button>

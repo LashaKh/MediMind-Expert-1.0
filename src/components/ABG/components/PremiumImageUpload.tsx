@@ -201,7 +201,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
           <div className="px-5 py-3 border-b border-slate-200 bg-slate-50/60">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-slate-800">
-                <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                <CheckCircle2 className="h-5 w-5 text-[#63b3ed]" />
                 <h3 className="font-semibold">{t('abg.upload.fileReady', 'File ready for analysis')}</h3>
               </div>
               <Button
@@ -228,7 +228,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#63b3ed] rounded-full flex items-center justify-center">
                   <CheckCircle2 className="h-4 w-4 text-white" />
                 </div>
               </div>
@@ -237,7 +237,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
               <div className="flex-1 space-y-3.5">
                 <div>
                   <h4 className="font-semibold text-slate-800 flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-blue-600" />
+                    <FileText className="h-5 w-5 text-[#2b6cb0]" />
                     {selectedFile.name}
                   </h4>
                   <p className="text-xs text-slate-600 mt-1">
@@ -249,11 +249,11 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-600">{t('abg.upload.progress', 'Upload Progress')}</span>
-                    <span className="font-medium text-emerald-600">{Math.round(uploadProgress)}%</span>
+                    <span className="font-medium text-[#63b3ed]">{Math.round(uploadProgress)}%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden" aria-hidden>
                     <div 
-                      className="h-full bg-emerald-500 rounded-full transition-all duration-300 relative"
+                      className="h-full bg-[#63b3ed] rounded-full transition-all duration-300 relative"
                       style={{ width: `${uploadProgress}%` }}
                     >
                       <div className="absolute inset-0 bg-white/30 opacity-30 animate-pulse" />
@@ -288,12 +288,12 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
 
             {/* Processing State */}
             {isProcessing && (
-              <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+              <div className="mt-6 p-4 bg-[#90cdf4]/20 rounded-xl border border-[#63b3ed]/30">
                 <div className="flex items-center gap-3">
-                  <div className="w-5 h-5 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-[#63b3ed]/30 border-t-[#2b6cb0] rounded-full animate-spin" />
                   <div>
-                    <p className="font-medium text-blue-800">{t('abg.upload.processing.title', 'Processing image…')}</p>
-                    <p className="text-sm text-blue-600">{t('abg.upload.processing.subtitle', 'AI is analyzing the blood gas report')}</p>
+                    <p className="font-medium text-[#1a365d]">{t('abg.upload.processing.title', 'Processing image…')}</p>
+                    <p className="text-sm text-[#2b6cb0]">{t('abg.upload.processing.subtitle', 'AI is analyzing the blood gas report')}</p>
                   </div>
                 </div>
               </div>
@@ -352,13 +352,13 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
           "rounded-2xl border-2 border-dashed overflow-hidden",
           "min-h-[140px] flex flex-col items-center justify-center",
           "bg-white/80 backdrop-blur",
-          isDragOver ? "border-blue-500 ring-2 ring-blue-500/20" : "border-slate-300 hover:border-blue-400",
+          isDragOver ? "border-[#2b6cb0] ring-2 ring-[#2b6cb0]/20" : "border-slate-300 hover:border-[#63b3ed]",
           isProcessing && "pointer-events-none opacity-50"
         )}
       >
         {/* Content */}
         <div className="relative z-10 text-center space-y-4 p-6">
-          <div className="mx-auto w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-white flex items-center justify-center shadow-sm">
+          <div className="mx-auto w-12 h-12 rounded-xl bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] text-white flex items-center justify-center shadow-sm">
             {isDragOver ? (
               <Download className="h-6 w-6" />
             ) : (
@@ -381,7 +381,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={(e) => { e.stopPropagation(); handleClick(); }}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700"
+              className="bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white hover:from-[#1a365d] hover:to-[#2b6cb0]"
               size="sm"
             >
               <Upload className="h-5 w-5 mr-2" />
@@ -390,7 +390,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
             <Button
               variant="outline"
               size="sm"
-              className="border-slate-300 hover:border-blue-400 hover:bg-blue-50"
+              className="border-slate-300 hover:border-[#63b3ed] hover:bg-[#90cdf4]/20"
               onClick={(e) => { e.stopPropagation(); handleRequestCamera(); }}
             >
               <Camera className="h-5 w-5 mr-2" />

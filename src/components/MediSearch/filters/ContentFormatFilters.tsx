@@ -47,7 +47,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.researchLiterature.options.studies.label', 'Clinical Studies'),
         description: t('filters.contentFormat.sections.researchLiterature.options.studies.description', 'Observational and interventional studies'),
         icon: DocumentTextIcon,
-        color: 'text-blue-600',
+        color: 'text-[#2b6cb0]',
         tKey: 'studies'
       },
       {
@@ -63,7 +63,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.researchLiterature.options.metaAnalyses.label', 'Meta-Analyses'),
         description: t('filters.contentFormat.sections.researchLiterature.options.metaAnalyses.description', 'Statistical analysis of multiple studies'),
         icon: DocumentTextIcon,
-        color: 'text-purple-600',
+        color: 'text-[#2b6cb0]',
         tKey: 'metaAnalyses'
       },
       {
@@ -71,7 +71,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.researchLiterature.options.systematicReviews.label', 'Systematic Reviews'),
         description: t('filters.contentFormat.sections.researchLiterature.options.systematicReviews.description', 'Comprehensive evidence synthesis'),
         icon: DocumentTextIcon,
-        color: 'text-indigo-600',
+        color: 'text-[#2b6cb0]',
         tKey: 'systematicReviews'
       }
     ],
@@ -89,7 +89,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.clinicalGuidelines.options.diagnosticProtocols.label', 'Diagnostic Protocols'),
         description: t('filters.contentFormat.sections.clinicalGuidelines.options.diagnosticProtocols.description', 'Standardized diagnostic procedures'),
         icon: ClipboardDocumentCheckIcon,
-        color: 'text-blue-600',
+        color: 'text-[#2b6cb0]',
         tKey: 'diagnosticProtocols'
       },
       {
@@ -97,7 +97,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.clinicalGuidelines.options.bestPractices.label', 'Best Practices'),
         description: t('filters.contentFormat.sections.clinicalGuidelines.options.bestPractices.description', 'Professional practice standards'),
         icon: ClipboardDocumentCheckIcon,
-        color: 'text-purple-600',
+        color: 'text-[#2b6cb0]',
         tKey: 'bestPractices'
       }
     ],
@@ -133,7 +133,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.educationalContent.options.cmeMaterials.label', 'CME Materials'),
         description: t('filters.contentFormat.sections.educationalContent.options.cmeMaterials.description', 'Continuing medical education resources'),
         icon: AcademicCapIcon,
-        color: 'text-indigo-600',
+        color: 'text-[#2b6cb0]',
         tKey: 'cmeMaterials'
       },
       {
@@ -149,7 +149,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.educationalContent.options.learningModules.label', 'Learning Modules'),
         description: t('filters.contentFormat.sections.educationalContent.options.learningModules.description', 'Structured educational content'),
         icon: AcademicCapIcon,
-        color: 'text-purple-600',
+        color: 'text-[#2b6cb0]',
         tKey: 'learningModules'
       }
     ],
@@ -159,7 +159,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.regulatoryDocs.options.fdaApprovals.label', 'FDA Approvals'),
         description: t('filters.contentFormat.sections.regulatoryDocs.options.fdaApprovals.description', 'Drug and device approval documents'),
         icon: DocumentIcon,
-        color: 'text-blue-700',
+        color: 'text-[#1a365d]',
         tKey: 'fdaApprovals'
       },
       {
@@ -193,7 +193,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
         label: t('filters.contentFormat.sections.patientResources.options.factSheets.label', 'Fact Sheets'),
         description: t('filters.contentFormat.sections.patientResources.options.factSheets.description', 'Quick reference information sheets'),
         icon: UserIcon,
-        color: 'text-blue-600',
+        color: 'text-[#2b6cb0]',
         tKey: 'factSheets'
       },
       {
@@ -289,7 +289,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
           {options[0] && React.createElement(options[0].icon, { className: "w-5 h-5 text-gray-600" })}
           {categoryTitle}
           {selectedTypes.length > 0 && (
-            <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
+            <span className="ml-2 px-2 py-1 bg-[#90cdf4]/20 text-[#1a365d] text-xs font-medium rounded-full">
               {selectedTypes.length}
             </span>
           )}
@@ -304,7 +304,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
                 key={option.id}
                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 min-h-[60px] touch-manipulation active:scale-98 ${
                   isSelected
-                    ? 'border-indigo-500 bg-indigo-50'
+                    ? 'border-[#2b6cb0] bg-[#90cdf4]/20'
                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
               >
@@ -312,7 +312,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleContentTypeChange(categoryKey, option.id, e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mt-0.5 min-h-[20px] min-w-[20px] touch-manipulation"
+                  className="w-5 h-5 text-[#2b6cb0] border-gray-300 rounded focus:ring-[#2b6cb0] mt-0.5 min-h-[20px] min-w-[20px] touch-manipulation"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
@@ -333,7 +333,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
     <div className="space-y-8">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          <DocumentTextIcon className="w-6 h-6 text-indigo-600" />
+          <DocumentTextIcon className="w-6 h-6 text-[#2b6cb0]" />
           {t('filters.contentFormat.title', 'Content Type & Format')}
         </h3>
         <p className="text-gray-600 mb-6">
@@ -357,7 +357,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
           <DocumentArrowDownIcon className="w-5 h-5 text-gray-600" />
           {t('filters.fileFormats.title', 'File Formats')}
           {filters.fileFormats && filters.fileFormats.length > 0 && (
-            <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
+            <span className="ml-2 px-2 py-1 bg-[#90cdf4]/20 text-[#1a365d] text-xs font-medium rounded-full">
               {filters.fileFormats.length}
             </span>
           )}
@@ -372,7 +372,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
                 key={option.id}
                 className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 min-h-[56px] touch-manipulation active:scale-98 ${
                   isSelected
-                    ? 'border-indigo-500 bg-indigo-50'
+                    ? 'border-[#2b6cb0] bg-[#90cdf4]/20'
                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
               >
@@ -380,7 +380,7 @@ export const ContentFormatFilters: React.FC<ContentFormatFiltersProps> = ({
                   type="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleFileFormatChange(option.id, e.target.checked)}
-                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 min-h-[16px] min-w-[16px] touch-manipulation"
+                  className="w-4 h-4 text-[#2b6cb0] border-gray-300 rounded focus:ring-[#2b6cb0] min-h-[16px] min-w-[16px] touch-manipulation"
                 />
                 <IconComponent className={`w-5 h-5 ${option.color}`} />
                 <div className="flex-1 min-w-0">

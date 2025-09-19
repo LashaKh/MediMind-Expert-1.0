@@ -48,9 +48,9 @@ interface ClinicalActionPlanDisplayProps {
 const issueConfig = {
   critical: {
     icon: AlertTriangle,
-    color: 'text-red-700',
-    bgColor: 'bg-red-50',
-    borderColor: 'border-red-200',
+    color: 'text-[#1a365d]',
+    bgColor: 'bg-[#90cdf4]/20',
+    borderColor: 'border-[#63b3ed]/40',
     dotColor: 'bg-red-500'
   },
   high: {
@@ -79,7 +79,7 @@ const issueConfig = {
 // Priority styling configuration
 const priorityConfig = {
   critical: {
-    badge: 'bg-red-100 text-red-800 border border-red-200',
+    badge: 'bg-[#90cdf4]/30 text-[#1a365d] border border-[#63b3ed]/40',
     icon: AlertTriangle,
     dotColor: 'bg-red-500'
   },
@@ -383,15 +383,15 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
   return (
     <div className={cn("space-y-6", className)}>
       {/* Premium Header with Gradient Background */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 rounded-2xl shadow-2xl">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#2b6cb0] via-[#1a365d] to-[#63b3ed] rounded-2xl shadow-2xl">
         {/* Animated Background Pattern */}
         <div className="absolute inset-0 opacity-20" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M15 15l15 15-15 15-15-15z'/%3E%3C/g%3E%3C/svg%3E")`
         }} />
         
         {/* Floating Gradient Orbs */}
-        <div className="absolute top-4 right-8 w-20 h-20 bg-gradient-to-br from-cyan-400/30 to-blue-500/30 rounded-full blur-xl animate-pulse" />
-        <div className="absolute bottom-6 left-12 w-16 h-16 bg-gradient-to-br from-purple-400/20 to-pink-500/20 rounded-full blur-lg animate-bounce" style={{ animationDuration: '3s' }} />
+        <div className="absolute top-4 right-8 w-20 h-20 bg-gradient-to-br from-[#63b3ed]/30 to-[#2b6cb0]/30 rounded-full blur-xl animate-pulse" />
+        <div className="absolute bottom-6 left-12 w-16 h-16 bg-gradient-to-br from-[#90cdf4]/20 to-[#63b3ed]/20 rounded-full blur-lg animate-bounce" style={{ animationDuration: '3s' }} />
         
         <div className="relative p-6">
           <div className="flex items-center justify-between">
@@ -402,7 +402,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
                   <FileText className="h-7 w-7 text-white" />
                 </div>
                 {/* Success indicator */}
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-400 rounded-full flex items-center justify-center border-2 border-white">
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#63b3ed] rounded-full flex items-center justify-center border-2 border-white">
                   <CheckCircle2 className="h-3 w-3 text-white" />
                 </div>
               </div>
@@ -415,7 +415,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
                     <span className="text-xs font-medium text-amber-100">{t('chat.actionPlan.aiEnhanced')}</span>
                   </div>
                 </h2>
-                <p className="text-blue-100 text-sm">
+                <p className="text-[#90cdf4] text-sm">
                   {t('chat.actionPlan.subtitle')}
                 </p>
               </div>
@@ -429,7 +429,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
                 size="sm"
               >
                 {copySuccess ? (
-                  <CheckCircle2 className="h-4 w-4 mr-2 text-emerald-300" />
+                  <CheckCircle2 className="h-4 w-4 mr-2 text-[#90cdf4]" />
                 ) : (
                   <Copy className="h-4 w-4 mr-2" />
                 )}
@@ -507,7 +507,7 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
                     <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center", 
                       issue.priority === 'critical' ? 'bg-red-500' :
                       issue.priority === 'high' ? 'bg-orange-500' :
-                      issue.priority === 'medium' ? 'bg-blue-500' : 'bg-green-500'
+                      issue.priority === 'medium' ? 'bg-[#2b6cb0]' : 'bg-[#63b3ed]'
                     )}>
                       <Icon className="h-6 w-6 text-white" />
                     </div>
@@ -563,9 +563,9 @@ export const ClinicalActionPlanDisplay: React.FC<ClinicalActionPlanDisplayProps>
                 <CardContent className="pt-0">
                   <div className={cn(
                     "rounded-lg border-l-4 pl-6 py-4",
-                    issue.priority === 'critical' ? 'border-red-500 bg-red-50/50' :
+                    issue.priority === 'critical' ? 'border-[#63b3ed] bg-[#90cdf4]/20' :
                     issue.priority === 'high' ? 'border-orange-500 bg-orange-50/50' :
-                    issue.priority === 'medium' ? 'border-blue-500 bg-blue-50/50' : 'border-green-500 bg-green-50/50',
+                    issue.priority === 'medium' ? 'border-[#2b6cb0] bg-[#90cdf4]/20' : 'border-[#63b3ed] bg-[#90cdf4]/20',
                     isCompleted && "opacity-75"
                   )}>
                     <MedicalMarkdownRenderer 

@@ -177,7 +177,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
       case 'excellent':
         return { color: 'text-green-600', bg: 'bg-green-50', icon: Star };
       case 'good':
-        return { color: 'text-blue-600', bg: 'bg-blue-50', icon: CheckCircle };
+        return { color: 'text-[#2b6cb0]', bg: 'bg-[#90cdf4]/50', icon: CheckCircle };
       case 'average':
         return { color: 'text-yellow-600', bg: 'bg-yellow-50', icon: Target };
       default:
@@ -209,7 +209,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Activity className="h-6 w-6 text-blue-600" />
+            <Activity className="h-6 w-6 text-[#2b6cb0]" />
             ABG Analysis Dashboard
           </h1>
           <p className="text-gray-600 mt-1">
@@ -224,7 +224,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
             <select
               value={selectedTimeRange}
               onChange={(e) => handleTimeRangeChange(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-2 border border-[#2b6cb0]/30 rounded-lg focus:ring-2 focus:ring-[#2b6cb0] focus:border-[#2b6cb0] bg-white/80 backdrop-blur-sm"
             >
               {TIME_RANGES.map(range => (
                 <option key={range.value} value={range.value}>
@@ -235,7 +235,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
           </div>
 
           {/* View Mode Toggle */}
-          <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="flex bg-[#90cdf4]/20 rounded-lg p-1 border border-[#2b6cb0]/20">
             {[
               { mode: 'overview', icon: BarChart3, label: 'Overview' },
               { mode: 'analytics', icon: PieChart, label: 'Analytics' },
@@ -257,7 +257,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
       </div>
 
       {/* Performance Summary Bar */}
-      <Card className="p-4 border-l-4 border-l-blue-500">
+      <Card className="p-4 border-l-4 border-l-[#2b6cb0] bg-gradient-to-r from-[#90cdf4]/10 to-white/50 backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className={cn("p-2 rounded-lg", performanceIndicator.bg)}>
@@ -276,7 +276,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
           <div className="flex items-center gap-2">
             <Badge 
               variant={stats.recentTrend > 0 ? 'default' : 'secondary'}
-              className={stats.recentTrend > 0 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}
+              className={stats.recentTrend > 0 ? 'bg-[#63b3ed]/20 text-[#1a365d] border-[#2b6cb0]/30' : 'bg-[#90cdf4]/20 text-[#1a365d] border-[#2b6cb0]/20'}
             >
               <TrendingUp className={cn("h-3 w-3 mr-1", stats.recentTrend < 0 && "rotate-180")} />
               {Math.abs(stats.recentTrend)}%
@@ -302,7 +302,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
       )}
 
       {/* Quick Actions */}
-      <Card className="p-6">
+      <Card className="p-6 bg-gradient-to-br from-[#90cdf4]/10 to-white/50 backdrop-blur-sm border-[#2b6cb0]/20">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
           <Zap className="h-5 w-5 text-yellow-500" />
           Quick Actions
@@ -313,7 +313,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
             className="justify-start"
             onClick={() => onFiltersChange({ hasInterpretation: false })}
           >
-            <AlertTriangle className="h-4 w-4 mr-2 text-orange-500" />
+            <AlertTriangle className="h-4 w-4 mr-2 text-[#2b6cb0]" />
             Pending Interpretations
           </Button>
           <Button 
@@ -324,7 +324,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
               onFiltersChange({ startDate: sevenDaysAgo.toISOString().split('T')[0] });
             }}
           >
-            <Calendar className="h-4 w-4 mr-2 text-blue-500" />
+            <Calendar className="h-4 w-4 mr-2 text-[#2b6cb0]" />
             Recent Activity
           </Button>
           <Button 
@@ -335,7 +335,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
               onFiltersChange({});
             }}
           >
-            <Star className="h-4 w-4 mr-2 text-green-500" />
+            <Star className="h-4 w-4 mr-2 text-[#63b3ed]" />
             High Quality Results
           </Button>
           <Button 
@@ -343,7 +343,7 @@ export const HistoryDashboard: React.FC<HistoryDashboardProps> = ({
             className="justify-start"
             onClick={() => onFiltersChange({ type: 'Arterial Blood Gas' })}
           >
-            <FileText className="h-4 w-4 mr-2 text-purple-500" />
+            <FileText className="h-4 w-4 mr-2 text-[#2b6cb0]" />
             Arterial Blood Gas
           </Button>
         </div>

@@ -41,7 +41,7 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
         };
       case 'ACTIVE_NOT_RECRUITING':
         return {
-          color: 'text-blue-700 bg-blue-100',
+          color: 'text-[#1a365d] bg-[#90cdf4]/20',
           icon: ClockIcon,
           label: t('search.clinicalTrials.status.active', 'Active')
         };
@@ -194,7 +194,7 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
               {trial.clinicalTrialData.locations[0].state && `, ${trial.clinicalTrialData.locations[0].state}`}
               {trial.clinicalTrialData.locations[0].country && `, ${trial.clinicalTrialData.locations[0].country}`}
               {trial.clinicalTrialData.locations[0].distance && (
-                <span className="text-blue-600 ml-1">
+                <span className="text-[#2b6cb0] ml-1">
                   ({trial.clinicalTrialData.locations[0].distance} {t('search.clinicalTrials.miles', 'miles')})
                 </span>
               )}
@@ -206,7 +206,7 @@ export const ClinicalTrialCard: React.FC<ClinicalTrialCardProps> = ({
         <div className="flex gap-3">
           <button
             onClick={() => onViewDetails?.(trial)}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
+            className="flex-1 px-4 py-2 bg-[#2b6cb0] text-white rounded-lg hover:bg-[#1a365d] transition-colors font-medium text-sm"
           >
             {t('search.clinicalTrials.checkEligibility', 'Check Eligibility')}
           </button>

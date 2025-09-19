@@ -136,17 +136,17 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
   };
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-blue-50 to-indigo-50 rounded-2xl border border-emerald-200/50 shadow-lg">
+    <div className="relative overflow-hidden bg-gradient-to-br from-[#90cdf4]/20 via-[#63b3ed]/20 to-[#2b6cb0]/20 rounded-2xl border border-[#63b3ed]/40 shadow-lg">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 opacity-20" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23059669' fill-opacity='0.1'%3E%3Cpath d='M0 0h20v20H0z'/%3E%3Cpath d='M10 0l10 10-10 10L0 10z'/%3E%3C/g%3E%3C/svg%3E")`
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232b6cb0' fill-opacity='0.1'%3E%3Cpath d='M0 0h20v20H0z'/%3E%3Cpath d='M10 0l10 10-10 10L0 10z'/%3E%3C/g%3E%3C/svg%3E")`
       }} />
 
       <div className="relative p-6">
         {/* Header Section */}
         <div className="flex items-center gap-3 mb-6">
-          <div className="flex items-center justify-center w-10 h-10 bg-emerald-100 rounded-xl">
-            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+          <div className="flex items-center justify-center w-10 h-10 bg-[#63b3ed]/30 rounded-xl">
+            <CheckCircle2 className="h-5 w-5 text-[#1a365d]" />
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
@@ -164,12 +164,12 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
         {/* AI Consultation Section - Integrated within the green box */}
         {/* Test: Always render to debug */}
         <div className="mb-6 space-y-4">
-          <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-emerald-200/70">
+          <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-[#63b3ed]/40">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 bg-emerald-500 rounded-lg flex items-center justify-center">
+              <div className="w-6 h-6 bg-[#2b6cb0] rounded-lg flex items-center justify-center">
                 <Brain className="h-3 w-3 text-white" />
               </div>
-              <h4 className="text-sm font-semibold text-emerald-800">{t('abg.final.aiClinicalConsultation', 'AI Clinical Consultation')}</h4>
+              <h4 className="text-sm font-semibold text-[#1a365d]">{t('abg.final.aiClinicalConsultation', 'AI Clinical Consultation')}</h4>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -187,9 +187,9 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
                     });
                   }
                 }}
-                className="group relative overflow-hidden bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-0 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-out flex items-center gap-3 justify-center text-sm font-medium"
+                className="group relative overflow-hidden bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] hover:from-[#1a365d] hover:to-[#2b6cb0] text-white border-0 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-out flex items-center gap-3 justify-center text-sm font-medium"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-300/20 to-emerald-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#63b3ed]/20 to-[#90cdf4]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <Stethoscope className="h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
                 <span className="relative z-10">{t('abg.final.aiClinicalConsultation', 'AI Clinical Consultation')}</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
@@ -198,9 +198,9 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
               {/* Select Action Plan - Opens selection window */}
               <Button
                 onClick={handleSelectiveConsultation}
-                className="group relative overflow-hidden bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-0 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-out flex items-center gap-3 justify-center text-sm font-medium"
+                className="group relative overflow-hidden bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d] text-white border-0 px-4 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-out flex items-center gap-3 justify-center text-sm font-medium"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#63b3ed]/20 to-[#90cdf4]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <Target className="h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
                 <span className="relative z-10">{t('abg.final.selectActionPlan', 'Select Action Plan')}</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
@@ -299,7 +299,7 @@ export const PremiumFinalSteps: React.FC<PremiumFinalStepsProps> = ({
               e.stopPropagation();
               handleGoToInterpretation();
             }}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 text-sm cursor-pointer"
+            className="bg-[#2b6cb0] hover:bg-[#1a365d] text-white px-4 py-2 text-sm cursor-pointer"
             style={{ pointerEvents: 'auto', zIndex: 1000 }}
           >
             <ChevronLeft className="h-3 w-3 mr-1" />

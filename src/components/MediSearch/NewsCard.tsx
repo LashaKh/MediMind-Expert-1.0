@@ -81,29 +81,29 @@ export const NewsCard: React.FC<NewsCardProps> = ({
       level: 'High Impact Study', 
       class: 'evidence-high-impact',
       icon: TrophyIcon,
-      gradient: 'from-amber-400 via-orange-500 to-red-500',
-      glow: 'shadow-orange-500/50'
+      gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+      glow: 'shadow-[#2b6cb0]/50'
     };
     if (score >= 0.9 || evidenceLevel === 'rct') return { 
       level: 'Quality Research', 
       class: 'evidence-quality',
       icon: ArrowTrendingUpIcon,
-      gradient: 'from-emerald-400 via-teal-500 to-cyan-500',
-      glow: 'shadow-emerald-500/50'
+      gradient: 'from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4]',
+      glow: 'shadow-[#63b3ed]/50'
     };
     if (score >= 0.8 || evidenceLevel === 'cohort_study') return { 
       level: 'Clinical Evidence', 
       class: 'evidence-clinical',
       icon: BeakerIcon,
-      gradient: 'from-blue-400 via-indigo-500 to-purple-500',
-      glow: 'shadow-blue-500/50'
+      gradient: 'from-[#63b3ed] via-[#90cdf4] to-[#2b6cb0]',
+      glow: 'shadow-[#2b6cb0]/50'
     };
     return { 
       level: 'Medical News', 
       class: 'evidence-news',
       icon: SparklesIcon,
-      gradient: 'from-gray-400 via-gray-500 to-gray-600',
-      glow: 'shadow-gray-500/50'
+      gradient: 'from-[#90cdf4] via-[#63b3ed] to-[#2b6cb0]',
+      glow: 'shadow-[#63b3ed]/50'
     };
   }, []);
 
@@ -153,7 +153,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex flex-col gap-2 mb-2">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-tight line-clamp-2 group-hover:text-indigo-900 transition-colors">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-tight line-clamp-2 group-hover:text-[#1a365d] transition-colors">
                   {article.title}
                 </h3>
                 <div className="flex gap-1 justify-end flex-shrink-0">
@@ -176,7 +176,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                         onClick={(e) => { e.stopPropagation(); handleBookmark(); }}
                         className={cn(
                           "p-1.5 h-auto min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center",
-                          isBookmarked ? "text-blue-500 hover:text-blue-600" : "text-gray-400 hover:text-blue-500"
+                          isBookmarked ? "text-[#2b6cb0] hover:text-[#1a365d]" : "text-gray-400 hover:text-[#2b6cb0]"
                         )}
                       >
                         {isBookmarked ? <BookmarkSolid className="w-4 h-4" /> : <BookmarkIcon className="w-4 h-4" />}
@@ -235,7 +235,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
       <CardHeader className="relative z-10">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-4 mb-4">
           <div className="flex-1 w-full">
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight mb-3 group-hover:text-indigo-900 transition-colors duration-200 line-clamp-3">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight mb-3 group-hover:text-[#1a365d] transition-colors duration-200 line-clamp-3">
               {article.title}
             </h3>
             
@@ -281,8 +281,8 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                   className={cn(
                     "p-2 transition-all duration-200 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center",
                     isBookmarked 
-                      ? "text-blue-500 bg-blue-50 hover:bg-blue-100" 
-                      : "text-gray-400 hover:text-blue-500 hover:bg-blue-50"
+                      ? "text-[#2b6cb0] bg-[#90cdf4]/20 hover:bg-[#90cdf4]/30" 
+                      : "text-gray-400 hover:text-[#2b6cb0] hover:bg-[#90cdf4]/20"
                   )}
                   title={isBookmarked ? 'Remove bookmark' : 'Bookmark article'}
                 >
@@ -357,7 +357,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             </div>
             
             <button
-              className="sm:ml-3 p-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 flex-shrink-0 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center"
+              className="sm:ml-3 p-2 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 flex-shrink-0 min-h-[44px] min-w-[44px] touch-manipulation flex items-center justify-center"
               onClick={(e) => { e.stopPropagation(); handleClick(); }}
               title="Read full article"
             >
