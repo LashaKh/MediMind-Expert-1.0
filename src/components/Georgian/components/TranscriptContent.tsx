@@ -138,7 +138,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
       {/* Modern Transcript Container */}
       <div className="relative group h-full flex flex-col">
         {/* Clean Background */}
-        <div className="absolute inset-0 transcription-card backdrop-blur-2xl" />
+        <div className="absolute inset-0 bg-white" />
         
         {/* Subtle Glow Effect */}
         <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/10 via-blue-400/5 to-blue-500/10 rounded-3xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-700" />

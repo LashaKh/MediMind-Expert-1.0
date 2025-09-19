@@ -2,11 +2,12 @@
 /* Inspired by professional transcription interfaces */
 
 :root {
-  /* Primary Blue Gradient Colors */
-  --transcription-primary-start: #4A9EFF;
-  --transcription-primary-end: #87BFFF;
-  --transcription-primary-light: #B8D4FF;
-  --transcription-primary-dark: #2B7FFF;
+  /* Primary Blue Gradient Colors - Updated to match theme */
+  --transcription-primary-start: #1a365d;
+  --transcription-primary-end: #2b6cb0;
+  --transcription-primary-light: #63b3ed;
+  --transcription-primary-lighter: #90cdf4;
+  --transcription-primary-dark: #1a365d;
   
   /* Supporting Colors */
   --transcription-white: #FFFFFF;
@@ -34,23 +35,20 @@
   
   /* Gradients */
   --transcription-bg-gradient: linear-gradient(135deg, var(--transcription-primary-start) 0%, var(--transcription-primary-end) 100%);
-  --transcription-button-gradient: linear-gradient(135deg, var(--transcription-primary-start) 0%, var(--transcription-primary-dark) 100%);
+  --transcription-button-gradient: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
   --transcription-card-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 100%);
 }
 
-/* Main Background */
+/* Main Background - Light Theme */
 .transcription-bg {
-  background: var(--transcription-bg-gradient);
+  background: #ffffff;
   background-attachment: fixed;
   min-height: 100vh;
 }
 
 .transcription-header-bg {
-  background: linear-gradient(to right, 
-    rgba(248, 250, 252, 0.95), 
-    rgba(255, 255, 255, 0.98), 
-    rgba(239, 246, 255, 0.95)
-  );
+  background: #ffffff;
+  border-bottom: 1px solid rgba(144, 205, 244, 0.3);
 }
 
 .transcription-primary-gradient {
@@ -59,11 +57,10 @@
 
 /* Card Styles */
 .transcription-card {
-  background: var(--transcription-white);
+  background: #ffffff;
   border-radius: var(--transcription-card-radius);
   box-shadow: var(--transcription-shadow-card);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(144, 205, 244, 0.2);
   transition: all 0.3s ease;
 }
 
@@ -73,9 +70,8 @@
 }
 
 .transcription-card-glass {
-  background: var(--transcription-card-gradient);
-  backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: #ffffff;
+  border: 1px solid rgba(144, 205, 244, 0.3);
 }
 
 /* Primary Button Styles */
@@ -112,11 +108,11 @@
   transform: none;
 }
 
-/* Secondary Button Styles - FORCE WHITE TEXT */
+/* Secondary Button Styles - Light Theme */
 .transcription-btn-secondary {
-  background: var(--transcription-gray-100);
-  color: white !important;
-  border: 1px solid var(--transcription-gray-200);
+  background: rgba(144, 205, 244, 0.1);
+  color: #1a365d !important;
+  border: 1px solid rgba(99, 179, 237, 0.3);
   border-radius: var(--transcription-button-radius);
   padding: 12px 24px;
   font-weight: 600;
@@ -128,7 +124,7 @@
   gap: 8px;
 }
 
-/* NUCLEAR OPTION - FORCE ALL TEXT TO WHITE */
+/* Force Dark Text for Light Theme Visibility */
 .transcription-btn-secondary,
 .transcription-btn-secondary *,
 .transcription-btn-secondary h1,
@@ -144,19 +140,19 @@
 .transcription-btn-secondary .mediscribe-mobile-control-text,
 .transcription-btn-secondary .mediscribe-mobile-control-subtext,
 .transcription-btn-secondary .opacity-70 {
-  color: white !important;
+  color: #1a365d !important;
 }
 
 .transcription-btn-secondary:hover:not(:disabled) {
-  background: var(--transcription-gray-200);
-  border-color: var(--transcription-gray-300);
+  background: rgba(99, 179, 237, 0.2);
+  border-color: rgba(99, 179, 237, 0.5);
   transform: translateY(-1px);
 }
 
-/* HOVER STATE - FORCE WHITE */
+/* HOVER STATE - Maintain Dark Text */
 .transcription-btn-secondary:hover:not(:disabled),
 .transcription-btn-secondary:hover:not(:disabled) * {
-  color: white !important;
+  color: #1a365d !important;
 }
 
 
@@ -237,28 +233,27 @@
 
 /* Tab Styles */
 .transcription-tab {
-  background: rgba(255, 255, 255, 0.7);
-  color: var(--transcription-gray-600);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(144, 205, 244, 0.1);
+  color: #1a365d;
+  border: 1px solid rgba(144, 205, 244, 0.3);
   border-radius: var(--transcription-small-radius);
   padding: 12px 16px;
   font-weight: 600;
   font-size: 14px;
   transition: all 0.2s ease;
   cursor: pointer;
-  backdrop-filter: blur(10px);
 }
 
 .transcription-tab.active {
-  background: var(--transcription-white);
-  color: var(--transcription-primary-start);
-  border-color: var(--transcription-primary-start);
+  background: #ffffff;
+  color: #1a365d;
+  border-color: #63b3ed;
   box-shadow: var(--transcription-shadow-button);
 }
 
 .transcription-tab:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--transcription-gray-700);
+  background: rgba(144, 205, 244, 0.2);
+  color: #1a365d;
 }
 
 /* Status Indicators */

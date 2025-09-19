@@ -368,7 +368,7 @@ export const CardiologyWorkspace: React.FC = () => {
     { 
       label: 'AI Clinical Consult', 
       icon: Brain, 
-      color: 'from-blue-500 to-blue-600',
+      color: 'from-[#63b3ed] to-[#2b6cb0]',
       action: goToAICopilot
     },
     { 

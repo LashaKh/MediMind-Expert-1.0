@@ -113,7 +113,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
             {/* Left: Icon and Text */}
             <div className="flex items-center space-x-2">
               {/* Icon */}
-              <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
+              <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
                 <CurrentEngineIcon className="w-4 h-4 text-white" />
               </div>
               
@@ -130,7 +130,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
             
             {/* Right: Indicator */}
             <div className="flex items-center space-x-1">
-              <div className={`w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 ${recordingState.isRecording ? 'animate-pulse' : ''}`} />
+              <div className={`w-2 h-2 rounded-full bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] ${recordingState.isRecording ? 'animate-pulse' : ''}`} />
               <ChevronDown className={`w-4 h-4 opacity-70 ${engineDropdownOpen ? 'rotate-180' : 'rotate-0'} transition-all duration-200`} />
             </div>
           </button>
@@ -167,7 +167,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                       <div className="flex items-center space-x-4">
                         
                         {/* Icon */}
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md group-hover/item:scale-110 transition-all duration-200">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] flex items-center justify-center shadow-md group-hover/item:scale-110 transition-all duration-200">
                           <EngineIcon className="w-5 h-5 text-white" />
                         </div>
                         
@@ -179,7 +179,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                             </h4>
                             
                             {isSelected && (
-                              <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
+                              <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] flex items-center justify-center shadow-md">
                                 <Check className="w-3 h-3 text-white" />
                               </div>
                             )}
@@ -250,7 +250,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                           <div className={`
                             w-12 h-12 rounded-xl flex items-center justify-center shadow-sm
                             ${isSelected 
-                              ? 'bg-gradient-to-br from-blue-500 to-blue-600' 
+                              ? 'bg-gradient-to-br from-[#1a365d] to-[#2b6cb0]' 
                               : 'bg-gray-200 dark:bg-gray-700'
                             }
                           `}>
@@ -320,7 +320,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
               {/* Left: Icon and Text */}
               <div className="flex items-center space-x-2">
                 {/* Icon */}
-                <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
+                <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
                   <Brain className="w-4 h-4 text-white" />
                 </div>
                 

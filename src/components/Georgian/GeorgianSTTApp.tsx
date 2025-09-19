@@ -720,7 +720,7 @@ export const GeorgianSTTApp: React.FC = () => {
             <div className="flex flex-col space-y-3">
               <button
                 onClick={() => handleCreateSession()}
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+                className="w-full bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d] text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2"
               >
                 <Plus className="w-4 h-4" />
                 <span>New Session</span>
@@ -731,7 +731,7 @@ export const GeorgianSTTApp: React.FC = () => {
                 placeholder="Search sessions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#63b3ed]"
               />
             </div>
             
@@ -739,13 +739,13 @@ export const GeorgianSTTApp: React.FC = () => {
             <div className="space-y-3 overflow-y-auto" style={{ maxHeight: '50vh' }}>
               {sessionLoading ? (
                 <div className="flex items-center justify-center py-8">
-                  <div className="text-blue-500">Loading sessions...</div>
+                  <div className="text-[#2b6cb0]">Loading sessions...</div>
                 </div>
               ) : filteredSessions.length === 0 ? (
                 <div className="bg-white p-6 rounded-lg border text-center">
                   <div className="flex flex-col items-center space-y-4">
-                    <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center">
-                      <Stethoscope className="w-8 h-8 text-blue-600" />
+                    <div className="w-16 h-16 bg-[#90cdf4]/20 rounded-xl flex items-center justify-center">
+                      <Stethoscope className="w-8 h-8 text-[#2b6cb0]" />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -759,7 +759,7 @@ export const GeorgianSTTApp: React.FC = () => {
                           handleCreateSession();
                           closeMobileDrawer();
                         }}
-                        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium flex items-center space-x-2"
+                        className="bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d] text-white py-2 px-4 rounded-lg font-medium transition-all duration-200 flex items-center space-x-2"
                       >
                         <Plus className="w-4 h-4" />
                         <span>Create First Session</span>
@@ -777,8 +777,8 @@ export const GeorgianSTTApp: React.FC = () => {
                       key={session.id}
                       className={`bg-white border-2 rounded-lg p-4 cursor-pointer transition-all duration-200 ${
                         isActive
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-blue-300'
+                          ? 'border-[#63b3ed] bg-[#90cdf4]/10'
+                          : 'border-gray-200 hover:border-[#63b3ed]/50'
                       }`}
                       onClick={() => handleMobileSessionSelect(session.id)}
                     >
@@ -786,7 +786,7 @@ export const GeorgianSTTApp: React.FC = () => {
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
                           <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
                             isActive 
-                              ? 'bg-blue-600 text-white' 
+                              ? 'bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white' 
                               : 'bg-gray-200 text-gray-500'
                           }`}>
                             <FileText className="w-5 h-5" />
@@ -794,13 +794,13 @@ export const GeorgianSTTApp: React.FC = () => {
                           
                           <div className="flex-1 min-w-0">
                             <h3 className={`text-base font-semibold truncate mb-1 ${
-                              isActive ? 'text-blue-900' : 'text-gray-900'
+                              isActive ? 'text-[#1a365d]' : 'text-gray-900'
                             }`}>
                               {session.title}
                             </h3>
                             
                             <div className="flex items-center space-x-3 text-sm">
-                              <span className={isActive ? 'text-blue-600' : 'text-gray-500'}>
+                              <span className={isActive ? 'text-[#2b6cb0]' : 'text-gray-500'}>
                                 {new Date(session.createdAt).toLocaleDateString('en-US', { 
                                   month: 'short', 
                                   day: 'numeric',
@@ -809,7 +809,7 @@ export const GeorgianSTTApp: React.FC = () => {
                                 })}
                               </span>
                               {session.durationMs > 0 && (
-                                <span className={isActive ? 'text-blue-600' : 'text-gray-500'}>
+                                <span className={isActive ? 'text-[#2b6cb0]' : 'text-gray-500'}>
                                   {formatTime(session.durationMs)}
                                 </span>
                               )}
@@ -818,7 +818,7 @@ export const GeorgianSTTApp: React.FC = () => {
                         </div>
                         
                         {hasTranscript && (
-                          <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">
+                          <span className="bg-[#90cdf4]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
                             Transcribed
                           </span>
                         )}
@@ -855,8 +855,8 @@ export const GeorgianSTTApp: React.FC = () => {
         <div className="hidden lg:flex lg:flex-row h-full">
           {/* Desktop Session History Panel - Only show when not collapsed */}
           {!isHistoryCollapsed && (
-            <div className="w-80 xl:w-96 flex-shrink-0 border-r border-white/20">
-              <div className="h-full transcription-card-glass backdrop-blur-sm">
+            <div className="w-80 xl:w-96 flex-shrink-0 border-r border-[#90cdf4]/30">
+              <div className="h-full bg-white">
                 <SessionHistory
                   sessions={filteredSessions}
                   currentSession={currentSession}

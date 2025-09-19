@@ -1,0 +1,207 @@
+/* Calculator Categories Theme Integration */
+/* Modern Blue Theme Color System for MediMind Expert Calculator Categories */
+
+:root {
+  /* ================================
+     CALCULATOR CATEGORY COLORS
+     ================================ */
+  
+  /* Base Theme Colors (from THEME_COLORS.md) */
+  --calc-theme-primary: #1a365d;      /* Deep Navy */
+  --calc-theme-secondary: #2b6cb0;    /* Vibrant Blue */
+  --calc-theme-accent: #63b3ed;       /* Light Blue */
+  --calc-theme-light: #90cdf4;        /* Lighter Blue */
+  
+  /* Category Color Progression (4-color system) */
+  --calc-category-1: var(--calc-theme-primary);    /* High priority/critical */
+  --calc-category-2: var(--calc-theme-secondary);  /* Standard priority */
+  --calc-category-3: var(--calc-theme-accent);     /* Secondary priority */
+  --calc-category-4: var(--calc-theme-light);      /* Low priority/accent */
+
+  /* ================================
+     SPECIALTY-AWARE GRADIENTS
+     ================================ */
+  
+  /* Cardiology Specialty Gradients */
+  --calc-cardiology-primary: linear-gradient(135deg, var(--calc-theme-primary), var(--calc-theme-secondary));
+  --calc-cardiology-full: linear-gradient(135deg, var(--calc-theme-primary), var(--calc-theme-secondary), var(--calc-theme-accent));
+  --calc-cardiology-hero: linear-gradient(to right, var(--calc-theme-primary), var(--calc-theme-secondary), var(--calc-theme-accent));
+  --calc-cardiology-subtle: linear-gradient(135deg, var(--calc-theme-primary)/10, var(--calc-theme-secondary)/15, var(--calc-theme-accent)/10);
+
+  /* OB/GYN Specialty Gradients */
+  --calc-obgyn-primary: linear-gradient(135deg, var(--calc-theme-secondary), var(--calc-theme-accent));
+  --calc-obgyn-full: linear-gradient(135deg, var(--calc-theme-secondary), var(--calc-theme-accent), var(--calc-theme-light));
+  --calc-obgyn-hero: linear-gradient(to right, var(--calc-theme-secondary), var(--calc-theme-accent), var(--calc-theme-light));
+  --calc-obgyn-subtle: linear-gradient(135deg, var(--calc-theme-secondary)/10, var(--calc-theme-accent)/15, var(--calc-theme-light)/10);
+
+  /* ================================
+     BACKGROUND SYSTEMS
+     ================================ */
+  
+  /* Main Container Backgrounds */
+  --calc-bg-main-light: linear-gradient(to bottom right, var(--calc-theme-light)/20, var(--calc-theme-accent)/10, transparent);
+  --calc-bg-main-subtle: linear-gradient(135deg, var(--calc-theme-light)/8, var(--calc-theme-accent)/5);
+  
+  /* Card Background System */
+  --calc-card-bg: rgba(255, 255, 255, 0.6);
+  --calc-card-bg-hover: rgba(255, 255, 255, 0.8);
+  --calc-card-border: rgba(255, 255, 255, 0.25);
+  --calc-card-border-hover: rgba(255, 255, 255, 0.4);
+
+  /* Glassmorphism Effects */
+  --calc-glass-bg: rgba(255, 255, 255, 0.7);
+  --calc-glass-border: rgba(255, 255, 255, 0.3);
+  --calc-glass-backdrop: blur(20px) saturate(1.8);
+
+  /* ================================
+     FLOATING ORB DECORATIONS
+     ================================ */
+  
+  /* Themed floating orbs (replacing random colors) */
+  --calc-orb-1: var(--calc-theme-primary)/15;
+  --calc-orb-2: var(--calc-theme-secondary)/12;
+  --calc-orb-3: var(--calc-theme-accent)/10;
+  --calc-orb-4: var(--calc-theme-light)/8;
+  
+  /* Orb gradient combinations */
+  --calc-orb-gradient-1: linear-gradient(to right, var(--calc-orb-1), var(--calc-orb-2));
+  --calc-orb-gradient-2: linear-gradient(to right, var(--calc-orb-2), var(--calc-orb-3));
+  --calc-orb-gradient-3: linear-gradient(to right, var(--calc-orb-3), var(--calc-orb-4));
+
+  /* ================================
+     INTERACTIVE STATES
+     ================================ */
+  
+  /* Hover Effects */
+  --calc-hover-primary: var(--calc-theme-primary);
+  --calc-hover-secondary: var(--calc-theme-secondary);
+  --calc-hover-accent: var(--calc-theme-accent);
+  --calc-hover-light: var(--calc-theme-light);
+
+  /* Active/Selected States */
+  --calc-active-bg: var(--calc-cardiology-primary);
+  --calc-active-text: white;
+  --calc-active-border: var(--calc-theme-primary);
+
+  /* Focus States */
+  --calc-focus-ring: var(--calc-theme-accent)/50;
+  --calc-focus-border: var(--calc-theme-accent);
+
+  /* ================================
+     VALIDATION & STATUS COLORS
+     ================================ */
+  
+  /* Validation Badge Colors (keeping theme-compliant) */
+  --calc-validation-bg: linear-gradient(to right, var(--calc-theme-accent)/20, var(--calc-theme-light)/15);
+  --calc-validation-text: var(--calc-theme-primary);
+  --calc-validation-border: var(--calc-theme-accent)/30;
+
+  /* Feature Indicators */
+  --calc-feature-clinical: var(--calc-theme-secondary);
+  --calc-feature-accurate: var(--calc-theme-accent);
+  --calc-feature-validated: var(--calc-theme-primary);
+
+  /* ================================
+     STATS SECTION COLORS
+     ================================ */
+  
+  /* Replace individual stat colors with theme progression */
+  --calc-stat-1: var(--calc-theme-primary);     /* Validated */
+  --calc-stat-2: var(--calc-theme-secondary);   /* Clinical */
+  --calc-stat-3: var(--calc-theme-accent);      /* Evidence */
+  --calc-stat-4: var(--calc-theme-light);       /* Performance */
+}
+
+/* ================================
+   DARK MODE OVERRIDES
+   ================================ */
+
+.dark {
+  /* Dark mode card backgrounds */
+  --calc-card-bg: rgba(42, 45, 58, 0.6);
+  --calc-card-bg-hover: rgba(42, 45, 58, 0.8);
+  --calc-card-border: rgba(255, 255, 255, 0.1);
+  --calc-card-border-hover: rgba(255, 255, 255, 0.2);
+
+  /* Dark mode glassmorphism */
+  --calc-glass-bg: rgba(42, 45, 58, 0.7);
+  --calc-glass-border: rgba(255, 255, 255, 0.1);
+
+  /* Dark mode backgrounds */
+  --calc-bg-main-light: linear-gradient(to bottom right, var(--calc-theme-primary)/15, var(--calc-theme-secondary)/10, transparent);
+  --calc-bg-main-subtle: linear-gradient(135deg, var(--calc-theme-primary)/12, var(--calc-theme-secondary)/8);
+
+  /* Dark mode validation colors */
+  --calc-validation-bg: linear-gradient(to right, var(--calc-theme-primary)/25, var(--calc-theme-secondary)/20);
+  --calc-validation-text: var(--calc-theme-accent);
+}
+
+/* ================================
+   UTILITY CLASSES
+   ================================ */
+
+/* Category color utilities */
+.text-calc-category-1 { color: var(--calc-category-1); }
+.text-calc-category-2 { color: var(--calc-category-2); }
+.text-calc-category-3 { color: var(--calc-category-3); }
+.text-calc-category-4 { color: var(--calc-category-4); }
+
+/* Background utilities */
+.bg-calc-cardiology { background: var(--calc-cardiology-primary); }
+.bg-calc-obgyn { background: var(--calc-obgyn-primary); }
+
+/* Gradient utilities */
+.bg-calc-cardiology-full { background: var(--calc-cardiology-full); }
+.bg-calc-obgyn-full { background: var(--calc-obgyn-full); }
+
+/* Interactive state utilities */
+.hover\:bg-calc-hover:hover { background: var(--calc-hover-primary); }
+.focus\:ring-calc-focus:focus { 
+  --tw-ring-color: var(--calc-focus-ring);
+  --tw-ring-opacity: 1;
+}
+
+/* ================================
+   ANIMATION COMPATIBILITY
+   ================================ */
+
+/* Ensure animations work smoothly with new colors */
+@keyframes calc-theme-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes calc-theme-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--calc-theme-accent)/30;
+  }
+  50% {
+    box-shadow: 0 0 40px var(--calc-theme-accent)/50;
+  }
+}
+
+.animate-calc-pulse {
+  animation: calc-theme-pulse 2s ease-in-out infinite;
+}
+
+.animate-calc-glow {
+  animation: calc-theme-glow 3s ease-in-out infinite;
+}
+
+/* ================================
+   LEGACY COMPATIBILITY
+   ================================ */
+
+/* Fallback colors for browsers that don't support CSS custom properties */
+@supports not (color: var(--calc-theme-primary)) {
+  .text-calc-category-1 { color: #1a365d; }
+  .text-calc-category-2 { color: #2b6cb0; }
+  .text-calc-category-3 { color: #63b3ed; }
+  .text-calc-category-4 { color: #90cdf4; }
+}

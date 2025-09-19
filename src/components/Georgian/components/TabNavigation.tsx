@@ -65,7 +65,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
   const [hoveredTab, setHoveredTab] = useState<string | null>(null);
 
   return (
-    <div className="transcription-card-glass border-b border-white/20">
+    <div className="bg-white border-b border-[#90cdf4]/30">
       <div className="px-3 sm:px-6 py-2 sm:py-3 mediscribe-mobile-tabs lg:px-6 lg:py-3">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           {/* Modern Blue Tab System */}

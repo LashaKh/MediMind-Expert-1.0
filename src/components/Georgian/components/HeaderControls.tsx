@@ -44,9 +44,8 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
   const navigate = useNavigate();
   return (
     <div className="relative overflow-hidden">
-      {/* Transcription Theme Background */}
-      <div className="absolute inset-0 transcription-header-bg" />
-      <div className="absolute inset-0 backdrop-blur-xl" />
+      {/* Light Theme Background */}
+      <div className="absolute inset-0 bg-white" />
       
       {/* Subtle Border with Shimmer Effect */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-200/60 to-transparent dark:via-blue-800/40" />
@@ -64,9 +63,9 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                 style={{ minWidth: 'var(--medical-mobile-touch-md)', minHeight: 'var(--medical-mobile-touch-md)' }}
               >
                 <div className="flex flex-col items-center justify-center">
-                  <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400 mb-0.5" />
+                  <FileText className="w-4 h-4 text-[#2b6cb0] mb-0.5" />
                   {sessionsCount > 0 && (
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 leading-none">
+                    <span className="text-xs font-bold text-[#2b6cb0] leading-none">
                       {sessionsCount > 99 ? '99+' : sessionsCount}
                     </span>
                   )}
@@ -96,7 +95,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
               <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1">
                 <div className="flex items-center space-x-2 sm:space-x-3">
                   <h1 
-                    className="text-lg sm:text-xl lg:text-3xl font-bold text-white tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity duration-200"
+                    className="text-lg sm:text-xl lg:text-3xl font-bold text-[#1a365d] tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity duration-200"
                     onClick={() => navigate('/')}
                     role="button"
                     aria-label="Navigate to home"
@@ -104,7 +103,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                     MediScribe
                   </h1>
                 </div>
-                <p className="text-xs sm:text-sm text-white/80 font-medium tracking-wide truncate">
+                <p className="text-xs sm:text-sm text-[#2b6cb0] font-medium tracking-wide truncate">
                   AI Medical Transcription
                 </p>
               </div>
@@ -117,26 +116,26 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
             {/* Compact Connection Status */}
             <div className={`relative flex items-center space-x-1.5 sm:space-x-2 lg:space-x-3 px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 rounded-lg sm:rounded-xl transition-all duration-300 shadow-md ${
               authStatus.isAuthenticated
-                ? 'bg-gradient-to-r from-emerald-500/10 via-green-500/10 to-emerald-500/10 border border-emerald-300/50 dark:border-emerald-600/50'
-                : 'bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-300/50 dark:border-amber-600/50'
+                ? 'bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 border border-[#63b3ed]/50'
+                : 'bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-300/50'
             }`}>
               {/* Compact Status Light */}
               <div className="relative">
                 <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${
                   authStatus.isAuthenticated 
-                    ? 'bg-gradient-to-r from-emerald-400 to-green-500 shadow-sm shadow-emerald-500/30' 
+                    ? 'bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] shadow-sm shadow-[#2b6cb0]/30' 
                     : 'bg-gradient-to-r from-amber-400 to-orange-500 shadow-sm shadow-amber-500/30'
                 }`} />
                 {authStatus.isAuthenticated && (
-                  <div className="absolute inset-0 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-400 animate-ping opacity-40" />
+                  <div className="absolute inset-0 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#63b3ed] animate-ping opacity-40" />
                 )}
               </div>
               
               {/* Status Text - Hidden on smallest screens, icon only on mobile */}
               <span className={`hidden sm:inline text-xs sm:text-sm font-semibold tracking-wide ${
                 authStatus.isAuthenticated
-                  ? 'text-emerald-700 dark:text-emerald-300'
-                  : 'text-amber-700 dark:text-amber-300'
+                  ? 'text-[#1a365d]'
+                  : 'text-amber-700'
               }`}>
                 {processing ? 'Processing' : authStatus.isAuthenticated ? 'Ready' : 'Connecting'}
               </span>
@@ -144,12 +143,12 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
               {/* Mobile Status Icon - Only show on mobile */}
               <div className="sm:hidden">
                 {processing ? (
-                  <Zap className="w-3 h-3 text-blue-600 dark:text-blue-400 animate-pulse" />
+                  <Zap className="w-3 h-3 text-[#2b6cb0] animate-pulse" />
                 ) : (
                   <Activity className={`w-3 h-3 ${
                     authStatus.isAuthenticated 
-                      ? 'text-emerald-600 dark:text-emerald-400' 
-                      : 'text-amber-600 dark:text-amber-400'
+                      ? 'text-[#2b6cb0]' 
+                      : 'text-amber-600'
                   }`} />
                 )}
               </div>
