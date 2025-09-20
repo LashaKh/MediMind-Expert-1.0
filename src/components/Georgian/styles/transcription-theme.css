@@ -91,6 +91,67 @@
   gap: 8px;
 }
 
+/* Primary Button Icons - Stroke-only for better visibility */
+.transcription-btn-primary svg,
+.transcription-btn-primary svg path,
+.transcription-btn-primary svg circle,
+.transcription-btn-primary svg rect,
+.transcription-btn-primary svg line,
+.transcription-btn-primary svg polyline,
+.transcription-btn-primary svg polygon {
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+}
+
+/* Specific class for history toggle button - Force icon visibility */
+.history-toggle-btn {
+  background: var(--transcription-button-gradient) !important;
+  color: var(--transcription-white) !important;
+  border: none !important;
+  border-radius: var(--transcription-button-radius) !important;
+  box-shadow: var(--transcription-shadow-button) !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.history-toggle-btn.collapsed {
+  background: #ffffff !important;
+  color: #1a365d !important;
+  border: 2px solid #63b3ed !important;
+  box-shadow: 0 2px 4px rgba(26, 54, 93, 0.1) !important;
+}
+
+/* Force icon visibility for history toggle button */
+.history-toggle-btn svg,
+.history-toggle-btn svg path,
+.history-toggle-btn svg circle,
+.history-toggle-btn svg rect,
+.history-toggle-btn svg line,
+.history-toggle-btn svg polyline,
+.history-toggle-btn svg polygon {
+  fill: none !important;
+  stroke: white !important;
+  stroke-width: 2.5 !important;
+  color: white !important;
+}
+
+.history-toggle-btn.collapsed svg,
+.history-toggle-btn.collapsed svg path,
+.history-toggle-btn.collapsed svg circle,
+.history-toggle-btn.collapsed svg rect,
+.history-toggle-btn.collapsed svg line,
+.history-toggle-btn.collapsed svg polyline,
+.history-toggle-btn.collapsed svg polygon {
+  fill: none !important;
+  stroke: #1a365d !important;
+  stroke-width: 2.5 !important;
+  color: #1a365d !important;
+}
+
 .transcription-btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, var(--transcription-primary-dark) 0%, var(--transcription-primary-start) 100%);
   box-shadow: var(--transcription-shadow-hover);
@@ -125,7 +186,7 @@
   box-shadow: 0 2px 4px rgba(26, 54, 93, 0.1);
 }
 
-/* Force Dark Text and Icons for Maximum Visibility */
+/* Force Dark Text and Stroke-Only Icons for Maximum Visibility */
 .transcription-btn-secondary,
 .transcription-btn-secondary *,
 .transcription-btn-secondary h1,
@@ -140,11 +201,22 @@
 .transcription-btn-secondary .text-xs,
 .transcription-btn-secondary .mediscribe-mobile-control-text,
 .transcription-btn-secondary .mediscribe-mobile-control-subtext,
-.transcription-btn-secondary .opacity-70,
-.transcription-btn-secondary svg {
+.transcription-btn-secondary .opacity-70 {
   color: #1a365d !important;
-  fill: #1a365d !important;
+}
+
+/* Stroke-only icons for unselected buttons - prevents solid fill */
+.transcription-btn-secondary svg,
+.transcription-btn-secondary svg path,
+.transcription-btn-secondary svg circle,
+.transcription-btn-secondary svg rect,
+.transcription-btn-secondary svg line,
+.transcription-btn-secondary svg polyline,
+.transcription-btn-secondary svg polygon {
+  color: #1a365d !important;
+  fill: none !important;
   stroke: #1a365d !important;
+  stroke-width: 2 !important;
 }
 
 .transcription-btn-secondary:hover:not(:disabled) {
@@ -159,33 +231,95 @@
   box-shadow: 0 2px 4px rgba(26, 54, 93, 0.1);
 }
 
-/* HOVER STATE - Maintain Dark Text and Icons */
+/* HOVER STATE - Maintain Stroke-Only Icons */
 .transcription-btn-secondary:hover:not(:disabled),
 .transcription-btn-secondary:hover:not(:disabled) *,
-.transcription-btn-secondary:hover:not(:disabled) svg {
+.transcription-btn-secondary:hover:not(:disabled) h1,
+.transcription-btn-secondary:hover:not(:disabled) h2,
+.transcription-btn-secondary:hover:not(:disabled) h3,
+.transcription-btn-secondary:hover:not(:disabled) h4,
+.transcription-btn-secondary:hover:not(:disabled) h5,
+.transcription-btn-secondary:hover:not(:disabled) h6,
+.transcription-btn-secondary:hover:not(:disabled) p,
+.transcription-btn-secondary:hover:not(:disabled) span,
+.transcription-btn-secondary:hover:not(:disabled) div,
+.transcription-btn-secondary:hover:not(:disabled) .text-xs {
   color: #1a365d !important;
-  fill: #1a365d !important;
-  stroke: #1a365d !important;
 }
 
-/* ACTIVE STATE - Maintain Dark Text and Icons */
+.transcription-btn-secondary:hover:not(:disabled) svg,
+.transcription-btn-secondary:hover:not(:disabled) svg path,
+.transcription-btn-secondary:hover:not(:disabled) svg circle,
+.transcription-btn-secondary:hover:not(:disabled) svg rect,
+.transcription-btn-secondary:hover:not(:disabled) svg line,
+.transcription-btn-secondary:hover:not(:disabled) svg polyline,
+.transcription-btn-secondary:hover:not(:disabled) svg polygon {
+  color: #1a365d !important;
+  fill: none !important;
+  stroke: #1a365d !important;
+  stroke-width: 2 !important;
+}
+
+/* ACTIVE STATE - Maintain Stroke-Only Icons */
 .transcription-btn-secondary:active:not(:disabled),
 .transcription-btn-secondary:active:not(:disabled) *,
-.transcription-btn-secondary:active:not(:disabled) svg {
+.transcription-btn-secondary:active:not(:disabled) h1,
+.transcription-btn-secondary:active:not(:disabled) h2,
+.transcription-btn-secondary:active:not(:disabled) h3,
+.transcription-btn-secondary:active:not(:disabled) h4,
+.transcription-btn-secondary:active:not(:disabled) h5,
+.transcription-btn-secondary:active:not(:disabled) h6,
+.transcription-btn-secondary:active:not(:disabled) p,
+.transcription-btn-secondary:active:not(:disabled) span,
+.transcription-btn-secondary:active:not(:disabled) div,
+.transcription-btn-secondary:active:not(:disabled) .text-xs {
   color: #1a365d !important;
-  fill: #1a365d !important;
-  stroke: #1a365d !important;
 }
 
-/* DISABLED STATE - Reduced opacity but still readable */
+.transcription-btn-secondary:active:not(:disabled) svg,
+.transcription-btn-secondary:active:not(:disabled) svg path,
+.transcription-btn-secondary:active:not(:disabled) svg circle,
+.transcription-btn-secondary:active:not(:disabled) svg rect,
+.transcription-btn-secondary:active:not(:disabled) svg line,
+.transcription-btn-secondary:active:not(:disabled) svg polyline,
+.transcription-btn-secondary:active:not(:disabled) svg polygon {
+  color: #1a365d !important;
+  fill: none !important;
+  stroke: #1a365d !important;
+  stroke-width: 2 !important;
+}
+
+/* DISABLED STATE - Reduced opacity but still readable with Stroke-Only Icons */
 .transcription-btn-secondary:disabled,
 .transcription-btn-secondary:disabled *,
-.transcription-btn-secondary:disabled svg {
+.transcription-btn-secondary:disabled h1,
+.transcription-btn-secondary:disabled h2,
+.transcription-btn-secondary:disabled h3,
+.transcription-btn-secondary:disabled h4,
+.transcription-btn-secondary:disabled h5,
+.transcription-btn-secondary:disabled h6,
+.transcription-btn-secondary:disabled p,
+.transcription-btn-secondary:disabled span,
+.transcription-btn-secondary:disabled div,
+.transcription-btn-secondary:disabled .text-xs {
   opacity: 0.5;
   cursor: not-allowed;
   color: #1a365d !important;
-  fill: #1a365d !important;
+}
+
+.transcription-btn-secondary:disabled svg,
+.transcription-btn-secondary:disabled svg path,
+.transcription-btn-secondary:disabled svg circle,
+.transcription-btn-secondary:disabled svg rect,
+.transcription-btn-secondary:disabled svg line,
+.transcription-btn-secondary:disabled svg polyline,
+.transcription-btn-secondary:disabled svg polygon {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: #1a365d !important;
+  fill: none !important;
   stroke: #1a365d !important;
+  stroke-width: 2 !important;
 }
 
 

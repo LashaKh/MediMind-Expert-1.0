@@ -154,6 +154,25 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const isUserTypingRef = useRef(false);
   const typingTimeoutRef = useRef<NodeJS.Timeout>();
   
+  // Store chat close function for tab switching
+  const closeChatFunctionRef = useRef<(() => void) | null>(null);
+
+  // Handle tab change with automatic chat and history closing
+  const handleTabChange = useCallback((tab: 'transcript' | 'context' | 'ai') => {
+    // Close chat if it's open and we're switching tabs
+    if (closeChatFunctionRef.current) {
+      closeChatFunctionRef.current();
+    }
+    
+    // Close history sidebar if it's open and we're switching tabs
+    if (isHistoryOpen && onToggleHistory) {
+      onToggleHistory();
+    }
+    
+    // Call the original tab change handler
+    onActiveTabChange(tab);
+  }, [onActiveTabChange, isHistoryOpen, onToggleHistory]);
+  
   // Cleanup typing timeout on unmount
   useEffect(() => {
     return () => {
@@ -451,6 +470,9 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
               // This will trigger the view change inside AIProcessingContent
             }}
             onExpandChat={onExpandChat}
+            onCloseChat={(closeFunction) => {
+              closeChatFunctionRef.current = closeFunction;
+            }}
           />
         );
       
@@ -470,7 +492,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       {/* Tab Navigation */}
       <TabNavigation
         activeTab={activeTab}
-        onTabChange={onActiveTabChange}
+        onTabChange={handleTabChange}
         hasTranscript={hasTranscript}
         canRecord={canRecord}
         canStop={canStop}

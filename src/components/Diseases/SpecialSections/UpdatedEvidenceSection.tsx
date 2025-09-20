@@ -64,14 +64,14 @@ export const UpdatedEvidenceSection: React.FC<UpdatedEvidenceSectionProps> = ({
       <div className="absolute top-8 right-12 w-1 h-1 bg-gradient-to-r from-teal-300 to-cyan-300 rounded-full opacity-40 animate-ping" />
       
       {/* Main Container */}
-      <div className="relative backdrop-blur-xl bg-gradient-to-br from-white/80 via-emerald-50/60 to-teal-50/70 border border-white/40 rounded-3xl overflow-hidden shadow-[0_8px_32px_rgba(16,185,129,0.12)] hover:shadow-[0_20px_60px_rgba(16,185,129,0.25)] transition-all duration-500 ease-out">
+      <div className="relative backdrop-blur-xl bg-gradient-to-br from-white/80 via-[#90cdf4]/10 to-[#63b3ed]/15 border border-white/40 rounded-3xl overflow-hidden shadow-[0_8px_32px_rgba(43,108,176,0.12)] hover:shadow-[0_20px_60px_rgba(43,108,176,0.25)] transition-all duration-500 ease-out">
         {/* Subtle Pattern Overlay */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1)_0%,transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(43,108,176,0.1)_0%,transparent_50%)]" />
         </div>
         
         {/* Premium Border Gradient */}
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-200/20 via-transparent to-teal-200/20 pointer-events-none" />
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#63b3ed]/20 via-transparent to-[#90cdf4]/20 pointer-events-none" />
         
         {/* Content Container */}
         <div className="relative p-8">
@@ -79,10 +79,10 @@ export const UpdatedEvidenceSection: React.FC<UpdatedEvidenceSectionProps> = ({
             {/* Premium Icon Container */}
             <div className="relative flex-shrink-0 group/icon">
               {/* Icon Glow */}
-              <div className="absolute -inset-2 bg-gradient-to-br from-emerald-400/30 to-teal-500/30 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500" />
+              <div className="absolute -inset-2 bg-gradient-to-br from-[#63b3ed]/30 to-[#2b6cb0]/30 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500" />
               
               {/* Icon Background */}
-              <div className="relative w-16 h-16 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 rounded-2xl shadow-[0_8px_24px_rgba(16,185,129,0.3)] transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 ease-out">
+              <div className="relative w-16 h-16 bg-gradient-to-br from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4] rounded-2xl shadow-[0_8px_24px_rgba(43,108,176,0.3)] transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 ease-out">
                 {/* Inner Glow */}
                 <div className="absolute inset-1 bg-gradient-to-br from-white/20 to-transparent rounded-xl" />
                 
@@ -162,7 +162,7 @@ export const UpdatedEvidenceSection: React.FC<UpdatedEvidenceSectionProps> = ({
                      href={finalPubmedLink}
                      target="_blank"
                      rel="noopener noreferrer"
-                     className="group/link relative inline-flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white text-sm font-bold rounded-2xl shadow-[0_6px_20px_rgba(16,185,129,0.35)] hover:shadow-[0_12px_32px_rgba(16,185,129,0.45)] transform hover:scale-105 hover:-translate-y-1 transition-all duration-400 ease-out overflow-hidden"
+                     className="group/link relative inline-flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] text-white text-sm font-bold rounded-2xl shadow-[0_6px_20px_rgba(43,108,176,0.35)] hover:shadow-[0_12px_32px_rgba(43,108,176,0.45)] transform hover:scale-105 hover:-translate-y-1 transition-all duration-400 ease-out overflow-hidden"
                    >
                      {/* Dynamic Glow Effect */}
                      <div className="absolute inset-0 bg-gradient-to-r from-white/25 via-white/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-400" />

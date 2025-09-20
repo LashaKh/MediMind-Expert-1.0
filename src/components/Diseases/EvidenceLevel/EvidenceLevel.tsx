@@ -13,15 +13,15 @@ interface EvidenceLevelProps {
 const EvidenceLevel: React.FC<EvidenceLevelProps> = ({ evidence, className = '' }) => {
   const { level, color, icon: Icon } = evidence;
 
-  // Color scheme mappings
+  // Color scheme mappings using theme colors
   const colorClasses = {
-    emerald: 'bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-800 border-emerald-300',
-    blue: 'bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 border-blue-300',
-    amber: 'bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 border-amber-300',
-    red: 'bg-gradient-to-r from-red-100 to-red-200 text-red-800 border-red-300',
-    slate: 'bg-gradient-to-r from-slate-100 to-slate-200 text-slate-800 border-slate-300',
-    purple: 'bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 border-purple-300',
-    indigo: 'bg-gradient-to-r from-indigo-100 to-indigo-200 text-indigo-800 border-indigo-300'
+    emerald: 'bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 text-[#1a365d] border-[#63b3ed]/40',
+    blue: 'bg-gradient-to-r from-[#63b3ed]/30 to-[#2b6cb0]/30 text-[#1a365d] border-[#2b6cb0]/40',
+    amber: 'bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/25 text-[#1a365d] border-[#63b3ed]/35',
+    red: 'bg-gradient-to-r from-[#2b6cb0]/25 to-[#1a365d]/25 text-[#1a365d] border-[#1a365d]/40',
+    slate: 'bg-gradient-to-r from-[#90cdf4]/15 to-[#63b3ed]/20 text-[#1a365d] border-[#63b3ed]/30',
+    purple: 'bg-gradient-to-r from-[#63b3ed]/25 to-[#2b6cb0]/25 text-[#1a365d] border-[#2b6cb0]/35',
+    indigo: 'bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/30 text-[#1a365d] border-[#2b6cb0]/40'
   };
 
   const colorClass = colorClasses[color as keyof typeof colorClasses] || colorClasses.slate;

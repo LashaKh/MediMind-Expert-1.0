@@ -128,7 +128,7 @@ export const UserDropdown: React.FC = () => {
       <button
         ref={buttonRef}
         onClick={handleToggle}
-        className="flex items-center gap-2 px-3 py-2 h-10 rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md transition-all duration-200 focus-enhanced"
+        className="flex items-center gap-2 px-3 py-2 h-10 rounded-lg text-white bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] hover:from-[#1a365d]/90 hover:via-[#2b6cb0]/90 hover:to-[#63b3ed]/90 shadow-sm hover:shadow-md transition-all duration-200 focus-enhanced"
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label="Account Menu"
@@ -162,10 +162,10 @@ export const UserDropdown: React.FC = () => {
             <Link
               to="/profile"
               onClick={() => setIsOpen(false)}
-              className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200 min-h-[44px] touch-target-md"
+              className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#63b3ed]/10 transition-all duration-200 min-h-[44px] touch-target-md"
             >
-              <div className="p-2 rounded-lg bg-blue-100 mr-3">
-                <User className="w-4 h-4 text-blue-600" />
+              <div className="p-2 rounded-lg bg-[#63b3ed]/20 mr-3">
+                <User className="w-4 h-4 text-[#2b6cb0]" />
               </div>
               <span className="font-medium">{t('navigation.profile')}</span>
             </Link>
@@ -173,10 +173,10 @@ export const UserDropdown: React.FC = () => {
             <Link
               to="/help"
               onClick={() => setIsOpen(false)}
-              className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200 min-h-[44px] touch-target-md"
+              className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#63b3ed]/10 transition-all duration-200 min-h-[44px] touch-target-md"
             >
-              <div className="p-2 rounded-lg bg-blue-100 mr-3">
-                <HelpCircle className="w-4 h-4 text-blue-600" />
+              <div className="p-2 rounded-lg bg-[#63b3ed]/20 mr-3">
+                <HelpCircle className="w-4 h-4 text-[#2b6cb0]" />
               </div>
               <span className="font-medium">{t('navigation.helpCenter')}</span>
             </Link>

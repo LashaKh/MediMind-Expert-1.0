@@ -65,15 +65,15 @@ export const LandmarkTrialsSection: React.FC<LandmarkTrialsSectionProps> = ({
       <div className="absolute top-6 right-20 w-1.5 h-1.5 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-full opacity-40 animate-bounce" />
       
       {/* Prestige Container */}
-      <div className="relative backdrop-blur-xl bg-gradient-to-br from-white/85 via-amber-50/70 to-orange-50/75 border border-white/50 rounded-3xl overflow-hidden shadow-[0_8px_32px_rgba(245,158,11,0.15)] hover:shadow-[0_20px_60px_rgba(245,158,11,0.3)] transition-all duration-500 ease-out">
+      <div className="relative backdrop-blur-xl bg-gradient-to-br from-white/85 via-[#90cdf4]/15 to-[#63b3ed]/20 border border-white/50 rounded-3xl overflow-hidden shadow-[0_8px_32px_rgba(43,108,176,0.15)] hover:shadow-[0_20px_60px_rgba(43,108,176,0.3)] transition-all duration-500 ease-out">
         {/* Golden Pattern Overlay */}
         <div className="absolute inset-0 opacity-8">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(245,158,11,0.15)_0%,transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(251,191,36,0.1)_0%,transparent_40%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(43,108,176,0.15)_0%,transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(99,179,237,0.1)_0%,transparent_40%)]" />
         </div>
         
         {/* Premium Border Treatment */}
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-amber-200/25 via-transparent to-orange-200/25 pointer-events-none" />
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#63b3ed]/25 via-transparent to-[#90cdf4]/25 pointer-events-none" />
         
         {/* Luxurious Content */}
         <div className="relative p-8">
@@ -84,10 +84,10 @@ export const LandmarkTrialsSection: React.FC<LandmarkTrialsSectionProps> = ({
               <div className="absolute -inset-3 bg-gradient-to-br from-amber-400/40 to-orange-500/40 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-600" />
               
               {/* Trophy Background */}
-              <div className="relative w-16 h-16 bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-500 rounded-3xl shadow-[0_8px_24px_rgba(245,158,11,0.4)] transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 ease-out">
+              <div className="relative w-16 h-16 bg-gradient-to-br from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] rounded-3xl shadow-[0_8px_24px_rgba(43,108,176,0.4)] transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 ease-out">
                 {/* Gold Shimmer */}
                 <div className="absolute inset-1 bg-gradient-to-br from-white/30 to-transparent rounded-2xl" />
-                <div className="absolute inset-2 bg-gradient-to-br from-yellow-200/20 to-transparent rounded-xl" />
+                <div className="absolute inset-2 bg-gradient-to-br from-[#90cdf4]/20 to-transparent rounded-xl" />
                 
                 {/* Award Icon */}
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -169,7 +169,7 @@ export const LandmarkTrialsSection: React.FC<LandmarkTrialsSectionProps> = ({
                      href={finalPubmedLink}
                      target="_blank"
                      rel="noopener noreferrer"
-                     className="group/link relative inline-flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-amber-600 via-orange-600 to-yellow-600 text-white text-sm font-bold rounded-2xl shadow-[0_6px_20px_rgba(245,158,11,0.4)] hover:shadow-[0_12px_32px_rgba(245,158,11,0.6)] transform hover:scale-105 hover:-translate-y-1 transition-all duration-400 ease-out overflow-hidden"
+                     className="group/link relative inline-flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] text-white text-sm font-bold rounded-2xl shadow-[0_6px_20px_rgba(43,108,176,0.4)] hover:shadow-[0_12px_32px_rgba(43,108,176,0.6)] transform hover:scale-105 hover:-translate-y-1 transition-all duration-400 ease-out overflow-hidden"
                    >
                      {/* Luxurious Glow Effect */}
                      <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-white/15 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-400" />

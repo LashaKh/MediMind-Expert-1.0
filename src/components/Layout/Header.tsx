@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Stethoscope, Menu, ArrowUp } from 'lucide-react';
+import { Stethoscope, ArrowUp } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useAuth } from '../../stores/useAppStore';
 import { UserDropdown } from './UserDropdown';
@@ -9,11 +9,10 @@ import { useTour } from '../../stores/useAppStore';
 import { useSmartPullToRefresh } from '../../hooks/useSmartPullToRefresh';
 
 interface HeaderProps {
-  onMenuToggle: () => void;
   isOnboardingPage?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage = false }) => {
+export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -22,7 +21,6 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
   const [isCondensed, setIsCondensed] = useState(false);
   const { openTour } = useTour();
   const headerRef = useRef<HTMLElement>(null);
-  const mobileButtonRef = useRef<HTMLButtonElement>(null);
 
   // Smart pull-to-refresh (only in header area, doesn't interfere with scrolling)
   const { bindToElement } = useSmartPullToRefresh({
@@ -62,14 +60,14 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
     };
   }, []);
 
-  // Bind pull-to-refresh to header element (desktop) or mobile button
+  // Bind pull-to-refresh to header element
   useEffect(() => {
-    const element = isMobile ? mobileButtonRef.current : headerRef.current;
+    const element = headerRef.current;
     if (element) {
       const cleanup = bindToElement(element);
       return cleanup;
     }
-  }, [bindToElement, isMobile]);
+  }, [bindToElement]);
 
   // Back to top functionality
   const scrollToTop = () => {
@@ -81,35 +79,6 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
 
   return (
     <>
-      {/* Floating Menu Button for Mobile - Edge Tab Style */}
-      {isMobile && user && !isOnboardingPage && (
-        <button
-          ref={mobileButtonRef}
-          onClick={onMenuToggle}
-          className="fixed left-0 top-1/2 -translate-y-1/2 z-50 bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl border border-blue-500 transition-all duration-200 focus-enhanced active:scale-95 rounded-r-2xl"
-          aria-label={t('navigation.toggleMenu')}
-          aria-expanded="false"
-          style={{
-            width: '24px',
-            height: '48px',
-            transform: 'translateX(-8px) translateY(-50%)',
-            borderLeft: 'none',
-          }}
-        >
-          <div className="flex items-center justify-center h-full pl-2">
-            <svg 
-              className="w-3 h-3 text-white" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-              strokeWidth={3}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-        </button>
-      )}
-
       {/* Header - hidden on mobile */}
       <header 
         ref={headerRef}
@@ -124,20 +93,8 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
           flex items-center justify-between px-4 sm:px-6 lg:px-8 safe-left safe-right transition-all duration-300
           ${isCondensed ? 'h-14 py-2' : 'h-20 py-5'}
         `}>
-          {/* Left side: Logo and desktop menu button */}
+          {/* Left side: Logo */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            {/* Desktop menu button - only shown on desktop when sidebar exists */}
-            {user && !isOnboardingPage && (
-              <button
-                onClick={onMenuToggle}
-                className="hidden lg:flex touch-target-md rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 transition-all duration-200 focus-enhanced active:scale-95 p-2"
-                aria-label={t('navigation.toggleMenu')}
-                aria-expanded="false"
-              >
-                <Menu className="w-5 h-5 text-blue-600" />
-              </button>
-            )}
-
             {/* Logo with responsive sizing */}
             <Link 
               to="/" 
@@ -146,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
               <div className="flex items-center">
                 {/* Enhanced Medical Icon with Gradient Background */}
                 <div className={`
-                  relative bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 
+                  relative bg-gradient-to-br from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] 
                   rounded-full flex items-center justify-center shadow-lg transition-all duration-300
                   ${isCondensed ? 'w-8 h-8' : 'w-10 h-10 sm:w-12 sm:h-12'}
                   hover:shadow-xl hover:scale-110 group
@@ -156,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
                     ${isCondensed ? 'w-4 h-4' : 'w-5 h-5 sm:w-6 sm:h-6'}
                   `} />
                   {/* Subtle Glow Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm scale-110"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#63b3ed] rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm scale-110"></div>
                 </div>
                 
                 {/* Enhanced Typography */}
@@ -166,15 +123,15 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
                 `}>
                   <div className="flex items-baseline space-x-1">
                     <span className={`
-                      font-bold bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-700 
-                      dark:from-blue-400 dark:via-cyan-400 dark:to-blue-500 
+                      font-bold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] 
+                      dark:from-[#63b3ed] dark:via-[#2b6cb0] dark:to-[#90cdf4] 
                       bg-clip-text text-transparent transition-all duration-200
                       ${isCondensed ? 'text-base' : 'text-lg sm:text-xl lg:text-2xl'}
                     `}>
                       MediMind
                     </span>
                     <span className={`
-                      font-medium text-cyan-600 dark:text-cyan-400 transition-all duration-200
+                      font-medium text-[#2b6cb0] dark:text-[#63b3ed] transition-all duration-200
                       ${isCondensed ? 'text-sm' : 'text-sm sm:text-base lg:text-lg'}
                     `}>
                       Expert
@@ -197,10 +154,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
             {user && !isOnboardingPage && (
               <button
                 onClick={() => openTour('selector')}
-                className="hidden md:inline-flex items-center px-4 py-2 h-10 rounded-lg text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 focus-enhanced hover:scale-105"
-                style={{
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #0ea5e9 100%)',
-                }}
+                className="hidden md:inline-flex items-center px-4 py-2 h-10 rounded-lg text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 focus-enhanced hover:scale-105 bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] hover:from-[#1a365d]/90 hover:via-[#2b6cb0]/90 hover:to-[#63b3ed]/90"
                 aria-label="Start Tour"
               >
                 <svg 
@@ -220,10 +174,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
             {user && !isOnboardingPage && (
               <button
                 onClick={() => openTour('selector')}
-                className="md:hidden inline-flex items-center justify-center p-2 h-10 w-10 rounded-lg text-white shadow-lg active:scale-95 transition-all duration-300 touch-target"
-                style={{
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #0ea5e9 100%)',
-                }}
+                className="md:hidden inline-flex items-center justify-center p-2 h-10 w-10 rounded-lg text-white shadow-lg active:scale-95 transition-all duration-300 touch-target bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] hover:from-[#1a365d]/90 hover:via-[#2b6cb0]/90 hover:to-[#63b3ed]/90"
                 aria-label="Start Tour"
               >
                 <svg 
@@ -250,7 +201,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
                 <Link
                   to="/signin"
                   className={`
-                    touch-target px-3 sm:px-4 py-2 text-gray-600 hover:text-blue-600 
+                    touch-target px-3 sm:px-4 py-2 text-gray-600 hover:text-[#2b6cb0] 
                     transition-all duration-200 focus-enhanced rounded-lg active:scale-95
                     ${isCondensed && isMobile ? 'text-xs px-2 py-1' : 'text-sm sm:text-base'}
                   `}
@@ -265,8 +216,8 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isOnboardingPage =
                 <Link
                   to="/signup"
                   className={`
-                    touch-target bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
-                    transition-all duration-200 focus-enhanced active:scale-95
+                    touch-target bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] hover:from-[#1a365d]/90 hover:to-[#2b6cb0]/90 text-white rounded-lg 
+                    transition-all duration-200 focus-enhanced active:scale-95 shadow-md hover:shadow-lg
                     ${isCondensed && isMobile ? 'text-xs px-2 py-1' : 'px-3 sm:px-4 py-2 text-sm sm:text-base'}
                   `}
                 >

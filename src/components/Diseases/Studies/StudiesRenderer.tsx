@@ -296,7 +296,7 @@ const StudiesRenderer: React.FC<StudiesRendererProps> = ({
       {/* Header - only show if showHeader is true */}
       {showHeader && (
         <div className="flex items-center space-x-3 mb-6">
-          <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg">
+          <div className="p-2 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] rounded-lg">
             <FlaskConical className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -402,15 +402,15 @@ const StudiesRenderer: React.FC<StudiesRendererProps> = ({
       </div>
       
       {/* Summary Stats */}
-      <div className="mt-8 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg border border-purple-200 dark:border-purple-700">
+      <div className="mt-8 p-4 bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 dark:from-[#2b6cb0]/20 dark:to-[#63b3ed]/20 rounded-lg border border-[#63b3ed]/30 dark:border-[#63b3ed]/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Activity className="w-5 h-5 text-purple-600" />
-            <span className="text-sm font-medium text-purple-900 dark:text-purple-100">
+            <Activity className="w-5 h-5 text-[#2b6cb0]" />
+            <span className="text-sm font-medium text-[#1a365d] dark:text-[#90cdf4]">
               Research Evidence Overview
             </span>
           </div>
-          <div className="flex items-center space-x-4 text-xs text-purple-700 dark:text-purple-300">
+          <div className="flex items-center space-x-4 text-xs text-[#2b6cb0] dark:text-[#63b3ed]">
             <div className="flex items-center space-x-1">
               <BarChart3 className="w-4 h-4" />
               <span>{studies.length} studies analyzed</span>

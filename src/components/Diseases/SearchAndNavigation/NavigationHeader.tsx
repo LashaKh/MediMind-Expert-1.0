@@ -44,7 +44,7 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
           <div className="flex items-center space-x-4">
             <button
               onClick={onToggleTOC}
-              className="p-2 bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-blue-600/10 hover:from-blue-500/20 hover:via-cyan-500/20 hover:to-blue-600/20 border border-blue-400/20 hover:border-blue-400/40 text-blue-600 dark:text-blue-400 rounded-lg transition-colors"
+              className="p-2 bg-gradient-to-br from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#2b6cb0]/10 hover:from-[#90cdf4]/20 hover:via-[#63b3ed]/20 hover:to-[#2b6cb0]/20 border border-[#63b3ed]/20 hover:border-[#63b3ed]/40 text-[#2b6cb0] dark:text-[#63b3ed] rounded-lg transition-colors"
               title={showTOC ? 'Hide table of contents' : 'Show table of contents'}
             >
               <Menu className="w-5 h-5" />

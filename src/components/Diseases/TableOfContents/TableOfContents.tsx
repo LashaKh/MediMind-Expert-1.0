@@ -24,7 +24,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
     <div className="w-80 flex-shrink-0">
       <div className="sticky top-8 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
         {/* TOC Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+        <div className="bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] p-6 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <BookOpen className="w-5 h-5" />
@@ -40,7 +40,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
           </div>
           
           {/* Reading Progress Info */}
-          <div className="mt-3 flex items-center space-x-4 text-sm text-blue-100">
+          <div className="mt-3 flex items-center space-x-4 text-sm text-white/80">
             <div className="flex items-center space-x-1">
               <Clock className="w-4 h-4" />
               <span>{estimatedReadTime} min read</span>
@@ -66,13 +66,13 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
                     onClick={() => onItemClick(item.id)}
                     className={`flex-1 text-left px-3 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2 group ${
                       activeSection === item.id
-                        ? 'bg-blue-100 text-blue-800 border-l-4 border-blue-600'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
+                        ? 'bg-[#90cdf4]/20 text-[#1a365d] border-l-4 border-[#2b6cb0]'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-[#2b6cb0]'
                     }`}
                     style={{ paddingLeft: `${item.level * 12 + 12}px` }}
                   >
                     <div className={`w-2 h-2 rounded-full ${
-                      activeSection === item.id ? 'bg-blue-600' : 'bg-gray-300 group-hover:bg-blue-400'
+                      activeSection === item.id ? 'bg-[#2b6cb0]' : 'bg-gray-300 group-hover:bg-[#63b3ed]'
                     }`} />
                     <span className="text-sm font-medium truncate">{item.title}</span>
                   </button>

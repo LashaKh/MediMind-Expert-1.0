@@ -90,8 +90,14 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                     <Icon className={`w-4 h-4 sm:w-4 sm:h-4 lg:w-4 lg:h-4 transition-transform duration-300 group-hover:scale-110 ${
                       isActive 
                         ? 'text-white' 
-                        : 'text-[#1a365d]'
-                    }`} />
+                        : 'text-[#1a365d] fill-[#1a365d] stroke-[#1a365d]'
+                    }`} 
+                    style={!isActive ? {
+                      color: '#1a365d',
+                      fill: '#1a365d',
+                      stroke: '#1a365d'
+                    } : undefined}
+                    />
                   </div>
                   
                   {/* Labels */}
@@ -136,8 +142,14 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                   <History className={`w-3 h-3 ${
                     isHistoryOpen 
                       ? 'text-white' 
-                      : 'text-[#1a365d]'
-                  }`} />
+                      : 'text-[#1a365d] fill-[#1a365d] stroke-[#1a365d]'
+                  }`}
+                  style={!isHistoryOpen ? {
+                    color: '#1a365d',
+                    fill: '#1a365d',
+                    stroke: '#1a365d'
+                  } : undefined}
+                  />
                 </div>
                 <div className="hidden xl:flex flex-col items-start min-w-0">
                   <span className={`text-xs font-bold leading-tight ${

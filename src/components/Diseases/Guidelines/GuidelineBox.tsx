@@ -215,11 +215,11 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
         name: 'American College of Emergency Physicians',
         abbreviation: 'ACEP',
         icon: Stethoscope,
-        gradient: 'from-orange-500 to-orange-600',
-        bg: 'from-orange-50 to-orange-100',
-        border: 'border-orange-200',
-        text: 'text-orange-900',
-        badge: 'bg-orange-100 text-orange-800'
+        gradient: 'from-[#2b6cb0] to-[#63b3ed]',
+        bg: 'from-[#90cdf4]/10 to-[#63b3ed]/10',
+        border: 'border-[#63b3ed]/30',
+        text: 'text-[#1a365d]',
+        badge: 'bg-[#90cdf4]/20 text-[#1a365d]'
       };
     }
     if (orgUpper.includes('ACP')) {
@@ -227,11 +227,11 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
         name: 'American College of Physicians',
         abbreviation: 'ACP',
         icon: BookOpen,
-        gradient: 'from-green-500 to-green-600',
-        bg: 'from-green-50 to-green-100',
-        border: 'border-green-200',
-        text: 'text-green-900',
-        badge: 'bg-green-100 text-green-800'
+        gradient: 'from-[#1a365d] to-[#2b6cb0]',
+        bg: 'from-[#63b3ed]/10 to-[#90cdf4]/10',
+        border: 'border-[#2b6cb0]/30',
+        text: 'text-[#1a365d]',
+        badge: 'bg-[#63b3ed]/20 text-[#1a365d]'
       };
     }
     if (orgUpper.includes('ESVS')) {
@@ -239,11 +239,11 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
         name: 'European Society for Vascular Surgery',
         abbreviation: 'ESVS',
         icon: Activity,
-        gradient: 'from-teal-500 to-teal-600',
-        bg: 'from-teal-50 to-teal-100',
-        border: 'border-teal-200',
-        text: 'text-black',
-        badge: 'bg-teal-100 text-teal-800'
+        gradient: 'from-[#63b3ed] to-[#90cdf4]',
+        bg: 'from-[#90cdf4]/10 to-[#63b3ed]/15',
+        border: 'border-[#63b3ed]/30',
+        text: 'text-[#1a365d]',
+        badge: 'bg-[#90cdf4]/20 text-[#1a365d]'
       };
     }
     if (orgUpper.includes('SVS')) {
@@ -251,11 +251,11 @@ export const GuidelineBox: React.FC<GuidelineBoxProps> = ({
         name: 'Society for Vascular Surgery',
         abbreviation: 'SVS',
         icon: Activity,
-        gradient: 'from-emerald-500 to-emerald-600',
-        bg: 'from-emerald-50 to-emerald-100',
-        border: 'border-emerald-200',
-        text: 'text-black',
-        badge: 'bg-emerald-100 text-emerald-800'
+        gradient: 'from-[#2b6cb0] to-[#1a365d]',
+        bg: 'from-[#63b3ed]/10 to-[#2b6cb0]/10',
+        border: 'border-[#2b6cb0]/30',
+        text: 'text-[#1a365d]',
+        badge: 'bg-[#63b3ed]/20 text-[#1a365d]'
       };
     }
     

@@ -128,7 +128,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             : 'hover:bg-gray-50 dark:hover:bg-gray-700'
         } ${
           isCurrentLanguage
-            ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+            ? 'bg-[#63b3ed]/10 dark:bg-[#2b6cb0]/20 text-[#1a365d] dark:text-[#63b3ed]'
             : isComingSoon
             ? 'text-orange-600 dark:text-orange-400'
             : 'text-gray-700 dark:text-gray-300'
@@ -173,7 +173,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           </div>
         ) : (
           isCurrentLanguage && (
-            <div className="relative p-1 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 shadow-md">
+            <div className="relative p-1 rounded-full bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] shadow-md">
               <svg
                 className="w-3 h-3 text-white"
                 fill="currentColor"
@@ -191,7 +191,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         )}
         
         {/* Hover glow effect */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/10 to-[#63b3ed]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
       </button>
     );
   };
@@ -253,9 +253,9 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             : ''
         }`}
         style={{
-          background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.7) 0%, rgba(6, 182, 212, 0.8) 25%, rgba(59, 130, 246, 0.7) 50%, rgba(37, 99, 235, 0.8) 75%, rgba(6, 182, 212, 0.7) 100%)',
+          background: 'linear-gradient(135deg, rgba(26, 54, 93, 0.7) 0%, rgba(43, 108, 176, 0.8) 25%, rgba(99, 179, 237, 0.7) 50%, rgba(43, 108, 176, 0.8) 75%, rgba(26, 54, 93, 0.7) 100%)',
           backgroundSize: '300% 300%',
-          boxShadow: '0 8px 25px -8px rgba(59, 130, 246, 0.25), 0 4px 15px -4px rgba(6, 182, 212, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 8px 25px -8px rgba(43, 108, 176, 0.25), 0 4px 15px -4px rgba(99, 179, 237, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
           animation: 'gradient-shift 6s ease-in-out infinite'
         }}
         aria-label={t('profile.language')}
@@ -265,7 +265,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         {/* Animated background layers */}
         <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
              style={{
-               background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 25%, #2563eb 50%, #06b6d4 75%, #3b82f6 100%)',
+               background: 'linear-gradient(135deg, #1a365d 0%, #2b6cb0 25%, #63b3ed 50%, #2b6cb0 75%, #1a365d 100%)',
                backgroundSize: '400% 400%',
                animation: 'gradient-shift 4s ease-in-out infinite'
              }} />

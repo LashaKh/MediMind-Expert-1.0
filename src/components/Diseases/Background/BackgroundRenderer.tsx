@@ -93,19 +93,19 @@ const BackgroundRenderer: React.FC<BackgroundRendererProps> = ({
     const titleLower = title.toLowerCase();
     
     if (titleLower.includes('definition')) {
-      return <BookOpen className="w-5 h-5 text-blue-600" />;
+      return <BookOpen className="w-5 h-5 text-[#1a365d]" />;
     } else if (titleLower.includes('pathophysiology')) {
-      return <Microscope className="w-5 h-5 text-purple-600" />;
+      return <Microscope className="w-5 h-5 text-[#63b3ed]" />;
     } else if (titleLower.includes('epidemiology')) {
-      return <BarChart3 className="w-5 h-5 text-green-600" />;
+      return <BarChart3 className="w-5 h-5 text-[#2b6cb0]" />;
     } else if (titleLower.includes('disease course') || titleLower.includes('course')) {
-      return <TrendingUp className="w-5 h-5 text-orange-600" />;
+      return <TrendingUp className="w-5 h-5 text-[#2b6cb0]" />;
     } else if (titleLower.includes('prognosis') || titleLower.includes('risk')) {
-      return <Target className="w-5 h-5 text-red-600" />;
+      return <Target className="w-5 h-5 text-[#2b6cb0]" />;
     } else if (titleLower.includes('demographics')) {
-      return <Users className="w-5 h-5 text-indigo-600" />;
+      return <Users className="w-5 h-5 text-[#63b3ed]" />;
     } else {
-      return <Heart className="w-5 h-5 text-rose-600" />;
+      return <Heart className="w-5 h-5 text-[#63b3ed]" />;
     }
   };
   

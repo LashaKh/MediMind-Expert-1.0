@@ -45,6 +45,7 @@ interface AIProcessingContentProps {
   onDeleteReport?: (analysis: ProcessingHistory) => void;
   onSwitchToHistory?: () => void; // New callback for switching tabs
   onExpandChat?: (expandFunction: () => void) => void; // Pass expand function to parent
+  onCloseChat?: (closeFunction: () => void) => void; // New callback to pass close function to parent
 }
 
 type ViewMode = 'templates' | 'history';
@@ -61,7 +62,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   onClearHistory,
   onDeleteReport,
   onSwitchToHistory,
-  onExpandChat
+  onExpandChat,
+  onCloseChat
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('templates');
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('grid');
@@ -153,6 +155,16 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
       onExpandChat(handleExpandChat);
     }
   }, [onExpandChat, handleExpandChat]);
+
+  // Pass close chat function to parent as well
+  useEffect(() => {
+    if (onCloseChat) {
+      // Pass the close function to parent
+      onCloseChat(() => {
+        setIsChatExpanded(false);
+      });
+    }
+  }, [onCloseChat]);
 
   const handleSubmitAndClose = () => {
     if (customInstruction.trim() && onProcessText && !processing) {

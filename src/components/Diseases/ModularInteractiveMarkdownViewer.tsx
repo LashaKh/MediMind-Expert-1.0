@@ -444,7 +444,7 @@ export const ModularInteractiveMarkdownViewer: React.FC<InteractiveMarkdownViewe
                 </button>
                 <button
                   onClick={handlePrint}
-                  className="px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  className="px-4 py-3 bg-[#1a365d] text-white rounded-xl hover:bg-[#2b6cb0] transition-colors flex items-center space-x-2"
                 >
                   <Printer className="w-4 h-4" />
                   <span className="hidden sm:inline">Print</span>

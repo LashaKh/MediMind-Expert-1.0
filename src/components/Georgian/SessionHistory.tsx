@@ -11,6 +11,7 @@ import {
   MoreHorizontal,
   ChevronDown,
   ChevronRight,
+  ChevronLeft,
   Sparkles,
   Activity,
   Brain,
@@ -473,18 +474,15 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             <button
               onClick={toggleHistory}
               className={`
-                w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md
-                ${isHistoryCollapsed 
-                  ? 'transcription-btn-secondary' 
-                  : 'transcription-btn-primary'
-                }
+                w-10 h-10 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md
+                history-toggle-btn ${isHistoryCollapsed ? 'collapsed' : ''}
               `}
               title={isHistoryCollapsed ? "Expand sessions" : "Collapse sessions"}
             >
               {isHistoryCollapsed ? (
                 <ChevronRight className="w-5 h-5" />
               ) : (
-                <ChevronDown className="w-5 h-5" />
+                <ChevronLeft className="w-5 h-5" />
               )}
             </button>
             

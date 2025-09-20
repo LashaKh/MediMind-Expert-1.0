@@ -75,7 +75,7 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
           title: 'Key Sources',
           content: sourceContent,
           type: 'key-source',
-          icon: <Building2 className="w-5 h-5 text-purple-600" />,
+          icon: <Building2 className="w-5 h-5 text-[#2b6cb0]" />,
           organization: organizations.length > 0 ? organizations[0].org : undefined,
           year: organizations.length > 0 ? organizations[0].year : undefined
         });
@@ -203,7 +203,7 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
         organization: org,
         year: year,
         type: 'recommendation',
-        icon: <Stethoscope className="w-5 h-5 text-blue-600" />
+        icon: <Stethoscope className="w-5 h-5 text-[#2b6cb0]" />
       });
     }
   };
@@ -221,13 +221,13 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
   const getIconForRecommendationType = (type: string): React.ReactNode => {
     switch (type) {
       case 'recommendation':
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className="w-5 h-5 text-[#2b6cb0]" />;
       case 'contraindication':
         return <XCircle className="w-5 h-5 text-red-600" />;
       case 'consideration':
-        return <Info className="w-5 h-5 text-blue-600" />;
+        return <Info className="w-5 h-5 text-[#2b6cb0]" />;
       case 'key-source':
-        return <Building2 className="w-5 h-5 text-purple-600" />;
+        return <Building2 className="w-5 h-5 text-[#2b6cb0]" />;
       default:
         return <Shield className="w-5 h-5 text-gray-600" />;
     }
@@ -274,14 +274,14 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
   const getCardStyle = (type: string) => {
     const styles = {
       'key-source': {
-        border: 'border-l-purple-500',
-        bg: 'bg-purple-50 dark:bg-purple-900/20',
-        hover: 'hover:bg-purple-100 dark:hover:bg-purple-900/30'
+        border: 'border-l-[#1a365d]',
+        bg: 'bg-[#63b3ed]/10 dark:bg-[#1a365d]/20',
+        hover: 'hover:bg-[#63b3ed]/15 dark:hover:bg-[#1a365d]/30'
       },
       'recommendation': {
-        border: 'border-l-green-500',
-        bg: 'bg-green-50 dark:bg-green-900/20',
-        hover: 'hover:bg-green-100 dark:hover:bg-green-900/30'
+        border: 'border-l-[#2b6cb0]',
+        bg: 'bg-[#90cdf4]/10 dark:bg-[#2b6cb0]/20',
+        hover: 'hover:bg-[#90cdf4]/15 dark:hover:bg-[#2b6cb0]/30'
       },
       'contraindication': {
         border: 'border-l-red-500',
@@ -289,9 +289,9 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
         hover: 'hover:bg-red-100 dark:hover:bg-red-900/30'
       },
       'consideration': {
-        border: 'border-l-blue-500',
-        bg: 'bg-blue-50 dark:bg-blue-900/20',
-        hover: 'hover:bg-blue-100 dark:hover:bg-blue-900/30'
+        border: 'border-l-[#63b3ed]',
+        bg: 'bg-[#90cdf4]/10 dark:bg-[#63b3ed]/20',
+        hover: 'hover:bg-[#90cdf4]/15 dark:hover:bg-[#63b3ed]/30'
       }
     };
     
@@ -408,15 +408,15 @@ const GuidelinesRenderer: React.FC<GuidelinesRendererProps> = ({
       </div>
       
       {/* Summary Stats */}
-      <div className="mt-8 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-lg border border-indigo-200 dark:border-indigo-700">
+      <div className="mt-8 p-4 bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 dark:from-[#2b6cb0]/20 dark:to-[#63b3ed]/20 rounded-lg border border-[#63b3ed]/30 dark:border-[#63b3ed]/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Shield className="w-5 h-5 text-indigo-600" />
-            <span className="text-sm font-medium text-indigo-900 dark:text-indigo-100">
+            <Shield className="w-5 h-5 text-[#2b6cb0]" />
+            <span className="text-sm font-medium text-[#1a365d] dark:text-[#90cdf4]">
               Clinical Guidelines Complete
             </span>
           </div>
-          <div className="text-xs text-indigo-700 dark:text-indigo-300">
+          <div className="text-xs text-[#2b6cb0] dark:text-[#63b3ed]">
             Evidence-based recommendations
           </div>
         </div>

@@ -679,7 +679,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           <button
             onClick={handleSendMessage}
             disabled={!canSend}
-            className="min-h-[44px] min-w-[44px] p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-gray-300 dark:disabled:bg-gray-600 transition-all duration-200 disabled:opacity-50 focus-enhanced shadow-sm hover:shadow-md flex items-center justify-center"
+            className="min-h-[44px] min-w-[44px] p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] hover:from-[#1a365d] hover:to-[#2b6cb0] active:from-[#1a365d] active:to-[#1a365d] disabled:bg-gray-300 dark:disabled:bg-gray-600 transition-all duration-200 disabled:opacity-50 focus-enhanced shadow-sm hover:shadow-md flex items-center justify-center"
             aria-label={t('chat.send')}
           >
             {disabled || isSubmitting ? (

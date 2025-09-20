@@ -148,52 +148,52 @@ const ClinicalFindingsRenderer: React.FC<ClinicalFindingsRendererProps> = ({ con
       const schemes = {
         symptoms: {
           icon: Stethoscope,
-          gradient: 'from-purple-500 to-violet-600',
-          bg: 'from-purple-50 to-violet-50',
-          text: 'text-purple-900',
-          border: 'border-purple-200'
+          gradient: 'from-[#1a365d] to-[#2b6cb0]',
+          bg: 'from-[#90cdf4]/10 to-[#63b3ed]/10',
+          text: 'text-[#1a365d]',
+          border: 'border-[#2b6cb0]/30'
         },
         demographics: {
           icon: User,
-          gradient: 'from-emerald-500 to-teal-600',
-          bg: 'from-emerald-50 to-teal-50',
-          text: 'text-emerald-900',
-          border: 'border-emerald-200'
+          gradient: 'from-[#2b6cb0] to-[#63b3ed]',
+          bg: 'from-[#63b3ed]/10 to-[#90cdf4]/10',
+          text: 'text-[#1a365d]',
+          border: 'border-[#63b3ed]/30'
         },
         medical_history: {
           icon: Heart,
-          gradient: 'from-red-500 to-rose-600',
-          bg: 'from-red-50 to-rose-50',
-          text: 'text-red-900',
-          border: 'border-red-200'
+          gradient: 'from-[#63b3ed] to-[#90cdf4]',
+          bg: 'from-[#90cdf4]/10 to-[#63b3ed]/15',
+          text: 'text-[#1a365d]',
+          border: 'border-[#90cdf4]/30'
         },
         surgical_history: {
           icon: Pill,
-          gradient: 'from-orange-500 to-amber-600',
-          bg: 'from-orange-50 to-amber-50',
-          text: 'text-orange-900',
-          border: 'border-orange-200'
+          gradient: 'from-[#1a365d] to-[#63b3ed]',
+          bg: 'from-[#2b6cb0]/10 to-[#90cdf4]/10',
+          text: 'text-[#1a365d]',
+          border: 'border-[#2b6cb0]/30'
         },
         medication_history: {
           icon: Pill,
-          gradient: 'from-blue-500 to-indigo-600',
-          bg: 'from-blue-50 to-indigo-50',
-          text: 'text-blue-900',
-          border: 'border-blue-200'
+          gradient: 'from-[#2b6cb0] to-[#1a365d]',
+          bg: 'from-[#63b3ed]/10 to-[#2b6cb0]/10',
+          text: 'text-[#1a365d]',
+          border: 'border-[#2b6cb0]/30'
         },
         vital_signs: {
           icon: Activity,
-          gradient: 'from-cyan-500 to-blue-600',
-          bg: 'from-cyan-50 to-blue-50',
-          text: 'text-cyan-900',
-          border: 'border-cyan-200'
+          gradient: 'from-[#63b3ed] to-[#2b6cb0]',
+          bg: 'from-[#90cdf4]/10 to-[#63b3ed]/10',
+          text: 'text-[#1a365d]',
+          border: 'border-[#63b3ed]/30'
         },
         physical_exam: {
           icon: Thermometer,
-          gradient: 'from-pink-500 to-rose-600',
-          bg: 'from-pink-50 to-rose-50',
-          text: 'text-pink-900',
-          border: 'border-pink-200'
+          gradient: 'from-[#90cdf4] to-[#63b3ed]',
+          bg: 'from-[#90cdf4]/15 to-[#63b3ed]/10',
+          text: 'text-[#1a365d]',
+          border: 'border-[#90cdf4]/30'
         }
       };
       

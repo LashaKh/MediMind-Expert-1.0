@@ -115,32 +115,32 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
         );
       }
       
-      // Dynamic styling based on content
+      // Dynamic styling based on content - using theme colors
       let icon = Activity;
-      let gradientClasses = "from-blue-600 to-indigo-600";
-      let textColor = "text-blue-900";
-      let bgColor = "bg-blue-50";
+      let gradientClasses = "from-[#1a365d] to-[#2b6cb0]";
+      let textColor = "text-[#1a365d]";
+      let bgColor = "bg-[#90cdf4]/10";
       
       if (text.includes('Background') || text.includes('Overview')) {
         icon = BookOpen;
-        gradientClasses = "from-emerald-600 to-teal-600";
-        textColor = "text-emerald-900";
-        bgColor = "bg-emerald-50";
+        gradientClasses = "from-[#2b6cb0] to-[#63b3ed]";
+        textColor = "text-[#1a365d]";
+        bgColor = "bg-[#63b3ed]/10";
       } else if (text.includes('Clinical') || text.includes('Symptoms') || text.includes('Findings')) {
         icon = Stethoscope;
-        gradientClasses = "from-purple-600 to-violet-600";
-        textColor = "text-purple-900";
-        bgColor = "bg-purple-50";
+        gradientClasses = "from-[#63b3ed] to-[#90cdf4]";
+        textColor = "text-[#1a365d]";
+        bgColor = "bg-[#90cdf4]/10";
       } else if (text.includes('Guidelines') || text.includes('Management')) {
         icon = Shield;
-        gradientClasses = "from-indigo-600 to-blue-600";
-        textColor = "text-indigo-900";
-        bgColor = "bg-indigo-50";
+        gradientClasses = "from-[#1a365d] to-[#2b6cb0]";
+        textColor = "text-[#1a365d]";
+        bgColor = "bg-[#2b6cb0]/10";
       } else if (text.includes('References')) {
         icon = Globe;
-        gradientClasses = "from-slate-600 to-gray-600";
-        textColor = "text-slate-900";
-        bgColor = "bg-slate-50";
+        gradientClasses = "from-[#2b6cb0] to-[#63b3ed]";
+        textColor = "text-[#1a365d]";
+        bgColor = "bg-[#63b3ed]/10";
       }
       
       const IconComponent = icon;
@@ -234,13 +234,13 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
           const { level, color, icon: EvidenceIcon } = evidenceLevel;
           
           const colorClasses = {
-            emerald: 'from-emerald-100 to-green-100 text-emerald-900 border-emerald-300',
-            blue: 'from-blue-100 to-sky-100 text-blue-900 border-blue-300',
-            amber: 'from-amber-100 to-yellow-100 text-amber-900 border-amber-300',
-            purple: 'from-purple-100 to-violet-100 text-purple-900 border-purple-300',
-            red: 'from-red-100 to-pink-100 text-red-900 border-red-300',
-            indigo: 'from-indigo-100 to-blue-100 text-indigo-900 border-indigo-300',
-            slate: 'from-slate-100 to-gray-100 text-slate-900 border-slate-300'
+            emerald: 'from-[#63b3ed]/20 to-[#90cdf4]/20 text-[#1a365d] border-[#63b3ed]/30',
+            blue: 'from-[#90cdf4]/20 to-[#63b3ed]/20 text-[#1a365d] border-[#2b6cb0]/30',
+            amber: 'from-[#63b3ed]/20 to-[#90cdf4]/20 text-[#1a365d] border-[#63b3ed]/30',
+            purple: 'from-[#2b6cb0]/20 to-[#63b3ed]/20 text-[#1a365d] border-[#2b6cb0]/30',
+            red: 'from-[#90cdf4]/20 to-[#63b3ed]/20 text-[#1a365d] border-[#63b3ed]/30',
+            indigo: 'from-[#1a365d]/20 to-[#2b6cb0]/20 text-[#1a365d] border-[#2b6cb0]/30',
+            slate: 'from-[#63b3ed]/20 to-[#90cdf4]/20 text-[#1a365d] border-[#63b3ed]/30'
           };
           
           return (
@@ -259,12 +259,12 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
       // TEMPORARY TEST: Force calculator render for CHA₂DS₂-VASc sections
       if (text.includes('CHA₂DS₂-VASc')) {
         return (
-          <div className="my-8 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 shadow-lg" {...props}>
+          <div className="my-8 p-6 bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/10 rounded-2xl border border-[#63b3ed]/30 shadow-lg" {...props}>
             <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-blue-600 rounded-lg">
+              <div className="p-2 bg-[#1a365d] rounded-lg">
                 <Calculator className="w-5 h-5 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-blue-900">CHA₂DS₂-VASc Calculator</h3>
+              <h3 className="text-xl font-bold text-[#1a365d]">CHA₂DS₂-VASc Calculator</h3>
             </div>
             <CHA2DS2VAScCalculator />
             <p className="mt-4 text-gray-700">{children}</p>
@@ -321,12 +321,12 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
         } else {
           // Default to CHA₂DS₂-VASc calculator for other sections
           return (
-            <div className="my-8 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 shadow-lg" {...props}>
+            <div className="my-8 p-6 bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/10 rounded-2xl border border-[#63b3ed]/30 shadow-lg" {...props}>
               <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-blue-600 rounded-lg">
+                <div className="p-2 bg-[#1a365d] rounded-lg">
                   <Calculator className="w-5 h-5 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-blue-900">CHA₂DS₂-VASc Calculator</h3>
+                <h3 className="text-xl font-bold text-[#1a365d]">CHA₂DS₂-VASc Calculator</h3>
               </div>
               <CHA2DS2VAScCalculator />
             </div>
@@ -353,13 +353,13 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
         const { level, color, icon: EvidenceIcon } = evidenceLevel;
         
         const colorClasses = {
-          emerald: 'text-emerald-900 bg-gradient-to-r from-emerald-100 to-green-100 border-emerald-300',
-          blue: 'text-blue-900 bg-gradient-to-r from-blue-100 to-sky-100 border-blue-300',
-          amber: 'text-amber-900 bg-gradient-to-r from-amber-100 to-yellow-100 border-amber-300',
-          purple: 'text-purple-900 bg-gradient-to-r from-purple-100 to-violet-100 border-purple-300',
-          red: 'text-red-900 bg-gradient-to-r from-red-100 to-pink-100 border-red-300',
-          indigo: 'text-indigo-900 bg-gradient-to-r from-indigo-100 to-blue-100 border-indigo-300',
-          slate: 'text-slate-900 bg-gradient-to-r from-slate-100 to-gray-100 border-slate-300'
+          emerald: 'text-[#1a365d] bg-gradient-to-r from-[#63b3ed]/20 to-[#90cdf4]/20 border-[#63b3ed]/30',
+          blue: 'text-[#1a365d] bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 border-[#2b6cb0]/30',
+          amber: 'text-[#1a365d] bg-gradient-to-r from-[#63b3ed]/20 to-[#90cdf4]/20 border-[#63b3ed]/30',
+          purple: 'text-[#1a365d] bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 border-[#2b6cb0]/30',
+          red: 'text-[#1a365d] bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 border-[#63b3ed]/30',
+          indigo: 'text-[#1a365d] bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 border-[#2b6cb0]/30',
+          slate: 'text-[#1a365d] bg-gradient-to-r from-[#63b3ed]/20 to-[#90cdf4]/20 border-[#63b3ed]/30'
         };
 
         const displayText = `Evidence Level ${level}`;
@@ -594,7 +594,7 @@ export const EnhancedMarkdownRenderer: React.FC<EnhancedMarkdownRendererProps> =
           return (
             <td className={cellClasses} {...props}>
               <div className="flex items-center space-x-2">
-                <EvidenceIcon className="w-4 h-4 text-blue-600" />
+                <EvidenceIcon className="w-4 h-4 text-[#2b6cb0]" />
                 <span className="font-bold">{children}</span>
               </div>
             </td>

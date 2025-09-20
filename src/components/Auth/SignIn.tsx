@@ -58,67 +58,112 @@ export const SignIn: React.FC = () => {
 
   return (
     <AuthLayout title={t('auth.signInTitle')}>
-      <div className="px-2 sm:px-4">
-        <form className="mt-4 sm:mt-6 space-y-4 sm:space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-4 sm:space-y-5">
-            {/* Email Input */}
-            <MobileInput
-              id="email"
-              type="email"
-              label={t('auth.emailLabel')}
-              placeholder={t('auth.emailPlaceholder')}
-              autoComplete="email"
-              icon={Mail}
-              error={errors.email?.message}
-              disabled={isSubmitting}
-              required
-              {...register('email')}
-            />
+      <div className="space-y-6 sm:space-y-8">
+        {/* Enhanced Welcome Message */}
+        <div className="text-center">
+          <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed">
+            Welcome back! Please sign in to continue.
+          </p>
+        </div>
 
-            {/* Password Input */}
-            <MobileInput
-              id="password"
-              type="password"
-              label={t('auth.passwordLabel')}
-              placeholder={t('auth.passwordPlaceholder')}
-              autoComplete="current-password"
-              icon={Lock}
-              error={errors.password?.message}
-              disabled={isSubmitting}
-              required
-              {...register('password')}
-            />
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-5">
+            {/* Enhanced Email Input */}
+            <div className="group">
+              <MobileInput
+                id="email"
+                type="email"
+                label={t('auth.emailLabel')}
+                placeholder={t('auth.emailPlaceholder')}
+                autoComplete="email"
+                icon={Mail}
+                error={errors.email?.message}
+                disabled={isSubmitting}
+                required
+                className="transition-all duration-300 group-hover:border-[#63b3ed]/30"
+                {...register('email')}
+              />
+            </div>
+
+            {/* Enhanced Password Input */}
+            <div className="group">
+              <MobileInput
+                id="password"
+                type="password"
+                label={t('auth.passwordLabel')}
+                placeholder={t('auth.passwordPlaceholder')}
+                autoComplete="current-password"
+                icon={Lock}
+                error={errors.password?.message}
+                disabled={isSubmitting}
+                required
+                className="transition-all duration-300 group-hover:border-[#63b3ed]/30"
+                {...register('password')}
+              />
+            </div>
           </div>
 
-          {/* Submit Button */}
-          <div className="pt-2 sm:pt-4">
+          {/* Enhanced Submit Button */}
+          <div className="pt-4">
             <MobileButton
               type="submit"
               loading={isSubmitting}
               disabled={isSubmitting}
-              className="w-full min-h-[44px] sm:min-h-[48px]"
+              className="w-full"
               size="lg"
             >
-              {isSubmitting ? t('auth.signingIn') : t('auth.signIn')}
+              <span className="flex items-center justify-center space-x-2">
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    <span>{t('auth.signingIn')}</span>
+                  </>
+                ) : (
+                  <span>{t('auth.signIn')}</span>
+                )}
+              </span>
             </MobileButton>
           </div>
 
-          {/* Navigation Links */}
-          <div className="space-y-3 sm:space-y-4 text-center pt-2">
-            <div className="text-sm sm:text-base">
+          {/* Compact Divider */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200 dark:border-gray-700" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-3 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
+                New here?
+              </span>
+            </div>
+          </div>
+
+          {/* Enhanced Navigation Links */}
+          <div className="space-y-4">
+            {/* Sign Up Link */}
+            <div className="text-center">
               <Link
                 to="/signup"
-                className="inline-block font-medium text-primary hover:text-primary/80 dark:text-accent dark:hover:text-accent/90 transition-colors duration-200 touch-target-md px-4 py-2 rounded-lg focus-enhanced"
+                className="group inline-flex items-center justify-center px-5 py-2.5 border-2 border-[#2b6cb0] text-[#2b6cb0] hover:bg-[#2b6cb0] hover:text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[#63b3ed] focus:ring-offset-2"
               >
-                {t('auth.noAccount')}
+                <span className="text-sm">{t('auth.noAccount')}</span>
+                <svg className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
               </Link>
             </div>
             
-            <div className="text-sm sm:text-base">
+            {/* Forgot Password Link */}
+            <div className="text-center">
               <Link
                 to="/forgot-password"
-                className="inline-block font-medium text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200 touch-target-md px-4 py-2 rounded-lg focus-enhanced"
+                className="inline-flex items-center text-sm font-medium text-gray-600 hover:text-[#2b6cb0] dark:text-gray-400 dark:hover:text-[#63b3ed] transition-colors duration-200 group"
               >
+                <svg className="mr-1.5 w-3.5 h-3.5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                </svg>
                 {t('auth.forgotPassword')}
               </Link>
             </div>
