@@ -106,23 +106,23 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
             disabled={recordingState.isRecording}
             title={recordingState.isRecording ? "Cannot change transcription quality during recording" : `Select transcription quality: ${currentEngine.name} - ${currentEngine.description}`}
             className={`
-              transcription-btn-secondary w-full h-12 md:min-h-[44px] md:h-[44px] mediscribe-mobile-control-button mediscribe-touch-target mediscribe-haptic-feedback flex items-center justify-between px-3 py-2 md:px-2 md:py-2
+              transcription-btn-primary w-full h-12 md:min-h-[44px] md:h-[44px] mediscribe-mobile-control-button mediscribe-touch-target mediscribe-haptic-feedback flex items-center justify-between px-3 py-2 md:px-2 md:py-2
               ${recordingState.isRecording ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}
             `}
           >
             {/* Left: Icon and Text */}
             <div className="flex items-center space-x-2">
               {/* Icon */}
-              <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-[#1a365d]/10 flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
-                <CurrentEngineIcon className="w-4 h-4 text-[#1a365d]" />
+              <div className="w-8 h-8 md:w-6 md:h-6 rounded-lg bg-white/20 flex items-center justify-center shadow-sm mediscribe-mobile-control-icon">
+                <CurrentEngineIcon className="w-4 h-4 text-white" />
               </div>
               
               {/* Text */}
               <div className="text-left">
-                <h3 className="text-sm font-bold text-[#1a365d] mediscribe-mobile-control-text">
+                <h3 className="text-sm md:text-xs font-bold text-white mediscribe-mobile-control-text">
                   {currentEngine.name}
                 </h3>
-                <p className="text-xs opacity-70 text-[#1a365d] mediscribe-mobile-control-subtext">
+                <p className="text-xs md:text-[10px] font-medium text-white/90 mediscribe-mobile-control-subtext">
                   Transcription Quality
                 </p>
               </div>
@@ -130,8 +130,8 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
             
             {/* Right: Indicator */}
             <div className="flex items-center space-x-1">
-              <div className={`w-2 h-2 rounded-full bg-[#1a365d] ${recordingState.isRecording ? 'animate-pulse' : ''}`} />
-              <ChevronDown className={`w-4 h-4 opacity-70 text-[#1a365d] ${engineDropdownOpen ? 'rotate-180' : 'rotate-0'} transition-all duration-200`} />
+              <div className={`w-2 h-2 rounded-full bg-white/70 ${recordingState.isRecording ? 'animate-pulse' : ''}`} />
+              <ChevronDown className={`w-4 h-4 text-white/90 ${engineDropdownOpen ? 'rotate-180' : 'rotate-0'} transition-all duration-200`} />
             </div>
           </button>
           
@@ -334,17 +334,17 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                 
                 {/* Text */}
                 <div className="text-left">
-                  <h3 className={`text-sm font-bold mediscribe-mobile-control-text ${
+                  <h3 className={`text-sm md:text-xs font-bold mediscribe-mobile-control-text ${
                     enableSpeakerDiarization 
                       ? 'text-white' 
                       : 'text-[#1a365d]'
                   }`}>
                     Speakers
                   </h3>
-                  <p className={`text-xs opacity-70 mediscribe-mobile-control-subtext ${
+                  <p className={`text-xs md:text-[10px] font-medium mediscribe-mobile-control-subtext ${
                     enableSpeakerDiarization 
                       ? 'text-white' 
-                      : 'text-[#1a365d]'
+                      : 'text-[#2b6cb0]'
                   }`}>
                     {enableSpeakerDiarization ? `${speakerCount} voices` : 'Voice separation'}
                   </p>
@@ -352,14 +352,16 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
               </div>
               
               {/* Right: Controls */}
-              <div className="flex items-center space-x-2">
-                {/* Speaker Count */}
+              <div className="flex items-center space-x-1 flex-shrink-0">
+                {/* Desktop Speaker Count - Hidden on Mobile */}
                 {enableSpeakerDiarization && (
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
+                      console.log('Desktop speaker count clicked, current state:', speakerDropdownOpen);
                       if (!recordingState.isRecording) {
                         setSpeakerDropdownOpen(!speakerDropdownOpen);
+                        console.log('Setting desktop speaker dropdown to:', !speakerDropdownOpen);
                       }
                     }}
                     role="button"
@@ -373,12 +375,56 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                         }
                       }
                     }}
-                    className="px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-white text-xs font-semibold flex items-center space-x-1 hover:bg-white/30 transition-all duration-200 cursor-pointer"
+                    className="hidden md:flex px-2 py-1 rounded-lg bg-white/20 border border-white/30 text-white text-xs font-semibold items-center space-x-1 hover:bg-white/30 transition-all duration-200 cursor-pointer"
                   >
                     <Users className="w-3 h-3" />
                     <span>{speakerCount}</span>
                     <ChevronDown className={`w-3 h-3 transition-all duration-200 ${speakerDropdownOpen ? 'rotate-180' : 'rotate-0'}`} />
                   </div>
+                )}
+                
+                {/* Debug: Check if speakers are enabled */}
+                {console.log('🔍 enableSpeakerDiarization:', enableSpeakerDiarization, 'speakerCount:', speakerCount)}
+                
+                {/* Mobile Speaker Count Button - Only show when enabled */}
+                {enableSpeakerDiarization && (
+                  <button
+                    onClick={(e) => {
+                      console.log('🔵 MOBILE Speaker count button clicked!');
+                      console.log('🔵 Event target:', e.target);
+                      console.log('🔵 Current speakerDropdownOpen state:', speakerDropdownOpen);
+                      console.log('🔵 Recording state:', recordingState.isRecording);
+                      
+                      e.preventDefault();
+                      e.stopPropagation();
+                      
+                      if (!recordingState.isRecording) {
+                        const newState = !speakerDropdownOpen;
+                        console.log('🔵 Setting speaker dropdown to:', newState);
+                        setSpeakerDropdownOpen(newState);
+                        
+                        // Force a re-render check
+                        setTimeout(() => {
+                          console.log('🔵 After timeout - speakerDropdownOpen is now:', speakerDropdownOpen);
+                        }, 100);
+                      } else {
+                        console.log('🔵 Cannot open dropdown - recording is active');
+                      }
+                    }}
+                    className="md:hidden flex items-center gap-1 px-3 py-2 rounded-lg bg-red-500 border-2 border-red-300 text-white font-bold hover:bg-red-600 transition-all duration-200 cursor-pointer shadow-md touch-manipulation"
+                    style={{
+                      backgroundColor: 'red !important',
+                      color: 'white !important',
+                      border: '2px solid yellow !important',
+                      touchAction: 'manipulation',
+                      WebkitTapHighlightColor: 'transparent'
+                    }}
+                    disabled={recordingState.isRecording}
+                  >
+                    <Users className="w-3 h-3" />
+                    <span className="text-sm font-bold">{speakerCount}</span>
+                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${speakerDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
                 )}
                 
                 {/* Compact Toggle Switch */}
@@ -398,67 +444,52 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                   `} />
                 </div>
               </div>
-              
-              {/* Mobile Content - All Contained */}
-              <div className="absolute inset-0 flex items-center justify-between px-3 z-[100] md:hidden">
-                
-                {/* Left Side: Icon and Text */}
-                <div className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-sm transition-all duration-200
-                    ${enableSpeakerDiarization 
-                      ? 'bg-gradient-to-br from-violet-500 to-purple-600' 
-                      : 'bg-gray-400 dark:bg-gray-600'
-                    }`}>
-                    <Brain className="w-4 h-4 text-white" />
-                  </div>
-                  
-                  <div className="flex flex-col items-start">
-                    <div className={`text-xs font-bold leading-tight transition-all duration-200
-                      ${enableSpeakerDiarization 
-                        ? 'text-violet-700 dark:text-violet-300' 
-                        : 'text-gray-600 dark:text-gray-400'
-                      }`}>
-                      Speakers
-                    </div>
-                    <div className={`text-[10px] leading-tight transition-all duration-200
-                      ${enableSpeakerDiarization 
-                        ? 'text-violet-600 dark:text-violet-400' 
-                        : 'text-gray-500 dark:text-gray-500'
-                      }`}>
-                      {enableSpeakerDiarization ? `${speakerCount} voices` : 'OFF'}
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Right Side: Number Selector only when enabled */}
-                {enableSpeakerDiarization && onSpeakerCountChange && (
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      if (!recordingState.isRecording) {
-                        setSpeakerDropdownOpen(!speakerDropdownOpen);
-                      }
-                    }}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    className="flex items-center gap-1 px-2 py-1 rounded-lg bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 hover:bg-violet-200 dark:hover:bg-violet-900/50 transition-all duration-200 cursor-pointer"
-                  >
-                    <span className="text-sm font-bold">{speakerCount}</span>
-                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${speakerDropdownOpen ? 'rotate-180' : ''}`} />
-                  </button>
-                )}
-              </div>
             </div>
             
+            {/* Desktop Speaker Count Dropdown */}
+            {speakerDropdownOpen && (
+              <div className="hidden md:block absolute top-full mt-2 left-0 right-0 z-[9999] animate-in slide-in-from-top-2 duration-200">
+                {/* Backdrop */}
+                <div className="absolute inset-0 bg-white/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-[#63b3ed]/30" />
+                
+                {/* Content */}
+                <div className="relative p-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    {[2, 3, 4, 5].map((count) => (
+                      <button
+                        key={count}
+                        onClick={() => {
+                          if (onSpeakerCountChange) {
+                            onSpeakerCountChange(count);
+                          }
+                          setSpeakerDropdownOpen(false);
+                        }}
+                        className={`
+                          p-3 rounded-xl text-center transition-all duration-200 border-2
+                          ${speakerCount === count 
+                            ? 'bg-[#1a365d] text-white border-[#1a365d]' 
+                            : 'bg-white text-[#1a365d] border-[#63b3ed] hover:bg-[#63b3ed]/10'
+                          }
+                        `}
+                      >
+                        <div className="font-bold text-lg">{count}</div>
+                        <div className="text-xs opacity-80">
+                          {count === 2 ? 'Doctor + Patient' : 'Voices'}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Mobile Speaker Count Dropdown - Bottom Sheet Style */}
             {speakerDropdownOpen && (
               <>
+              {console.log('🟡 MOBILE DROPDOWN RENDERING! speakerDropdownOpen =', speakerDropdownOpen)}
           {/* Mobile Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            className="fixed inset-0 bg-black/50 z-[9998] md:hidden"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -467,10 +498,24 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
           />
           
           {/* Mobile Bottom Sheet */}
-          <div className="fixed bottom-0 left-0 right-0 z-50 animate-in slide-in-from-bottom duration-300 md:hidden">
+          <div 
+            className="fixed bottom-0 left-0 right-0 z-[9999] md:hidden"
+            style={{
+              transform: 'translateY(0)',
+              transition: 'transform 300ms ease-out'
+            }}
+            onClick={() => console.log('Mobile sheet clicked')}
+          >
             <div 
               className="bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-gray-700 p-6"
-              onClick={(e) => e.stopPropagation()}
+              style={{ 
+                backgroundColor: 'white',
+                minHeight: '200px'
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('🟢 Mobile sheet content clicked');
+              }}
             >
               
               {/* Handle */}

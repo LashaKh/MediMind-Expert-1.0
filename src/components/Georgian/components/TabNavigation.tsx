@@ -75,45 +75,69 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 <button
                   key={tab.id}
                   onClick={() => onTabChange(tab.id as TabId)}
-                  className={`group relative flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-4 py-2.5 transition-all duration-300 lg:px-4 lg:py-2.5 lg:space-x-2 ${
-                    isActive 
-                      ? 'transcription-btn-primary' 
-                      : 'transcription-btn-secondary'
-                  } mediscribe-mobile-tab`}
+                  className={`group relative flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-4 py-2.5 transition-all duration-300 lg:px-4 lg:py-2.5 lg:space-x-2 mediscribe-mobile-tab`}
+                  style={isActive ? {
+                    background: 'linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '16px',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    boxShadow: '0 4px 6px -1px rgba(74, 158, 255, 0.2), 0 2px 4px -1px rgba(74, 158, 255, 0.06)'
+                  } : {
+                    background: '#ffffff',
+                    color: '#1a365d',
+                    border: '2px solid #63b3ed',
+                    borderRadius: '16px',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    boxShadow: '0 2px 4px rgba(26, 54, 93, 0.1)'
+                  }}
                 >
                   {/* Icon Container */}
-                  <div className={`w-6 h-6 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-md flex items-center justify-center transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-white/20' 
-                      : 'bg-[#1a365d]/10'
-                  } mediscribe-mobile-tab-icon`}>
-                    <Icon className={`w-4 h-4 sm:w-4 sm:h-4 lg:w-4 lg:h-4 transition-transform duration-300 group-hover:scale-110 ${
-                      isActive 
-                        ? 'text-white' 
-                        : 'text-[#1a365d] fill-[#1a365d] stroke-[#1a365d]'
-                    }`} 
-                    style={!isActive ? {
-                      color: '#1a365d',
-                      fill: '#1a365d',
-                      stroke: '#1a365d'
-                    } : undefined}
+                  <div 
+                    className="w-6 h-6 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-md flex items-center justify-center transition-all duration-300 mediscribe-mobile-tab-icon"
+                    style={isActive ? {
+                      backgroundColor: 'rgba(255, 255, 255, 0.2)'
+                    } : {
+                      backgroundColor: 'rgba(26, 54, 93, 0.1)'
+                    }}
+                  >
+                    <Icon 
+                      className="w-4 h-4 sm:w-4 sm:h-4 lg:w-4 lg:h-4 transition-transform duration-300 group-hover:scale-110"
+                      style={isActive ? {
+                        color: 'white',
+                        fill: 'none',
+                        stroke: 'white'
+                      } : {
+                        color: '#1a365d',
+                        fill: '#1a365d',
+                        stroke: '#1a365d'
+                      }}
                     />
                   </div>
                   
                   {/* Labels */}
                   <div className="flex flex-col items-start min-w-0">
-                    <span className={`text-xs sm:text-sm lg:text-sm font-bold leading-tight ${
-                      isActive 
-                        ? 'text-white' 
-                        : 'text-[#1a365d]'
-                    } mediscribe-mobile-tab-label`}>
+                    <span 
+                      className="text-xs sm:text-sm lg:text-sm font-bold leading-tight mediscribe-mobile-tab-label"
+                      style={isActive ? {
+                        color: 'white'
+                      } : {
+                        color: '#1a365d'
+                      }}
+                    >
                       {tab.label}
                     </span>
-                    <span className={`text-[11px] sm:text-xs lg:text-xs font-medium leading-tight opacity-80 ${
-                      isActive 
-                        ? 'text-white' 
-                        : 'text-[#1a365d]'
-                    } mediscribe-mobile-tab-sublabel`}>
+                    <span 
+                      className="text-[11px] sm:text-xs lg:text-xs font-medium leading-tight mediscribe-mobile-tab-sublabel"
+                      style={isActive ? {
+                        color: 'rgba(255, 255, 255, 0.9)'
+                      } : {
+                        color: '#1a365d',
+                        opacity: '0.8'
+                      }}
+                    >
                       {tab.sublabel}
                     </span>
                   </div>
