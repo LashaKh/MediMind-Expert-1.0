@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Edit3, Stethoscope, MessageSquare, Sparkles, Mic, Square, History, Zap, Brain, FileText, Play, Pause, Activity } from 'lucide-react';
+import { Edit3, Stethoscope, MessageSquare, Sparkles, Mic, Square, History, Zap, Brain, FileText, Play, Pause, Activity, Upload } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { TRANSCRIPT_TABS, TabId } from '../utils/uiConstants';
 
@@ -17,6 +17,8 @@ interface TabNavigationProps {
   isHistoryOpen?: boolean;
   onToggleHistory?: () => void;
   sessionCount?: number;
+  // Upload controls
+  onFileUpload?: (file: File) => void;
 }
 
 const tabs = TRANSCRIPT_TABS;
@@ -57,9 +59,26 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
   onStopRecording,
   isHistoryOpen = false,
   onToggleHistory,
-  sessionCount = 0
+  sessionCount = 0,
+  onFileUpload
 }) => {
   const [hoveredTab, setHoveredTab] = useState<string | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleFileUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && onFileUpload) {
+      onFileUpload(file);
+    }
+    // Reset file input to allow selecting the same file again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   return (
     <div className="bg-white border-b border-[#90cdf4]/30">
@@ -200,6 +219,33 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 )}
               </button>
             )}
+
+            {/* Compact Upload Button */}
+            {onFileUpload && (
+              <button
+                onClick={handleFileUploadClick}
+                disabled={isRecording}
+                className={`
+                  transcription-btn-secondary relative hidden lg:flex items-center space-x-2 px-3 py-2 font-semibold text-sm transition-all duration-300 hover:scale-105 active:scale-95
+                  ${isRecording ? 'opacity-60 cursor-not-allowed' : ''}
+                `}
+                title={isRecording ? "Cannot upload files during recording" : "Upload an audio file (.wav, .mp3, .m4a, .ogg, .webm) for transcription"}
+              >
+                <div className="w-5 h-5 rounded-md bg-[#1a365d]/10 flex items-center justify-center">
+                  <Upload className="w-3 h-3 text-[#1a365d]" style={{
+                    color: '#1a365d',
+                    stroke: '#1a365d',
+                    strokeWidth: '2.5'
+                  }} />
+                </div>
+                <div className="hidden xl:flex flex-col items-start min-w-0">
+                  <span className="text-xs font-bold leading-tight text-[#1a365d]">Upload</span>
+                  <span className="text-[10px] font-medium leading-tight opacity-80 text-[#1a365d]">
+                    Audio file
+                  </span>
+                </div>
+              </button>
+            )}
             
             {/* Compact Record Button - Hidden on mobile (replaced by FAB) */}
             {activeTab === 'transcript' && (onStartRecording || onStopRecording) && (
@@ -244,6 +290,16 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Hidden File Input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="audio/*,.wav,.mp3,.m4a,.ogg,.webm"
+        onChange={handleFileChange}
+        className="hidden"
+        multiple={false}
+      />
     </div>
   );
 };

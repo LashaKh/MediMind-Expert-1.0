@@ -502,6 +502,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         isHistoryOpen={isHistoryOpen}
         onToggleHistory={onToggleHistory}
         sessionCount={sessionCount}
+        onFileUpload={onFileUpload}
       />
 
       {/* Content Area */}
