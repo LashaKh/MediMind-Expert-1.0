@@ -605,9 +605,10 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
   }, [searchHistory]);
 
   const specialtyName = specialty === MedicalSpecialty.CARDIOLOGY ? 'Cardiology' : 'OB/GYN';
+  // Updated to use consistent blue theme colors for all specialties
   const specialtyColors = specialty === MedicalSpecialty.CARDIOLOGY ? 
-    { primary: 'blue', secondary: 'indigo', accent: 'cyan' } : 
-    { primary: 'pink', secondary: 'rose', accent: 'purple' };
+    { primary: '#1a365d', secondary: '#2b6cb0', accent: '#63b3ed' } : 
+    { primary: '#2b6cb0', secondary: '#63b3ed', accent: '#90cdf4' };
 
   // Simulate loading for dramatic effect
   useEffect(() => {
@@ -635,10 +636,10 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
               onChange={(e) => handleSearch(e.target.value)}
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
-              className="w-full pl-12 pr-4 py-4 min-h-[48px] text-sm border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 placeholder-gray-500"
+              className="w-full pl-12 pr-4 py-4 min-h-[48px] text-sm border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#63b3ed] transition-all duration-300 placeholder-gray-500"
             />
             <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-purple-400" />
+              <Sparkles className="w-4 h-4 text-[#63b3ed]" />
             </div>
           </div>
 
@@ -670,7 +671,7 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
                   onClick={() => setSelectedFilter(filter as FilterBy)}
                   className={`px-4 py-3 min-h-[44px] rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-1 ${
                     selectedFilter === filter
-                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-md transform scale-105'
+                      ? 'bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] text-white shadow-md transform scale-105'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-sm'
                   }`}
                 >
@@ -703,7 +704,7 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortBy)}
-                  className="w-full sm:w-auto px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-purple-500/20 cursor-pointer appearance-none pr-8 text-sm"
+                  className="w-full sm:w-auto px-4 py-3 min-h-[44px] border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#63b3ed] cursor-pointer appearance-none pr-8 text-sm"
                 >
                   <option value="relevance">Relevance</option>
                   <option value="rating">Highest Rated</option>
@@ -727,7 +728,7 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
                     onClick={() => setViewMode(mode as ViewMode)}
                     className={`p-3 min-h-[40px] min-w-[40px] rounded-md transition-all duration-200 flex items-center justify-center ${
                       viewMode === mode 
-                        ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-sm' 
+                        ? 'bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white shadow-sm' 
                         : 'hover:bg-gray-200 text-gray-600'
                     }`}
                   >
@@ -746,16 +747,16 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
               {filteredResources.length} Resources Found
             </h2>
             {searchTerm && (
-              <div className="flex items-center space-x-2 px-3 py-1 bg-purple-100 rounded-full">
-                <Search className="w-3 h-3 text-purple-600" />
-                <span className="text-sm text-purple-700">
+              <div className="flex items-center space-x-2 px-3 py-1 bg-[#63b3ed]/10 rounded-full">
+                <Search className="w-3 h-3 text-[#1a365d]" />
+                <span className="text-sm text-[#1a365d] font-medium">
                   <strong>"{searchTerm}"</strong>
                 </span>
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="p-0.5 hover:bg-purple-200 rounded-full transition-colors"
+                  className="p-0.5 hover:bg-[#63b3ed]/20 rounded-full transition-colors"
                 >
-                  <X className="w-3 h-3 text-purple-600" />
+                  <X className="w-3 h-3 text-[#1a365d]" />
                 </button>
               </div>
             )}
@@ -772,7 +773,7 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
               <span>{stats.trendingCount} trending</span>
             </div>
             <div className="flex items-center space-x-1">
-              <Bookmark className="w-4 h-4 text-blue-500" />
+              <Bookmark className="w-4 h-4 text-[#2b6cb0]" />
               <span>{resources.filter(r => r.bookmarked).length} bookmarked</span>
             </div>
           </div>
@@ -817,11 +818,11 @@ const LoadingState: React.FC<LoadingStateProps> = ({ specialtyColors }) => {
     <div className="min-h-screen bg-white flex items-center justify-center">
       <div className="text-center">
         <div className="relative mb-6">
-          <div className={`w-12 h-12 border-4 border-${specialtyColors.primary}-200 rounded-full animate-spin`}>
-            <div className={`w-8 h-8 border-4 border-${specialtyColors.primary}-600 border-t-transparent rounded-full animate-spin`}></div>
+          <div className="w-12 h-12 border-4 border-[#63b3ed]/30 rounded-full animate-spin">
+            <div className="w-8 h-8 border-4 border-[#1a365d] border-t-transparent rounded-full animate-spin"></div>
           </div>
           <div className="absolute inset-0 flex items-center justify-center">
-            <BookOpen className={`w-6 h-6 text-${specialtyColors.primary}-600 animate-pulse`} />
+            <BookOpen className="w-6 h-6 text-[#1a365d] animate-pulse" />
           </div>
         </div>
         <h2 className="text-lg font-bold text-gray-900 mb-2">Loading Knowledge Base</h2>
@@ -897,15 +898,15 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
         <div className="flex items-start justify-between">
           <div className="flex-1 pr-3">
             <div className="flex items-center space-x-2 mb-2">
-              <div className={`p-1.5 rounded-md bg-${resource.category === 'book' ? 'blue' : 'green'}-100`}>
+              <div className={resource.category === 'book' ? 'p-1.5 rounded-md bg-[#63b3ed]/20' : 'p-1.5 rounded-md bg-[#2b6cb0]/20'}>
                 {resource.category === 'book' ? (
-                  <BookOpen className={`w-4 h-4 text-${resource.category === 'book' ? 'blue' : 'green'}-600`} />
+                  <BookOpen className="w-4 h-4 text-[#1a365d]" />
                 ) : (
-                  <FileText className="w-4 h-4 text-green-600" />
+                  <FileText className="w-4 h-4 text-[#2b6cb0]" />
                 )}
               </div>
               <div className="flex items-center space-x-2">
-                <span className={`px-2 py-1 bg-${resource.category === 'book' ? 'blue' : 'green'}-100 text-${resource.category === 'book' ? 'blue' : 'green'}-800 rounded-full text-xs font-medium`}>
+                <span className={resource.category === 'book' ? 'px-2 py-1 bg-[#63b3ed]/20 text-[#1a365d] rounded-full text-xs font-medium' : 'px-2 py-1 bg-[#2b6cb0]/20 text-[#1a365d] rounded-full text-xs font-medium'}>
                   {resource.category === 'book' ? 'Book' : 'Guideline'}
                 </span>
                 {resource.featured && (
@@ -915,7 +916,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
                   </span>
                 )}
                 {resource.trending && (
-                  <span className="px-2 py-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full text-xs font-medium flex items-center space-x-1">
+                  <span className="px-2 py-1 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white rounded-full text-xs font-medium flex items-center space-x-1">
                     <TrendingUp className="w-2.5 h-2.5" />
                     <span>Trending</span>
                   </span>
@@ -923,7 +924,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
               </div>
             </div>
             
-            <h3 className="font-semibold text-gray-900 mb-2 text-sm group-hover:text-purple-600 transition-colors line-clamp-2">
+            <h3 className="font-semibold text-gray-900 mb-2 text-sm group-hover:text-[#1a365d] transition-colors line-clamp-2">
               {resource.title}
             </h3>
             
@@ -936,7 +937,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
               )}
               {resource.citations && (
                 <div className="flex items-center space-x-1">
-                  <BarChart3 className="w-3 h-3 text-blue-500" />
+                  <BarChart3 className="w-3 h-3 text-[#2b6cb0]" />
                   <span>{resource.citations.toLocaleString()} citations</span>
                 </div>
               )}
@@ -975,7 +976,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
               </span>
             )}
             <button 
-              className={`p-1.5 rounded-md bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-white hover:shadow-lg transition-all duration-200 ${isHovered ? 'scale-110' : ''}`}
+              className={`p-1.5 rounded-md bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white hover:shadow-lg transition-all duration-200 ${isHovered ? 'scale-110' : ''}`}
             >
               <ArrowRight className="w-3 h-3" />
             </button>
@@ -1001,11 +1002,11 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Card Header */}
-      <div className={`h-16 bg-gradient-to-r ${
+      <div className={`h-16 relative overflow-hidden ${
         resource.category === 'book' 
-          ? `from-${specialtyColors.primary}-500 to-${specialtyColors.accent}-500` 
-          : `from-${specialtyColors.secondary}-500 to-${specialtyColors.primary}-500`
-      } relative overflow-hidden`}>
+          ? 'bg-gradient-to-r from-[#1a365d] to-[#63b3ed]' 
+          : 'bg-gradient-to-r from-[#2b6cb0] to-[#1a365d]'
+      }`}>
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute inset-0 opacity-10">
           <div className="w-full h-full" style={{
@@ -1044,8 +1045,8 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
               </div>
             )}
             {resource.bookmarked && (
-              <div className="p-1 bg-blue-500/20 rounded-md backdrop-blur-sm">
-                <Bookmark className="w-3 h-3 text-blue-200 fill-current" />
+              <div className="p-1 bg-[#2b6cb0]/20 rounded-md backdrop-blur-sm">
+                <Bookmark className="w-3 h-3 text-white fill-current" />
               </div>
             )}
           </div>
@@ -1055,7 +1056,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
       {/* Card Content */}
       <div className="p-3">
         <div className="mb-3">
-          <h3 className="font-semibold text-gray-900 text-sm mb-2 group-hover:text-purple-600 transition-colors line-clamp-2">
+          <h3 className="font-semibold text-gray-900 text-sm mb-2 group-hover:text-[#1a365d] transition-colors line-clamp-2">
             {resource.title}
           </h3>
           
@@ -1068,7 +1069,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
             )}
             {resource.citations && (
               <div className="flex items-center space-x-1">
-                <BarChart3 className="w-3 h-3 text-blue-500" />
+                <BarChart3 className="w-3 h-3 text-[#2b6cb0]" />
                 <span className="font-semibold text-sm">{resource.citations.toLocaleString()}</span>
               </div>
             )}
@@ -1147,7 +1148,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
             )}
           </div>
           
-          <button className={`p-1.5 rounded-lg bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-white hover:shadow-lg transition-all duration-300 ${
+          <button className={`p-1.5 rounded-lg bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white hover:shadow-lg transition-all duration-300 ${
             isHovered ? 'scale-110 rotate-12' : ''
           }`}>
             <ArrowUpRight className="w-3 h-3" />
@@ -1189,7 +1190,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ searchTerm, onClearSearch, spec
           <div className="space-y-3">
             <button
               onClick={onClearSearch}
-              className={`px-6 py-2 bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-white rounded-lg hover:shadow-lg transition-all duration-300 font-semibold text-sm`}
+              className="px-6 py-2 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white rounded-lg hover:shadow-lg transition-all duration-300 font-semibold text-sm"
             >
               Clear search and browse all resources
             </button>
@@ -1234,11 +1235,11 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         {/* Modal Header */}
-        <div className={`h-32 bg-gradient-to-r ${
+        <div className={`h-32 relative overflow-hidden ${
           resource.category === 'book' 
-            ? `from-${specialtyColors.primary}-600 to-${specialtyColors.accent}-600` 
-            : `from-${specialtyColors.secondary}-600 to-${specialtyColors.primary}-600`
-        } relative overflow-hidden`}>
+            ? 'bg-gradient-to-r from-[#1a365d] to-[#63b3ed]' 
+            : 'bg-gradient-to-r from-[#2b6cb0] to-[#1a365d]'
+        }`}>
           <div className="absolute inset-0 opacity-10">
             <div className="w-full h-full" style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='7' cy='7' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
@@ -1312,7 +1313,7 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
                   <h3 className="font-semibold text-gray-900 mb-2">Topics</h3>
                   <div className="flex flex-wrap gap-2">
                     {resource.tags.map(tag => (
-                      <span key={tag} className={`px-2 py-1 bg-${specialtyColors.primary}-100 text-${specialtyColors.primary}-800 rounded-md text-sm font-medium`}>
+                      <span key={tag} className="px-2 py-1 bg-[#63b3ed]/20 text-[#1a365d] rounded-md text-sm font-medium">
                         #{tag}
                       </span>
                     ))}
@@ -1371,7 +1372,7 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
 
               {/* Actions */}
               <div className="space-y-2">
-                <button className={`w-full py-2 px-3 bg-gradient-to-r from-${specialtyColors.primary}-600 to-${specialtyColors.secondary}-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 text-sm`}>
+                <button className="w-full py-2 px-3 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 text-sm">
                   <Eye className="w-4 h-4" />
                   <span>Open Resource</span>
                 </button>

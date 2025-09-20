@@ -68,7 +68,7 @@ const BaseErrorFallback: React.FC<BaseErrorFallbackProps> = ({
           {showRetry && (
             <button
               onClick={handleRetry}
-              className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
+              className="flex-1 bg-[#2b6cb0] text-white px-6 py-3 rounded-lg hover:bg-[#1a365d] focus:outline-none focus:ring-2 focus:ring-[#63b3ed] focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
             >
               {t('common.errors.actions.tryAgain')}
             </button>
@@ -259,7 +259,7 @@ export const LoadingSpinner: React.FC<{
   return (
     <div className={`flex justify-center ${className}`}>
       <svg
-        className={`animate-spin text-blue-600 ${sizeClasses[size]}`}
+        className={`animate-spin text-[#2b6cb0] ${sizeClasses[size]}`}
         fill="none"
         viewBox="0 0 24 24"
       >

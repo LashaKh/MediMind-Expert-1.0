@@ -166,7 +166,7 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
       {/* Enhanced Profile Picture Display */}
       <div className="relative group">
         {/* Glow effect background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-500 scale-110"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-500 scale-110"></div>
         
         {/* Main picture container */}
         <div className="relative">
@@ -178,8 +178,8 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
-                <User className="w-20 h-20 text-blue-400 dark:text-blue-300" />
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#2b6cb0]/20 dark:to-[#1a365d]/20">
+                <User className="w-20 h-20 text-[#63b3ed] dark:text-[#90cdf4]" />
               </div>
             )}
           </div>
@@ -210,7 +210,7 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
 
           {/* Enhanced Loading overlay */}
           {isUploading && (
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/80 to-indigo-500/80 flex items-center justify-center backdrop-blur-sm">
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#2b6cb0]/80 to-[#1a365d]/80 flex items-center justify-center backdrop-blur-sm">
               <div className="text-center space-y-3">
                 <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto"></div>
                 <p className="text-white text-sm font-medium">{t('profile.saving')}</p>
@@ -229,7 +229,7 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
       <button
         onClick={handleFileSelect}
         disabled={isUploading}
-        className="group flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
+        className="group flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] hover:from-[#1a365d] hover:to-[#2b6cb0] text-white rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
       >
         <Upload className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
         <span className="font-medium">{isUploading ? t('profile.saving') : t('profile.uploadNewPhoto')}</span>

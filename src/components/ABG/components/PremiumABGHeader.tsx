@@ -83,7 +83,7 @@ export const PremiumABGHeader: React.FC<PremiumABGHeaderProps> = ({
             </div>
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-700 via-purple-700 to-emerald-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] bg-clip-text text-transparent">
               {t('abg.header.title', 'Blood Gas Analysis')}
             </h1>
             <p className="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed max-w-3xl">

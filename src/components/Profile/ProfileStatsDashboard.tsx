@@ -92,9 +92,9 @@ export const ProfileStatsDashboard: React.FC = () => {
 
   const getProfessionalLevelColor = (level: string) => {
     const colors = {
-      'Resident': 'from-blue-500 to-cyan-500',
+      'Resident': 'from-[#63b3ed] to-[#90cdf4]',
       'Fellow': 'from-green-500 to-emerald-500',
-      'Attending': 'from-purple-500 to-violet-500',
+      'Attending': 'from-[#2b6cb0] to-[#1a365d]',
       'Specialist': 'from-orange-500 to-red-500',
       'Expert': 'from-yellow-500 to-amber-500'
     };
@@ -223,7 +223,7 @@ export const ProfileStatsDashboard: React.FC = () => {
         className="col-span-2 lg:col-span-4 relative overflow-hidden rounded-3xl medical-glass animate-magnetic-hover hw-accelerate"
       >
         {/* Enhanced Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-purple-800 to-indigo-900 opacity-90 animate-professional-gradient" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-[#1a365d] to-[#2b6cb0] opacity-90 animate-professional-gradient" />
         
         {/* Glass Morphism Layer */}
         <div className="relative h-full w-full rounded-3xl bg-white/5 dark:bg-gray-900/10 backdrop-blur-xl border border-white/10 dark:border-gray-700/20 p-6 hover:bg-white/10 transition-all duration-500">
@@ -233,7 +233,7 @@ export const ProfileStatsDashboard: React.FC = () => {
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className="absolute w-1 h-1 bg-purple-400/30 rounded-full animate-medical-particle"
+                className="absolute w-1 h-1 bg-[#63b3ed]/30 rounded-full animate-medical-particle"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
@@ -250,7 +250,7 @@ export const ProfileStatsDashboard: React.FC = () => {
               <div className="p-2 bg-white/20 backdrop-blur-sm rounded-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
                 <BarChart3 className="w-5 h-5 text-white" />
               </div>
-              <span className="group-hover:text-purple-200 transition-colors duration-300">Weekly Activity</span>
+              <span className="group-hover:text-[#90cdf4] transition-colors duration-300">Weekly Activity</span>
           </h3>
             <div className="flex items-center space-x-3">
           <div className="text-white/70 text-sm">Last 7 days</div>
@@ -268,7 +268,7 @@ export const ProfileStatsDashboard: React.FC = () => {
                 <div className="relative w-full">
                   {/* Bar */}
               <div 
-                    className="relative w-full bg-gradient-to-t from-purple-600 via-violet-500 to-indigo-400 rounded-lg transition-all duration-700 hover:scale-110 group shadow-lg animate-chart-bar filter-glow-blue"
+                    className="relative w-full bg-gradient-to-t from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] rounded-lg transition-all duration-700 hover:scale-110 group shadow-lg animate-chart-bar filter-glow-blue"
                 style={{ 
                       height: `${(value / Math.max(...stats.weeklyActivity)) * 120}px`,
                       minHeight: '12px',
@@ -307,7 +307,7 @@ export const ProfileStatsDashboard: React.FC = () => {
           <div className="mt-4 flex items-center justify-between text-xs">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-purple-400 rounded-full" />
+                <div className="w-2 h-2 bg-[#63b3ed] rounded-full" />
                 <span className="text-white/70">Avg: {Math.round(stats.weeklyActivity.reduce((a, b) => a + b, 0) / 7)} sessions</span>
       </div>
               <div className="flex items-center space-x-2">
@@ -471,7 +471,7 @@ export const ProfileStatsDashboard: React.FC = () => {
           subtitle="Almost there! Add more details"
           trend="up"
           trendValue="+5%"
-          gradient="from-blue-600 to-cyan-600"
+          gradient="from-[#2b6cb0] to-[#63b3ed]"
           delay={0}
           statKey="completion"
           isAnimating={true}
@@ -495,7 +495,7 @@ export const ProfileStatsDashboard: React.FC = () => {
           subtitle="Medical calculators accessed"
           trend="up"
           trendValue="+12"
-          gradient="from-purple-600 to-violet-600"
+          gradient="from-[#1a365d] to-[#2b6cb0]"
           delay={200}
           statKey="calculations"
           isAnimating={true}

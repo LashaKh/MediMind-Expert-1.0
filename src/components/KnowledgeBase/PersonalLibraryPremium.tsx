@@ -384,13 +384,13 @@ const PremiumFileIcon: React.FC<{ fileType: string; className?: string; showGrad
     const normalizedType = type.toLowerCase();
     
     if (normalizedType.includes('pdf')) {
-      return { Icon: FileText, color: 'from-red-500 to-red-600', solid: 'text-red-500' };
+      return { Icon: FileText, color: 'from-[#1a365d] to-[#2b6cb0]', solid: 'text-[#1a365d]' };
     } else if (normalizedType.includes('image') || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(normalizedType)) {
       return { Icon: FileImage, color: 'from-purple-500 to-pink-500', solid: 'text-purple-500' };
     } else if (normalizedType.includes('excel') || normalizedType.includes('csv') || normalizedType.includes('spreadsheet')) {
       return { Icon: FileSpreadsheet, color: 'from-green-500 to-emerald-500', solid: 'text-green-500' };
     } else if (normalizedType.includes('word') || normalizedType.includes('doc')) {
-      return { Icon: FileText, color: 'from-blue-500 to-indigo-500', solid: 'text-blue-500' };
+      return { Icon: FileText, color: 'from-[#2b6cb0] to-[#63b3ed]', solid: 'text-[#2b6cb0]' };
     } else {
       return { Icon: File, color: 'from-gray-500 to-gray-600', solid: 'text-gray-500' };
     }
@@ -1031,30 +1031,30 @@ export const PersonalLibraryPremium: React.FC = () => {
     switch (specialty) {
       case MedicalSpecialty.CARDIOLOGY:
         return {
-          primary: 'text-red-600',
-          primaryBg: 'bg-red-600',
-          primaryLight: 'bg-red-50',
-          primaryGradient: 'from-red-500 to-red-600',
-          border: 'border-red-200',
-          accent: 'bg-red-100'
+          primary: 'text-[#1a365d]',
+          primaryBg: 'bg-[#1a365d]',
+          primaryLight: 'bg-[#63b3ed]/10',
+          primaryGradient: 'from-[#1a365d] to-[#2b6cb0]',
+          border: 'border-[#63b3ed]/30',
+          accent: 'bg-[#63b3ed]/20'
         };
       case MedicalSpecialty.OBGYN:
         return {
-          primary: 'text-pink-600',
-          primaryBg: 'bg-pink-600',
-          primaryLight: 'bg-pink-50',
-          primaryGradient: 'from-pink-500 to-pink-600',
-          border: 'border-pink-200',
-          accent: 'bg-pink-100'
+          primary: 'text-[#2b6cb0]',
+          primaryBg: 'bg-[#2b6cb0]',
+          primaryLight: 'bg-[#90cdf4]/10',
+          primaryGradient: 'from-[#2b6cb0] to-[#63b3ed]',
+          border: 'border-[#90cdf4]/30',
+          accent: 'bg-[#90cdf4]/20'
         };
       default:
         return {
-          primary: 'text-blue-600',
-          primaryBg: 'bg-blue-600',
-          primaryLight: 'bg-blue-50',
-          primaryGradient: 'from-blue-500 to-blue-600',
-          border: 'border-blue-200',
-          accent: 'bg-blue-100'
+          primary: 'text-[#2b6cb0]',
+          primaryBg: 'bg-[#2b6cb0]',
+          primaryLight: 'bg-[#63b3ed]/10',
+          primaryGradient: 'from-[#1a365d] to-[#2b6cb0]',
+          border: 'border-[#63b3ed]/30',
+          accent: 'bg-[#63b3ed]/20'
         };
     }
   };
@@ -1538,10 +1538,10 @@ export const PersonalLibraryPremium: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Ready</p>
-                  <p className="text-3xl font-bold text-green-600">{documentStats.completed}</p>
-                  <p className="text-xs text-green-500 mt-1">processed</p>
+                  <p className="text-3xl font-bold text-[#2b6cb0]">{documentStats.completed}</p>
+                  <p className="text-xs text-[#2b6cb0] mt-1">processed</p>
                 </div>
-                <div className="p-3 rounded-xl bg-gradient-to-br from-green-500 to-green-600 shadow-lg">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-[#2b6cb0] to-[#63b3ed] shadow-lg">
                   <CheckCircle className="w-6 h-6 text-white" />
                 </div>
               </div>
@@ -1552,10 +1552,10 @@ export const PersonalLibraryPremium: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Processing</p>
-                  <p className="text-3xl font-bold text-amber-600">{documentStats.pending}</p>
-                  <p className="text-xs text-amber-500 mt-1">in queue</p>
+                  <p className="text-3xl font-bold text-[#63b3ed]">{documentStats.pending}</p>
+                  <p className="text-xs text-[#63b3ed] mt-1">in queue</p>
                 </div>
-                <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 shadow-lg">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-[#63b3ed] to-[#90cdf4] shadow-lg">
                   <Activity className="w-6 h-6 text-white animate-pulse" />
                 </div>
               </div>
@@ -1569,7 +1569,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                   <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{formatFileSize(documentStats.totalSize)}</p>
                   <p className="text-xs text-gray-500 mt-1">total used</p>
                 </div>
-                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] shadow-lg">
                   <Cloud className="w-6 h-6 text-white" />
                 </div>
               </div>

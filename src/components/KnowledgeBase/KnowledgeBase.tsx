@@ -24,33 +24,33 @@ export const KnowledgeBase: React.FC = () => {
   const { specialty } = useSpecialty();
   const [activeTab, setActiveTab] = useState<KnowledgeBaseTab>('curated');
 
-  // Get specialty-specific colors and icons
+  // Get specialty-specific colors and icons - Updated to Blue Theme
   const getSpecialtyTheme = () => {
     switch (specialty) {
       case MedicalSpecialty.CARDIOLOGY:
         return {
-          primary: 'text-red-600',
-          primaryBg: 'bg-red-600',
-          primaryGradient: 'from-red-500 to-red-600',
-          secondaryBg: 'bg-red-50',
+          primary: 'text-[#1a365d]',
+          primaryBg: 'bg-[#1a365d]',
+          primaryGradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+          secondaryBg: 'bg-[#63b3ed]/10',
           icon: <Stethoscope className="w-8 h-8" />,
           specialtyName: t('navigation.cardiology')
         };
       case MedicalSpecialty.OBGYN:
         return {
-          primary: 'text-pink-600',
-          primaryBg: 'bg-pink-600',
-          primaryGradient: 'from-pink-500 to-pink-600',
-          secondaryBg: 'bg-pink-50',
+          primary: 'text-[#2b6cb0]',
+          primaryBg: 'bg-[#2b6cb0]',
+          primaryGradient: 'from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4]',
+          secondaryBg: 'bg-[#90cdf4]/10',
           icon: <FileText className="w-8 h-8" />,
           specialtyName: t('navigation.obgyn')
         };
       default:
         return {
-          primary: 'text-purple-600',
-          primaryBg: 'bg-purple-600',
-          primaryGradient: 'from-purple-500 to-purple-600',
-          secondaryBg: 'bg-purple-50',
+          primary: 'text-[#2b6cb0]',
+          primaryBg: 'bg-[#2b6cb0]',
+          primaryGradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+          secondaryBg: 'bg-[#63b3ed]/10',
           icon: <Brain className="w-8 h-8" />,
           specialtyName: t('common.medical')
         };
@@ -149,7 +149,7 @@ export const KnowledgeBase: React.FC = () => {
                   onClick={() => setActiveTab('curated')}
                   className={`flex-1 flex items-center justify-center space-x-3 px-4 py-4 sm:px-6 min-h-[60px] rounded-xl transition-all duration-300 ${
                     activeTab === 'curated'
-                      ? `${theme.primaryBg} text-white shadow-lg transform scale-[1.02]`
+                      ? 'bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white shadow-lg transform scale-[1.02]'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                   }`}
                    data-tour="document-library"
@@ -166,7 +166,7 @@ export const KnowledgeBase: React.FC = () => {
                   onClick={() => setActiveTab('personal')}
                   className={`flex-1 flex items-center justify-center space-x-3 px-4 py-4 sm:px-6 min-h-[60px] rounded-xl transition-all duration-300 ${
                     activeTab === 'personal'
-                      ? 'bg-emerald-600 text-white shadow-lg transform scale-[1.02]'
+                      ? 'bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white shadow-lg transform scale-[1.02]'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                   }`}
                    data-tour="document-upload"

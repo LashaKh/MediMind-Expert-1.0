@@ -54,8 +54,8 @@ const tourSections: TourSection[] = [
     stepCount: 15,
     duration: '8-10 min',
     difficulty: 'Beginner',
-    primaryColor: '#dc2626',
-    secondaryColor: '#ef4444',
+    primaryColor: '#1a365d',
+    secondaryColor: '#2b6cb0',
     features: ['File Upload & Analysis', 'Medical Image Processing', 'Case Management', 'AI Citations', 'Calculator Integration'],
     isPopular: true,
     completedAt: null
@@ -69,8 +69,8 @@ const tourSections: TourSection[] = [
     stepCount: 12,
     duration: '6-8 min',
     difficulty: 'Intermediate',
-    primaryColor: '#059669',
-    secondaryColor: '#10b981',
+    primaryColor: '#2b6cb0',
+    secondaryColor: '#63b3ed',
     features: ['Calculator Categories', 'Result Interpretation', 'AI Integration', 'Clinical Guidelines', 'Validation Process'],
     completedAt: null
   },
@@ -83,8 +83,8 @@ const tourSections: TourSection[] = [
     stepCount: 8,
     duration: '6-8 min',
     difficulty: 'Intermediate',
-    primaryColor: '#3b82f6',
-    secondaryColor: '#6366f1',
+    primaryColor: '#63b3ed',
+    secondaryColor: '#90cdf4',
     features: ['Curated Literature', 'Personal Documents', 'AI Integration', 'Cross-System Search', 'Unified Citations'],
     completedAt: null
   },
@@ -97,8 +97,8 @@ const tourSections: TourSection[] = [
     stepCount: 8,
     duration: '4-6 min',
     difficulty: 'Advanced',
-    primaryColor: '#dc2626',
-    secondaryColor: '#ef4444',
+    primaryColor: '#1a365d',
+    secondaryColor: '#2b6cb0',
     features: ['ABG Input Methods', 'AI Interpretation', 'Clinical Insights', 'Action Plans', 'Results History'],
     isNew: true,
     completedAt: null
@@ -112,8 +112,8 @@ const tourSections: TourSection[] = [
     stepCount: 6,
     duration: '3-5 min',
     difficulty: 'Beginner',
-    primaryColor: '#7c3aed',
-    secondaryColor: '#8b5cf6',
+    primaryColor: '#2b6cb0',
+    secondaryColor: '#63b3ed',
     features: ['News Curation', 'Personalization', 'Save & Share', 'Reading Progress', 'Professional Templates'],
     completedAt: null
   },
@@ -126,8 +126,8 @@ const tourSections: TourSection[] = [
     stepCount: 7,
     duration: '4-6 min',
     difficulty: 'Intermediate',
-    primaryColor: '#059669',
-    secondaryColor: '#10b981',
+    primaryColor: '#63b3ed',
+    secondaryColor: '#90cdf4',
     features: ['Evidence-Based Guidelines', 'Clinical Pathways', 'Disease Categories', 'Severity Classification', 'Medical References'],
     completedAt: null
   }
@@ -194,7 +194,7 @@ export const TourSelector: React.FC<TourSelectorProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="relative p-8 bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 text-white">
+          <div className="relative p-8 bg-gradient-to-br from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] text-white">
             <button
               onClick={onClose}
               className="absolute top-6 right-6 p-2 hover:bg-white/20 rounded-full transition-colors duration-200"

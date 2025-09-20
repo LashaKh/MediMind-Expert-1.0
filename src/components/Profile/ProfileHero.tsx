@@ -61,17 +61,17 @@ const medicalSpecialtyIcons = {
 };
 
 const medicalSpecialtyGradients = {
-  'cardiology': 'from-red-500 via-pink-500 to-rose-500',
-  'ob-gyn': 'from-purple-500 via-violet-500 to-indigo-500',
-  'internal-medicine': 'from-blue-500 via-cyan-500 to-teal-500',
-  'emergency-medicine': 'from-orange-500 via-red-500 to-pink-500',
-  'pediatrics': 'from-green-500 via-emerald-500 to-teal-500',
-  'surgery': 'from-gray-600 via-slate-600 to-zinc-600',
-  'family-medicine': 'from-amber-500 via-yellow-500 to-lime-500',
-  'psychiatry': 'from-indigo-500 via-purple-500 to-pink-500',
-  'radiology': 'from-cyan-500 via-blue-500 to-indigo-500',
-  'anesthesiology': 'from-slate-500 via-gray-500 to-zinc-500',
-  'other': 'from-blue-500 via-indigo-500 to-purple-500'
+  'cardiology': 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+  'ob-gyn': 'from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4]',
+  'internal-medicine': 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+  'emergency-medicine': 'from-[#2b6cb0] via-[#1a365d] to-[#63b3ed]',
+  'pediatrics': 'from-[#63b3ed] via-[#2b6cb0] to-[#1a365d]',
+  'surgery': 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+  'family-medicine': 'from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4]',
+  'psychiatry': 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+  'radiology': 'from-[#63b3ed] via-[#2b6cb0] to-[#1a365d]',
+  'anesthesiology': 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+  'other': 'from-[#2b6cb0] via-[#1a365d] to-[#63b3ed]'
 };
 
 export const ProfileHero: React.FC<ProfileHeroProps> = ({
@@ -130,7 +130,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
         {particles.map((particle) => (
           <div
             key={particle.id}
-            className="absolute w-1 h-1 bg-blue-400/20 rounded-full animate-medical-particle"
+            className="absolute w-1 h-1 bg-[#63b3ed]/20 rounded-full animate-medical-particle"
             style={{
               left: `${particle.x}%`,
               top: `${particle.y}%`,
@@ -140,13 +140,13 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
               animationDelay: `${particle.delay}s`,
             }}
           >
-            <div className="w-full h-full bg-gradient-to-r from-blue-400 to-teal-400 rounded-full animate-pulse" />
+            <div className="w-full h-full bg-gradient-to-r from-[#63b3ed] to-[#90cdf4] rounded-full animate-pulse" />
           </div>
         ))}
       </div>
 
       {/* Dynamic Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-transparent to-indigo-600/10 rounded-3xl blur-3xl animate-professional-gradient" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/10 via-transparent to-[#1a365d]/10 rounded-3xl blur-3xl animate-professional-gradient" />
       
       {/* Main Hero Card */}
       <div
@@ -158,7 +158,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
         {/* Animated Border Glow */}
         <div className={`absolute inset-0 rounded-3xl transition-all duration-700 ${
           isHovering 
-            ? 'bg-gradient-to-r from-blue-500/20 via-teal-500/20 to-purple-500/20 animate-professional-gradient' 
+            ? 'bg-gradient-to-r from-[#2b6cb0]/20 via-[#63b3ed]/20 to-[#90cdf4]/20 animate-professional-gradient' 
             : 'bg-transparent'
         }`} />
 
@@ -170,17 +170,17 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
             <div className="relative group">
               {/* Floating Medical Icons */}
               <div className="absolute -inset-8 pointer-events-none">
-                <div className="absolute top-0 left-0 w-6 h-6 text-blue-400/30 animate-medical-particle">
+                <div className="absolute top-0 left-0 w-6 h-6 text-[#63b3ed]/30 animate-medical-particle">
                   <Heart className="w-full h-full" />
                 </div>
                 <div 
-                  className="absolute top-2 right-0 w-5 h-5 text-teal-400/30 animate-medical-particle"
+                  className="absolute top-2 right-0 w-5 h-5 text-[#2b6cb0]/30 animate-medical-particle"
                   style={{ animationDelay: '1s' }}
                 >
                   <Activity className="w-full h-full" />
                 </div>
                 <div 
-                  className="absolute bottom-0 left-2 w-4 h-4 text-purple-400/30 animate-medical-particle"
+                  className="absolute bottom-0 left-2 w-4 h-4 text-[#90cdf4]/30 animate-medical-particle"
                   style={{ animationDelay: '2s' }}
                 >
                   <Stethoscope className="w-full h-full" />
@@ -188,7 +188,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
               </div>
 
               {/* Glowing Ring Animation */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500 via-teal-500 to-purple-500 animate-professional-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-xl" />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4] animate-professional-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-xl" />
               
               {/* Profile Picture Container */}
               <div className="relative medical-avatar hw-accelerate">
@@ -198,7 +198,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                 />
                 
                 {/* Achievement Badge */}
-                <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg animate-medical-badge-glow">
+                <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] rounded-full flex items-center justify-center shadow-lg animate-medical-badge-glow">
                   <Award className="w-5 h-5 text-white" />
                 </div>
               </div>
@@ -259,7 +259,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                           strokeWidth="2"
                         />
                         <path
-                          className="text-blue-500 transition-all duration-1000 ease-out"
+                          className="text-[#2b6cb0] transition-all duration-1000 ease-out"
                           d="M18 2.0845
                             a 15.9155 15.9155 0 0 1 0 31.831
                             a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -283,7 +283,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
 
                   {/* Verification Status */}
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-live-pulse" />
+                    <div className="w-3 h-3 bg-[#63b3ed] rounded-full animate-live-pulse" />
                     <div>
                       <div className="text-sm font-medium text-gray-900 dark:text-gray-100">Verified</div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">Professional Account</div>
@@ -292,7 +292,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
 
                   {/* Achievement Count */}
                   <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gradient-to-r from-amber-400 to-orange-500 rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] rounded-lg flex items-center justify-center">
                       <Star className="w-4 h-4 text-white" />
                     </div>
                     <div>
@@ -310,7 +310,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                 <button
                   ref={magneticButtonRef}
                   onClick={onEdit}
-                  className="group relative overflow-hidden px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all duration-300 animate-button-magnetic hw-accelerate"
+                  className="group relative overflow-hidden px-8 py-4 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] hover:from-[#1a365d] hover:to-[#2b6cb0] text-white rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all duration-300 animate-button-magnetic hw-accelerate"
                 >
                   <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="relative flex items-center space-x-2 z-10">
@@ -369,7 +369,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
             className={`w-14 h-14 ${
               isEditing 
                 ? 'bg-gradient-to-r from-emerald-600 to-green-600' 
-                : 'bg-gradient-to-r from-blue-600 to-indigo-600'
+                : 'bg-gradient-to-r from-[#2b6cb0] to-[#1a365d]'
             } text-white rounded-full shadow-2xl flex items-center justify-center transform hover:scale-110 transition-all duration-300 hover:shadow-3xl hw-accelerate disabled:opacity-50`}
           >
             {isEditing ? (

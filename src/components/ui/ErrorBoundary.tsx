@@ -133,7 +133,7 @@ const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetError 
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             onClick={resetError}
-            className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
+            className="flex-1 bg-[#2b6cb0] text-white px-6 py-3 rounded-lg hover:bg-[#1a365d] focus:outline-none focus:ring-2 focus:ring-[#63b3ed] focus:ring-offset-2 transition-colors font-medium min-h-[44px] touch-manipulation"
           >
             Try Again
           </button>

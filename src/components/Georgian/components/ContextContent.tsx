@@ -52,11 +52,11 @@ export const ContextContent: React.FC<ContextContentProps> = ({
   const contextFileInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="flex flex-col h-full p-6 bg-gradient-to-br from-[#90cdf4]/20 via-[#63b3ed]/10 to-[#90cdf4]/20 dark:from-[#1a365d]/80 dark:via-[#2b6cb0]/60 dark:to-[#1a365d]/40">
+    <div className="flex flex-col h-full p-6 bg-white dark:bg-gray-900">
       {/* World-Class Context Container */}
       <div className="relative group h-full flex flex-col">
         {/* Sophisticated Background Layers */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-[#90cdf4]/10 to-[#63b3ed]/5 dark:from-gray-800/95 dark:via-[#1a365d]/70 dark:to-[#2b6cb0]/60 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-[#1a365d]/10 dark:shadow-black/30" />
+        <div className="absolute inset-0 bg-white dark:bg-gray-800 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-gray-300/10 dark:shadow-black/30" />
         <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-transparent to-transparent dark:from-white/5 rounded-3xl" />
         <div className="absolute inset-0 border border-white/30 dark:border-white/10 rounded-3xl" />
         
@@ -103,10 +103,10 @@ export const ContextContent: React.FC<ContextContentProps> = ({
           
           {/* Premium Text Area */}
           <div className="flex-1 relative overflow-hidden">
-            <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-[#63b3ed]/60 dark:border-[#2b6cb0]/60 shadow-inner shadow-[#1a365d]/5 dark:shadow-black/20 overflow-hidden">
+            <div className="h-full bg-white dark:bg-gray-800 backdrop-blur-sm rounded-2xl border border-gray-300 dark:border-gray-600 shadow-inner shadow-gray-300/5 dark:shadow-black/20 overflow-hidden">
               
               {/* Text Area Header */}
-              <div className="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-[#90cdf4]/20 via-[#63b3ed]/10 to-[#90cdf4]/20 dark:from-[#1a365d]/90 dark:via-[#2b6cb0]/95 dark:to-[#1a365d]/90 border-b border-[#63b3ed]/50 dark:border-[#2b6cb0]/50">
+              <div className="flex items-center justify-between px-6 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                 <div className="flex items-center space-x-3">
                   <User className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
                   <span className="text-sm font-semibold text-[#1a365d] dark:text-[#90cdf4] tracking-wide">Patient Context & Notes</span>

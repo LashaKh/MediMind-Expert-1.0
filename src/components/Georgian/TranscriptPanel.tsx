@@ -460,7 +460,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50/30 via-white/80 to-blue-50/20 dark:from-gray-900/30 dark:via-gray-800/80 dark:to-blue-900/10 relative overflow-hidden mediscribe-mobile-safe-bottom">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-900 relative overflow-hidden mediscribe-mobile-safe-bottom">
       {/* Recording Status Indicators */}
       <RecordingStatusIndicator 
         recordingState={recordingState}

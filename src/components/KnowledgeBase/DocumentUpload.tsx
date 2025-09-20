@@ -106,9 +106,9 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
     const typeMap = {
       'application/pdf': { 
         icon: FileText, 
-        color: 'text-red-500 bg-red-50 dark:bg-red-900/20', 
+        color: 'text-[#1a365d] bg-[#63b3ed]/10 dark:bg-[#1a365d]/20', 
         label: 'PDF',
-        gradient: 'from-red-500 to-red-600'
+        gradient: 'from-[#1a365d] to-[#2b6cb0]'
       },
       'application/msword': { 
         icon: FileText, 

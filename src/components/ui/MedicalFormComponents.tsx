@@ -72,7 +72,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
         {[...Array(2)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-blue-400/20 rounded-full animate-medical-particle"
+            className="absolute w-1 h-1 bg-[#63b3ed]/20 rounded-full animate-medical-particle"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -84,7 +84,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
       </div>
 
       {/* Label */}
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 group-hover:text-[#2b6cb0] dark:group-hover:text-[#63b3ed] transition-colors duration-300">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -94,11 +94,11 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
         {/* Background Glow Effect */}
         <div className={`absolute inset-0 rounded-xl transition-all duration-300 ${
           isFocused 
-            ? 'bg-blue-500/10 shadow-medical-glow-blue' 
+            ? 'bg-[#2b6cb0]/10 shadow-medical-glow-blue' 
             : error 
             ? 'bg-red-500/5' 
             : success 
-            ? 'bg-green-500/5' 
+            ? 'bg-[#63b3ed]/5' 
             : 'bg-transparent'
         }`} />
 
@@ -106,7 +106,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
         <div className="relative medical-glass">
           {/* Icon */}
           {icon && (
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-blue-500 transition-colors duration-300">
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-[#2b6cb0] transition-colors duration-300">
               {icon}
             </div>
           )}
@@ -123,7 +123,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
               icon ? 'pl-12' : 'pl-4'
             } ${
               type === 'password' ? 'pr-12' : 'pr-4'
-            } py-4 bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-smart-input-focus`}
+            } py-4 bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-[#2b6cb0] focus:ring-4 focus:ring-[#2b6cb0]/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-smart-input-focus`}
           />
 
           {/* Password Toggle */}
@@ -132,7 +132,7 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
               ref={magneticRef as React.RefObject<HTMLButtonElement>}
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 transition-all duration-300 animate-magnetic-hover"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#2b6cb0] transition-all duration-300 animate-magnetic-hover"
             >
               {showPassword ? (
                 <EyeOff className="w-5 h-5" />
@@ -148,14 +148,14 @@ export const MedicalInput: React.FC<MedicalInputProps> = ({
               {error ? (
                 <AlertCircle className="w-5 h-5 text-red-500 animate-bounce" />
               ) : success ? (
-                <Check className="w-5 h-5 text-green-500 animate-bounce" />
+                <Check className="w-5 h-5 text-[#2b6cb0] animate-bounce" />
               ) : null}
             </div>
           )}
 
           {/* Floating Label Effect */}
           {(isFocused || hasValue) && (
-            <div className="absolute -top-2 left-3 px-2 bg-white dark:bg-gray-800 text-xs font-medium text-blue-600 dark:text-blue-400 animate-scale-in">
+            <div className="absolute -top-2 left-3 px-2 bg-white dark:bg-gray-800 text-xs font-medium text-[#2b6cb0] dark:text-[#63b3ed] animate-scale-in">
               {label}
             </div>
           )}
@@ -363,7 +363,7 @@ export const MedicalTextarea: React.FC<MedicalTextareaProps> = ({
         {[...Array(3)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-purple-400/20 rounded-full animate-medical-particle"
+            className="absolute w-1 h-1 bg-[#63b3ed]/20 rounded-full animate-medical-particle"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -376,7 +376,7 @@ export const MedicalTextarea: React.FC<MedicalTextareaProps> = ({
 
       {/* Label */}
       <div className="flex items-center justify-between mb-2">
-        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-[#2b6cb0] dark:group-hover:text-[#63b3ed] transition-colors duration-300">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -395,7 +395,7 @@ export const MedicalTextarea: React.FC<MedicalTextareaProps> = ({
         {/* Background Glow Effect */}
         <div className={`absolute inset-0 rounded-xl transition-all duration-300 ${
           isFocused 
-            ? 'bg-purple-500/10 shadow-medical-glow-blue' 
+            ? 'bg-[#2b6cb0]/10 shadow-medical-glow-blue' 
             : error 
             ? 'bg-red-500/5' 
             : 'bg-transparent'
@@ -411,7 +411,7 @@ export const MedicalTextarea: React.FC<MedicalTextareaProps> = ({
             rows={rows}
             maxLength={maxLength}
             disabled={disabled}
-            className="medical-input w-full px-4 py-4 bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed resize-none animate-smart-input-focus"
+            className="medical-input w-full px-4 py-4 bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-[#2b6cb0] focus:ring-4 focus:ring-[#2b6cb0]/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed resize-none animate-smart-input-focus"
           />
 
           {/* Character Count Indicator */}
@@ -422,7 +422,7 @@ export const MedicalTextarea: React.FC<MedicalTextareaProps> = ({
                   ? 'bg-red-500 text-white animate-pulse' 
                   : value.length > maxLength * 0.9 
                   ? 'bg-yellow-500 text-white' 
-                  : 'bg-blue-500 text-white'
+                  : 'bg-[#2b6cb0] text-white'
               }`}>
                 {maxLength - value.length}
               </div>
@@ -477,9 +477,9 @@ export const MedicalButton: React.FC<MedicalButtonProps> = ({
   const touchRippleRef = useTouchRipple();
 
   const variantStyles = {
-    primary: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-medical-lg hover:shadow-medical-glow-blue',
+    primary: 'bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] hover:from-[#1a365d] hover:to-[#2b6cb0] text-white shadow-medical-lg hover:shadow-medical-glow-blue',
     secondary: 'bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700',
-    success: 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-medical-lg hover:shadow-medical-glow-success',
+    success: 'bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] hover:from-[#1a365d] hover:to-[#2b6cb0] text-white shadow-medical-lg hover:shadow-medical-glow-blue',
     danger: 'bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white shadow-medical-lg',
     ghost: 'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
   };
@@ -567,10 +567,10 @@ export const MedicalFormSection: React.FC<MedicalFormSectionProps> = ({
               animationDuration: `${15 + i * 3}s`
             }}
           >
-            {i % 4 === 0 ? <Heart className="w-2 h-2 text-red-400/20" /> :
-             i % 4 === 1 ? <Brain className="w-2 h-2 text-purple-400/20" /> :
-             i % 4 === 2 ? <Activity className="w-2 h-2 text-green-400/20" /> :
-             <Stethoscope className="w-2 h-2 text-blue-400/20" />}
+            {i % 4 === 0 ? <Heart className="w-2 h-2 text-[#1a365d]/20" /> :
+             i % 4 === 1 ? <Brain className="w-2 h-2 text-[#63b3ed]/20" /> :
+             i % 4 === 2 ? <Activity className="w-2 h-2 text-[#2b6cb0]/20" /> :
+             <Stethoscope className="w-2 h-2 text-[#90cdf4]/20" />}
           </div>
         ))}
       </div>
@@ -578,12 +578,12 @@ export const MedicalFormSection: React.FC<MedicalFormSectionProps> = ({
       {/* Section Header */}
       <div className="flex items-center space-x-4 mb-6 p-6 pb-0">
         {icon && (
-          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+          <div className="w-12 h-12 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
             {icon}
           </div>
         )}
         <div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-[#2b6cb0] dark:group-hover:text-[#63b3ed] transition-colors duration-300">
             {title}
           </h3>
           {subtitle && (
@@ -601,7 +601,7 @@ export const MedicalFormSection: React.FC<MedicalFormSectionProps> = ({
 
       {/* Professional Verification Badge */}
       <div className="absolute top-4 right-4">
-        <ShieldCheck className="w-5 h-5 text-green-400 animate-live-pulse" />
+        <ShieldCheck className="w-5 h-5 text-[#63b3ed] animate-live-pulse" />
       </div>
     </div>
   );

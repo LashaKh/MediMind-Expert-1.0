@@ -100,10 +100,10 @@ export const SimpleDiseasePage: React.FC = () => {
     switch (severity) {
       case 'high': 
         return { 
-          color: 'bg-gradient-to-r from-red-500 to-pink-600', 
+          color: 'bg-gradient-to-r from-[#1a365d] to-[#2b6cb0]', 
           textColor: 'text-white',
-          bgColor: 'bg-red-50',
-          borderColor: 'border-red-200',
+          bgColor: 'bg-[#90cdf4]/20',
+          borderColor: 'border-[#2b6cb0]/40',
           icon: AlertTriangle, 
           label: 'Critical Condition',
           description: 'Requires immediate medical attention',
@@ -111,10 +111,10 @@ export const SimpleDiseasePage: React.FC = () => {
         };
       case 'medium': 
         return { 
-          color: 'bg-gradient-to-r from-amber-500 to-orange-600', 
+          color: 'bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed]', 
           textColor: 'text-white',
-          bgColor: 'bg-amber-50',
-          borderColor: 'border-amber-200',
+          bgColor: 'bg-[#90cdf4]/20',
+          borderColor: 'border-[#63b3ed]/30',
           icon: Activity, 
           label: 'Moderate Severity',
           description: 'Requires careful monitoring',
@@ -122,10 +122,10 @@ export const SimpleDiseasePage: React.FC = () => {
         };
       case 'low': 
         return { 
-          color: 'bg-gradient-to-r from-green-500 to-emerald-600', 
+          color: 'bg-gradient-to-r from-[#63b3ed] to-[#90cdf4]', 
           textColor: 'text-white',
-          bgColor: 'bg-green-50',
-          borderColor: 'border-green-200',
+          bgColor: 'bg-[#90cdf4]/10',
+          borderColor: 'border-[#63b3ed]/20',
           icon: Shield, 
           label: 'Stable Condition',
           description: 'Generally manageable',
@@ -164,7 +164,7 @@ export const SimpleDiseasePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-[#90cdf4]/10 to-[#63b3ed]/10">
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="flex items-center justify-center py-20">
             <div className="text-center bg-white p-12 rounded-3xl shadow-2xl border border-blue-100">
@@ -186,20 +186,20 @@ export const SimpleDiseasePage: React.FC = () => {
 
   if (error || !disease) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-[#90cdf4]/10 to-[#63b3ed]/10">
         <div className="max-w-4xl mx-auto px-4 py-8">
           {/* Back Button */}
           <button
             onClick={handleBackClick}
-            className="mb-6 flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors group"
+            className="mb-6 flex items-center space-x-2 text-[#2b6cb0] hover:text-[#1a365d] transition-colors group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">Back to Diseases</span>
           </button>
 
-          <div className="bg-white rounded-3xl shadow-2xl border border-red-200 p-12 text-center max-w-md mx-auto">
-            <div className="bg-red-100 p-6 rounded-full w-fit mx-auto mb-8">
-              <AlertCircle className="w-12 h-12 text-red-600" />
+          <div className="bg-white rounded-3xl shadow-2xl border border-[#63b3ed]/30 p-12 text-center max-w-md mx-auto">
+            <div className="bg-[#90cdf4]/20 p-6 rounded-full w-fit mx-auto mb-8">
+              <AlertCircle className="w-12 h-12 text-[#2b6cb0]" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Disease Not Found</h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
@@ -207,7 +207,7 @@ export const SimpleDiseasePage: React.FC = () => {
             </p>
             <button
               onClick={handleBackClick}
-              className="px-8 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-medium shadow-lg"
+              className="px-8 py-3 bg-[#1a365d] text-white rounded-xl hover:bg-[#2b6cb0] transition-colors font-medium shadow-lg"
             >
               Return to Disease List
             </button>
@@ -222,12 +222,12 @@ export const SimpleDiseasePage: React.FC = () => {
   const CategoryIcon = getCategoryIcon(disease.category);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-[#90cdf4]/10 to-[#63b3ed]/10">
       <div className="w-full px-4 py-8">
         {/* Back Button */}
         <button
           onClick={handleBackClick}
-          className="mb-8 flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-all group bg-white px-4 py-2 rounded-xl shadow-sm border border-blue-100 hover:shadow-md"
+          className="mb-8 flex items-center space-x-2 text-[#2b6cb0] hover:text-[#1a365d] transition-all group bg-white px-4 py-2 rounded-xl shadow-sm border border-[#63b3ed]/30 hover:shadow-md"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span className="font-medium">Back to Diseases</span>
@@ -244,7 +244,12 @@ export const SimpleDiseasePage: React.FC = () => {
               <div className="flex items-start space-x-6 flex-1">
                 {/* Category Icon */}
                 <div className={`p-4 rounded-2xl ${severityConfig.bgColor} ${severityConfig.borderColor} border-2 shadow-sm`}>
-                  <CategoryIcon className={`w-8 h-8 ${severityConfig.color.replace('bg-gradient-to-r', 'text').split(' ')[1].replace('to-pink-600', 'red-600').replace('to-orange-600', 'amber-600').replace('to-emerald-600', 'green-600').replace('to-slate-600', 'gray-600')}`} />
+                  <CategoryIcon className={`w-8 h-8 ${
+                    disease.severity === 'high' ? 'text-[#1a365d]' :
+                    disease.severity === 'medium' ? 'text-[#2b6cb0]' :
+                    disease.severity === 'low' ? 'text-[#63b3ed]' :
+                    'text-gray-600'
+                  }`} />
                 </div>
                 
                 {/* Title and Category */}
@@ -253,7 +258,7 @@ export const SimpleDiseasePage: React.FC = () => {
                     {disease.title}
                   </h1>
                   <div className="flex items-center space-x-4 mb-4">
-                    <span className="px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 rounded-xl font-semibold text-sm border border-blue-200">
+                    <span className="px-4 py-2 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/20 text-[#1a365d] rounded-xl font-semibold text-sm border border-[#2b6cb0]/30">
                       {disease.category}
                     </span>
                     <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-medium text-sm">
@@ -283,7 +288,7 @@ export const SimpleDiseasePage: React.FC = () => {
               {disease.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-4 py-2 bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 text-sm rounded-xl flex items-center space-x-2 border border-indigo-200 font-medium hover:shadow-md transition-shadow"
+                  className="px-4 py-2 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/10 text-[#1a365d] text-sm rounded-xl flex items-center space-x-2 border border-[#2b6cb0]/30 font-medium hover:shadow-md transition-shadow"
                 >
                   <Star className="w-4 h-4" />
                   <span>{tag}</span>
@@ -293,38 +298,38 @@ export const SimpleDiseasePage: React.FC = () => {
 
             {/* Metadata Grid */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
+              <div className="bg-gradient-to-br from-[#1a365d]/10 to-[#2b6cb0]/10 p-4 rounded-xl border border-[#2b6cb0]/30">
                 <div className="flex items-center space-x-3 mb-2">
-                  <Clock className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm font-semibold text-blue-800">Read Time</span>
+                  <Clock className="w-5 h-5 text-[#2b6cb0]" />
+                  <span className="text-sm font-semibold text-[#1a365d]">Read Time</span>
                 </div>
-                <p className="text-xl font-bold text-blue-900">{disease.readTime}</p>
+                <p className="text-xl font-bold text-[#1a365d]">{disease.readTime}</p>
               </div>
               
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+              <div className="bg-gradient-to-br from-[#63b3ed]/10 to-[#90cdf4]/10 p-4 rounded-xl border border-[#63b3ed]/30">
                 <div className="flex items-center space-x-3 mb-2">
-                  <Calendar className="w-5 h-5 text-green-600" />
-                  <span className="text-sm font-semibold text-green-800">Last Updated</span>
+                  <Calendar className="w-5 h-5 text-[#2b6cb0]" />
+                  <span className="text-sm font-semibold text-[#1a365d]">Last Updated</span>
                 </div>
-                <p className="text-xl font-bold text-green-900">{disease.lastUpdated}</p>
+                <p className="text-xl font-bold text-[#1a365d]">{disease.lastUpdated}</p>
               </div>
               
               {disease.prevalence && (
-                <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-200">
+                <div className="bg-gradient-to-br from-[#2b6cb0]/10 to-[#63b3ed]/10 p-4 rounded-xl border border-[#63b3ed]/30">
                   <div className="flex items-center space-x-3 mb-2">
-                    <TrendingUp className="w-5 h-5 text-purple-600" />
-                    <span className="text-sm font-semibold text-purple-800">Prevalence</span>
+                    <TrendingUp className="w-5 h-5 text-[#2b6cb0]" />
+                    <span className="text-sm font-semibold text-[#1a365d]">Prevalence</span>
                   </div>
-                  <p className="text-xl font-bold text-purple-900">{disease.prevalence}</p>
+                  <p className="text-xl font-bold text-[#1a365d]">{disease.prevalence}</p>
                 </div>
               )}
               
-              <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-xl border border-amber-200">
+              <div className="bg-gradient-to-br from-[#63b3ed]/10 to-[#90cdf4]/10 p-4 rounded-xl border border-[#63b3ed]/30">
                 <div className="flex items-center space-x-3 mb-2">
-                  <Award className="w-5 h-5 text-amber-600" />
-                  <span className="text-sm font-semibold text-amber-800">Evidence Level</span>
+                  <Award className="w-5 h-5 text-[#2b6cb0]" />
+                  <span className="text-sm font-semibold text-[#1a365d]">Evidence Level</span>
                 </div>
-                <p className="text-xl font-bold text-amber-900">Grade A</p>
+                <p className="text-xl font-bold text-[#1a365d]">Grade A</p>
               </div>
             </div>
 
@@ -334,7 +339,7 @@ export const SimpleDiseasePage: React.FC = () => {
                 onClick={() => setBookmarked(!bookmarked)}
                 className={`px-6 py-3 rounded-xl transition-all flex items-center space-x-2 font-medium ${
                   bookmarked 
-                    ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200 border border-yellow-300' 
+                    ? 'bg-[#90cdf4]/30 text-[#1a365d] hover:bg-[#90cdf4]/40 border border-[#63b3ed]/50' 
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
                 }`}
               >
@@ -344,7 +349,7 @@ export const SimpleDiseasePage: React.FC = () => {
               
               <button
                 onClick={handleShare}
-                className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors flex items-center space-x-2 font-medium shadow-lg"
+                className="px-6 py-3 bg-[#1a365d] text-white rounded-xl hover:bg-[#2b6cb0] transition-colors flex items-center space-x-2 font-medium shadow-lg"
               >
                 <Share2 className="w-5 h-5" />
                 <span>Share</span>

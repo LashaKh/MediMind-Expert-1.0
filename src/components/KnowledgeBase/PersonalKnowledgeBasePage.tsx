@@ -127,7 +127,7 @@ export const PersonalKnowledgeBasePage: React.FC = () => {
     <React.Suspense fallback={
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center animate-pulse">
+          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] rounded-full flex items-center justify-center animate-pulse">
             <BookOpen className="w-8 h-8 text-white" />
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Loading Personal Library...</h3>
@@ -165,29 +165,29 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
     dateRange: { from: '', to: '' }
   });
 
-  // Get specialty theme
+  // Get specialty theme - Updated to Blue Theme
   const getSpecialtyTheme = () => {
     switch (specialty) {
       case MedicalSpecialty.CARDIOLOGY:
         return {
-          primary: 'text-red-600',
-          primaryBg: 'bg-red-600',
-          primaryLight: 'bg-red-50',
-          border: 'border-red-200'
+          primary: 'text-[#1a365d]',
+          primaryBg: 'bg-[#1a365d]',
+          primaryLight: 'bg-[#63b3ed]/10',
+          border: 'border-[#63b3ed]/30'
         };
       case MedicalSpecialty.OBGYN:
         return {
-          primary: 'text-pink-600',
-          primaryBg: 'bg-pink-600',
-          primaryLight: 'bg-pink-50',
-          border: 'border-pink-200'
+          primary: 'text-[#2b6cb0]',
+          primaryBg: 'bg-[#2b6cb0]',
+          primaryLight: 'bg-[#90cdf4]/10',
+          border: 'border-[#90cdf4]/30'
         };
       default:
         return {
-          primary: 'text-emerald-600',
-          primaryBg: 'bg-emerald-600',
-          primaryLight: 'bg-emerald-50',
-          border: 'border-emerald-200'
+          primary: 'text-[#2b6cb0]',
+          primaryBg: 'bg-[#2b6cb0]',
+          primaryLight: 'bg-[#63b3ed]/10',
+          border: 'border-[#63b3ed]/30'
         };
     }
   };
@@ -408,9 +408,9 @@ export const PersonalKnowledgeBasePageOriginal: React.FC = () => {
               <div className="flex items-center justify-between h-full">
                 <div className="min-w-0 flex-1 mr-3">
                   <p className="text-sm text-gray-600 truncate">{t('documents.stats.completed')}</p>
-                  <p className="text-xl sm:text-2xl font-bold text-green-600">{documentStats.completed}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-[#2b6cb0]">{documentStats.completed}</p>
                 </div>
-                <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 text-green-600" />
+                <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 text-[#2b6cb0]" />
               </div>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm min-h-[80px]">

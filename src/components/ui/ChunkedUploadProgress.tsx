@@ -53,9 +53,9 @@ const statusConfig = {
     icon: Clock,
     title: 'Preparing Upload',
     description: 'Analyzing file and preparing for upload...',
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
-    borderColor: 'border-blue-200 dark:border-blue-800'
+    color: 'text-[#2b6cb0]',
+    bgColor: 'bg-[#63b3ed]/10 dark:bg-[#1a365d]/20',
+    borderColor: 'border-[#63b3ed]/30 dark:border-[#2b6cb0]/50'
   },
   chunking: {
     icon: Zap,
@@ -69,25 +69,25 @@ const statusConfig = {
     icon: Upload,
     title: 'Uploading',
     description: 'Uploading file chunks to secure storage...',
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
-    borderColor: 'border-blue-200 dark:border-blue-800'
+    color: 'text-[#2b6cb0]',
+    bgColor: 'bg-[#63b3ed]/10 dark:bg-[#1a365d]/20',
+    borderColor: 'border-[#63b3ed]/30 dark:border-[#2b6cb0]/50'
   },
   reassembling: {
     icon: Server,
     title: 'Reassembling',
     description: 'Reconstructing file on secure servers...',
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-50 dark:bg-purple-900/20',
-    borderColor: 'border-purple-200 dark:border-purple-800'
+    color: 'text-[#63b3ed]',
+    bgColor: 'bg-[#63b3ed]/10 dark:bg-[#2b6cb0]/20',
+    borderColor: 'border-[#63b3ed]/30 dark:border-[#1a365d]/50'
   },
   processing: {
     icon: Database,
     title: 'Processing',
     description: 'Analyzing content and creating knowledge base...',
-    color: 'text-indigo-500',
-    bgColor: 'bg-indigo-50 dark:bg-indigo-900/20',
-    borderColor: 'border-indigo-200 dark:border-indigo-800'
+    color: 'text-[#2b6cb0]',
+    bgColor: 'bg-[#2b6cb0]/10 dark:bg-[#1a365d]/20',
+    borderColor: 'border-[#2b6cb0]/30 dark:border-[#1a365d]/50'
   },
   complete: {
     icon: CheckCircle2,
@@ -190,7 +190,7 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
           <div className="text-xs">
             {formatFileSize(fileSize)}
             {isChunked && (
-              <span className="ml-1 px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded text-xs font-medium">
+              <span className="ml-1 px-1.5 py-0.5 bg-[#90cdf4]/20 dark:bg-[#1a365d]/50 text-[#2b6cb0] dark:text-[#63b3ed] rounded text-xs font-medium">
                 Chunked
               </span>
             )}
@@ -277,7 +277,7 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
                     i < chunkProgress.currentChunk
                       ? 'bg-green-500'
                       : i === chunkProgress.currentChunk
-                      ? 'bg-blue-500'
+                      ? 'bg-[#2b6cb0]'
                       : 'bg-gray-200 dark:bg-gray-600'
                   }`}
                   initial={{ scaleX: 0 }}
@@ -347,7 +347,7 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
                 {[...Array(3)].map((_, i) => (
                   <motion.div
                     key={i}
-                    className="w-2 h-2 bg-blue-500 rounded-full"
+                    className="w-2 h-2 bg-[#2b6cb0] rounded-full"
                     animate={{
                       scale: [1, 1.5, 1],
                       opacity: [0.5, 1, 0.5]
@@ -361,9 +361,9 @@ export const ChunkedUploadProgress: React.FC<ChunkedUploadProgressProps> = ({
                 ))}
               </div>
               <ArrowRight className="w-4 h-4 text-gray-400" />
-              <Server className="w-5 h-5 text-purple-500" />
+              <Server className="w-5 h-5 text-[#63b3ed]" />
               <ArrowRight className="w-4 h-4 text-gray-400" />
-              <Database className="w-5 h-5 text-indigo-500" />
+              <Database className="w-5 h-5 text-[#2b6cb0]" />
             </div>
             <div className="text-center mt-2 text-xs text-gray-600 dark:text-gray-400">
               {status === 'reassembling' ? 'Reconstructing file from chunks' : 'Creating knowledge base'}

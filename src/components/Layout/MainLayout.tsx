@@ -87,7 +87,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
   return (
     <div 
-      className="min-h-screen flex flex-col bg-background safe-area-inset layout-container"
+      className={`min-h-screen flex flex-col ${isMediScribePage ? 'bg-white' : 'bg-background'} safe-area-inset layout-container`}
       style={{ 
         backgroundImage: 'none !important'
       }}
@@ -118,7 +118,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <main 
           className={`
             flex-1 transition-all duration-300 ease-in-out 
-            overflow-hidden bg-background
+            overflow-hidden ${isMediScribePage ? 'bg-white' : 'bg-background'}
             ${user && isMobile && isSidebarOpen ? 'pointer-events-none' : ''}
             ${''}
           `}
@@ -140,7 +140,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Footer - completely removed */}
       
       {/* Bottom safe area spacer */}
-      <div className="safe-bottom bg-background" />
+      <div className={`safe-bottom ${isMediScribePage ? 'bg-white' : 'bg-background'}`} />
 
       {/* Premium Guided Tour - persists across route changes, hide on onboarding */}
       {!isOnboardingPage && (

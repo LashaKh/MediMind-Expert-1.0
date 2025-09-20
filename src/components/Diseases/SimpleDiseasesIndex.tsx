@@ -37,12 +37,12 @@ import EvidenceLevelsTable from './EvidenceLevel/EvidenceLevelsTable';
 
 const categories = [
   { id: 'all', name: 'All Categories', icon: Database, color: 'text-slate-600', gradient: 'from-slate-500 to-gray-600' },
-  { id: 'cardiomyopathy', name: 'Cardiomyopathy', icon: Heart, color: 'text-red-600', gradient: 'from-red-500 to-pink-600' },
-  { id: 'electrophysiology', name: 'Electrophysiology', icon: Zap, color: 'text-yellow-600', gradient: 'from-yellow-500 to-orange-600' },
-  { id: 'heart-failure', name: 'Heart Failure', icon: Activity, color: 'text-blue-600', gradient: 'from-blue-500 to-indigo-600' },
-  { id: 'valvular', name: 'Valvular Disease', icon: Layers, color: 'text-indigo-600', gradient: 'from-indigo-500 to-purple-600' },
-  { id: 'emergency', name: 'Emergency', icon: Stethoscope, color: 'text-pink-600', gradient: 'from-pink-500 to-rose-600' },
-  { id: 'electrolyte', name: 'Electrolyte Disorders', icon: Target, color: 'text-green-600', gradient: 'from-green-500 to-emerald-600' }
+  { id: 'cardiomyopathy', name: 'Cardiomyopathy', icon: Heart, color: 'text-[#1a365d]', gradient: 'from-[#1a365d] to-[#2b6cb0]' },
+  { id: 'electrophysiology', name: 'Electrophysiology', icon: Zap, color: 'text-[#2b6cb0]', gradient: 'from-[#2b6cb0] to-[#63b3ed]' },
+  { id: 'heart-failure', name: 'Heart Failure', icon: Activity, color: 'text-[#2b6cb0]', gradient: 'from-[#2b6cb0] to-[#63b3ed]' },
+  { id: 'valvular', name: 'Valvular Disease', icon: Layers, color: 'text-[#1a365d]', gradient: 'from-[#1a365d] to-[#2b6cb0]' },
+  { id: 'emergency', name: 'Emergency', icon: Stethoscope, color: 'text-[#63b3ed]', gradient: 'from-[#63b3ed] to-[#90cdf4]' },
+  { id: 'electrolyte', name: 'Electrolyte Disorders', icon: Target, color: 'text-[#2b6cb0]', gradient: 'from-[#2b6cb0] to-[#90cdf4]' }
 ];
 
 const sortOptions = [
@@ -97,30 +97,30 @@ export const SimpleDiseasesIndex: React.FC = () => {
     switch (severity) {
       case 'high': 
         return { 
-          color: 'bg-gradient-to-r from-red-500 to-pink-600', 
+          color: 'bg-gradient-to-r from-[#1a365d] to-[#2b6cb0]', 
           textColor: 'text-white',
-          bgColor: 'bg-red-50',
-          borderColor: 'border-red-200',
+          bgColor: 'bg-[#90cdf4]/20',
+          borderColor: 'border-[#2b6cb0]/40',
           icon: AlertTriangle, 
           label: 'Critical',
           pulse: 'animate-pulse'
         };
       case 'medium': 
         return { 
-          color: 'bg-gradient-to-r from-amber-500 to-orange-600', 
+          color: 'bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed]', 
           textColor: 'text-white',
-          bgColor: 'bg-amber-50',
-          borderColor: 'border-amber-200',
+          bgColor: 'bg-[#90cdf4]/20',
+          borderColor: 'border-[#63b3ed]/30',
           icon: Activity, 
           label: 'Moderate',
           pulse: ''
         };
       case 'low': 
         return { 
-          color: 'bg-gradient-to-r from-green-500 to-emerald-600', 
+          color: 'bg-gradient-to-r from-[#63b3ed] to-[#90cdf4]', 
           textColor: 'text-white',
-          bgColor: 'bg-green-50',
-          borderColor: 'border-green-200',
+          bgColor: 'bg-[#90cdf4]/10',
+          borderColor: 'border-[#63b3ed]/20',
           icon: Shield, 
           label: 'Stable',
           pulse: ''
@@ -155,7 +155,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
     return (
       <div
         onClick={() => handleDiseaseClick(disease)}
-        className="group bg-white rounded-2xl border border-gray-200 hover:border-blue-300 hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden transform hover:-translate-y-1"
+        className="group bg-white rounded-2xl border border-gray-200 hover:border-[#63b3ed] hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden transform hover:-translate-y-1"
       >
         {/* Card Header with Gradient */}
         <div className={`h-2 ${severityConfig.color}`}></div>
@@ -165,10 +165,15 @@ export const SimpleDiseasesIndex: React.FC = () => {
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-start space-x-3 flex-1">
               <div className={`p-3 rounded-xl ${severityConfig.bgColor} ${severityConfig.borderColor} border group-hover:scale-110 transition-transform`}>
-                <CategoryIcon className={`w-5 h-5 ${severityConfig.color.replace('bg-gradient-to-r', 'text').split(' ')[1].replace('to-pink-600', 'red-600').replace('to-orange-600', 'amber-600').replace('to-emerald-600', 'green-600').replace('to-slate-600', 'gray-600')}`} />
+                <CategoryIcon className={`w-5 h-5 ${
+                  disease.severity === 'high' ? 'text-red-600' :
+                  disease.severity === 'medium' ? 'text-[#2b6cb0]' :
+                  disease.severity === 'low' ? 'text-[#63b3ed]' :
+                  'text-gray-600'
+                }`} />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-1 line-clamp-2">
+                <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#2b6cb0] transition-colors mb-1 line-clamp-2">
                   {disease.title}
                 </h3>
                 <p className="text-sm font-medium text-gray-600">{disease.category}</p>
@@ -191,7 +196,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
             {disease.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="px-2 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 text-xs rounded-lg flex items-center space-x-1 border border-blue-100"
+                className="px-2 py-1 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/10 text-[#1a365d] text-xs rounded-lg flex items-center space-x-1 border border-[#63b3ed]/30"
               >
                 <Tag className="w-3 h-3" />
                 <span className="font-medium">{tag}</span>
@@ -218,7 +223,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-xs text-gray-500 font-medium">{disease.lastUpdated}</span>
-              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#2b6cb0] group-hover:translate-x-1 transition-all" />
             </div>
           </div>
         </div>
@@ -234,17 +239,22 @@ export const SimpleDiseasesIndex: React.FC = () => {
     return (
       <div
         onClick={() => handleDiseaseClick(disease)}
-        className="group bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300 cursor-pointer p-6"
+        className="group bg-white rounded-xl border border-gray-200 hover:border-[#63b3ed] hover:shadow-lg transition-all duration-300 cursor-pointer p-6"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4 flex-1">
             <div className={`p-3 rounded-xl ${severityConfig.bgColor} ${severityConfig.borderColor} border group-hover:scale-110 transition-transform`}>
-              <CategoryIcon className={`w-5 h-5 ${severityConfig.color.replace('bg-gradient-to-r', 'text').split(' ')[1].replace('to-pink-600', 'red-600').replace('to-orange-600', 'amber-600').replace('to-emerald-600', 'green-600').replace('to-slate-600', 'gray-600')}`} />
+              <CategoryIcon className={`w-5 h-5 ${
+                disease.severity === 'high' ? 'text-[#1a365d]' :
+                disease.severity === 'medium' ? 'text-[#2b6cb0]' :
+                disease.severity === 'low' ? 'text-[#63b3ed]' :
+                'text-gray-600'
+              }`} />
             </div>
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center space-x-3 mb-2">
-                <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#2b6cb0] transition-colors">
                   {disease.title}
                 </h3>
                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${severityConfig.color} ${severityConfig.textColor} flex items-center space-x-1`}>
@@ -268,7 +278,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
               <Calendar className="w-4 h-4" />
               <span className="font-medium">{disease.lastUpdated}</span>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#2b6cb0] group-hover:translate-x-1 transition-all" />
           </div>
         </div>
       </div>
@@ -276,17 +286,17 @@ export const SimpleDiseasesIndex: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-[#90cdf4]/10 to-[#63b3ed]/10">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Hero Header */}
         <div className="text-center mb-12" data-tour="disease-header">
-          <div className="inline-flex items-center space-x-3 bg-white px-6 py-3 rounded-full shadow-lg border border-blue-100 mb-6">
-            <div className="p-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full">
+          <div className="inline-flex items-center space-x-3 bg-white px-6 py-3 rounded-full shadow-lg border border-[#63b3ed]/30 mb-6">
+            <div className="p-2 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] rounded-full">
               <Stethoscope className="w-5 h-5 text-white" />
             </div>
             <span className="text-sm font-semibold text-gray-600">Medical Knowledge Base</span>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] bg-clip-text text-transparent mb-4">
             Disease Guidelines & Pathways
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
@@ -306,7 +316,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
                   placeholder="Search diseases, symptoms, treatments, or guidelines..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500"
+                  className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#63b3ed] focus:border-transparent transition-all text-gray-900 placeholder-gray-500"
                 />
               </div>
             </div>
@@ -318,7 +328,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-4 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 font-medium"
+                  className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-4 pr-10 focus:ring-2 focus:ring-[#63b3ed] focus:border-transparent transition-all text-gray-900 font-medium"
                 >
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
@@ -334,7 +344,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-4 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 font-medium"
+                  className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-4 pr-10 focus:ring-2 focus:ring-[#63b3ed] focus:border-transparent transition-all text-gray-900 font-medium"
                 >
                   {sortOptions.map((option) => (
                     <option key={option.id} value={option.id}>
@@ -379,7 +389,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
               {filteredDiseases.length} Disease{filteredDiseases.length !== 1 ? 's' : ''} Found
             </h2>
             {selectedCategory !== 'all' && (
-              <div className="flex items-center space-x-2 px-4 py-2 bg-blue-100 text-blue-800 rounded-full">
+              <div className="flex items-center space-x-2 px-4 py-2 bg-[#90cdf4]/20 text-[#1a365d] rounded-full">
                 <Filter className="w-4 h-4" />
                 <span className="text-sm font-medium">
                   {categories.find(cat => cat.id === selectedCategory)?.name}
@@ -433,7 +443,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
                   setSearchTerm('');
                   setSelectedCategory('all');
                 }}
-                className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
+                className="px-6 py-3 bg-[#1a365d] text-white rounded-xl hover:bg-[#2b6cb0] transition-colors font-medium"
               >
                 View All Diseases
               </button>

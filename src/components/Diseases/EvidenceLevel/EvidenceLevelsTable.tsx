@@ -51,9 +51,9 @@ const evidenceLevelsData: EvidenceLevelData[] = [
     description: 'A single high-quality randomised controlled trial or a preponderance of level II studies supports the recommendation.',
     studyTypes: 'Single high-quality RCT, well-conducted meta-analyses, limited RCTs',
     clinicalApplication: 'Moderate recommendations with clinical judgment',
-    color: 'text-blue-800',
-    bgColor: 'from-blue-50 to-sky-50',
-    borderColor: 'border-blue-300',
+    color: 'text-[#1a365d]',
+    bgColor: 'from-[#90cdf4]/20 to-[#63b3ed]/10',
+    borderColor: 'border-[#2b6cb0]/30',
     icon: CheckCircle
   },
   {
@@ -75,9 +75,9 @@ const evidenceLevelsData: EvidenceLevelData[] = [
     description: 'Higher-quality studies conducted on this topic disagree concerning their conclusions. Based on conflicting studies.',
     studyTypes: 'Case series, case reports, conflicting studies',
     clinicalApplication: 'Expert opinion-based recommendations',
-    color: 'text-purple-800',
-    bgColor: 'from-purple-50 to-violet-50',
-    borderColor: 'border-purple-300',
+    color: 'text-[#2b6cb0]',
+    bgColor: 'from-[#63b3ed]/10 to-[#90cdf4]/10',
+    borderColor: 'border-[#63b3ed]/30',
     icon: Minus
   },
   {
@@ -159,21 +159,21 @@ const EvidenceLevelsTable: React.FC = () => {
       title: 'Evidence Levels Overview',
       subtitle: 'Quality Grades & Clinical Applications',
       icon: GraduationCap,
-      color: 'from-indigo-600 via-purple-600 to-blue-600'
+      color: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]'
     },
     {
       id: 'oxford',
       title: 'Oxford CEBM Levels',
       subtitle: 'Therapy, Prognosis & Diagnosis',
       icon: Users,
-      color: 'from-blue-600 to-indigo-600'
+      color: 'from-[#1a365d] to-[#2b6cb0]'
     },
     {
       id: 'notes',
       title: 'Clinical Application',
       subtitle: 'Usage Notes & Abbreviations',
       icon: FileText,
-      color: 'from-gray-600 to-slate-700'
+      color: 'from-[#2b6cb0] to-[#63b3ed]'
     }
   ];
 
@@ -194,7 +194,7 @@ const EvidenceLevelsTable: React.FC = () => {
       {/* Collapsible Header */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 rounded-xl p-4 text-white hover:from-indigo-700 hover:via-purple-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        className="w-full bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] rounded-xl p-4 text-white hover:from-[#2b6cb0] hover:via-[#63b3ed] hover:to-[#90cdf4] transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#63b3ed] focus:ring-offset-2"
         aria-expanded={isOpen}
         aria-controls="evidence-levels-content"
       >
@@ -240,7 +240,7 @@ const EvidenceLevelsTable: React.FC = () => {
         }`}
       >
         {isOpen && (
-          <div className="bg-white border-x border-b border-indigo-200 rounded-b-xl shadow-xl">
+          <div className="bg-white border-x border-b border-[#63b3ed]/30 rounded-b-xl shadow-xl">
             {/* Navigation Header for Slides */}
             <div className={`bg-gradient-to-r ${slides[currentSlide].color} p-4 text-white relative overflow-hidden border-b border-white/20`}>
               <div className="flex items-center justify-between">
@@ -297,7 +297,7 @@ const EvidenceLevelsTable: React.FC = () => {
             </div>
 
       {/* Sliding Content Container */}
-      <div className="bg-white rounded-b-xl shadow-xl overflow-hidden border border-indigo-200 relative">
+      <div className="bg-white rounded-b-xl shadow-xl overflow-hidden border border-[#63b3ed]/30 relative">
         <div className="overflow-hidden">
           <div 
             className="flex transition-transform duration-500 ease-in-out"
@@ -383,11 +383,11 @@ const EvidenceLevelsTable: React.FC = () => {
             {/* Slide 2: Oxford CEBM Levels */}
             <div className="w-full flex-shrink-0">
               <div className="p-6">
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200 overflow-hidden shadow-lg">
+                <div className="bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/10 rounded-xl border border-[#63b3ed]/30 overflow-hidden shadow-lg">
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
+                        <tr className="bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white">
                           <th className="px-4 py-3 text-left font-bold text-sm">Level</th>
                           <th className="px-4 py-3 text-left font-bold text-sm">Therapy/Prevention</th>
                           <th className="px-4 py-3 text-left font-bold text-sm">Prognosis</th>
@@ -398,10 +398,10 @@ const EvidenceLevelsTable: React.FC = () => {
                         {oxfordLevelsData.map((level, index) => (
                           <tr 
                             key={level.level}
-                            className={`${index % 2 === 0 ? 'bg-white' : 'bg-blue-50/50'} hover:bg-blue-100 transition-colors`}
+                            className={`${index % 2 === 0 ? 'bg-white' : 'bg-[#90cdf4]/10'} hover:bg-[#63b3ed]/20 transition-colors`}
                           >
                             <td className="px-4 py-4">
-                              <span className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-lg shadow-md">
+                              <span className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white font-bold rounded-lg shadow-md">
                                 {level.level}
                               </span>
                             </td>
@@ -428,12 +428,12 @@ const EvidenceLevelsTable: React.FC = () => {
               <div className="p-8">
                 <div className="space-y-6">
                   {/* Introduction */}
-                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-200 p-6 shadow-lg">
+                  <div className="bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/10 rounded-xl border border-[#63b3ed]/30 p-6 shadow-lg">
                     <div className="flex items-center space-x-3 mb-4">
-                      <div className="p-2 bg-indigo-600 rounded-lg">
+                      <div className="p-2 bg-[#1a365d] rounded-lg">
                         <BookOpen className="w-6 h-6 text-white" />
                       </div>
-                      <h3 className="text-xl font-bold text-indigo-900">Clinical Significance</h3>
+                      <h3 className="text-xl font-bold text-[#1a365d]">Clinical Significance</h3>
                     </div>
                     <p className="text-gray-700 leading-relaxed">
                       Levels of evidence help target your search at the type of evidence most likely to provide a reliable answer. 
@@ -444,7 +444,7 @@ const EvidenceLevelsTable: React.FC = () => {
                   {/* Abbreviations */}
                   <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl border border-gray-200 p-6 shadow-lg">
                     <div className="flex items-center space-x-3 mb-4">
-                      <div className="p-2 bg-gray-600 rounded-lg">
+                      <div className="p-2 bg-[#2b6cb0] rounded-lg">
                         <FileText className="w-6 h-6 text-white" />
                       </div>
                       <h3 className="text-xl font-bold text-gray-900">Key Abbreviations</h3>
@@ -467,7 +467,7 @@ const EvidenceLevelsTable: React.FC = () => {
                   {/* Clinical Usage */}
                   <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200 p-6 shadow-lg">
                     <div className="flex items-center space-x-3 mb-4">
-                      <div className="p-2 bg-amber-600 rounded-lg">
+                      <div className="p-2 bg-[#63b3ed] rounded-lg">
                         <Activity className="w-6 h-6 text-white" />
                       </div>
                       <h3 className="text-xl font-bold text-amber-900">Clinical Application</h3>

@@ -47,7 +47,7 @@ export const DocumentProgressTracker: React.FC<DocumentProgressTrackerProps> = (
 
   const getProgressColor = (status: DocumentProgress['status']) => {
     switch (status) {
-      case 'uploading': return 'bg-blue-500';
+      case 'uploading': return 'bg-[#2b6cb0]';
       case 'processing': return 'bg-yellow-500';
       case 'completed': return 'bg-green-500';
       case 'failed': return 'bg-red-500';
@@ -84,7 +84,7 @@ export const DocumentProgressTracker: React.FC<DocumentProgressTrackerProps> = (
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-2">
               {hasActiveUploads && (
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-pulse"></div>
               )}
               <h3 className="font-medium text-gray-900 dark:text-gray-100">
                 Document Progress
