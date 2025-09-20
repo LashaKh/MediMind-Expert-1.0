@@ -383,50 +383,6 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                   </div>
                 )}
                 
-                {/* Debug: Check if speakers are enabled */}
-                {console.log('🔍 enableSpeakerDiarization:', enableSpeakerDiarization, 'speakerCount:', speakerCount)}
-                
-                {/* Mobile Speaker Count Button - Only show when enabled */}
-                {enableSpeakerDiarization && (
-                  <button
-                    onClick={(e) => {
-                      console.log('🔵 MOBILE Speaker count button clicked!');
-                      console.log('🔵 Event target:', e.target);
-                      console.log('🔵 Current speakerDropdownOpen state:', speakerDropdownOpen);
-                      console.log('🔵 Recording state:', recordingState.isRecording);
-                      
-                      e.preventDefault();
-                      e.stopPropagation();
-                      
-                      if (!recordingState.isRecording) {
-                        const newState = !speakerDropdownOpen;
-                        console.log('🔵 Setting speaker dropdown to:', newState);
-                        setSpeakerDropdownOpen(newState);
-                        
-                        // Force a re-render check
-                        setTimeout(() => {
-                          console.log('🔵 After timeout - speakerDropdownOpen is now:', speakerDropdownOpen);
-                        }, 100);
-                      } else {
-                        console.log('🔵 Cannot open dropdown - recording is active');
-                      }
-                    }}
-                    className="md:hidden flex items-center gap-1 px-3 py-2 rounded-lg bg-red-500 border-2 border-red-300 text-white font-bold hover:bg-red-600 transition-all duration-200 cursor-pointer shadow-md touch-manipulation"
-                    style={{
-                      backgroundColor: 'red !important',
-                      color: 'white !important',
-                      border: '2px solid yellow !important',
-                      touchAction: 'manipulation',
-                      WebkitTapHighlightColor: 'transparent'
-                    }}
-                    disabled={recordingState.isRecording}
-                  >
-                    <Users className="w-3 h-3" />
-                    <span className="text-sm font-bold">{speakerCount}</span>
-                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${speakerDropdownOpen ? 'rotate-180' : ''}`} />
-                  </button>
-                )}
-                
                 {/* Compact Toggle Switch */}
                 <div className={`
                   w-10 h-5 rounded-full border p-0.5 transition-all duration-200 
@@ -443,6 +399,59 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                     }
                   `} />
                 </div>
+              </div>
+              
+              {/* Mobile Content - All Contained */}
+              <div className="absolute inset-0 flex items-center justify-between px-3 z-[100] md:hidden">
+                
+                {/* Left Side: Icon and Text */}
+                <div className="flex items-center gap-2">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-sm transition-all duration-200
+                    ${enableSpeakerDiarization 
+                      ? 'bg-gradient-to-br from-[#1a365d] to-[#2b6cb0]' 
+                      : 'bg-gray-400 dark:bg-gray-600'
+                    }`}>
+                    <Brain className="w-4 h-4 text-white" />
+                  </div>
+                  
+                  <div className="flex flex-col items-start">
+                    <div className={`text-xs font-bold leading-tight transition-all duration-200
+                      ${enableSpeakerDiarization 
+                        ? 'text-[#1a365d] dark:text-[#63b3ed]' 
+                        : 'text-gray-600 dark:text-gray-400'
+                      }`}>
+                      Speakers
+                    </div>
+                    <div className={`text-[10px] leading-tight transition-all duration-200
+                      ${enableSpeakerDiarization 
+                        ? 'text-[#2b6cb0] dark:text-[#63b3ed]' 
+                        : 'text-gray-500 dark:text-gray-500'
+                      }`}>
+                      {enableSpeakerDiarization ? `${speakerCount} voices` : 'OFF'}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Right Side: Number Selector only when enabled */}
+                {enableSpeakerDiarization && onSpeakerCountChange && (
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (!recordingState.isRecording) {
+                        setSpeakerDropdownOpen(!speakerDropdownOpen);
+                      }
+                    }}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#63b3ed]/20 dark:bg-[#1a365d]/30 text-[#1a365d] dark:text-[#63b3ed] hover:bg-[#63b3ed]/30 dark:hover:bg-[#1a365d]/50 transition-all duration-200 cursor-pointer"
+                  >
+                    <span className="text-sm font-bold">{speakerCount}</span>
+                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${speakerDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                )}
               </div>
             </div>
             
@@ -486,10 +495,9 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
             {/* Mobile Speaker Count Dropdown - Bottom Sheet Style */}
             {speakerDropdownOpen && (
               <>
-              {console.log('🟡 MOBILE DROPDOWN RENDERING! speakerDropdownOpen =', speakerDropdownOpen)}
           {/* Mobile Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/50 z-[9998] md:hidden"
+            className="fixed inset-0 bg-black/50 z-40 md:hidden"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -498,36 +506,22 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
           />
           
           {/* Mobile Bottom Sheet */}
-          <div 
-            className="fixed bottom-0 left-0 right-0 z-[9999] md:hidden"
-            style={{
-              transform: 'translateY(0)',
-              transition: 'transform 300ms ease-out'
-            }}
-            onClick={() => console.log('Mobile sheet clicked')}
-          >
+          <div className="fixed bottom-0 left-0 right-0 z-50 animate-in slide-in-from-bottom duration-300 md:hidden">
             <div 
               className="bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-gray-700 p-6"
-              style={{ 
-                backgroundColor: 'white',
-                minHeight: '200px'
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log('🟢 Mobile sheet content clicked');
-              }}
+              onClick={(e) => e.stopPropagation()}
             >
               
               {/* Handle */}
-              <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-6" />
+              <div className="w-12 h-1 bg-[#63b3ed] dark:bg-[#2b6cb0] rounded-full mx-auto mb-6" />
               
               {/* Header */}
               <div className="text-center mb-6">
-                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center justify-center space-x-2">
-                  <Users className="w-5 h-5" />
+                <h3 className="text-lg font-bold text-[#1a365d] dark:text-[#63b3ed] flex items-center justify-center space-x-2">
+                  <Users className="w-5 h-5 text-[#2b6cb0] dark:text-[#63b3ed]" />
                   <span>Select Voice Count</span>
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                <p className="text-sm text-[#2b6cb0] dark:text-[#90cdf4] mt-2">
                   Choose how many speakers to detect in the conversation
                 </p>
               </div>
@@ -559,8 +553,8 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                       flex flex-col items-center justify-center
                       border-2 min-h-[80px] cursor-pointer active:scale-95 touch-manipulation select-none
                       ${speakerCount === count 
-                        ? 'bg-violet-100 dark:bg-violet-900/40 border-violet-400 dark:border-violet-500 shadow-lg' 
-                        : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:border-violet-300'
+                        ? 'bg-[#63b3ed]/20 dark:bg-[#1a365d]/40 border-[#2b6cb0] dark:border-[#63b3ed] shadow-lg' 
+                        : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-[#63b3ed]/10 dark:hover:bg-[#1a365d]/20 hover:border-[#63b3ed]'
                       }
                     `}
                   >
@@ -572,7 +566,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                           className={`
                             w-2 h-2 rounded-full
                             ${speakerCount === count 
-                              ? 'bg-violet-500' 
+                              ? 'bg-[#2b6cb0]' 
                               : 'bg-gray-400 dark:bg-gray-600'
                             }
                           `}
@@ -584,7 +578,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                     <span className={`
                       text-2xl font-bold
                       ${speakerCount === count 
-                        ? 'text-violet-700 dark:text-violet-300' 
+                        ? 'text-[#1a365d] dark:text-[#63b3ed]' 
                         : 'text-gray-700 dark:text-gray-300'
                       }
                     `}>
@@ -595,16 +589,16 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                     <span className={`
                       text-xs font-medium mt-1
                       ${speakerCount === count 
-                        ? 'text-violet-600 dark:text-violet-400' 
+                        ? 'text-[#2b6cb0] dark:text-[#63b3ed]' 
                         : 'text-gray-500 dark:text-gray-500'
                       }
                     `}>
-                      {count === 2 ? 'Doctor + Patient' : 'Voices'}
+                      {count === 2 ? 'Dr+Pt' : `${count} Voices`}
                     </span>
                     
                     {/* Selected Indicator */}
                     {speakerCount === count && (
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-violet-500 rounded-full flex items-center justify-center shadow-lg">
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#2b6cb0] rounded-full flex items-center justify-center shadow-lg">
                         <Check className="w-4 h-4 text-white" />
                       </div>
                     )}
