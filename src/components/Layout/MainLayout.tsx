@@ -92,10 +92,16 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         backgroundImage: 'none !important'
       }}
     >
-      {/* Header with safe area support */}
-      <Header onMenuToggle={handleMenuToggle} isOnboardingPage={isOnboardingPage} />
+      {/* Header with safe area support - Hidden on MediScribe page MOBILE ONLY */}
+      {!(isMediScribePage && isMobile) && (
+        <Header onMenuToggle={handleMenuToggle} isOnboardingPage={isOnboardingPage} />
+      )}
       
-      <div className={`flex flex-1 layout-container ${isMobile ? 'pt-16' : 'pt-20'}`}>
+      <div className={`flex flex-1 layout-container ${
+        isMediScribePage && isMobile
+          ? 'pt-0' // No padding on MediScribe page mobile since header is hidden
+          : isMobile ? 'pt-16' : 'pt-20'
+      }`}>
         {/* Sidebar - only show for authenticated users and not on onboarding */}
         {user && !isOnboardingPage && (
           <Sidebar 

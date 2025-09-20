@@ -4,6 +4,46 @@
 
 /* Mobile Touch Target Enhancements */
 @media (max-width: 767px) {
+  /* Mobile Container Optimizations - Maximize Content Area */
+  .transcription-card {
+    margin: 4px !important; /* Minimal margin on mobile */
+    border-radius: 16px !important; /* Slightly less rounded for mobile */
+    padding: 4px !important; /* Minimal internal padding */
+    border: none !important; /* Remove black border */
+    box-shadow: none !important; /* Remove shadow for cleaner look */
+    background: #ffffff !important; /* Ensure white background */
+  }
+
+  /* Mobile Layout Maximization */
+  .h-screen {
+    height: 100vh !important;
+    height: calc(100vh - env(safe-area-inset-top)) !important; /* Account for notches */
+  }
+
+  /* Mobile content area optimization */
+  .lg\\:hidden.flex-1 {
+    margin-bottom: env(safe-area-inset-bottom, 0px) !important; /* Safe area bottom */
+  }
+
+  /* Ensure full height usage */
+  .transcription-bg {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Remove any potential borders from content areas */
+  .bg-white\\/80,
+  .bg-white {
+    border: none !important;
+    outline: none !important;
+  }
+
+  /* Clean mobile container styling */
+  .backdrop-blur-sm {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
   /* Minimum 48px touch targets for mobile medical professionals */
   .mediscribe-touch-target {
     min-height: 48px;
@@ -24,16 +64,16 @@
     transform: scale(0.96);
   }
 
-  /* Mobile Tab Navigation Optimizations - Blue Theme */
+  /* Mobile Tab Navigation Optimizations - Compact Blue Theme */
   .mediscribe-mobile-tabs {
-    gap: 8px;
-    padding: 8px 12px;
+    gap: 6px;
+    padding: 6px 8px;
   }
 
   .mediscribe-mobile-tab {
-    min-height: 52px;
-    padding: 12px 14px;
-    border-radius: 14px;
+    min-height: 44px; /* Reduced from 52px */
+    padding: 8px 12px; /* Reduced padding */
+    border-radius: 12px;
     flex: 1;
     max-width: none;
     background: rgba(255, 255, 255, 0.7);
@@ -139,19 +179,96 @@
     .mediscribe-mobile-control-subtext {
       font-size: 9px;
     }
+
+    /* Compact tabs for very small screens */
+    .mediscribe-mobile-tab {
+      min-height: 40px;
+      padding: 6px 8px;
+    }
+
+    .mediscribe-mobile-tab-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .mediscribe-mobile-tab-label {
+      font-size: 11px;
+    }
+
+    .mediscribe-mobile-tab-sublabel {
+      font-size: 10px;
+    }
+
+    /* Extra compact transcript area */
+    .mediscribe-mobile-transcript {
+      padding: 8px;
+    }
+
+    .mediscribe-mobile-textarea {
+      padding: 12px;
+    }
   }
 
-  /* Mobile Transcript Area - Blue Theme */
+  /* Mobile Transcript Area - Enhanced Blue Theme */
   .mediscribe-mobile-transcript {
-    padding: 16px;
-    min-height: 200px;
+    padding: 12px; /* Reduced from 16px */
+    min-height: 40vh; /* Dynamic minimum height */
   }
 
   .mediscribe-mobile-textarea {
-    padding: 20px;
-    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 16px; /* Reduced from 20px */
+    font-size: 16px !important; /* Prevents zoom on iOS - important for override */
     line-height: 1.6;
     border-radius: 16px;
+    /* Enhanced mobile touch behavior */
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+    /* Smooth scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    /* Better text rendering on mobile */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    /* Prevent text selection issues */
+    -webkit-tap-highlight-color: transparent;
+    /* Dynamic sizing */
+    resize: none;
+    overflow-y: auto;
+    transition: height 0.3s ease, padding 0.3s ease;
+  }
+
+  /* Keyboard active state */
+  .mediscribe-keyboard-active {
+    padding: 12px !important; /* Compact padding when keyboard is open */
+    font-size: 16px !important; /* Ensure no zoom */
+  }
+
+  /* Enhanced focus states for mobile textarea */
+  .mediscribe-mobile-textarea:focus {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* Auto-resize textarea container */
+  .textarea-auto-resize {
+    min-height: 40vh;
+    max-height: 70vh;
+    overflow: hidden;
+    transition: height 0.3s ease;
+  }
+
+  /* Keyboard open state adjustments */
+  body.keyboard-open .mediscribe-mobile-textarea {
+    max-height: calc(100vh - 200px) !important;
+    min-height: 120px !important;
+  }
+
+  /* Container adjustments when keyboard is open */
+  body.keyboard-open .mediscribe-mobile-transcript {
+    padding: 8px !important;
   }
 
   /* Mobile Floating Action Button - Updated for Blue Theme */

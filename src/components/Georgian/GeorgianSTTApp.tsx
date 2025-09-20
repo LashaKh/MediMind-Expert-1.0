@@ -29,6 +29,7 @@ import { supabase } from '../../lib/supabase';
 
 // Import extracted components
 import { HeaderControls } from './components/HeaderControls';
+import { MobileHeader } from './components/MobileHeader';
 import { MobileSessionHeader } from './components/MobileSessionHeader';
 import { AudioUploadProgress } from './components/AudioUploadProgress';
 import { formatTime } from './utils/transcriptUtils';
@@ -684,24 +685,35 @@ export const GeorgianSTTApp: React.FC = () => {
 
   return (
     <div className="h-screen transcription-bg overflow-hidden">
-      {/* Enhanced Medical Professional Header */}
-      <HeaderControls 
+      {/* Desktop Header - Hidden on Mobile */}
+      <div className="hidden lg:block">
+        <HeaderControls 
+          authStatus={authStatus}
+          recordingState={recordingState}
+          processing={processing}
+          activeTab={activeTab}
+          onOpenMobileSessions={openMobileDrawer}
+          sessionsCount={sessions.length}
+          canRecord={canRecord}
+          canStop={canStop}
+          onStartRecording={handleStartRecording}
+          onStopRecording={stopRecording}
+          selectedSTTModel={selectedSTTModel}
+          onModelChange={updateSelectedSTTModel}
+        />
+      </div>
+
+      {/* Mobile Header - Only on Mobile */}
+      <MobileHeader
         authStatus={authStatus}
         recordingState={recordingState}
         processing={processing}
-        activeTab={activeTab}
         onOpenMobileSessions={openMobileDrawer}
         sessionsCount={sessions.length}
-        canRecord={canRecord}
-        canStop={canStop}
-        onStartRecording={handleStartRecording}
-        onStopRecording={stopRecording}
-        selectedSTTModel={selectedSTTModel}
-        onModelChange={updateSelectedSTTModel}
       />
 
       {/* Mobile-First Responsive Layout */}
-      <div className="flex flex-col h-[calc(100vh-64px)]">
+      <div className="flex flex-col h-[calc(100vh-48px)] lg:h-[calc(100vh-64px)]">
         
         {/* Medical Session History Drawer */}
         <MedicalDrawer
@@ -929,7 +941,7 @@ export const GeorgianSTTApp: React.FC = () => {
 
         {/* Mobile: Full-Screen Transcript Panel */}
         <div className="lg:hidden flex-1 flex flex-col min-h-0 relative">
-          <div className="h-full transcription-card backdrop-blur-sm m-4">
+          <div className="h-full transcription-card backdrop-blur-sm m-1 sm:m-4">
             <TranscriptPanel
               currentSession={currentSession}
               localTranscript={localTranscript}

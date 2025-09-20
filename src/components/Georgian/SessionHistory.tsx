@@ -701,17 +701,28 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
       {/* Enhanced keyboard shortcuts overlay */}
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
+          width: 8px !important;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
+          background: rgba(144, 205, 244, 0.1) !important;
+          border-radius: 4px !important;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #1a365d, #2b6cb0);
-          border-radius: 3px;
+          background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%) !important;
+          border-radius: 4px !important;
+          transition: background 0.2s ease !important;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #1a365d, #63b3ed);
+          background: linear-gradient(135deg, #0f1c2e 0%, #1a365d 100%) !important;
+        }
+        .custom-scrollbar::-webkit-scrollbar-corner {
+          background: rgba(144, 205, 244, 0.1) !important;
+        }
+        
+        /* Force Firefox scrollbar theme */
+        .custom-scrollbar {
+          scrollbar-width: thin !important;
+          scrollbar-color: #1a365d rgba(144, 205, 244, 0.3) !important;
         }
         
         @keyframes shimmer {

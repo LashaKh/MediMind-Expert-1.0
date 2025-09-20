@@ -63,8 +63,8 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
 
   return (
     <div className="bg-white border-b border-[#90cdf4]/30">
-      <div className="px-3 sm:px-6 py-2 sm:py-3 mediscribe-mobile-tabs lg:px-6 lg:py-3">
-        <div className="flex items-center justify-between max-w-7xl mx-auto">
+      <div className="px-3 sm:px-6 py-1.5 sm:py-3 mediscribe-mobile-tabs lg:px-6 lg:py-3">
+        <div className="flex items-center justify-center lg:justify-between max-w-7xl mx-auto">
           {/* Modern Blue Tab System */}
           <div className="flex space-x-1 sm:space-x-2 mediscribe-mobile-tabs lg:space-x-2">
             {enhancedTabs.map((tab) => {
@@ -75,7 +75,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 <button
                   key={tab.id}
                   onClick={() => onTabChange(tab.id as TabId)}
-                  className={`group relative flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-4 py-2.5 transition-all duration-300 lg:px-4 lg:py-2.5 lg:space-x-2 mediscribe-mobile-tab`}
+                  className={`group relative flex items-center space-x-1 sm:space-x-2 px-1.5 sm:px-4 py-1.5 sm:py-2.5 transition-all duration-300 lg:px-4 lg:py-2.5 lg:space-x-2 mediscribe-mobile-tab`}
                   style={isActive ? {
                     background: 'linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%)',
                     color: 'white',
@@ -96,7 +96,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 >
                   {/* Icon Container */}
                   <div 
-                    className="w-6 h-6 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-md flex items-center justify-center transition-all duration-300 mediscribe-mobile-tab-icon"
+                    className="w-5 h-5 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-md flex items-center justify-center transition-all duration-300 mediscribe-mobile-tab-icon"
                     style={isActive ? {
                       backgroundColor: 'rgba(255, 255, 255, 0.2)'
                     } : {
@@ -104,15 +104,15 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                     }}
                   >
                     <Icon 
-                      className="w-4 h-4 sm:w-4 sm:h-4 lg:w-4 lg:h-4 transition-transform duration-300 group-hover:scale-110"
+                      className="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 transition-transform duration-300 group-hover:scale-110"
                       style={isActive ? {
                         color: 'white',
-                        fill: 'none',
-                        stroke: 'white'
+                        stroke: 'white',
+                        strokeWidth: '2.5'
                       } : {
                         color: '#1a365d',
-                        fill: '#1a365d',
-                        stroke: '#1a365d'
+                        stroke: '#1a365d',
+                        strokeWidth: '2.5'
                       }}
                     />
                   </div>
@@ -120,7 +120,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                   {/* Labels */}
                   <div className="flex flex-col items-start min-w-0">
                     <span 
-                      className="text-xs sm:text-sm lg:text-sm font-bold leading-tight mediscribe-mobile-tab-label"
+                      className="text-[10px] sm:text-sm lg:text-sm font-bold leading-tight mediscribe-mobile-tab-label"
                       style={isActive ? {
                         color: 'white'
                       } : {
@@ -130,7 +130,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                       {tab.label}
                     </span>
                     <span 
-                      className="text-[11px] sm:text-xs lg:text-xs font-medium leading-tight mediscribe-mobile-tab-sublabel"
+                      className="text-[9px] sm:text-xs lg:text-xs font-medium leading-tight mediscribe-mobile-tab-sublabel"
                       style={isActive ? {
                         color: 'rgba(255, 255, 255, 0.9)'
                       } : {
@@ -147,7 +147,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
           </div>
           
           {/* Compact Right Side Actions */}
-          <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-3">
+          <div className="hidden lg:flex items-center space-x-2 sm:space-x-3 lg:space-x-3">
             {/* Compact History Button */}
             {onToggleHistory && (
               <button
@@ -166,13 +166,17 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                   <History className={`w-3 h-3 ${
                     isHistoryOpen 
                       ? 'text-white' 
-                      : 'text-[#1a365d] fill-[#1a365d] stroke-[#1a365d]'
+                      : 'text-[#1a365d]'
                   }`}
                   style={!isHistoryOpen ? {
                     color: '#1a365d',
-                    fill: '#1a365d',
-                    stroke: '#1a365d'
-                  } : undefined}
+                    stroke: '#1a365d',
+                    strokeWidth: '2.5'
+                  } : {
+                    color: 'white',
+                    stroke: 'white',
+                    strokeWidth: '2.5'
+                  }}
                   />
                 </div>
                 <div className="hidden xl:flex flex-col items-start min-w-0">

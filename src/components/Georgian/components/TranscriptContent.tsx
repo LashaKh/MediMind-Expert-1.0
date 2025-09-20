@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { 
   Save, 
   X, 
@@ -67,6 +67,71 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   onModelChange,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  
+  // Mobile keyboard state
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [textareaHeight, setTextareaHeight] = useState('40vh');
+
+  // Mobile keyboard detection
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      // Detect mobile keyboard by viewport height change
+      const isMobile = window.innerWidth < 768;
+      if (!isMobile) return;
+
+      const viewportHeight = window.visualViewport?.height || window.innerHeight;
+      const windowHeight = window.innerHeight;
+      const keyboardHeight = windowHeight - viewportHeight;
+      const isKeyboardVisible = keyboardHeight > 150; // 150px threshold
+
+      setIsKeyboardOpen(isKeyboardVisible);
+      
+      // Add/remove class to body for CSS styling
+      if (isKeyboardVisible) {
+        document.body.classList.add('keyboard-open');
+        // Adjust textarea height when keyboard is open
+        setTextareaHeight(`${Math.max(viewportHeight * 0.3, 120)}px`);
+      } else {
+        document.body.classList.remove('keyboard-open');
+        setTextareaHeight('40vh');
+      }
+    };
+
+    // Listen to both resize and visualViewport events
+    window.addEventListener('resize', handleResize);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleResize);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleResize);
+      }
+      document.body.classList.remove('keyboard-open');
+    };
+  }, []);
+
+  // Auto-resize textarea based on content
+  useEffect(() => {
+    if (textareaRef.current && !isKeyboardOpen) {
+      const textarea = textareaRef.current;
+      
+      // Reset height to auto to get the correct scrollHeight
+      textarea.style.height = 'auto';
+      
+      // Calculate the required height
+      const scrollHeight = textarea.scrollHeight;
+      const maxHeight = window.innerHeight * 0.7; // 70vh max
+      const minHeight = window.innerHeight * 0.4; // 40vh min
+      
+      const newHeight = Math.min(Math.max(scrollHeight, minHeight), maxHeight);
+      setTextareaHeight(`${newHeight}px`);
+    }
+  }, [transcript, isKeyboardOpen]);
 
   const handleFileUploadClick = () => {
     fileInputRef.current?.click();
@@ -147,10 +212,10 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         <div className="relative h-full flex flex-col p-1 sm:p-1 lg:p-1">
           
           {/* Compact Production Controls */}
-          <div className="relative mb-4 sm:mb-3 lg:mb-3 z-10 px-3 sm:px-4 lg:px-4 pt-4 sm:pt-3 lg:pt-3 mediscribe-mobile-controls">
+          <div className="relative mb-4 sm:mb-3 lg:mb-3 z-10 px-3 sm:px-4 lg:px-4 pt-3 sm:pt-3 lg:pt-3 mediscribe-mobile-controls">
             
             {/* Compact Controls Row */}
-            <div className="flex flex-col sm:flex-row gap-3 items-center">
+            <div className="flex flex-col sm:flex-row gap-3 items-center lg:justify-start">
               
               {/* Engine & Speaker Controls */}
               <ProductionControls
@@ -240,20 +305,27 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                 /* Regular editable text area */
                 <div className="relative h-full p-0">
                   <textarea
+                    ref={textareaRef}
                     value={transcript}
                     onChange={(e) => onEditChange(e.target.value)}
-                    className="transcription-textarea w-full h-full resize-none border-0 px-5 py-5 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed overflow-y-auto mediscribe-mobile-textarea"
+                    className={`transcription-textarea w-full resize-none border-0 px-4 py-4 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed overflow-y-auto mediscribe-mobile-textarea transition-all duration-300 ${
+                      isKeyboardOpen ? 'mediscribe-keyboard-active' : ''
+                    }`}
                     placeholder={`Your medical transcript will appear here with real-time precision${enableSpeakerDiarization ? ' with speaker separation for doctor-patient conversations' : ''}. You can edit this text at any time...`}
                     dir="auto"
                     style={{ 
                       background: 'transparent',
-                      fontSize: '16px' // Prevents zoom on iOS
+                      fontSize: '16px', // Prevents zoom on iOS
+                      height: textareaHeight,
+                      minHeight: isKeyboardOpen ? '120px' : textareaHeight,
+                      maxHeight: isKeyboardOpen ? 'calc(100vh - 200px)' : '70vh',
+                      WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
                     }}
                   />
                   
-                  {/* Modern Scroll Indicator */}
-                  <div className="absolute right-2 top-4 bottom-4 w-1 bg-blue-200/40 rounded-full overflow-hidden pointer-events-none">
-                    <div className="w-full bg-gradient-to-b from-blue-500 to-blue-600 rounded-full transition-all duration-300" style={{height: '25%'}} />
+                  {/* Modern Scroll Indicator - MediScribe Theme */}
+                  <div className="absolute right-2 top-4 bottom-4 w-1 bg-[#90cdf4]/40 rounded-full overflow-hidden pointer-events-none">
+                    <div className="w-full bg-gradient-to-b from-[#1a365d] to-[#2b6cb0] rounded-full transition-all duration-300" style={{height: '25%'}} />
                   </div>
                 </div>
               )}
