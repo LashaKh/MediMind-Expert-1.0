@@ -316,12 +316,14 @@ ${messageText}`;
       }
     }
 
-    // ROUTE BASED ON KNOWLEDGE BASE TYPE
+    // ROUTE BASED ON KNOWLEDGE BASE TYPE - default to curated if not specified
     let apiEndpoint: string;
-    const isPersonalKB = knowledgeBaseType === 'personal';
+    const finalKnowledgeBaseType = knowledgeBaseType || 'curated';
+    const isPersonalKB = finalKnowledgeBaseType === 'personal';
     
     logger.debug('🔍 KNOWLEDGE BASE ROUTING DEBUG:', {
-      knowledgeBaseType,
+      originalKnowledgeBaseType: knowledgeBaseType,
+      finalKnowledgeBaseType,
       isPersonalKB,
       sessionId,
       hasCaseContext: !!caseContext
@@ -369,7 +371,7 @@ ${messageText}`;
       };
     }
 
-    logger.debug(`📡 Sending ${knowledgeBaseType || 'personal'} KB request to:`, apiEndpoint);
+    logger.debug(`📡 Sending ${finalKnowledgeBaseType} KB request to:`, apiEndpoint);
 
     // Make the API request (for personal KB only now) with retry logic
     const response = await retryWithBackoff(async () => {

@@ -76,13 +76,13 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
       // Otherwise, send attachments for processing
       const finalAttachments = enhancedMessage ? undefined : attachments;
       
-      // Send to Flowise API with case context
+      // Send to Flowise API with case context - ensure curated KB is default
       const response = await fetchAIResponse(
         finalMessage, 
         sessionId, 
         activeCaseContext || undefined,
         finalAttachments,
-        knowledgeBaseType,
+        knowledgeBaseType || 'curated',
         personalDocumentIds
       );
       

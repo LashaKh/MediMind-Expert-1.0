@@ -95,7 +95,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Header with safe area support */}
       <Header onMenuToggle={handleMenuToggle} isOnboardingPage={isOnboardingPage} />
       
-      <div className={`flex flex-1 layout-container ${isMobile ? 'pt-0' : 'pt-20'}`}>
+      <div className={`flex flex-1 layout-container ${isMobile ? 'pt-16' : 'pt-20'}`}>
         {/* Sidebar - only show for authenticated users and not on onboarding */}
         {user && !isOnboardingPage && (
           <Sidebar 

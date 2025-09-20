@@ -190,19 +190,151 @@ export const handler = async (event, context) => {
       };
     }
 
-    // Handle chat requests (simplified)
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        ...getCorsHeaders(origin)
-      },
-      body: JSON.stringify({
-        success: false,
-        error: 'Chat functionality temporarily simplified',
-        message: 'Please use auth requests only for now'
-      })
+    // Handle chat requests for curated knowledge base
+    console.log('💬 Processing chat request for curated knowledge base');
+
+    // Parse request body
+    let requestData;
+    try {
+      requestData = JSON.parse(event.body || '{}');
+    } catch (error) {
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCorsHeaders(origin)
+        },
+        body: JSON.stringify({ error: 'Invalid JSON in request body' })
+      };
+    }
+
+    // Check authentication for chat
+    const authHeader = event.headers.authorization || event.headers.Authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return {
+        statusCode: 401,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCorsHeaders(origin)
+        },
+        body: JSON.stringify({ error: 'Authentication required' })
+      };
+    }
+
+    // Decode JWT token
+    const token = authHeader.replace('Bearer ', '');
+    const jwtPayload = decodeSupabaseJWT(token);
+    
+    if (!jwtPayload) {
+      return {
+        statusCode: 401,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCorsHeaders(origin)
+        },
+        body: JSON.stringify({ error: 'Invalid token' })
+      };
+    }
+
+    // Get user profile
+    const profile = await getUserProfile(jwtPayload.id);
+    const user = {
+      ...jwtPayload,
+      specialty: profile.specialty || jwtPayload.specialty,
+      role: profile.role || jwtPayload.role
     };
+
+    // Get Flowise configuration
+    const flowiseConfig = getFlowiseConfig(user.specialty);
+
+    // Prepare Flowise request
+    const flowiseRequest = {
+      question: requestData.message || '',
+      overrideConfig: { 
+        sessionId: requestData.conversationId || 'default-session' 
+      }
+    };
+
+    // Add case context if provided
+    if (requestData.caseContext) {
+      const caseString = `Patient Case Context:
+- Title: ${requestData.caseContext.title || 'Untitled Case'}
+- Specialty: ${requestData.caseContext.specialty || user.specialty}
+- Description: ${requestData.caseContext.description || 'No description provided'}
+
+Question: ${requestData.message}`;
+      
+      flowiseRequest.question = caseString;
+    }
+
+    console.log('📡 Sending request to Flowise:', {
+      url: flowiseConfig.url,
+      hasQuestion: !!flowiseRequest.question,
+      specialty: flowiseConfig.specialty
+    });
+
+    try {
+      // Make request to Flowise
+      const flowiseResponse = await fetch(flowiseConfig.url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(flowiseRequest)
+      });
+
+      if (!flowiseResponse.ok) {
+        const errorText = await flowiseResponse.text();
+        console.error('Flowise error:', flowiseResponse.status, errorText);
+        
+        return {
+          statusCode: flowiseResponse.status,
+          headers: {
+            'Content-Type': 'application/json',
+            ...getCorsHeaders(origin)
+          },
+          body: JSON.stringify({ 
+            error: `Flowise error: ${flowiseResponse.status}`,
+            details: errorText 
+          })
+        };
+      }
+
+      const flowiseResult = await flowiseResponse.json();
+      
+      // Format response to match expected structure
+      const formattedResponse = {
+        message: flowiseResult.text || flowiseResult.response || flowiseResult.answer || 'No response from AI',
+        sources: flowiseResult.sourceDocuments || []
+      };
+
+      return {
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCorsHeaders(origin)
+        },
+        body: JSON.stringify({
+          success: true,
+          data: formattedResponse
+        })
+      };
+
+    } catch (error) {
+      console.error('Error calling Flowise:', error);
+      
+      return {
+        statusCode: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCorsHeaders(origin)
+        },
+        body: JSON.stringify({ 
+          error: 'Failed to get AI response',
+          details: error.message 
+        })
+      };
+    }
 
   } catch (error) {
     console.error('Function error:', error);

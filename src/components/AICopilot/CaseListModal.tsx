@@ -216,7 +216,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
         {/* World-Class Modal Container */}
         <div 
           ref={modalRef}
-          className="relative w-full max-w-6xl max-h-[92vh] overflow-hidden
+          className="relative w-full max-w-6xl max-h-[92vh] flex flex-col
                      transform transition-all duration-700 ease-out"
           style={{
             background: `
@@ -240,7 +240,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
           
           {/* Revolutionary Header */}
-          <div className="relative z-10 p-8 pb-6 border-b border-white/40">
+          <div className="relative z-10 p-8 pb-6 border-b border-white/40 flex-shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-6">
                 <div className="relative group">
@@ -377,7 +377,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
           </div>
 
           {/* Premium Cases Display */}
-                     <div className="flex-1 overflow-y-auto p-8 case-library-scrollbar">
+          <div className="flex-1 overflow-y-auto p-8 case-library-scrollbar scroll-smooth min-h-0">
             {filteredAndSortedCases.length === 0 ? (
               <div className="text-center py-16">
                 <div className="relative group">

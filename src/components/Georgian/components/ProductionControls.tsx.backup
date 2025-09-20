@@ -436,6 +436,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
+                      console.log('Mobile speaker count button clicked');
                       if (!recordingState.isRecording) {
                         setSpeakerDropdownOpen(!speakerDropdownOpen);
                       }
@@ -495,9 +496,12 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
+                      console.log('🔢 Speaker count selected:', count, 'current:', speakerCount);
                       if (onSpeakerCountChange) {
+                        console.log('📞 Calling onSpeakerCountChange with:', count);
                         onSpeakerCountChange(count);
                       } else {
+                        console.log('❌ onSpeakerCountChange is not available');
                       }
                       // Small delay before closing to ensure state update
                       setTimeout(() => {
@@ -507,6 +511,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                     onMouseDown={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
+                      console.log('👆 Mouse down on speaker count:', count);
                     }}
                     type="button"
                     className={`

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Stethoscope, ArrowUp } from 'lucide-react';
+import { Stethoscope, ArrowUp, Menu } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useAuth } from '../../stores/useAppStore';
 import { UserDropdown } from './UserDropdown';
@@ -10,9 +10,10 @@ import { useSmartPullToRefresh } from '../../hooks/useSmartPullToRefresh';
 
 interface HeaderProps {
   isOnboardingPage?: boolean;
+  onMenuToggle?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false }) => {
+export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false, onMenuToggle }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -79,22 +80,32 @@ export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false }) => {
 
   return (
     <>
-      {/* Header - hidden on mobile */}
+      {/* Header - visible on mobile with hamburger menu */}
       <header 
         ref={headerRef}
         className={`
-          ${isMobile ? 'hidden' : 'fixed top-0 left-0 right-0 z-50'}
+          fixed top-0 left-0 right-0 z-50
           bg-white border-b border-gray-200 transition-all duration-300 ease-in-out safe-top
           ${isScrolled ? 'shadow-lg' : 'shadow-sm'}
-          ${isCondensed ? 'h-14' : 'h-18'}
+          ${isCondensed ? 'h-14' : isMobile ? 'h-16' : 'h-18'}
         `}
       >
         <div className={`
           flex items-center justify-between px-4 sm:px-6 lg:px-8 safe-left safe-right transition-all duration-300
-          ${isCondensed ? 'h-14 py-2' : 'h-20 py-5'}
+          ${isCondensed ? 'h-14 py-2' : isMobile ? 'h-16 py-3' : 'h-20 py-5'}
         `}>
-          {/* Left side: Logo */}
+          {/* Left side: Hamburger menu (mobile) + Logo */}
           <div className="flex items-center space-x-2 sm:space-x-4">
+            {/* Hamburger Menu Button - Mobile Only */}
+            {isMobile && user && !isOnboardingPage && onMenuToggle && (
+              <button
+                onClick={onMenuToggle}
+                className="p-2 rounded-lg text-gray-600 hover:text-[#2b6cb0] hover:bg-gray-100 transition-all duration-200 focus-enhanced active:scale-95 touch-target"
+                aria-label="Open menu"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+            )}
             {/* Logo with responsive sizing */}
             <Link 
               to="/" 
@@ -105,12 +116,12 @@ export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false }) => {
                 <div className={`
                   relative bg-gradient-to-br from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] 
                   rounded-full flex items-center justify-center shadow-lg transition-all duration-300
-                  ${isCondensed ? 'w-8 h-8' : 'w-10 h-10 sm:w-12 sm:h-12'}
+                  ${isCondensed ? 'w-8 h-8' : isMobile ? 'w-8 h-8' : 'w-10 h-10 sm:w-12 sm:h-12'}
                   hover:shadow-xl hover:scale-110 group
                 `}>
                   <Stethoscope className={`
                     text-white transition-all duration-300 group-hover:rotate-12
-                    ${isCondensed ? 'w-4 h-4' : 'w-5 h-5 sm:w-6 sm:h-6'}
+                    ${isCondensed ? 'w-4 h-4' : isMobile ? 'w-4 h-4' : 'w-5 h-5 sm:w-6 sm:h-6'}
                   `} />
                   {/* Subtle Glow Effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#63b3ed] rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm scale-110"></div>
@@ -119,27 +130,27 @@ export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false }) => {
                 {/* Enhanced Typography */}
                 <div className={`
                   ml-3 flex flex-col transition-all duration-300
-                  ${isCondensed ? 'opacity-0 w-0 overflow-hidden ml-0' : ''}
+                  ${isCondensed ? 'opacity-0 w-0 overflow-hidden ml-0' : isMobile ? 'ml-2' : ''}
                 `}>
                   <div className="flex items-baseline space-x-1">
                     <span className={`
                       font-bold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] 
                       dark:from-[#63b3ed] dark:via-[#2b6cb0] dark:to-[#90cdf4] 
                       bg-clip-text text-transparent transition-all duration-200
-                      ${isCondensed ? 'text-base' : 'text-lg sm:text-xl lg:text-2xl'}
+                      ${isCondensed ? 'text-base' : isMobile ? 'text-sm' : 'text-lg sm:text-xl lg:text-2xl'}
                     `}>
                       MediMind
                     </span>
                     <span className={`
                       font-medium text-[#2b6cb0] dark:text-[#63b3ed] transition-all duration-200
-                      ${isCondensed ? 'text-sm' : 'text-sm sm:text-base lg:text-lg'}
+                      ${isCondensed ? 'text-sm' : isMobile ? 'text-xs' : 'text-sm sm:text-base lg:text-lg'}
                     `}>
                       Expert
                     </span>
                   </div>
                   <span className={`
                     text-gray-500 dark:text-gray-400 font-medium tracking-wide transition-all duration-200
-                    ${isCondensed ? 'hidden' : 'text-xs hidden xs:block'}
+                    ${isCondensed ? 'hidden' : isMobile ? 'hidden' : 'text-xs hidden xs:block'}
                   `}>
                     AI Medical Co-Pilot
                   </span>

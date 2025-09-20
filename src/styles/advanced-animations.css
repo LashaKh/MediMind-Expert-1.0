@@ -401,24 +401,55 @@
 }
 
 /* Custom scrollbar styles for Case Library */
+.case-library-scrollbar {
+  /* Firefox scrollbar support */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(43, 108, 176, 0.7) rgba(255, 255, 255, 0.1);
+  /* Ensure proper scrolling behavior */
+  overflow-y: auto !important;
+  max-height: 100%;
+}
+
 .case-library-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
 }
 
 .case-library-scrollbar::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+  border-radius: 12px;
+  margin: 8px 0;
 }
 
 .case-library-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.6), rgba(168, 85, 247, 0.6));
-  border-radius: 10px;
-  border: 2px solid transparent;
+  background: linear-gradient(135deg, rgba(43, 108, 176, 0.7), rgba(99, 179, 237, 0.7));
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
   background-clip: padding-box;
+  transition: all 0.3s ease;
 }
 
 .case-library-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(168, 85, 247, 0.8));
+  background: linear-gradient(135deg, rgba(43, 108, 176, 0.9), rgba(99, 179, 237, 0.9));
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.case-library-scrollbar::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, rgba(43, 108, 176, 1), rgba(99, 179, 237, 1));
+}
+
+/* Enhanced scrollbar for mobile devices */
+@media (max-width: 768px) {
+  .case-library-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .case-library-scrollbar::-webkit-scrollbar-track {
+    margin: 4px 0;
+  }
+  
+  .case-library-scrollbar::-webkit-scrollbar-thumb {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 }
 
 /* Mobile-safe glass effects - no backdrop-filter on mobile */
