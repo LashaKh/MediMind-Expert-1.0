@@ -8,14 +8,18 @@ MediMind Expert is a comprehensive medical AI co-pilot platform for healthcare p
 
 ## Current Branch & Progress
 
-**Branch**: `feature/mediScribe`
-**Recent Progress**:
+**Branch**: `main`
+**Recent Progress** (Updated: 2025-09-21):
 - ✅ Implemented Georgian medical transcription system (MediScribe)
 - ✅ Optimized recording start performance (<200ms with microphone pre-initialization)
 - ✅ Added real-time session management with cross-session isolation
 - ✅ Enhanced UI with medical iconography and responsive design
 - ✅ Completed performance optimizations for instant recording/transcription
 - ✅ Fixed React warnings and optimized component architecture
+- ✅ **NEW**: Added comprehensive Claude Code command automation system
+- ✅ **NEW**: Implemented advanced MCP server configuration with multiple providers
+- ✅ **NEW**: Complete mobile responsiveness audit and optimization for MediScribe
+- ✅ **NEW**: Added unified blue theme across entire application interface
 
 ## MCP Server Configuration
 
@@ -68,14 +72,48 @@ MediMind Expert is a comprehensive medical AI co-pilot platform for healthcare p
 4. **Accessibility Audit**: Navigate → Snapshot → Evaluate → Screenshot for evidence
 
 ### Other Available MCP Servers
-- **Context7**: Library documentation and code patterns
+- **Context7**: Library documentation and code patterns  
 - **Browser Tools**: Alternative browser automation (use Playwright as primary)
 - **Taskmaster AI**: Project management and task tracking
+
+### MCP Configuration Files
+- **`.mcp.json`**: Primary configuration with Supabase and Playwright
+- **`.mcp.json.all-three`**: Extended configuration with additional providers
+- **`.mcp.json.context7-only`**: Context7-specific configuration
+- **`.mcp.json.supabase-only`**: Supabase-only configuration for focused database work
 
 ### MCP Usage Guidelines (from Cursor rules)
 - **Sequential Thinking MCP**: Use for debugging, troubleshooting, complex problem-solving, and detailed project planning. Avoid excessive recursive calls.
 - **Information Gathering**: Use Brave Search, Puppeteer, FireCrawl when troubleshooting or searching documentation. Combine with Sequential Thinking for refined solutions.
 - **Browser Tools**: Requires explicit user confirmation. User must start server and ensure Chromium is running. Disable Puppeteer before use.
+
+## Claude Code Command System
+
+### Available Commands
+- **`/constitution`**: Create or update project constitution with principle inputs
+- **`/implement`**: Execute implementation plan by processing tasks.md
+- **`/plan`**: Generate comprehensive development plans and specifications
+- **`/specify`**: Create detailed technical specifications
+- **`/tasks`**: Manage and track development tasks
+- **`/updateClaude`**: Automatically update CLAUDE.md based on recent changes
+- **`/promptOptimizer`**: Optimize prompts for better AI interactions
+
+### Command Templates & Scripts
+```
+.specify/
+├── memory/constitution.md          # Project governance and principles
+├── scripts/bash/                   # Automation scripts
+│   ├── check-prerequisites.sh      # Environment validation
+│   ├── common.sh                   # Shared utilities
+│   ├── create-new-feature.sh       # Feature scaffolding
+│   ├── setup-plan.sh              # Plan initialization
+│   └── update-agent-context.sh     # Context management
+└── templates/                      # Template files
+    ├── agent-file-template.md
+    ├── plan-template.md
+    ├── spec-template.md
+    └── tasks-template.md
+```
 
 ## Development Commands
 
@@ -328,6 +366,8 @@ liked_search_results, clinical_trials_monitoring
 3. **Safe Areas**: Support notches and home indicators
 4. **Performance**: Optimize for bedside mobile use cases
 5. **Clinical Workflows**: Seamless transition between devices
+6. **Mobile Responsiveness**: Comprehensive viewport testing at 320px, 375px, and 414px breakpoints
+7. **Keyboard Interactions**: Mobile keyboard-aware layout management with viewport height constraints
 
 ### Database Operations
 - Use Supabase MCP for all database interactions
@@ -342,6 +382,32 @@ liked_search_results, clinical_trials_monitoring
 - Ensure WCAG accessibility compliance for medical professionals
 - Mobile-first CSS with Tailwind utilities
 - Comprehensive error handling with `safeAsync` patterns
+
+## Recent Updates (Updated: 2025-09-21)
+
+### Major Infrastructure Changes
+- **Claude Code Command System**: Added comprehensive automation with 7 custom commands for project management, planning, and development workflows
+- **Advanced MCP Configuration**: Multiple MCP server configurations for different development scenarios (all-three, context7-only, supabase-only)
+- **Project Constitution Framework**: Implemented governance and principle management system with automated template synchronization
+
+### UI/UX Improvements
+- **Unified Blue Theme**: Applied comprehensive blue theme integration across all application interfaces including:
+  - AI Copilot chat interface with modern blue styling
+  - Medical calculators with blue-themed components
+  - Georgian transcription interface with medical blue accents
+  - Profile, knowledge base, and authentication pages
+- **Mobile Optimization Completion**: Finalized mobile responsiveness audit with viewport testing at 320px, 375px, and 414px breakpoints
+- **MediScribe Mobile Enhancements**: Fixed textarea keyboard interactions, button positioning, and layout stability
+
+### Development Workflow Enhancements
+- **Command Templates**: Added structured templates for plans, specifications, and task management
+- **Automation Scripts**: Bash scripts for prerequisite checking, feature creation, and agent context updates
+- **Mobile Testing Framework**: Comprehensive Playwright-based mobile testing with screenshot documentation
+
+### Technical Debt Resolution
+- **Mobile Layout Issues**: Resolved keyboard interaction problems in Georgian transcription
+- **Component Architecture**: Optimized React component structure for better maintainability
+- **CSS Organization**: Unified styling approach with theme-consistent component libraries
 
 ## Critical Architecture Patterns
 

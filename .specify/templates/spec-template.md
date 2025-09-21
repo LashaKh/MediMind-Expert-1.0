@@ -48,7 +48,9 @@ When creating this spec from a user prompt:
    - Performance targets and scale
    - Error handling behaviors
    - Integration requirements
-   - Security/compliance needs
+   - Security/compliance needs (especially HIPAA for medical data)
+   - Medical accuracy and evidence-based validation requirements
+   - Mobile interface touch target specifications for clinical use
 
 ---
 

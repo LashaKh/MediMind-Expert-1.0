@@ -47,7 +47,15 @@
 ## Constitution Check
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+**Medical Safety & Compliance**: All medical calculations, algorithms, and clinical data MUST achieve 100% validation before deployment. Evidence-based validation with published medical literature references required.
+
+**Mobile-First Medical Interface**: Touch targets MUST meet 44px minimum for medical professional use. Progressive enhancement from mobile to desktop ensures bedside usability.
+
+**Performance & Reliability**: Recording start times MUST remain under 200ms. Session isolation MUST prevent transcript contamination. Real-time processing with smart auto-segmentation required.
+
+**Security & Privacy**: Row Level Security MUST be enforced on all database tables. Medical data anonymization mandatory in case management. HIPAA-compliant session management required.
+
+**Testing & Validation (TDD Mandatory)**: Tests written → User approved → Tests fail → Then implement. Medical calculator tests must achieve 100% success rate before deployment.
 
 ## Project Structure
 
@@ -209,4 +217,4 @@ ios/ or android/
 - [ ] Complexity deviations documented
 
 ---
-*Based on Constitution v2.1.1 - See `/memory/constitution.md`*
+*Based on Constitution v1.0.0 - See `.specify/memory/constitution.md`*
