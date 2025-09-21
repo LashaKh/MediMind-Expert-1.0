@@ -59,25 +59,9 @@ export const useViewportHeight = () => {
       }
     };
 
-    // Prevent viewport shifting on input focus
-    const preventViewportShift = (e: FocusEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.matches('input, textarea, [contenteditable]')) {
-        // Prevent automatic scrolling
-        e.preventDefault();
-        
-        // Ensure input stays visible without shifting viewport
-        setTimeout(() => {
-          const rect = target.getBoundingClientRect();
-          const viewportHeight = window.visualViewport?.height || window.innerHeight;
-          
-          // Only scroll if input is completely hidden by keyboard
-          if (rect.bottom > viewportHeight - 20) {
-            const scrollTop = window.scrollY + (rect.bottom - viewportHeight + 60);
-            window.scrollTo({ top: scrollTop, behavior: 'smooth' });
-          }
-        }, 100);
-      }
+    // Simple input focus detection
+    const handleInputFocus = () => {
+      setTimeout(updateViewportAndButtons, 150);
     };
 
     // Initialize
@@ -100,7 +84,7 @@ export const useViewportHeight = () => {
     });
 
     // Input focus management
-    document.addEventListener('focusin', preventViewportShift);
+    document.addEventListener('focusin', handleInputFocus);
 
     // Cleanup
     return () => {
@@ -110,7 +94,7 @@ export const useViewportHeight = () => {
       }
       window.removeEventListener('resize', updateViewportAndButtons);
       window.removeEventListener('orientationchange', updateViewportAndButtons);
-      document.removeEventListener('focusin', preventViewportShift);
+      document.removeEventListener('focusin', handleInputFocus);
     };
   }, []);
 };

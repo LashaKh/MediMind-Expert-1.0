@@ -2,24 +2,11 @@
 /* Mobile-first responsive enhancements for screens < 768px */
 /* Desktop view (≥1024px) is completely preserved */
 
-/* Mobile viewport height adaptation with keyboard handling */
+/* Simple Mobile Viewport - Natural Flow */
 @media (max-width: 767px) {
-  html {
+  html, body {
     height: 100%;
     overflow-x: hidden;
-    /* Prevent page bounce */
-    touch-action: manipulation;
-  }
-  
-  body {
-    height: 100%;
-    overflow-x: hidden;
-    /* Stable height that doesn't change with keyboard */
-    min-height: 100vh;
-    min-height: 100dvh;
-    /* Prevent iOS rubber band scrolling */
-    overscroll-behavior: none;
-    /* Prevent font size adjustment */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
@@ -30,8 +17,6 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* Stable positioning */
-    position: relative;
   }
 }
 
@@ -57,37 +42,22 @@
     transform: scale(0.96);
   }
 
-  /* Mobile Header - ALWAYS VISIBLE */
+  /* Mobile Header - Simple approach */
   .mediscribe-mobile-header {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    flex-shrink: 0;
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.3);
     padding-top: env(safe-area-inset-top);
-    /* Ensure it never moves */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    /* Backdrop for iOS */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    z-index: 100;
   }
 
-  /* Mobile Tab Navigation - ALWAYS VISIBLE */
+  /* Mobile Tab Navigation - Simple approach */
   .mediscribe-mobile-tabs {
     gap: 8px;
     padding: 8px 12px;
-    position: sticky;
-    top: 0;
-    z-index: 999;
+    flex-shrink: 0;
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.2);
-    /* Ensure it never moves */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    /* Backdrop for iOS */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
   }
 
   .mediscribe-mobile-tab {
@@ -232,21 +202,22 @@
     }
   }
 
-  /* Mobile Transcript Area - Enhanced for Keyboard Interactions */
+  /* Mobile Transcript Area - ONLY TEXTAREA SCROLLS */
   .mediscribe-mobile-transcript {
     padding: 16px;
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* NO SCROLLING HERE */
   }
 
   .mediscribe-mobile-textarea-container {
-    /* Flexible container that adapts to keyboard */
+    /* Container fills remaining space */
     flex: 1;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    overflow: hidden;
+    overflow: hidden; /* NO SCROLLING HERE */
     position: relative;
   }
 
@@ -255,49 +226,42 @@
     font-size: 16px; /* Prevents zoom on iOS */
     line-height: 1.6;
     border-radius: 16px;
-    /* Fill available space */
+    /* ONLY THIS ELEMENT SCROLLS */
     width: 100%;
-    flex: 1;
-    min-height: 0;
+    height: 100%; /* FILL CONTAINER COMPLETELY */
     resize: none;
-    /* Smooth scrolling */
-    overflow-y: auto;
+    overflow-y: auto; /* ONLY SCROLLING ALLOWED */
     -webkit-overflow-scrolling: touch;
     /* Prevent iOS zoom and viewport shifting */
     touch-action: manipulation;
     -webkit-touch-callout: none;
     -webkit-user-select: text;
     user-select: text;
-    /* Ensure proper keyboard behavior */
     box-sizing: border-box;
-    /* Prevent viewport shifting on focus */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    /* Adaptive height for keyboard */
-    max-height: calc(var(--viewport-height, 100vh) - 200px);
+    /* Hardware acceleration but no transform changes */
+    will-change: scroll-position;
+    /* Ensure it takes exact available space */
+    min-height: 0;
+    max-height: none; /* NO HEIGHT RESTRICTIONS */
   }
 
-  /* When keyboard is open, adjust textarea */
-  .keyboard-open .mediscribe-mobile-textarea {
-    max-height: calc(var(--viewport-height, 100vh) - 120px);
-  }
-
-  /* Mobile Floating Action Button - Always visible */
+  /* Mobile Floating Action Button - DYNAMIC POSITIONING */
   .mediscribe-mobile-fab {
     position: fixed;
-    bottom: 24px;
+    bottom: var(--floating-button-bottom, 24px); /* DYNAMIC FROM JS */
     right: 24px;
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    z-index: 1100; /* Above everything */
-    transition: transform 0.2s ease;
-    /* Ensure button stays visible */
+    z-index: 2100; /* ABOVE EVERYTHING */
+    transition: bottom 0.3s ease, transform 0.2s ease;
+    /* Hardware acceleration */
     transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
+    will-change: bottom, transform;
   }
 
-  /* Simple scale on active */
+  /* Scale on active */
   .mediscribe-mobile-fab:active {
     transform: translate3d(0, 0, 0) scale(0.95);
   }
@@ -452,11 +416,11 @@
     margin-bottom: 16px;
   }
 
-  /* Mobile Main Container - Natural flow */
+  /* Mobile Main Container - Flex layout */
   .mediscribe-mobile-main-container {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    flex: 1;
     min-height: 0;
     overflow: hidden;
   }
@@ -482,26 +446,13 @@
     contain: layout style;
   }
 
+  /* Content area - Allow scrolling in content area */
   .mediscribe-mobile-scrollable-content {
-    /* Scrollable content that adapts to keyboard */
     flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     min-height: 0;
     padding-bottom: 100px; /* Space for floating buttons */
-    /* Smooth scrolling */
-    scroll-behavior: smooth;
-    /* Prevent overscroll */
-    overscroll-behavior: contain;
-    /* Adapt height when keyboard opens */
-    height: var(--viewport-height, 100vh);
-    transition: height 0.3s ease;
-  }
-
-  /* When keyboard is open, adjust content area */
-  .keyboard-open .mediscribe-mobile-scrollable-content {
-    height: calc(var(--viewport-height, 100vh) - 120px);
-    padding-bottom: calc(var(--keyboard-height, 0px) + 120px);
   }
 
   /* Mobile Keyboard Avoidance - Enhanced */
@@ -559,25 +510,26 @@
     justify-content: space-between;
   }
 
-  /* Mobile Floating Upload Button - Always visible */
+  /* Mobile Floating Upload Button - DYNAMIC POSITIONING */
   .mediscribe-mobile-floating-upload {
     position: fixed;
-    bottom: 24px;
+    bottom: var(--floating-button-bottom, 24px); /* DYNAMIC FROM JS */
     left: 24px;
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    z-index: 1100; /* Above everything */
+    z-index: 2100; /* ABOVE EVERYTHING */
     background: linear-gradient(135deg, #1a365d, #2b6cb0);
     box-shadow: 0 8px 24px rgba(26, 54, 93, 0.3);
-    transition: transform 0.2s ease;
+    transition: bottom 0.3s ease, transform 0.2s ease;
     border: 2px solid rgba(255, 255, 255, 0.2);
-    /* Ensure button stays visible */
+    /* Hardware acceleration */
     transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
+    will-change: bottom, transform;
   }
 
-  /* Simple scale on active */
+  /* Scale on active */
   .mediscribe-mobile-floating-upload:active {
     transform: translate3d(0, 0, 0) scale(0.95);
   }
