@@ -2,11 +2,26 @@
 /* Mobile-first responsive enhancements for screens < 768px */
 /* Desktop view (≥1024px) is completely preserved */
 
-/* Simple mobile keyboard adaptation - no complex positioning */
+/* Mobile viewport height adaptation for keyboard */
 @media (max-width: 767px) {
-  /* Only prevent page bounce/scroll when keyboard appears */
+  /* Prevent page bounce and ensure proper viewport height detection */
+  html {
+    height: 100%;
+  }
+  
   body {
+    height: 100vh;
+    height: var(--viewport-height, 100vh);
     overflow-x: hidden;
+    /* Ensure layout reflows when viewport height changes */
+    transition: height 0.3s ease;
+  }
+
+  /* Main app root should fill available space */
+  #root {
+    height: 100vh;
+    height: var(--viewport-height, 100vh);
+    overflow: hidden;
   }
 }
 
@@ -396,13 +411,14 @@
     margin-bottom: 16px;
   }
 
-  /* Mobile Main Container - Simple normal flow */
+  /* Mobile Main Container - Shrinks when keyboard appears */
   .mediscribe-mobile-main-container {
     display: flex;
     flex-direction: column;
-    /* Only use dynamic height when keyboard actually appears */
-    min-height: 100vh;
-    min-height: var(--viewport-height, 100vh);
+    /* Use dynamic height to shrink when keyboard appears */
+    height: 100vh;
+    height: var(--viewport-height, 100vh);
+    overflow: hidden;
   }
 
   /* Legacy layout container - keep for desktop compatibility */
@@ -420,19 +436,19 @@
     flex-direction: column;
     overflow: hidden;
     position: relative;
-    /* For mobile: take full available space in fixed container */
-    height: 100%;
+    /* Ensure content shrinks with container */
+    min-height: 0;
   }
 
   .mediscribe-mobile-scrollable-content {
-    /* Flexible scrollable area that only adapts when viewport actually changes */
+    /* Flexible scrollable area that shrinks when keyboard appears */
     flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     min-height: 0;
     padding-bottom: 80px; /* Space for floating buttons */
-    /* Use viewport height only when it actually changes */
-    max-height: var(--viewport-height, 100vh);
+    /* Critical: take all available space in shrinking container */
+    height: 100%;
   }
 
   /* Mobile Keyboard Avoidance - Enhanced */
