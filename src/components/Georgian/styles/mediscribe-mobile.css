@@ -7,15 +7,22 @@
   /* Prevent page bounce and ensure proper viewport height detection */
   html {
     height: 100%;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
   }
   
   body {
-    height: 100vh;
-    height: 100dvh; /* Dynamic viewport height - automatically adapts to keyboard */
-    height: var(--viewport-height, 100vh);
-    overflow-x: hidden;
-    /* Ensure layout reflows when viewport height changes */
-    transition: height 0.3s ease;
+    height: 100%;
+    height: var(--initial-height, 100vh);
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    /* Prevent viewport shifting */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Force layout when keyboard is detected */
@@ -25,16 +32,17 @@
 
   /* Main app root should fill available space */
   #root {
-    height: 100vh;
-    height: 100dvh; /* Dynamic viewport height - automatically adapts to keyboard */
-    height: var(--viewport-height, 100vh);
+    height: 100%;
+    width: 100%;
     overflow: hidden;
-    transition: height 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
   /* Force root layout when keyboard is detected */
   body.keyboard-open #root {
-    height: var(--viewport-height, 100vh) !important;
+    height: 100% !important;
   }
 }
 
@@ -60,21 +68,44 @@
     transform: scale(0.96);
   }
 
-  /* Mobile Header - Normal flow, no special positioning */
+  /* Mobile Header - Fixed positioning to stay visible */
   .mediscribe-mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1100;
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.3);
+    /* Add safe area for notches */
+    padding-top: env(safe-area-inset-top);
+    /* Prevent shifting */
+    transform: translateZ(0);
+    will-change: transform;
+    /* Standard height */
+    height: 64px;
+    display: flex;
+    align-items: center;
   }
 
   /* Mobile Tab Navigation Optimizations - Blue Theme */
   .mediscribe-mobile-tabs {
     gap: 8px;
     padding: 8px 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    position: fixed;
+    top: 64px; /* Below header */
+    top: calc(64px + env(safe-area-inset-top));
+    left: 0;
+    right: 0;
+    z-index: 1000;
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.2);
+    /* Prevent shifting */
+    transform: translateZ(0);
+    will-change: transform;
+    /* Add backdrop blur for premium feel */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .mediscribe-mobile-tab {
@@ -222,17 +253,19 @@
   /* Mobile Transcript Area - Enhanced for Keyboard Interactions */
   .mediscribe-mobile-transcript {
     padding: 16px;
-    min-height: 200px;
-    /* Allow content to expand naturally without fixed height */
-    height: auto;
-    max-height: none;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .mediscribe-mobile-textarea-container {
-    /* Allow container to be flexible for mobile keyboard */
-    overflow: visible;
-    min-height: 200px;
-    height: auto;
+    /* Flexible container that adapts to keyboard */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
   }
 
   .mediscribe-mobile-textarea {
@@ -240,38 +273,44 @@
     font-size: 16px; /* Prevents zoom on iOS */
     line-height: 1.6;
     border-radius: 16px;
-    /* Flexible height that adapts to available space */
+    /* Fill available space */
     width: 100%;
-    height: 100%;
-    min-height: 150px;
-    /* Use dynamic viewport height from JavaScript hook */
-    max-height: calc(var(--viewport-height, 100vh) - 300px);
-    resize: none; /* Disable manual resize on mobile */
+    flex: 1;
+    min-height: 0;
+    resize: none;
     /* Smooth scrolling */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    /* Prevent iOS zoom on focus */
+    touch-action: manipulation;
     /* Ensure proper keyboard behavior */
     box-sizing: border-box;
-    /* Smooth transition when keyboard appears */
-    transition: max-height 0.3s ease;
+  }
+  
+  /* When keyboard is open, adjust textarea height */
+  .keyboard-open .mediscribe-mobile-textarea {
+    max-height: calc(var(--viewport-height, 100vh) - 200px);
   }
 
-  /* Mobile Floating Action Button - Simple positioning */
+  /* Mobile Floating Action Button - Dynamic positioning */
   .mediscribe-mobile-fab {
     position: fixed;
-    bottom: 24px;
+    bottom: var(--button-bottom-offset, 24px);
     right: 24px;
     width: 64px;
     height: 64px;
     border-radius: 50%;
     z-index: 1001;
-    transition: all 0.3s ease;
+    transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease;
+    /* Ensure button stays above keyboard */
+    transform: translateZ(0);
+    will-change: bottom, transform;
   }
 
-  /* Only move when keyboard is actually detected by JavaScript */
-  .mediscribe-mobile-fab.keyboard-visible {
-    bottom: calc(var(--viewport-height, 100vh) - 80px);
-    transform: scale(0.9);
+  /* Keyboard state handled by CSS variables from JS */
+  .keyboard-visible .mediscribe-mobile-fab {
+    /* Bottom position is set by JS via --button-bottom-offset */
+    transform: scale(0.95);
   }
 
   .mediscribe-mobile-fab:active {
@@ -424,51 +463,54 @@
     margin-bottom: 16px;
   }
 
-  /* Mobile Main Container - Shrinks when keyboard appears */
+  /* Mobile Main Container - Fixed layout system */
   .mediscribe-mobile-main-container {
     display: flex;
     flex-direction: column;
-    /* Use dynamic height to shrink when keyboard appears */
-    height: 100vh;
-    height: 100dvh; /* Dynamic viewport height - automatically adapts to keyboard */
-    height: var(--viewport-height, 100vh);
+    height: 100%;
+    position: relative;
     overflow: hidden;
-    transition: height 0.3s ease;
+    /* Account for fixed header and tabs */
+    padding-top: calc(64px + 60px + env(safe-area-inset-top));
   }
 
-  /* Force container adaptation when keyboard opens */
-  body.keyboard-open .mediscribe-mobile-main-container {
-    height: var(--viewport-height, 100vh) !important;
+  /* Adjust padding when keyboard is open */
+  .keyboard-open .mediscribe-mobile-main-container {
+    /* Content area shrinks naturally with flexbox */
   }
 
-  /* Legacy layout container - keep for desktop compatibility */
+  /* Layout container for proper structure */
   .mediscribe-mobile-layout-container {
     display: flex;
     flex-direction: column;
     height: 100%;
     min-height: 0;
+    position: relative;
   }
 
   .mediscribe-mobile-content-area {
-    /* Flexible content that shrinks when keyboard appears */
+    /* Flexible content area */
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     position: relative;
-    /* Ensure content shrinks with container */
     min-height: 0;
+    /* Ensure proper containment */
+    contain: layout style;
   }
 
   .mediscribe-mobile-scrollable-content {
-    /* Flexible scrollable area that shrinks when keyboard appears */
+    /* Scrollable content that adapts to available space */
     flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     min-height: 0;
-    padding-bottom: 80px; /* Space for floating buttons */
-    /* Critical: take all available space in shrinking container */
-    height: 100%;
+    padding-bottom: 100px; /* Space for floating buttons */
+    /* Smooth scrolling */
+    scroll-behavior: smooth;
+    /* Prevent overscroll */
+    overscroll-behavior: contain;
   }
 
   /* Mobile Keyboard Avoidance - Enhanced */
@@ -526,10 +568,10 @@
     justify-content: space-between;
   }
 
-  /* Mobile Floating Upload Button - Simple positioning */
+  /* Mobile Floating Upload Button - Dynamic positioning */
   .mediscribe-mobile-floating-upload {
     position: fixed;
-    bottom: 24px;
+    bottom: var(--button-bottom-offset, 24px);
     left: 24px;
     width: 56px;
     height: 56px;
@@ -537,14 +579,17 @@
     z-index: 1001;
     background: linear-gradient(135deg, #1a365d, #2b6cb0);
     box-shadow: 0 8px 24px rgba(26, 54, 93, 0.3);
-    transition: all 0.3s ease;
+    transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease;
     border: 2px solid rgba(255, 255, 255, 0.2);
+    /* Ensure button stays above keyboard */
+    transform: translateZ(0);
+    will-change: bottom, transform;
   }
 
-  /* Only move when keyboard is actually detected by JavaScript */
-  .mediscribe-mobile-floating-upload.keyboard-visible {
-    bottom: calc(var(--viewport-height, 100vh) - 80px);
-    transform: scale(0.9);
+  /* Keyboard state handled by CSS variables from JS */
+  .keyboard-visible .mediscribe-mobile-floating-upload {
+    /* Bottom position is set by JS via --button-bottom-offset */
+    transform: scale(0.95);
   }
 
   .mediscribe-mobile-floating-upload:not(:disabled):hover {

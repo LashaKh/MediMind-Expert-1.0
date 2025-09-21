@@ -232,8 +232,33 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                     dir="auto"
                     style={{ 
                       background: 'transparent',
-                      fontSize: '16px' // Prevents zoom on iOS
+                      fontSize: '16px', // Prevents zoom on iOS
+                      WebkitTextSizeAdjust: '100%', // Prevent text size adjustment
+                      textSizeAdjust: '100%'
                     }}
+                    // Prevent viewport jumping on focus
+                    onFocus={(e) => {
+                      // Prevent default zoom behavior on iOS
+                      e.currentTarget.style.fontSize = '16px';
+                      // Ensure textarea stays in view
+                      setTimeout(() => {
+                        e.currentTarget.scrollIntoView({ 
+                          behavior: 'smooth', 
+                          block: 'center',
+                          inline: 'nearest'
+                        });
+                      }, 100);
+                    }}
+                    onBlur={(e) => {
+                      // Reset any focus styles
+                      e.currentTarget.style.fontSize = '16px';
+                    }}
+                    // Improve mobile input experience
+                    autoComplete="off"
+                    autoCorrect="on"
+                    autoCapitalize="sentences"
+                    spellCheck="true"
+                    inputMode="text"
                   />
                   
                   {/* Modern Scroll Indicator - Preserve BLUE theme for history icons */}

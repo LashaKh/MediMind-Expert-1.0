@@ -686,7 +686,7 @@ export const GeorgianSTTApp: React.FC = () => {
   // Browser support is checked in GeorgianSTTAppWrapper
 
   return (
-    <div className="h-screen transcription-bg overflow-hidden">
+    <div className="h-screen transcription-bg overflow-hidden relative">
       {/* Desktop Header - Hidden on Mobile */}
       <div className="hidden lg:block">
         <HeaderControls 
@@ -705,14 +705,16 @@ export const GeorgianSTTApp: React.FC = () => {
         />
       </div>
 
-      {/* Mobile Header - Only on Mobile */}
-      <MobileHeader
-        authStatus={authStatus}
-        recordingState={recordingState}
-        processing={processing}
-        onOpenMobileSessions={openMobileDrawer}
-        sessionsCount={sessions.length}
-      />
+      {/* Mobile Header - Fixed on Mobile */}
+      <div className="lg:hidden mediscribe-mobile-header">
+        <MobileHeader
+          authStatus={authStatus}
+          recordingState={recordingState}
+          processing={processing}
+          onOpenMobileSessions={openMobileDrawer}
+          sessionsCount={sessions.length}
+        />
+      </div>
 
       {/* Mobile-First Responsive Layout */}
       <div className="flex flex-col mediscribe-mobile-layout-container mediscribe-mobile-main-container lg:h-[calc(100vh-64px)]">

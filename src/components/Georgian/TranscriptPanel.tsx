@@ -489,24 +489,26 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         formatTime={formatTime}
       />
 
-      {/* Tab Navigation */}
-      <TabNavigation
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-        hasTranscript={hasTranscript}
-        canRecord={canRecord}
-        canStop={canStop}
-        isRecording={recordingState.isRecording}
-        onStartRecording={onStartRecording}
-        onStopRecording={onStopRecording}
-        isHistoryOpen={isHistoryOpen}
-        onToggleHistory={onToggleHistory}
-        sessionCount={sessionCount}
-        onFileUpload={onFileUpload}
-      />
+      {/* Tab Navigation - Fixed on mobile */}
+      <div className="lg:static mediscribe-mobile-tabs">
+        <TabNavigation
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          hasTranscript={hasTranscript}
+          canRecord={canRecord}
+          canStop={canStop}
+          isRecording={recordingState.isRecording}
+          onStartRecording={onStartRecording}
+          onStopRecording={onStopRecording}
+          isHistoryOpen={isHistoryOpen}
+          onToggleHistory={onToggleHistory}
+          sessionCount={sessionCount}
+          onFileUpload={onFileUpload}
+        />
+      </div>
 
-      {/* Content Area */}
-      <div className="flex-1 min-h-0 mediscribe-mobile-scrollable-content mediscribe-mobile-keyboard-padding">
+      {/* Content Area - Adaptive height */}
+      <div className="flex-1 min-h-0 mediscribe-mobile-scrollable-content overflow-hidden">
         {renderContent()}
       </div>
 
