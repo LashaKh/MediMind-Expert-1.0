@@ -191,43 +191,6 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
           
           {/* Premium Text Area */}
           <div className="flex-1 relative mediscribe-mobile-textarea-container">
-            {/* Upload Button - positioned at bottom left of textarea */}
-            {onFileUpload && (
-              <button
-                onClick={handleFileUploadClick}
-                disabled={recordingState.isRecording}
-                title={recordingState.isRecording ? "Cannot upload files during recording" : "Upload an audio file for transcription"}
-                className={`
-                  lg:hidden mediscribe-mobile-floating-upload
-                  flex items-center justify-center
-                  ${recordingState.isRecording ? 'opacity-50 cursor-not-allowed' : ''}
-                `}
-              >
-                <Upload className="w-6 h-6 text-white" />
-              </button>
-            )}
-            
-            {/* Record Button - positioned at bottom right of textarea */}
-            <button
-              onClick={() => {
-                if (recordingState.isRecording) {
-                  onStopRecording && onStopRecording();
-                } else {
-                  onStartRecording && onStartRecording();
-                }
-              }}
-              disabled={recordingState.isRecording ? !canStop : !canRecord}
-              className="lg:hidden mediscribe-mobile-fab flex items-center justify-center"
-              title={recordingState.isRecording ? "Stop recording" : "Start recording"}
-            >
-              {recordingState.isProcessingChunks ? (
-                <Loader2 className="w-6 h-6 text-white animate-spin" />
-              ) : recordingState.isRecording ? (
-                <Square className="w-6 h-6 text-white" />
-              ) : (
-                <Mic className="w-6 h-6 text-white" />
-              )}
-            </button>
             
             <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl sm:rounded-2xl lg:rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden mediscribe-mobile-transcript">
               
@@ -307,6 +270,49 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                 </div>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Mobile Button Footer - below textarea */}
+        <div className="lg:hidden mediscribe-mobile-button-footer">
+          <div className="flex justify-between items-center">
+            {/* Upload Button */}
+            {onFileUpload && (
+              <button
+                onClick={handleFileUploadClick}
+                disabled={recordingState.isRecording}
+                title={recordingState.isRecording ? "Cannot upload files during recording" : "Upload an audio file for transcription"}
+                className={`
+                  mediscribe-mobile-footer-button
+                  flex items-center justify-center
+                  ${recordingState.isRecording ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
+              >
+                <Upload className="w-6 h-6 text-white" />
+              </button>
+            )}
+            
+            {/* Record Button */}
+            <button
+              onClick={() => {
+                if (recordingState.isRecording) {
+                  onStopRecording && onStopRecording();
+                } else {
+                  onStartRecording && onStartRecording();
+                }
+              }}
+              disabled={recordingState.isRecording ? !canStop : !canRecord}
+              className="mediscribe-mobile-footer-button flex items-center justify-center"
+              title={recordingState.isRecording ? "Stop recording" : "Start recording"}
+            >
+              {recordingState.isProcessingChunks ? (
+                <Loader2 className="w-6 h-6 text-white animate-spin" />
+              ) : recordingState.isRecording ? (
+                <Square className="w-6 h-6 text-white" />
+              ) : (
+                <Mic className="w-6 h-6 text-white" />
+              )}
+            </button>
           </div>
         </div>
 

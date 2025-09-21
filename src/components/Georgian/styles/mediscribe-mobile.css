@@ -522,15 +522,19 @@
     justify-content: space-between;
   }
 
-  /* Mobile Upload Button - FIXED TO TEXTAREA BOTTOM */
-  .mediscribe-mobile-floating-upload {
-    position: absolute;
-    bottom: 20px; /* Fixed distance from textarea bottom */
-    left: 20px;
+  /* Mobile Button Footer - below textarea */
+  .mediscribe-mobile-button-footer {
+    padding: 16px 20px;
+    background: white;
+    border-top: 1px solid rgba(144, 205, 244, 0.3);
+    margin-top: 8px;
+  }
+  
+  /* Mobile Footer Buttons */
+  .mediscribe-mobile-footer-button {
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    z-index: 10; /* Above textarea content */
     background: linear-gradient(135deg, #1a365d, #2b6cb0);
     box-shadow: 0 8px 24px rgba(26, 54, 93, 0.3);
     transition: transform 0.2s ease;
@@ -540,9 +544,20 @@
     -webkit-transform: translate3d(0, 0, 0);
   }
 
-  /* Scale on active */
-  .mediscribe-mobile-floating-upload:active {
+  /* Footer Button Active States */
+  .mediscribe-mobile-footer-button:active {
     transform: translate3d(0, 0, 0) scale(0.95);
+  }
+  
+  .mediscribe-mobile-footer-button:not(:disabled):hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(26, 54, 93, 0.4);
+  }
+  
+  .mediscribe-mobile-footer-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: scale(0.9);
   }
 
   .mediscribe-mobile-floating-upload:not(:disabled):hover {
