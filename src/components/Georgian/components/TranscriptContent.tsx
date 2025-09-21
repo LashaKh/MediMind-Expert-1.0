@@ -209,17 +209,23 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             
             {/* Record Button - positioned at bottom right of textarea */}
             <button
-              onClick={onStartRecording || (() => console.log('Record button clicked'))}
+              onClick={() => {
+                if (recordingState.isRecording) {
+                  onStopRecording && onStopRecording();
+                } else {
+                  onStartRecording && onStartRecording();
+                }
+              }}
               disabled={recordingState.isRecording ? !canStop : !canRecord}
               className="lg:hidden mediscribe-mobile-fab flex items-center justify-center"
               title={recordingState.isRecording ? "Stop recording" : "Start recording"}
             >
               {recordingState.isProcessingChunks ? (
-                <Loader2 className="w-8 h-8 text-white animate-spin" />
+                <Loader2 className="w-6 h-6 text-white animate-spin" />
               ) : recordingState.isRecording ? (
-                <Square className="w-8 h-8 text-white" />
+                <Square className="w-6 h-6 text-white" />
               ) : (
-                <Mic className="w-8 h-8 text-white" />
+                <Mic className="w-6 h-6 text-white" />
               )}
             </button>
             

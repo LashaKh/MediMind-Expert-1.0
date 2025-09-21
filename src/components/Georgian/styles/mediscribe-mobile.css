@@ -259,8 +259,8 @@
     position: absolute !important; /* Override fixed positioning */
     bottom: 20px; /* Fixed distance from textarea bottom */
     right: 20px;
-    width: 64px;
-    height: 64px;
+    width: 56px; /* Same size as upload button */
+    height: 56px; /* Same size as upload button */
     border-radius: 50%;
     z-index: 10; /* Above textarea content */
     transition: transform 0.2s ease;
