@@ -482,7 +482,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-900 relative overflow-hidden mediscribe-mobile-safe-bottom">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-900 relative mediscribe-mobile-content-area mediscribe-mobile-safe-bottom">
       {/* Recording Status Indicators */}
       <RecordingStatusIndicator 
         recordingState={recordingState}
@@ -506,7 +506,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       />
 
       {/* Content Area */}
-      <div className="flex-1 min-h-0 overflow-hidden mediscribe-mobile-keyboard-padding">
+      <div className="flex-1 min-h-0 mediscribe-mobile-scrollable-content mediscribe-mobile-keyboard-padding">
         {renderContent()}
       </div>
 

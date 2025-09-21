@@ -156,10 +156,20 @@
     }
   }
 
-  /* Mobile Transcript Area - Blue Theme */
+  /* Mobile Transcript Area - Enhanced for Keyboard Interactions */
   .mediscribe-mobile-transcript {
     padding: 16px;
     min-height: 200px;
+    /* Allow content to expand naturally without fixed height */
+    height: auto;
+    max-height: none;
+  }
+
+  .mediscribe-mobile-textarea-container {
+    /* Allow container to be flexible for mobile keyboard */
+    overflow: visible;
+    min-height: 200px;
+    height: auto;
   }
 
   .mediscribe-mobile-textarea {
@@ -167,9 +177,17 @@
     font-size: 16px; /* Prevents zoom on iOS */
     line-height: 1.6;
     border-radius: 16px;
+    /* Flexible height management for mobile keyboard */
+    min-height: 200px;
+    height: auto;
+    max-height: calc(100vh - 300px); /* Allow space for keyboard */
+    resize: vertical;
+    /* Ensure proper scrolling behavior */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* Mobile Floating Action Button - Updated for Blue Theme */
+  /* Mobile Floating Action Button - Keyboard-Aware Positioning */
   .mediscribe-mobile-fab {
     position: fixed;
     bottom: 24px;
@@ -179,6 +197,8 @@
     border-radius: 50%;
     z-index: 1000;
     transition: all 0.3s ease;
+    /* Adjust position when mobile keyboard appears */
+    bottom: calc(24px + env(keyboard-inset-height, 0px));
   }
 
   .mediscribe-mobile-fab:active {
@@ -331,9 +351,37 @@
     margin-bottom: 16px;
   }
 
-  /* Mobile Keyboard Avoidance */
+  /* Enhanced Mobile Keyboard-Aware Layout */
+  .mediscribe-mobile-layout-container {
+    /* Use dynamic viewport height for better mobile support */
+    height: calc(100dvh - 48px);
+    /* Fallback for older browsers */
+    height: calc(100vh - 48px);
+    /* JavaScript-based viewport height for maximum compatibility */
+    height: calc(var(--viewport-height, 100vh) - 48px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mediscribe-mobile-content-area {
+    /* Allow content to scroll when keyboard appears */
+    overflow: visible;
+  }
+
+  .mediscribe-mobile-scrollable-content {
+    /* Enable smooth scrolling for content area */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Maintain minimum height while allowing expansion */
+    min-height: 0;
+  }
+
+  /* Mobile Keyboard Avoidance - Enhanced */
   .mediscribe-mobile-keyboard-padding {
-    padding-bottom: env(keyboard-inset-height, 0);
+    /* Use keyboard-inset-height for modern browsers */
+    padding-bottom: env(keyboard-inset-height, 0px);
+    /* Smooth transition when keyboard appears/disappears */
+    transition: padding-bottom 0.3s ease;
   }
 
   /* Mobile Safe Area Support */
@@ -383,7 +431,7 @@
     justify-content: space-between;
   }
 
-  /* Mobile Floating Upload Button */
+  /* Mobile Floating Upload Button - Keyboard-Aware */
   .mediscribe-mobile-floating-upload {
     position: fixed;
     bottom: 24px; /* Same level as record button */
@@ -396,6 +444,8 @@
     box-shadow: 0 8px 24px rgba(26, 54, 93, 0.3);
     transition: all 0.3s ease;
     border: 2px solid rgba(255, 255, 255, 0.2);
+    /* Adjust position when mobile keyboard appears */
+    bottom: calc(24px + env(keyboard-inset-height, 0px));
   }
 
   .mediscribe-mobile-floating-upload:not(:disabled):hover {

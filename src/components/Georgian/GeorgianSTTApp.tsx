@@ -24,6 +24,7 @@ import { useAIProcessing } from '../../hooks/useAIProcessing';
 import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
 import { useAudioFileUpload } from '../../hooks/useAudioFileUpload';
 import { useAuth } from '../../stores/useAppStore';
+import { useViewportHeight } from '../../hooks/useViewportHeight';
 import { isDiagnosisTemplate, extractDiagnosisFromInstruction, generateDiagnosisReport } from '../../services/diagnosisFlowiseService';
 import { supabase } from '../../lib/supabase';
 
@@ -46,6 +47,7 @@ interface ProcessingHistory {
 
 export const GeorgianSTTApp: React.FC = () => {
   useAuth(); // Authentication hook
+  useViewportHeight(); // Mobile viewport height management
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredSessions, setFilteredSessions] = useState<GeorgianSession[]>([]);
   // Mobile drawer state management
@@ -713,7 +715,7 @@ export const GeorgianSTTApp: React.FC = () => {
       />
 
       {/* Mobile-First Responsive Layout */}
-      <div className="flex flex-col h-[calc(100vh-48px)] lg:h-[calc(100vh-64px)]">
+      <div className="flex flex-col mediscribe-mobile-layout-container lg:h-[calc(100vh-64px)]">
         
         {/* Medical Session History Drawer */}
         <MedicalDrawer

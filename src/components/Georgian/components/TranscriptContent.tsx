@@ -194,7 +194,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
 
           
           {/* Premium Text Area */}
-          <div className="flex-1 relative overflow-hidden">
+          <div className="flex-1 relative mediscribe-mobile-textarea-container">
             <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl sm:rounded-2xl lg:rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden mediscribe-mobile-transcript">
               
               {/* Conditional Content Display */}
@@ -227,7 +227,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                   <textarea
                     value={transcript}
                     onChange={(e) => onEditChange(e.target.value)}
-                    className="transcription-textarea w-full h-full resize-none border-0 px-5 py-5 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed overflow-y-auto mediscribe-mobile-textarea"
+                    className="transcription-textarea w-full resize-none border-0 px-5 py-5 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed mediscribe-mobile-textarea"
                     placeholder={`Your medical transcript will appear here with real-time precision${enableSpeakerDiarization ? ' with speaker separation for doctor-patient conversations' : ''}. You can edit this text at any time...`}
                     dir="auto"
                     style={{ 
