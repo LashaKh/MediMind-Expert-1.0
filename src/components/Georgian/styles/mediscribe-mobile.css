@@ -2,6 +2,14 @@
 /* Mobile-first responsive enhancements for screens < 768px */
 /* Desktop view (≥1024px) is completely preserved */
 
+/* Simple mobile keyboard adaptation - no complex positioning */
+@media (max-width: 767px) {
+  /* Only prevent page bounce/scroll when keyboard appears */
+  body {
+    overflow-x: hidden;
+  }
+}
+
 /* Mobile Touch Target Enhancements */
 @media (max-width: 767px) {
   /* Minimum 48px touch targets for mobile medical professionals */
@@ -24,12 +32,10 @@
     transform: scale(0.96);
   }
 
-  /* Fixed Mobile Header and Navigation */
+  /* Mobile Header - Normal flow, no special positioning */
   .mediscribe-mobile-header {
-    position: static; /* Use normal flow positioning */
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.3);
-    /* Ensure it doesn't interfere with desktop layout */
   }
 
   /* Mobile Tab Navigation Optimizations - Blue Theme */
@@ -222,7 +228,7 @@
     transition: max-height 0.3s ease;
   }
 
-  /* Mobile Floating Action Button - Always Above Keyboard */
+  /* Mobile Floating Action Button - Simple positioning */
   .mediscribe-mobile-fab {
     position: fixed;
     bottom: 24px;
@@ -230,18 +236,14 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    z-index: 1001; /* Above other elements */
+    z-index: 1001;
     transition: all 0.3s ease;
-    /* Use dynamic viewport height for keyboard avoidance */
-    bottom: calc(var(--viewport-height, 100vh) - 100vh + 24px);
-    bottom: max(24px, calc(var(--viewport-height, 100vh) - 100vh + 24px));
   }
 
-  /* Keyboard visible state - dynamically applied by JavaScript */
+  /* Only move when keyboard is actually detected by JavaScript */
   .mediscribe-mobile-fab.keyboard-visible {
-    /* Position relative to the reduced viewport when keyboard is visible */
-    bottom: calc(var(--viewport-height, 100vh) * 0.5 - 32px);
-    transform: scale(0.9); /* Slightly smaller when keyboard is visible */
+    bottom: calc(var(--viewport-height, 100vh) - 80px);
+    transform: scale(0.9);
   }
 
   .mediscribe-mobile-fab:active {
@@ -394,9 +396,17 @@
     margin-bottom: 16px;
   }
 
-  /* Fixed Mobile Layout - Keyboard Aware */
+  /* Mobile Main Container - Simple normal flow */
+  .mediscribe-mobile-main-container {
+    display: flex;
+    flex-direction: column;
+    /* Only use dynamic height when keyboard actually appears */
+    min-height: 100vh;
+    min-height: var(--viewport-height, 100vh);
+  }
+
+  /* Legacy layout container - keep for desktop compatibility */
   .mediscribe-mobile-layout-container {
-    /* Normal container with flexible height */
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -410,17 +420,19 @@
     flex-direction: column;
     overflow: hidden;
     position: relative;
+    /* For mobile: take full available space in fixed container */
+    height: 100%;
   }
 
   .mediscribe-mobile-scrollable-content {
-    /* Flexible scrollable area that adapts to available space */
+    /* Flexible scrollable area that only adapts when viewport actually changes */
     flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     min-height: 0;
     padding-bottom: 80px; /* Space for floating buttons */
-    /* Use dynamic viewport height to handle keyboard properly */
-    max-height: calc(var(--viewport-height, 100vh) - 200px);
+    /* Use viewport height only when it actually changes */
+    max-height: var(--viewport-height, 100vh);
   }
 
   /* Mobile Keyboard Avoidance - Enhanced */
@@ -478,29 +490,25 @@
     justify-content: space-between;
   }
 
-  /* Mobile Floating Upload Button - Always Above Keyboard */
+  /* Mobile Floating Upload Button - Simple positioning */
   .mediscribe-mobile-floating-upload {
     position: fixed;
-    bottom: 24px; /* Same level as record button */
-    left: 24px; /* Left side */
+    bottom: 24px;
+    left: 24px;
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    z-index: 1001; /* Above keyboard and other elements */
+    z-index: 1001;
     background: linear-gradient(135deg, #1a365d, #2b6cb0);
     box-shadow: 0 8px 24px rgba(26, 54, 93, 0.3);
     transition: all 0.3s ease;
     border: 2px solid rgba(255, 255, 255, 0.2);
-    /* Use dynamic viewport height for keyboard avoidance */
-    bottom: calc(var(--viewport-height, 100vh) - 100vh + 24px);
-    bottom: max(24px, calc(var(--viewport-height, 100vh) - 100vh + 24px));
   }
 
-  /* Keyboard visible state for upload button */
+  /* Only move when keyboard is actually detected by JavaScript */
   .mediscribe-mobile-floating-upload.keyboard-visible {
-    /* Position relative to the reduced viewport when keyboard is visible */
-    bottom: calc(var(--viewport-height, 100vh) * 0.5 - 28px);
-    transform: scale(0.9); /* Slightly smaller when keyboard is visible */
+    bottom: calc(var(--viewport-height, 100vh) - 80px);
+    transform: scale(0.9);
   }
 
   .mediscribe-mobile-floating-upload:not(:disabled):hover {

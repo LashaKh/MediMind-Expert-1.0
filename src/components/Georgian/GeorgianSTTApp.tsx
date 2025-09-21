@@ -715,7 +715,7 @@ export const GeorgianSTTApp: React.FC = () => {
       />
 
       {/* Mobile-First Responsive Layout */}
-      <div className="flex flex-col mediscribe-mobile-layout-container lg:h-[calc(100vh-64px)]">
+      <div className="flex flex-col mediscribe-mobile-layout-container mediscribe-mobile-main-container lg:h-[calc(100vh-64px)]">
         
         {/* Medical Session History Drawer */}
         <MedicalDrawer
