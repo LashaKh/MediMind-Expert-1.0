@@ -26,16 +26,9 @@
 
   /* Fixed Mobile Header and Navigation */
   .mediscribe-mobile-header {
-    position: fixed;
-    top: 0; /* Start from very top */
-    left: 0;
-    right: 0;
-    z-index: 1000;
+    position: static; /* Use normal flow positioning */
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.3);
-    backdrop-filter: blur(10px);
-    /* Add safe area support for notched devices */
-    padding-top: env(safe-area-inset-top);
     /* Ensure it doesn't interfere with desktop layout */
   }
 
@@ -403,15 +396,11 @@
 
   /* Fixed Mobile Layout - Keyboard Aware */
   .mediscribe-mobile-layout-container {
-    /* Fixed viewport system for mobile keyboard stability */
-    position: static; /* Use static positioning instead of fixed */
+    /* Normal container with flexible height */
     display: flex;
     flex-direction: column;
-    /* Use dynamic viewport height from JavaScript hook */
-    min-height: calc(var(--viewport-height, 100vh) - 140px);
-    height: auto;
-    /* Smooth transition when keyboard appears */
-    transition: min-height 0.3s ease;
+    height: 100%;
+    min-height: 0;
   }
 
   .mediscribe-mobile-content-area {
@@ -421,8 +410,6 @@
     flex-direction: column;
     overflow: hidden;
     position: relative;
-    /* Add top margin to account for fixed tab navigation */
-    margin-top: 140px;
   }
 
   .mediscribe-mobile-scrollable-content {
@@ -432,6 +419,8 @@
     -webkit-overflow-scrolling: touch;
     min-height: 0;
     padding-bottom: 80px; /* Space for floating buttons */
+    /* Use dynamic viewport height to handle keyboard properly */
+    max-height: calc(var(--viewport-height, 100vh) - 200px);
   }
 
   /* Mobile Keyboard Avoidance - Enhanced */
