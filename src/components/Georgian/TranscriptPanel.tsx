@@ -489,8 +489,8 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         formatTime={formatTime}
       />
 
-      {/* Tab Navigation - Sticky on mobile */}
-      <div className="mediscribe-mobile-tabs lg:static">
+      {/* Tab Navigation */}
+      <div className="mediscribe-mobile-tabs">
         <TabNavigation
           activeTab={activeTab}
           onTabChange={handleTabChange}

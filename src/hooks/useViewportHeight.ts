@@ -1,146 +1,116 @@
 import { useEffect } from 'react';
 
 /**
- * Custom hook that manages dynamic viewport height for mobile keyboard interactions.
+ * Enhanced mobile viewport management with keyboard detection
  * 
- * This hook sets CSS custom properties and manages keyboard state for optimal
- * mobile experience when the soft keyboard appears/disappears.
- * 
- * Features:
- * - Accurate keyboard detection using Visual Viewport API
- * - Input focus tracking for proactive keyboard management
- * - Dynamic button repositioning above keyboard
- * - Smooth transitions and professional UX
+ * Solves mobile keyboard issues:
+ * - Keeps header visible when keyboard opens
+ * - Moves floating buttons above keyboard
+ * - Prevents viewport shifting on input focus
  */
 export const useViewportHeight = () => {
   useEffect(() => {
     let initialHeight = window.innerHeight;
     let isKeyboardOpen = false;
-    let keyboardHeight = 0;
-    
-    const updateViewportHeight = (forceUpdate = false) => {
-      // Use Visual Viewport API for accurate measurements
-      const visualHeight = window.visualViewport?.height || window.innerHeight;
-      const currentHeight = window.innerHeight;
+
+    const updateViewportAndButtons = () => {
+      // Use Visual Viewport API for accurate keyboard detection
+      const currentHeight = window.visualViewport?.height || window.innerHeight;
+      const windowHeight = window.innerHeight;
       
-      // Calculate keyboard height when present
-      const heightDifference = initialHeight - visualHeight;
-      const keyboardDetected = heightDifference > 50; // More sensitive detection
+      // Calculate if keyboard is open
+      const heightDifference = initialHeight - currentHeight;
+      const keyboardDetected = heightDifference > 50;
       
-      // Update keyboard height for button positioning
-      if (keyboardDetected) {
-        keyboardHeight = heightDifference;
-        document.documentElement.style.setProperty('--keyboard-height', `${keyboardHeight}px`);
-      } else {
-        keyboardHeight = 0;
-        document.documentElement.style.setProperty('--keyboard-height', '0px');
-      }
+      // Set CSS variables for dynamic positioning
+      document.documentElement.style.setProperty('--window-height', `${windowHeight}px`);
+      document.documentElement.style.setProperty('--viewport-height', `${currentHeight}px`);
+      document.documentElement.style.setProperty('--keyboard-height', `${Math.max(0, heightDifference)}px`);
       
-      // Set viewport properties
-      document.documentElement.style.setProperty('--viewport-height', `${visualHeight}px`);
-      document.documentElement.style.setProperty('--window-height', `${currentHeight}px`);
-      document.documentElement.style.setProperty('--initial-height', `${initialHeight}px`);
-      
-      // Update safe area for content
-      const safeContentHeight = visualHeight - (keyboardDetected ? 0 : 0);
-      document.documentElement.style.setProperty('--safe-content-height', `${safeContentHeight}px`);
-      
-      // Force layout update when keyboard state changes
-      if (keyboardDetected !== isKeyboardOpen || forceUpdate) {
+      // Handle keyboard state change
+      if (keyboardDetected !== isKeyboardOpen) {
         isKeyboardOpen = keyboardDetected;
         
-        // Apply keyboard state classes
+        // Update floating buttons position
+        const floatingButtons = document.querySelectorAll('.mediscribe-mobile-fab, .mediscribe-mobile-floating-upload');
+        
         if (isKeyboardOpen) {
           document.body.classList.add('keyboard-open');
-          document.documentElement.classList.add('keyboard-visible');
+          // Move buttons above keyboard with safe padding
+          const buttonBottom = heightDifference + 20;
+          document.documentElement.style.setProperty('--floating-button-bottom', `${buttonBottom}px`);
           
-          // Position floating buttons above keyboard
-          const buttonOffset = keyboardHeight + 24; // 24px padding above keyboard
-          document.documentElement.style.setProperty('--button-bottom-offset', `${buttonOffset}px`);
+          floatingButtons.forEach(button => {
+            (button as HTMLElement).style.bottom = `${buttonBottom}px`;
+            (button as HTMLElement).style.transition = 'bottom 0.3s ease';
+          });
         } else {
           document.body.classList.remove('keyboard-open');
-          document.documentElement.classList.remove('keyboard-visible');
-          document.documentElement.style.setProperty('--button-bottom-offset', '24px');
+          // Reset buttons to normal position
+          document.documentElement.style.setProperty('--floating-button-bottom', '24px');
+          
+          floatingButtons.forEach(button => {
+            (button as HTMLElement).style.bottom = '24px';
+            (button as HTMLElement).style.transition = 'bottom 0.3s ease';
+          });
         }
         
-        // Update floating elements
-        const fabElements = document.querySelectorAll('.mediscribe-mobile-fab, .mediscribe-mobile-floating-upload');
-        fabElements.forEach(element => {
-          if (isKeyboardOpen) {
-            element.classList.add('keyboard-visible');
-            (element as HTMLElement).style.bottom = `${buttonOffset}px`;
-          } else {
-            element.classList.remove('keyboard-visible');
-            (element as HTMLElement).style.bottom = '24px';
-          }
-        });
-      }
-      
-      // Development logging
-      if (process.env.NODE_ENV === 'development') {
-        console.log('📱 Viewport updated:', {
-          visualHeight,
-          windowHeight: currentHeight,
-          keyboardHeight,
-          isKeyboardOpen,
-          safeContentHeight
-        });
+        console.log('🎯 Keyboard state:', { isKeyboardOpen, heightDifference, currentHeight });
       }
     };
 
-    // Simple input focus detection for keyboard state
-    const handleInputFocus = (event: FocusEvent) => {
-      const target = event.target as HTMLElement;
-      if (target.matches('input, textarea, [contenteditable="true"]')) {
-        // Light touch - just update viewport after delay
+    // Prevent viewport shifting on input focus
+    const preventViewportShift = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.matches('input, textarea, [contenteditable]')) {
+        // Prevent automatic scrolling
+        e.preventDefault();
+        
+        // Ensure input stays visible without shifting viewport
         setTimeout(() => {
-          updateViewportHeight(true);
-        }, 150);
+          const rect = target.getBoundingClientRect();
+          const viewportHeight = window.visualViewport?.height || window.innerHeight;
+          
+          // Only scroll if input is completely hidden by keyboard
+          if (rect.bottom > viewportHeight - 20) {
+            const scrollTop = window.scrollY + (rect.bottom - viewportHeight + 60);
+            window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+          }
+        }, 100);
       }
     };
 
-    const handleInputBlur = () => {
-      // Light delay to detect keyboard closing
-      setTimeout(() => {
-        updateViewportHeight();
-      }, 150);
-    };
+    // Initialize
+    updateViewportAndButtons();
 
-    // Initialize viewport
-    updateViewportHeight();
-
-    // Visual Viewport API for precise keyboard detection
+    // Visual Viewport API listeners (iOS Safari and modern browsers)
     if (window.visualViewport) {
-      const handleVisualViewportChange = () => {
-        updateViewportHeight();
-      };
-      
-      window.visualViewport.addEventListener('resize', handleVisualViewportChange);
-      window.visualViewport.addEventListener('scroll', handleVisualViewportChange);
+      window.visualViewport.addEventListener('resize', updateViewportAndButtons);
+      window.visualViewport.addEventListener('scroll', updateViewportAndButtons);
     }
 
-    // Standard event listeners
-    window.addEventListener('resize', () => updateViewportHeight());
+    // Fallback listeners
+    window.addEventListener('resize', updateViewportAndButtons);
     window.addEventListener('orientationchange', () => {
-      initialHeight = window.innerHeight; // Reset initial height on orientation change
-      setTimeout(() => updateViewportHeight(true), 100);
+      // Reset initial height on orientation change
+      setTimeout(() => {
+        initialHeight = window.innerHeight;
+        updateViewportAndButtons();
+      }, 500);
     });
-    
-    // Input focus listeners for proactive keyboard management
-    document.addEventListener('focusin', handleInputFocus);
-    document.addEventListener('focusout', handleInputBlur);
+
+    // Input focus management
+    document.addEventListener('focusin', preventViewportShift);
 
     // Cleanup
     return () => {
-      window.removeEventListener('resize', updateViewportHeight);
-      window.removeEventListener('orientationchange', updateViewportHeight);
-      document.removeEventListener('focusin', handleInputFocus);
-      document.removeEventListener('focusout', handleInputBlur);
-      
       if (window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', updateViewportHeight);
-        window.visualViewport.removeEventListener('scroll', updateViewportHeight);
+        window.visualViewport.removeEventListener('resize', updateViewportAndButtons);
+        window.visualViewport.removeEventListener('scroll', updateViewportAndButtons);
       }
+      window.removeEventListener('resize', updateViewportAndButtons);
+      window.removeEventListener('orientationchange', updateViewportAndButtons);
+      document.removeEventListener('focusin', preventViewportShift);
     };
   }, []);
 };
