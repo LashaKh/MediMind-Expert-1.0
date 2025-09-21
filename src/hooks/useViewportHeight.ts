@@ -28,8 +28,15 @@ export const useViewportHeight = () => {
       document.documentElement.style.setProperty('--keyboard-height', `${Math.max(0, heightDifference)}px`);
       
       // **CRITICAL FIX**: Set dynamic textarea container height to prevent auto-scroll
-      const availableContentHeight = currentHeight - 200; // Account for header, tabs, controls (approx 200px)
-      document.documentElement.style.setProperty('--textarea-container-height', `${Math.max(150, availableContentHeight)}px`);
+      // More accurate height calculation for mobile elements:
+      // - Mobile header: ~80px
+      // - Tab navigation: ~80px 
+      // - Production controls: ~60px
+      // - Padding/margins: ~30px
+      // Total: ~250px
+      const mobileUIHeight = 250;
+      const availableContentHeight = currentHeight - mobileUIHeight;
+      document.documentElement.style.setProperty('--textarea-container-height', `${Math.max(200, availableContentHeight)}px`);
       
       // Handle keyboard state change
       if (keyboardDetected !== isKeyboardOpen) {

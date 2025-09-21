@@ -208,7 +208,8 @@
   /* Mobile Transcript Area - ONLY TEXTAREA SCROLLS */
   .mediscribe-mobile-transcript {
     padding: 16px;
-    height: 100%;
+    flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden; /* NO SCROLLING HERE */
@@ -216,9 +217,9 @@
 
   .mediscribe-mobile-textarea-container {
     /* Container uses dynamic height to prevent browser auto-scroll */
-    height: var(--textarea-container-height, calc(100vh - 200px));
-    max-height: var(--textarea-container-height, calc(100vh - 200px));
-    min-height: 150px;
+    height: var(--textarea-container-height, calc(100vh - 250px));
+    max-height: var(--textarea-container-height, calc(100vh - 250px));
+    min-height: 200px;
     display: flex;
     flex-direction: column;
     overflow: hidden; /* NO SCROLLING HERE */
