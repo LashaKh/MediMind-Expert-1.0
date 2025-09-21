@@ -554,6 +554,22 @@
     transform: scale(0.9);
   }
 
+  /* Recording state for mobile footer buttons */
+  .mediscribe-mobile-footer-button.recording {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4) !important;
+    animation: recordingPulse 2s infinite;
+  }
+
+  @keyframes recordingPulse {
+    0%, 100% {
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+    }
+    50% {
+      box-shadow: 0 12px 32px rgba(239, 68, 68, 0.6);
+    }
+  }
+
   .mediscribe-mobile-floating-upload:not(:disabled):hover {
     transform: scale(1.1);
     box-shadow: 0 12px 32px rgba(26, 54, 93, 0.4);
