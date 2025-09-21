@@ -11,7 +11,6 @@ import { TranscriptContent } from './components/TranscriptContent';
 import { ContextContent } from './components/ContextContent';
 import { AIProcessingContent } from './components/AIProcessingContent';
 import { RecordingStatusIndicator } from './components/RecordingStatusIndicator';
-import MobileFloatingButton from './components/MobileFloatingButton';
 
 // Import utilities
 import { formatTime, copyToClipboard, downloadTranscription } from './utils/transcriptUtils';
@@ -422,6 +421,10 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             recordingState={recordingState}
             onEditChange={handleTranscriptChange}
             onFileUpload={onFileUpload}
+            onStartRecording={onStartRecording}
+            onStopRecording={onStopRecording}
+            canRecord={canRecord}
+            canStop={canStop}
             hasSpeakers={hasSpeakers}
             speakers={speakerSegments}
             enableSpeakerDiarization={enableSpeakerDiarization}
@@ -512,18 +515,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         {renderContent()}
       </div>
 
-      {/* Mobile-Only Floating Action Button */}
-      {activeTab === 'transcript' && (
-        <MobileFloatingButton
-          isRecording={recordingState.isRecording}
-          canRecord={canRecord}
-          canStop={canStop}
-          isProcessing={recordingState.isProcessingChunks}
-          onStartRecording={onStartRecording}
-          onStopRecording={onStopRecording}
-          disabled={false}
-        />
-      )}
 
     </div>
   );
