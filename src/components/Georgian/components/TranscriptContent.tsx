@@ -62,6 +62,32 @@ interface TranscriptContentProps {
   onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
 }
 
+// Add mobile keyboard styles
+const mobileKeyboardStyles = `
+  .mediscribe-mobile-textarea-container.keyboard-active {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .mediscribe-mobile-textarea.keyboard-adjusted {
+    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .mediscribe-mobile-button-footer.keyboard-visible {
+    animation: slideUpFromBottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  @keyframes slideUpFromBottom {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+`;
+
 export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   transcript,
   recordingState,
@@ -151,7 +177,11 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   }, [hasSpeakers, speakers, enableSpeakerDiarization]);
 
   return (
-    <div className="flex flex-col h-full p-4 sm:p-6 lg:p-6 mediscribe-mobile-transcript">
+    <>
+      {/* Inject mobile keyboard styles */}
+      <style>{mobileKeyboardStyles}</style>
+      
+      <div className="flex flex-col h-full p-4 sm:p-6 lg:p-6 mediscribe-mobile-transcript">
       {/* Modern Transcript Container */}
       <div className="relative group h-full flex flex-col">
         {/* Clean Background */}
@@ -196,7 +226,14 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
 
           
           {/* Premium Text Area */}
-          <div className="flex-1 relative mediscribe-mobile-textarea-container">
+          <div 
+            className={`flex-1 relative mediscribe-mobile-textarea-container ${isKeyboardAdjusted ? 'keyboard-active' : ''}`}
+            style={{
+              height: isKeyboardAdjusted ? 'var(--content-height, calc(100vh - var(--keyboard-height, 0px) - 180px))' : '100%',
+              maxHeight: isKeyboardAdjusted ? 'var(--content-height, calc(100vh - var(--keyboard-height, 0px) - 180px))' : 'none',
+              transition: 'height 0.3s ease-out, max-height 0.3s ease-out'
+            }}
+          >
             
             <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl sm:rounded-2xl lg:rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden mediscribe-mobile-transcript">
               
@@ -238,7 +275,9 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                       background: 'transparent',
                       fontSize: '16px', // Prevents zoom on iOS
                       WebkitTextSizeAdjust: '100%', // Prevent text size adjustment
-                      textSizeAdjust: '100%'
+                      textSizeAdjust: '100%',
+                      height: isKeyboardAdjusted ? 'calc(100% - 60px)' : '100%', // Reserve space for bottom when keyboard is visible
+                      minHeight: isKeyboardAdjusted ? '200px' : 'auto' // Ensure minimum usable height
                     }}
                     // Prevent viewport jumping on focus
                     onFocus={(e) => {
@@ -281,7 +320,21 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         </div>
 
         {/* Mobile Button Footer - below textarea */}
-        <div className="lg:hidden mediscribe-mobile-button-footer">
+        <div 
+          className={`lg:hidden mediscribe-mobile-button-footer ${isKeyboardAdjusted ? 'keyboard-visible' : ''}`}
+          style={{
+            position: isKeyboardAdjusted ? 'fixed' : 'relative',
+            bottom: isKeyboardAdjusted ? 'var(--safe-area-bottom, 0px)' : 'auto',
+            left: isKeyboardAdjusted ? '0' : 'auto',
+            right: isKeyboardAdjusted ? '0' : 'auto',
+            zIndex: isKeyboardAdjusted ? 1000 : 'auto',
+            backgroundColor: isKeyboardAdjusted ? 'rgba(255, 255, 255, 0.95)' : 'transparent',
+            backdropFilter: isKeyboardAdjusted ? 'blur(10px)' : 'none',
+            borderTop: isKeyboardAdjusted ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
+            padding: isKeyboardAdjusted ? '12px 16px' : '0',
+            transition: 'all 0.3s ease-out'
+          }}
+        >
           <div className="flex justify-between items-center">
             {/* Upload Button */}
             {onFileUpload && (
@@ -328,5 +381,6 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         <div className="absolute bottom-0 right-0 w-8 h-8 bg-gradient-to-tl from-blue-500/20 to-transparent rounded-3xl" />
       </div>
     </div>
+    </>
   );
 };
