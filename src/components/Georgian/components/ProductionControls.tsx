@@ -211,21 +211,18 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                 <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 max-h-[56vh] overflow-y-auto w-4/5 max-w-xs">
                   
                   {/* Handle */}
-                  <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-6" />
+                  <div className="w-8 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-3" />
                   
                   {/* Header */}
-                  <div className="text-center mb-6">
-                    <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center justify-center space-x-2">
-                      <Settings className="w-5 h-5" />
-                      <span>Select Transcription Quality</span>
+                  <div className="text-center mb-3">
+                    <h3 className="text-base font-bold text-gray-800 dark:text-gray-200 flex items-center justify-center space-x-2">
+                      <Settings className="w-4 h-4" />
+                      <span>Select Quality</span>
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                      Choose the quality mode for medical transcription
-                    </p>
                   </div>
                   
-                  {/* Mobile Options - Large Touch Targets */}
-                  <div className="space-y-3 mb-6">
+                  {/* Mobile Options - Compact */}
+                  <div className="space-y-2 mb-3">
                     {(Object.keys(ENGINE_CONFIGS) as Array<keyof typeof ENGINE_CONFIGS>).map((engineKey) => {
                       const engine = ENGINE_CONFIGS[engineKey];
                       const EngineIcon = engine.icon;
@@ -239,7 +236,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                             setEngineDropdownOpen(false);
                           }}
                           className={`
-                            w-full p-4 rounded-2xl transition-all duration-200 flex items-center space-x-4
+                            w-full p-3 rounded-xl transition-all duration-200 flex items-center space-x-3 min-h-[60px]
                             ${isSelected
                               ? 'bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border-2 border-violet-500'
                               : 'bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-violet-300'
@@ -248,29 +245,29 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                         >
                           {/* Icon */}
                           <div className={`
-                            w-12 h-12 rounded-xl flex items-center justify-center shadow-sm
+                            w-10 h-10 rounded-lg flex items-center justify-center shadow-sm
                             ${isSelected 
                               ? 'bg-gradient-to-br from-[#1a365d] to-[#2b6cb0]' 
                               : 'bg-gray-200 dark:bg-gray-700'
                             }
                           `}>
-                            <EngineIcon className={`w-6 h-6 ${isSelected ? 'text-white' : 'text-gray-600 dark:text-gray-300'}`} />
+                            <EngineIcon className={`w-5 h-5 ${isSelected ? 'text-white' : 'text-gray-600 dark:text-gray-300'}`} />
                           </div>
                           
                           {/* Text */}
                           <div className="flex-1 text-left">
-                            <div className="font-bold text-gray-800 dark:text-gray-200">
+                            <div className="font-bold text-gray-800 dark:text-gray-200 text-sm">
                               {engine.name}
                             </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                            <div className="text-xs text-gray-600 dark:text-gray-400">
                               {engine.description}
                             </div>
                           </div>
                           
                           {/* Checkmark */}
                           {isSelected && (
-                            <div className="w-6 h-6 rounded-full bg-violet-500 flex items-center justify-center">
-                              <Check className="w-4 h-4 text-white" />
+                            <div className="w-5 h-5 rounded-full bg-violet-500 flex items-center justify-center">
+                              <Check className="w-3 h-3 text-white" />
                             </div>
                           )}
                         </button>
@@ -281,7 +278,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                   {/* Close Button */}
                   <button
                     onClick={() => setEngineDropdownOpen(false)}
-                    className="w-full py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-medium transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    className="w-full py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm"
                   >
                     Close
                   </button>
@@ -544,9 +541,9 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                     }}
                     type="button"
                     className={`
-                      relative p-6 rounded-2xl transition-all duration-200
+                      relative p-3 rounded-xl transition-all duration-200
                       flex flex-col items-center justify-center
-                      border-2 min-h-[80px] cursor-pointer active:scale-95 touch-manipulation select-none
+                      border-2 min-h-[60px] cursor-pointer active:scale-95 touch-manipulation select-none
                       ${speakerCount === count 
                         ? 'bg-[#63b3ed]/20 dark:bg-[#1a365d]/40 border-[#2b6cb0] dark:border-[#63b3ed] shadow-lg' 
                         : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-[#63b3ed]/10 dark:hover:bg-[#1a365d]/20 hover:border-[#63b3ed]'
