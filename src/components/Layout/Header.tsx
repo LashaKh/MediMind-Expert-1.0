@@ -181,8 +181,8 @@ export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false, onMenu
               </button>
             )}
 
-            {/* Start Tour Button - Mobile */}
-            {user && !isOnboardingPage && (
+            {/* Start Tour Button - Mobile - HIDDEN */}
+            {false && user && !isOnboardingPage && (
               <button
                 onClick={() => openTour('selector')}
                 className="md:hidden inline-flex items-center justify-center p-2 h-10 w-10 rounded-lg text-white shadow-lg active:scale-95 transition-all duration-300 touch-target bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] hover:from-[#1a365d]/90 hover:via-[#2b6cb0]/90 hover:to-[#63b3ed]/90"

@@ -32,6 +32,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   // Check if we're on the MediScribe page - hide bottom navigation for full screen transcription
   const isMediScribePage = location.pathname === '/mediscribe';
   
+  // Check if we're on the AI Copilot page - hide header on mobile for full screen chat
+  const isAICopilotMobilePage = location.pathname === '/ai-copilot';
+  
   // Initialize theme - this will force light mode
   useTheme();
 
@@ -92,14 +95,14 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         backgroundImage: 'none !important'
       }}
     >
-      {/* Header with safe area support - Hidden on MediScribe page MOBILE ONLY */}
-      {!(isMediScribePage && isMobile) && (
+      {/* Header with safe area support - Hidden on MediScribe and AI Copilot pages MOBILE ONLY */}
+      {!((isMediScribePage || isAICopilotMobilePage) && isMobile) && (
         <Header onMenuToggle={handleMenuToggle} isOnboardingPage={isOnboardingPage} />
       )}
       
       <div className={`flex flex-1 layout-container ${
-        isMediScribePage && isMobile
-          ? 'pt-0' // No padding on MediScribe page mobile since header is hidden
+        (isMediScribePage || isAICopilotMobilePage) && isMobile
+          ? 'pt-0' // No padding on MediScribe or AI Copilot page mobile since header is hidden
           : isMobile ? 'pt-16' : 'pt-20'
       }`}>
         {/* Sidebar - only show for authenticated users and not on onboarding */}
@@ -114,7 +117,13 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         {/* Mobile overlay */}
         {isMobile && isSidebarOpen && user && !isOnboardingPage && (
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+            className="fixed bg-black bg-opacity-50 z-30 transition-opacity duration-300"
+            style={{
+              top: '64px',
+              left: '0',
+              right: '0',
+              bottom: '0'
+            }}
             onClick={handleSidebarClose}
             aria-hidden="true"
           />
@@ -124,7 +133,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <main 
           className={`
             flex-1 transition-all duration-300 ease-in-out 
-            overflow-hidden ${isMediScribePage ? 'bg-white' : 'bg-background'}
+            overflow-hidden ${(isMediScribePage || isAICopilotMobilePage) ? 'bg-white' : 'bg-background'}
             ${user && isMobile && isSidebarOpen ? 'pointer-events-none' : ''}
             ${''}
           `}
@@ -146,7 +155,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Footer - completely removed */}
       
       {/* Bottom safe area spacer */}
-      <div className={`safe-bottom ${isMediScribePage ? 'bg-white' : 'bg-background'}`} />
+      <div className={`safe-bottom ${(isMediScribePage || isAICopilotMobilePage) ? 'bg-white' : 'bg-background'}`} />
 
       {/* Premium Guided Tour - persists across route changes, hide on onboarding */}
       {!isOnboardingPage && (

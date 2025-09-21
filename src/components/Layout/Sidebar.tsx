@@ -316,21 +316,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
           relative transform transition-transform duration-200
           sidebar-container group
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-          ${isMobile ? 'fixed inset-y-0 left-0 z-[9999]' : 'relative z-40'}
+          ${isMobile ? 'fixed left-0 z-40' : 'relative z-40'}
           md:translate-x-0
           focus-within:outline-none
         `}
         style={{
           ...(isMobile ? {
             position: 'fixed',
-            top: '0',
+            top: '64px',  // Start below header (header height)
             left: '0',
-            right: '0',
             bottom: '0',
-            height: '100vh',
+            height: 'calc(100vh - 64px)',  // Full height minus header
             width: window.innerHeight < 500 ? 'min(280px, 85vw)' : '320px',
             maxWidth: '90vw',
-            zIndex: 9999,
+            zIndex: 40,  // Below header z-index
             paddingTop: '0',
             marginTop: '0',
           } : {

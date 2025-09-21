@@ -59,19 +59,21 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     loadConversationsFromDatabase();
   }, [loadConversationsFromDatabase]);
 
-  // Convert conversations to summaries format
-  const conversationSummaries: ConversationSummary[] = conversations.map((conv): ConversationSummary => {
-    return {
-      id: conv.id,
-      title: conv.title,
-      type: conv.type,
-      lastMessage: conv.messages?.[conv.messages.length - 1]?.content || undefined,
-      updatedAt: new Date(conv.updatedAt || conv.createdAt),
-      messageCount: conv.metadata?.messageCount || conv.messages?.length || 0,
-      specialty: conv.specialty,
-      caseId: conv.caseId
-    };
-  });
+  // Convert conversations to summaries format and remove duplicates
+  const conversationSummaries: ConversationSummary[] = conversations
+    .filter((conv, index, self) => self.findIndex(c => c.id === conv.id) === index)
+    .map((conv): ConversationSummary => {
+      return {
+        id: conv.id,
+        title: conv.title,
+        type: conv.type,
+        lastMessage: conv.messages?.[conv.messages.length - 1]?.content || undefined,
+        updatedAt: new Date(conv.updatedAt || conv.createdAt),
+        messageCount: conv.metadata?.messageCount || conv.messages?.length || 0,
+        specialty: conv.specialty,
+        caseId: conv.caseId
+      };
+    });
 
   // Filter and sort conversations
   const filteredConversations = conversationSummaries
@@ -446,7 +448,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             <div className="space-y-2 md:space-y-3">
               {filteredConversations.map((conv, index) => (
                 <div
-                  key={conv.id}
+                  key={`${conv.id}-${index}`}
                   className={`group relative rounded-xl md:rounded-2xl cursor-pointer transition-all duration-200 ${
                     activeConversationId === conv.id
                       ? conv.type === 'case-study'
