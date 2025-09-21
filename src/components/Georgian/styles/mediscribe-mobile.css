@@ -97,6 +97,22 @@
     align-items: stretch;
   }
 
+  /* Fixed Mobile Controls positioned below tab navigation */
+  .mediscribe-mobile-fixed-controls {
+    position: fixed;
+    top: 80px; /* Below tab navigation (approximately 80px) */
+    left: 0;
+    right: 0;
+    z-index: 999; /* Below tab navigation but above content */
+    background: white;
+    border-bottom: 1px solid rgba(144, 205, 244, 0.2);
+    padding: 12px 16px;
+    backdrop-filter: blur(10px);
+    /* Add safe area support */
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+
   .mediscribe-mobile-control-container {
     width: calc(50% - 4px) !important;
     min-width: calc(50% - 4px) !important;
@@ -388,18 +404,14 @@
   /* Fixed Mobile Layout - Keyboard Aware */
   .mediscribe-mobile-layout-container {
     /* Fixed viewport system for mobile keyboard stability */
-    position: fixed;
-    top: 112px; /* Account for fixed tab navigation (approximately 112px with safe areas) */
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: static; /* Use static positioning instead of fixed */
     display: flex;
     flex-direction: column;
     /* Use dynamic viewport height from JavaScript hook */
-    height: calc(var(--viewport-height, 100vh) - 112px);
-    max-height: calc(var(--viewport-height, 100vh) - 112px);
+    min-height: calc(var(--viewport-height, 100vh) - 140px);
+    height: auto;
     /* Smooth transition when keyboard appears */
-    transition: height 0.3s ease;
+    transition: min-height 0.3s ease;
   }
 
   .mediscribe-mobile-content-area {
@@ -409,6 +421,8 @@
     flex-direction: column;
     overflow: hidden;
     position: relative;
+    /* Add top margin to account for fixed tab navigation */
+    margin-top: 140px;
   }
 
   .mediscribe-mobile-scrollable-content {
