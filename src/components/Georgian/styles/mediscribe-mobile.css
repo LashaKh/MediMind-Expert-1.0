@@ -9,6 +9,9 @@
     overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* **CRITICAL**: Prevent auto-scroll when focusing inputs */
+    scroll-behavior: auto;
+    overscroll-behavior-y: contain;
   }
 
   #root {
@@ -212,13 +215,16 @@
   }
 
   .mediscribe-mobile-textarea-container {
-    /* Container fills remaining space */
-    flex: 1;
+    /* Container uses dynamic height to prevent browser auto-scroll */
+    height: var(--textarea-container-height, calc(100vh - 200px));
+    max-height: var(--textarea-container-height, calc(100vh - 200px));
+    min-height: 150px;
     display: flex;
     flex-direction: column;
-    min-height: 0;
     overflow: hidden; /* NO SCROLLING HERE */
     position: relative;
+    /* Smooth transitions when keyboard opens/closes */
+    transition: height 0.3s ease, max-height 0.3s ease;
   }
 
   .mediscribe-mobile-textarea {
@@ -243,6 +249,12 @@
     /* Ensure it takes exact available space */
     min-height: 0;
     max-height: none; /* NO HEIGHT RESTRICTIONS */
+    /* **CRITICAL**: Prevent browser auto-scroll behavior */
+    scroll-behavior: auto;
+    overscroll-behavior: contain;
+    /* Prevent document scroll when textarea is focused */
+    position: relative;
+    z-index: 1;
   }
 
   /* Mobile Floating Action Button - DYNAMIC POSITIONING */
