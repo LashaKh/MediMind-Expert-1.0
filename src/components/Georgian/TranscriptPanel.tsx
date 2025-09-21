@@ -38,6 +38,9 @@ interface TranscriptPanelProps {
     totalChunks: number;
   };
   isTranscribing: boolean;
+  // Mobile optimization props
+  textareaRef?: React.RefObject<HTMLTextAreaElement>;
+  isKeyboardAdjusted?: boolean;
   transcriptionResult: {
     text: string;
     timestamp: number;
@@ -141,7 +144,10 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   // History controls
   isHistoryOpen = false,
   onToggleHistory,
-  sessionCount = 0
+  sessionCount = 0,
+  // Mobile optimization props
+  textareaRef,
+  isKeyboardAdjusted
 }) => {
   const [contextText, setContextText] = useState('');
   const [isRecordingContext, setIsRecordingContext] = useState(false);
@@ -431,6 +437,8 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onToggleSpeakerDiarization={onToggleSpeakerDiarization}
             speakerCount={speakerCount}
             onSpeakerCountChange={onSpeakerCountChange}
+            textareaRef={textareaRef}
+            isKeyboardAdjusted={isKeyboardAdjusted}
             selectedSTTModel={selectedSTTModel}
             onModelChange={onModelChange}
           />

@@ -47,6 +47,9 @@ interface TranscriptContentProps {
   onStopRecording?: () => void;
   canRecord?: boolean;
   canStop?: boolean;
+  // Mobile optimization props
+  textareaRef?: React.RefObject<HTMLTextAreaElement>;
+  isKeyboardAdjusted?: boolean;
   // Speaker diarization props
   hasSpeakers?: boolean;
   speakers?: SpeakerSegment[];
@@ -76,6 +79,9 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   onSpeakerCountChange,
   selectedSTTModel = 'STT3',
   onModelChange,
+  // Mobile optimization props
+  textareaRef,
+  isKeyboardAdjusted,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -222,9 +228,10 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                 /* Regular editable text area */
                 <div className="relative h-full p-0">
                   <textarea
+                    ref={textareaRef}
                     value={transcript}
                     onChange={(e) => onEditChange(e.target.value)}
-                    className="transcription-textarea w-full resize-none border-0 px-5 py-5 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed mediscribe-mobile-textarea"
+                    className={`transcription-textarea w-full resize-none border-0 px-5 py-5 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed mediscribe-mobile-textarea ${isKeyboardAdjusted ? 'keyboard-adjusted' : ''}`}
                     placeholder={`Your medical transcript will appear here with real-time precision${enableSpeakerDiarization ? ' with speaker separation for doctor-patient conversations' : ''}. You can edit this text at any time...`}
                     dir="auto"
                     style={{ 

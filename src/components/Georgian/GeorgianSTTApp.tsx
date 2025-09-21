@@ -25,6 +25,8 @@ import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
 import { useAudioFileUpload } from '../../hooks/useAudioFileUpload';
 import { useAuth } from '../../stores/useAppStore';
 import { useViewportHeight } from '../../hooks/useViewportHeight';
+import { useMobileViewport } from '../../hooks/useMobileViewport';
+import { useKeyboardAwareTextarea } from '../../hooks/useKeyboardAwareTextarea';
 import { isDiagnosisTemplate, extractDiagnosisFromInstruction, generateDiagnosisReport } from '../../services/diagnosisFlowiseService';
 import { supabase } from '../../lib/supabase';
 
@@ -48,6 +50,15 @@ interface ProcessingHistory {
 export const GeorgianSTTApp: React.FC = () => {
   useAuth(); // Authentication hook
   useViewportHeight(); // Mobile viewport height management
+  
+  // Mobile-first optimization hooks
+  const { viewportState, isKeyboardVisible, keyboardHeight } = useMobileViewport();
+  const { 
+    textareaRef, 
+    focusState, 
+    containerStyle, 
+    isKeyboardAdjusted 
+  } = useKeyboardAwareTextarea();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredSessions, setFilteredSessions] = useState<GeorgianSession[]>([]);
   // Mobile drawer state management
@@ -686,7 +697,16 @@ export const GeorgianSTTApp: React.FC = () => {
   // Browser support is checked in GeorgianSTTAppWrapper
 
   return (
-    <div className="h-screen transcription-bg overflow-hidden relative">
+    <div 
+      className="h-screen transcription-bg overflow-hidden relative"
+      style={{
+        ...containerStyle,
+        '--keyboard-height': `${keyboardHeight}px`,
+        '--viewport-height': `${viewportState.viewport.height}px`,
+        '--safe-area-top': `${viewportState.safeAreaInsets.top}px`,
+        '--safe-area-bottom': `${viewportState.safeAreaInsets.bottom}px`
+      } as React.CSSProperties}
+    >
       {/* Desktop Header - Hidden on Mobile */}
       <div className="hidden lg:block">
         <HeaderControls 
@@ -902,6 +922,8 @@ export const GeorgianSTTApp: React.FC = () => {
                 canRecord={canRecord}
                 canStop={canStop}
                 canPause={canPause}
+                textareaRef={textareaRef}
+                isKeyboardAdjusted={isKeyboardAdjusted}
                 canResume={canResume}
                 remainingTime={remainingTime}
                 isNearMaxDuration={isNearMaxDuration}
@@ -957,6 +979,8 @@ export const GeorgianSTTApp: React.FC = () => {
               canRecord={canRecord}
               canStop={canStop}
               canPause={canPause}
+              textareaRef={textareaRef}
+              isKeyboardAdjusted={isKeyboardAdjusted}
               canResume={canResume}
               remainingTime={remainingTime}
               isNearMaxDuration={isNearMaxDuration}
