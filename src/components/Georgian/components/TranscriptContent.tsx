@@ -362,8 +362,17 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                 }
               }}
               disabled={recordingState.isRecording ? !canStop : !canRecord}
-              className="mediscribe-mobile-footer-button flex items-center justify-center"
+              className={`mediscribe-mobile-footer-button flex items-center justify-center ${
+                recordingState.isRecording 
+                  ? 'bg-red-500 hover:bg-red-600 shadow-red-500/25 animate-pulse' 
+                  : ''
+              }`}
               title={recordingState.isRecording ? "Stop recording" : "Start recording"}
+              style={{
+                backgroundColor: recordingState.isRecording ? '#ef4444' : undefined,
+                boxShadow: recordingState.isRecording ? '0 4px 12px rgba(239, 68, 68, 0.3)' : undefined,
+                transition: 'all 0.3s ease'
+              }}
             >
               {recordingState.isProcessingChunks ? (
                 <Loader2 className="w-6 h-6 text-white animate-spin" />

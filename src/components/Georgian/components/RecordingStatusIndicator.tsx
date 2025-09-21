@@ -28,6 +28,13 @@ export const RecordingStatusIndicator: React.FC<RecordingStatusIndicatorProps> =
   recordingState,
   formatTime
 }) => {
+  // Hide recording status indicator on mobile devices
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  
+  if (isMobile) {
+    return null; // Don't render on mobile - record button will be red instead
+  }
+  
   return (
     <>
       {/* Premium Live Recording Status */}
