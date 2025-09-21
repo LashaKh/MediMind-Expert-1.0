@@ -256,7 +256,7 @@
 
   /* Mobile Record Button - FIXED TO TEXTAREA BOTTOM */
   .mediscribe-mobile-fab {
-    position: absolute;
+    position: absolute !important; /* Override fixed positioning */
     bottom: 20px; /* Fixed distance from textarea bottom */
     right: 20px;
     width: 64px;
