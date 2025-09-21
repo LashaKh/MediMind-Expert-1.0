@@ -267,6 +267,10 @@
     /* Hardware acceleration */
     transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
+    /* Add visible styling */
+    background: linear-gradient(135deg, #1a365d, #2b6cb0);
+    box-shadow: 0 8px 24px rgba(26, 54, 93, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
   }
 
   /* Scale on active */

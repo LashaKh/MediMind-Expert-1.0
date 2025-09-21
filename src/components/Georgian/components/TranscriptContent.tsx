@@ -208,22 +208,20 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             )}
             
             {/* Record Button - positioned at bottom right of textarea */}
-            {onStartRecording && onStopRecording && (
-              <button
-                onClick={recordingState.isRecording ? onStopRecording : onStartRecording}
-                disabled={recordingState.isRecording ? !canStop : !canRecord}
-                className="lg:hidden mediscribe-mobile-fab flex items-center justify-center"
-                title={recordingState.isRecording ? "Stop recording" : "Start recording"}
-              >
-                {recordingState.isProcessingChunks ? (
-                  <Loader2 className="w-8 h-8 text-white animate-spin" />
-                ) : recordingState.isRecording ? (
-                  <Square className="w-8 h-8 text-white" />
-                ) : (
-                  <Mic className="w-8 h-8 text-white" />
-                )}
-              </button>
-            )}
+            <button
+              onClick={onStartRecording || (() => console.log('Record button clicked'))}
+              disabled={recordingState.isRecording ? !canStop : !canRecord}
+              className="lg:hidden mediscribe-mobile-fab flex items-center justify-center"
+              title={recordingState.isRecording ? "Stop recording" : "Start recording"}
+            >
+              {recordingState.isProcessingChunks ? (
+                <Loader2 className="w-8 h-8 text-white animate-spin" />
+              ) : recordingState.isRecording ? (
+                <Square className="w-8 h-8 text-white" />
+              ) : (
+                <Mic className="w-8 h-8 text-white" />
+              )}
+            </button>
             
             <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl sm:rounded-2xl lg:rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden mediscribe-mobile-transcript">
               
