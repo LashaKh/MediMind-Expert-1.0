@@ -208,7 +208,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
               
               {/* Mobile Centered Modal */}
               <div className="fixed inset-0 flex items-center justify-center p-4 z-50 md:hidden">
-                <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 p-6 max-h-[70vh] overflow-y-auto w-full max-w-sm">
+                <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 max-h-[56vh] overflow-y-auto w-4/5 max-w-xs">
                   
                   {/* Handle */}
                   <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-6" />
@@ -503,7 +503,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
           {/* Mobile Centered Modal */}
           <div className="fixed inset-0 flex items-center justify-center p-4 z-50 md:hidden">
             <div 
-              className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 p-6 max-h-[60vh] overflow-y-auto w-full max-w-sm"
+              className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 max-h-[56vh] overflow-y-auto w-4/5 max-w-xs"
               onClick={(e) => e.stopPropagation()}
             >
               
