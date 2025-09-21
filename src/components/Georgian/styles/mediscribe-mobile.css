@@ -7,22 +7,18 @@
   /* Prevent page bounce and ensure proper viewport height detection */
   html {
     height: 100%;
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
+    overflow-x: hidden;
   }
   
   body {
-    height: 100%;
-    height: var(--initial-height, 100vh);
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    /* Prevent viewport shifting */
-    overscroll-behavior: none;
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height - automatically adapts to keyboard */
+    height: var(--viewport-height, 100vh);
+    overflow-x: hidden;
+    /* Prevent viewport shifting but allow scrolling */
+    overscroll-behavior-x: none;
     -webkit-overflow-scrolling: touch;
+    transition: height 0.3s ease;
   }
 
   /* Force layout when keyboard is detected */
@@ -32,17 +28,16 @@
 
   /* Main app root should fill available space */
   #root {
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height - automatically adapts to keyboard */
+    height: var(--viewport-height, 100vh);
     overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    transition: height 0.3s ease;
   }
 
   /* Force root layout when keyboard is detected */
   body.keyboard-open #root {
-    height: 100% !important;
+    height: var(--viewport-height, 100vh) !important;
   }
 }
 
@@ -68,12 +63,10 @@
     transform: scale(0.96);
   }
 
-  /* Mobile Header - Fixed positioning to stay visible */
+  /* Mobile Header - Sticky positioning to stay visible */
   .mediscribe-mobile-header {
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
     z-index: 1100;
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.3);
@@ -82,21 +75,14 @@
     /* Prevent shifting */
     transform: translateZ(0);
     will-change: transform;
-    /* Standard height */
-    height: 64px;
-    display: flex;
-    align-items: center;
   }
 
   /* Mobile Tab Navigation Optimizations - Blue Theme */
   .mediscribe-mobile-tabs {
     gap: 8px;
     padding: 8px 12px;
-    position: fixed;
-    top: 64px; /* Below header */
-    top: calc(64px + env(safe-area-inset-top));
-    left: 0;
-    right: 0;
+    position: sticky;
+    top: 0;
     z-index: 1000;
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.2);
@@ -463,15 +449,13 @@
     margin-bottom: 16px;
   }
 
-  /* Mobile Main Container - Fixed layout system */
+  /* Mobile Main Container - Natural flow layout */
   .mediscribe-mobile-main-container {
     display: flex;
     flex-direction: column;
     height: 100%;
     position: relative;
-    overflow: hidden;
-    /* Account for fixed header and tabs */
-    padding-top: calc(64px + 60px + env(safe-area-inset-top));
+    /* Remove padding - let sticky positioning handle it */
   }
 
   /* Adjust padding when keyboard is open */

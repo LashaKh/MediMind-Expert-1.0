@@ -705,15 +705,17 @@ export const GeorgianSTTApp: React.FC = () => {
         />
       </div>
 
-      {/* Mobile Header - Fixed on Mobile */}
-      <div className="lg:hidden mediscribe-mobile-header">
-        <MobileHeader
-          authStatus={authStatus}
-          recordingState={recordingState}
-          processing={processing}
-          onOpenMobileSessions={openMobileDrawer}
-          sessionsCount={sessions.length}
-        />
+      {/* Mobile Header - Sticky on Mobile */}
+      <div className="lg:hidden">
+        <div className="mediscribe-mobile-header">
+          <MobileHeader
+            authStatus={authStatus}
+            recordingState={recordingState}
+            processing={processing}
+            onOpenMobileSessions={openMobileDrawer}
+            sessionsCount={sessions.length}
+          />
+        </div>
       </div>
 
       {/* Mobile-First Responsive Layout */}

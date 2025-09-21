@@ -88,35 +88,22 @@ export const useViewportHeight = () => {
       }
     };
 
-    // Enhanced input focus detection
+    // Simple input focus detection for keyboard state
     const handleInputFocus = (event: FocusEvent) => {
       const target = event.target as HTMLElement;
       if (target.matches('input, textarea, [contenteditable="true"]')) {
-        // Proactively prepare for keyboard
+        // Light touch - just update viewport after delay
         setTimeout(() => {
           updateViewportHeight(true);
-          
-          // Ensure input is visible above keyboard
-          if (window.visualViewport && target) {
-            const rect = target.getBoundingClientRect();
-            const viewportHeight = window.visualViewport.height;
-            const inputBottom = rect.bottom;
-            
-            // Scroll if input would be covered by keyboard
-            if (inputBottom > viewportHeight - 50) {
-              const scrollAmount = inputBottom - (viewportHeight - 100);
-              window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
-            }
-          }
-        }, 100);
+        }, 150);
       }
     };
 
     const handleInputBlur = () => {
-      // Delay to ensure keyboard is closing
+      // Light delay to detect keyboard closing
       setTimeout(() => {
         updateViewportHeight();
-      }, 100);
+      }, 150);
     };
 
     // Initialize viewport

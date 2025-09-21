@@ -240,14 +240,6 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                     onFocus={(e) => {
                       // Prevent default zoom behavior on iOS
                       e.currentTarget.style.fontSize = '16px';
-                      // Ensure textarea stays in view
-                      setTimeout(() => {
-                        e.currentTarget.scrollIntoView({ 
-                          behavior: 'smooth', 
-                          block: 'center',
-                          inline: 'nearest'
-                        });
-                      }, 100);
                     }}
                     onBlur={(e) => {
                       // Reset any focus styles
