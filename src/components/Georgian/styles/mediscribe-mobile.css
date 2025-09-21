@@ -213,13 +213,13 @@
   }
 
   .mediscribe-mobile-textarea-container {
-    /* SIMPLE APPROACH: Fixed height, no dynamic changes */
+    /* SIMPLE APPROACH: Container for textarea and buttons */
     flex: 1;
     min-height: 200px;
     display: flex;
     flex-direction: column;
     overflow: hidden; /* NO SCROLLING HERE */
-    position: relative;
+    position: relative; /* For absolute positioned buttons */
   }
 
   .mediscribe-mobile-textarea {
@@ -254,20 +254,19 @@
     -webkit-user-modify: read-write-plaintext-only;
   }
 
-  /* Mobile Floating Action Button - DYNAMIC POSITIONING */
+  /* Mobile Record Button - FIXED TO TEXTAREA BOTTOM */
   .mediscribe-mobile-fab {
-    position: fixed;
-    bottom: var(--floating-button-bottom, 24px); /* DYNAMIC FROM JS */
-    right: 24px;
+    position: absolute;
+    bottom: 20px; /* Fixed distance from textarea bottom */
+    right: 20px;
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    z-index: 2100; /* ABOVE EVERYTHING */
-    transition: bottom 0.3s ease, transform 0.2s ease;
+    z-index: 10; /* Above textarea content */
+    transition: transform 0.2s ease;
     /* Hardware acceleration */
     transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
-    will-change: bottom, transform;
   }
 
   /* Scale on active */
@@ -519,23 +518,22 @@
     justify-content: space-between;
   }
 
-  /* Mobile Floating Upload Button - DYNAMIC POSITIONING */
+  /* Mobile Upload Button - FIXED TO TEXTAREA BOTTOM */
   .mediscribe-mobile-floating-upload {
-    position: fixed;
-    bottom: var(--floating-button-bottom, 24px); /* DYNAMIC FROM JS */
-    left: 24px;
+    position: absolute;
+    bottom: 20px; /* Fixed distance from textarea bottom */
+    left: 20px;
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    z-index: 2100; /* ABOVE EVERYTHING */
+    z-index: 10; /* Above textarea content */
     background: linear-gradient(135deg, #1a365d, #2b6cb0);
     box-shadow: 0 8px 24px rgba(26, 54, 93, 0.3);
-    transition: bottom 0.3s ease, transform 0.2s ease;
+    transition: transform 0.2s ease;
     border: 2px solid rgba(255, 255, 255, 0.2);
     /* Hardware acceleration */
     transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
-    will-change: bottom, transform;
   }
 
   /* Scale on active */
