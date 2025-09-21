@@ -240,13 +240,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                     onFocus={(e) => {
                       // Prevent default zoom behavior on iOS
                       e.currentTarget.style.fontSize = '16px';
-                      // **CRITICAL**: Prevent browser auto-scroll to cursor position
-                      e.preventDefault();
-                      // Use scrollIntoView: false to prevent auto-scroll
-                      if (e.currentTarget.setSelectionRange) {
-                        const pos = e.currentTarget.selectionStart;
-                        e.currentTarget.setSelectionRange(pos, pos);
-                      }
+                      // Fixed elements at top should handle positioning
                     }}
                     onBlur={(e) => {
                       // Reset any focus styles
