@@ -19,6 +19,7 @@ import { useEffect } from 'react';
 export const useViewportHeight = () => {
   useEffect(() => {
     let initialHeight = window.innerHeight;
+    let isKeyboardOpen = false;
     
     const updateViewportHeight = () => {
       // Calculate 1% of the current inner height
@@ -33,12 +34,36 @@ export const useViewportHeight = () => {
       
       // Detect if keyboard is likely visible (significant height reduction)
       const heightDifference = initialHeight - currentHeight;
-      const isKeyboardVisible = heightDifference > 150; // Keyboard typically reduces height by 200-350px
+      const keyboardDetected = heightDifference > 100; // More sensitive threshold
+      
+      // Force layout update when keyboard state changes
+      if (keyboardDetected !== isKeyboardOpen) {
+        isKeyboardOpen = keyboardDetected;
+        
+        // Apply keyboard class to body for global styling
+        if (isKeyboardOpen) {
+          document.body.classList.add('keyboard-open');
+          // Force immediate layout update
+          document.body.style.height = `${currentHeight}px`;
+          const root = document.getElementById('root');
+          if (root) {
+            root.style.height = `${currentHeight}px`;
+          }
+        } else {
+          document.body.classList.remove('keyboard-open');
+          // Restore full height
+          document.body.style.height = `${initialHeight}px`;
+          const root = document.getElementById('root');
+          if (root) {
+            root.style.height = `${initialHeight}px`;
+          }
+        }
+      }
       
       // Add/remove keyboard classes to floating elements
       const fabElements = document.querySelectorAll('.mediscribe-mobile-fab, .mediscribe-mobile-floating-upload');
       fabElements.forEach(element => {
-        if (isKeyboardVisible) {
+        if (isKeyboardOpen) {
           element.classList.add('keyboard-visible');
         } else {
           element.classList.remove('keyboard-visible');
@@ -51,7 +76,7 @@ export const useViewportHeight = () => {
           innerHeight: currentHeight,
           initialHeight,
           heightDifference,
-          isKeyboardVisible,
+          isKeyboardOpen,
           viewportHeightPx: `${currentHeight}px`,
           vhUnit: `${vh}px`
         });
@@ -60,6 +85,22 @@ export const useViewportHeight = () => {
 
     // Set initial viewport height
     updateViewportHeight();
+
+    // Visual Viewport API for better keyboard detection (modern browsers)
+    if (window.visualViewport) {
+      const handleVisualViewportResize = () => {
+        const currentHeight = window.visualViewport?.height || window.innerHeight;
+        const heightDifference = initialHeight - currentHeight;
+        const keyboardDetected = heightDifference > 100;
+        
+        if (keyboardDetected !== isKeyboardOpen) {
+          // Force immediate update
+          updateViewportHeight();
+        }
+      };
+      
+      window.visualViewport.addEventListener('resize', handleVisualViewportResize);
+    }
 
     // Update on resize (keyboard show/hide triggers resize)
     window.addEventListener('resize', updateViewportHeight);
@@ -74,6 +115,9 @@ export const useViewportHeight = () => {
     return () => {
       window.removeEventListener('resize', updateViewportHeight);
       window.removeEventListener('orientationchange', updateViewportHeight);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', updateViewportHeight);
+      }
     };
   }, []);
 };

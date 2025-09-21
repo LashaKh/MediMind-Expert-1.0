@@ -11,17 +11,30 @@
   
   body {
     height: 100vh;
+    height: 100dvh; /* Dynamic viewport height - automatically adapts to keyboard */
     height: var(--viewport-height, 100vh);
     overflow-x: hidden;
     /* Ensure layout reflows when viewport height changes */
     transition: height 0.3s ease;
   }
 
+  /* Force layout when keyboard is detected */
+  body.keyboard-open {
+    height: var(--viewport-height, 100vh) !important;
+  }
+
   /* Main app root should fill available space */
   #root {
     height: 100vh;
+    height: 100dvh; /* Dynamic viewport height - automatically adapts to keyboard */
     height: var(--viewport-height, 100vh);
     overflow: hidden;
+    transition: height 0.3s ease;
+  }
+
+  /* Force root layout when keyboard is detected */
+  body.keyboard-open #root {
+    height: var(--viewport-height, 100vh) !important;
   }
 }
 
@@ -417,8 +430,15 @@
     flex-direction: column;
     /* Use dynamic height to shrink when keyboard appears */
     height: 100vh;
+    height: 100dvh; /* Dynamic viewport height - automatically adapts to keyboard */
     height: var(--viewport-height, 100vh);
     overflow: hidden;
+    transition: height 0.3s ease;
+  }
+
+  /* Force container adaptation when keyboard opens */
+  body.keyboard-open .mediscribe-mobile-main-container {
+    height: var(--viewport-height, 100vh) !important;
   }
 
   /* Legacy layout container - keep for desktop compatibility */
