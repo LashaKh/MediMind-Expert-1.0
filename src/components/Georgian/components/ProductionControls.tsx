@@ -206,9 +206,9 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                 onClick={() => setEngineDropdownOpen(false)}
               />
               
-              {/* Mobile Bottom Sheet */}
-              <div className="fixed bottom-0 left-0 right-0 z-50 animate-in slide-in-from-bottom duration-300 md:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
-                <div className="bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-gray-700 p-6 max-h-[70vh] overflow-y-auto">
+              {/* Mobile Centered Modal */}
+              <div className="fixed inset-0 flex items-center justify-center p-4 z-50 md:hidden">
+                <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 p-6 max-h-[70vh] overflow-y-auto w-full max-w-sm">
                   
                   {/* Handle */}
                   <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-6" />
@@ -500,10 +500,10 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
             }}
           />
           
-          {/* Mobile Bottom Sheet */}
-          <div className="fixed bottom-0 left-0 right-0 z-50 animate-in slide-in-from-bottom duration-300 md:hidden" style={{ paddingBottom: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}>
+          {/* Mobile Centered Modal */}
+          <div className="fixed inset-0 flex items-center justify-center p-4 z-50 md:hidden">
             <div 
-              className="bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-gray-700 p-6 max-h-[60vh] overflow-y-auto"
+              className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 p-6 max-h-[60vh] overflow-y-auto w-full max-w-sm"
               onClick={(e) => e.stopPropagation()}
             >
               
