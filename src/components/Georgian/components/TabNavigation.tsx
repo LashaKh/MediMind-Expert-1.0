@@ -81,7 +81,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
   };
 
   return (
-    <div className="bg-white border-b border-[#90cdf4]/30">
+    <div className="bg-white border-b border-[#90cdf4]/30 mediscribe-mobile-header lg:relative lg:top-auto">
       <div className="px-3 sm:px-6 py-1.5 sm:py-3 mediscribe-mobile-tabs lg:px-6 lg:py-3">
         <div className="flex items-center justify-center lg:justify-between max-w-7xl mx-auto">
           {/* Modern Blue Tab System */}

@@ -18,21 +18,41 @@ import { useEffect } from 'react';
  */
 export const useViewportHeight = () => {
   useEffect(() => {
+    let initialHeight = window.innerHeight;
+    
     const updateViewportHeight = () => {
       // Calculate 1% of the current inner height
       const vh = window.innerHeight * 0.01;
+      const currentHeight = window.innerHeight;
       
       // Set the custom property on the document root
-      document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
+      document.documentElement.style.setProperty('--viewport-height', `${currentHeight}px`);
       
       // Also set the legacy vh unit custom property for compatibility
       document.documentElement.style.setProperty('--vh', `${vh}px`);
       
+      // Detect if keyboard is likely visible (significant height reduction)
+      const heightDifference = initialHeight - currentHeight;
+      const isKeyboardVisible = heightDifference > 150; // Keyboard typically reduces height by 200-350px
+      
+      // Add/remove keyboard classes to floating elements
+      const fabElements = document.querySelectorAll('.mediscribe-mobile-fab, .mediscribe-mobile-floating-upload');
+      fabElements.forEach(element => {
+        if (isKeyboardVisible) {
+          element.classList.add('keyboard-visible');
+        } else {
+          element.classList.remove('keyboard-visible');
+        }
+      });
+      
       // Development logging (only in development mode)
       if (process.env.NODE_ENV === 'development') {
         console.log('📱 Viewport height updated:', {
-          innerHeight: window.innerHeight,
-          viewportHeightPx: `${window.innerHeight}px`,
+          innerHeight: currentHeight,
+          initialHeight,
+          heightDifference,
+          isKeyboardVisible,
+          viewportHeightPx: `${currentHeight}px`,
           vhUnit: `${vh}px`
         });
       }
