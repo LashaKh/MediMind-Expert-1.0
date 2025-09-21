@@ -45,31 +45,22 @@
     transform: scale(0.96);
   }
 
-  /* Mobile Header - COMPLETELY FIXED */
+  /* Mobile Header - Normal flow */
   .mediscribe-mobile-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    flex-shrink: 0;
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.3);
     padding-top: env(safe-area-inset-top);
-    z-index: 1000;
-    height: 80px; /* Fixed height */
+    z-index: 100;
   }
 
-  /* Mobile Tab Navigation - COMPLETELY FIXED */
+  /* Mobile Tab Navigation - Normal flow */
   .mediscribe-mobile-tabs {
-    position: fixed;
-    top: 80px; /* Below header */
-    left: 0;
-    right: 0;
     gap: 8px;
     padding: 8px 12px;
+    flex-shrink: 0;
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.2);
-    z-index: 999;
-    height: 80px; /* Fixed height */
   }
 
   .mediscribe-mobile-tab {
@@ -119,18 +110,13 @@
     align-items: stretch;
   }
 
-  /* Fixed Mobile Controls positioned below tab navigation */
+  /* Mobile Controls - Normal flow */
   .mediscribe-mobile-fixed-controls {
-    position: fixed;
-    top: 160px; /* Below header (80px) + tabs (80px) */
-    left: 0;
-    right: 0;
-    z-index: 998; /* Below tabs but above content */
+    z-index: 999;
     background: white;
     border-bottom: 1px solid rgba(144, 205, 244, 0.2);
     padding: 12px 16px;
     backdrop-filter: blur(10px);
-    height: 60px; /* Fixed height */
     /* Add safe area support */
     padding-left: max(16px, env(safe-area-inset-left));
     padding-right: max(16px, env(safe-area-inset-right));
@@ -227,16 +213,13 @@
   }
 
   .mediscribe-mobile-textarea-container {
-    /* TARGETED APPROACH: Only this element resizes for keyboard */
-    height: var(--dynamic-textarea-height, calc(100vh - 270px));
-    max-height: var(--dynamic-textarea-height, calc(100vh - 270px));
-    min-height: 150px;
+    /* SIMPLE APPROACH: Fixed height, no dynamic changes */
+    flex: 1;
+    min-height: 200px;
     display: flex;
     flex-direction: column;
     overflow: hidden; /* NO SCROLLING HERE */
     position: relative;
-    /* Smooth transitions when keyboard opens/closes */
-    transition: height 0.3s ease, max-height 0.3s ease;
   }
 
   .mediscribe-mobile-textarea {
@@ -442,9 +425,8 @@
     margin-bottom: 16px;
   }
 
-  /* Mobile Main Container - Starts below fixed elements */
+  /* Mobile Main Container - Normal flow */
   .mediscribe-mobile-main-container {
-    margin-top: 220px; /* Header (80px) + Tabs (80px) + Controls (60px) */
     flex: 1;
     display: flex;
     flex-direction: column;

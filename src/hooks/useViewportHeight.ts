@@ -27,18 +27,8 @@ export const useViewportHeight = () => {
       document.documentElement.style.setProperty('--viewport-height', `${currentHeight}px`);
       document.documentElement.style.setProperty('--keyboard-height', `${Math.max(0, heightDifference)}px`);
       
-      // **TARGETED FIX**: Only adjust textarea size when keyboard opens
-      // Keep header/tabs/controls completely fixed at top
-      if (keyboardDetected) {
-        // Keyboard is open - make textarea smaller to accommodate
-        // Account for fixed elements: Header(80) + Tabs(80) + Controls(60) + margins(50) = 270px
-        const textareaHeight = Math.max(150, currentHeight - 270);
-        document.documentElement.style.setProperty('--dynamic-textarea-height', `${textareaHeight}px`);
-      } else {
-        // Keyboard closed - restore normal textarea size
-        // Use remaining viewport height minus fixed elements
-        document.documentElement.style.setProperty('--dynamic-textarea-height', 'calc(100vh - 270px)');
-      }
+      // **SIMPLE FIX**: Just prevent viewport shifts, no height changes
+      // Keep everything static to prevent layout breaks
       
       // Handle keyboard state change
       if (keyboardDetected !== isKeyboardOpen) {

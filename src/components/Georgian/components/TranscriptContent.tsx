@@ -240,7 +240,19 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                     onFocus={(e) => {
                       // Prevent default zoom behavior on iOS
                       e.currentTarget.style.fontSize = '16px';
-                      // Fixed elements at top should handle positioning
+                      
+                      // **SIMPLE VIEWPORT LOCK**: Prevent any scroll changes
+                      const scrollX = window.scrollX;
+                      const scrollY = window.scrollY;
+                      
+                      // Lock scroll position after focus
+                      setTimeout(() => {
+                        window.scrollTo(scrollX, scrollY);
+                      }, 0);
+                      
+                      setTimeout(() => {
+                        window.scrollTo(scrollX, scrollY);
+                      }, 100);
                     }}
                     onBlur={(e) => {
                       // Reset any focus styles
