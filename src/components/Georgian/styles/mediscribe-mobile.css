@@ -16,10 +16,13 @@
 
   #root {
     height: 100vh;
+    max-height: 100vh;
     height: 100dvh;
+    max-height: 100dvh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
   }
 }
 
@@ -208,18 +211,19 @@
   /* Mobile Transcript Area - ONLY TEXTAREA SCROLLS */
   .mediscribe-mobile-transcript {
     padding: 16px;
-    flex: 1;
-    min-height: 0;
+    height: calc(100vh - 300px); /* Force smaller height */
+    max-height: calc(100vh - 300px);
+    min-height: 200px;
     display: flex;
     flex-direction: column;
     overflow: hidden; /* NO SCROLLING HERE */
   }
 
   .mediscribe-mobile-textarea-container {
-    /* Container uses dynamic height to prevent browser auto-scroll */
-    height: var(--textarea-container-height, calc(100vh - 250px));
-    max-height: var(--textarea-container-height, calc(100vh - 250px));
-    min-height: 200px;
+    /* AGGRESSIVE APPROACH: Use small fixed height to ensure everything fits */
+    height: calc(100vh - 400px);
+    max-height: calc(100vh - 400px);
+    min-height: 150px;
     display: flex;
     flex-direction: column;
     overflow: hidden; /* NO SCROLLING HERE */
@@ -435,6 +439,7 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
+    max-height: calc(100vh - 160px); /* Subtract header height */
     overflow: hidden;
   }
 
