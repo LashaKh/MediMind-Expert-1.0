@@ -235,6 +235,9 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     }
   }, [recordingState.isRecording, lastRecordingSessionId]);
 
+  // Track previous session ID to detect session changes
+  const previousSessionIdRef = useRef<string>('');
+
   // Load session transcript when session changes OR when localTranscript updates
   useEffect(() => {
     // Don't update if user is currently typing to prevent interference
@@ -248,9 +251,16 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     const localLength = localTranscript?.length || 0;
     const sessionLength = sessionTranscript.length;
     const currentEditableLength = editableTranscript?.length || 0;
+    const currentSessionId = currentSession?.id || '';
+    const previousSessionId = previousSessionIdRef.current;
+    
+    // Check if this is a session change
+    const isSessionChange = currentSessionId !== previousSessionId;
     
     console.log('🔍 Transcript selection logic:', {
-      sessionId: currentSession?.id,
+      sessionId: currentSessionId,
+      previousSessionId,
+      isSessionChange,
       sessionLength,
       localLength,
       currentEditableLength,
@@ -260,49 +270,61 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       currentEditable: (editableTranscript || '').substring(0, 50) + ((editableTranscript?.length || 0) > 50 ? '...' : ''),
     });
     
+    // Update previous session ID tracker
+    if (isSessionChange) {
+      previousSessionIdRef.current = currentSessionId;
+    }
+    
     // Enhanced transcript selection logic with user edits preservation:
-    // 1. If user has typed content that's different from session, preserve user edits
-    // 2. If session transcript is longer (new transcription added), use session
-    // 3. Fall back to local/session/empty as before
+    // 1. If session changed, always load the new session transcript
+    // 2. Within same session: if user has typed content that's different from session, preserve user edits
+    // 3. If session transcript is longer (new transcription added), use session
+    // 4. Fall back to local/session/empty as before
     let transcript = '';
     
-    // Check if user has made manual edits that would be lost
-    // During live recording, localTranscript grows with new segments, but that's not a "user edit"
-    // Only consider it a user edit if the editable content differs from the START of local transcript
-    const localStart = (localTranscript || '').substring(0, currentEditableLength);
-    const userHasEdits = currentEditableLength > 0 && 
-                        editableTranscript.trim() !== sessionTranscript.trim() &&
-                        editableTranscript.trim() !== localStart.trim() &&
-                        !(localTranscript || '').startsWith(editableTranscript.trim()); // Not just a prefix of live recording
-    
-    if (userHasEdits) {
-      // User has made manual edits - preserve them
-      transcript = editableTranscript;
-      console.log('✏️ Preserving user edits (manual changes detected)');
-    } else if (sessionLength > currentEditableLength) {
-      // Session has more content (new transcription arrived) - use it
+    if (isSessionChange) {
+      // Session changed - always load the new session transcript, ignore user edits from previous session
       transcript = sessionTranscript;
-      console.log('📄 Using session transcript (new content available)');
-    } else if (localLength > currentEditableLength) {
-      // Local has more content - use local
-      transcript = localTranscript || '';
-      console.log('📝 Using local transcript (fresh recording)');
-    } else if (sessionLength > 0) {
-      // Session has content - use it
-      transcript = sessionTranscript;
-      console.log('📄 Using session transcript (most complete)');
-    } else if (localLength > 0) {
-      // No session but we have local content - use local
-      transcript = localTranscript || '';
-      console.log('📝 Using local transcript (available)');
-    } else if (currentEditableLength > 0) {
-      // Preserve any existing editable content
-      transcript = editableTranscript || '';
-      console.log('💾 Preserving current editable content');
+      console.log('🔄 Session changed - loading new session transcript');
     } else {
-      // Nothing available - start fresh
-      transcript = '';
-      console.log('🆕 Starting with empty transcript');
+      // Same session - check for user edits
+      // During live recording, localTranscript grows with new segments, but that's not a "user edit"
+      // Only consider it a user edit if the editable content differs from the START of local transcript
+      const localStart = (localTranscript || '').substring(0, currentEditableLength);
+      const userHasEdits = currentEditableLength > 0 && 
+                          editableTranscript.trim() !== sessionTranscript.trim() &&
+                          editableTranscript.trim() !== localStart.trim() &&
+                          !(localTranscript || '').startsWith(editableTranscript.trim()); // Not just a prefix of live recording
+      
+      if (userHasEdits) {
+        // User has made manual edits within the same session - preserve them
+        transcript = editableTranscript;
+        console.log('✏️ Preserving user edits (manual changes detected within same session)');
+      } else if (sessionLength > currentEditableLength) {
+        // Session has more content (new transcription arrived) - use it
+        transcript = sessionTranscript;
+        console.log('📄 Using session transcript (new content available)');
+      } else if (localLength > currentEditableLength) {
+        // Local has more content - use local
+        transcript = localTranscript || '';
+        console.log('📝 Using local transcript (fresh recording)');
+      } else if (sessionLength > 0) {
+        // Session has content - use it
+        transcript = sessionTranscript;
+        console.log('📄 Using session transcript (most complete)');
+      } else if (localLength > 0) {
+        // No session but we have local content - use local
+        transcript = localTranscript || '';
+        console.log('📝 Using local transcript (available)');
+      } else if (currentEditableLength > 0) {
+        // Preserve any existing editable content
+        transcript = editableTranscript || '';
+        console.log('💾 Preserving current editable content');
+      } else {
+        // Nothing available - start fresh
+        transcript = '';
+        console.log('🆕 Starting with empty transcript');
+      }
     }
     
     // Only update if the transcript actually changed

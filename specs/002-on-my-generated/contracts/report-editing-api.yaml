@@ -1,0 +1,623 @@
+openapi: 3.0.3
+info:
+  title: MediScribe Report Editing API
+  description: API for interactive editing of medical reports with voice and text instructions
+  version: 1.0.0
+  contact:
+    name: MediMind Expert Team
+
+servers:
+  - url: https://kvsqtolsjggpyvdtdpss.supabase.co
+    description: Supabase Production
+
+paths:
+  /rest/v1/edit_sessions:
+    post:
+      summary: Create new edit session for a medical report
+      operationId: createEditSession
+      tags:
+        - Edit Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - report_id
+                - session_id
+              properties:
+                report_id:
+                  type: string
+                  description: ID of the medical report to edit
+                session_id:
+                  type: string
+                  description: Unique session identifier for isolation
+              example:
+                report_id: "heart-failure-er-20250922-001"
+                session_id: "edit-session-uuid-123"
+      responses:
+        '201':
+          description: Edit session created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditSession'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized access
+        '409':
+          description: Active edit session already exists for this report
+
+    get:
+      summary: List edit sessions for the authenticated user
+      operationId: listEditSessions
+      tags:
+        - Edit Sessions
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, completed, cancelled]
+          description: Filter by session status
+        - name: report_id
+          in: query
+          schema:
+            type: string
+          description: Filter by specific report ID
+      responses:
+        '200':
+          description: List of edit sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EditSession'
+
+  /rest/v1/edit_sessions/{session_id}:
+    patch:
+      summary: Update edit session status
+      operationId: updateEditSession
+      tags:
+        - Edit Sessions
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [completed, cancelled]
+                  description: New session status
+              example:
+                status: "completed"
+      responses:
+        '200':
+          description: Session updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditSession'
+        '404':
+          description: Session not found
+        '400':
+          description: Invalid status transition
+
+  /rest/v1/report_edits:
+    post:
+      summary: Create a new report edit operation
+      operationId: createReportEdit
+      tags:
+        - Report Edits
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - report_id
+                - session_id
+                - edit_type
+                - original_content
+              properties:
+                report_id:
+                  type: string
+                  description: ID of the report being edited
+                session_id:
+                  type: string
+                  description: Edit session identifier
+                edit_type:
+                  type: string
+                  enum: [text_instruction, voice_instruction, manual_edit]
+                instruction_text:
+                  type: string
+                  description: Text instruction or manual edit content
+                voice_transcript:
+                  type: string
+                  description: Transcribed voice instruction (required for voice_instruction)
+                original_content:
+                  type: string
+                  description: Report content before edit
+              example:
+                report_id: "heart-failure-er-20250922-001"
+                session_id: "edit-session-uuid-123"
+                edit_type: "text_instruction"
+                instruction_text: "Add patient complained of shortness of breath for 3 days"
+                original_content: "Patient presents with chest pain..."
+      responses:
+        '201':
+          description: Edit operation created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportEdit'
+        '400':
+          description: Invalid edit data
+        '401':
+          description: Unauthorized access
+        '404':
+          description: Report or session not found
+
+    get:
+      summary: List report edits for authenticated user
+      operationId: listReportEdits
+      tags:
+        - Report Edits
+      parameters:
+        - name: report_id
+          in: query
+          schema:
+            type: string
+          description: Filter by specific report ID
+        - name: session_id
+          in: query
+          schema:
+            type: string
+          description: Filter by edit session
+        - name: edit_type
+          in: query
+          schema:
+            type: string
+            enum: [text_instruction, voice_instruction, manual_edit]
+          description: Filter by edit type
+      responses:
+        '200':
+          description: List of report edits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportEdit'
+
+  /rest/v1/report_edits/{edit_id}:
+    patch:
+      summary: Update report edit with processing results
+      operationId: updateReportEdit
+      tags:
+        - Report Edits
+      parameters:
+        - name: edit_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                updated_content:
+                  type: string
+                  description: Report content after AI processing
+                processing_metadata:
+                  type: object
+                  description: AI processing details and metadata
+                processed_at:
+                  type: string
+                  format: date-time
+                  description: Timestamp when processing completed
+              example:
+                updated_content: "Patient presents with chest pain and shortness of breath for 3 days..."
+                processing_metadata:
+                  tokens_used: 150
+                  model: "flowise-diagnosis-agent"
+                  processing_time: 2.3
+                processed_at: "2025-09-22T13:45:30Z"
+      responses:
+        '200':
+          description: Edit updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportEdit'
+        '404':
+          description: Edit not found
+        '400':
+          description: Invalid update data
+
+  /rest/v1/report_versions:
+    post:
+      summary: Create new report version
+      operationId: createReportVersion
+      tags:
+        - Report Versions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - report_id
+                - content
+                - edit_summary
+                - created_by_edit_id
+              properties:
+                report_id:
+                  type: string
+                  description: ID of the report
+                content:
+                  type: string
+                  description: Complete report content for this version
+                edit_summary:
+                  type: string
+                  description: Summary of changes in this version
+                created_by_edit_id:
+                  type: string
+                  format: uuid
+                  description: ID of the edit that created this version
+              example:
+                report_id: "heart-failure-er-20250922-001"
+                content: "Updated report content with new findings..."
+                edit_summary: "Added patient symptom duration (3 days SOB)"
+                created_by_edit_id: "edit-uuid-456"
+      responses:
+        '201':
+          description: Report version created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportVersion'
+        '400':
+          description: Invalid version data
+        '401':
+          description: Unauthorized access
+
+    get:
+      summary: List report versions for authenticated user
+      operationId: listReportVersions
+      tags:
+        - Report Versions
+      parameters:
+        - name: report_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Filter by specific report ID
+        - name: current_only
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Return only the current version
+      responses:
+        '200':
+          description: List of report versions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportVersion'
+
+  /functions/v1/process-edit-instruction:
+    post:
+      summary: Process edit instruction via Flowise AI
+      operationId: processEditInstruction
+      tags:
+        - AI Processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - edit_id
+                - instruction_text
+                - original_content
+                - flowise_endpoint
+              properties:
+                edit_id:
+                  type: string
+                  format: uuid
+                  description: ID of the edit operation
+                instruction_text:
+                  type: string
+                  description: Edit instruction from user
+                original_content:
+                  type: string
+                  description: Current report content
+                flowise_endpoint:
+                  type: string
+                  description: Flowise chatbot endpoint for this specialty
+                voice_transcript:
+                  type: string
+                  description: Original voice transcript if applicable
+              example:
+                edit_id: "edit-uuid-456"
+                instruction_text: "Add patient complained of shortness of breath for 3 days"
+                original_content: "Patient presents with chest pain..."
+                flowise_endpoint: "cardiology-diagnosis-agent"
+                voice_transcript: "დაამატე რომ პაციენტი უჩივის ქოშინზე 3 დღეა"
+      responses:
+        '200':
+          description: Edit instruction processed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updated_content:
+                    type: string
+                    description: Updated report content
+                  processing_metadata:
+                    type: object
+                    description: Processing details and metrics
+                  success:
+                    type: boolean
+                    description: Processing success status
+        '400':
+          description: Invalid instruction or content
+        '500':
+          description: AI processing failed
+
+  /functions/v1/georgian-tts-proxy:
+    post:
+      summary: Transcribe voice instruction using Georgian TTS
+      operationId: transcribeVoiceInstruction
+      tags:
+        - Voice Processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - theAudioDataAsBase64
+                - Language
+              properties:
+                theAudioDataAsBase64:
+                  type: string
+                  description: Base64 encoded audio data
+                Language:
+                  type: string
+                  default: "ka-GE"
+                  description: Language code for transcription
+                Autocorrect:
+                  type: boolean
+                  default: true
+                  description: Enable autocorrection
+                Punctuation:
+                  type: boolean
+                  default: true
+                  description: Enable punctuation
+                Digits:
+                  type: boolean
+                  default: true
+                  description: Enable digit recognition
+              example:
+                theAudioDataAsBase64: "UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBkKY3PLJeSkELYPQ8diLOAYSZ6vn56JQRQADAA=="
+                Language: "ka-GE"
+                Autocorrect: true
+                Punctuation: true
+                Digits: true
+      responses:
+        '200':
+          description: Voice transcription completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                    description: Transcribed text
+                  confidence:
+                    type: number
+                    description: Transcription confidence score
+                  language:
+                    type: string
+                    description: Detected language
+        '400':
+          description: Invalid audio data
+        '500':
+          description: Transcription service error
+
+components:
+  schemas:
+    EditSession:
+      type: object
+      required:
+        - id
+        - report_id
+        - user_id
+        - session_id
+        - status
+        - total_edits
+        - started_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique session identifier
+        report_id:
+          type: string
+          description: ID of the medical report being edited
+        user_id:
+          type: string
+          format: uuid
+          description: ID of the user who owns this session
+        session_id:
+          type: string
+          description: Session identifier for isolation
+        status:
+          type: string
+          enum: [active, completed, cancelled]
+          description: Current session status
+        total_edits:
+          type: integer
+          minimum: 0
+          description: Number of edits in this session
+        started_at:
+          type: string
+          format: date-time
+          description: Session start timestamp
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Session completion timestamp
+
+    ReportEdit:
+      type: object
+      required:
+        - id
+        - report_id
+        - user_id
+        - session_id
+        - edit_type
+        - original_content
+        - updated_content
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique edit identifier
+        report_id:
+          type: string
+          description: ID of the report being edited
+        user_id:
+          type: string
+          format: uuid
+          description: ID of the user who made the edit
+        session_id:
+          type: string
+          description: Edit session identifier
+        edit_type:
+          type: string
+          enum: [text_instruction, voice_instruction, manual_edit]
+          description: Type of edit operation
+        instruction_text:
+          type: string
+          nullable: true
+          description: Text instruction or manual edit content
+        voice_transcript:
+          type: string
+          nullable: true
+          description: Transcribed voice instruction
+        original_content:
+          type: string
+          description: Report content before edit
+        updated_content:
+          type: string
+          description: Report content after edit
+        processing_metadata:
+          type: object
+          description: AI processing details and metrics
+        created_at:
+          type: string
+          format: date-time
+          description: Edit creation timestamp
+        processed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: AI processing completion timestamp
+
+    ReportVersion:
+      type: object
+      required:
+        - id
+        - report_id
+        - user_id
+        - version_number
+        - content
+        - is_current
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique version identifier
+        report_id:
+          type: string
+          description: ID of the medical report
+        user_id:
+          type: string
+          format: uuid
+          description: ID of the user who owns the report
+        version_number:
+          type: integer
+          minimum: 1
+          description: Sequential version number
+        content:
+          type: string
+          description: Complete report content at this version
+        edit_summary:
+          type: string
+          nullable: true
+          description: Summary of changes in this version
+        is_current:
+          type: boolean
+          description: Whether this is the current active version
+        created_by_edit_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of the edit that created this version
+        created_at:
+          type: string
+          format: date-time
+          description: Version creation timestamp
+
+  securitySchemes:
+    supabaseAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase JWT token from user authentication
+
+security:
+  - supabaseAuth: []
+
+tags:
+  - name: Edit Sessions
+    description: Operations for managing report editing sessions
+  - name: Report Edits
+    description: Operations for individual edit operations
+  - name: Report Versions
+    description: Operations for report version management
+  - name: AI Processing
+    description: Operations for AI-powered edit processing
+  - name: Voice Processing
+    description: Operations for voice transcription and processing
