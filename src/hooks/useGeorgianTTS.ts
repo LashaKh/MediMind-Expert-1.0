@@ -340,15 +340,17 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     }
   }, [monitorAudioLevel]);
 
-  // 🚀 Pre-initialize microphone for instant recording
+  // 🚀 Performance-optimized microphone pre-initialization for <200ms recording start
   const preInitializeMicrophone = useCallback(async (): Promise<MediaStream> => {
+    // Performance optimization: Return immediately if already initialized
     if (preInitializedStreamRef.current && preInitializedStreamRef.current.active) {
-
+      console.log('🚀 Using cached pre-initialized stream - 0ms delay');
       return preInitializedStreamRef.current;
     }
 
+    // Performance optimization: Await existing promise to avoid duplicate requests
     if (preInitPromiseRef.current) {
-
+      console.log('🚀 Awaiting existing pre-initialization promise');
       return await preInitPromiseRef.current;
     }
 
@@ -356,23 +358,34 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       throw new Error('Pre-initialization already in progress');
     }
 
+    console.time('🚀 Microphone pre-initialization');
     isPreInitializingRef.current = true;
 
     const initPromise = safeAsync(
       () => navigator.mediaDevices.getUserMedia({ 
         audio: {
+          // Performance-optimized audio constraints for <200ms start
           echoCancellation: true,
           noiseSuppression: true,
           autoGainControl: true,
-          sampleRate: 16000,
-        }
+          sampleRate: 16000, // Lower sample rate for faster processing
+          channelCount: 1, // Mono for better performance
+          latency: 0, // Request lowest possible latency
+          // Advanced performance constraints
+          googEchoCancellation: true,
+          googAutoGainControl: true,
+          googNoiseSuppression: true,
+          googHighpassFilter: true,
+          googTypingNoiseDetection: true,
+        } as any // Cast to any for advanced Chrome constraints
       })
     ).then(([stream, error]) => {
+      console.timeEnd('🚀 Microphone pre-initialization');
       isPreInitializingRef.current = false;
       preInitPromiseRef.current = null;
 
       if (error) {
-
+        console.error('❌ Pre-initialization failed:', error.message);
         throw error;
       }
 
@@ -380,7 +393,28 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         throw new Error('No stream returned from getUserMedia');
       }
 
+      // Performance optimization: Immediately set up optimal audio constraints
+      const audioTrack = stream.getAudioTracks()[0];
+      if (audioTrack && audioTrack.applyConstraints) {
+        audioTrack.applyConstraints({
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          latency: 0,
+        }).catch(err => {
+          console.warn('⚠️ Could not apply optimal audio constraints:', err.message);
+        });
+      }
+
       preInitializedStreamRef.current = stream;
+      console.log('✅ Microphone pre-initialized successfully');
+      
+      // Performance monitoring: Track pre-initialization success
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('microphone-preinitialized', { 
+          detail: { timestamp: Date.now() } 
+        }));
+      }
 
       return stream;
     });
@@ -1084,13 +1118,18 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   }, [language, autocorrect, punctuation, digits, onLiveTranscriptUpdate, chunkSize, monitorAudioLevel, stopChunkedProcessing, cleanupAudioResources]);
 
   const startRecording = useCallback(async () => {
+    // 🚀 Performance timing to ensure <200ms recording start
+    const startTime = performance.now();
+    console.time('🚀 Recording start performance');
+    
     try {
       // Prevent multiple recordings
       if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-
+        console.log('🚀 Recording already active - 0ms');
         return;
       }
       
+      // Fast state reset without blocking operations
       setError(null);
       audioChunksRef.current = [];
       audioChunksForProcessingRef.current = [];
@@ -1104,11 +1143,17 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       processedSegmentsRef.current = 0;
       lastProcessedTimeRef.current = 0;
       
-      // 🚀 Use pre-initialized stream for instant recording
+      // 🚀 Use pre-initialized stream for instant recording (target: 0-50ms)
       let stream: MediaStream;
       try {
-
+        const streamStartTime = performance.now();
         stream = await preInitializeMicrophone();
+        const streamTime = performance.now() - streamStartTime;
+        console.log(`🚀 Stream acquisition: ${streamTime.toFixed(1)}ms`);
+        
+        if (streamTime > 100) {
+          console.warn(`⚠️ Stream acquisition slower than expected: ${streamTime.toFixed(1)}ms`);
+        }
       } catch (streamError: any) {
         // Enhanced error handling for common microphone permission issues
         let errorMessage = streamError.message;
@@ -1200,6 +1245,40 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       // if (enableStreaming) {
       //   startChunkedProcessing();
       // }
+      
+      // 🚀 Performance monitoring: Track total recording start time
+      const totalTime = performance.now() - startTime;
+      console.timeEnd('🚀 Recording start performance');
+      console.log(`🚀 Total recording start time: ${totalTime.toFixed(1)}ms`);
+      
+      // Performance validation: Warn if >200ms target is exceeded
+      if (totalTime > 200) {
+        console.warn(`⚠️ PERFORMANCE WARNING: Recording start took ${totalTime.toFixed(1)}ms (target: <200ms)`);
+        
+        // Dispatch performance warning event for monitoring
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('recording-performance-warning', { 
+            detail: { 
+              startTime: totalTime,
+              target: 200,
+              component: 'useGeorgianTTS'
+            } 
+          }));
+        }
+      } else {
+        console.log(`✅ Recording start performance: ${totalTime.toFixed(1)}ms (target: <200ms) - PASS`);
+        
+        // Dispatch success event for monitoring
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('recording-performance-success', { 
+            detail: { 
+              startTime: totalTime,
+              target: 200,
+              component: 'useGeorgianTTS'
+            } 
+          }));
+        }
+      }
       
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to start recording';
@@ -1367,19 +1446,68 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     window.MediaRecorder
   );
 
-  // 🚀 Auto pre-initialize microphone for instant recording
+  // 🚀 Ultra-aggressive microphone pre-initialization for <200ms target
   useEffect(() => {
     if (!isSupported) return;
 
-    // Start pre-initialization in background to eliminate delay
-    const timer = setTimeout(() => {
-      preInitializeMicrophone().catch(error => {
-        console.log('🤖 Background pre-initialization failed (this is normal):', error.message);
-        // Don't set error state - this is just background optimization
-      });
-    }, 100); // Small delay to avoid blocking initial render
+    // Multiple pre-initialization strategies for maximum performance
+    const preInitStrategies = [
+      // Strategy 1: Immediate pre-init (most aggressive)
+      () => {
+        preInitializeMicrophone().catch(error => {
+          console.log('🤖 Immediate pre-initialization failed (trying fallback):', error.message);
+        });
+      },
+      
+      // Strategy 2: User interaction pre-init (fallback)
+      () => {
+        const handleUserInteraction = () => {
+          console.log('🚀 User interaction detected - pre-initializing microphone');
+          preInitializeMicrophone().catch(error => {
+            console.log('🤖 User interaction pre-initialization failed:', error.message);
+          });
+          
+          // Remove listeners after first interaction
+          ['click', 'touchstart', 'keydown', 'mouseover'].forEach(event => {
+            document.removeEventListener(event, handleUserInteraction);
+          });
+        };
+        
+        // Listen for any user interaction to trigger pre-init
+        ['click', 'touchstart', 'keydown', 'mouseover'].forEach(event => {
+          document.addEventListener(event, handleUserInteraction, { once: true, passive: true });
+        });
+      }
+    ];
 
-    return () => clearTimeout(timer);
+    // Try immediate pre-initialization first
+    const immediateTimer = setTimeout(preInitStrategies[0], 50); // Reduced delay for faster init
+    
+    // Setup fallback user interaction pre-init after short delay
+    const fallbackTimer = setTimeout(preInitStrategies[1], 100);
+    
+    // Advanced: Pre-warm browser audio context
+    const audioContextTimer = setTimeout(() => {
+      try {
+        if (typeof window !== 'undefined' && 'AudioContext' in window) {
+          const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+          audioContext.resume().then(() => {
+            console.log('🚀 Audio context pre-warmed successfully');
+            audioContext.close(); // Clean up
+          }).catch(err => {
+            console.log('🤖 Audio context pre-warm failed:', err.message);
+          });
+        }
+      } catch (error) {
+        console.log('🤖 Audio context not available:', error);
+      }
+    }, 10); // Very early pre-warm
+
+    return () => {
+      clearTimeout(immediateTimer);
+      clearTimeout(fallbackTimer);
+      clearTimeout(audioContextTimer);
+    };
   }, [isSupported, preInitializeMicrophone]);
 
   return {

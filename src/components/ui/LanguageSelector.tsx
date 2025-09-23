@@ -106,7 +106,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
 
   // Loading indicator component
   const LoadingSpinner = () => (
-    <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+    <div className="w-4 h-4 border-2 border-gray-300 border-t-[#2b6cb0] rounded-full animate-spin"></div>
   );
 
   const renderLanguageOption = (code: string, lang: typeof SUPPORTED_LANGUAGES[keyof typeof SUPPORTED_LANGUAGES], isCompact: boolean = false) => {
@@ -124,13 +124,13 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           isDisabled 
             ? 'opacity-50 cursor-not-allowed' 
             : isComingSoon
-            ? 'hover:bg-orange-50 dark:hover:bg-orange-900/20'
+            ? 'hover:bg-[#90cdf4]/10 dark:hover:bg-[#90cdf4]/5'
             : 'hover:bg-gray-50 dark:hover:bg-gray-700'
         } ${
           isCurrentLanguage
             ? 'bg-[#63b3ed]/10 dark:bg-[#2b6cb0]/20 text-[#1a365d] dark:text-[#63b3ed]'
             : isComingSoon
-            ? 'text-orange-600 dark:text-orange-400'
+            ? 'text-[#2b6cb0] dark:text-[#63b3ed]'
             : 'text-gray-700 dark:text-gray-300'
         }`}
         title={isDisabled ? 'Loading...' : isComingSoon ? 'Coming Soon!' : lang.nativeName}
@@ -143,7 +143,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             <div className="font-medium flex items-center gap-2">
               {lang.nativeName}
               {isComingSoon && (
-                <span className="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-2 py-1 rounded-full">
+                <span className="text-xs bg-[#90cdf4]/20 dark:bg-[#90cdf4]/10 text-[#2b6cb0] dark:text-[#63b3ed] px-2 py-1 rounded-full">
                   Coming Soon
                 </span>
               )}
@@ -155,7 +155,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium whitespace-nowrap">{lang.nativeName}</span>
             {isComingSoon && (
-              <span className="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-1 py-0.5 rounded text-[10px]">
+              <span className="text-xs bg-[#90cdf4]/20 dark:bg-[#90cdf4]/10 text-[#2b6cb0] dark:text-[#63b3ed] px-1 py-0.5 rounded text-[10px]">
                 Soon
               </span>
             )}
@@ -164,9 +164,9 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         
         {/* Enhanced status indicators */}
         {isSwitchingToThis ? (
-          <div className="w-5 h-5 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin" />
+          <div className="w-5 h-5 border-2 border-[#90cdf4] border-t-[#2b6cb0] rounded-full animate-spin" />
         ) : isComingSoon ? (
-          <div className="relative p-1 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 shadow-md">
+          <div className="relative p-1 rounded-full bg-gradient-to-r from-[#90cdf4] to-[#63b3ed] shadow-md">
             <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -201,7 +201,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       <button
         onClick={() => setIsOpen(!isOpen)}
         disabled={isLoading}
-        className={`flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+        className={`flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#63b3ed] ${
           isLoading 
             ? 'opacity-50 cursor-not-allowed' 
             : 'hover:bg-gray-50 dark:hover:bg-gray-700'
@@ -247,51 +247,24 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       <button
         onClick={() => setIsOpen(!isOpen)}
         disabled={isLoading}
-        className={`relative group flex items-center gap-2 px-4 py-0 h-11 rounded-2xl text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-500 ease-out border border-white/20 backdrop-blur-xl overflow-hidden ${
+        className={`flex items-center gap-2 px-4 py-2 h-11 rounded-2xl text-white border border-white/20 backdrop-blur-xl transition-colors duration-200 ${
           isLoading 
             ? 'opacity-50 cursor-not-allowed' 
-            : ''
+            : 'hover:bg-[#1a365d]'
         }`}
         style={{
-          background: 'linear-gradient(135deg, rgba(26, 54, 93, 0.7) 0%, rgba(43, 108, 176, 0.8) 25%, rgba(99, 179, 237, 0.7) 50%, rgba(43, 108, 176, 0.8) 75%, rgba(26, 54, 93, 0.7) 100%)',
-          backgroundSize: '300% 300%',
-          boxShadow: '0 8px 25px -8px rgba(43, 108, 176, 0.25), 0 4px 15px -4px rgba(99, 179, 237, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-          animation: 'gradient-shift 6s ease-in-out infinite'
+          background: '#2b6cb0'
         }}
         aria-label={t('profile.language')}
         aria-expanded={isOpen}
         title={isLoading ? 'Loading translations...' : currentLang.nativeName}
       >
-        {/* Animated background layers */}
-        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-             style={{
-               background: 'linear-gradient(135deg, #1a365d 0%, #2b6cb0 25%, #63b3ed 50%, #2b6cb0 75%, #1a365d 100%)',
-               backgroundSize: '400% 400%',
-               animation: 'gradient-shift 4s ease-in-out infinite'
-             }} />
-        
-        {/* Inner glow */}
-        <div className="absolute inset-0.5 rounded-2xl bg-gradient-to-br from-white/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-        
-        {/* Shimmer effect */}
-        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-600"
-             style={{
-               background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%)',
-               backgroundSize: '200% 200%',
-               animation: 'shimmer 2s ease-in-out infinite'
-             }} />
-        
-        <div className="relative z-10 flex items-center gap-2">
-          {/* Enhanced flag with container */}
-          <div className="relative p-1 rounded-xl bg-white/20 backdrop-blur-sm group-hover:bg-white/30 transition-all duration-500 group-hover:scale-110">
-            <span className="text-lg drop-shadow-sm" role="img" aria-label={currentLang.name}>
-              {currentLang.flag}
-            </span>
-          </div>
+        <div className="flex items-center gap-2">
+          <span className="text-lg" role="img" aria-label={currentLang.name}>
+            {currentLang.flag}
+          </span>
           
-          {/* Enhanced text */}
-          <span className="text-sm font-bold drop-shadow-sm tracking-wide group-hover:translate-x-0.5 transition-transform duration-300"
-                style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)' }}>
+          <span className="text-sm font-medium">
             {currentLang.code.toUpperCase()}
           </span>
           
@@ -299,16 +272,10 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             <div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" />
           )}
         </div>
-        
-        {/* Pulse ring on hover */}
-        <div className="absolute inset-0 rounded-2xl border-2 border-white/40 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out" />
       </button>
 
       {isOpen && !isLoading && (
-        <div className="absolute top-full right-0 mt-2 bg-white/95 dark:bg-gray-800/95 border border-white/20 dark:border-gray-600/20 rounded-2xl shadow-2xl backdrop-blur-xl z-50 overflow-hidden"
-             style={{
-               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)'
-             }}>
+        <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-50 overflow-hidden">
           {Object.entries(SUPPORTED_LANGUAGES).map(([code, lang]) => 
             renderLanguageOption(code, lang, true)
           )}
@@ -322,7 +289,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       <button
         onClick={() => setIsOpen(!isOpen)}
         disabled={isLoading}
-        className={`w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+        className={`w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#63b3ed] ${
           isLoading 
             ? 'opacity-50 cursor-not-allowed' 
             : 'hover:bg-gray-50 dark:hover:bg-gray-700'

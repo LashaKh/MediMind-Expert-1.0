@@ -258,7 +258,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'complete': return 'text-emerald-500';
+      case 'complete': return 'text-[#2b6cb0]';
       case 'transcribed': return 'text-[#2b6cb0]';
       case 'recent': return 'text-[#63b3ed]';
       default: return 'text-[#90cdf4]';
@@ -345,12 +345,12 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 
                 {/* Active indicator */}
                 {isActive && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white dark:border-medical-gray-800" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#2b6cb0] rounded-full border-2 border-white dark:border-medical-gray-800" />
                 )}
                 
                 {/* Favorite star */}
                 {isFavorite && (
-                  <div className="absolute -top-1 -left-1 w-4 h-4 bg-amber-500 rounded-full flex items-center justify-center">
+                  <div className="absolute -top-1 -left-1 w-4 h-4 bg-[#90cdf4] rounded-full flex items-center justify-center">
                     <Star className="w-2 h-2 text-white fill-current" />
                   </div>
                 )}
@@ -380,7 +380,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 {/* Compact status badges */}
                 <div className="flex items-center space-x-1 mt-2">
                   {session.transcript && (
-                    <span className="px-2 py-0.5 text-xs font-medium bg-emerald-100 text-emerald-700 rounded-lg">
+                    <span className="px-2 py-0.5 text-xs font-medium bg-[#63b3ed]/20 text-[#1a365d] rounded-lg">
                       Transcribed
                     </span>
                   )}
@@ -404,8 +404,8 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 className={`
                   p-2 rounded-lg transition-all duration-200
                   ${isFavorite
-                    ? 'text-amber-500 hover:text-amber-600 bg-amber-50 dark:bg-amber-900/20'
-                    : 'text-medical-gray-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20'
+                    ? 'text-[#90cdf4] hover:text-[#63b3ed] bg-[#90cdf4]/10 dark:bg-[#90cdf4]/20'
+                    : 'text-medical-gray-400 hover:text-[#90cdf4] hover:bg-[#90cdf4]/10 dark:hover:bg-[#90cdf4]/20'
                   }
                 `}
                 title={isFavorite ? "Remove from favorites" : "Add to favorites"}
@@ -640,7 +640,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
         <div className="relative px-4 py-2 bg-white border-t border-[#90cdf4]/30">
           <div className="flex items-center justify-center text-xs text-[#2b6cb0]">
             <span>{sessions.length} sessions • </span>
-            <Shield className="w-3 h-3 mx-1 text-emerald-500" />
+            <Shield className="w-3 h-3 mx-1 text-[#2b6cb0]" />
             <span>Secure</span>
           </div>
         </div>

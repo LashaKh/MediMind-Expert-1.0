@@ -30,6 +30,9 @@
 /* Import Revolutionary MediSearch Styles */
 @import './styles/medisearch-revolutionary.css';
 
+/* Import Report Editing Medical Theme */
+@import './styles/report-editing-theme.css';
+
 /* Advanced Search Modal Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;

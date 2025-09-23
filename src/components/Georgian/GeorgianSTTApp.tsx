@@ -1026,20 +1026,20 @@ export const GeorgianSTTApp: React.FC = () => {
       {window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && (
         <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 max-w-lg bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-amber-200/50 dark:border-amber-700/50 rounded-xl p-6 shadow-2xl shadow-amber-500/10">
           <div className="flex items-start space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+            <div className="w-12 h-12 bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
               <Shield className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
               <div className="flex items-center space-x-2 mb-3">
-                <h3 className="text-lg font-bold text-amber-800 dark:text-amber-200">Security Protocol Required</h3>
-                <div className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-full text-xs font-semibold">
+                <h3 className="text-lg font-bold text-[#1a365d] dark:text-[#90cdf4]">Security Protocol Required</h3>
+                <div className="px-2 py-1 bg-[#90cdf4]/20 dark:bg-[#90cdf4]/30 text-[#1a365d] dark:text-[#90cdf4] rounded-full text-xs font-semibold">
                   HIPAA
                 </div>
               </div>
-              <p className="text-sm text-amber-700 dark:text-amber-300 leading-relaxed mb-3">
+              <p className="text-sm text-[#2b6cb0] dark:text-[#90cdf4] leading-relaxed mb-3">
                 Medical transcription requires secure HTTPS connection for patient privacy protection and microphone access.
               </p>
-              <div className="flex items-center space-x-2 text-xs text-amber-600 dark:text-amber-400">
+              <div className="flex items-center space-x-2 text-xs text-[#2b6cb0] dark:text-[#90cdf4]">
                 <Activity className="w-3 h-3" />
                 <span>Please ensure secure connection before proceeding</span>
               </div>
@@ -1079,7 +1079,7 @@ export const GeorgianSTTApp: React.FC = () => {
             width: '64px',
             height: '64px',
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%)',
+            background: 'linear-gradient(135deg, #1a365d 0%, #2b6cb0 50%, #63b3ed 100%)',
             border: '2px solid rgba(255, 255, 255, 0.2)',
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
             zIndex: 999999,
@@ -1092,11 +1092,11 @@ export const GeorgianSTTApp: React.FC = () => {
           }}
           onMouseEnter={(e) => {
             e.target.style.transform = 'scale(1.1) translateY(-2px)';
-            e.target.style.boxShadow = '0 35px 60px -12px rgba(0, 0, 0, 0.35)';
+            e.target.style.boxShadow = '0 35px 60px -12px rgba(26, 54, 93, 0.35)';
           }}
           onMouseLeave={(e) => {
             e.target.style.transform = 'scale(1) translateY(0px)';
-            e.target.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+            e.target.style.boxShadow = '0 25px 50px -12px rgba(26, 54, 93, 0.25)';
           }}
           title="Ask AI about this transcript"
         >

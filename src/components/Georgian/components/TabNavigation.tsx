@@ -102,7 +102,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                     borderRadius: '16px',
                     fontWeight: '600',
                     fontSize: '14px',
-                    boxShadow: '0 4px 6px -1px rgba(74, 158, 255, 0.2), 0 2px 4px -1px rgba(74, 158, 255, 0.06)'
+                    boxShadow: '0 4px 6px -1px rgba(26, 54, 93, 0.2), 0 2px 4px -1px rgba(26, 54, 93, 0.06)'
                   } : {
                     background: '#ffffff',
                     color: '#1a365d',

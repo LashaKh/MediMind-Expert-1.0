@@ -238,8 +238,8 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                           className={`
                             w-full p-3 rounded-xl transition-all duration-200 flex items-center space-x-3 min-h-[60px]
                             ${isSelected
-                              ? 'bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border-2 border-violet-500'
-                              : 'bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-violet-300'
+                              ? 'bg-gradient-to-r from-[#63b3ed]/10 to-[#90cdf4]/10 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/20 border-2 border-[#2b6cb0]'
+                              : 'bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-[#63b3ed]'
                             }
                           `}
                         >
@@ -266,7 +266,7 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                           
                           {/* Checkmark */}
                           {isSelected && (
-                            <div className="w-5 h-5 rounded-full bg-violet-500 flex items-center justify-center">
+                            <div className="w-5 h-5 rounded-full bg-[#2b6cb0] flex items-center justify-center">
                               <Check className="w-3 h-3 text-white" />
                             </div>
                           )}

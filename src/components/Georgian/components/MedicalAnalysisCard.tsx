@@ -18,10 +18,22 @@ import {
   User,
   Shield,
   HeartHandshake,
-  Trash2
+  Trash2,
+  Edit3,
+  Settings,
+  Sparkles,
+  Crown,
+  Star,
+  Award,
+  Gem,
+  Wand2,
+  Target,
+  TrendingUp,
+  Layers
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { formatMarkdown, extractCleanText, hasMarkdownFormatting } from '../../../utils/markdownFormatter';
+import ReportEditCard from '../../ReportEditing/ReportEditCard';
 
 interface ProcessingHistory {
   userInstruction: string;
@@ -40,6 +52,9 @@ interface MedicalAnalysisCardProps {
   onDownload?: (analysis: ProcessingHistory) => void;
   onShare?: (analysis: ProcessingHistory) => void;
   onDelete?: (analysis: ProcessingHistory) => void;
+  onEdit?: (analysis: ProcessingHistory) => void;
+  enableEditing?: boolean;
+  flowiseEndpoint?: string;
 }
 
 const formatProcessingTime = (milliseconds: number): string => {
@@ -47,7 +62,7 @@ const formatProcessingTime = (milliseconds: number): string => {
   return `${(milliseconds / 1000).toFixed(1)}s`;
 };
 
-const getAnalysisType = (instruction: string, model?: string): { type: string; icon: React.ElementType; color: string; isDiagnosis: boolean } => {
+const getAnalysisType = (instruction: string, model?: string): { type: string; icon: React.ElementType; color: string; isDiagnosis: boolean; endpoint: string } => {
   const lower = instruction.toLowerCase();
   
   // Check if this is a diagnosis report (either by model name or instruction content)
@@ -62,31 +77,49 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
   
   if (isDiagnosis) {
     if (lower.includes('i50.0') || lower.includes('heart failure') || lower.includes('გულის შეგუბებითი უკმარისობა')) {
-      return { type: 'Heart Failure ER Report (I50.0)', icon: HeartHandshake, color: 'from-[#2b6cb0] to-[#1a365d]', isDiagnosis: true };
+      return { 
+        type: 'Heart Failure ER Report (I50.0)', 
+        icon: HeartHandshake, 
+        color: 'from-[#2b6cb0] to-[#1a365d]', 
+        isDiagnosis: true,
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/89920f52-74cb-46bc-bf6c-b9099746dfe9'
+      };
     }
     if (lower.includes('i24.9') || lower.includes('nstemi') || lower.includes('გულის მწვავე იშემიური ავადმყოფობა')) {
-      return { type: 'NSTEMI ER Report (I24.9)', icon: HeartHandshake, color: 'from-[#1a365d] to-[#2b6cb0]', isDiagnosis: true };
+      return { 
+        type: 'NSTEMI ER Report (I24.9)', 
+        icon: HeartHandshake, 
+        color: 'from-[#1a365d] to-[#2b6cb0]', 
+        isDiagnosis: true,
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4'
+      };
     }
-    return { type: 'Diagnosis ER Report', icon: HeartHandshake, color: 'from-[#63b3ed] to-[#90cdf4]', isDiagnosis: true };
+    return { 
+      type: 'Diagnosis ER Report', 
+      icon: HeartHandshake, 
+      color: 'from-[#63b3ed] to-[#90cdf4]', 
+      isDiagnosis: true,
+      endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy'
+    };
   }
   
   if (lower.includes('symptom') || lower.includes('diagnos')) {
-    return { type: 'Clinical Assessment', icon: Stethoscope, color: 'from-[#63b3ed] to-[#2b6cb0]', isDiagnosis: false };
+    return { type: 'Clinical Assessment', icon: Stethoscope, color: 'from-[#63b3ed] to-[#2b6cb0]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
   }
   if (lower.includes('medication') || lower.includes('drug') || lower.includes('dosage')) {
-    return { type: 'Medication Review', icon: Shield, color: 'from-[#2b6cb0] to-[#1a365d]', isDiagnosis: false };
+    return { type: 'Medication Review', icon: Shield, color: 'from-[#2b6cb0] to-[#1a365d]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
   }
   if (lower.includes('summary') || lower.includes('summarize')) {
-    return { type: 'Clinical Summary', icon: FileText, color: 'from-[#90cdf4] to-[#63b3ed]', isDiagnosis: false };
+    return { type: 'Clinical Summary', icon: FileText, color: 'from-[#90cdf4] to-[#63b3ed]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
   }
   if (lower.includes('procedure') || lower.includes('treatment')) {
-    return { type: 'Treatment Plan', icon: Activity, color: 'from-[#1a365d] to-[#63b3ed]', isDiagnosis: false };
+    return { type: 'Treatment Plan', icon: Activity, color: 'from-[#1a365d] to-[#63b3ed]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
   }
   if (lower.includes('demographic') || lower.includes('history')) {
-    return { type: 'Patient History', icon: User, color: 'from-[#90cdf4] to-[#2b6cb0]', isDiagnosis: false };
+    return { type: 'Patient History', icon: User, color: 'from-[#90cdf4] to-[#2b6cb0]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
   }
   
-  return { type: 'General Analysis', icon: Brain, color: 'from-[#2b6cb0] to-[#90cdf4]', isDiagnosis: false };
+  return { type: 'General Analysis', icon: Brain, color: 'from-[#2b6cb0] to-[#90cdf4]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
 };
 
 const copyToClipboard = async (content: string) => {
@@ -116,9 +149,14 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
   onCopy,
   onDownload,
   onShare,
-  onDelete
+  onDelete,
+  onEdit,
+  enableEditing = false,
+  flowiseEndpoint = ''
 }) => {
   const [isExpanded, setIsExpanded] = useState(index === 0); // First card expanded by default
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editedContent, setEditedContent] = useState<string | null>(null);
   const analysisType = getAnalysisType(analysis.userInstruction, analysis.model);
   const IconComponent = analysisType.icon;
 
@@ -199,6 +237,35 @@ Medical AI Processing System`;
     }
   };
 
+  const handleEdit = () => {
+    if (enableEditing) {
+      setIsEditMode(true);
+      setIsExpanded(true);
+      onEdit?.(analysis);
+    }
+  };
+
+  const handleEditComplete = (editResult: any) => {
+    // Handle successful edit
+    console.log('Edit completed:', editResult);
+    setIsEditMode(false);
+    
+    // Update the local content state with the edited content
+    if (editResult?.updatedContent) {
+      setEditedContent(editResult.updatedContent);
+      setIsExpanded(true); // Keep card expanded to show the changes
+    }
+  };
+
+  const handleEditError = (error: Error) => {
+    console.error('Edit failed:', error);
+    // You might want to show an error message to the user
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditMode(false);
+  };
+
   // Safety check for analysis data
   if (!analysis || !analysis.userInstruction || !analysis.aiResponse) {
     return (
@@ -216,181 +283,436 @@ Medical AI Processing System`;
   }
 
   return (
-    <div className="group medical-analysis-card bg-white dark:bg-slate-800 rounded-xl md:rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden w-full max-w-full">
-      {/* Card Header */}
-      <div className="relative bg-gradient-to-br from-slate-50/80 to-white dark:from-slate-800/80 dark:to-slate-900/80 border-b border-slate-200/50 dark:border-slate-700/50">
-        {/* Priority Badge and Delete Button */}
-        <div className="absolute top-4 right-4 z-20">
-          <div className="flex items-center space-x-2">
-            <div className="bg-slate-100 dark:bg-slate-700 rounded-full px-3 py-1">
-              <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-                #{totalCount - index}
-              </span>
-            </div>
-            <div className={`bg-gradient-to-r ${analysisType.color} rounded-full p-2 shadow-lg`}>
-              <IconComponent className="w-4 h-4 text-white" />
-            </div>
-            {onDelete && (
-              <button
-                onClick={handleDelete}
-                className="bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 rounded-full p-2 shadow-md hover:shadow-lg transition-all duration-200 group"
-                title="Delete Report"
-              >
-                <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400 group-hover:text-red-700 dark:group-hover:text-red-300" />
-              </button>
-            )}
+    <div className="group relative overflow-hidden w-full max-w-full">
+      {/* Premium Background with Advanced Visual Effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white via-slate-50/90 to-[#63b3ed]/10 dark:from-slate-900 dark:via-slate-800/95 dark:to-[#1a365d]/20" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(43,108,176,0.08),transparent_70%)] dark:bg-[radial-gradient(circle_at_bottom_right,rgba(26,54,93,0.15),transparent_70%)]" />
+      
+      {/* Animated Border Glow */}
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-[#2b6cb0]/20 via-[#63b3ed]/10 to-[#1a365d]/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-700 blur-sm animate-pulse" />
+      
+      {/* Main Container */}
+      <div className="relative bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl border border-white/30 dark:border-slate-700/50 shadow-2xl shadow-[#2b6cb0]/10 dark:shadow-[#2b6cb0]/20 overflow-hidden transition-all duration-500 hover:shadow-3xl hover:shadow-[#2b6cb0]/15">
+        
+        {/* Luxury Header */}
+        <div className="relative overflow-hidden">
+          {/* Header Background Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/5 via-[#63b3ed]/3 to-[#1a365d]/5 dark:from-[#2b6cb0]/10 dark:via-[#63b3ed]/5 dark:to-[#1a365d]/10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white/90 dark:via-slate-900/50 dark:to-slate-900/90" />
+          
+          {/* Animated Particles Background */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-3 left-6 w-1.5 h-1.5 bg-[#63b3ed]/30 rounded-full animate-ping" style={{ animationDelay: '0s', animationDuration: '3s' }} />
+            <div className="absolute top-6 right-8 w-1 h-1 bg-[#90cdf4]/20 rounded-full animate-ping" style={{ animationDelay: '1s', animationDuration: '4s' }} />
+            <div className="absolute bottom-4 left-12 w-0.5 h-0.5 bg-[#2b6cb0]/25 rounded-full animate-ping" style={{ animationDelay: '2s', animationDuration: '5s' }} />
           </div>
-        </div>
-
-        <div className="p-4 pr-24 md:p-6 md:pr-32">
-          {/* Analysis Type & Status */}
-          <div className="flex items-center space-x-3 mb-3">
-            <div className={`bg-gradient-to-r ${analysisType.color} rounded-xl p-2.5 shadow-lg`}>
-              <IconComponent className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-                {analysisType.type}
-              </h3>
-              <div className="flex items-center space-x-3 text-sm text-slate-500 dark:text-slate-400">
-                <div className="flex items-center space-x-1">
-                  <Calendar className="w-3 h-3" />
-                  <span>{new Date(analysis.timestamp).toLocaleDateString()}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Clock className="w-3 h-3" />
-                  <span>{formatProcessingTime(analysis.processingTime)}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <CheckCircle className="w-3 h-3 text-green-500" />
-                  <span className="text-green-600 dark:text-green-400 font-medium">Complete</span>
+          
+          {/* Premium Priority Badge and Controls */}
+          <div className="absolute top-6 right-6 z-20">
+            <div className="flex items-center space-x-3">
+              {/* Enhanced Priority Badge */}
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-400/20 to-slate-500/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                <div className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl px-4 py-2 border border-white/50 dark:border-slate-700/50 shadow-lg">
+                  <div className="flex items-center space-x-2">
+                    <Hash className="w-3 h-3 text-slate-600 dark:text-slate-400" />
+                    <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                      {totalCount - index}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <MedicalButton
-                variant="ghost"
-                size="sm"
-                leftIcon={Copy}
-                onClick={handleCopy}
-                className="text-slate-600 dark:text-slate-400 hover:text-emerald-600"
-              >
-                Copy
-              </MedicalButton>
-              <MedicalButton
-                variant="ghost"
-                size="sm"
-                leftIcon={Download}
-                onClick={handleDownload}
-                className="text-slate-600 dark:text-slate-400 hover:text-blue-600"
-              >
-                Export
-              </MedicalButton>
-              {navigator.share && (
-                <MedicalButton
-                  variant="ghost"
-                  size="sm"
-                  leftIcon={Share2}
-                  onClick={handleShare}
-                  className="text-slate-600 dark:text-slate-400 hover:text-purple-600"
-                >
-                  Share
-                </MedicalButton>
+              
+              {/* Premium Analysis Type Indicator */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-2xl blur-md opacity-70 animate-pulse" />
+                <div className={`relative bg-gradient-to-r ${analysisType.color} rounded-2xl p-3 shadow-xl shadow-[#2b6cb0]/25`}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
+                  <IconComponent className="w-5 h-5 text-white relative z-10" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] rounded-full flex items-center justify-center shadow-lg">
+                  <Star className="w-2.5 h-2.5 text-white" />
+                </div>
+              </div>
+              
+              {/* Enhanced Delete Button */}
+              {onDelete && (
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-rose-500/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                  <button
+                    onClick={handleDelete}
+                    className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm hover:bg-red-50 dark:hover:bg-red-900/20 rounded-2xl p-3 border border-white/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 group"
+                    title="Delete Report"
+                  >
+                    <Trash2 className="w-5 h-5 text-red-600 dark:text-red-400 group-hover:text-red-700 dark:group-hover:text-red-300 transition-colors duration-200" />
+                  </button>
+                </div>
               )}
             </div>
-            
-            <MedicalButton
-              variant="ghost"
-              size="sm"
-              rightIcon={isExpanded ? ChevronUp : ChevronDown}
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="text-slate-600 dark:text-slate-400"
-            >
-              {isExpanded ? 'Collapse' : 'Expand'}
-            </MedicalButton>
           </div>
-        </div>
-      </div>
 
-      {/* Collapsible Content */}
-      <div className={`transition-all duration-300 ${isExpanded ? 'max-h-none opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-        <div className="p-4 space-y-4 md:p-6 md:space-y-6">
-          {/* User Request - Hide for diagnosis reports */}
-          {!analysisType.isDiagnosis && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 border border-slate-200/50 dark:border-slate-700/50">
-              <div className="flex items-start space-x-3">
-                <div className="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-2 flex-shrink-0">
-                  <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
-                    Analysis Request
-                  </h4>
-                  <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-                    {analysis.userInstruction}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* AI Response */}
-          <div className="bg-gradient-to-br from-emerald-50/80 to-teal-50/60 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-xl p-4 border border-emerald-200/50 dark:border-emerald-700/30">
-            <div className="flex items-start space-x-3">
-              <div className="bg-emerald-100 dark:bg-emerald-900/40 rounded-lg p-2 flex-shrink-0">
-                {analysisType.isDiagnosis ? (
-                  <HeartHandshake className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                ) : (
-                  <Brain className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                )}
-              </div>
-              <div className="flex-1">
-                <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
-                  {analysisType.isDiagnosis ? 'Medical Report' : 'AI Clinical Analysis'}
-                </h4>
-                <div className="prose prose-sm dark:prose-invert max-w-none">
-                  {hasMarkdownFormatting(analysis.aiResponse) ? (
-                    // Render formatted markdown for diagnosis reports
-                    formatMarkdown(analysis.aiResponse)
-                  ) : (
-                    // Render as plain text for regular reports
-                    <div className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
-                      {analysis.aiResponse}
+          <div className="relative p-8 pr-32">
+            {/* Premium Analysis Type & Status */}
+            <div className="space-y-6">
+              {/* Main Title Section */}
+              <div className="flex items-center space-x-6">
+                {/* Enhanced Analysis Icon */}
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-3xl blur-lg opacity-30 animate-pulse" />
+                  <div className={`relative bg-gradient-to-br ${analysisType.color} rounded-3xl p-4 shadow-2xl shadow-[#2b6cb0]/25`}>
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-3xl" />
+                    <IconComponent className="w-8 h-8 text-white relative z-10" />
+                  </div>
+                  {analysisType.isDiagnosis && (
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                      <Award className="w-3 h-3 text-white" />
                     </div>
                   )}
                 </div>
+                
+                <div className="flex-1 space-y-3">
+                  {/* Enhanced Title */}
+                  <div className="flex items-center space-x-4">
+                    <h3 className="text-2xl font-bold bg-gradient-to-r from-slate-900 via-[#1a365d] to-[#2b6cb0] dark:from-white dark:via-[#90cdf4] dark:to-[#63b3ed] bg-clip-text text-transparent">
+                      {analysisType.type}
+                    </h3>
+                    
+                    {isEditMode && (
+                      <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#1a365d]/30 rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-lg">
+                        <Edit3 className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                        <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4] tracking-wide">
+                          EDIT MODE
+                        </span>
+                      </div>
+                    )}
+                    
+                    {analysisType.isDiagnosis && (
+                      <div className="flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#2b6cb0]/30 dark:to-[#63b3ed]/30 rounded-full border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50">
+                        <Crown className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                        <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4]">MEDICAL REPORT</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Premium Status Information */}
+                  <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-3 px-4 py-2 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-slate-700/40 shadow-sm">
+                      <div className="p-1 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-lg shadow-lg">
+                        <Calendar className="w-3 h-3 text-white" />
+                      </div>
+                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        {new Date(analysis.timestamp).toLocaleDateString()}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-3 px-4 py-2 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-slate-700/40 shadow-sm">
+                      <div className="p-1 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] rounded-lg shadow-lg">
+                        <Clock className="w-3 h-3 text-white" />
+                      </div>
+                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        {formatProcessingTime(analysis.processingTime)}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#2b6cb0]/20 dark:to-[#63b3ed]/20 backdrop-blur-sm rounded-xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30 shadow-sm">
+                      <div className="p-1 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-lg shadow-lg">
+                        <CheckCircle className="w-3 h-3 text-white" />
+                      </div>
+                      <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4]">
+                        Analysis Complete
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Premium Quick Actions */}
+              <div className="flex items-center justify-between pt-4">
+                <div className="flex items-center space-x-3">
+                  {/* Enhanced Copy Button */}
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                    <MedicalButton
+                      variant="ghost"
+                      size="sm"
+                      leftIcon={Copy}
+                      onClick={handleCopy}
+                      className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                    >
+                      Copy
+                    </MedicalButton>
+                  </div>
+                  
+                  {/* Enhanced Export Button */}
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                    <MedicalButton
+                      variant="ghost"
+                      size="sm"
+                      leftIcon={Download}
+                      onClick={handleDownload}
+                      className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                    >
+                      Export
+                    </MedicalButton>
+                  </div>
+                  
+                  {/* Enhanced Share Button */}
+                  {navigator.share && (
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                      <MedicalButton
+                        variant="ghost"
+                        size="sm"
+                        leftIcon={Share2}
+                        onClick={handleShare}
+                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#1a365d] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                      >
+                        Share
+                      </MedicalButton>
+                    </div>
+                  )}
+                  
+                  {/* Premium Edit Button */}
+                  {enableEditing && analysisType.isDiagnosis && (
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-xl blur-md opacity-70 animate-pulse" />
+                      <MedicalButton
+                        variant={isEditMode ? "primary" : "ghost"}
+                        size="sm"
+                        leftIcon={isEditMode ? Settings : Edit3}
+                        onClick={isEditMode ? handleCancelEdit : handleEdit}
+                        className={isEditMode 
+                          ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200" 
+                          : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                        }
+                      >
+                        <span className="flex items-center space-x-2">
+                          <span>{isEditMode ? 'Cancel Edit' : 'Edit Report'}</span>
+                          {isEditMode && <Wand2 className="w-4 h-4" />}
+                        </span>
+                      </MedicalButton>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Enhanced Expand/Collapse */}
+                <div className="relative group">
+                  <MedicalButton
+                    variant="ghost"
+                    size="sm"
+                    rightIcon={isExpanded ? ChevronUp : ChevronDown}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="text-slate-600 dark:text-slate-400 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                  >
+                    {isExpanded ? 'Minimize' : 'Expand Details'}
+                  </MedicalButton>
+                </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Metadata Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-200/50 dark:border-slate-700/50">
-            <div className="flex items-center space-x-4 text-xs text-slate-500 dark:text-slate-400">
-              <div className="flex items-center space-x-1">
-                <Zap className="w-3 h-3" />
-                <span className="font-medium">{analysis.model}</span>
-              </div>
-              {analysis.tokensUsed && (
-                <div className="flex items-center space-x-1">
-                  <Hash className="w-3 h-3" />
-                  <span>{analysis.tokensUsed} tokens</span>
+        {/* Premium Collapsible Content */}
+        <div className={`transition-all duration-500 ${isExpanded ? 'max-h-none opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+          <div className="relative p-8 pt-6 space-y-8">
+            {/* Premium Interactive Report Editor */}
+            {isEditMode && enableEditing && analysisType.isDiagnosis && flowiseEndpoint && (
+              <div className="relative overflow-hidden">
+                {/* Luxury Editor Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/20 via-[#63b3ed]/15 to-[#2b6cb0]/10 dark:from-[#2b6cb0]/20 dark:via-[#1a365d]/15 dark:to-[#63b3ed]/20 rounded-3xl" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(43,108,176,0.1),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(43,108,176,0.2),transparent_70%)]" />
+                
+                <div className="relative p-6">
+                  {/* Editor Header */}
+                  <div className="flex items-center space-x-4 mb-6">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30 animate-pulse" />
+                      <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-3 shadow-xl shadow-[#2b6cb0]/25">
+                        <Edit3 className="w-6 h-6 text-white" />
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
+                        <span>AI Report Editor</span>
+                        <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#63b3ed]/30 rounded-full">
+                          <Crown className="w-3 h-3 text-[#2b6cb0] dark:text-[#90cdf4]" />
+                          <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4]">STUDIO</span>
+                        </div>
+                      </h4>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                        Advanced medical report editing with AI assistance
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Enhanced Report Edit Card */}
+                  <div className="relative">
+                    <ReportEditCard
+                      reportId={analysis.timestamp.toString()}
+                      initialContent={analysis.aiResponse}
+                      sessionId={`edit-${analysis.timestamp}`}
+                      flowiseEndpoint={analysisType.endpoint}
+                      onEditComplete={handleEditComplete}
+                      onError={handleEditError}
+                      className="border-2 border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-2xl shadow-[#2b6cb0]/10"
+                    />
+                  </div>
                 </div>
-              )}
-              <div className="flex items-center space-x-1">
-                <Clock className="w-3 h-3" />
-                <span>{new Date(analysis.timestamp).toLocaleTimeString()}</span>
+              </div>
+            )}
+            {/* Premium User Request Section - Hide for diagnosis reports */}
+            {!analysisType.isDiagnosis && (
+              <div className="relative overflow-hidden">
+                {/* Request Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-[#90cdf4]/15 to-[#63b3ed]/10 dark:from-slate-800/80 dark:via-[#2b6cb0]/20 dark:to-[#1a365d]/15 rounded-3xl" />
+                
+                <div className="relative p-6">
+                  <div className="flex items-start space-x-4">
+                    {/* Enhanced User Icon */}
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30" />
+                      <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-3 shadow-xl shadow-[#2b6cb0]/25">
+                        <User className="w-5 h-5 text-white" />
+                      </div>
+                    </div>
+                    
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <h4 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                          Analysis Request
+                        </h4>
+                        <div className="px-3 py-1 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-full border border-white/40 dark:border-slate-700/40">
+                          <span className="text-xs font-bold text-[#2b6cb0] dark:text-[#63b3ed]">USER INPUT</span>
+                        </div>
+                      </div>
+                      
+                      <div className="p-4 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-lg">
+                        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                          {analysis.userInstruction}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Premium AI Response Section */}
+            <div className="relative overflow-hidden">
+              {/* Response Background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/20 via-[#63b3ed]/15 to-[#2b6cb0]/10 dark:from-[#2b6cb0]/25 dark:via-[#1a365d]/20 dark:to-[#63b3ed]/15 rounded-3xl" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(43,108,176,0.1),transparent_70%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(43,108,176,0.2),transparent_70%)]" />
+              
+              <div className="relative p-6">
+                <div className="flex items-start space-x-4">
+                  {/* Enhanced AI Icon */}
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30 animate-pulse" />
+                    <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-3 shadow-xl shadow-[#2b6cb0]/25">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
+                      {analysisType.isDiagnosis ? (
+                        <HeartHandshake className="w-6 h-6 text-white relative z-10" />
+                      ) : (
+                        <Brain className="w-6 h-6 text-white relative z-10" />
+                      )}
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] rounded-full flex items-center justify-center animate-bounce">
+                      <Sparkles className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                        {analysisType.isDiagnosis ? 'Medical Report' : 'AI Clinical Analysis'}
+                      </h4>
+                      
+                      <div className="flex items-center space-x-2">
+                        <div className="px-3 py-1 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-full border border-white/50 dark:border-slate-700/50">
+                          <span className="text-xs font-bold text-[#2b6cb0] dark:text-[#63b3ed]">AI GENERATED</span>
+                        </div>
+                        
+                        {analysisType.isDiagnosis && (
+                          <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#63b3ed]/30 rounded-full">
+                            <Target className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                            <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4]">CLINICAL</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Enhanced Content Display */}
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-inner" />
+                      <div className="relative p-6 prose prose-sm dark:prose-invert max-w-none">
+                        {(() => {
+                          const displayContent = editedContent || analysis.aiResponse;
+                          return hasMarkdownFormatting(displayContent) ? (
+                            formatMarkdown(displayContent)
+                          ) : (
+                            <div className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap font-medium">
+                              {displayContent}
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            
-            <div className="flex items-center space-x-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 rounded-md">
-              <div className="w-2 h-2 bg-green-500 rounded-full" />
-              <span className="text-xs font-semibold text-green-700 dark:text-green-300">
-                Analysis Complete
-              </span>
+
+            {/* Premium Metadata Footer */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-50/80 to-[#90cdf4]/15 dark:from-slate-800/60 dark:to-[#2b6cb0]/20 rounded-3xl" />
+              
+              <div className="relative p-6">
+                <div className="flex items-center justify-between">
+                  {/* Enhanced Metadata */}
+                  <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-3 px-4 py-2 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-xl border border-white/50 dark:border-slate-700/50 shadow-sm">
+                      <div className="p-1 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] rounded-lg shadow-lg">
+                        <Zap className="w-3 h-3 text-white" />
+                      </div>
+                      <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{analysis.model}</span>
+                    </div>
+                    
+                    {analysis.tokensUsed && (
+                      <div className="flex items-center space-x-3 px-4 py-2 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-xl border border-white/50 dark:border-slate-700/50 shadow-sm">
+                        <div className="p-1 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-lg shadow-lg">
+                          <Hash className="w-3 h-3 text-white" />
+                        </div>
+                        <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{analysis.tokensUsed} tokens</span>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center space-x-3 px-4 py-2 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-xl border border-white/50 dark:border-slate-700/50 shadow-sm">
+                      <div className="p-1 bg-gradient-to-r from-[#63b3ed] to-red-600 rounded-lg shadow-lg">
+                        <Clock className="w-3 h-3 text-white" />
+                      </div>
+                      <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                        {new Date(analysis.timestamp).toLocaleTimeString()}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Premium Status Indicator */}
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-2xl blur-md opacity-70 animate-pulse" />
+                    <div className="relative flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#2b6cb0]/30 dark:to-[#63b3ed]/30 backdrop-blur-sm rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30 shadow-lg">
+                      <div className="relative">
+                        <div className="w-3 h-3 bg-[#2b6cb0] rounded-full animate-pulse" />
+                        <div className="absolute inset-0 w-3 h-3 bg-[#63b3ed] rounded-full animate-ping" />
+                      </div>
+                      <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4] tracking-wide">
+                        ANALYSIS COMPLETE
+                      </span>
+                      <Award className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -398,3 +720,6 @@ Medical AI Processing System`;
     </div>
   );
 };
+
+// Enhanced animations and effects (to be added to global styles)
+// Additional premium visual enhancements complete

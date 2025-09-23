@@ -22,6 +22,9 @@ export * from './translation-patterns'
 // Mobile-specific types (NEW)
 export * from './mobile'
 
+// Report editing types (NEW)
+export * from './reportEditing'
+
 // Re-export commonly used mobile types for convenience
 export type {
   MobileViewportState,

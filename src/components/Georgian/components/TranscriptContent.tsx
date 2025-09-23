@@ -129,9 +129,9 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   // Speaker colors for differentiation
   const speakerColors = [
     'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700',
-    'text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700',
-    'text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-700',
-    'text-orange-700 dark:text-orange-300 bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-700',
+    'text-[#2b6cb0] dark:text-[#63b3ed] bg-[#63b3ed]/10 dark:bg-[#2b6cb0]/20 border-[#63b3ed]/30 dark:border-[#2b6cb0]/50',
+    'text-[#1a365d] dark:text-[#90cdf4] bg-[#90cdf4]/10 dark:bg-[#1a365d]/30 border-[#90cdf4]/30 dark:border-[#1a365d]/50',
+    'text-[#2b6cb0] dark:text-[#90cdf4] bg-[#90cdf4]/20 dark:bg-[#2b6cb0]/30 border-[#90cdf4]/40 dark:border-[#2b6cb0]/50',
   ];
 
   // Render speaker-differentiated transcript - memoized to prevent infinite re-renders
@@ -235,7 +235,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             }}
           >
             
-            <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl sm:rounded-2xl lg:rounded-2xl border border-indigo-200/60 dark:border-indigo-600/60 shadow-inner shadow-indigo-900/5 dark:shadow-black/20 overflow-hidden mediscribe-mobile-transcript">
+            <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl sm:rounded-2xl lg:rounded-2xl border border-[#63b3ed]/60 dark:border-[#2b6cb0]/60 shadow-inner shadow-[#1a365d]/5 dark:shadow-black/20 overflow-hidden mediscribe-mobile-transcript">
               
               {/* Conditional Content Display */}
               {hasSpeakers && speakers && speakers.length > 0 ? (

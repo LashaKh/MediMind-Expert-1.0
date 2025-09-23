@@ -215,25 +215,33 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   // Simplified refs for basic tracking
   const lastRecordingSessionIdRef = useRef<string>('');
   
-  // Simple transcript resolution with editableTranscript priority for AI processing
-  const currentTranscript = editableTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
+  // Smart transcript resolution - prioritize live transcript during recording
+  const currentTranscript = recordingState.isRecording 
+    ? (localTranscript || editableTranscript || currentSession?.transcript || transcriptionResult?.text || '')
+    : (editableTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '');
   const hasTranscript = currentTranscript.length > 0;
   
   // Debug transcript resolution (disabled in production)
   // + '...'
   // });
   
-  // Track recording session changes for cleanup
+  // Track recording session changes for cleanup and clear editable state when recording starts
   useEffect(() => {
     if (recordingState.isRecording && !lastRecordingSessionId) {
       const newSessionId = Date.now().toString();
       setLastRecordingSessionId(newSessionId);
       lastRecordingSessionIdRef.current = newSessionId;
+      
+      // Clear editable transcript when recording starts to ensure live transcript is visible
+      if (editableTranscript) {
+        console.log('🧹 Clearing editable transcript to show live recording');
+        setEditableTranscript('');
+      }
     } else if (!recordingState.isRecording && lastRecordingSessionId) {
       setLastRecordingSessionId('');
       lastRecordingSessionIdRef.current = '';
     }
-  }, [recordingState.isRecording, lastRecordingSessionId]);
+  }, [recordingState.isRecording, lastRecordingSessionId, editableTranscript]);
 
   // Track previous session ID to detect session changes
   const previousSessionIdRef = useRef<string>('');

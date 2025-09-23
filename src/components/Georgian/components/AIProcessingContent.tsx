@@ -354,6 +354,17 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       index={index}
                       totalCount={processingHistory.length}
                       onDelete={onDeleteReport}
+                      enableEditing={true}
+                      flowiseEndpoint={(() => {
+                        const lower = analysis.userInstruction.toLowerCase();
+                        if ((lower.includes('i50.0') || lower.includes('heart failure') || lower.includes('გულის შეგუბებითი უკმარისობა')) && analysis.model === 'flowise-diagnosis-agent') {
+                          return 'https://flowise-2-0.onrender.com/api/v1/prediction/89920f52-74cb-46bc-bf6c-b9099746dfe9';
+                        }
+                        if ((lower.includes('i24.9') || lower.includes('nstemi') || lower.includes('გულის მწვავე იშემიური ავადმყოფობა')) && analysis.model === 'flowise-diagnosis-agent') {
+                          return 'https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4';
+                        }
+                        return 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy';
+                      })()}
                     />
                   ))}
                 </div>
@@ -473,7 +484,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       {/* Character Counter */}
                       <div className={`text-xs transition-colors duration-200 ${
                         customInstruction.length > 450 ? 'text-red-500' : 
-                        customInstruction.length > 400 ? 'text-amber-500' : 
+                        customInstruction.length > 400 ? 'text-[#90cdf4]' : 
                         'text-[#2b6cb0]/60 dark:text-[#63b3ed]/60'
                       }`}>
                         <span className="tabular-nums">{customInstruction.length}</span>
@@ -546,7 +557,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
           
           {/* Alternative: Bottom notification for less intrusive feedback */}
           {/* <div className="fixed bottom-6 right-6" style={{ zIndex: 9999998 }}>
-            <div className="flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-xl shadow-2xl backdrop-blur-sm animate-in slide-in-from-right duration-300">
+            <div className="flex items-center space-x-3 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white px-4 py-3 rounded-xl shadow-2xl backdrop-blur-sm animate-in slide-in-from-right duration-300">
               <div className="animate-pulse">
                 <HeartHandshake className="w-5 h-5" />
               </div>

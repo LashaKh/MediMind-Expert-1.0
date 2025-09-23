@@ -197,8 +197,8 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
                   bg-gray-50 dark:bg-gray-700 
                   text-gray-900 dark:text-white 
                   placeholder-gray-500 dark:placeholder-gray-400 
-                  focus:outline-none focus:ring-4 focus:ring-blue-500/20 
-                  focus:border-blue-500 dark:focus:border-blue-400
+                  focus:outline-none focus:ring-4 focus:ring-[#63b3ed]/20 
+                  focus:border-[#2b6cb0] dark:focus:border-[#63b3ed]
                   transition-all duration-200 premium-focus
                   touch-manipulation
                   medical-input medical-mobile-touch-md
@@ -215,7 +215,7 @@ export const MedicalDrawer: React.FC<MedicalDrawerProps> = ({
           style={{ 
             maxHeight: `calc(${maxHeight} - 160px)`,
             scrollbarWidth: 'thin',
-            scrollbarColor: '#3B82F6 #F3F4F6'
+            scrollbarColor: '#2b6cb0 #F3F4F6'
           }}
         >
           <div className="px-6 py-4">
@@ -262,8 +262,8 @@ export const MedicalSessionItem: React.FC<SessionItemProps> = ({
         relative p-5 rounded-2xl cursor-pointer transition-all duration-300 border-2 
         premium-hover-lift touch-manipulation
         ${isActive
-          ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-600 shadow-lg shadow-blue-500/10' 
-          : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:border-blue-200 dark:hover:border-blue-700 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 hover:shadow-lg'
+          ? 'bg-[#63b3ed]/10 dark:bg-[#2b6cb0]/20 border-[#63b3ed] dark:border-[#2b6cb0] shadow-lg shadow-[#2b6cb0]/10' 
+          : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:border-[#90cdf4] dark:hover:border-[#63b3ed] hover:bg-[#63b3ed]/5 dark:hover:bg-[#2b6cb0]/10 hover:shadow-lg'
         }
         ${className}
       `}
@@ -274,7 +274,7 @@ export const MedicalSessionItem: React.FC<SessionItemProps> = ({
         <div className="flex items-center space-x-3 flex-1 min-w-0">
           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md ${
             isActive 
-              ? 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white' 
+              ? 'bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] text-white' 
               : 'bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
           }`}>
             <FileText className="w-6 h-6" />
@@ -282,13 +282,13 @@ export const MedicalSessionItem: React.FC<SessionItemProps> = ({
           
           <div className="flex-1 min-w-0">
             <h3 className={`text-lg font-bold truncate mb-1 ${
-              isActive ? 'text-blue-900 dark:text-blue-100' : 'text-gray-900 dark:text-white'
+              isActive ? 'text-[#1a365d] dark:text-[#63b3ed]' : 'text-gray-900 dark:text-white'
             }`}>
               {session.title}
             </h3>
             
             <div className="flex items-center space-x-4 text-sm">
-              <span className={`font-medium ${isActive ? 'text-blue-600 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400'}`}>
+              <span className={`font-medium ${isActive ? 'text-[#2b6cb0] dark:text-[#63b3ed]' : 'text-gray-500 dark:text-gray-400'}`}>
                 {new Date(session.createdAt).toLocaleDateString('en-US', { 
                   month: 'short', 
                   day: 'numeric',
@@ -297,7 +297,7 @@ export const MedicalSessionItem: React.FC<SessionItemProps> = ({
                 })}
               </span>
               {session.durationMs > 0 && (
-                <span className={`font-medium ${isActive ? 'text-blue-600 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400'}`}>
+                <span className={`font-medium ${isActive ? 'text-[#2b6cb0] dark:text-[#63b3ed]' : 'text-gray-500 dark:text-gray-400'}`}>
                   {formatTime(session.durationMs)}
                 </span>
               )}
@@ -308,8 +308,8 @@ export const MedicalSessionItem: React.FC<SessionItemProps> = ({
         {hasTranscript && (
           <div className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm ${
             isActive 
-              ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700'
-              : 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border border-green-100 dark:border-green-800'
+              ? 'bg-[#63b3ed]/20 dark:bg-[#2b6cb0]/30 text-[#1a365d] dark:text-[#63b3ed] border border-[#63b3ed] dark:border-[#2b6cb0]'
+              : 'bg-[#90cdf4]/10 dark:bg-[#2b6cb0]/10 text-[#2b6cb0] dark:text-[#63b3ed] border border-[#90cdf4] dark:border-[#2b6cb0]'
           }`}>
             Transcribed
           </div>

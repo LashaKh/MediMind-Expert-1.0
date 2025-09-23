@@ -76,7 +76,7 @@ export const RecordingStatusIndicator: React.FC<RecordingStatusIndicatorProps> =
                   {[1, 2, 3, 4, 5].map((bar) => (
                     <div
                       key={bar}
-                      className={`w-1 bg-gradient-to-t from-green-500 to-emerald-400 rounded-full transition-all duration-150 ${
+                      className={`w-1 bg-gradient-to-t from-[#2b6cb0] to-[#63b3ed] rounded-full transition-all duration-150 ${
                         recordingState.audioLevel > (bar * 20) ? 'h-6 opacity-100' : 'h-2 opacity-30'
                       }`}
                     />
@@ -88,9 +88,9 @@ export const RecordingStatusIndicator: React.FC<RecordingStatusIndicatorProps> =
               </div>
               
               {/* Recording Quality Indicator */}
-              <div className="flex items-center space-x-2 px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-200/50 dark:border-emerald-700/30 rounded-lg">
-                <Star className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300">HD Quality</span>
+              <div className="flex items-center space-x-2 px-3 py-1 bg-[#63b3ed]/10 dark:bg-[#2b6cb0]/30 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-lg">
+                <Star className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4]">HD Quality</span>
               </div>
             </div>
           </div>
@@ -99,31 +99,31 @@ export const RecordingStatusIndicator: React.FC<RecordingStatusIndicatorProps> =
 
       {/* Premium AI Processing Status */}
       {recordingState.isProcessingChunks && (
-        <div className="relative bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50 dark:from-emerald-900/20 dark:via-green-900/20 dark:to-teal-900/20 border border-emerald-200/40 dark:border-emerald-700/40 rounded-2xl p-6 mb-6 shadow-lg shadow-emerald-500/10 overflow-hidden">
+        <div className="relative bg-gradient-to-r from-[#63b3ed]/10 via-[#90cdf4]/10 to-[#63b3ed]/10 dark:from-[#1a365d]/20 dark:via-[#2b6cb0]/20 dark:to-[#1a365d]/20 border border-[#63b3ed]/40 dark:border-[#2b6cb0]/40 rounded-2xl p-6 mb-6 shadow-lg shadow-[#2b6cb0]/10 overflow-hidden">
           {/* Animated AI Background */}
           <div className="absolute inset-0 opacity-5">
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-transparent to-emerald-600 animate-pulse"/>
-            <Brain className="absolute top-4 right-4 w-32 h-32 text-emerald-300 opacity-10 animate-pulse"/>
+            <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0] via-transparent to-[#2b6cb0] animate-pulse"/>
+            <Brain className="absolute top-4 right-4 w-32 h-32 text-[#63b3ed] opacity-10 animate-pulse"/>
           </div>
           
           <div className="relative flex items-center justify-between">
             <div className="flex items-center space-x-6">
               {/* Sophisticated Processing Animation */}
               <div className="relative">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-500/25">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] flex items-center justify-center shadow-lg shadow-[#2b6cb0]/25">
                   <Sparkles className="w-6 h-6 text-white animate-spin" />
                 </div>
-                <div className="absolute -inset-1 border-2 border-emerald-400 rounded-xl animate-pulse opacity-50" />
+                <div className="absolute -inset-1 border-2 border-[#63b3ed] rounded-xl animate-pulse opacity-50" />
               </div>
               
               <div>
                 <div className="flex items-center space-x-2 mb-1">
-                  <span className="text-emerald-700 dark:text-emerald-300 font-bold text-lg">
+                  <span className="text-[#1a365d] dark:text-[#90cdf4] font-bold text-lg">
                     AI Processing
                   </span>
-                  <Gem className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <Gem className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
                 </div>
-                <p className="text-emerald-600 dark:text-emerald-400 text-sm font-medium">
+                <p className="text-[#2b6cb0] dark:text-[#63b3ed] text-sm font-medium">
                   Real-time transcription with medical intelligence
                 </p>
                 <div className="flex items-center space-x-2 mt-1">
@@ -131,12 +131,12 @@ export const RecordingStatusIndicator: React.FC<RecordingStatusIndicatorProps> =
                     {[1, 2, 3].map((dot) => (
                       <div
                         key={dot}
-                        className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse"
+                        className="w-1 h-1 bg-[#2b6cb0] rounded-full animate-pulse"
                         style={{ animationDelay: `${dot * 150}ms` }}
                       />
                     ))}
                   </div>
-                  <span className="text-emerald-600 dark:text-emerald-400 text-xs">
+                  <span className="text-[#2b6cb0] dark:text-[#63b3ed] text-xs">
                     Intelligent segmentation active
                   </span>
                 </div>
@@ -144,10 +144,10 @@ export const RecordingStatusIndicator: React.FC<RecordingStatusIndicatorProps> =
             </div>
             
             <div className="flex items-center space-x-3">
-              <div className="px-4 py-2 bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/40 dark:to-green-900/40 border border-emerald-200/50 dark:border-emerald-700/30 rounded-xl">
-                <span className="text-emerald-700 dark:text-emerald-300 text-sm font-bold">Neural Mode</span>
+              <div className="px-4 py-2 bg-gradient-to-r from-[#63b3ed]/10 to-[#90cdf4]/10 dark:from-[#1a365d]/40 dark:to-[#2b6cb0]/40 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-xl">
+                <span className="text-[#1a365d] dark:text-[#90cdf4] text-sm font-bold">Neural Mode</span>
               </div>
-              <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <TrendingUp className="w-5 h-5 text-[#2b6cb0] dark:text-[#63b3ed]" />
             </div>
           </div>
         </div>
@@ -155,7 +155,7 @@ export const RecordingStatusIndicator: React.FC<RecordingStatusIndicatorProps> =
       
       {/* Enhanced Legacy Chunked Processing Status */}
       {recordingState.isProcessingChunks && recordingState.totalChunks > 0 && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 border border-blue-200/50 dark:border-blue-700/30 rounded-xl p-4 mb-4">
+        <div className="bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 dark:from-[#1a365d]/10 dark:to-[#2b6cb0]/10 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-xl p-4 mb-4">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-3">
               <div className="w-5 h-5 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
@@ -169,7 +169,7 @@ export const RecordingStatusIndicator: React.FC<RecordingStatusIndicatorProps> =
           </div>
           <div className="w-full bg-blue-200 dark:bg-blue-800/30 rounded-full h-2.5">
             <div 
-              className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full transition-all duration-500" 
+              className="bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] h-2.5 rounded-full transition-all duration-500" 
               style={{ 
                 width: `${recordingState.totalChunks > 0 ? (recordingState.processedChunks / recordingState.totalChunks) * 100 : 0}%` 
               }}

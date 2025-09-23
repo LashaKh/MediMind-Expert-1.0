@@ -63,14 +63,14 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
           <div className={`relative flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg transition-all duration-300 ${
             authStatus.isAuthenticated
               ? 'bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 border border-[#63b3ed]/50'
-              : 'bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-300/50'
+              : 'bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 border border-[#90cdf4]/50'
           }`}>
             {/* Status Light */}
             <div className="relative">
               <div className={`w-2 h-2 rounded-full ${
                 authStatus.isAuthenticated 
                   ? 'bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0]' 
-                  : 'bg-gradient-to-r from-amber-400 to-orange-500'
+                  : 'bg-gradient-to-r from-[#90cdf4] to-[#63b3ed]'
               }`} />
               {authStatus.isAuthenticated && (
                 <div className="absolute inset-0 w-2 h-2 rounded-full bg-[#63b3ed] animate-ping opacity-40" />
@@ -84,7 +84,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
               <Activity className={`w-3 h-3 ${
                 authStatus.isAuthenticated 
                   ? 'text-[#2b6cb0]' 
-                  : 'text-amber-600'
+                  : 'text-[#2b6cb0]'
               }`} />
             )}
             
@@ -116,7 +116,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
       </div>
 
       {/* Subtle bottom border with shimmer effect */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-200/60 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#90cdf4]/60 to-transparent" />
     </div>
   );
 };
