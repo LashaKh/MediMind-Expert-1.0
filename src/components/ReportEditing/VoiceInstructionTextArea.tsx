@@ -39,6 +39,7 @@ const VoiceInstructionTextArea: React.FC<VoiceInstructionTextAreaProps> = ({
     chunkDuration: 20000,
     autocorrect: true,
     punctuation: true,
+    digits: true,
     onLiveTranscriptUpdate: (newText, fullText) => {
       if (fullText && fullText !== lastTranscript) {
         setLastTranscript(fullText)
