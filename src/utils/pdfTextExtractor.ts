@@ -7,59 +7,16 @@ if (typeof window !== 'undefined') {
   
   // Strategy 1: PRIORITIZE LOCAL FILE (eliminates CORS issues)
   try {
-    // Get the correct base path from current location
-    const basePath = window.location.pathname.includes('/expert/') ? '/expert/' : '/';
+    // Add timestamp to force cache refresh and handle /expert/ path
     const timestamp = Date.now();
-    const localWorkerUrl = `${window.location.origin}${basePath}pdf.worker.min.js?v=${timestamp}`;
-    
-    // Force the configuration multiple times to ensure it sticks
+    const basePath = window.location.pathname.includes('/expert/') ? '/expert/' : '/';
+    const localWorkerUrl = new URL(`${basePath}pdf.worker.min.js?v=${timestamp}`, window.location.origin).href;
     pdfjsLib.GlobalWorkerOptions.workerSrc = localWorkerUrl;
     pdfjsLib.GlobalWorkerOptions.disableWorker = false;
-    
-    // Additional force-set to prevent PDF.js from overriding
-    Object.defineProperty(pdfjsLib.GlobalWorkerOptions, 'workerSrc', {
-      value: localWorkerUrl,
-      writable: true,
-      configurable: true
-    });
-    
-    // Intercept Worker constructor to fix URL
-    const OriginalWorker = window.Worker;
-    window.Worker = class extends OriginalWorker {
-      constructor(scriptURL: string | URL, options?: WorkerOptions) {
-        let fixedURL = scriptURL;
-        
-        // If PDF.js is trying to load worker without /expert/ path, fix it
-        if (typeof scriptURL === 'string' && scriptURL.includes('pdf.worker.min.js')) {
-          if (!scriptURL.includes('/expert/')) {
-            const url = new URL(scriptURL, window.location.origin);
-            fixedURL = `${window.location.origin}/expert/pdf.worker.min.js${url.search}`;
-            console.log('Intercepted and fixed PDF worker URL:', scriptURL, '→', fixedURL);
-          }
-        }
-        
-        super(fixedURL, options);
-      }
-    } as any;
-    
     workerConfigured = true;
     console.log('PDF.js worker configured:', localWorkerUrl);
-    
-    // Verify the worker URL is accessible
-    fetch(localWorkerUrl, { method: 'HEAD' })
-      .then(response => {
-        if (response.ok) {
-          console.log('PDF worker file verified accessible');
-        } else {
-          console.warn('PDF worker file not accessible:', response.status);
-        }
-      })
-      .catch(error => {
-        console.warn('PDF worker file verification failed:', error);
-      });
-      
   } catch (localError) {
-    console.warn('Failed to configure local PDF worker:', localError);
+
   }
   
   // Strategy 2: Only try CDN as backup if local completely fails
@@ -77,21 +34,9 @@ if (typeof window !== 'undefined') {
   
   // Strategy 3: Complete fallback - disable worker entirely (guaranteed to work)
   if (!workerConfigured) {
-    console.warn('All PDF worker strategies failed, disabling worker (will use main thread)');
+    console.warn('🐌 All worker configurations failed, disabling worker (slower but bulletproof)');
     pdfjsLib.GlobalWorkerOptions.disableWorker = true;
     pdfjsLib.GlobalWorkerOptions.workerSrc = null;
-  }
-  
-  // Additional safety: Listen for worker errors and fallback
-  if (typeof window !== 'undefined') {
-    window.addEventListener('unhandledrejection', (event) => {
-      if (event.reason?.message?.includes('pdf.worker')) {
-        console.warn('PDF worker failed, falling back to main thread processing');
-        pdfjsLib.GlobalWorkerOptions.disableWorker = true;
-        pdfjsLib.GlobalWorkerOptions.workerSrc = null;
-        event.preventDefault(); // Prevent the error from propagating
-      }
-    });
   }
   
   // Enhanced security and performance settings
@@ -231,10 +176,6 @@ export async function extractTextFromPdf(
     const arrayBuffer = await file.arrayBuffer();
     console.log('📖 ArrayBuffer created, size:', arrayBuffer.byteLength);
     
-    // Create a Uint8Array copy to prevent detachment issues - more reliable than ArrayBuffer.slice
-    const uint8Array = new Uint8Array(arrayBuffer);
-    const stableBuffer = uint8Array.buffer.slice(0);
-    
     // Load PDF with enhanced Unicode support and BULLETPROOF error handling
     let pdf;
     let attempts = 0;
@@ -245,17 +186,8 @@ export async function extractTextFromPdf(
         attempts++;
         console.log(`📖 PDF loading attempt ${attempts}/${maxAttempts}...`);
         
-        // Create a fresh, stable buffer for each attempt
-        const bufferForAttempt = new Uint8Array(stableBuffer).buffer;
-        
-        // Force complete worker disabling from the start
-        pdfjsLib.GlobalWorkerOptions.disableWorker = true;
-        pdfjsLib.GlobalWorkerOptions.workerSrc = '';
-        
-        console.log(`🔧 Attempt ${attempts}: Using main thread processing with fresh buffer`);
-        
         pdf = await pdfjsLib.getDocument({
-          data: bufferForAttempt,
+          data: arrayBuffer,
           useSystemFonts: true,
           disableFontFace: false,
           fontExtraProperties: true,
@@ -306,13 +238,17 @@ export async function extractTextFromPdf(
       const page = await pdf.getPage(pageNum);
       const textContent = await page.getTextContent();
       
+      console.log(`📄 Page ${pageNum}: Found ${textContent.items.length} text items`);
+      
       // Extract text from items
       const pageText = textContent.items
         .map((item) => (item as { str: string }).str)
         .join(' ')
         .trim();
 
+      console.log(`📄 Page ${pageNum} text length:`, pageText.length);
       if (pageText.length > 0) {
+        console.log(`📄 Page ${pageNum} preview:`, pageText.substring(0, 100) + '...');
         hasText = true;
         allText += `\n--- Page ${pageNum} ---\n${pageText}\n`;
       }
@@ -350,7 +286,7 @@ export async function extractTextFromPdf(
       
       // Debug logging for quality assessment
       if (process.env.NODE_ENV === 'development') {
-
+        console.log('PDF quality assessment:', qualityAssessment);
       }
       
       // Use Gemini if text appears garbled or quality is poor

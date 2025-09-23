@@ -47,9 +47,11 @@ async function configurePdfWorker(): Promise<PdfjsModule> {
   if (typeof window !== 'undefined') {
     try {
       const timestamp = Date.now();
-      const localWorkerUrl = new URL(`/pdf.worker.min.js?v=${timestamp}`, window.location.origin).href;
+      const basePath = window.location.pathname.includes('/expert/') ? '/expert/' : '/';
+      const localWorkerUrl = new URL(`${basePath}pdf.worker.min.js?v=${timestamp}`, window.location.origin).href;
       pdfjsLib.GlobalWorkerOptions.workerSrc = localWorkerUrl;
       pdfjsLib.GlobalWorkerOptions.disableWorker = false;
+      console.log('OCR PDF.js worker configured:', localWorkerUrl);
     } catch (error) {
       // Fallback handling
     }
