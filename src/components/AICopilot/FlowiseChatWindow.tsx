@@ -348,7 +348,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       );
       
     } else {
-
+      console.log('💬 Using enhanced content from attachments:', !!enhancedContent);
     }
     
     const userMessage: Message = {
@@ -378,6 +378,14 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       async () => {
         // Send enhanced content (with ABG context or PDF text) to AI, but display original content in UI
         const messageToSend = finalEnhancedContent || content;
+        
+        console.log('📤 Message sending details:', {
+          originalContent: content,
+          hasEnhancedContent: !!finalEnhancedContent,
+          enhancedContentLength: finalEnhancedContent?.length,
+          messageToSend: messageToSend === finalEnhancedContent ? 'enhanced' : 'original',
+          hasAttachments: !!attachments?.length
+        });
         
         // If we have enhanced content, don't send attachments (text already extracted)
         const attachmentsToSend = finalEnhancedContent ? undefined : attachments;
@@ -468,16 +476,38 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         } : null;
 
         // Combine message attachments with case attachment uploads
+        // Convert case attachment uploads to proper Attachment format
+        const caseAttachments: Attachment[] = (caseAttachmentUploads || []).map(upload => {
+          if (upload.type === 'url') {
+            // Image URL attachments
+            return {
+              id: uuidv4(),
+              name: upload.name,
+              type: upload.mime,
+              url: upload.data,
+              uploadType: 'url',
+              size: 0
+            };
+          } else {
+            // Text content from documents - create a proper base64 text file
+            const textContent = upload.data;
+            const base64Text = btoa(unescape(encodeURIComponent(textContent)));
+            const dataUrl = `data:text/plain;base64,${base64Text}`;
+            
+            return {
+              id: uuidv4(),
+              name: upload.name,
+              type: 'text/plain',
+              base64Data: dataUrl,
+              uploadType: 'file',
+              size: textContent.length
+            };
+          }
+        });
+        
         const allAttachments = [
           ...(messageAttachments || []),
-          ...(caseAttachmentUploads || []).map(upload => ({
-            id: uuidv4(),
-            name: upload.name,
-            type: upload.mime,
-            url: upload.data,
-            uploadType: (upload.type === 'url' ? 'url' : 'file') as 'file' | 'url',
-            size: upload.size || 0 // Add missing size property
-          }))
+          ...caseAttachments
         ];
 
         // Pass the enhanced case context and combined attachments to the API

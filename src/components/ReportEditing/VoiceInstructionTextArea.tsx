@@ -2,7 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react'
 import {
   Mic,
   CheckCircle,
-  Volume2
+  Volume2,
+  FileText
 } from 'lucide-react'
 import { useGeorgianTTS } from '../../hooks/useGeorgianTTS'
 
@@ -87,7 +88,7 @@ const VoiceInstructionTextArea: React.FC<VoiceInstructionTextAreaProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-[#2b6cb0] rounded-lg flex items-center justify-center">
-              <Mic className="w-5 h-5 text-white" />
+              <FileText className="w-5 h-5 text-white" />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">

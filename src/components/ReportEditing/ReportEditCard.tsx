@@ -19,13 +19,11 @@ import {
   Brain,
   CheckSquare,
   Timer,
-  BarChart3,
   Eye,
   RotateCcw,
   Sparkles,
   Shield,
   Star,
-  TrendingUp,
   Layers,
   Crown,
   Palette,
@@ -83,6 +81,13 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
   // Mobile bedside consultation state
   const [isMobileMode, setIsMobileMode] = useState(false)
   const [quickActionMode, setQuickActionMode] = useState(false)
+  
+  // Processing metrics state
+  const [processingMetrics, setProcessingMetrics] = useState({ 
+    confidence: 0, 
+    processingTime: 0, 
+    tokenCount: 0 
+  })
   const [isOneHandedMode, setIsOneHandedMode] = useState(false)
   
   // Real-time processing state
@@ -90,11 +95,6 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
   const [processingStage, setProcessingStage] = useState<string>('')
   const [processingStartTime, setProcessingStartTime] = useState<Date | null>(null)
   const [estimatedTimeRemaining, setEstimatedTimeRemaining] = useState<number>(0)
-  const [processingMetrics, setProcessingMetrics] = useState({
-    tokensProcessed: 0,
-    totalTokens: 0,
-    confidence: 0
-  })
   
   // Version management state
   const [currentVersion, setCurrentVersion] = useState<number>(1)
@@ -136,12 +136,6 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
       currentProgress += increment
       setProcessingProgress(Math.min(currentProgress, stage.progress))
       
-      // Update metrics simulation
-      setProcessingMetrics(prev => ({
-        tokensProcessed: Math.floor(currentProgress * 10),
-        totalTokens: 1000,
-        confidence: Math.min(0.95, currentProgress / 100 * 0.95)
-      }))
       
       // Update estimated time remaining
       const elapsed = Date.now() - (processingStartTime?.getTime() || Date.now())
@@ -1357,67 +1351,6 @@ ${instruction}`
                         </div>
                       </div>
                   
-                      {/* Premium Processing Metrics */}
-                      {processingMetrics.totalTokens > 0 && (
-                        <div className="grid grid-cols-3 gap-6">
-                          <div className="relative group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                            <div className="relative p-6 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/40 dark:border-slate-700/40 text-center">
-                              <div className="w-12 h-12 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
-                                <BarChart3 className="w-6 h-6 text-white" />
-                              </div>
-                              <div className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">Tokens</div>
-                              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                                {processingMetrics.tokensProcessed}/{processingMetrics.totalTokens}
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="relative group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                            <div className="relative p-6 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/40 dark:border-slate-700/40 text-center">
-                              <div className="w-12 h-12 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
-                                <Target className="w-6 h-6 text-white" />
-                              </div>
-                              <div className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">Precision</div>
-                              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                                {(processingMetrics.confidence * 100).toFixed(1)}%
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="relative group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                            <div className="relative p-6 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/40 dark:border-slate-700/40 text-center">
-                              <div className="w-12 h-12 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
-                                <TrendingUp className="w-6 h-6 text-white" />
-                              </div>
-                              <div className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">Duration</div>
-                              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                                {processingStartTime ? Math.round((Date.now() - processingStartTime.getTime()) / 1000) : 0}s
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Premium Processing Information */}
-                      <div className="p-6 bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/8 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/15 rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30">
-                        <div className="flex items-center space-x-4">
-                          <div className="p-3 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-xl shadow-lg">
-                            <Brain className="w-6 h-6 text-white" />
-                          </div>
-                          <div className="flex-1">
-                            <h5 className="text-lg font-bold text-[#1a365d] dark:text-[#90cdf4] mb-1">
-                              Advanced Medical AI Processing
-                            </h5>
-                            <p className="text-sm text-[#2b6cb0] dark:text-[#63b3ed]">
-                              Your instruction is being analyzed with state-of-the-art medical intelligence for context understanding, 
-                              clinical terminology validation, and evidence-based content accuracy. Processing complexity adapts to medical requirements.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 )}

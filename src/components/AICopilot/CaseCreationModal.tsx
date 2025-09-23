@@ -541,7 +541,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Anonymized Patient Information *
                   <span className="text-gray-500 font-normal ml-2">
-                    ({formData.anonymizedInfo.length}/2000 characters, minimum 50)
+                    ({formData.anonymizedInfo.length} characters, minimum 50)
                   </span>
                 </label>
                 <textarea
@@ -549,7 +549,6 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   onChange={handleInputChange('anonymizedInfo')}
                   placeholder="Patient age, gender, presenting symptoms, medical history, test results, etc. (completely anonymized)"
                   rows={8}
-                  maxLength={2000}
                   className={`
                     w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200 resize-none
                     ${errors.anonymizedInfo 
@@ -575,7 +574,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                     {formData.anonymizedInfo.length >= 50 ? '✓ Minimum length met' : `Need ${50 - formData.anonymizedInfo.length} more characters`}
                   </div>
                   <div className="text-sm text-gray-500">
-                    {formData.anonymizedInfo.length}/2000
+                    {formData.anonymizedInfo.length} characters
                   </div>
                 </div>
               </div>

@@ -149,11 +149,20 @@ async function processPdfForChat(
     const base64Data = await convertFileToBase64(file);
     
     // Try enhanced text extraction (includes Gemini fallback)
+    console.log('📄 Calling extractTextFromPdf...');
     const textResult = await extractTextFromPdf(file, onProgress);
     
+    console.log('📄 extractTextFromPdf result:', {
+      hasText: textResult.hasText,
+      textLength: textResult.text?.length || 0,
+      extractionMethod: textResult.extractionMethod,
+      needsOCR: textResult.needsOCR,
+      pageCount: textResult.pageCount,
+      confidence: textResult.confidence
+    });
+    
     if (textResult.hasText && textResult.text) {
-      // Debug logging for text extraction
-      
+      console.log('✅ Text extraction successful, returning text');
       return {
         base64Data,
         extractedText: textResult.text,
@@ -168,6 +177,7 @@ async function processPdfForChat(
     
     // If no text found, try OCR
     if (textResult.needsOCR) {
+      console.log('🔍 Text extraction failed, trying OCR...');
       onProgress?.({
         stage: 'ocr',
         stageDescription: 'No text found, starting OCR processing...',
@@ -177,20 +187,30 @@ async function processPdfForChat(
       
       const ocrResult = await extractTextFromPdfWithOCR(file, onProgress);
       
-      // Debug logging for OCR extraction
+      console.log('🔍 OCR extraction result:', {
+        textLength: ocrResult.text?.length || 0,
+        confidence: ocrResult.confidence,
+        pageCount: ocrResult.pageCount
+      });
       
-      return {
-        base64Data,
-        extractedText: ocrResult.text,
-        metadata: {
-          pageCount: ocrResult.pageCount,
-          extractionMethod: 'ocr',
-          ocrConfidence: ocrResult.confidence
-        }
-      };
+      if (ocrResult.text && ocrResult.text.trim()) {
+        console.log('✅ OCR extraction successful, returning text');
+        return {
+          base64Data,
+          extractedText: ocrResult.text,
+          metadata: {
+            pageCount: ocrResult.pageCount,
+            extractionMethod: 'ocr',
+            ocrConfidence: ocrResult.confidence
+          }
+        };
+      } else {
+        console.log('❌ OCR extraction failed or returned empty text');
+      }
     }
     
     // Return just base64 if no text could be extracted
+    console.log('⚠️ No text extraction possible, returning base64 only');
     return { base64Data };
     
   } catch (error) {
@@ -398,13 +418,28 @@ export const processFileForChatUpload = async (
     
     // Process based on file type
     const fileType = file.type.toLowerCase();
+    console.log('🔍 Processing file for chat:', {
+      name: file.name,
+      type: fileType,
+      size: file.size
+    });
+    
     let processingResult: { base64Data: string; extractedText?: string; metadata?: Record<string, unknown> };
     
     if (fileType === 'application/pdf') {
+      console.log('📄 Starting PDF processing for:', file.name);
       processingResult = await processPdfForChat(file, onProgress);
+      console.log('📄 PDF processing completed:', {
+        hasBase64: !!processingResult.base64Data,
+        hasExtractedText: !!processingResult.extractedText,
+        extractedTextLength: processingResult.extractedText?.length || 0,
+        metadata: processingResult.metadata
+      });
     } else if (fileType.startsWith('image/')) {
+      console.log('🖼️ Starting image processing for:', file.name);
       processingResult = await processImageForChat(file, onProgress);
     } else {
+      console.log('📝 Starting document processing for:', file.name);
       processingResult = await processDocumentForChat(file);
     }
     
@@ -421,6 +456,12 @@ export const processFileForChatUpload = async (
     return enhancedAttachment;
     
   } catch (error) {
+    console.error('❌ File processing failed:', {
+      fileName: file.name,
+      fileType: file.type,
+      error: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined
+    });
 
     // Return basic attachment on error
     const fallbackBase64 = await convertFileToBase64(file);

@@ -149,7 +149,7 @@ export class RetryService {
     maxDelay: 30000,
     backoffMultiplier: 2,
     jitter: true,
-    timeout: 30000,
+    timeout: 60000, // Increased from 30s to 60s for medical AI processing
     retryCondition: (error: any) => this.isRetryableError(error),
     onRetry: () => {},
     onFailure: () => {}
@@ -240,6 +240,7 @@ export class RetryService {
         maxRetries: operationType === 'voice' ? 2 : 3, // Voice has more lenient retry
         initialDelay: 2000,
         maxDelay: 15000,
+        timeout: operationType === 'voice' ? 90000 : 60000, // 90s for voice, 60s for others
         onRetry: (error, attempt) => {
           console.warn(`Medical edit retry ${attempt}:`, {
             operationType,

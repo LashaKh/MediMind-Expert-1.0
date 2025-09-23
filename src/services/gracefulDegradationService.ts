@@ -216,8 +216,8 @@ export class GracefulDegradationService {
    */
   private async checkEdgeFunctionsHealth(): Promise<boolean> {
     try {
-      // Simple ping to edge function
-      const response = await fetch('/api/health', { 
+      // Simple ping to edge function with proper base path
+      const response = await fetch('/expert/api/health', { 
         method: 'GET',
         timeout: 5000 
       } as any)

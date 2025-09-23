@@ -316,7 +316,7 @@ export const MobileTextarea = forwardRef<HTMLTextAreaElement, MobileTextareaProp
             
             className
           )}
-          maxLength={maxLength}
+          maxLength={maxLength && maxLength < 2000 ? maxLength : undefined}
           onChange={handleChange}
           {...props}
         />
@@ -339,14 +339,14 @@ export const MobileTextarea = forwardRef<HTMLTextAreaElement, MobileTextareaProp
           </div>
 
           {/* Character Count */}
-          {(showCharCount || maxLength) && (
+          {(showCharCount || (maxLength && maxLength < 2000)) && (
             <p className={cn(
               'text-sm ml-2 flex-shrink-0',
               maxLength && charCount > maxLength * 0.9 
                 ? 'text-red-600' 
                 : 'text-gray-500 dark:text-gray-400'
             )}>
-              {charCount}{maxLength && `/${maxLength}`}
+              {charCount}{maxLength && maxLength < 2000 && `/${maxLength}`}
             </p>
           )}
         </div>

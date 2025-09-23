@@ -300,7 +300,7 @@ export class NetworkRecoveryService {
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), this.config.connectionTimeoutMs)
 
-      const response = await fetch('/api/health', {
+      const response = await fetch('/expert/api/health', {
         method: 'HEAD',
         cache: 'no-cache',
         signal: controller.signal

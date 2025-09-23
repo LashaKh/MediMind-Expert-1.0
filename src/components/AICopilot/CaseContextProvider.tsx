@@ -38,10 +38,12 @@ export const CaseContextProvider: React.FC<CaseContextProviderProps> = ({
         return;
       }
 
-      // Build context using selected documents or basic context if none selected
+      // Build context using selected documents or enhanced context if attachments exist
       const context = selectedDocuments.length > 0
         ? buildSelectiveCaseContext(activeCase, selectedDocuments)
-        : buildBasicCaseContext(activeCase);
+        : activeCase.metadata?.attachments && Array.isArray(activeCase.metadata.attachments) && activeCase.metadata.attachments.length > 0
+          ? buildEnhancedCaseContext(activeCase)
+          : buildBasicCaseContext(activeCase);
       setCaseContext(context);
 
       // Extract attachments from case metadata
@@ -69,6 +71,16 @@ export const CaseContextProvider: React.FC<CaseContextProviderProps> = ({
               type: 'url',
               name: attachment.fileName,
               mime: attachment.fileType
+            });
+          }
+          
+          // Add documents with extracted text to uploads for Flowise
+          else if (attachment.extractedText && attachment.extractedText.trim()) {
+            uploads.push({
+              data: attachment.extractedText,
+              type: 'file',
+              name: attachment.fileName || 'Document',
+              mime: attachment.fileType || 'text/plain'
             });
           }
         });

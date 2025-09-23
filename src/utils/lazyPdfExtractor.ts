@@ -10,9 +10,17 @@ export const extractTextFromPdfLazy = async (
 ): Promise<PdfTextExtractionResult> => {
   try {
     // Dynamic import to load PDF.js only when needed
+    console.log('📦 Loading PDF extractor dynamically...');
     const { extractTextFromPdf } = await import('./pdfTextExtractor');
-    return await extractTextFromPdf(file, onProgress);
+    console.log('📦 PDF extractor loaded, calling extractTextFromPdf...');
+    const result = await extractTextFromPdf(file, onProgress);
+    console.log('📦 PDF extractor result:', result);
+    return result;
   } catch (error) {
+    console.error('❌ Lazy PDF extractor failed:', {
+      error: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined
+    });
 
     return {
       text: '',

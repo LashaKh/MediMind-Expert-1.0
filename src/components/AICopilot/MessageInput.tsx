@@ -316,6 +316,13 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     if (!trimmedMessage && attachments.length === 0) return;
     if (disabled || isSubmitting) return;
 
+    // Check if any attachments are still processing
+    const processingAttachments = attachments.filter(att => att.processingStatus === 'processing');
+    if (processingAttachments.length > 0) {
+      setUploadError(`Please wait for ${processingAttachments.length} file(s) to finish processing before sending.`);
+      return;
+    }
+
     setIsSubmitting(true);
     setUploadError(null);
 
@@ -337,6 +344,23 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         // Build enhanced message with extracted text content for AI (background)
         const attachmentTextContext = buildAttachmentTextContext(currentAttachments);
         
+        console.log('📄 Attachment processing debug:', {
+          numberOfAttachments: currentAttachments.length,
+          attachmentsWithText: currentAttachments.filter(att => att.extractedText).length,
+          attachmentTextContextLength: attachmentTextContext.length,
+          attachmentDetails: currentAttachments.map(att => ({
+            name: att.name,
+            type: att.type,
+            size: att.size,
+            hasExtractedText: !!att.extractedText,
+            extractedTextLength: att.extractedText?.length || 0,
+            processingStatus: att.processingStatus,
+            processingError: att.processingError,
+            hasBase64Data: !!att.base64Data,
+            uploadType: att.uploadType
+          }))
+        });
+        
         // Create the actual message that will be sent to AI (includes extracted content)
         let aiMessage = currentMessage;
         if (attachmentTextContext) {
@@ -345,6 +369,13 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           } else {
             aiMessage = `${t('chat.analyzeAttachedDocuments')}${attachmentTextContext}`;
           }
+          console.log('💬 Enhanced message created:', {
+            originalLength: currentMessage.length,
+            contextLength: attachmentTextContext.length,
+            totalLength: aiMessage.length
+          });
+        } else {
+          console.log('⚠️ No attachment text context generated');
         }
         
         // Convert enhanced attachments to standard format for API
@@ -427,12 +458,16 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
   const canSend = (message.trim() || attachments.length > 0) && !disabled && !isSubmitting;
 
+  // Safety check: never use fixed positioning on large desktop screens (> 1024px)
+  const isLargeDesktop = window.innerWidth > 1024;
+  const shouldUseFixedPosition = ((isMobile && !disableInternalMobilePositioning) || forceMobileLayout) && !isLargeDesktop;
+
   return (
     <div 
       ref={containerRef}
       className={`
         flex flex-col safe-bottom
-        ${(isMobile && !disableInternalMobilePositioning) || forceMobileLayout ? 'fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-gray-900/98 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-700/50 shadow-xl mobile-input-container' : 'relative'}
+        ${shouldUseFixedPosition ? 'fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-gray-900/98 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-700/50 shadow-xl mobile-input-container' : 'relative'}
         ${className}
       `}
       data-tour="message-input"

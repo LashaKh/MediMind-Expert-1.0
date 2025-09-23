@@ -196,9 +196,6 @@ export const CaseForm: React.FC<CaseFormProps> = ({
             error={errors.anonymizedInfo}
             required
             disabled={isSubmitting}
-            maxLength={2000}
-            showCharCount
-            hint={t('case.charactersMinimum', { count: formData.anonymizedInfo.length.toString() })}
           />
           
           {/* Privacy Warning */}

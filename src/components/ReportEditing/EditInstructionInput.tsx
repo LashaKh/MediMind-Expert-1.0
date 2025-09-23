@@ -4,9 +4,7 @@ import {
   Mic,
   MicOff,
   Type,
-  Loader2,
-  X,
-  Lightbulb
+  Loader2
 } from 'lucide-react'
 import { EditInstructionInputProps } from '../../types/reportEditing'
 import { MedicalButton } from '../ui/MedicalDesignSystem'
@@ -36,9 +34,8 @@ const EditInstructionInput: React.FC<EditInstructionInputProps> = ({
   placeholder = "Describe the changes you want to make to this medical report...",
   className = ''
 }) => {
-  const [inputMode, setInputMode] = useState<'text' | 'voice'>('text')
+  const [inputMode, setInputMode] = useState<'text' | 'voice'>('voice')
   const [textInput, setTextInput] = useState('')
-  const [showSuggestions, setShowSuggestions] = useState(false)
   const [charCount, setCharCount] = useState(0)
   const [debouncedText, setDebouncedText] = useState('')
   const [isTextValidating, setIsTextValidating] = useState(false)
@@ -50,18 +47,6 @@ const EditInstructionInput: React.FC<EditInstructionInputProps> = ({
   const MIN_CHARS = 10
   const DEBOUNCE_DELAY = 500 // 500ms debounce for API call reduction
   const VALIDATION_DELAY = 150 // 150ms debounce for real-time validation
-
-  // Medical instruction suggestions
-  const suggestions = [
-    "Fix spelling and grammar errors",
-    "Summarize the patient's main symptoms",
-    "Add diagnosis codes (ICD-10)",
-    "Update medication dosages",
-    "Clarify treatment recommendations",
-    "Improve medical terminology usage",
-    "Add missing patient history details",
-    "Format lab results clearly"
-  ]
 
   // Debounced text processing for API call optimization
   useEffect(() => {
@@ -135,7 +120,6 @@ const EditInstructionInput: React.FC<EditInstructionInputProps> = ({
     setTextInput('')
     setDebouncedText('')
     setCharCount(0)
-    setShowSuggestions(false)
     setIsTextValidating(false)
     
     console.timeEnd('🚀 Text instruction submission')
@@ -160,11 +144,6 @@ const EditInstructionInput: React.FC<EditInstructionInputProps> = ({
     }
   }, [handleTextSubmit])
 
-  const handleSuggestionClick = useCallback((suggestion: string) => {
-    setTextInput(suggestion)
-    setShowSuggestions(false)
-    textareaRef.current?.focus()
-  }, [])
 
   // Enhanced submit validation with debouncing awareness
   const canSubmit = inputMode === 'text' 
@@ -173,33 +152,36 @@ const EditInstructionInput: React.FC<EditInstructionInputProps> = ({
 
   return (
     <div className={`space-y-4 ${className}`}>
-      {/* Input Mode Toggle */}
-      <div className="flex items-center space-x-2">
-        <span className="text-sm font-medium text-[#1a365d] dark:text-[#90cdf4]">
+      {/* Input Mode Toggle - Prominent Design */}
+      <div className="flex items-center justify-center space-x-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+        <span className="text-lg font-bold text-[#1a365d] dark:text-[#90cdf4]">
           Input Method:
         </span>
-        <div className="flex rounded-lg overflow-hidden border border-[#63b3ed]/30 dark:border-[#2b6cb0]/50">
-          <button
-            onClick={() => setInputMode('text')}
-            className={`flex items-center space-x-2 px-3 py-1.5 text-sm transition-colors ${
-              inputMode === 'text'
-                ? 'bg-[#2b6cb0] text-white'
-                : 'bg-white dark:bg-[#1a365d]/30 text-[#1a365d] dark:text-[#90cdf4] hover:bg-[#90cdf4]/10 dark:hover:bg-[#2b6cb0]/30'
-            }`}
-          >
-            <Type className="w-3 h-3" />
-            <span>Text</span>
-          </button>
+        <div className="flex rounded-xl overflow-hidden border-2 border-[#2b6cb0]/50 shadow-lg">
+          {/* Voice Button - First and Default */}
           <button
             onClick={() => setInputMode('voice')}
-            className={`flex items-center space-x-2 px-3 py-1.5 text-sm transition-colors ${
+            className={`flex items-center space-x-3 px-6 py-3 text-base font-bold transition-all duration-200 transform hover:scale-105 ${
               inputMode === 'voice'
-                ? 'bg-[#2b6cb0] text-white'
-                : 'bg-white dark:bg-[#1a365d]/30 text-[#1a365d] dark:text-[#90cdf4] hover:bg-[#90cdf4]/10 dark:hover:bg-[#2b6cb0]/30'
+                ? 'bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl'
+                : 'bg-white dark:bg-slate-700 text-[#2b6cb0] dark:text-[#63b3ed] hover:bg-[#90cdf4]/20 dark:hover:bg-[#2b6cb0]/20'
             }`}
           >
-            <Mic className="w-3 h-3" />
+            <Mic className="w-5 h-5" />
             <span>Voice</span>
+          </button>
+          
+          {/* Text Button - Second */}
+          <button
+            onClick={() => setInputMode('text')}
+            className={`flex items-center space-x-3 px-6 py-3 text-base font-bold transition-all duration-200 transform hover:scale-105 ${
+              inputMode === 'text'
+                ? 'bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl'
+                : 'bg-white dark:bg-slate-700 text-[#2b6cb0] dark:text-[#63b3ed] hover:bg-[#90cdf4]/20 dark:hover:bg-[#2b6cb0]/20'
+            }`}
+          >
+            <Type className="w-5 h-5" />
+            <span>Text</span>
           </button>
         </div>
       </div>
@@ -213,7 +195,6 @@ const EditInstructionInput: React.FC<EditInstructionInputProps> = ({
               value={textInput}
               onChange={(e) => setTextInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              onFocus={() => setShowSuggestions(true)}
               placeholder={placeholder}
               disabled={disabled || isProcessing}
               rows={4}
@@ -240,36 +221,6 @@ const EditInstructionInput: React.FC<EditInstructionInputProps> = ({
             </div>
           </div>
 
-          {/* Suggestions */}
-          {showSuggestions && textInput.length < MIN_CHARS && (
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-3">
-              <div className="flex items-start space-x-2">
-                <Lightbulb className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
-                    Suggested Medical Edit Instructions:
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-                    {suggestions.map((suggestion, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className="text-left text-xs text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/30 px-2 py-1 rounded transition-colors"
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <button
-                  onClick={() => setShowSuggestions(false)}
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* Submit Button */}
           <div className="flex items-center justify-between">
@@ -308,10 +259,6 @@ const EditInstructionInput: React.FC<EditInstructionInputProps> = ({
         </div>
       )}
 
-      {/* Session Info */}
-      <div className="text-xs text-[#1a365d]/60 dark:text-[#90cdf4]/70 text-center">
-        Session: {sessionId} • Report: {reportId}
-      </div>
     </div>
   )
 }

@@ -16,7 +16,18 @@ export const isMobile = (): boolean => {
     /Windows Phone/i
   ];
 
-  return mobileRegex.some((regex) => regex.test(userAgent)) || 
-    // Additional check for mobile browsers
-    (window.innerWidth <= 768);
+  const isUserAgentMobile = mobileRegex.some((regex) => regex.test(userAgent));
+  
+  // Only consider viewport width for mobile detection if it's a genuinely small screen
+  // and not just a resized desktop browser window
+  const isSmallViewport = window.innerWidth <= 768;
+  
+  // For large desktop screens (> 1024px), never consider mobile regardless of zoom/responsive tools
+  const isLargeDesktop = window.innerWidth > 1024;
+  
+  if (isLargeDesktop) {
+    return isUserAgentMobile; // Only mobile if actual mobile device
+  }
+  
+  return isUserAgentMobile || isSmallViewport;
 };
