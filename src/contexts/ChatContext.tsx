@@ -361,7 +361,7 @@ interface ChatContextType {
   // Case management methods
   createCase: (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => Promise<PatientCase>;
   setActiveCase: (caseItem: PatientCase | null) => void;
-  updateCase: (id: string, updates: Partial<PatientCase>) => void;
+  updateCase: (id: string, updates: Partial<PatientCase>) => Promise<void>;
   deleteCase: (caseId: string) => Promise<void>;
   getCaseHistory: () => PatientCase[];
   resetCaseContext: () => void;
@@ -1030,12 +1030,40 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
     dispatch({ type: 'SET_ACTIVE_CASE', payload: caseItem });
   };
 
-  const updateCase = (id: string, updates: Partial<PatientCase>) => {
+  const updateCase = async (id: string, updates: Partial<PatientCase>) => {
     const updatedCase = {
       ...updates,
-      updatedAt: new Date()
+      updated_at: new Date()
     };
-    dispatch({ type: 'UPDATE_CASE', payload: { id, updates: updatedCase } });
+    
+    // Debug logging for attachment removal
+    console.log('DEBUG: updateCase received updates:', updates);
+    console.log('DEBUG: updatedCase metadata:', updatedCase.metadata);
+    if (updatedCase.metadata?.attachments) {
+      console.log('DEBUG: Attachment count being sent to DB:', updatedCase.metadata.attachments.length);
+      console.log('DEBUG: Attachment files being sent to DB:', updatedCase.metadata.attachments.map(att => att.fileName || att.file_name || 'Unknown file'));
+    }
+    
+    try {
+      // Update in Supabase database
+      const { error } = await (supabase as any)
+        .from('patient_cases')
+        .update(updatedCase)
+        .eq('id', id);
+
+      if (error) {
+        console.error('Failed to update case in database:', error);
+        throw error;
+      }
+
+      // Update local state only after successful database update
+      console.log('DEBUG: About to update local state with:', { id, updates: updatedCase });
+      dispatch({ type: 'UPDATE_CASE', payload: { id, updates: updatedCase } });
+      console.log(`Successfully updated case ${id} in database`);
+    } catch (error) {
+      console.error('Error updating case:', error);
+      throw error;
+    }
   };
 
   const deleteCase = async (caseId: string): Promise<void> => {
@@ -1157,11 +1185,11 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
     }
   }, [state.caseContext.caseHistory, state.caseContext.activeCase]);
 
-  const loadCases = useCallback(async (): Promise<void> => {
+  const loadCases = useCallback(async (forceRefresh: boolean = false): Promise<void> => {
     try {
       // Use the optimized version that batches user auth and case loading
       const { user, cases, error } = await loadUserCasesOptimized({
-        useCache: true,
+        useCache: !forceRefresh, // Bypass cache if forceRefresh is true
         cacheTTL: 5 * 60 * 1000 // 5 minutes cache
       });
 
@@ -1180,15 +1208,15 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
       if (cases && cases.length > 0) {
         const formattedCases: PatientCase[] = cases.map((dbCase: any) => ({
           id: dbCase.id,
-          userId: dbCase.user_id,
+          user_id: dbCase.user_id,
           title: dbCase.title,
           description: dbCase.description,
-          anonymizedInfo: dbCase.anonymized_info || dbCase.description,
+          anonymized_info: dbCase.anonymized_info || dbCase.description,
           specialty: dbCase.specialty as 'cardiology' | 'obgyn',
           status: (dbCase.status as 'active' | 'archived') || 'active',
           metadata: dbCase.metadata || {},
-          createdAt: new Date(dbCase.created_at),
-          updatedAt: new Date(dbCase.updated_at)
+          created_at: new Date(dbCase.created_at),
+          updated_at: new Date(dbCase.updated_at)
         }));
 
         dispatch({ type: 'SET_CASE_HISTORY', payload: formattedCases });

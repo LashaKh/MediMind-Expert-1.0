@@ -5,7 +5,7 @@ import {
   Activity, Brain, Heart, Stethoscope, ArrowRight, MoreHorizontal,
   Download, Share2, Archive, Copy, Tag, Users, TrendingUp, Zap,
   Grid3X3, List, SortAsc, SortDesc, Plus, Sparkles, ChevronDown,
-  AlertTriangle, CheckCircle, Clock4, User, Shield, MessageSquare, Edit3
+  AlertTriangle, CheckCircle, Clock4, User, Shield, MessageSquare, Edit3, Paperclip
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -495,9 +495,18 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         {/* Case Content */}
                         <div className="relative z-10 space-y-4">
                           <div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
-                              {caseItem.title}
-                            </h3>
+                            <div className="flex items-start justify-between mb-2">
+                              <h3 className="text-xl font-bold text-gray-900 line-clamp-2 leading-tight flex-1">
+                                {caseItem.title}
+                              </h3>
+                              {/* Attachment Count Badge */}
+                              {(caseItem.metadata?.attachmentCount > 0 || (caseItem.metadata?.attachments && caseItem.metadata.attachments.length > 0)) && (
+                                <div className="flex items-center space-x-1 ml-3 px-2 py-1 bg-[#2b6cb0] text-white text-xs font-semibold rounded-full shadow-lg flex-shrink-0">
+                                  <Paperclip className="w-3 h-3" />
+                                  <span>{caseItem.metadata?.attachmentCount || caseItem.metadata?.attachments?.length || 0}</span>
+                                </div>
+                              )}
+                            </div>
                             <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
                               {caseItem.description}
                             </p>

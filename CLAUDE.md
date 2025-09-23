@@ -34,7 +34,7 @@ MediMind Expert is a comprehensive medical AI co-pilot platform for healthcare p
 **Use for**: All database operations, user profiles,  medical data, Edge Functions deployment
 
 ### Playwright MCP (Browser Testing & Error Analysis)
-**Primary Tools for Browser Testing and Debugging**:
+**Available Tools for Browser Testing and Debugging (Use Only When Explicitly Requested)**:
 
 #### Navigation & Setup
 **Local Development**: http://localhost:8888 (use this URL for all browser testing)
@@ -65,7 +65,7 @@ MediMind Expert is a comprehensive medical AI co-pilot platform for healthcare p
 - `mcp__playwright__browser_tab_select` - Switch between tabs
 - `mcp__playwright__browser_tab_close` - Clean up test tabs
 
-**Common Testing Scenarios**:
+**Common Testing Scenarios (Use Only When User Requests Browser Testing/Debugging)**:
 1. **Error Investigation**: Navigate → Console Messages → Network Requests → Screenshot
 2. **Responsive Testing**: Navigate → Resize (mobile/tablet/desktop) → Screenshot → Test interactions
 3. **User Flow Testing**: Navigate → Type/Click interactions → Wait for results → Validate
@@ -82,7 +82,8 @@ MediMind Expert is a comprehensive medical AI co-pilot platform for healthcare p
 - **`.mcp.json.context7-only`**: Context7-specific configuration
 - **`.mcp.json.supabase-only`**: Supabase-only configuration for focused database work
 
-### MCP Usage Guidelines (from Cursor rules)
+### MCP Usage Guidelines
+- **Playwright MCP**: Use ONLY when explicitly requested for debugging, browser testing, or error analysis. Do not use by default for development tasks.
 - **Sequential Thinking MCP**: Use for debugging, troubleshooting, complex problem-solving, and detailed project planning. Avoid excessive recursive calls.
 - **Information Gathering**: Use Brave Search, Puppeteer, FireCrawl when troubleshooting or searching documentation. Combine with Sequential Thinking for refined solutions.
 - **Browser Tools**: Requires explicit user confirmation. User must start server and ensure Chromium is running. Disable Puppeteer before use.
@@ -354,11 +355,12 @@ liked_search_results, clinical_trials_monitoring
 5. **Calculator Integration**: Suggest relevant calculators in chat
 
 ### Testing Strategy
-1. **Playwright MCP Primary**: Use for browser testing and error analysis
-2. **Console Messages First**: Always capture JavaScript errors initially
-3. **Responsive Testing**: Test at 320px, 768px, 1024px breakpoints
-4. **Medical Accuracy**: Validate all clinical calculations
-5. **Cross-Device**: Ensure consistency from mobile to desktop
+1. **Standard Testing**: Use Vitest, npm test commands, and code analysis for primary testing
+2. **Playwright MCP**: Use ONLY when explicitly requested for browser testing, debugging, or error analysis
+3. **Console Error Analysis**: When user reports browser issues, then use Playwright to capture JavaScript errors
+4. **Responsive Testing**: Use Playwright testing only when specifically requested at 320px, 768px, 1024px breakpoints
+5. **Medical Accuracy**: Validate all clinical calculations through unit tests
+6. **Cross-Device**: Ensure consistency through code review and standard testing practices
 
 ### Mobile-First Development
 1. **Touch Targets**: Minimum 44px for medical professional use
@@ -371,7 +373,8 @@ liked_search_results, clinical_trials_monitoring
 
 ### Database Operations
 - Use Supabase MCP for all database interactions
-- Test Edge Functions through browser automation
+- Test Edge Functions through direct API calls and unit tests
+- Use browser automation ONLY when explicitly requested for debugging
 - Monitor real-time subscriptions and data updates
 - Execute `supabase_setup_safe.sql` before user testing
 - Maintain Row Level Security on all tables
@@ -402,7 +405,7 @@ liked_search_results, clinical_trials_monitoring
 ### Development Workflow Enhancements
 - **Command Templates**: Added structured templates for plans, specifications, and task management
 - **Automation Scripts**: Bash scripts for prerequisite checking, feature creation, and agent context updates
-- **Mobile Testing Framework**: Comprehensive Playwright-based mobile testing with screenshot documentation
+- **Mobile Testing Framework**: Comprehensive mobile testing with standard development tools (use Playwright only when explicitly requested)
 
 ### Technical Debt Resolution
 - **Mobile Layout Issues**: Resolved keyboard interaction problems in Georgian transcription

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Upload, X, File, Image, FileText, AlertCircle, Loader2, CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/button';
@@ -20,6 +20,7 @@ export interface CaseAttachment {
 interface CaseFileUploadProps {
   caseId?: string;
   onFilesSelected: (attachments: CaseAttachment[]) => void;
+  initialAttachments?: CaseAttachment[];
   maxFiles?: number;
   maxSizeMB?: number;
   acceptedTypes?: string[];
@@ -38,6 +39,7 @@ const defaultAcceptedTypes = [
 export const CaseFileUpload: React.FC<CaseFileUploadProps> = ({
   caseId,
   onFilesSelected,
+  initialAttachments = [],
   maxFiles = 10,
   maxSizeMB = 50,
   acceptedTypes = defaultAcceptedTypes,
@@ -45,9 +47,14 @@ export const CaseFileUpload: React.FC<CaseFileUploadProps> = ({
 }) => {
   const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
-  const [attachments, setAttachments] = useState<CaseAttachment[]>([]);
+  const [attachments, setAttachments] = useState<CaseAttachment[]>(initialAttachments);
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Update attachments when initialAttachments change
+  useEffect(() => {
+    setAttachments(initialAttachments);
+  }, [initialAttachments]);
 
   const validateFile = (file: File): { isValid: boolean; error?: string } => {
     // Check file size
@@ -190,7 +197,15 @@ export const CaseFileUpload: React.FC<CaseFileUploadProps> = ({
   };
 
   const getCategoryLabel = (category?: string): string => {
-    return t(`documents.categories.${category || 'other'}`, { defaultValue: t('documents.categories.other') });
+    const categoryLabels: Record<string, string> = {
+      'medical-images': 'Medical Images',
+      'diagnostic-reports': 'Diagnostic Reports',
+      'lab-results': 'Lab Results',
+      'referral-letters': 'Referral Letters',
+      'other': 'Other Documents'
+    };
+    
+    return categoryLabels[category || 'other'] || 'Other Documents';
   };
 
   return (
@@ -266,12 +281,23 @@ export const CaseFileUpload: React.FC<CaseFileUploadProps> = ({
                   {getFileIcon(attachment)}
                   
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
-                      {attachment.file.name}
-                    </p>
+                    <div className="flex items-center space-x-2">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {attachment.file.name}
+                      </p>
+                      {attachment.id.startsWith('existing-') && (
+                        <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full font-medium">
+                          Existing
+                        </span>
+                      )}
+                    </div>
                     <div className="flex items-center space-x-3 text-xs text-gray-500">
-                      <span>{(attachment.file.size / 1024 / 1024).toFixed(2)}MB</span>
-                      <span>•</span>
+                      {attachment.file.size > 0 && (
+                        <>
+                          <span>{(attachment.file.size / 1024 / 1024).toFixed(2)}MB</span>
+                          <span>•</span>
+                        </>
+                      )}
                       <span>{getCategoryLabel(attachment.category)}</span>
                       {attachment.status === 'error' && (
                         <>

@@ -12,8 +12,8 @@ import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
 interface CaseCreationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCaseCreate: (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => Promise<PatientCase>;
-  onCaseUpdate?: (caseId: string, caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => Promise<PatientCase>;
+  onCaseCreate: (caseData: Omit<PatientCase, 'id' | 'created_at' | 'updated_at'>) => Promise<PatientCase>;
+  onCaseUpdate?: (caseId: string, caseData: Omit<PatientCase, 'id' | 'created_at' | 'updated_at'>) => Promise<PatientCase>;
   editingCase?: PatientCase | null;
   specialty?: 'cardiology' | 'obgyn';
   className?: string;
@@ -66,14 +66,47 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
   // Populate form data when editing a case
   useEffect(() => {
     if (editingCase) {
-      setFormData({
+      console.log('DEBUG: Loading form data from editingCase:', editingCase);
+      console.log('DEBUG: editingCase.anonymized_info:', editingCase.anonymized_info);
+      const newFormData = {
         title: editingCase.title || '',
         description: editingCase.description || '',
-        anonymizedInfo: editingCase.patientName || editingCase.anonymizedInfo || '',
+        anonymizedInfo: editingCase.patientName || editingCase.anonymized_info || '',
         category: editingCase.category || '',
         tags: editingCase.metadata?.tags ? editingCase.metadata.tags.join(', ') : '',
         complexity: editingCase.metadata?.complexity || 'medium'
-      });
+      };
+      console.log('DEBUG: Setting form data to:', newFormData);
+      setFormData(newFormData);
+
+      // Load existing attachments if any
+      console.log('DEBUG: editingCase.metadata:', editingCase.metadata);
+      console.log('DEBUG: editingCase.metadata.attachments:', editingCase.metadata?.attachments);
+      if (editingCase.metadata?.attachments && Array.isArray(editingCase.metadata.attachments)) {
+        console.log('DEBUG: Processing each attachment:');
+        const existingAttachments: CaseAttachment[] = editingCase.metadata.attachments.map((attachment: any, index: number) => {
+          console.log(`DEBUG: Attachment ${index}:`, attachment);
+          const converted = {
+            id: attachment.id || `existing-${index}`,
+            file: new File([], attachment.fileName || attachment.file_name || `Attachment ${index + 1}`, {
+              type: attachment.fileType || attachment.mime_type || 'application/octet-stream'
+            }),
+            base64Data: '', // Not needed for display
+            uploadType: attachment.uploadType || (attachment.fileType?.startsWith('image/') ? 'image' : attachment.fileType === 'application/pdf' ? 'pdf' : 'document') as 'image' | 'pdf' | 'document',
+            status: 'ready' as const,
+            category: attachment.category,
+            preview: attachment.publicUrl || attachment.public_url,
+            metadata: attachment
+          };
+          console.log(`DEBUG: Converted attachment ${index}:`, converted);
+          return converted;
+        });
+        console.log(`DEBUG: Loading ${existingAttachments.length} existing attachments for case ${editingCase.title}`);
+        console.log('DEBUG: All existingAttachments:', existingAttachments);
+        setAttachments(existingAttachments);
+      } else {
+        setAttachments([]);
+      }
     } else {
       // Reset form for new case
       setFormData({
@@ -84,6 +117,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
         tags: '',
         complexity: 'medium'
       });
+      setAttachments([]);
     }
     setErrors({});
   }, [editingCase, isOpen]);
@@ -161,36 +195,62 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
     
     const [result, error] = await safeAsync(
       async () => {
-        // Process attachments if any
+        // Separate existing and new attachments
+        const existingAttachments = attachments.filter(att => att.id.startsWith('existing-'));
+        const newAttachments = attachments.filter(att => !att.id.startsWith('existing-'));
+        
+        // Process only new attachments
         let processedAttachments: ProcessedAttachment[] = [];
-        if (attachments.length > 0) {
-          processedAttachments = await processCaseAttachments(attachments);
+        if (newAttachments.length > 0) {
+          processedAttachments = await processCaseAttachments(newAttachments);
         }
         
-        // Upload attachments first to get metadata
-        let attachmentMetadata: any[] = [];
+        // Upload new attachments and get metadata
+        let newAttachmentMetadata: any[] = [];
         if (processedAttachments.length > 0 && user) {
-          const { attachmentMetadata: attachments } = await uploadCaseAttachments(
+          const { attachmentMetadata } = await uploadCaseAttachments(
             editingCase?.id || crypto.randomUUID(), // Use case ID or temporary ID for file organization
             user.id, 
             processedAttachments
           );
-          attachmentMetadata = attachments;
+          newAttachmentMetadata = attachmentMetadata;
         }
 
-        const caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'> = {
-          userId: user?.id,
+        // Build final attachment metadata based ONLY on current attachments in UI
+        const allAttachmentMetadata: any[] = [];
+        
+        // Add metadata for existing attachments that are still present
+        existingAttachments.forEach(att => {
+          if (att.metadata) {
+            allAttachmentMetadata.push(att.metadata);
+          }
+        });
+        
+        // Add metadata for new attachments
+        allAttachmentMetadata.push(...newAttachmentMetadata);
+
+        // Log attachment processing for debugging
+        if (editingCase?.metadata?.attachments && Array.isArray(editingCase.metadata.attachments)) {
+          const originalCount = editingCase.metadata.attachments.length;
+          const currentUICount = attachments.length;
+          const finalMetadataCount = allAttachmentMetadata.length;
+          console.log(`DEBUG: Original attachments: ${originalCount}, UI attachments: ${currentUICount}, Final metadata: ${finalMetadataCount}`);
+          console.log('Final attachment metadata:', allAttachmentMetadata.map(att => att.fileName || 'Unknown file'));
+        }
+
+        const caseData: Omit<PatientCase, 'id' | 'created_at' | 'updated_at'> = {
+          user_id: user?.id,
           title: formData.title.trim(),
           description: formData.description.trim(),
-          anonymizedInfo: formData.anonymizedInfo.trim(),
+          anonymized_info: formData.anonymizedInfo.trim(),
           specialty: specialty || editingCase?.specialty,
           status: editingCase?.status || 'active',
           metadata: {
             category: formData.category.trim() || undefined,
             tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
             complexity: formData.complexity,
-            attachmentCount: attachments.length,
-            attachments: attachmentMetadata // Store attachment metadata including extracted text
+            attachmentCount: allAttachmentMetadata.length, // Use actual metadata length, not UI attachments length
+            attachments: allAttachmentMetadata // Store both existing and new attachment metadata
           }
         };
 
@@ -592,6 +652,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
 
               <CaseFileUpload
                 onFilesSelected={setAttachments}
+                initialAttachments={attachments}
                 maxFiles={10}
                 maxSizeMB={50}
                 className="mb-6"

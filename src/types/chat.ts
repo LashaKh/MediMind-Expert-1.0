@@ -70,15 +70,15 @@ export type KnowledgeBaseType = 'curated' | 'personal';
 // Case management interfaces
 export interface PatientCase {
   id: string;
-  userId?: string;
+  user_id?: string;
   title: string;
   description: string;
-  anonymizedInfo: string;
-  createdAt: Date;
-  updatedAt: Date;
+  anonymized_info: string;
+  created_at: Date;
+  updated_at: Date;
   specialty?: 'cardiology' | 'obgyn';
   status: 'active' | 'archived';
-  conversationId?: string;
+  conversation_id?: string;
   metadata?: {
     tags?: string[];
     category?: string;

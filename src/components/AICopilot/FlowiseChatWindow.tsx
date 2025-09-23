@@ -74,7 +74,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     conversations,
     activeConversationId,
     setActiveConversation,
-    updateCase,
     activeCase,
     setActiveCase,
     resetCaseContext,
@@ -93,7 +92,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   } = useAppStore();
 
   // Get Flowise metadata functions and case management from ChatContext
-  const { saveFlowiseConversationMetadata, incrementFlowiseMessageCount, loadCases, createCase } = useChatContext();
+  const { saveFlowiseConversationMetadata, incrementFlowiseMessageCount, loadCases, createCase, updateCase } = useChatContext();
 
   const navigate = useNavigate();
   const [showConversationList, setShowConversationList] = useState(false);
@@ -321,6 +320,17 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       setChatError(flowiseError);
     }
   }, [flowiseError]);
+
+  // Update editingCase when caseHistory changes (after case updates)
+  useEffect(() => {
+    if (editingCase && caseHistory.length > 0) {
+      const freshCase = caseHistory.find(c => c.id === editingCase.id);
+      if (freshCase && JSON.stringify(freshCase) !== JSON.stringify(editingCase)) {
+        console.log('DEBUG: Auto-updating editingCase with fresh data:', freshCase);
+        setEditingCase(freshCase);
+      }
+    }
+  }, [caseHistory, editingCase]);
 
   // Handle sending a message
   const handleSendMessage = useCallback(async (
@@ -594,10 +604,25 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
   // Handle case update
   const handleCaseUpdate = async (caseId: string, caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => {
-    updateCase(caseId, caseData);
+    console.log('DEBUG: handleCaseUpdate called with caseId:', caseId);
+    console.log('DEBUG: handleCaseUpdate caseData.metadata:', caseData.metadata);
+    if (caseData.metadata?.attachments) {
+      console.log('DEBUG: handleCaseUpdate attachments being passed:', caseData.metadata.attachments.length);
+      console.log('DEBUG: handleCaseUpdate attachment files:', caseData.metadata.attachments.map(att => att.fileName || att.file_name || 'Unknown file'));
+    }
     
-    // Reload cases to ensure the list is up-to-date
-    await loadCases();
+    try {
+      await updateCase(caseId, caseData);
+      console.log('DEBUG: updateCase completed successfully');
+    } catch (error) {
+      console.error('DEBUG: updateCase failed:', error);
+      throw error;
+    }
+    
+    // Reload cases after a short delay to ensure fresh data, bypassing cache
+    setTimeout(async () => {
+      await loadCases(true); // forceRefresh = true to bypass cache
+    }, 100);
     
     // Return the updated case (the store should handle this)
     const updatedCase = caseHistory.find(c => c.id === caseId);
