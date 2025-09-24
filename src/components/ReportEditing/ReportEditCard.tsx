@@ -73,7 +73,6 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
   const [currentContent, setCurrentContent] = useState(initialContent)
   const [isProcessing, setIsProcessing] = useState(false)
   const [activeTab, setActiveTab] = useState<'edit' | 'history'>('edit')
-  const [editMode, setEditMode] = useState<'instruction' | 'manual'>('instruction')
   const [isExpanded, setIsExpanded] = useState(true)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
@@ -777,156 +776,270 @@ ${instruction}`
           
           <div className="relative p-8 pb-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-6">
-                {/* Premium Icon with Multiple Layers */}
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30 animate-pulse" />
-                  <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-4 shadow-xl shadow-[#2b6cb0]/25">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
-                    <Edit3 className="w-7 h-7 text-white relative z-10" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] rounded-full flex items-center justify-center shadow-lg">
-                    <Crown className="w-2.5 h-2.5 text-white" />
-                  </div>
-                </div>
-                
-                <div className="space-y-3">
-                  {/* Premium Title with Enhanced Typography */}
-                  <div className="flex items-center space-x-3">
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-slate-900 via-[#1a365d] to-[#2b6cb0] dark:from-white dark:via-[#90cdf4] dark:to-[#63b3ed] bg-clip-text text-transparent">
-                      AI Report Studio
-                    </h3>
-                    <div className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#1a365d]/30 dark:to-[#2b6cb0]/30 rounded-full border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50">
-                      <Sparkles className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                      <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4] tracking-wide">PREMIUM</span>
+              {/* Mobile-First Header Layout */}
+              <div className="space-y-4">
+                {/* Mobile Layout */}
+                <div className="md:hidden">
+                  {/* Title Row */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="relative">
+                        <div className="bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl p-3 shadow-lg">
+                          <Edit3 className="w-5 h-5 text-white" />
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                          AI Report Studio
+                        </h3>
+                        <div className="flex items-center space-x-1 text-xs text-[#2b6cb0] dark:text-[#63b3ed]">
+                          <Sparkles className="w-3 h-3" />
+                          <span className="font-semibold">PREMIUM</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   
-                  {/* Enhanced Status Information */}
-                  <div className="flex items-center space-x-6">
-                    <div className="flex items-center space-x-2 px-3 py-1.5 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-slate-700/40 shadow-sm">
-                      <div className="w-2 h-2 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-full animate-pulse" />
-                      <FileText className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Report {reportId}</span>
+                  {/* Status Row - Hidden on Mobile */}
+                  <div className="hidden items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-1 px-2 py-1 bg-white/60 dark:bg-slate-800/60 rounded-lg">
+                        <FileText className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                        <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">#{reportId}</span>
+                      </div>
+                      <div className="flex items-center space-x-1 px-2 py-1 bg-white/60 dark:bg-slate-800/60 rounded-lg">
+                        <History className="w-3 h-3 text-[#1a365d] dark:text-[#90cdf4]" />
+                        <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">v{currentVersion}</span>
+                      </div>
                     </div>
                     
-                    <div className="flex items-center space-x-2 px-3 py-1.5 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-slate-700/40 shadow-sm">
-                      <History className="w-4 h-4 text-[#1a365d] dark:text-[#90cdf4]" />
-                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">v{currentVersion}</span>
-                      <div className="w-1 h-1 bg-[#63b3ed] rounded-full" />
+                    <div className="flex items-center space-x-2">
+                      {lastSaved && (
+                        <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 rounded-lg">
+                          <CheckCircle className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                          <span className="text-xs font-semibold text-[#1a365d] dark:text-[#90cdf4]">
+                            Saved
+                          </span>
+                        </div>
+                      )}
+                      
+                      {hasUnsavedChanges && (
+                        <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 rounded-lg animate-pulse">
+                          <AlertCircle className="w-3 h-3 text-[#90cdf4]" />
+                          <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4]">
+                            Unsaved
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Desktop Layout */}
+                <div className="hidden md:flex md:items-center md:space-x-6">
+                  {/* Premium Icon with Multiple Layers */}
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30 animate-pulse" />
+                    <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-4 shadow-xl shadow-[#2b6cb0]/25">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
+                      <Edit3 className="w-7 h-7 text-white relative z-10" />
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] rounded-full flex items-center justify-center shadow-lg">
+                      <Crown className="w-2.5 h-2.5 text-white" />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {/* Premium Title with Enhanced Typography */}
+                    <div className="flex items-center space-x-3">
+                      <h3 className="text-2xl font-bold bg-gradient-to-r from-slate-900 via-[#1a365d] to-[#2b6cb0] dark:from-white dark:via-[#90cdf4] dark:to-[#63b3ed] bg-clip-text text-transparent">
+                        AI Report Studio
+                      </h3>
+                      <div className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#1a365d]/30 dark:to-[#2b6cb0]/30 rounded-full border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50">
+                        <Sparkles className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                        <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4] tracking-wide">PREMIUM</span>
+                      </div>
                     </div>
                     
-                    {lastSaved && (
-                      <div className="flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/20 backdrop-blur-sm rounded-xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30 shadow-sm">
-                        <CheckCircle className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                        <span className="text-sm font-semibold text-[#1a365d] dark:text-[#90cdf4]">
-                          Saved {lastSaved.toLocaleTimeString()}
-                        </span>
+                    {/* Enhanced Status Information */}
+                    {/* Desktop Only Status Information */}
+                    <div className="hidden md:flex md:items-center md:space-x-6">
+                      <div className="flex items-center space-x-2 px-3 py-1.5 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-slate-700/40 shadow-sm">
+                        <div className="w-2 h-2 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-full animate-pulse" />
+                        <FileText className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Report {reportId}</span>
                       </div>
-                    )}
-                    
-                    {hasUnsavedChanges && (
-                      <div className="flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/20 backdrop-blur-sm rounded-xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30 shadow-sm animate-pulse">
-                        <AlertCircle className="w-4 h-4 text-[#90cdf4] dark:text-[#90cdf4]" />
-                        <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4]">
-                          Unsaved Changes
-                        </span>
+                      
+                      <div className="flex items-center space-x-2 px-3 py-1.5 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-slate-700/40 shadow-sm">
+                        <History className="w-4 h-4 text-[#1a365d] dark:text-[#90cdf4]" />
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">v{currentVersion}</span>
+                        <div className="w-1 h-1 bg-[#63b3ed] rounded-full" />
                       </div>
-                    )}
+                      
+                      {lastSaved && (
+                        <div className="flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/20 backdrop-blur-sm rounded-xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30 shadow-sm">
+                          <CheckCircle className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                          <span className="text-sm font-semibold text-[#1a365d] dark:text-[#90cdf4]">
+                            Saved {lastSaved.toLocaleTimeString()}
+                          </span>
+                        </div>
+                      )}
+                      
+                      {hasUnsavedChanges && (
+                        <div className="flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/20 backdrop-blur-sm rounded-xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30 shadow-sm animate-pulse">
+                          <AlertCircle className="w-4 h-4 text-[#90cdf4] dark:text-[#90cdf4]" />
+                          <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4]">
+                            Unsaved Changes
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
           
-              {/* Premium Control Panel */}
-              <div className="flex items-center space-x-3">
-                {/* Mobile-specific controls with enhanced design */}
-                {isMobileMode && (
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              {/* Mobile-Responsive Control Panel */}
+              <div className="space-y-3">
+                {/* Mobile Layout - Fixed spacing and no overlap */}
+                <div className="md:hidden">
+                  {/* First Row: Main Controls */}
+                  <div className="flex items-center justify-between mb-3">
                     <MedicalButton
-                      variant={quickActionMode ? "primary" : "ghost"}
+                      variant="ghost"
                       size="md"
-                      leftIcon={Zap}
-                      onClick={() => setQuickActionMode(!quickActionMode)}
-                      className={quickActionMode 
-                        ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-lg shadow-[#2b6cb0]/25 hover:shadow-xl hover:shadow-[#2b6cb0]/30" 
-                        : "relative text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-slate-800/60 backdrop-blur-sm"
-                      }
-                      title="Toggle quick action buttons"
+                      rightIcon={isExpanded ? ChevronUp : ChevronDown}
+                      onClick={() => setIsExpanded(!isExpanded)}
+                      className="min-w-[44px] min-h-[44px] text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40"
                     >
-                      Quick AI
+                      <span className="text-sm font-medium">{isExpanded ? 'Hide' : 'Show'}</span>
                     </MedicalButton>
+                    
+                    {/* Save Button - Always visible when needed */}
+                    {hasUnsavedChanges && (
+                      <MedicalButton
+                        variant="primary"
+                        size="md"
+                        leftIcon={Save}
+                        onClick={handleSave}
+                        disabled={isProcessing}
+                        className="min-w-[44px] min-h-[44px] bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-lg"
+                      >
+                        <span className="text-sm font-medium">Save</span>
+                      </MedicalButton>
+                    )}
                   </div>
-                )}
-                
-                {isMobileMode && window.innerWidth <= 414 && (
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    <MedicalButton
-                      variant={isOneHandedMode ? "primary" : "ghost"}
-                      size="md"
-                      leftIcon={User}
-                      onClick={() => setIsOneHandedMode(!isOneHandedMode)}
-                      className={isOneHandedMode 
-                        ? "relative bg-gradient-to-r from-[#90cdf4] to-[#63b3ed] text-white shadow-lg shadow-[#90cdf4]/25" 
-                        : "relative text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-slate-800/60 backdrop-blur-sm"
-                      }
-                      title="Toggle one-handed mode layout"
-                    >
-                      <Crown className="w-4 h-4" />
-                    </MedicalButton>
-                  </div>
-                )}
-                
-                {/* Enhanced Version Management */}
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                  <MedicalButton
-                    variant={autoVersioning ? "primary" : "ghost"}
-                    size="md"
-                    leftIcon={Shield}
-                    onClick={() => setAutoVersioning(!autoVersioning)}
-                    className={autoVersioning 
-                      ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-lg shadow-[#2b6cb0]/25" 
-                      : "relative text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-slate-800/60 backdrop-blur-sm"
-                    }
-                    title={autoVersioning ? "Auto-versioning enabled" : "Auto-versioning disabled"}
-                  >
-                    Auto-Save
-                  </MedicalButton>
+                  
+                  {/* Second Row: Quick Action Toggle - Only when mobile mode */}
+                  {isMobileMode && (
+                    <div className="flex justify-center">
+                      <MedicalButton
+                        variant={quickActionMode ? "primary" : "ghost"}
+                        size="md"
+                        leftIcon={Zap}
+                        onClick={() => setQuickActionMode(!quickActionMode)}
+                        className={`min-w-[120px] min-h-[44px] ${quickActionMode 
+                          ? "bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-lg" 
+                          : "text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40"
+                        }`}
+                        title="Toggle quick action buttons"
+                      >
+                        <span className="text-sm font-medium">Quick Actions</span>
+                      </MedicalButton>
+                    </div>
+                  )}
                 </div>
-                
-                {/* Premium Save Button */}
-                {hasUnsavedChanges && (
+
+                {/* Desktop Layout */}
+                <div className="hidden md:flex md:items-center md:space-x-3">
+                  {/* Mobile-specific controls with enhanced design */}
+                  {isMobileMode && (
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                      <MedicalButton
+                        variant={quickActionMode ? "primary" : "ghost"}
+                        size="md"
+                        leftIcon={Zap}
+                        onClick={() => setQuickActionMode(!quickActionMode)}
+                        className={quickActionMode 
+                          ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-lg shadow-[#2b6cb0]/25 hover:shadow-xl hover:shadow-[#2b6cb0]/30" 
+                          : "relative text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-slate-800/60 backdrop-blur-sm"
+                        }
+                        title="Toggle quick action buttons"
+                      >
+                        Quick AI
+                      </MedicalButton>
+                    </div>
+                  )}
+                  
+                  {isMobileMode && window.innerWidth <= 414 && (
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                      <MedicalButton
+                        variant={isOneHandedMode ? "primary" : "ghost"}
+                        size="md"
+                        leftIcon={User}
+                        onClick={() => setIsOneHandedMode(!isOneHandedMode)}
+                        className={isOneHandedMode 
+                          ? "relative bg-gradient-to-r from-[#90cdf4] to-[#63b3ed] text-white shadow-lg shadow-[#90cdf4]/25" 
+                          : "relative text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-slate-800/60 backdrop-blur-sm"
+                        }
+                        title="Toggle one-handed mode layout"
+                      >
+                        <Crown className="w-4 h-4" />
+                      </MedicalButton>
+                    </div>
+                  )}
+                  
+                  {/* Enhanced Version Management */}
                   <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#63b3ed]/30 rounded-xl blur-md opacity-70 animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
                     <MedicalButton
-                      variant="primary"
+                      variant={autoVersioning ? "primary" : "ghost"}
                       size="md"
-                      leftIcon={Save}
-                      onClick={handleSave}
-                      disabled={isProcessing}
-                      className="relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/30 hover:shadow-2xl hover:shadow-[#2b6cb0]/40 transform hover:scale-105 transition-all duration-200"
+                      leftIcon={Shield}
+                      onClick={() => setAutoVersioning(!autoVersioning)}
+                      className={autoVersioning 
+                        ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-lg shadow-[#2b6cb0]/25" 
+                        : "relative text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-slate-800/60 backdrop-blur-sm"
+                      }
+                      title={autoVersioning ? "Auto-versioning enabled" : "Auto-versioning disabled"}
                     >
-                      <span className="flex items-center space-x-2">
-                        <span>Save Changes</span>
-                        <Gem className="w-4 h-4" />
-                      </span>
+                      Auto-Save
                     </MedicalButton>
                   </div>
-                )}
-                
-                {/* Enhanced Expand/Collapse */}
-                <div className="relative group">
-                  <MedicalButton
-                    variant="ghost"
-                    size="md"
-                    rightIcon={isExpanded ? ChevronUp : ChevronDown}
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    className="relative text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40"
-                  >
-                    {isExpanded ? 'Minimize' : 'Expand Studio'}
-                  </MedicalButton>
+                  
+                  {/* Premium Save Button */}
+                  {hasUnsavedChanges && (
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#63b3ed]/30 rounded-xl blur-md opacity-70 animate-pulse" />
+                      <MedicalButton
+                        variant="primary"
+                        size="md"
+                        leftIcon={Save}
+                        onClick={handleSave}
+                        disabled={isProcessing}
+                        className="relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/30 hover:shadow-2xl hover:shadow-[#2b6cb0]/40 transform hover:scale-105 transition-all duration-200"
+                      >
+                        <span className="flex items-center space-x-2">
+                          <span>Save Changes</span>
+                          <Gem className="w-4 h-4" />
+                        </span>
+                      </MedicalButton>
+                    </div>
+                  )}
+                  
+                  {/* Enhanced Expand/Collapse */}
+                  <div className="relative group">
+                    <MedicalButton
+                      variant="ghost"
+                      size="md"
+                      rightIcon={isExpanded ? ChevronUp : ChevronDown}
+                      onClick={() => setIsExpanded(!isExpanded)}
+                      className="relative text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40"
+                    >
+                      {isExpanded ? 'Minimize' : 'Expand Studio'}
+                    </MedicalButton>
+                  </div>
                 </div>
               </div>
             </div>
@@ -987,74 +1100,8 @@ ${instruction}`
           <div className="relative p-8 pt-6">
             {activeTab === 'edit' && (
               <div className="space-y-8">
-                {/* Enhanced Edit Mode Toggle */}
-                <div className="relative">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
-                      <Palette className="w-5 h-5 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                      <span>Editing Mode</span>
-                    </h4>
-                    <div className="flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/20 rounded-full border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30">
-                      <Award className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                      <span className="text-sm font-semibold text-[#1a365d] dark:text-[#90cdf4]">Professional Suite</span>
-                    </div>
-                  </div>
-                  
-                  <div className="relative p-1 bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-700 rounded-2xl border border-slate-200/50 dark:border-slate-600/50 shadow-inner">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => setEditMode('instruction')}
-                        className={`group relative flex-1 flex items-center justify-center space-x-3 px-6 py-4 rounded-xl font-semibold transition-all duration-300 ${
-                          editMode === 'instruction'
-                            ? 'bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 transform scale-[1.02]'
-                            : 'text-slate-600 dark:text-slate-400 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-slate-100'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-lg ${
-                          editMode === 'instruction'
-                            ? 'bg-white/20'
-                            : 'bg-[#90cdf4]/30 dark:bg-[#1a365d]/30 group-hover:bg-[#90cdf4]/50 dark:group-hover:bg-[#2b6cb0]/50'
-                        } transition-all duration-300`}>
-                          <Brain className="w-5 h-5" />
-                        </div>
-                        <span className="text-lg tracking-wide">AI Intelligence</span>
-                        {editMode === 'instruction' && (
-                          <>
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#63b3ed]/20 to-[#2b6cb0]/20 rounded-xl animate-pulse" />
-                            <Sparkles className="w-5 h-5 text-white/80" />
-                          </>
-                        )}
-                      </button>
-                      
-                      <button
-                        onClick={() => setEditMode('manual')}
-                        className={`group relative flex-1 flex items-center justify-center space-x-3 px-6 py-4 rounded-xl font-semibold transition-all duration-300 ${
-                          editMode === 'manual'
-                            ? 'bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 transform scale-[1.02]'
-                            : 'text-slate-600 dark:text-slate-400 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-slate-100'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-lg ${
-                          editMode === 'manual'
-                            ? 'bg-white/20'
-                            : 'bg-[#90cdf4]/30 dark:bg-[#1a365d]/30 group-hover:bg-[#90cdf4]/50 dark:group-hover:bg-[#2b6cb0]/50'
-                        } transition-all duration-300`}>
-                          <Type className="w-5 h-5" />
-                        </div>
-                        <span className="text-lg tracking-wide">Manual Precision</span>
-                        {editMode === 'manual' && (
-                          <>
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#63b3ed]/20 to-[#90cdf4]/20 rounded-xl animate-pulse" />
-                            <Target className="w-5 h-5 text-white/80" />
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Premium Quick Action Center for Mobile Bedside Consultations */}
-                {isMobileMode && quickActionMode && editMode === 'instruction' && (
+                {isMobileMode && quickActionMode && (
                   <div className="relative overflow-hidden">
                     {/* Luxury Background */}
                     <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/10 via-[#63b3ed]/8 to-[#2b6cb0]/5 dark:from-[#1a365d]/20 dark:via-[#2b6cb0]/15 dark:to-[#63b3ed]/10 rounded-3xl" />
@@ -1090,8 +1137,12 @@ ${instruction}`
                         </div>
                       </div>
                       
-                      {/* Premium Action Grid */}
-                      <div className={`grid gap-4 ${isOneHandedMode ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                      {/* Mobile-Optimized Premium Action Grid */}
+                      <div className={`grid gap-4 ${
+                        isOneHandedMode 
+                          ? 'grid-cols-1 space-y-2' 
+                          : 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3'
+                      }`}>
                         {quickActions.map((action, index) => {
                           const IconComponent = action.icon
                           const gradients = [
@@ -1110,7 +1161,9 @@ ${instruction}`
                               <button
                                 onClick={() => handleQuickAction(action)}
                                 disabled={isProcessing}
-                                className={`relative w-full p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:scale-100 disabled:cursor-not-allowed group`}
+                                className={`relative w-full ${
+                                  isOneHandedMode ? 'p-4 min-h-[60px]' : 'p-6 min-h-[80px]'
+                                } bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:scale-100 disabled:cursor-not-allowed group`}
                                 title={action.instruction}
                               >
                                 <div className="flex flex-col items-center space-y-3">
@@ -1152,61 +1205,27 @@ ${instruction}`
                   </div>
                 )}
 
-                {/* Premium Voice Instruction Interface for Mobile */}
-                {isMobileMode && !quickActionMode && editMode === 'instruction' && (
-                  <div className="relative overflow-hidden">
-                    {/* Luxury Voice Background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/10 via-[#63b3ed]/8 to-[#2b6cb0]/5 dark:from-[#1a365d]/20 dark:via-[#2b6cb0]/15 dark:to-[#63b3ed]/10 rounded-3xl" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(26,54,93,0.1),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(26,54,93,0.2),transparent_70%)]" />
-                    
-                    <div className="relative p-8">
-                      <div className="space-y-6">
-                        {/* Premium Voice Icon */}
-                        <div className="text-center">
-                          <div className="relative inline-block">
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] rounded-full blur-xl opacity-30 animate-pulse" />
-                            <div className="relative w-20 h-20 bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] rounded-full flex items-center justify-center shadow-2xl shadow-[#1a365d]/25">
-                              <Mic className="w-10 h-10 text-white" />
-                              <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] rounded-full flex items-center justify-center">
-                                <Wand2 className="w-3 h-3 text-white" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Enhanced Voice Button - Full Width Container */}
-                        <div className="w-full">
-                          <VoiceInstructionButton
-                            onTranscription={handleInstructionSubmit}
-                            disabled={isProcessing}
-                            className="w-full"
-                          />
-                        </div>
-                        
-                        {/* Premium Hint */}
-                        <div className="p-4 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/40 dark:border-slate-700/40">
-                          <div className="flex items-center justify-center space-x-3">
-                            <div className="p-2 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] rounded-lg shadow-lg">
-                              <Star className="w-4 h-4 text-white" />
-                            </div>
-                            <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                              Hands-free clinical excellence during patient examinations
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+              {/* Unified Edit Interface - AI Voice/Text Input + Manual Editor */}
+              <div className="space-y-8">
+                
+                {/* AI Voice/Text Input Section */}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="p-2 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-lg">
+                      <Brain className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                      AI Assistant
+                    </h3>
+                    <div className="px-3 py-1 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#1a365d]/30 rounded-full">
+                      <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4]">VOICE & TEXT</span>
                     </div>
                   </div>
-                )}
-
-              {/* Edit Interface */}
-              {editMode === 'instruction' ? (
-                <div className="space-y-4">
+                  
                   <EditInstructionInput
-                    onSubmit={handleInstructionSubmit}
-                    isProcessing={isProcessing}
-                    sessionId={sessionId}
-                    reportId={reportId}
+                    onTextInstruction={handleInstructionSubmit}
+                    onVoiceInstruction={(transcript, audioData) => handleInstructionSubmit(transcript)}
+                    disabled={isProcessing}
                   />
                   
                   {/* Medical Validation Results */}
@@ -1263,94 +1282,61 @@ ${instruction}`
                       </div>
                     </div>
                   )}
-                  
                 </div>
-              ) : (
-                <ReportTextEditor
-                  content={currentContent}
-                  onChange={handleManualEdit}
-                  isProcessing={isProcessing}
-                  reportId={reportId}
-                  sessionId={sessionId}
-                />
-              )}
 
-                {/* Revolutionary Processing Status */}
-                {isProcessing && (
-                  <div className="relative overflow-hidden">
-                    {/* Premium Processing Background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/10 via-[#63b3ed]/8 to-[#2b6cb0]/5 dark:from-[#1a365d]/30 dark:via-[#2b6cb0]/20 dark:to-[#63b3ed]/10 rounded-3xl" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(43,108,176,0.15),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(43,108,176,0.25),transparent_50%)]" />
-                    
-                    {/* Animated Particles */}
-                    <div className="absolute inset-0 overflow-hidden">
-                      <div className="absolute top-6 left-8 w-2 h-2 bg-[#63b3ed]/40 rounded-full animate-ping" style={{ animationDelay: '0s' }} />
-                      <div className="absolute top-12 right-12 w-1.5 h-1.5 bg-[#2b6cb0]/30 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
-                      <div className="absolute bottom-8 left-16 w-1 h-1 bg-[#1a365d]/35 rounded-full animate-ping" style={{ animationDelay: '2s' }} />
+                {/* Divider */}
+                <div className="relative flex items-center">
+                  <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+                  <div className="flex-shrink-0 px-4">
+                    <div className="flex items-center space-x-2 text-slate-500 dark:text-slate-400">
+                      <Type className="w-4 h-4" />
+                      <span className="text-sm font-medium">OR EDIT DIRECTLY</span>
+                      <Type className="w-4 h-4" />
                     </div>
-                    
-                    <div className="relative p-8">
-                      {/* Main Processing Indicator */}
-                      <div className="flex items-center space-x-6 mb-8">
-                        {/* Premium AI Icon */}
-                        <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-50 animate-pulse" />
-                          <div className="relative w-16 h-16 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl flex items-center justify-center shadow-2xl shadow-[#2b6cb0]/30">
-                            <Brain className="w-8 h-8 text-white" />
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
-                          </div>
-                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-full flex items-center justify-center animate-bounce">
-                            <Zap className="w-3 h-3 text-white" />
-                          </div>
-                        </div>
-                        
-                        {/* Processing Info */}
-                        <div className="flex-1 space-y-4">
-                          <div className="flex items-center justify-between">
-                            <h4 className="text-2xl font-bold bg-gradient-to-r from-[#2b6cb0] via-[#1a365d] to-[#2b6cb0] bg-clip-text text-transparent">
-                              AI Intelligence Processing
-                            </h4>
-                            <div className="flex items-center space-x-2 px-4 py-2 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-slate-700/40">
-                              <Timer className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                              <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4]">
-                                {estimatedTimeRemaining > 0 ? formatTimeRemaining(estimatedTimeRemaining) : 'Calculating...'}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          {/* Revolutionary Progress Bar */}
-                          <div className="relative">
-                            <div className="h-4 bg-gradient-to-r from-slate-200 to-slate-100 dark:from-slate-700 dark:to-slate-600 rounded-full overflow-hidden shadow-inner">
-                              <div 
-                                className="h-full bg-gradient-to-r from-[#2b6cb0] via-[#63b3ed] to-[#1a365d] rounded-full shadow-lg transition-all duration-300 ease-out relative overflow-hidden"
-                                style={{ width: `${processingProgress}%` }}
-                              >
-                                <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-white/10 to-transparent animate-pulse" />
-                                <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)] animate-slide-right" />
-                              </div>
-                            </div>
-                            <div className="absolute -top-1 -bottom-1 left-0 right-0 bg-gradient-to-r from-[#2b6cb0]/20 via-[#63b3ed]/20 to-[#1a365d]/20 rounded-full blur-sm animate-pulse" />
-                          </div>
-                          
-                          {/* Current Stage with Premium Design */}
-                          <div className="flex items-center space-x-4 p-4 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-slate-700/40">
-                            <div className="p-2 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-lg shadow-lg">
-                              <Loader2 className="w-5 h-5 text-white animate-spin" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="font-semibold text-slate-900 dark:text-slate-100 text-lg">
-                                {processingStage || 'Initializing advanced AI algorithms...'}
-                              </div>
-                            </div>
-                            <div className="px-4 py-2 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#1a365d]/30 rounded-xl border border-[#63b3ed] dark:border-[#2b6cb0]/50">
-                              <span className="text-lg font-bold text-[#1a365d] dark:text-[#90cdf4]">
-                                {Math.round(processingProgress)}%
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                  </div>
+                  <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+                </div>
+
+                {/* Manual Editor Section */}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="p-2 bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] rounded-lg">
+                      <Type className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                      Manual Editor
+                    </h3>
+                    <div className="px-3 py-1 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#1a365d]/30 rounded-full">
+                      <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4]">DIRECT EDIT</span>
+                    </div>
+                  </div>
                   
+                  <ReportTextEditor
+                    content={currentContent}
+                    onChange={handleManualEdit}
+                    isProcessing={isProcessing}
+                    reportId={reportId}
+                    sessionId={sessionId}
+                  />
+                </div>
+              </div>
+
+                {/* Simple Processing Progress Bar */}
+                {isProcessing && (
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        Processing...
+                      </span>
+                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        {Math.round(processingProgress)}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] h-2 rounded-full transition-all duration-300 ease-out"
+                        style={{ width: `${processingProgress}%` }}
+                      ></div>
                     </div>
                   </div>
                 )}

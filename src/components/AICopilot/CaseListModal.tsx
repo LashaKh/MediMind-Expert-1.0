@@ -42,6 +42,12 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<FilterStatus>('all');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
+  
+  // Debug: Track when cases prop changes
+  useEffect(() => {
+    console.log('DEBUG: CaseListModal cases prop updated:', cases.length);
+    console.log('DEBUG: Case titles:', cases.map(c => ({ id: c.id, title: c.title, updated_at: c.updated_at })));
+  }, [cases]);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<{ case: PatientCase } | null>(null);
@@ -104,8 +110,15 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
   }, [cases, searchTerm, filter, sortBy]);
 
   const handleCaseClick = (caseItem: PatientCase) => {
-    onCaseSelect(caseItem);
-    onClose();
+    // When clicking on case study box, open edit modal instead of selecting case
+    if (onEditCase) {
+      onEditCase(caseItem);
+      onClose();
+    } else {
+      // Fallback to selecting case if no edit handler provided
+      onCaseSelect(caseItem);
+      onClose();
+    }
   };
 
   const handleDeleteClick = (e: React.MouseEvent, caseItem: PatientCase) => {
@@ -117,7 +130,14 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
     e.stopPropagation();
     if (onEditCase) {
       onEditCase(caseItem);
+      onClose();
     }
+  };
+
+  const handleSelectClick = (e: React.MouseEvent, caseItem: PatientCase) => {
+    e.stopPropagation();
+    onCaseSelect(caseItem);
+    onClose();
   };
 
   const handleConfirmDelete = async () => {
@@ -253,13 +273,18 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                   <h1 className="text-4xl font-bold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] bg-clip-text text-transparent mb-2">
                     Case Study Library
                   </h1>
-                  <div className="flex items-center space-x-4 text-gray-600">
-                    <span className="text-lg font-medium">
-                      {filteredAndSortedCases.length} of {cases.length} cases
-                    </span>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-[#63b3ed] rounded-full animate-pulse" />
-                      <span className="text-sm">Real-time sync</span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4 text-gray-600">
+                      <span className="text-lg font-medium">
+                        {filteredAndSortedCases.length} of {cases.length} cases
+                      </span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-[#63b3ed] rounded-full animate-pulse" />
+                        <span className="text-sm">Real-time sync</span>
+                      </div>
+                    </div>
+                    <div className="text-sm text-[#2b6cb0] bg-[#90cdf4]/20 px-3 py-1 rounded-full border border-[#63b3ed]/30">
+                      💡 Click card to edit • Use "Start Chat" to discuss with AI
                     </div>
                   </div>
                 </div>
@@ -468,27 +493,39 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                              </div>
                           </div>
                           
-                          <div className="flex items-center space-x-2">
-                            {onEditCase && (
+                          <div className="flex items-center justify-between w-full">
+                            {/* Primary Action - Start Chat Button */}
+                            <Button
+                              onClick={(e) => handleSelectClick(e, caseItem)}
+                              className="px-4 py-2 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white hover:from-[#1a365d] hover:to-[#2b6cb0] transition-all duration-200 rounded-lg shadow-md hover:shadow-lg font-medium text-sm"
+                            >
+                              <MessageSquare className="w-4 h-4 mr-2" />
+                              Start Chat
+                            </Button>
+                            
+                            {/* Secondary Actions */}
+                            <div className="flex items-center space-x-1">
+                              {onEditCase && (
+                                <Button
+                                  onClick={(e) => handleEditClick(e, caseItem)}
+                                  variant="ghost"
+                                  size="sm"
+                                  className="p-2 rounded-lg opacity-60 hover:opacity-100 transition-all duration-200 hover:bg-[#90cdf4]/20 hover:text-[#2b6cb0]"
+                                  title="Edit case details"
+                                >
+                                  <Edit3 className="w-4 h-4" />
+                                </Button>
+                              )}
                               <Button
-                                onClick={(e) => handleEditClick(e, caseItem)}
+                                onClick={(e) => handleDeleteClick(e, caseItem)}
                                 variant="ghost"
                                 size="sm"
-                                className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#90cdf4]/20 hover:text-[#2b6cb0]"
-                                title="Edit case"
+                                className="p-2 rounded-lg opacity-60 hover:opacity-100 transition-all duration-200 hover:bg-red-50 hover:text-red-600"
+                                title="Delete case"
                               >
-                                <Edit3 className="w-4 h-4" />
+                                <Trash2 className="w-4 h-4" />
                               </Button>
-                            )}
-                            <Button
-                              onClick={(e) => handleDeleteClick(e, caseItem)}
-                              variant="ghost"
-                              size="sm"
-                              className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-50 hover:text-red-600"
-                              title="Delete case"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
+                            </div>
                           </div>
                         </div>
 

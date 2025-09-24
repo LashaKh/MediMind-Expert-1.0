@@ -8,6 +8,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 interface HeaderCaseIndicatorProps {
   activeCase: PatientCase | null;
   onViewCase?: () => void;
+  onEditCase?: (caseItem: PatientCase) => void;
   onResetCase?: () => void;
   className?: string;
 }
@@ -15,6 +16,7 @@ interface HeaderCaseIndicatorProps {
 export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
   activeCase,
   onViewCase,
+  onEditCase,
   onResetCase,
   className = ''
 }) => {
@@ -83,7 +85,13 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
           ${isExpanded ? 'shadow-lg border-blue-300/60' : ''}
           ${className}
         `}
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={() => {
+          if (onEditCase && activeCase) {
+            onEditCase(activeCase);
+          } else {
+            setIsExpanded(!isExpanded);
+          }
+        }}
       >
         {/* Case Icon with Status */}
         <div className="relative flex-shrink-0">
@@ -229,7 +237,15 @@ export const HeaderCaseIndicator: React.FC<HeaderCaseIndicatorProps> = ({
               <div className="flex items-center justify-between pt-2 border-t border-blue-100">
                 <div className="flex items-center space-x-2 text-xs text-gray-500">
                   <Calendar className="w-3 h-3" />
-                  <span>Created {activeCase.createdAt.toLocaleDateString()}</span>
+                  <span>Created {(() => {
+                    const createdAt = activeCase.createdAt || activeCase.created_at;
+                    if (createdAt instanceof Date) {
+                      return createdAt.toLocaleDateString();
+                    } else if (typeof createdAt === 'string') {
+                      return new Date(createdAt).toLocaleDateString();
+                    }
+                    return 'Unknown';
+                  })()}</span>
                 </div>
                 
                 {onViewCase && (

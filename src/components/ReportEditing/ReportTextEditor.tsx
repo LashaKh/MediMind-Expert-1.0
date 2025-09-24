@@ -209,132 +209,252 @@ const ReportTextEditor: React.FC<ReportTextEditorProps> = ({
 
   return (
     <div className={`space-y-4 ${className}`}>
-      {/* Header with stats and actions */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0">
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <FileText className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
-            <span className="text-sm font-medium text-[#1a365d] dark:text-[#90cdf4]">
-              Medical Report Editor
-            </span>
-          </div>
-          
-          {lastSaved && (
-            <div className="flex items-center space-x-1 text-xs text-[#2b6cb0] dark:text-[#63b3ed]">
-              <CheckCircle className="w-3 h-3" />
-              <span>Saved {lastSaved.toLocaleTimeString()}</span>
-            </div>
-          )}
-          
+      {/* Mobile-Responsive Header with stats and actions */}
+      <div className="space-y-3 md:space-y-0">
+        {/* Mobile Layout - Clean and Simple */}
+        <div className="md:hidden">
+          {/* Only show unsaved status on mobile if needed */}
           {hasUnsavedChanges && (
-            <div className="flex items-center space-x-1 text-xs text-[#90cdf4] dark:text-[#90cdf4]">
-              <AlertTriangle className="w-3 h-3" />
-              <span>Unsaved changes</span>
+            <div className="flex items-center justify-center p-2">
+              <div className="flex items-center space-x-1 text-xs text-[#90cdf4] dark:text-[#90cdf4]">
+                <AlertTriangle className="w-3 h-3" />
+                <span>Unsaved changes</span>
+              </div>
             </div>
           )}
         </div>
-        
-        <div className="flex items-center space-x-2">
-          {/* Statistics */}
-          <div className="text-xs text-[#1a365d]/60 dark:text-[#90cdf4]/80 space-x-3">
-            <span>{stats.words} words</span>
-            <span>{stats.lines} lines</span>
-            <span className={isOverLimit ? 'text-red-600' : isNearLimit ? 'text-[#90cdf4]' : ''}>
-              {stats.chars.toLocaleString()}/{maxLength.toLocaleString()}
-            </span>
+
+        {/* Desktop Layout */}
+        <div className="hidden md:flex md:items-center md:justify-between md:space-y-0">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <FileText className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
+              <span className="text-sm font-medium text-[#1a365d] dark:text-[#90cdf4]">
+                Medical Report Editor
+              </span>
+            </div>
+            
+            {lastSaved && (
+              <div className="flex items-center space-x-1 text-xs text-[#2b6cb0] dark:text-[#63b3ed]">
+                <CheckCircle className="w-3 h-3" />
+                <span>Saved {lastSaved.toLocaleTimeString()}</span>
+              </div>
+            )}
+            
+            {hasUnsavedChanges && (
+              <div className="flex items-center space-x-1 text-xs text-[#90cdf4] dark:text-[#90cdf4]">
+                <AlertTriangle className="w-3 h-3" />
+                <span>Unsaved changes</span>
+              </div>
+            )}
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            {/* Statistics */}
+            <div className="text-xs text-[#1a365d]/60 dark:text-[#90cdf4]/80 space-x-3">
+              <span>{stats.words} words</span>
+              <span>{stats.lines} lines</span>
+              <span className={isOverLimit ? 'text-red-600' : isNearLimit ? 'text-[#90cdf4]' : ''}>
+                {stats.chars.toLocaleString()}/{maxLength.toLocaleString()}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-2 p-3 bg-[#90cdf4]/10 dark:bg-[#1a365d]/20 rounded-lg border border-[#63b3ed]/30 dark:border-[#2b6cb0]/50">
-        <div className="flex items-center space-x-1">
-          <MedicalButton
-            variant="ghost"
-            size="sm"
-            leftIcon={Undo}
-            onClick={handleUndo}
-            disabled={!canUndo || disabled || isProcessing}
-            title="Undo (Cmd+Z)"
-          >
-            Undo
-          </MedicalButton>
+      {/* Mobile-First Responsive Toolbar */}
+      <div className="bg-[#90cdf4]/10 dark:bg-[#1a365d]/20 rounded-lg border border-[#63b3ed]/30 dark:border-[#2b6cb0]/50">
+        {/* Mobile Layout (<=768px) */}
+        <div className="md:hidden">
+          {/* Primary Actions Row */}
+          <div className="flex items-center justify-between p-3 border-b border-[#63b3ed]/20 dark:border-[#2b6cb0]/30">
+            <div className="flex items-center space-x-2">
+              <MedicalButton
+                variant="ghost"
+                size="md"
+                leftIcon={Undo}
+                onClick={handleUndo}
+                disabled={!canUndo || disabled || isProcessing}
+                title="Undo (Cmd+Z)"
+                className="min-w-[44px] min-h-[44px] px-3"
+              >
+                <span className="hidden xs:inline">Undo</span>
+              </MedicalButton>
+              
+              <MedicalButton
+                variant="ghost"
+                size="md"
+                leftIcon={Redo}
+                onClick={handleRedo}
+                disabled={!canRedo || disabled || isProcessing}
+                title="Redo (Cmd+Shift+Z)"
+                className="min-w-[44px] min-h-[44px] px-3"
+              >
+                <span className="hidden xs:inline">Redo</span>
+              </MedicalButton>
+            </div>
+            
+            {hasUnsavedChanges && (
+              <MedicalButton
+                variant="primary"
+                size="md"
+                leftIcon={Save}
+                onClick={handleSave}
+                disabled={disabled || isProcessing}
+                title="Save changes"
+                className="min-w-[44px] min-h-[44px] px-4"
+              >
+                Save
+              </MedicalButton>
+            )}
+          </div>
           
-          <MedicalButton
-            variant="ghost"
-            size="sm"
-            leftIcon={Redo}
-            onClick={handleRedo}
-            disabled={!canRedo || disabled || isProcessing}
-            title="Redo (Cmd+Shift+Z)"
-          >
-            Redo
-          </MedicalButton>
+          {/* Secondary Actions Row */}
+          <div className="flex items-center justify-between p-3">
+            <div className="flex items-center space-x-2">
+              <MedicalButton
+                variant="ghost"
+                size="md"
+                leftIcon={Search}
+                onClick={() => setShowFind(!showFind)}
+                disabled={disabled || isProcessing}
+                title="Find text (Cmd+F)"
+                className="min-w-[44px] min-h-[44px] px-3"
+              >
+                <span className="hidden xs:inline">Find</span>
+              </MedicalButton>
+              
+              <MedicalButton
+                variant="ghost"
+                size="md"
+                leftIcon={showWordWrap ? EyeOff : Eye}
+                onClick={() => setShowWordWrap(!showWordWrap)}
+                disabled={disabled || isProcessing}
+                title="Toggle word wrap"
+                className="min-w-[44px] min-h-[44px] px-3"
+              >
+                <span className="hidden xs:inline">Wrap</span>
+              </MedicalButton>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <MedicalButton
+                variant="ghost"
+                size="md"
+                leftIcon={Copy}
+                onClick={handleCopy}
+                disabled={disabled || isProcessing || !localContent}
+                title="Copy content"
+                className="min-w-[44px] min-h-[44px] px-3"
+              >
+                <span className="hidden xs:inline">Copy</span>
+              </MedicalButton>
+              
+              <MedicalButton
+                variant="ghost"
+                size="md"
+                leftIcon={RotateCcw}
+                onClick={handleReset}
+                disabled={disabled || isProcessing || localContent === content}
+                title="Reset to original"
+                className="min-w-[44px] min-h-[44px] px-3"
+              >
+                <span className="hidden xs:inline">Reset</span>
+              </MedicalButton>
+            </div>
+          </div>
         </div>
-        
-        <div className="h-4 w-px bg-[#63b3ed]/50 dark:bg-[#2b6cb0]/60" />
-        
-        <div className="flex items-center space-x-1">
-          <MedicalButton
-            variant="ghost"
-            size="sm"
-            leftIcon={Search}
-            onClick={() => setShowFind(!showFind)}
-            disabled={disabled || isProcessing}
-            title="Find text (Cmd+F)"
-          >
-            Find
-          </MedicalButton>
-          
-          <MedicalButton
-            variant="ghost"
-            size="sm"
-            leftIcon={showWordWrap ? EyeOff : Eye}
-            onClick={() => setShowWordWrap(!showWordWrap)}
-            disabled={disabled || isProcessing}
-            title="Toggle word wrap"
-          >
-            Wrap
-          </MedicalButton>
-        </div>
-        
-        <div className="h-4 w-px bg-[#63b3ed]/50 dark:bg-[#2b6cb0]/60" />
-        
-        <div className="flex items-center space-x-1">
-          <MedicalButton
-            variant="ghost"
-            size="sm"
-            leftIcon={Copy}
-            onClick={handleCopy}
-            disabled={disabled || isProcessing || !localContent}
-            title="Copy content"
-          >
-            Copy
-          </MedicalButton>
-          
-          <MedicalButton
-            variant="ghost"
-            size="sm"
-            leftIcon={RotateCcw}
-            onClick={handleReset}
-            disabled={disabled || isProcessing || localContent === content}
-            title="Reset to original"
-          >
-            Reset
-          </MedicalButton>
-          
-          {hasUnsavedChanges && (
+
+        {/* Desktop Layout (>768px) */}
+        <div className="hidden md:flex md:flex-wrap md:items-center md:gap-2 md:p-3">
+          <div className="flex items-center space-x-1">
             <MedicalButton
-              variant="primary"
+              variant="ghost"
               size="sm"
-              leftIcon={Save}
-              onClick={handleSave}
-              disabled={disabled || isProcessing}
-              title="Save changes"
+              leftIcon={Undo}
+              onClick={handleUndo}
+              disabled={!canUndo || disabled || isProcessing}
+              title="Undo (Cmd+Z)"
             >
-              Save
+              Undo
             </MedicalButton>
-          )}
+            
+            <MedicalButton
+              variant="ghost"
+              size="sm"
+              leftIcon={Redo}
+              onClick={handleRedo}
+              disabled={!canRedo || disabled || isProcessing}
+              title="Redo (Cmd+Shift+Z)"
+            >
+              Redo
+            </MedicalButton>
+          </div>
+          
+          <div className="h-4 w-px bg-[#63b3ed]/50 dark:bg-[#2b6cb0]/60" />
+          
+          <div className="flex items-center space-x-1">
+            <MedicalButton
+              variant="ghost"
+              size="sm"
+              leftIcon={Search}
+              onClick={() => setShowFind(!showFind)}
+              disabled={disabled || isProcessing}
+              title="Find text (Cmd+F)"
+            >
+              Find
+            </MedicalButton>
+            
+            <MedicalButton
+              variant="ghost"
+              size="sm"
+              leftIcon={showWordWrap ? EyeOff : Eye}
+              onClick={() => setShowWordWrap(!showWordWrap)}
+              disabled={disabled || isProcessing}
+              title="Toggle word wrap"
+            >
+              Wrap
+            </MedicalButton>
+          </div>
+          
+          <div className="h-4 w-px bg-[#63b3ed]/50 dark:bg-[#2b6cb0]/60" />
+          
+          <div className="flex items-center space-x-1">
+            <MedicalButton
+              variant="ghost"
+              size="sm"
+              leftIcon={Copy}
+              onClick={handleCopy}
+              disabled={disabled || isProcessing || !localContent}
+              title="Copy content"
+            >
+              Copy
+            </MedicalButton>
+            
+            <MedicalButton
+              variant="ghost"
+              size="sm"
+              leftIcon={RotateCcw}
+              onClick={handleReset}
+              disabled={disabled || isProcessing || localContent === content}
+              title="Reset to original"
+            >
+              Reset
+            </MedicalButton>
+            
+            {hasUnsavedChanges && (
+              <MedicalButton
+                variant="primary"
+                size="sm"
+                leftIcon={Save}
+                onClick={handleSave}
+                disabled={disabled || isProcessing}
+                title="Save changes"
+              >
+                Save
+              </MedicalButton>
+            )}
+          </div>
         </div>
       </div>
 
@@ -371,7 +491,11 @@ const ReportTextEditor: React.FC<ReportTextEditorProps> = ({
           maxLength={maxLength}
           placeholder="Enter medical report content here...\n\nTip: Use clear, professional medical language. The system will validate content for medical terminology and compliance."
           className={`
-            w-full h-96 px-4 py-3 border rounded-lg resize-none
+            w-full px-4 py-3 border rounded-lg resize-none
+            min-h-[40vh] max-h-[60vh] h-[50vh] 
+            sm:min-h-[45vh] sm:max-h-[65vh] sm:h-[55vh]
+            md:min-h-[50vh] md:max-h-[70vh] md:h-[60vh]
+            lg:h-96
             focus:ring-2 focus:ring-[#2b6cb0] focus:border-transparent
             disabled:opacity-50 disabled:cursor-not-allowed
             font-mono text-sm leading-relaxed
@@ -421,8 +545,8 @@ const ReportTextEditor: React.FC<ReportTextEditorProps> = ({
         </div>
       )}
 
-      {/* Footer info */}
-      <div className="flex items-center justify-between text-xs text-[#1a365d]/60 dark:text-[#90cdf4]/70">
+      {/* Footer info - Desktop Only */}
+      <div className="hidden md:flex md:items-center md:justify-between text-xs text-[#1a365d]/60 dark:text-[#90cdf4]/70">
         <div>
           Session: {sessionId} • Report: {reportId}
         </div>

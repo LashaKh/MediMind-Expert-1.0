@@ -71,7 +71,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
       const newFormData = {
         title: editingCase.title || '',
         description: editingCase.description || '',
-        anonymizedInfo: editingCase.patientName || editingCase.anonymized_info || '',
+        anonymizedInfo: editingCase.anonymized_info || '',
         category: editingCase.category || '',
         tags: editingCase.metadata?.tags ? editingCase.metadata.tags.join(', ') : '',
         complexity: editingCase.metadata?.complexity || 'medium'

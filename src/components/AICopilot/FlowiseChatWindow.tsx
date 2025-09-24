@@ -584,10 +584,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       // Add an initial AI message with case context
       const caseIntroMessage: Message = {
         id: uuidv4(),
-        content: t('chat.caseReceived', { title: newCase.title }) + 
-                '\n\n' + t('chat.caseSummary') + 
-                `\n${newCase.description}` +
-                '\n\n' + t('chat.caseDiscussionPrompt'),
+        content: `I'm ready to discuss the case "${newCase.title}". What would you like to explore first?`,
         type: 'ai',
         timestamp: new Date(),
         sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
@@ -612,24 +609,16 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     }
     
     try {
-      await updateCase(caseId, caseData);
-      console.log('DEBUG: updateCase completed successfully');
+      const updatedCase = await updateCase(caseId, caseData);
+      console.log('DEBUG: updateCase completed successfully, returned:', updatedCase);
+      
+      // The updateCase function now returns the exact data from the database
+      // This ensures we have the most up-to-date case information
+      return updatedCase;
+      
     } catch (error) {
       console.error('DEBUG: updateCase failed:', error);
       throw error;
-    }
-    
-    // Reload cases after a short delay to ensure fresh data, bypassing cache
-    setTimeout(async () => {
-      await loadCases(true); // forceRefresh = true to bypass cache
-    }, 100);
-    
-    // Return the updated case (the store should handle this)
-    const updatedCase = caseHistory.find(c => c.id === caseId);
-    if (updatedCase) {
-      // Update the case data with the new information
-      Object.assign(updatedCase, caseData);
-      return updatedCase;
     }
     
     // Fallback - create a minimal updated case object
@@ -643,6 +632,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
   // Handle edit case
   const handleEditCase = (caseItem: PatientCase) => {
+    console.log('DEBUG: handleEditCase called for case:', caseItem.id, caseItem.title);
     setEditingCase(caseItem);
     setShowCaseModal(true);
     setShowCaseListModal(false); // Close the case list modal
@@ -697,17 +687,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         // Step 5: Set the new conversation as active
         setActiveConversation(newConversationId);
         
-        // Step 6: Add a welcoming AI message for the fresh start
-        setTimeout(() => {
-          const welcomeMessage = {
-            id: `msg-${Date.now()}`,
-            content: `Hello! I've cleared the previous case context and we're starting fresh. How can I assist you with your ${profile?.medical_specialty || 'medical'} practice today?`,
-            type: 'ai' as const,
-            timestamp: new Date(),
-            sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
-          };
-          addMessage(welcomeMessage);
-        }, 100);
+        // Step 6: Don't add any messages - let the clinical dashboard show
+        // This ensures a clean state with the welcome screen visible
         
         // Step 7: Reload cases to ensure case list is up-to-date
         await loadCases();
@@ -754,8 +735,16 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     // Set the new conversation as active
     setActiveConversation(newConversationId);
     
-    // Case context will be automatically included when user sends their first message
-    // No automatic AI response - user must initiate the conversation
+    // Add an initial AI message with case context (similar to case creation)
+    const caseIntroMessage: Message = {
+      id: uuidv4(),
+      content: `I'm ready to discuss the case "${selectedCase.title}". What would you like to explore first?`,
+      type: 'ai',
+      timestamp: new Date(),
+      sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
+    };
+    
+    addMessage(caseIntroMessage);
     
     // Close the case list modal
     setShowCaseListModal(false);
@@ -1003,6 +992,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     <HeaderCaseIndicator
                       activeCase={activeCase}
                       onViewCase={handleViewCase}
+                      onEditCase={handleEditCase}
                       onResetCase={handleResetCase}
                     />
                   </div>
@@ -1126,6 +1116,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 <HeaderCaseIndicator
                   activeCase={activeCase}
                   onViewCase={handleViewCase}
+                  onEditCase={handleEditCase}
                   onResetCase={handleResetCase}
                 />
               </div>
@@ -1206,6 +1197,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 recentCases={caseHistory}
                 onCreateCase={() => setShowCaseModal(true)}
                 specialtyConfig={specialtyConfig}
+                activeCase={activeCase}
               />
             </div>
           ) : (
@@ -1404,6 +1396,20 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         onClose={() => {
           setShowCaseModal(false);
           setEditingCase(null); // Reset editing case when modal closes
+          
+          // If we were editing a case, briefly show the case list again to see the updated case
+          if (editingCase) {
+            setTimeout(() => {
+              console.log('DEBUG: Auto-reopening case list to show updated case');
+              console.log('DEBUG: Current caseHistory length:', caseHistory.length);
+              console.log('DEBUG: Current cases in history:', caseHistory.map(c => ({ id: c.id, title: c.title })));
+              
+              // Force refresh cases from database before showing modal
+              loadCases(true).then(() => {
+                setShowCaseListModal(true);
+              });
+            }, 300);
+          }
         }}
         onCaseCreate={handleCaseCreate}
         onCaseUpdate={handleCaseUpdate}
@@ -1412,6 +1418,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       />
 
       <CaseListModal
+        key={`cases-modal-${showCaseListModal ? Date.now() : 'closed'}`}
         isOpen={showCaseListModal}
         onClose={() => setShowCaseListModal(false)}
         cases={caseHistory}

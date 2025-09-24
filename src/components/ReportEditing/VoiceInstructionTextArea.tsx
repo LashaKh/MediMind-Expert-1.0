@@ -100,17 +100,17 @@ const VoiceInstructionTextArea: React.FC<VoiceInstructionTextAreaProps> = ({
             </div>
           </div>
           
-          {/* Recording Button */}
+          {/* Recording Button - Mobile Optimized */}
           <button
             onClick={handleRecordingToggle}
             disabled={disabled || !isSupported || isTranscribing}
-            className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-200 ${
+            className={`min-w-[48px] min-h-[48px] w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center transition-all duration-200 ${
               recordingState.isRecording 
                 ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
                 : 'bg-[#2b6cb0] hover:bg-[#1a365d]'
             } text-white disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            <Mic className="w-5 h-5" />
+            <Mic className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
         
@@ -149,7 +149,10 @@ const VoiceInstructionTextArea: React.FC<VoiceInstructionTextAreaProps> = ({
               ? 'Recording your voice instruction...' 
               : 'Your voice instruction will appear here. You can also type directly to provide editing instructions for the medical report.'
             }
-            className="w-full h-48 p-4 text-base leading-relaxed
+            className="w-full p-4 text-base leading-relaxed
+                      min-h-[120px] max-h-[40vh] h-48
+                      sm:min-h-[140px] sm:h-52
+                      md:min-h-[160px] md:h-56
                       bg-slate-50 dark:bg-slate-800/50 rounded-lg
                       border border-slate-200 dark:border-slate-600
                       text-slate-900 dark:text-slate-100 
@@ -168,19 +171,36 @@ const VoiceInstructionTextArea: React.FC<VoiceInstructionTextAreaProps> = ({
           </div>
         </div>
         
-        {/* Submit Button */}
+        {/* Mobile-Optimized Submit Button */}
         {lastTranscript && !recordingState.isRecording && !isTranscribing && (
-          <div className="mt-4 flex justify-end">
-            <button
-              onClick={handleSubmit}
-              className="px-6 py-3 bg-[#2b6cb0] hover:bg-[#1a365d] text-white font-medium rounded-lg
-                        focus:ring-2 focus:ring-[#2b6cb0]/50 focus:ring-offset-2 focus:outline-none
-                        transform hover:scale-105 transition-all duration-200
-                        flex items-center space-x-2 shadow-lg"
-            >
-              <CheckCircle className="w-5 h-5" />
-              <span>Submit Instruction</span>
-            </button>
+          <div className="mt-4">
+            {/* Mobile: Full width button for easy thumb access */}
+            <div className="sm:hidden">
+              <button
+                onClick={handleSubmit}
+                className="w-full min-h-[48px] px-6 py-3 bg-[#2b6cb0] hover:bg-[#1a365d] text-white font-medium rounded-lg
+                          focus:ring-2 focus:ring-[#2b6cb0]/50 focus:ring-offset-2 focus:outline-none
+                          transform hover:scale-105 transition-all duration-200
+                          flex items-center justify-center space-x-2 shadow-lg"
+              >
+                <CheckCircle className="w-5 h-5" />
+                <span>Submit Instruction</span>
+              </button>
+            </div>
+            
+            {/* Desktop: Right-aligned button */}
+            <div className="hidden sm:flex sm:justify-end">
+              <button
+                onClick={handleSubmit}
+                className="px-6 py-3 bg-[#2b6cb0] hover:bg-[#1a365d] text-white font-medium rounded-lg
+                          focus:ring-2 focus:ring-[#2b6cb0]/50 focus:ring-offset-2 focus:outline-none
+                          transform hover:scale-105 transition-all duration-200
+                          flex items-center space-x-2 shadow-lg"
+              >
+                <CheckCircle className="w-5 h-5" />
+                <span>Submit Instruction</span>
+              </button>
+            </div>
           </div>
         )}
       </div>

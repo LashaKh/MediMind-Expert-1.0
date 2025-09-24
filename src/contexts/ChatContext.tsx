@@ -222,15 +222,19 @@ const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
       };
 
     case 'UPDATE_CASE':
+      console.log('DEBUG: UPDATE_CASE reducer called with:', action.payload);
+      const updatedCaseHistory = state.caseContext.caseHistory.map(caseItem =>
+        caseItem.id === action.payload.id
+          ? { ...caseItem, ...action.payload.updates }
+          : caseItem
+      );
+      console.log('DEBUG: Updated case history:', updatedCaseHistory.find(c => c.id === action.payload.id));
+      
       return {
         ...state,
         caseContext: {
           ...state.caseContext,
-          caseHistory: state.caseContext.caseHistory.map(caseItem =>
-            caseItem.id === action.payload.id
-              ? { ...caseItem, ...action.payload.updates }
-              : caseItem
-          ),
+          caseHistory: updatedCaseHistory,
           activeCase: state.caseContext.activeCase?.id === action.payload.id
             ? { ...state.caseContext.activeCase, ...action.payload.updates }
             : state.caseContext.activeCase
@@ -1045,21 +1049,53 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
     }
     
     try {
-      // Update in Supabase database
-      const { error } = await (supabase as any)
+      // Update in Supabase database and return the updated row
+      const { data: dbResult, error } = await (supabase as any)
         .from('patient_cases')
         .update(updatedCase)
-        .eq('id', id);
+        .eq('id', id)
+        .select()
+        .single();
 
       if (error) {
         console.error('Failed to update case in database:', error);
         throw error;
       }
 
-      // Update local state only after successful database update
-      console.log('DEBUG: About to update local state with:', { id, updates: updatedCase });
-      dispatch({ type: 'UPDATE_CASE', payload: { id, updates: updatedCase } });
-      console.log(`Successfully updated case ${id} in database`);
+      // Map the database result back to PatientCase format for consistent state
+      const dbUpdatedCase: PatientCase = {
+        id: dbResult.id,
+        user_id: dbResult.user_id,
+        title: dbResult.title,
+        description: dbResult.description,
+        anonymized_info: dbResult.anonymized_info,
+        specialty: dbResult.specialty,
+        status: dbResult.status,
+        metadata: dbResult.metadata ? JSON.parse(JSON.stringify(dbResult.metadata)) : {}, // Deep clone to ensure new object reference
+        created_at: new Date(dbResult.created_at),
+        updated_at: new Date(dbResult.updated_at)
+      };
+      
+      console.log('DEBUG: Final mapped case for state update:', {
+        id: dbUpdatedCase.id,
+        title: dbUpdatedCase.title,
+        updated_at: dbUpdatedCase.updated_at
+      });
+
+      // Update local state with the exact data from database
+      console.log('DEBUG: About to update local state with DB result:', dbUpdatedCase);
+      
+      // Force a completely new object reference by creating a fresh case object
+      const freshCaseUpdate = {
+        ...dbUpdatedCase,
+        // Force new object reference by adding a timestamp
+        _lastUpdated: Date.now()
+      };
+      
+      dispatch({ type: 'UPDATE_CASE', payload: { id, updates: freshCaseUpdate } });
+      console.log(`Successfully updated case ${id} in database and local state`);
+      
+      return dbUpdatedCase;
     } catch (error) {
       console.error('Error updating case:', error);
       throw error;

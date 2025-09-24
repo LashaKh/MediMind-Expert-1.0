@@ -300,8 +300,8 @@ Medical AI Processing System`;
             <div className="absolute bottom-4 left-12 w-0.5 h-0.5 bg-[#2b6cb0]/25 rounded-full animate-ping" style={{ animationDelay: '2s', animationDuration: '5s' }} />
           </div>
           
-          {/* Premium Priority Badge and Controls */}
-          <div className="absolute top-6 right-6 z-20">
+          {/* Premium Priority Badge and Controls - Desktop Only */}
+          <div className="absolute top-6 right-6 z-20 hidden md:flex">
             <div className="flex items-center space-x-3">
               {/* Enhanced Priority Badge */}
               <div className="relative group">
@@ -344,6 +344,19 @@ Medical AI Processing System`;
             </div>
           </div>
 
+          {/* Mobile-Only Delete Button */}
+          {onDelete && (
+            <div className="absolute top-4 right-4 z-20 md:hidden">
+              <button
+                onClick={handleDelete}
+                className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl p-2 border border-white/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all duration-300"
+                title="Delete Report"
+              >
+                <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
+              </button>
+            </div>
+          )}
+
           <div className="relative p-8 pr-32">
             {/* Premium Analysis Type & Status */}
             <div className="space-y-6">
@@ -370,21 +383,24 @@ Medical AI Processing System`;
                       {analysisType.type}
                     </h3>
                     
-                    {isEditMode && (
-                      <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#1a365d]/30 rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-lg">
-                        <Edit3 className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                        <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4] tracking-wide">
-                          EDIT MODE
-                        </span>
-                      </div>
-                    )}
-                    
-                    {analysisType.isDiagnosis && (
-                      <div className="flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#2b6cb0]/30 dark:to-[#63b3ed]/30 rounded-full border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50">
-                        <Crown className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                        <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4]">MEDICAL REPORT</span>
-                      </div>
-                    )}
+                    {/* Desktop Only Badges */}
+                    <div className="hidden md:flex md:items-center md:space-x-4">
+                      {isEditMode && (
+                        <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#1a365d]/30 rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-lg">
+                          <Edit3 className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                          <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4] tracking-wide">
+                            EDIT MODE
+                          </span>
+                        </div>
+                      )}
+                      
+                      {analysisType.isDiagnosis && (
+                        <div className="flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#2b6cb0]/30 dark:to-[#63b3ed]/30 rounded-full border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50">
+                          <Crown className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                          <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4]">MEDICAL REPORT</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   
                   {/* Premium Status Information */}
@@ -402,87 +418,177 @@ Medical AI Processing System`;
                 </div>
               </div>
 
-              {/* Premium Quick Actions */}
-              <div className="flex items-center justify-between pt-4">
-                <div className="flex items-center space-x-3">
-                  {/* Enhanced Copy Button */}
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    <MedicalButton
-                      variant="ghost"
-                      size="sm"
-                      leftIcon={Copy}
-                      onClick={handleCopy}
-                      className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                    >
-                      Copy
-                    </MedicalButton>
-                  </div>
-                  
-                  {/* Enhanced Export Button */}
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    <MedicalButton
-                      variant="ghost"
-                      size="sm"
-                      leftIcon={Download}
-                      onClick={handleDownload}
-                      className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                    >
-                      Export
-                    </MedicalButton>
-                  </div>
-                  
-                  {/* Enhanced Share Button */}
-                  {navigator.share && (
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              {/* Premium Quick Actions - Mobile-First Layout */}
+              <div className="space-y-4 pt-4">
+                {/* Mobile Layout - Stacked Rows */}
+                <div className="block md:hidden">
+                  {/* First Row: Main Actions */}
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    {/* Enhanced Copy Button */}
+                    <div className="relative group flex-shrink-0">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
                       <MedicalButton
                         variant="ghost"
                         size="sm"
-                        leftIcon={Share2}
-                        onClick={handleShare}
-                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#1a365d] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                        leftIcon={Copy}
+                        onClick={handleCopy}
+                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
                       >
-                        Share
+                        <span className="text-sm">Copy</span>
                       </MedicalButton>
                     </div>
-                  )}
-                  
-                  {/* Premium Edit Button */}
-                  {enableEditing && analysisType.isDiagnosis && (
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-xl blur-md opacity-70 animate-pulse" />
+                    
+                    {/* Enhanced Export Button */}
+                    <div className="relative group flex-shrink-0">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
                       <MedicalButton
-                        variant={isEditMode ? "primary" : "ghost"}
+                        variant="ghost"
                         size="sm"
-                        leftIcon={isEditMode ? Settings : Edit3}
-                        onClick={isEditMode ? handleCancelEdit : handleEdit}
-                        className={isEditMode 
-                          ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200" 
-                          : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                        }
+                        leftIcon={Download}
+                        onClick={handleDownload}
+                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
                       >
-                        <span className="flex items-center space-x-2">
-                          <span>{isEditMode ? 'Cancel Edit' : 'Edit Report'}</span>
-                          {isEditMode && <Wand2 className="w-4 h-4" />}
-                        </span>
+                        <span className="text-sm">Export</span>
                       </MedicalButton>
                     </div>
-                  )}
+                    
+                    {/* Enhanced Share Button */}
+                    {navigator.share && (
+                      <div className="relative group flex-shrink-0">
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                        <MedicalButton
+                          variant="ghost"
+                          size="sm"
+                          leftIcon={Share2}
+                          onClick={handleShare}
+                          className="relative text-slate-600 dark:text-slate-400 hover:text-[#1a365d] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
+                        >
+                          <span className="text-sm">Share</span>
+                        </MedicalButton>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Second Row: Edit and Expand Actions */}
+                  <div className="flex items-center justify-between gap-2">
+                    {/* Premium Edit Button */}
+                    {enableEditing && analysisType.isDiagnosis && (
+                      <div className="relative group flex-shrink-0">
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-xl blur-md opacity-70 animate-pulse" />
+                        <MedicalButton
+                          variant={isEditMode ? "primary" : "ghost"}
+                          size="sm"
+                          leftIcon={isEditMode ? Settings : Edit3}
+                          onClick={isEditMode ? handleCancelEdit : handleEdit}
+                          className={isEditMode 
+                            ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200 min-h-[36px]" 
+                            : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
+                          }
+                        >
+                          <span className="text-sm font-medium">
+                            {isEditMode ? 'Cancel Edit' : 'Edit Report'}
+                          </span>
+                        </MedicalButton>
+                      </div>
+                    )}
+                    
+                    {/* Enhanced Expand/Collapse */}
+                    <div className="relative group flex-shrink-0">
+                      <MedicalButton
+                        variant="ghost"
+                        size="sm"
+                        rightIcon={isExpanded ? ChevronUp : ChevronDown}
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="text-slate-600 dark:text-slate-400 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
+                      >
+                        <span className="text-sm">{isExpanded ? 'Minimize' : 'Expand'}</span>
+                      </MedicalButton>
+                    </div>
+                  </div>
                 </div>
-                
-                {/* Enhanced Expand/Collapse */}
-                <div className="relative group">
-                  <MedicalButton
-                    variant="ghost"
-                    size="sm"
-                    rightIcon={isExpanded ? ChevronUp : ChevronDown}
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    className="text-slate-600 dark:text-slate-400 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                  >
-                    {isExpanded ? 'Minimize' : 'Expand Details'}
-                  </MedicalButton>
+
+                {/* Desktop Layout - Single Row */}
+                <div className="hidden md:flex md:items-center md:justify-between">
+                  <div className="flex items-center space-x-3">
+                    {/* Enhanced Copy Button */}
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                      <MedicalButton
+                        variant="ghost"
+                        size="sm"
+                        leftIcon={Copy}
+                        onClick={handleCopy}
+                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                      >
+                        Copy
+                      </MedicalButton>
+                    </div>
+                    
+                    {/* Enhanced Export Button */}
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                      <MedicalButton
+                        variant="ghost"
+                        size="sm"
+                        leftIcon={Download}
+                        onClick={handleDownload}
+                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                      >
+                        Export
+                      </MedicalButton>
+                    </div>
+                    
+                    {/* Enhanced Share Button */}
+                    {navigator.share && (
+                      <div className="relative group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                        <MedicalButton
+                          variant="ghost"
+                          size="sm"
+                          leftIcon={Share2}
+                          onClick={handleShare}
+                          className="relative text-slate-600 dark:text-slate-400 hover:text-[#1a365d] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                        >
+                          Share
+                        </MedicalButton>
+                      </div>
+                    )}
+                    
+                    {/* Premium Edit Button */}
+                    {enableEditing && analysisType.isDiagnosis && (
+                      <div className="relative group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-xl blur-md opacity-70 animate-pulse" />
+                        <MedicalButton
+                          variant={isEditMode ? "primary" : "ghost"}
+                          size="sm"
+                          leftIcon={isEditMode ? Settings : Edit3}
+                          onClick={isEditMode ? handleCancelEdit : handleEdit}
+                          className={isEditMode 
+                            ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200" 
+                            : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                          }
+                        >
+                          <span className="flex items-center space-x-2">
+                            <span>{isEditMode ? 'Cancel Edit' : 'Edit Report'}</span>
+                            {isEditMode && <Wand2 className="w-4 h-4" />}
+                          </span>
+                        </MedicalButton>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Enhanced Expand/Collapse */}
+                  <div className="relative group">
+                    <MedicalButton
+                      variant="ghost"
+                      size="sm"
+                      rightIcon={isExpanded ? ChevronUp : ChevronDown}
+                      onClick={() => setIsExpanded(!isExpanded)}
+                      className="text-slate-600 dark:text-slate-400 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                    >
+                      {isExpanded ? 'Minimize' : 'Expand Details'}
+                    </MedicalButton>
+                  </div>
                 </div>
               </div>
             </div>

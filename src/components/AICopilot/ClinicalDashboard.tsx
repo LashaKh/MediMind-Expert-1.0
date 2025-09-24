@@ -21,12 +21,14 @@ interface ClinicalDashboardProps {
     accentColor: string;
     glowColor: string;
   };
+  activeCase?: PatientCase;
 }
 
 export const ClinicalDashboard: React.FC<ClinicalDashboardProps> = ({
   recentCases = [],
   onCreateCase,
-  specialtyConfig
+  specialtyConfig,
+  activeCase
 }) => {
   const { t } = useTranslation();
   const { profile } = useAuth();
@@ -76,6 +78,46 @@ export const ClinicalDashboard: React.FC<ClinicalDashboardProps> = ({
   };
 
   const quickActions = getQuickActions();
+
+  // If there's an active case, show case-ready view instead of quick actions
+  if (activeCase) {
+    return (
+      <div className="max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="text-center">
+          {/* Case Icon */}
+          <div className="flex items-center justify-center mb-6">
+            <div className={`
+              p-4 rounded-2xl bg-gradient-to-br ${specialtyConfig.gradient}
+              shadow-xl shadow-${specialtyConfig.glowColor}/25 border border-white/20
+            `}>
+              <FileText className="w-8 h-8 text-white drop-shadow-sm" />
+            </div>
+          </div>
+          
+          {/* Case Ready Message */}
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-slate-800">
+              Case Ready for Discussion
+            </h2>
+            <div className={`
+              inline-block px-4 py-2 rounded-lg 
+              bg-gradient-to-r ${specialtyConfig.bgGradient} 
+              border border-${specialtyConfig.accentColor}-200/60 
+              shadow-md
+            `}>
+              <p className={`font-semibold text-${specialtyConfig.accentColor}-700`}>
+                {activeCase.title}
+              </p>
+            </div>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              I'm ready to discuss this case with you. Ask me anything about diagnosis, treatment options, 
+              differential diagnosis, or any specific aspect of this case.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
