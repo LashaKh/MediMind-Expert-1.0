@@ -5,9 +5,11 @@ import { GeorgianSession } from '../../hooks/useSessionManagement';
 import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
 import { Brain } from 'lucide-react';
 
-// Import file processing utilities
-import { processFileForChatUpload, EnhancedAttachment, buildAttachmentTextContext } from '../../utils/chatFileProcessor';
+// Import file processing utilities - using case study approach
+import { processFileForUpload } from '../../utils/fileUpload';
+import { processCaseAttachments, ProcessedAttachment } from '../../utils/caseFileProcessor';
 import type { ProgressInfo } from '../../utils/pdfTextExtractor';
+import type { Attachment } from '../../types/chat';
 
 // Import extracted components
 import { TabNavigation } from './components/TabNavigation';
@@ -159,8 +161,8 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   textareaRef,
   isKeyboardAdjusted
 }) => {
-  // File attachment state - replaces old context functionality
-  const [attachedFiles, setAttachedFiles] = useState<EnhancedAttachment[]>([]);
+  // File attachment state - using simple attachment type like case studies
+  const [attachedFiles, setAttachedFiles] = useState<Attachment[]>([]);
   const [isProcessingAttachment, setIsProcessingAttachment] = useState(false);
   const [attachmentProgress, setAttachmentProgress] = useState<ProgressInfo | null>(null);
   
@@ -217,11 +219,10 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   
   // Check if we have content for AI processing (transcript OR attached files)
   const hasTranscript = currentTranscript.length > 0;
-  // Consider ANY attached file as potential AI content, not just files with extracted text
-  // This allows visual analysis of images, charts, etc. even without text extraction
+  // Consider ANY attached file as potential AI content for visual or text analysis
   const hasAttachmentContent = attachedFiles.length > 0 && attachedFiles.some(file => 
-    // File has extracted text OR is processable (has base64Data for visual analysis)
-    (file.extractedText && file.extractedText.trim()) || file.base64Data
+    // File has base64Data for processing (simple attachment type)
+    file.base64Data
   );
   const hasContentForAI = hasTranscript || hasAttachmentContent;
   
@@ -350,39 +351,143 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
 
   }, [currentSession?.id, localTranscript, currentSession?.transcript]); // Remove editableTranscript to prevent infinite loop
   
-  // File processing handlers
+  // File processing handlers - using simple case study approach
   const handleFileUploadFromContent = useCallback(async (files: File[]) => {
     if (files.length === 0) return;
 
     setIsProcessingAttachment(true);
-    setAttachmentProgress(null);
+    setAttachmentProgress({
+      stage: 'processing',
+      stageDescription: 'Converting files...',
+      percentage: 0,
+      method: 'standard'
+    });
 
     try {
-      const processedAttachments: EnhancedAttachment[] = [];
+      const processedAttachments: Attachment[] = [];
 
+      // Step 1: Basic file processing (convert to base64)
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const progressCallback = (progress: ProgressInfo) => {
-          setAttachmentProgress({
-            ...progress,
-            stageDescription: `Processing ${file.name}... ${progress.stageDescription}`
-          });
-        };
+        setAttachmentProgress({
+          stage: 'processing',
+          stageDescription: `Processing ${file.name}...`,
+          percentage: Math.round((i / files.length) * 40), // First 40% for basic processing
+          method: 'standard'
+        });
 
-        const processed = await processFileForChatUpload(file, undefined, progressCallback);
-        processedAttachments.push(processed);
+        // Use simple processing like case studies (just convert to base64)
+        const processed = await processFileForUpload(file);
+        processedAttachments.push({
+          ...processed,
+          textExtractionStatus: 'pending' // Mark for text extraction
+        });
       }
 
+      // Add files to UI with pending status
       setAttachedFiles(prev => [...prev, ...processedAttachments]);
-      setAttachmentProgress(null);
+
+      // Step 2: Immediately extract text from all uploaded files
+      setAttachmentProgress({
+        stage: 'extracting',
+        stageDescription: 'Extracting text from files...',
+        percentage: 40,
+        method: 'ocr'
+      });
+
+      // Convert to case attachment format for text extraction
+      const caseAttachments = processedAttachments.map(attachment => {
+        const base64Data = attachment.base64Data || '';
+        let fileBlob: Blob;
+        
+        if (base64Data.startsWith('data:')) {
+          const base64String = base64Data.split(',')[1];
+          const mimeType = base64Data.split(';')[0].split(':')[1];
+          const byteCharacters = atob(base64String);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          fileBlob = new Blob([byteArray], { type: mimeType });
+        } else {
+          fileBlob = new Blob([], { type: attachment.type });
+        }
+
+        return {
+          id: attachment.id,
+          file: new File([fileBlob], attachment.name, { type: attachment.type }),
+          base64Data: base64Data,
+          uploadType: attachment.type.startsWith('image/') ? 'image' as const : 
+                    attachment.type === 'application/pdf' ? 'pdf' as const : 'document' as const,
+          status: 'ready' as const,
+          category: 'medical-images'
+        };
+      });
+
+      console.log('🔍 Starting immediate text extraction from uploaded files...');
+
+      // Update status to processing for each file
+      setAttachedFiles(prev => prev.map(file => 
+        processedAttachments.find(p => p.id === file.id) 
+          ? { ...file, textExtractionStatus: 'processing' }
+          : file
+      ));
+
+      // Extract text immediately
+      const processedWithText = await processCaseAttachments(caseAttachments, (fileIndex, fileName, progress) => {
+        const currentFile = processedAttachments[fileIndex];
+        setAttachmentProgress({
+          stage: progress.stage,
+          stageDescription: `${progress.stageDescription} (${fileName})`,
+          percentage: 40 + Math.round(((fileIndex + (progress.percentage || 0) / 100) / processedAttachments.length) * 50),
+          method: progress.method || 'standard'
+        });
+      });
+
+      // Update files with extracted text results
+      setAttachedFiles(prev => prev.map(file => {
+        const attachmentIndex = processedAttachments.findIndex(p => p.id === file.id);
+        if (attachmentIndex >= 0) {
+          const textResult = processedWithText[attachmentIndex];
+          return {
+            ...file,
+            extractedText: textResult.extractedText || '',
+            textExtractionStatus: textResult.status === 'ready' ? 'success' : 'failed',
+            textExtractionError: textResult.error
+          };
+        }
+        return file;
+      }));
+
+      setAttachmentProgress({
+        stage: 'complete',
+        stageDescription: 'All files processed with text extraction!',
+        percentage: 100,
+        method: 'standard'
+      });
+
+      // Clear progress after showing success
+      setTimeout(() => {
+        setAttachmentProgress(null);
+      }, 2000);
+
+      console.log('✅ Files processed successfully with immediate text extraction');
     } catch (error) {
       console.error('❌ File processing failed:', error);
       setAttachmentProgress({
         stage: 'error',
-        stageDescription: 'File processing failed',
+        stageDescription: `File processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         percentage: 0,
         method: 'error'
       });
+
+      // Mark failed files
+      setAttachedFiles(prev => prev.map(file => ({
+        ...file,
+        textExtractionStatus: 'failed',
+        textExtractionError: error instanceof Error ? error.message : 'Unknown error'
+      })));
     } finally {
       setIsProcessingAttachment(false);
     }
@@ -491,23 +596,48 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             processing={processing}
             aiError={aiError}
             processingHistory={processingHistory}
-            onProcessText={(instruction) => {
-              // Include attachment content when processing
-              const attachmentContext = buildAttachmentTextContext(attachedFiles);
+            onProcessText={async (instruction) => {
               let combinedText = '';
-              
-              if (currentTranscript && attachmentContext) {
-                combinedText = `${currentTranscript}\n\n${attachmentContext}`;
-              } else if (currentTranscript) {
-                combinedText = currentTranscript;
-              } else if (attachmentContext) {
-                combinedText = attachmentContext;
-              } else if (attachedFiles.length > 0) {
-                // If we have attached files but no extracted text, still provide context
-                const fileNames = attachedFiles.map(f => f.name).join(', ');
-                combinedText = `Please analyze the attached file(s): ${fileNames}. The file(s) have been processed and are available for visual analysis.`;
+
+              // Use pre-extracted text from immediately processed attachments
+              if (attachedFiles.length > 0) {
+                console.log('📄 Using pre-extracted text from uploaded files...');
+                
+                // Build attachment text context from pre-extracted text
+                let attachmentContext = '';
+                let hasExtractedText = false;
+                
+                attachedFiles.forEach((file, index) => {
+                  if (file.extractedText && file.extractedText.trim()) {
+                    attachmentContext += `\n--- Document ${index + 1}: ${file.name} ---\n${file.extractedText}\n`;
+                    hasExtractedText = true;
+                  }
+                });
+
+                if (currentTranscript && hasExtractedText) {
+                  combinedText = `${currentTranscript}\n\n=== Attached Documents ===${attachmentContext}`;
+                } else if (currentTranscript) {
+                  combinedText = currentTranscript;
+                } else if (hasExtractedText) {
+                  combinedText = `=== Attached Documents ===${attachmentContext}`;
+                } else {
+                  // No text extracted - provide context for visual analysis
+                  const fileDetails = attachedFiles.map(f => {
+                    const status = f.textExtractionStatus;
+                    const statusIndicator = status === 'success' ? '✅' : 
+                                          status === 'failed' ? '❌' : 
+                                          status === 'processing' ? '⏳' : '⏸️';
+                    return `${f.name} (${f.type}) ${statusIndicator}`;
+                  }).join(', ');
+                  
+                  if (currentTranscript) {
+                    combinedText = `${currentTranscript}\n\n=== Attached Files ===\nThe following files are available for visual analysis: ${fileDetails}`;
+                  } else {
+                    combinedText = `Please analyze the attached file(s): ${fileDetails}. The files have been processed and are available for visual analysis.`;
+                  }
+                }
               } else {
-                combinedText = 'No content available for processing.';
+                combinedText = currentTranscript || 'No content available for processing.';
               }
               
               onProcessText?.(instruction, combinedText);

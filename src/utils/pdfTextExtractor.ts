@@ -9,10 +9,22 @@ if (typeof window !== 'undefined') {
   try {
     // Add timestamp to force cache refresh and handle /expert/ path
     const timestamp = Date.now();
-    const basePath = window.location.pathname.includes('/expert/') ? '/expert/' : '/';
+    const currentPath = window.location.pathname;
+    // Check if we're on expert path or mediscribe path (both should use expert assets)
+    const isExpertContext = currentPath.includes('/expert/') || currentPath.includes('/mediscribe');
+    const basePath = isExpertContext ? '/expert/' : '/';
     const localWorkerUrl = new URL(`${basePath}pdf.worker.min.js?v=${timestamp}`, window.location.origin).href;
-    pdfjsLib.GlobalWorkerOptions.workerSrc = localWorkerUrl;
-    pdfjsLib.GlobalWorkerOptions.disableWorker = false;
+    
+    // Debug: Log path detection details
+    console.log('🔧 PDF Worker Path Detection:', {
+      currentPath,
+      basePath,
+      localWorkerUrl,
+      timestamp
+    });
+    
+    // Force fresh worker configuration
+    (pdfjsLib.GlobalWorkerOptions as any).workerSrc = localWorkerUrl;
     workerConfigured = true;
     console.log('PDF.js worker configured:', localWorkerUrl);
   } catch (localError) {
@@ -185,6 +197,15 @@ export async function extractTextFromPdf(
       try {
         attempts++;
         console.log(`📖 PDF loading attempt ${attempts}/${maxAttempts}...`);
+        
+        // Force fresh worker configuration for each attempt
+        const freshTimestamp = Date.now();
+        const currentPath = window.location.pathname;
+        const isExpertContext = currentPath.includes('/expert/') || currentPath.includes('/mediscribe');
+        const basePath = isExpertContext ? '/expert/' : '/';
+        const freshWorkerUrl = new URL(`${basePath}pdf.worker.min.js?v=${freshTimestamp}`, window.location.origin).href;
+        (pdfjsLib.GlobalWorkerOptions as any).workerSrc = freshWorkerUrl;
+        console.log(`🔄 Fresh worker configured for attempt ${attempts}:`, freshWorkerUrl);
         
         pdf = await pdfjsLib.getDocument({
           data: arrayBuffer,

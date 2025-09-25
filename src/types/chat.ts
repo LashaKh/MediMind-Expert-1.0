@@ -51,6 +51,10 @@ export interface Attachment {
   // New fields for Flowise integration
   base64Data?: string; // Base64 data URL format: "data:mime/type;base64,data"
   uploadType?: FlowiseUploadType; // Type of upload for Flowise API
+  // Text extraction fields for immediate processing
+  extractedText?: string;
+  textExtractionStatus?: 'processing' | 'success' | 'failed' | 'pending';
+  textExtractionError?: string;
 }
 
 // Flowise upload types

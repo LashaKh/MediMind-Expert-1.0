@@ -145,79 +145,64 @@ async function processPdfForChat(
   onProgress?: (progress: ProgressInfo) => void
 ): Promise<{ base64Data: string; extractedText?: string; metadata?: Record<string, unknown> }> {
   try {
-    // Get base64 data first
+    // Get base64 data first (same as case study)
     const base64Data = await convertFileToBase64(file);
     
-    // Try enhanced text extraction (includes Gemini fallback)
-    console.log('📄 Calling extractTextFromPdf...');
-    const textResult = await extractTextFromPdf(file, onProgress);
+    // Try text extraction like case study does, but gracefully handle failures
+    console.log('📄 Attempting text extraction (same as case study approach)...');
     
-    console.log('📄 extractTextFromPdf result:', {
-      hasText: textResult.hasText,
-      textLength: textResult.text?.length || 0,
-      extractionMethod: textResult.extractionMethod,
-      needsOCR: textResult.needsOCR,
-      pageCount: textResult.pageCount,
-      confidence: textResult.confidence
-    });
-    
-    if (textResult.hasText && textResult.text) {
-      console.log('✅ Text extraction successful, returning text');
-      return {
-        base64Data,
-        extractedText: textResult.text,
-        metadata: {
-          pageCount: textResult.pageCount,
-          extractionMethod: textResult.extractionMethod || 'standard',
-          confidence: textResult.confidence,
-          processingDecision: `Extracted ${textResult.text.length} characters using ${textResult.extractionMethod || 'standard'} method`
-        }
-      };
-    }
-    
-    // If no text found, try OCR
-    if (textResult.needsOCR) {
-      console.log('🔍 Text extraction failed, trying OCR...');
-      onProgress?.({
-        stage: 'ocr',
-        stageDescription: 'No text found, starting OCR processing...',
-        percentage: 0,
-        method: 'ocr'
-      });
+    try {
+      // Try the exact same extraction as case study processPdfFile
+      const textResult = await extractTextFromPdf(file, onProgress);
       
-      const ocrResult = await extractTextFromPdfWithOCR(file, onProgress);
-      
-      console.log('🔍 OCR extraction result:', {
-        textLength: ocrResult.text?.length || 0,
-        confidence: ocrResult.confidence,
-        pageCount: ocrResult.pageCount
-      });
-      
-      if (ocrResult.text && ocrResult.text.trim()) {
-        console.log('✅ OCR extraction successful, returning text');
+      if (textResult.hasText && textResult.text && textResult.text.trim()) {
+        console.log('✅ Text extraction successful:', textResult.text.length, 'characters');
         return {
           base64Data,
-          extractedText: ocrResult.text,
+          extractedText: textResult.text,
           metadata: {
-            pageCount: ocrResult.pageCount,
-            extractionMethod: 'ocr',
-            ocrConfidence: ocrResult.confidence
+            pageCount: textResult.pageCount,
+            extractionMethod: textResult.extractionMethod || 'standard',
+            confidence: textResult.confidence,
+            processingDecision: `Extracted ${textResult.text.length} characters using ${textResult.extractionMethod || 'standard'} method`
           }
         };
-      } else {
-        console.log('❌ OCR extraction failed or returned empty text');
+      } else if (textResult.needsOCR) {
+        // Try OCR fallback like case study does
+        console.log('🔍 Trying OCR fallback...');
+        const ocrResult = await extractTextFromPdfWithOCR(file, onProgress);
+        
+        if (ocrResult.text && ocrResult.text.trim()) {
+          console.log('✅ OCR extraction successful:', ocrResult.text.length, 'characters');
+          return {
+            base64Data,
+            extractedText: ocrResult.text,
+            metadata: {
+              pageCount: ocrResult.pageCount,
+              extractionMethod: 'ocr',
+              ocrConfidence: ocrResult.confidence,
+              processingDecision: `OCR extracted ${ocrResult.text.length} characters with ${Math.round(ocrResult.confidence * 100)}% confidence`
+            }
+          };
+        }
       }
+    } catch (extractionError) {
+      console.log('⚠️ Text extraction failed, continuing with base64 only:', extractionError);
     }
     
-    // Return just base64 if no text could be extracted
-    console.log('⚠️ No text extraction possible, returning base64 only');
-    return { base64Data };
+    // Return base64 for visual analysis (like case study would if extraction failed)
+    console.log('📄 Returning PDF as base64 for visual analysis');
+    return {
+      base64Data,
+      metadata: {
+        extractionMethod: 'base64',
+        processingDecision: 'Text extraction failed, using PDF for visual analysis'
+      }
+    };
     
   } catch (error) {
-
-    // Fallback to just base64 if extraction fails
-    const base64Data = await convertFileToBase64(file);
-    return { base64Data };
+    console.error('❌ PDF processing error:', error);
+    throw error;
   }
 }
 

@@ -326,15 +326,45 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                           <span className="text-[#2b6cb0] dark:text-[#63b3ed]">
                             {(attachment.size / 1024).toFixed(1)} KB
                           </span>
-                          {attachment.extractedText ? (
-                            <span className="bg-[#90cdf4]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
-                              Text extracted
-                            </span>
-                          ) : (
-                            <span className="bg-[#63b3ed]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
-                              Ready for analysis
-                            </span>
-                          )}
+                          {(() => {
+                            const status = attachment.textExtractionStatus;
+                            switch (status) {
+                              case 'processing':
+                                return (
+                                  <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                    Processing...
+                                  </span>
+                                );
+                              case 'success':
+                                return (
+                                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <span className="text-green-600">✅</span>
+                                    Text extracted
+                                  </span>
+                                );
+                              case 'failed':
+                                return (
+                                  <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1" title={attachment.textExtractionError}>
+                                    <span className="text-red-600">❌</span>
+                                    Failed
+                                  </span>
+                                );
+                              case 'pending':
+                                return (
+                                  <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <span className="text-gray-500">⏸️</span>
+                                    Pending
+                                  </span>
+                                );
+                              default:
+                                return (
+                                  <span className="bg-[#63b3ed]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
+                                    Ready for analysis
+                                  </span>
+                                );
+                            }
+                          })()}
                         </div>
                       </div>
                       {onRemoveAttachment && (

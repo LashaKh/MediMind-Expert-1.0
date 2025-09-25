@@ -104,6 +104,13 @@ export async function generateDiagnosisReport(
       responseKeys: Object.keys(data)
     });
     
+    // Debug: Check the actual response content
+    console.log('🔍 DEBUG - API Response Content Analysis:', {
+      contentPreview: data.text?.substring(0, 300) + '...',
+      hasGeorgianChars: /[\u10A0-\u10FF]/.test(data.text || ''),
+      contentLanguage: /[\u10A0-\u10FF]/.test(data.text || '') ? 'Georgian detected' : 'No Georgian detected'
+    });
+    
     if (!data.text) {
       console.error('❌ Invalid response format from diagnosis API:', data);
       return {

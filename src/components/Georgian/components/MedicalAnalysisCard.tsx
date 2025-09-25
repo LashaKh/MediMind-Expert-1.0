@@ -162,11 +162,21 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
   // Analysis type and icon setup
 
   const handleCopy = async () => {
+    // Debug: Log the actual content being processed
+    console.log('🔍 DEBUG - UI Content Analysis:', {
+      isDiagnosis: analysisType.isDiagnosis,
+      responseLength: analysis.aiResponse?.length || 0,
+      responsePreview: analysis.aiResponse?.substring(0, 200) + '...',
+      hasGeorgianChars: /[\u10A0-\u10FF]/.test(analysis.aiResponse || ''),
+      model: analysis.model
+    });
+    
     let content: string;
     
     if (analysisType.isDiagnosis) {
       // For diagnosis reports, copy only the clean response text
       content = extractCleanText(analysis.aiResponse);
+      console.log('🔍 DEBUG - Extracted clean text preview:', content.substring(0, 200) + '...');
     } else {
       // For regular reports, copy full content
       content = `Medical Analysis Report

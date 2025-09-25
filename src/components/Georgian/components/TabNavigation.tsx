@@ -94,235 +94,199 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
 
   return (
     <div className="bg-white border-b border-[#90cdf4]/30 mediscribe-mobile-header lg:relative lg:top-auto">
-      <div className="px-3 sm:px-6 py-1.5 sm:py-3 mediscribe-mobile-tabs lg:px-6 lg:py-3">
-        <div className="flex items-center justify-center lg:justify-between max-w-7xl mx-auto">
-          {/* Modern Blue Tab System */}
-          <div className="flex space-x-1 sm:space-x-2 mediscribe-mobile-tabs lg:space-x-2">
-            {enhancedTabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => onTabChange(tab.id as TabId)}
-                  className={`group relative flex items-center space-x-1 sm:space-x-2 px-1.5 sm:px-4 py-1.5 sm:py-2.5 transition-all duration-300 lg:px-4 lg:py-2.5 lg:space-x-2 mediscribe-mobile-tab`}
-                  style={isActive ? {
-                    background: 'linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '16px',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    boxShadow: '0 4px 6px -1px rgba(26, 54, 93, 0.2), 0 2px 4px -1px rgba(26, 54, 93, 0.06)'
-                  } : {
-                    background: '#ffffff',
-                    color: '#1a365d',
-                    border: '2px solid #63b3ed',
-                    borderRadius: '16px',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    boxShadow: '0 2px 4px rgba(26, 54, 93, 0.1)'
-                  }}
-                >
-                  {/* Icon Container */}
-                  <div 
-                    className="w-5 h-5 sm:w-6 sm:h-6 lg:w-6 lg:h-6 rounded-md flex items-center justify-center transition-all duration-300 mediscribe-mobile-tab-icon"
-                    style={isActive ? {
-                      backgroundColor: 'rgba(255, 255, 255, 0.2)'
-                    } : {
-                      backgroundColor: 'rgba(26, 54, 93, 0.1)'
-                    }}
+      <div className="px-3 sm:px-6 py-3 sm:py-4 mediscribe-mobile-tabs lg:px-6 lg:py-4">
+        <div className="flex items-center justify-between lg:justify-between max-w-7xl mx-auto w-full">
+          
+          {/* PRIMARY NAVIGATION - Left Side */}
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            {/* Navigation Tabs - Prominent Design */}
+            <div className="flex bg-gray-50 rounded-2xl p-1 sm:p-1.5 border border-gray-200/50">
+              {enhancedTabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => onTabChange(tab.id as TabId)}
+                    className={`
+                      group relative flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-4 py-2 sm:py-3 rounded-xl transition-all duration-300 font-semibold text-xs sm:text-sm min-w-0
+                      ${isActive 
+                        ? 'bg-white text-[#1a365d] shadow-lg shadow-black/10 border border-gray-200/50' 
+                        : 'text-gray-500 hover:text-[#2b6cb0] hover:bg-white/50'
+                      }
+                    `}
                   >
-                    <Icon 
-                      className="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 transition-transform duration-300 group-hover:scale-110"
-                      style={isActive ? {
-                        color: 'white',
-                        stroke: 'white',
-                        strokeWidth: '2.5'
-                      } : {
-                        color: '#1a365d',
-                        stroke: '#1a365d',
-                        strokeWidth: '2.5'
-                      }}
-                    />
-                  </div>
-                  
-                  {/* Labels */}
-                  <div className="flex flex-col items-start min-w-0">
-                    <span 
-                      className="text-[10px] sm:text-sm lg:text-sm font-bold leading-tight mediscribe-mobile-tab-label"
-                      style={isActive ? {
-                        color: 'white'
-                      } : {
-                        color: '#1a365d'
-                      }}
-                    >
+                    {/* Icon with enhanced styling */}
+                    <div className={`
+                      w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center transition-all duration-300 flex-shrink-0
+                      ${isActive 
+                        ? 'bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] text-white' 
+                        : 'bg-gray-100 group-hover:bg-[#63b3ed]/10'
+                      }
+                    `}>
+                      <Icon className={`
+                        w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:scale-110
+                        ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-[#2b6cb0]'}
+                      `} />
+                    </div>
+                    
+                    {/* Labels with enhanced hierarchy - Hidden on mobile, visible on tablet+ */}
+                    <div className="hidden md:flex flex-col items-start min-w-0">
+                      <span className={`
+                        font-bold text-sm leading-tight
+                        ${isActive ? 'text-[#1a365d]' : 'text-gray-600 group-hover:text-[#2b6cb0]'}
+                      `}>
+                        {tab.label}
+                      </span>
+                      <span className={`
+                        text-xs font-medium leading-tight
+                        ${isActive ? 'text-[#2b6cb0]' : 'text-gray-400 group-hover:text-[#2b6cb0]'}
+                      `}>
+                        {tab.sublabel}
+                      </span>
+                    </div>
+                    
+                    {/* Mobile label - Only icon label on small screens */}
+                    <span className={`
+                      md:hidden text-xs font-bold
+                      ${isActive ? 'text-[#1a365d]' : 'text-gray-600 group-hover:text-[#2b6cb0]'}
+                    `}>
                       {tab.label}
                     </span>
-                    <span 
-                      className="text-[9px] sm:text-xs lg:text-xs font-medium leading-tight mediscribe-mobile-tab-sublabel"
-                      style={isActive ? {
-                        color: 'rgba(255, 255, 255, 0.9)'
-                      } : {
-                        color: '#1a365d',
-                        opacity: '0.8'
-                      }}
-                    >
-                      {tab.sublabel}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+                    
+                    {/* Active indicator */}
+                    {isActive && (
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 sm:w-8 h-0.5 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] rounded-full" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
           
-          {/* Compact Right Side Actions */}
-          <div className="hidden lg:flex items-center space-x-2 sm:space-x-3 lg:space-x-3">
-            {/* Compact History Button */}
-            {onToggleHistory && (
-              <button
-                onClick={onToggleHistory}
-                className={`
-                  ${isHistoryOpen ? 'transcription-btn-primary' : 'transcription-btn-secondary'} 
-                  relative hidden lg:flex items-center space-x-2 px-3 py-2 font-semibold text-sm transition-all duration-300 hover:scale-105 active:scale-95
-                `}
-                title={`${isHistoryOpen ? 'Hide' : 'Show'} History (${sessionCount} recordings)`}
-              >
-                <div className={`w-5 h-5 rounded-md flex items-center justify-center ${
-                  isHistoryOpen 
-                    ? 'bg-white/20' 
-                    : 'bg-[#1a365d]/10'
-                }`}>
-                  <History className={`w-3 h-3 ${
-                    isHistoryOpen 
-                      ? 'text-white' 
-                      : 'text-[#1a365d]'
-                  }`}
-                  style={!isHistoryOpen ? {
-                    color: '#1a365d',
-                    stroke: '#1a365d',
-                    strokeWidth: '2.5'
-                  } : {
-                    color: 'white',
-                    stroke: 'white',
-                    strokeWidth: '2.5'
-                  }}
-                  />
-                </div>
-                <div className="hidden xl:flex flex-col items-start min-w-0">
-                  <span className={`text-xs font-bold leading-tight ${
-                    isHistoryOpen 
-                      ? 'text-white' 
-                      : 'text-[#1a365d]'
-                  }`}>History</span>
-                  <span className={`text-[10px] font-medium leading-tight opacity-80 ${
-                    isHistoryOpen 
-                      ? 'text-white' 
-                      : 'text-[#1a365d]'
-                  }`}>
-                    {sessionCount} recordings
-                  </span>
-                </div>
-                {sessionCount > 0 && !isHistoryOpen && (
-                  <div className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">
-                    {sessionCount > 99 ? '99' : sessionCount}
+          {/* SECONDARY ACTIONS - Right Side */}
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            {/* Action Buttons - Smaller, Subtle Design */}
+            <div className="hidden sm:flex items-center space-x-1.5">
+              
+              {/* History Button - Compact */}
+              {onToggleHistory && (
+                <button
+                  onClick={onToggleHistory}
+                  className={`
+                    group relative flex items-center space-x-1.5 px-2 lg:px-3 py-2 rounded-xl transition-all duration-200 text-xs font-medium
+                    ${isHistoryOpen 
+                      ? 'bg-[#1a365d] text-white shadow-md shadow-[#1a365d]/20' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-[#2b6cb0]'
+                    }
+                  `}
+                  title={`${isHistoryOpen ? 'Hide' : 'Show'} History (${sessionCount} recordings)`}
+                >
+                  <History className={`w-4 h-4 ${isHistoryOpen ? 'text-white' : 'text-gray-500'}`} />
+                  <div className="hidden xl:flex flex-col items-start">
+                    <span className="font-semibold">History</span>
+                    <span className="text-[10px] opacity-70">{sessionCount} recordings</span>
                   </div>
-                )}
-              </button>
-            )}
+                  {/* Notification Badge */}
+                  {sessionCount > 0 && !isHistoryOpen && (
+                    <div className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold">
+                      {sessionCount > 99 ? '99+' : sessionCount}
+                    </div>
+                  )}
+                </button>
+              )}
 
-            {/* Compact Upload Button */}
-            {onFileUpload && (
-              <button
-                onClick={handleFileUploadClick}
-                disabled={isRecording}
-                className={`
-                  transcription-btn-secondary relative hidden lg:flex items-center space-x-2 px-3 py-2 font-semibold text-sm transition-all duration-300 hover:scale-105 active:scale-95
-                  ${isRecording ? 'opacity-60 cursor-not-allowed' : ''}
-                `}
-                title={isRecording ? "Cannot upload files during recording" : "Upload an audio file (.wav, .mp3, .m4a, .ogg, .webm) for transcription"}
-              >
-                <div className="w-5 h-5 rounded-md bg-[#1a365d]/10 flex items-center justify-center">
-                  <Upload className="w-3 h-3 text-[#1a365d]" style={{
-                    color: '#1a365d',
-                    stroke: '#1a365d',
-                    strokeWidth: '2.5'
-                  }} />
-                </div>
-                <div className="hidden xl:flex flex-col items-start min-w-0">
-                  <span className="text-xs font-bold leading-tight text-[#1a365d]">Upload</span>
-                  <span className="text-[10px] font-medium leading-tight opacity-80 text-[#1a365d]">
-                    Audio file
-                  </span>
-                </div>
-              </button>
-            )}
+              {/* Upload Button - Compact */}
+              {onFileUpload && (
+                <button
+                  onClick={handleFileUploadClick}
+                  disabled={isRecording}
+                  className={`
+                    group flex items-center space-x-1.5 px-2 lg:px-3 py-2 rounded-xl transition-all duration-200 text-xs font-medium
+                    ${isRecording 
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-[#2b6cb0] hover:border-blue-200'
+                    }
+                  `}
+                  title={isRecording ? "Cannot upload during recording" : "Upload audio file"}
+                >
+                  <Upload className={`w-4 h-4 ${isRecording ? 'text-gray-400' : 'text-gray-500 group-hover:text-[#2b6cb0]'}`} />
+                  <div className="hidden xl:flex flex-col items-start">
+                    <span className="font-semibold">Upload</span>
+                    <span className="text-[10px] opacity-70">Audio file</span>
+                  </div>
+                </button>
+              )}
 
-            {/* Compact Attach Files Button - positioned between Upload and Record */}
-            {onAttachFiles && (
-              <button
-                onClick={handleAttachmentClick}
-                disabled={isRecording}
-                className={`
-                  transcription-btn-secondary relative hidden lg:flex items-center space-x-2 px-3 py-2 font-semibold text-sm transition-all duration-300 hover:scale-105 active:scale-95
-                  ${isRecording ? 'opacity-60 cursor-not-allowed' : ''}
-                `}
-                title={isRecording ? "Cannot attach files during recording" : "Attach documents, images, or files for analysis"}
-              >
-                <div className="w-5 h-5 rounded-md bg-[#1a365d]/10 flex items-center justify-center">
-                  <Paperclip className="w-3 h-3 text-[#1a365d]" style={{
-                    color: '#1a365d',
-                    stroke: '#1a365d',
-                    strokeWidth: '2.5'
-                  }} />
-                </div>
-                <div className="hidden xl:flex flex-col items-start min-w-0">
-                  <span className="text-xs font-bold leading-tight text-[#1a365d]">Attach</span>
-                  <span className="text-[10px] font-medium leading-tight opacity-80 text-[#1a365d]">
-                    Files & docs
-                  </span>
-                </div>
-              </button>
-            )}
+              {/* Attach Button - Compact */}
+              {onAttachFiles && (
+                <button
+                  onClick={handleAttachmentClick}
+                  disabled={isRecording}
+                  className={`
+                    group flex items-center space-x-1.5 px-2 lg:px-3 py-2 rounded-xl transition-all duration-200 text-xs font-medium
+                    ${isRecording 
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-[#2b6cb0] hover:border-blue-200'
+                    }
+                  `}
+                  title={isRecording ? "Cannot attach during recording" : "Attach files & documents"}
+                >
+                  <Paperclip className={`w-4 h-4 ${isRecording ? 'text-gray-400' : 'text-gray-500 group-hover:text-[#2b6cb0]'}`} />
+                  <div className="hidden xl:flex flex-col items-start">
+                    <span className="font-semibold">Attach</span>
+                    <span className="text-[10px] opacity-70">Files & docs</span>
+                  </div>
+                </button>
+              )}
+            </div>
             
-            {/* Compact Record Button - Hidden on mobile (replaced by FAB) */}
+            {/* Divider - Only on larger screens */}
+            <div className="hidden sm:block w-px h-8 bg-gray-200 mx-1 lg:mx-2" />
+            
+            {/* Primary Record Button - Most Prominent */}
             {activeTab === 'transcript' && (onStartRecording || onStopRecording) && (
               <button
                 onClick={isRecording ? (canStop ? onStopRecording : undefined) : (canRecord ? onStartRecording : undefined)}
                 disabled={isRecording ? !canStop : !canRecord}
                 className={`
-                  relative hidden lg:flex items-center space-x-2 px-4 py-2.5 font-bold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 min-w-[100px] justify-center
+                  relative flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 min-w-[100px] sm:min-w-[120px] justify-center
                   ${isRecording 
                     ? (canStop 
-                        ? 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg shadow-red-600/40' 
-                        : 'transcription-btn-secondary opacity-60 cursor-not-allowed')
+                        ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-lg shadow-red-500/30' 
+                        : 'bg-gray-200 text-gray-400 cursor-not-allowed')
                     : (canRecord 
-                        ? 'transcription-btn-primary' 
-                        : 'transcription-btn-secondary opacity-60 cursor-not-allowed')
+                        ? 'bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d] text-white shadow-lg shadow-[#2b6cb0]/30' 
+                        : 'bg-gray-200 text-gray-400 cursor-not-allowed')
                   }
                 `}
               >
-                <div className="w-5 h-5 rounded-md bg-white/20 flex items-center justify-center">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-white/20 flex items-center justify-center">
                   {isRecording ? (
-                    <Square className="w-3 h-3 text-white" />
+                    <Square className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   ) : (
-                    <Mic className="w-3 h-3 text-white" />
+                    <Mic className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   )}
                 </div>
                 
-                <div className="flex flex-col items-start min-w-0">
-                  <span className="text-xs font-bold leading-tight text-white">
+                <div className="hidden sm:flex flex-col items-start">
+                  <span className="font-bold text-sm leading-tight">
                     {isRecording ? 'Stop' : 'Record'}
                   </span>
-                  <span className="text-[10px] font-medium leading-tight opacity-80 text-white">
-                    {isRecording ? 'End session' : 'Start recording'}
+                  <span className="text-xs opacity-90 leading-tight">
+                    {isRecording ? 'End recording' : 'Start recording'}
                   </span>
                 </div>
                 
+                {/* Mobile label */}
+                <span className="sm:hidden font-bold text-xs">
+                  {isRecording ? 'Stop' : 'Record'}
+                </span>
+                
                 {/* Recording pulse effect */}
                 {isRecording && (
-                  <div className="absolute inset-0 rounded-lg border-2 border-red-400/60 animate-pulse" />
+                  <div className="absolute inset-0 rounded-xl bg-red-400/20 animate-pulse" />
                 )}
               </button>
             )}
