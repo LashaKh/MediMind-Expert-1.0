@@ -4,6 +4,8 @@ import {
   Activity,
   Shield,
   X,
+  Check,
+  Edit3,
   AlertTriangle,
   ChevronRight,
   FileText,
@@ -73,6 +75,13 @@ export const GeorgianSTTApp: React.FC = () => {
   const [enableSpeakerDiarization, setEnableSpeakerDiarization] = useState(false);
   const [speakerCount, setSpeakerCount] = useState(2);
 
+  // Session title state for pre-recording title input
+  const [pendingSessionTitle, setPendingSessionTitle] = useState('');
+
+  // Mobile session editing states
+  const [editingSessionId, setEditingSessionId] = useState<string>('');
+  const [editingTitle, setEditingTitle] = useState('');
+
   // Store the expand chat function from AIProcessingContent
   const [expandChatFunction, setExpandChatFunction] = useState<(() => void) | null>(null);
 
@@ -100,7 +109,7 @@ export const GeorgianSTTApp: React.FC = () => {
     error: sessionError,
     createSession,
     selectSession,
-    // updateSession, // Currently unused
+    updateSession,
     deleteSession,
     duplicateSession,
     updateTranscript,
@@ -648,7 +657,11 @@ export const GeorgianSTTApp: React.FC = () => {
       resetTranscript(); // Reset TTS hook state for new session
       clearTTSResult(); // Clear old transcription result
       
-      const newSession = await createSession('New Recording');
+      const sessionTitle = pendingSessionTitle.trim() || 'New Recording';
+      const newSession = await createSession(sessionTitle);
+      
+      // Clear the pending title after creating the session
+      setPendingSessionTitle('');
       if (newSession) {
         await selectSession(newSession.id);
       }
@@ -829,11 +842,83 @@ export const GeorgianSTTApp: React.FC = () => {
                           </div>
                           
                           <div className="flex-1 min-w-0">
-                            <h3 className={`text-base font-semibold truncate mb-1 ${
-                              isActive ? 'text-[#1a365d]' : 'text-gray-900'
-                            }`}>
-                              {session.title}
-                            </h3>
+                            {editingSessionId === session.id ? (
+                              <div className="flex items-center space-x-2 mb-1">
+                                <input
+                                  type="text"
+                                  value={editingTitle}
+                                  onChange={(e) => setEditingTitle(e.target.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      e.preventDefault();
+                                      if (editingTitle.trim()) {
+                                        updateSession(editingSessionId, { title: editingTitle.trim() });
+                                        setEditingSessionId('');
+                                        setEditingTitle('');
+                                      }
+                                    } else if (e.key === 'Escape') {
+                                      e.preventDefault();
+                                      setEditingSessionId('');
+                                      setEditingTitle('');
+                                    }
+                                  }}
+                                  onBlur={() => {
+                                    if (editingTitle.trim()) {
+                                      updateSession(editingSessionId, { title: editingTitle.trim() });
+                                    }
+                                    setEditingSessionId('');
+                                    setEditingTitle('');
+                                  }}
+                                  className="flex-1 text-sm font-semibold bg-white border-2 border-[#63b3ed] rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#2b6cb0] text-[#1a365d]"
+                                  maxLength={100}
+                                  autoFocus
+                                />
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (editingTitle.trim()) {
+                                      updateSession(editingSessionId, { title: editingTitle.trim() });
+                                    }
+                                    setEditingSessionId('');
+                                    setEditingTitle('');
+                                  }}
+                                  className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-[#2b6cb0] text-white rounded-md hover:bg-[#1a365d] transition-colors"
+                                  title="Save title"
+                                >
+                                  <Check className="w-3 h-3" />
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setEditingSessionId('');
+                                    setEditingTitle('');
+                                  }}
+                                  className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-gray-400 text-white rounded-md hover:bg-gray-500 transition-colors"
+                                  title="Cancel edit"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="flex items-center space-x-2 mb-1 group/mobile-title">
+                                <h3 className={`text-base font-semibold truncate flex-1 ${
+                                  isActive ? 'text-[#1a365d]' : 'text-gray-900'
+                                }`}>
+                                  {session.title}
+                                </h3>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setEditingSessionId(session.id);
+                                    setEditingTitle(session.title);
+                                  }}
+                                  className="opacity-0 group-hover/mobile-title:opacity-100 flex-shrink-0 w-5 h-5 flex items-center justify-center text-[#2b6cb0] hover:text-[#1a365d] transition-all duration-200"
+                                  title="Edit title"
+                                >
+                                  <Edit3 className="w-3 h-3" />
+                                </button>
+                              </div>
+                            )}
                             
                             <div className="flex items-center space-x-3 text-sm">
                               <span className={isActive ? 'text-[#2b6cb0]' : 'text-gray-500'}>
@@ -901,6 +986,7 @@ export const GeorgianSTTApp: React.FC = () => {
                   onSelectSession={handleSelectSession}
                   onDeleteSession={handleDeleteSession}
                   onDuplicateSession={duplicateSession}
+                  onUpdateSession={updateSession}
                   onSearchChange={setSearchQuery}
                   onCollapseChange={handleHistoryCollapseChange}
                 />
@@ -954,6 +1040,9 @@ export const GeorgianSTTApp: React.FC = () => {
                 // STT Model selection props
                 selectedSTTModel={selectedSTTModel}
                 onModelChange={updateSelectedSTTModel}
+                // Session title props
+                pendingSessionTitle={pendingSessionTitle}
+                onPendingTitleChange={setPendingSessionTitle}
                 speakers={speakerSegments}
                 onExpandChat={handleSetExpandChatFunction}
                 // History controls
@@ -1012,6 +1101,9 @@ export const GeorgianSTTApp: React.FC = () => {
               // STT Model selection props
               selectedSTTModel={selectedSTTModel}
               onModelChange={updateSelectedSTTModel}
+              // Session title props
+              pendingSessionTitle={pendingSessionTitle}
+              onPendingTitleChange={setPendingSessionTitle}
               onExpandChat={handleSetExpandChatFunction}
               // History controls - pass sessionCount but no toggle for mobile (uses drawer)
               sessionCount={sessions.length}

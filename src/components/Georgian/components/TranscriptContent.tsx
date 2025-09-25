@@ -47,6 +47,10 @@ interface TranscriptContentProps {
   onStopRecording?: () => void;
   canRecord?: boolean;
   canStop?: boolean;
+  // Session title props
+  pendingSessionTitle?: string;
+  onPendingTitleChange?: (title: string) => void;
+  currentSession?: any;
   // Mobile optimization props
   textareaRef?: React.RefObject<HTMLTextAreaElement>;
   isKeyboardAdjusted?: boolean;
@@ -97,6 +101,9 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   onStopRecording,
   canRecord = true,
   canStop = true,
+  pendingSessionTitle = '',
+  onPendingTitleChange,
+  currentSession,
   hasSpeakers = false,
   speakers = [],
   enableSpeakerDiarization = false,
@@ -193,6 +200,34 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         {/* Main Content Structure */}
         <div className="relative h-full flex flex-col p-1 sm:p-1 lg:p-1">
           
+          {/* Optional Session Title Input */}
+          {onPendingTitleChange && !currentSession && (
+            <div className="relative mb-3 sm:mb-2 lg:mb-2 z-10 px-3 sm:px-4 lg:px-4 pt-2 sm:pt-1 lg:pt-1">
+              <div className="w-full">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Session title (optional)"
+                    value={pendingSessionTitle}
+                    onChange={(e) => onPendingTitleChange(e.target.value)}
+                    className="w-full h-10 px-3 py-2 bg-white/95 border-2 border-[#63b3ed]/30 hover:border-[#63b3ed]/50 focus:border-[#2b6cb0] rounded-lg text-sm font-medium text-[#1a365d] placeholder-[#1a365d]/60 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20"
+                    maxLength={100}
+                    disabled={recordingState.isRecording}
+                  />
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#63b3ed]/5 via-transparent to-[#63b3ed]/5 pointer-events-none" />
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <div className="text-xs text-[#1a365d]/60 font-medium">
+                    💡 Add a title to organize your recordings
+                  </div>
+                  <div className="text-xs text-[#1a365d]/40 font-mono">
+                    {pendingSessionTitle.length}/100
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Compact Production Controls */}
           <div className="relative mb-4 sm:mb-3 lg:mb-3 z-10 px-3 sm:px-4 lg:px-4 pt-4 sm:pt-3 lg:pt-3 mediscribe-mobile-controls">
             

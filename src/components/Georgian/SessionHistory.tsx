@@ -25,6 +25,8 @@ import {
   Volume2,
   MoreVertical,
   X,
+  Check,
+  Edit3,
   Hash,
   Headphones,
   Mic,
@@ -55,6 +57,7 @@ interface SessionHistoryProps {
   onSelectSession: (sessionId: string) => void;
   onDeleteSession: (sessionId: string) => void;
   onDuplicateSession: (sessionId: string) => void;
+  onUpdateSession?: (sessionId: string, updates: { title: string }) => void;
   onSearchChange: (query: string) => void;
   onCollapseChange?: (isCollapsed: boolean) => void;
 }
@@ -88,6 +91,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   onSelectSession,
   onDeleteSession,
   onDuplicateSession,
+  onUpdateSession,
   onSearchChange,
   onCollapseChange
 }) => {
@@ -99,6 +103,10 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   const [hoveredSession, setHoveredSession] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number } | null>(null);
+  
+  // Title editing states
+  const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
+  const [editingTitle, setEditingTitle] = useState<string>('');
   
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -265,6 +273,35 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
     }
   };
 
+  // Title editing functions
+  const handleStartEditingTitle = (session: GeorgianSession) => {
+    setEditingSessionId(session.id);
+    setEditingTitle(session.title);
+  };
+
+  const handleSaveTitle = async () => {
+    if (editingSessionId && onUpdateSession && editingTitle.trim()) {
+      await onUpdateSession(editingSessionId, { title: editingTitle.trim() });
+      setEditingSessionId(null);
+      setEditingTitle('');
+    }
+  };
+
+  const handleCancelEditTitle = () => {
+    setEditingSessionId(null);
+    setEditingTitle('');
+  };
+
+  const handleTitleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSaveTitle();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      handleCancelEditTitle();
+    }
+  };
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -359,15 +396,58 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
               {/* Compact session info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center mb-1">
-                  <h3 className={`
-                    text-sm font-bold truncate transition-colors duration-200
-                    ${isActive 
-                      ? 'text-medical-blue-900 dark:text-medical-blue-100' 
-                      : 'text-medical-gray-900 dark:text-medical-gray-100 group-hover:text-medical-blue-800 dark:group-hover:text-medical-blue-200'
-                    }
-                  `}>
-                    {session.title}
-                  </h3>
+                  {editingSessionId === session.id ? (
+                    <div className="flex items-center space-x-2 w-full">
+                      <input
+                        type="text"
+                        value={editingTitle}
+                        onChange={(e) => setEditingTitle(e.target.value)}
+                        onKeyDown={handleTitleKeyDown}
+                        onBlur={handleSaveTitle}
+                        className="flex-1 text-sm font-bold bg-white border-2 border-[#63b3ed] rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#2b6cb0] text-[#1a365d]"
+                        maxLength={100}
+                        autoFocus
+                      />
+                      <button
+                        onClick={handleSaveTitle}
+                        className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-[#2b6cb0] text-white rounded-md hover:bg-[#1a365d] transition-colors"
+                        title="Save title"
+                      >
+                        <Check className="w-3 h-3" />
+                      </button>
+                      <button
+                        onClick={handleCancelEditTitle}
+                        className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-gray-400 text-white rounded-md hover:bg-gray-500 transition-colors"
+                        title="Cancel edit"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2 w-full group/title">
+                      <h3 className={`
+                        text-sm font-bold truncate transition-colors duration-200 flex-1
+                        ${isActive 
+                          ? 'text-medical-blue-900 dark:text-medical-blue-100' 
+                          : 'text-medical-gray-900 dark:text-medical-gray-100 group-hover:text-medical-blue-800 dark:group-hover:text-medical-blue-200'
+                        }
+                      `}>
+                        {session.title}
+                      </h3>
+                      {onUpdateSession && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStartEditingTitle(session);
+                          }}
+                          className="opacity-0 group-hover/title:opacity-100 group-hover:opacity-100 flex-shrink-0 w-5 h-5 flex items-center justify-center text-[#2b6cb0] hover:text-[#1a365d] transition-all duration-200"
+                          title="Edit title"
+                        >
+                          <Edit3 className="w-3 h-3" />
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Compact metadata */}

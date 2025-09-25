@@ -100,6 +100,10 @@ interface TranscriptPanelProps {
   selectedSTTModel?: 'STT1' | 'STT2' | 'STT3';
   onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
   
+  // Session title props
+  pendingSessionTitle?: string;
+  onPendingTitleChange?: (title: string) => void;
+  
   // History controls
   isHistoryOpen?: boolean;
   onToggleHistory?: () => void;
@@ -141,6 +145,9 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   // STT Model selection props
   selectedSTTModel = 'STT3',
   onModelChange,
+  // Session title props
+  pendingSessionTitle = '',
+  onPendingTitleChange,
   // History controls
   isHistoryOpen = false,
   onToggleHistory,
@@ -461,6 +468,9 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onStopRecording={onStopRecording}
             canRecord={canRecord}
             canStop={canStop}
+            pendingSessionTitle={pendingSessionTitle}
+            onPendingTitleChange={onPendingTitleChange}
+            currentSession={currentSession}
             hasSpeakers={hasSpeakers}
             speakers={speakerSegments}
             enableSpeakerDiarization={enableSpeakerDiarization}
