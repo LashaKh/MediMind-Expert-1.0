@@ -10,11 +10,7 @@ import {
   Heart,
   Stethoscope,
   Activity,
-  Shield,
-  User,
-  FileText,
   HeartHandshake,
-  AlertTriangle,
   Zap
 } from 'lucide-react';
 
@@ -41,7 +37,7 @@ interface PremiumTemplatesSectionProps {
   hasTranscript: boolean;
 }
 
-// Enhanced template data with featured flag
+// Enhanced template data with featured flag - Cardiology Consults Only
 const PREMIUM_TEMPLATES: Template[] = [
   // FEATURED - Cardiology Consults Section
   {
@@ -68,101 +64,12 @@ const PREMIUM_TEMPLATES: Template[] = [
     estimatedTime: '45s',
     isFeatured: true,
     isSpecialDiagnosis: true
-  },
-
-  // Clinical Assessment Category
-  {
-    id: 'clinical-summary',
-    category: 'Clinical Assessment',
-    title: 'Clinical Summary',
-    instruction: 'Create a comprehensive clinical summary of this medical consultation including chief complaint, history of present illness, assessment, and plan (SOAP format)',
-    description: 'Structured clinical summary in SOAP format',
-    icon: Stethoscope,
-    color: 'from-[#63b3ed] to-[#2b6cb0]',
-    priority: 'high',
-    estimatedTime: '30s'
-  },
-  {
-    id: 'symptom-extraction',
-    category: 'Clinical Assessment',
-    title: 'Symptoms & Signs',
-    instruction: 'Extract and categorize all symptoms, signs, and clinical findings mentioned in this consultation, organized by body system',
-    description: 'Systematic symptom and sign extraction',
-    icon: Activity,
-    color: 'from-[#90cdf4] to-[#63b3ed]',
-    priority: 'high',
-    estimatedTime: '25s'
-  },
-  {
-    id: 'diagnosis-assessment',
-    category: 'Clinical Assessment',
-    title: 'Diagnosis & DDx',
-    instruction: 'Identify primary and differential diagnoses discussed, including ICD-10 codes where applicable and clinical reasoning',
-    description: 'Diagnosis identification with differential',
-    icon: Zap,
-    color: 'from-[#1a365d] to-[#63b3ed]',
-    priority: 'high',
-    estimatedTime: '35s'
-  },
-
-  // Medication Management Category
-  {
-    id: 'medication-review',
-    category: 'Medication Management',
-    title: 'Medication Review',
-    instruction: 'Extract all medications mentioned including drug names, dosages, frequencies, routes of administration, and any drug interactions or side effects discussed',
-    description: 'Complete medication analysis with interactions',
-    icon: Shield,
-    color: 'from-[#2b6cb0] to-[#1a365d]',
-    priority: 'high',
-    estimatedTime: '40s'
-  },
-
-  // Patient Management Category
-  {
-    id: 'risk-assessment',
-    category: 'Patient Management',
-    title: 'Risk Assessment',
-    instruction: 'Identify and assess clinical risk factors, safety concerns, red flags, and urgent issues that require immediate attention',
-    description: 'Clinical risk and safety evaluation',
-    icon: AlertTriangle,
-    color: 'from-[#63b3ed] to-[#90cdf4]',
-    priority: 'high',
-    estimatedTime: '40s'
-  },
-  {
-    id: 'patient-history',
-    category: 'Patient Management',
-    title: 'Patient Demographics',
-    instruction: 'Extract patient demographics, past medical history, family history, social history, and allergies mentioned in the consultation',
-    description: 'Comprehensive patient background',
-    icon: User,
-    color: 'from-[#90cdf4] to-[#2b6cb0]',
-    priority: 'medium',
-    estimatedTime: '30s'
-  },
-
-  // Documentation Category
-  {
-    id: 'follow-up-plan',
-    category: 'Documentation',
-    title: 'Follow-up Instructions',
-    instruction: 'Extract follow-up appointments, monitoring requirements, when to return if symptoms worsen, and patient education provided',
-    description: 'Patient follow-up and education summary',
-    icon: FileText,
-    color: 'from-[#2b6cb0] to-[#90cdf4]',
-    priority: 'low',
-    estimatedTime: '20s'
   }
 ];
 
 const getCategoryIcon = (category: string): React.ElementType => {
   switch (category) {
     case 'Cardiologist Consults': return HeartHandshake;
-    case 'Clinical Assessment': return Stethoscope;
-    case 'Medication Management': return Shield;
-    case 'Patient Management': return User;
-    case 'Documentation': return FileText;
     default: return Activity;
   }
 };
@@ -170,10 +77,6 @@ const getCategoryIcon = (category: string): React.ElementType => {
 const getCategoryColor = (category: string): string => {
   switch (category) {
     case 'Cardiologist Consults': return 'from-[#2b6cb0] to-[#1a365d]';
-    case 'Clinical Assessment': return 'from-[#63b3ed] to-[#2b6cb0]';
-    case 'Medication Management': return 'from-[#90cdf4] to-[#63b3ed]';
-    case 'Patient Management': return 'from-[#1a365d] to-[#90cdf4]';
-    case 'Documentation': return 'from-[#2b6cb0] to-[#90cdf4]';
     default: return 'from-[#63b3ed] to-[#90cdf4]';
   }
 };
@@ -363,10 +266,8 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
               return (
                 <div
                   key={template.id}
-                  className={`group relative bg-gradient-to-br ${template.color} rounded-2xl p-6 shadow-lg hover:shadow-2xl premium-shimmer scale-hover premium-transition cursor-pointer stagger-item ${
-                    template.isSpecialDiagnosis ? 'diagnosis-pulse' : template.priority === 'high' ? 'medical-pulse-high' : ''
-                  } ${template.isSpecialDiagnosis ? 'transform hover:scale-105' : ''} ${
-                    processingCards.has(template.id) ? 'diagnosis-processing' : ''
+                  className={`group relative bg-gradient-to-br ${template.color} rounded-2xl p-6 shadow-lg hover:shadow-2xl scale-hover premium-transition cursor-pointer stagger-item ${
+                    template.isSpecialDiagnosis ? 'transform hover:scale-105' : ''
                   } ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
                   onClick={() => handleTemplateSelect(template)}
                 >
