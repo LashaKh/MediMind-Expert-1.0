@@ -5,10 +5,13 @@ import { GeorgianSession } from '../../hooks/useSessionManagement';
 import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
 import { Brain } from 'lucide-react';
 
+// Import file processing utilities
+import { processFileForChatUpload, EnhancedAttachment, buildAttachmentTextContext } from '../../utils/chatFileProcessor';
+import type { ProgressInfo } from '../../utils/pdfTextExtractor';
+
 // Import extracted components
 import { TabNavigation } from './components/TabNavigation';
 import { TranscriptContent } from './components/TranscriptContent';
-import { ContextContent } from './components/ContextContent';
 import { AIProcessingContent } from './components/AIProcessingContent';
 import { RecordingStatusIndicator } from './components/RecordingStatusIndicator';
 
@@ -56,8 +59,8 @@ interface TranscriptPanelProps {
   isNearMaxDuration: boolean;
   
   // Active tab control from parent
-  activeTab: 'transcript' | 'context' | 'ai';
-  onActiveTabChange: (tab: 'transcript' | 'context' | 'ai') => void;
+  activeTab: 'transcript' | 'ai';
+  onActiveTabChange: (tab: 'transcript' | 'ai') => void;
   
   // Recording actions
   onStartRecording: () => void;
@@ -156,9 +159,11 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   textareaRef,
   isKeyboardAdjusted
 }) => {
-  const [contextText, setContextText] = useState('');
-  const [isRecordingContext, setIsRecordingContext] = useState(false);
-  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  // File attachment state - replaces old context functionality
+  const [attachedFiles, setAttachedFiles] = useState<EnhancedAttachment[]>([]);
+  const [isProcessingAttachment, setIsProcessingAttachment] = useState(false);
+  const [attachmentProgress, setAttachmentProgress] = useState<ProgressInfo | null>(null);
+  
   const [editableTranscript, setEditableTranscript] = useState('');
   const [lastRecordingSessionId, setLastRecordingSessionId] = useState<string>('');
   
@@ -170,7 +175,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const closeChatFunctionRef = useRef<(() => void) | null>(null);
 
   // Handle tab change with automatic chat and history closing
-  const handleTabChange = useCallback((tab: 'transcript' | 'context' | 'ai') => {
+  const handleTabChange = useCallback((tab: 'transcript' | 'ai') => {
     // Close chat if it's open and we're switching tabs
     if (closeChatFunctionRef.current) {
       closeChatFunctionRef.current();
@@ -198,23 +203,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const hasSpeakers = hasSpeakersFromHook;
   const speakerSegments = speakersFromHook;
   
-  // Context recording TTS - separate instance with 5-second chunks
-  const {
-    recordingState: contextRecordingState,
-    isTranscribing: isContextTranscribing,
-    transcriptionResult: contextTranscriptionResult,
-    error: contextTTSError,
-    startRecording: startContextRecording,
-    stopRecording: stopContextRecording,
-    clearError: clearContextTTSError,
-    clearResult: clearContextTTSResult,
-    isSupported: isContextTTSSupported, // eslint-disable-line @typescript-eslint/no-unused-vars
-    canRecord: canContextRecord
-  } = useGeorgianTTS({
-    chunkSize: 5000, // 5-second chunks for context
-    maxDuration: 120000, // 2 minutes max for context notes
-    language: 'ka-GE'
-  });
 
   // Refs
   const transcriptRef = useRef<HTMLDivElement>(null);
@@ -226,7 +214,17 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const currentTranscript = recordingState.isRecording 
     ? (localTranscript || editableTranscript || currentSession?.transcript || transcriptionResult?.text || '')
     : (editableTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '');
+  
+  // Check if we have content for AI processing (transcript OR attached files)
   const hasTranscript = currentTranscript.length > 0;
+  // Consider ANY attached file as potential AI content, not just files with extracted text
+  // This allows visual analysis of images, charts, etc. even without text extraction
+  const hasAttachmentContent = attachedFiles.length > 0 && attachedFiles.some(file => 
+    // File has extracted text OR is processable (has base64Data for visual analysis)
+    (file.extractedText && file.extractedText.trim()) || file.base64Data
+  );
+  const hasContentForAI = hasTranscript || hasAttachmentContent;
+  
   
   // Debug transcript resolution (disabled in production)
   // + '...'
@@ -352,29 +350,47 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
 
   }, [currentSession?.id, localTranscript, currentSession?.transcript]); // Remove editableTranscript to prevent infinite loop
   
-  // Sync context recording state with actual recording state
-  useEffect(() => {
-    setIsRecordingContext(contextRecordingState.isRecording);
-  }, [contextRecordingState.isRecording]);
+  // File processing handlers
+  const handleFileUploadFromContent = useCallback(async (files: File[]) => {
+    if (files.length === 0) return;
 
-  // Handle context transcription results
-  useEffect(() => {
-    if (contextTranscriptionResult && !contextRecordingState.isRecording) {
-      // Add final transcription result to context if not already added via live updates
-      const newText = contextTranscriptionResult.text.trim();
-      if (newText && !contextText.includes(newText)) {
-        setContextText(prev => prev ? `${prev}\n\nVoice note: ${newText}` : `Voice note: ${newText}`);
+    setIsProcessingAttachment(true);
+    setAttachmentProgress(null);
+
+    try {
+      const processedAttachments: EnhancedAttachment[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const progressCallback = (progress: ProgressInfo) => {
+          setAttachmentProgress({
+            ...progress,
+            stageDescription: `Processing ${file.name}... ${progress.stageDescription}`
+          });
+        };
+
+        const processed = await processFileForChatUpload(file, undefined, progressCallback);
+        processedAttachments.push(processed);
       }
-      
-      // Also append to main transcript if there's a current session
-      if (currentSession && onAppendTranscript && newText) {
-        onAppendTranscript(`Context Note: ${newText}`);
-      }
-      
-      // Clear the result
-      clearContextTTSResult();
+
+      setAttachedFiles(prev => [...prev, ...processedAttachments]);
+      setAttachmentProgress(null);
+    } catch (error) {
+      console.error('❌ File processing failed:', error);
+      setAttachmentProgress({
+        stage: 'error',
+        stageDescription: 'File processing failed',
+        percentage: 0,
+        method: 'error'
+      });
+    } finally {
+      setIsProcessingAttachment(false);
     }
-  }, [contextTranscriptionResult, contextRecordingState.isRecording, currentSession, onAppendTranscript, contextText, clearContextTTSResult]);
+  }, []);
+
+  const handleRemoveAttachment = useCallback((attachmentId: string) => {
+    setAttachedFiles(prev => prev.filter(file => file.id !== attachmentId));
+  }, []);
 
   // Utility functions (using imported utilities)
 
@@ -392,29 +408,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     }
   };
 
-  const handleContextFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    setAttachedFiles(prev => [...prev, ...files]);
-  };
-
-  const removeAttachedFile = (index: number) => {
-    setAttachedFiles(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const handleContextVoiceRecord = useCallback(() => {
-    if (contextRecordingState.isRecording) {
-      // Stop recording
-      stopContextRecording();
-    } else {
-      // Start recording
-      startContextRecording();
-      setIsRecordingContext(true);
-    }
-  }, [contextRecordingState.isRecording, canContextRecord, startContextRecording, stopContextRecording]);
-
-  const copyContextText = () => {
-    copyToClipboard(contextText);
-  };
 
   // Enhanced transcript change handler that preserves typed text during live transcription
   const handleTranscriptChange = (newTranscript: string) => {
@@ -481,25 +474,12 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             isKeyboardAdjusted={isKeyboardAdjusted}
             selectedSTTModel={selectedSTTModel}
             onModelChange={onModelChange}
-          />
-        );
-      
-      case 'context':
-        return (
-          <ContextContent
-            contextText={contextText}
-            onContextChange={setContextText}
+            // File attachment props
             attachedFiles={attachedFiles}
-            onFileUpload={handleContextFileUpload}
-            onRemoveFile={removeAttachedFile}
-            isRecordingContext={isRecordingContext}
-            isContextTranscribing={isContextTranscribing}
-            contextRecordingState={contextRecordingState}
-            contextTTSError={contextTTSError}
-            onContextVoiceRecord={handleContextVoiceRecord}
-            onCopyContext={copyContextText}
-            onClearError={clearContextTTSError}
-            formatTime={formatTime}
+            onAttachFiles={handleFileUploadFromContent}
+            onRemoveAttachment={handleRemoveAttachment}
+            isProcessingAttachment={isProcessingAttachment}
+            attachmentProgress={attachmentProgress}
           />
         );
       
@@ -507,11 +487,31 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         return (
           <AIProcessingContent
             transcript={currentTranscript}
-            hasTranscript={hasTranscript}
+            hasTranscript={hasContentForAI}
             processing={processing}
             aiError={aiError}
             processingHistory={processingHistory}
-            onProcessText={(instruction) => onProcessText?.(instruction, currentTranscript)}
+            onProcessText={(instruction) => {
+              // Include attachment content when processing
+              const attachmentContext = buildAttachmentTextContext(attachedFiles);
+              let combinedText = '';
+              
+              if (currentTranscript && attachmentContext) {
+                combinedText = `${currentTranscript}\n\n${attachmentContext}`;
+              } else if (currentTranscript) {
+                combinedText = currentTranscript;
+              } else if (attachmentContext) {
+                combinedText = attachmentContext;
+              } else if (attachedFiles.length > 0) {
+                // If we have attached files but no extracted text, still provide context
+                const fileNames = attachedFiles.map(f => f.name).join(', ');
+                combinedText = `Please analyze the attached file(s): ${fileNames}. The file(s) have been processed and are available for visual analysis.`;
+              } else {
+                combinedText = 'No content available for processing.';
+              }
+              
+              onProcessText?.(instruction, combinedText);
+            }}
             onClearAIError={onClearAIError}
             onClearHistory={onClearHistory}
             onDeleteReport={onDeleteReport}
@@ -545,7 +545,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         <TabNavigation
           activeTab={activeTab}
           onTabChange={handleTabChange}
-          hasTranscript={hasTranscript}
+          hasTranscript={hasContentForAI}
           canRecord={canRecord}
           canStop={canStop}
           isRecording={recordingState.isRecording}
@@ -555,6 +555,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
           onToggleHistory={onToggleHistory}
           sessionCount={sessionCount}
           onFileUpload={onFileUpload}
+          onAttachFiles={handleFileUploadFromContent}
         />
       </div>
 

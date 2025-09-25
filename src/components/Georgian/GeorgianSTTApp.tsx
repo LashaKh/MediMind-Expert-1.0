@@ -66,7 +66,7 @@ export const GeorgianSTTApp: React.FC = () => {
   // Mobile drawer state management
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   // Active tab state for header recording controls
-  const [activeTab, setActiveTab] = useState<'transcript' | 'context' | 'ai'>('transcript');
+  const [activeTab, setActiveTab] = useState<'transcript' | 'ai'>('transcript');
   const openMobileDrawer = () => setIsMobileDrawerOpen(true);
   const closeMobileDrawer = () => setIsMobileDrawerOpen(false);
   const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(true);

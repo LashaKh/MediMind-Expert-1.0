@@ -5,7 +5,6 @@ import { FileText, User, Brain } from 'lucide-react';
 // Tab definitions for the transcript panel
 export const TRANSCRIPT_TABS = [
   { id: 'transcript' as const, label: 'Transcript', icon: FileText },
-  { id: 'context' as const, label: 'Context', icon: User },
   { id: 'ai' as const, label: 'AI Processing', icon: Brain }
 ] as const;
 

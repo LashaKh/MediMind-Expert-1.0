@@ -32,49 +32,10 @@ const NSTEMI_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3db46
  * Formats the transcript with diagnosis context for the Flowise agent
  */
 function formatDiagnosisRequest(transcript: string, diagnosis: DiagnosisContext): string {
-  const context = `
-MEDICAL CONSULTATION TRANSCRIPT FOR DIAGNOSIS ANALYSIS
+  // Use the same simple prompt format as regular processing
+  return `Please generate a comprehensive cardiologist's consultation report based on this transcript. Follow the examples and instructions on how the report should look, and make sure it's in Georgian as in the examples.
 
-Patient Consultation Context:
-- Primary Diagnosis: ${diagnosis.diagnosisEnglish} (${diagnosis.diagnosisGeorgian})
-- ICD-10 Code: ${diagnosis.icdCode}
-- Medical Specialty: ${diagnosis.specialty}
-- Consultation Type: Emergency Department / Cardiology Assessment
-
-TRANSCRIPT:
-${transcript}
-
-REQUESTED ANALYSIS:
-Please generate a comprehensive Cardiologist's Emergency Room consultation report based on this transcript. The report should include:
-
-1. CLINICAL SUMMARY
-   - Chief complaint and presenting symptoms
-   - Vital signs and initial assessment
-   - Cardiac examination findings
-
-2. DIAGNOSTIC ASSESSMENT
-   - Primary diagnosis: ${diagnosis.icdCode} - ${diagnosis.diagnosisEnglish}
-   - Supporting clinical evidence from transcript
-   - Differential diagnoses considered
-
-3. TREATMENT PLAN
-   - Immediate interventions performed/recommended
-   - Medication management
-   - Follow-up care instructions
-
-4. RISK STRATIFICATION
-   - Acute cardiac risk assessment
-   - Prognosis and complications to monitor
-
-5. DISPOSITION
-   - Admission recommendations
-   - Discharge planning if applicable
-   - Emergency return precautions
-
-Please format this as a formal medical consultation report suitable for medical records and colleague communication.
-  `.trim();
-
-  return context;
+${transcript}`;
 }
 
 /**

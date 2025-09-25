@@ -15,10 +15,16 @@ import {
   Cpu,
   Gauge,
   Square,
-  Loader2
+  Loader2,
+  Paperclip,
+  FileIcon
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { ProductionControls } from './ProductionControls';
+
+// Import types for file attachments
+import { EnhancedAttachment } from '../../../utils/chatFileProcessor';
+import type { ProgressInfo } from '../../../utils/pdfTextExtractor';
 
 interface RecordingState {
   isRecording: boolean;
@@ -64,6 +70,12 @@ interface TranscriptContentProps {
   // STT Model selection props
   selectedSTTModel?: 'STT1' | 'STT2' | 'STT3';
   onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
+  // File attachment props
+  attachedFiles?: EnhancedAttachment[];
+  onAttachFiles?: (files: File[]) => void;
+  onRemoveAttachment?: (attachmentId: string) => void;
+  isProcessingAttachment?: boolean;
+  attachmentProgress?: ProgressInfo | null;
 }
 
 // Add mobile keyboard styles
@@ -112,11 +124,18 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   onSpeakerCountChange,
   selectedSTTModel = 'STT3',
   onModelChange,
+  // File attachment props
+  attachedFiles = [],
+  onAttachFiles,
+  onRemoveAttachment,
+  isProcessingAttachment = false,
+  attachmentProgress,
   // Mobile optimization props
   textareaRef,
   isKeyboardAdjusted,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const attachmentInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUploadClick = () => {
     fileInputRef.current?.click();
@@ -130,6 +149,21 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
     // Reset file input to allow selecting the same file again
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+  };
+
+  const handleAttachmentUploadClick = () => {
+    attachmentInputRef.current?.click();
+  };
+
+  const handleAttachmentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    if (files.length > 0 && onAttachFiles) {
+      onAttachFiles(files);
+    }
+    // Reset file input to allow selecting the same files again
+    if (attachmentInputRef.current) {
+      attachmentInputRef.current.value = '';
     }
   };
 
@@ -249,7 +283,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             </div>
           </div>
 
-          {/* Hidden File Input */}
+          {/* Hidden File Inputs */}
           <input
             ref={fileInputRef}
             type="file"
@@ -258,7 +292,83 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             className="hidden"
             multiple={false}
           />
+          <input
+            ref={attachmentInputRef}
+            type="file"
+            accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp3,.wav"
+            onChange={handleAttachmentChange}
+            className="hidden"
+            multiple={true}
+          />
 
+          {/* Attached Files Display */}
+          {attachedFiles.length > 0 && (
+            <div className="mb-4 px-3 sm:px-4 lg:px-4">
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 p-4">
+                <h4 className="text-sm font-semibold text-[#1a365d] dark:text-[#63b3ed] mb-3 flex items-center space-x-2">
+                  <FileIcon className="w-4 h-4" />
+                  <span>Attached Files ({attachedFiles.length})</span>
+                  {isProcessingAttachment && (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  )}
+                </h4>
+                <div className="flex flex-wrap gap-3">
+                  {attachedFiles.map((attachment) => (
+                    <div key={attachment.id} className="group relative flex items-center space-x-3 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#1a365d]/30 dark:to-[#2b6cb0]/30 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 px-4 py-3 rounded-xl hover:shadow-lg hover:shadow-[#2b6cb0]/10 transition-all duration-300">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center shadow-lg">
+                        <FileIcon className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[#1a365d] dark:text-[#90cdf4] font-semibold truncate max-w-40">
+                          {attachment.name}
+                        </p>
+                        <div className="flex items-center space-x-2 text-xs">
+                          <span className="text-[#2b6cb0] dark:text-[#63b3ed]">
+                            {(attachment.size / 1024).toFixed(1)} KB
+                          </span>
+                          {attachment.extractedText ? (
+                            <span className="bg-[#90cdf4]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
+                              Text extracted
+                            </span>
+                          ) : (
+                            <span className="bg-[#63b3ed]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
+                              Ready for analysis
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      {onRemoveAttachment && (
+                        <button
+                          onClick={() => onRemoveAttachment(attachment.id)}
+                          className="opacity-0 group-hover:opacity-100 p-1.5 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all duration-300"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {attachmentProgress && (
+                  <div className="mt-3 p-3 bg-[#90cdf4]/10 rounded-lg border border-[#63b3ed]/30">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-[#1a365d]">
+                        {attachmentProgress.stageDescription}
+                      </span>
+                      <span className="text-sm text-[#2b6cb0]">
+                        {attachmentProgress.percentage}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-[#63b3ed]/20 rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${attachmentProgress.percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
           
           {/* Premium Text Area */}
           <div 
@@ -370,8 +480,8 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             transition: 'all 0.3s ease-out'
           }}
         >
-          <div className="flex justify-between items-center">
-            {/* Upload Button */}
+          <div className="flex justify-between items-center space-x-3">
+            {/* Upload Audio Button */}
             {onFileUpload && (
               <button
                 onClick={handleFileUploadClick}
@@ -384,6 +494,28 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                 `}
               >
                 <Upload className="w-6 h-6 text-white" />
+              </button>
+            )}
+
+            {/* Attach Files Button - positioned between Upload and Record */}
+            {onAttachFiles && (
+              <button
+                onClick={handleAttachmentUploadClick}
+                disabled={recordingState.isRecording}
+                title={recordingState.isRecording ? "Cannot attach files during recording" : "Attach documents, images, or files"}
+                className={`
+                  mediscribe-mobile-footer-button
+                  flex items-center justify-center bg-gradient-to-r from-[#63b3ed] to-[#90cdf4] hover:from-[#2b6cb0] hover:to-[#63b3ed]
+                  ${recordingState.isRecording ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
+                style={{
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '50%',
+                  boxShadow: '0 4px 15px rgba(43, 108, 176, 0.3)'
+                }}
+              >
+                <Paperclip className="w-6 h-6 text-white" />
               </button>
             )}
             

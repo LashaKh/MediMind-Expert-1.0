@@ -267,7 +267,7 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
             Premium Medical Templates
           </h3>
           <p className="text-[#2b6cb0] dark:text-[#63b3ed] leading-relaxed mb-6">
-            Start recording or upload an audio file to access our comprehensive suite of medical analysis templates designed for healthcare professionals.
+            Start recording, upload an audio file, or attach medical documents to access our comprehensive suite of medical analysis templates designed for healthcare professionals.
           </p>
           <div className="flex items-center justify-center space-x-2 text-sm text-[#1a365d] dark:text-[#90cdf4]">
             <Heart className="w-4 h-4" />

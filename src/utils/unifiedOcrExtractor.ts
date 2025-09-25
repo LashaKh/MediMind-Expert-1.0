@@ -331,20 +331,22 @@ export async function analyzeImageForText(file: File): Promise<ImageTextAnalysis
     const filename = file.name.toLowerCase();
     const sizeKB = file.size / 1024;
     
-    // Text document patterns
+    // Text document patterns - expanded for medical use
     const textDocumentPatterns = [
       /scan/i, /document/i, /report/i, /form/i, /page/i,
       /დოკუმენტი/i, /ანგარიში/i, /ფორმა/i,
-      /text/i, /note/i, /receipt/i, /invoice/i
+      /text/i, /note/i, /receipt/i, /invoice/i,
+      /screenshot/i, /screen/i, /capture/i, /snap/i // Add screenshot detection
     ];
     
     const hasTextualFilename = textDocumentPatterns.some(pattern => pattern.test(filename));
     
-    // Medical image patterns
+    // Medical image patterns - expanded
     const medicalImagePatterns = [
       /x[_-]?ray/i, /ultrasound/i, /mri/i, /ct[_-]?scan/i,
       /ecg|ekg/i, /echo/i, /mammo/i, /radio/i,
-      /photo/i, /picture/i, /img/i
+      /photo/i, /picture/i, /img/i,
+      /medical/i, /lab/i, /test/i, /result/i // Add common medical terms
     ];
     
     const isMedicalImage = medicalImagePatterns.some(pattern => pattern.test(filename));
@@ -361,9 +363,15 @@ export async function analyzeImageForText(file: File): Promise<ImageTextAnalysis
       hasSignificantText = true;
       estimatedTextRatio = 0.5;
       recommendedAction = 'extract_and_send';
-    } else if (sizeKB > 500 && sizeKB < 5000) {
+    } else if (sizeKB > 10 && sizeKB < 10000) {
+      // For medical app, be more aggressive about OCR for any reasonable-sized image
       hasSignificantText = true;
-      estimatedTextRatio = 0.3;
+      estimatedTextRatio = 0.4;
+      recommendedAction = 'extract_and_send';
+    } else {
+      // Even for other images, try extraction in medical context
+      hasSignificantText = true;
+      estimatedTextRatio = 0.2;
       recommendedAction = 'extract_and_send';
     }
     

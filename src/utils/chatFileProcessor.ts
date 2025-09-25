@@ -617,8 +617,10 @@ export const buildAttachmentTextContext = (attachments: EnhancedAttachment[]): s
   let context = '';
   
   const attachmentsWithText = attachments.filter(att => att.extractedText);
+  const attachmentsWithoutText = attachments.filter(att => !att.extractedText && att.base64Data);
   
-  if (attachmentsWithText.length === 0) {
+  // If no attachments at all, return empty
+  if (attachments.length === 0) {
     return context;
   }
   
@@ -683,9 +685,25 @@ export const buildAttachmentTextContext = (attachments: EnhancedAttachment[]): s
     }
   });
   
+  // Handle visual files without extracted text
+  if (attachmentsWithoutText.length > 0) {
+    context += '\n--- Visual Files for Analysis ---\n';
+    attachmentsWithoutText.forEach((attachment, index) => {
+      context += `File ${index + 1}: ${attachment.name} (${attachment.type})\n`;
+      if (attachment.metadata?.processingDecision) {
+        context += `Processing: ${attachment.metadata.processingDecision}\n`;
+      }
+      context += `Status: Image/file available for visual analysis\n\n`;
+    });
+  }
+  
   // Add final summary
   if (totalTokensUsed > 500000) {
     context += `\n[Total extracted content: ~${totalTokensUsed} tokens from ${attachmentsWithText.length} document(s)]\n`;
+  }
+  
+  if (attachmentsWithoutText.length > 0) {
+    context += `[Additional ${attachmentsWithoutText.length} visual file(s) attached for analysis]\n`;
   }
   
   return context;

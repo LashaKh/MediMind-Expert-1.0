@@ -381,7 +381,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       ? 'Try adjusting your search terms or filters.'
                       : hasTranscript 
                         ? 'Start by selecting a medical analysis template or create a custom analysis.'
-                        : 'Record or upload a medical transcript to begin AI analysis.'
+                        : 'Record a transcript or attach medical documents to begin AI analysis.'
                     }
                   </p>
                   {searchQuery && (
