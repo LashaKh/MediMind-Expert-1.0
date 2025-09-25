@@ -186,6 +186,13 @@ export class RetryService {
       } catch (error) {
         lastError = error as Error
         
+        console.warn(`Attempt ${attempt} failed for ${serviceName}:`, {
+          error: error instanceof Error ? error.message : 'Unknown error',
+          attempt,
+          maxRetries: config.maxRetries,
+          serviceName,
+          timestamp: new Date().toISOString()
+        })
 
         // Don't retry if this is the last attempt or error is not retryable
         if (attempt > config.maxRetries || !config.retryCondition(error)) {
@@ -205,6 +212,7 @@ export class RetryService {
 
         config.onRetry(error, attempt)
         
+        console.info(`Retrying in ${Math.round(delay)}ms... (attempt ${attempt + 1}/${config.maxRetries + 1})`)
         await this.sleep(delay)
       }
     }
@@ -234,8 +242,20 @@ export class RetryService {
         maxDelay: 15000,
         timeout: operationType === 'voice' ? 90000 : 60000, // 90s for voice, 60s for others
         onRetry: (error, attempt) => {
+          console.warn(`Medical edit retry ${attempt}:`, {
+            operationType,
+            reportId,
+            error: error.message,
+            timestamp: new Date().toISOString()
+          })
         },
         onFailure: (error, attempts) => {
+          console.error(`Medical edit failed after ${attempts} attempts:`, {
+            operationType,
+            reportId,
+            error: error.message,
+            timestamp: new Date().toISOString()
+          })
         }
       },
       `edit-${operationType}`
@@ -263,6 +283,12 @@ export class RetryService {
           return this.isRetryableError(error)
         },
         onRetry: (error, attempt) => {
+          console.warn(`Edge function retry ${attempt}:`, {
+            functionName,
+            error: error.message,
+            status: error.status,
+            timestamp: new Date().toISOString()
+          })
         }
       },
       `edge-${functionName}`

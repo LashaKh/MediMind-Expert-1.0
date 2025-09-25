@@ -66,6 +66,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
   // Populate form data when editing a case
   useEffect(() => {
     if (editingCase) {
+      console.log('DEBUG: Loading form data from editingCase:', editingCase);
+      console.log('DEBUG: editingCase.anonymized_info:', editingCase.anonymized_info);
       const newFormData = {
         title: editingCase.title || '',
         description: editingCase.description || '',
@@ -74,11 +76,16 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
         tags: editingCase.metadata?.tags ? editingCase.metadata.tags.join(', ') : '',
         complexity: editingCase.metadata?.complexity || 'medium'
       };
+      console.log('DEBUG: Setting form data to:', newFormData);
       setFormData(newFormData);
 
       // Load existing attachments if any
+      console.log('DEBUG: editingCase.metadata:', editingCase.metadata);
+      console.log('DEBUG: editingCase.metadata.attachments:', editingCase.metadata?.attachments);
       if (editingCase.metadata?.attachments && Array.isArray(editingCase.metadata.attachments)) {
+        console.log('DEBUG: Processing each attachment:');
         const existingAttachments: CaseAttachment[] = editingCase.metadata.attachments.map((attachment: any, index: number) => {
+          console.log(`DEBUG: Attachment ${index}:`, attachment);
           const converted = {
             id: attachment.id || `existing-${index}`,
             file: new File([], attachment.fileName || attachment.file_name || `Attachment ${index + 1}`, {
@@ -91,8 +98,11 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
             preview: attachment.publicUrl || attachment.public_url,
             metadata: attachment
           };
+          console.log(`DEBUG: Converted attachment ${index}:`, converted);
           return converted;
         });
+        console.log(`DEBUG: Loading ${existingAttachments.length} existing attachments for case ${editingCase.title}`);
+        console.log('DEBUG: All existingAttachments:', existingAttachments);
         setAttachments(existingAttachments);
       } else {
         setAttachments([]);
@@ -224,6 +234,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
           const originalCount = editingCase.metadata.attachments.length;
           const currentUICount = attachments.length;
           const finalMetadataCount = allAttachmentMetadata.length;
+          console.log(`DEBUG: Original attachments: ${originalCount}, UI attachments: ${currentUICount}, Final metadata: ${finalMetadataCount}`);
+          console.log('Final attachment metadata:', allAttachmentMetadata.map(att => att.fileName || 'Unknown file'));
         }
 
         const caseData: Omit<PatientCase, 'id' | 'created_at' | 'updated_at'> = {

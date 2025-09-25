@@ -75,6 +75,7 @@ export class ReportEditingService {
       
       return EditSessionModel.fromApiResponse(data)
     } catch (error) {
+      console.error('Error creating edit session:', error)
       throw error
     }
   }
@@ -97,6 +98,7 @@ export class ReportEditingService {
       
       return EditSessionModel.fromApiResponse(data)
     } catch (error) {
+      console.error('Error getting edit session:', error)
       throw error
     }
   }
@@ -131,6 +133,7 @@ export class ReportEditingService {
       
       return EditSessionModel.fromApiResponse(data)
     } catch (error) {
+      console.error('Error updating edit session:', error)
       throw error
     }
   }
@@ -168,6 +171,7 @@ export class ReportEditingService {
       
       return data.map(session => EditSessionModel.fromApiResponse(session))
     } catch (error) {
+      console.error('Error listing edit sessions:', error)
       throw error
     }
   }
@@ -210,10 +214,12 @@ export class ReportEditingService {
       try {
         await this.incrementSessionEditCount(request.session_id)
       } catch (error) {
+        console.warn('Failed to increment session edit count:', error)
       }
       
       return ReportEditModel.fromApiResponse(data)
     } catch (error) {
+      console.error('Error creating report edit:', error)
       throw error
     }
   }
@@ -236,6 +242,7 @@ export class ReportEditingService {
       
       return ReportEditModel.fromApiResponse(data)
     } catch (error) {
+      console.error('Error getting report edit:', error)
       throw error
     }
   }
@@ -262,6 +269,7 @@ export class ReportEditingService {
       
       return ReportEditModel.fromApiResponse(data)
     } catch (error) {
+      console.error('Error updating report edit:', error)
       throw error
     }
   }
@@ -302,6 +310,7 @@ export class ReportEditingService {
       
       return data.map(edit => ReportEditModel.fromApiResponse(edit))
     } catch (error) {
+      console.error('Error listing report edits:', error)
       throw error
     }
   }
@@ -350,6 +359,7 @@ export class ReportEditingService {
       
       return ReportVersionModel.fromApiResponse(data)
     } catch (error) {
+      console.error('Error creating report version:', error)
       throw error
     }
   }
@@ -405,6 +415,7 @@ export class ReportEditingService {
       
       return ReportVersionModel.fromApiResponse(data)
     } catch (error) {
+      console.error('Error getting report version:', error)
       throw error
     }
   }
@@ -432,6 +443,7 @@ export class ReportEditingService {
       
       return data.map(version => ReportVersionModel.fromApiResponse(version))
     } catch (error) {
+      console.error('Error listing report versions:', error)
       throw error
     }
   }
@@ -441,6 +453,7 @@ export class ReportEditingService {
       const versions = await this.listReportVersions(reportId, true)
       return versions.length > 0 ? versions[0] : null
     } catch (error) {
+      console.error('Error getting current version:', error)
       throw error
     }
   }
@@ -472,6 +485,7 @@ export class ReportEditingService {
         throw new Error(`Failed to set current version: ${error.message}`)
       }
     } catch (error) {
+      console.error('Error setting current version:', error)
       throw error
     }
   }
@@ -494,6 +508,7 @@ export class ReportEditingService {
         }
       }
     } catch (error) {
+      console.error('Error incrementing session edit count:', error)
       // Don't throw - this is not critical
     }
   }
@@ -539,6 +554,7 @@ export class ReportEditingService {
         lastEditDate
       }
     } catch (error) {
+      console.error('Error getting edit statistics:', error)
       return {
         totalEdits: 0,
         totalVersions: 0,
@@ -569,6 +585,7 @@ export class ReportEditingService {
       
       return data?.length || 0
     } catch (error) {
+      console.error('Error cleaning up expired sessions:', error)
       return 0
     }
   }

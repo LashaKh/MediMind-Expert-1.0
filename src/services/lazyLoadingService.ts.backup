@@ -106,6 +106,7 @@ export class LazyLoadingService {
     const startTime = performance.now()
 
     try {
+      console.log(`🔄 Loading medical component: ${name} (${info.config.medicalContext})`)
       
       const result = await info.loader()
       
@@ -117,6 +118,7 @@ export class LazyLoadingService {
 
       this.loadedBundles.add(name)
       
+      console.log(`✅ Loaded ${name} in ${Math.round(loadTime)}ms`)
       
       // Report metrics
       this.reportLoadingMetrics(name, loadTime, true)
@@ -129,12 +131,14 @@ export class LazyLoadingService {
       info.lastError = error as Error
       info.retryCount++
 
+      console.error(`❌ Failed to load ${name} (attempt ${info.retryCount}):`, error)
       
       // Report error metrics
       this.reportLoadingMetrics(name, loadTime, false, error as Error)
       
       // Retry logic
       if (info.config.retryOnError && info.retryCount < 3) {
+        console.log(`🔄 Retrying ${name} in ${info.retryCount * 1000}ms...`)
         await new Promise(resolve => setTimeout(resolve, info.retryCount * 1000))
         return this.loadComponentWithMetrics(name)
       }
@@ -351,6 +355,7 @@ export class LazyLoadingService {
         await this.preloadComponent(name)
         await new Promise(resolve => setTimeout(resolve, 100)) // Small delay between preloads
       } catch (error) {
+        console.warn(`Preload failed for ${name}:`, error)
       }
     }
   }
@@ -364,7 +369,9 @@ export class LazyLoadingService {
 
     try {
       await this.loadComponentWithMetrics(name)
+      console.log(`🚀 Preloaded medical component: ${name}`)
     } catch (error) {
+      console.warn(`Preload failed for ${name}:`, error)
     }
   }
 
@@ -452,6 +459,7 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Lazy loading error:', error, errorInfo)
   }
 
   render() {

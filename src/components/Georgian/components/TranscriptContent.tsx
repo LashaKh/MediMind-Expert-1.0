@@ -25,6 +25,7 @@ import { ProductionControls } from './ProductionControls';
 // Import types for file attachments
 import { EnhancedAttachment } from '../../../utils/chatFileProcessor';
 import type { ProgressInfo } from '../../../utils/pdfTextExtractor';
+import { countEmptyFields, hasEmptyFields } from '../../../utils/markdownFormatter';
 
 interface RecordingState {
   isRecording: boolean;
@@ -60,6 +61,8 @@ interface TranscriptContentProps {
   // Mobile optimization props
   textareaRef?: React.RefObject<HTMLTextAreaElement>;
   isKeyboardAdjusted?: boolean;
+  // Empty field detection props
+  showEmptyFieldIndicator?: boolean;
   // Speaker diarization props
   hasSpeakers?: boolean;
   speakers?: SpeakerSegment[];
@@ -133,9 +136,15 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   // Mobile optimization props
   textareaRef,
   isKeyboardAdjusted,
+  // Empty field detection
+  showEmptyFieldIndicator = true,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const attachmentInputRef = useRef<HTMLInputElement>(null);
+  
+  // Calculate empty fields in transcript
+  const emptyFieldsCount = countEmptyFields(transcript);
+  const hasEmptyFieldsPresent = hasEmptyFields(transcript);
 
   const handleFileUploadClick = () => {
     fileInputRef.current?.click();
@@ -439,6 +448,18 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
               ) : (
                 /* Regular editable text area */
                 <div className="relative h-full p-0">
+                  {/* Empty Field Notification */}
+                  {showEmptyFieldIndicator && hasEmptyFieldsPresent && (
+                    <div className="absolute top-2 right-2 z-10">
+                      <div className="flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-amber-100/90 to-yellow-100/90 backdrop-blur-sm rounded-lg border border-amber-300/60 shadow-lg">
+                        <span className="text-amber-600">⚠️</span>
+                        <span className="text-xs font-bold text-amber-800">
+                          {emptyFieldsCount} field{emptyFieldsCount !== 1 ? 's' : ''} incomplete
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  
                   <textarea
                     ref={textareaRef}
                     value={transcript}

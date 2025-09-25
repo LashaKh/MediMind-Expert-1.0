@@ -212,6 +212,7 @@ export class EditSessionModel {
     
     // In a real implementation, this would update the database:
     // UPDATE edit_sessions SET total_edits = total_edits + 1 WHERE session_id = ?
+    console.log(`Incrementing edit count for session ${sessionId}`)
   }
   
   static async validateEditCount(sessionId: string, expectedCount: number): Promise<boolean> {

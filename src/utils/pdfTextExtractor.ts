@@ -16,17 +16,10 @@ if (typeof window !== 'undefined') {
     const localWorkerUrl = new URL(`${basePath}pdf.worker.min.js?v=${timestamp}`, window.location.origin).href;
     
     // Debug: Log path detection details
-    console.log('🔧 PDF Worker Path Detection:', {
-      currentPath,
-      basePath,
-      localWorkerUrl,
-      timestamp
-    });
     
     // Force fresh worker configuration
     (pdfjsLib.GlobalWorkerOptions as any).workerSrc = localWorkerUrl;
     workerConfigured = true;
-    console.log('PDF.js worker configured:', localWorkerUrl);
   } catch (localError) {
 
   }
@@ -46,7 +39,6 @@ if (typeof window !== 'undefined') {
   
   // Strategy 3: Complete fallback - disable worker entirely (guaranteed to work)
   if (!workerConfigured) {
-    console.warn('🐌 All worker configurations failed, disabling worker (slower but bulletproof)');
     pdfjsLib.GlobalWorkerOptions.disableWorker = true;
     pdfjsLib.GlobalWorkerOptions.workerSrc = null;
   }
@@ -177,16 +169,13 @@ export async function extractTextFromPdf(
   onProgress?: (progress: ProgressInfo) => void
 ): Promise<PdfTextExtractionResult> {
   try {
-    console.log('🔧 Starting PDF text extraction for:', file.name);
     onProgress?.({
       stage: 'analyzing',
       stageDescription: 'Loading PDF document...',
       percentage: 0
     });
 
-    console.log('📖 Converting file to ArrayBuffer...');
     const arrayBuffer = await file.arrayBuffer();
-    console.log('📖 ArrayBuffer created, size:', arrayBuffer.byteLength);
     
     // Load PDF with enhanced Unicode support and BULLETPROOF error handling
     let pdf;
@@ -196,7 +185,6 @@ export async function extractTextFromPdf(
     while (attempts < maxAttempts) {
       try {
         attempts++;
-        console.log(`📖 PDF loading attempt ${attempts}/${maxAttempts}...`);
         
         // Force fresh worker configuration for each attempt
         const freshTimestamp = Date.now();
@@ -205,7 +193,6 @@ export async function extractTextFromPdf(
         const basePath = isExpertContext ? '/expert/' : '/';
         const freshWorkerUrl = new URL(`${basePath}pdf.worker.min.js?v=${freshTimestamp}`, window.location.origin).href;
         (pdfjsLib.GlobalWorkerOptions as any).workerSrc = freshWorkerUrl;
-        console.log(`🔄 Fresh worker configured for attempt ${attempts}:`, freshWorkerUrl);
         
         pdf = await pdfjsLib.getDocument({
           data: arrayBuffer,
@@ -219,30 +206,24 @@ export async function extractTextFromPdf(
           isOffscreenCanvasSupported: false
         }).promise;
         
-        console.log('✅ PDF loaded successfully on attempt', attempts);
         break; // Success - exit retry loop
         
       } catch (workerError) {
-        console.warn(`❌ PDF loading attempt ${attempts} failed:`, workerError.message);
 
         if (attempts === 1) {
           // First failure: Disable worker and try again
-          console.log('🔄 Disabling PDF worker for retry...');
           pdfjsLib.GlobalWorkerOptions.disableWorker = true;
           pdfjsLib.GlobalWorkerOptions.workerSrc = null;
         } else if (attempts === 2) {
           // Second failure: Use minimal configuration
-          console.log('🔄 Using minimal configuration for retry...');
         } else {
           // Final failure: Re-throw error
-          console.error('💥 All PDF loading attempts failed');
           throw new Error(`PDF loading failed after ${maxAttempts} attempts: ${workerError.message}`);
         }
       }
     }
 
     const numPages = pdf.numPages;
-    console.log('📄 PDF document loaded, pages:', numPages);
     let allText = '';
     let hasText = false;
 
@@ -259,7 +240,6 @@ export async function extractTextFromPdf(
       const page = await pdf.getPage(pageNum);
       const textContent = await page.getTextContent();
       
-      console.log(`📄 Page ${pageNum}: Found ${textContent.items.length} text items`);
       
       // Extract text from items
       const pageText = textContent.items
@@ -267,9 +247,7 @@ export async function extractTextFromPdf(
         .join(' ')
         .trim();
 
-      console.log(`📄 Page ${pageNum} text length:`, pageText.length);
       if (pageText.length > 0) {
-        console.log(`📄 Page ${pageNum} preview:`, pageText.substring(0, 100) + '...');
         hasText = true;
         allText += `\n--- Page ${pageNum} ---\n${pageText}\n`;
       }
@@ -307,7 +285,6 @@ export async function extractTextFromPdf(
       
       // Debug logging for quality assessment
       if (process.env.NODE_ENV === 'development') {
-        console.log('PDF quality assessment:', qualityAssessment);
       }
       
       // Use Gemini if text appears garbled or quality is poor

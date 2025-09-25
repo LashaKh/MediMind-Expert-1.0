@@ -70,6 +70,7 @@ const VoiceInstructionTextArea: React.FC<VoiceInstructionTextAreaProps> = ({
         await startRecording()
       }
     } catch (error) {
+      console.error('Recording toggle failed:', error)
     }
   }, [disabled, isSupported, recordingState.isRecording, startRecording, stopRecording, clearError])
 

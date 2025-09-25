@@ -112,6 +112,7 @@ export const useEditSession = (
     
     // Show warning when session is about to expire
     if (remaining <= WARNING_THRESHOLD_MS && remaining > 0) {
+      console.warn(`Edit session expires in ${Math.floor(remaining / 60000)} minutes`)
     }
   }, [session])
 
@@ -125,6 +126,7 @@ export const useEditSession = (
       setSession(timedOutSession)
       setError('Edit session expired for security. Please start a new session.')
     } catch (error) {
+      console.error('Failed to handle session timeout:', error)
       setError('Session timeout error. Please refresh and try again.')
     }
   }, [session])
@@ -181,6 +183,7 @@ export const useEditSession = (
       return createdSession
       
     } catch (error) {
+      console.error('Failed to create edit session:', error)
       const errorMessage = error instanceof Error ? error.message : 'Failed to create edit session'
       setError(errorMessage)
       throw error
@@ -240,6 +243,7 @@ export const useEditSession = (
       return savedSession
       
     } catch (error) {
+      console.error('Failed to update edit session:', error)
       const errorMessage = error instanceof Error ? error.message : 'Failed to update edit session'
       setError(errorMessage)
       throw error
@@ -268,6 +272,7 @@ export const useEditSession = (
       // Validate HIPAA compliance before completion
       const complianceCheck = EditSessionModel.validateHIPAACompliance(completedSession)
       if (!complianceCheck.isCompliant) {
+        console.warn('HIPAA compliance issues:', complianceCheck.issues)
       }
       
       // Update via API
@@ -286,6 +291,7 @@ export const useEditSession = (
       }
       
     } catch (error) {
+      console.error('Failed to complete edit session:', error)
       const errorMessage = error instanceof Error ? error.message : 'Failed to complete edit session'
       setError(errorMessage)
       throw error
@@ -327,6 +333,7 @@ export const useEditSession = (
       }
       
     } catch (error) {
+      console.error('Failed to cancel edit session:', error)
       const errorMessage = error instanceof Error ? error.message : 'Failed to cancel edit session'
       setError(errorMessage)
       throw error

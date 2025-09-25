@@ -92,9 +92,9 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   
   // STT model selection state
   const [selectedSTTModel, setSelectedSTTModel] = useState<'STT1' | 'STT2' | 'STT3'>(() => {
-    // Load from localStorage or default to STT3
+    // Load from localStorage or default to STT1 (Fast model)
     const saved = localStorage.getItem('medimind_stt_model');
-    return (saved === 'STT1' || saved === 'STT2' || saved === 'STT3') ? saved : 'STT3';
+    return (saved === 'STT1' || saved === 'STT2' || saved === 'STT3') ? saved : 'STT1';
   });
   
   // Update ref when state changes

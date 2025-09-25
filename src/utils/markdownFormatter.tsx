@@ -3,6 +3,7 @@
  * 
  * Formats markdown text into clean, readable JSX for medical reports.
  * Handles headings, lists, bold text, and paragraphs without showing raw markdown.
+ * Also detects and highlights empty fields marked with 'Value_to_be_filled'.
  */
 
 import React from 'react';
@@ -50,6 +51,22 @@ const FormattedListItem: React.FC<FormattedTextProps> = ({ children, className =
   <li className={`text-slate-800 dark:text-slate-200 leading-relaxed ${className}`}>
     {children}
   </li>
+);
+
+/**
+ * Component for highlighting empty fields that need to be filled
+ */
+const EmptyFieldIndicator: React.FC<{ fieldName?: string }> = ({ fieldName }) => (
+  <span
+    className="empty-field-indicator inline-flex items-center space-x-1 bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 text-amber-800 dark:text-amber-200 px-3 py-1 rounded-md border border-amber-300 dark:border-amber-600 font-semibold text-sm cursor-help transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/25 animate-pulse"
+    data-field={fieldName}
+    title={`This field needs to be filled: ${fieldName || 'Unknown field'}`}
+  >
+    <span className="empty-field-text">Value_to_be_filled</span>
+    <span className="empty-field-icon text-amber-600 dark:text-amber-400" role="img" aria-label="Warning">
+      ⚠️
+    </span>
+  </span>
 );
 
 /**
@@ -140,22 +157,56 @@ export function formatMarkdown(text: string): JSX.Element {
 }
 
 /**
- * Format inline text elements (bold, italic, etc.)
+ * Format inline text elements (bold, italic, empty fields, etc.)
  */
 function formatInlineText(text: string): React.ReactNode {
   if (!text) return text;
 
-  // Handle bold text
-  let formatted: React.ReactNode = text;
+  // First, handle empty fields before other formatting
+  const emptyFieldRegex = /Value_to_be_filled/g;
+  const hasEmptyFields = emptyFieldRegex.test(text);
   
-  // Replace **bold** with <strong>
+  if (hasEmptyFields) {
+    const parts = text.split(/(Value_to_be_filled)/g);
+    const formattedParts: React.ReactNode[] = [];
+    
+    parts.forEach((part, index) => {
+      if (part === 'Value_to_be_filled') {
+        // Try to extract context from surrounding text to identify the field
+        const beforeText = parts[index - 1] || '';
+        const fieldMatch = beforeText.match(/([\w\s]+):\s*$/i);
+        const fieldName = fieldMatch ? fieldMatch[1].trim() : 'Unknown field';
+        
+        formattedParts.push(
+          <EmptyFieldIndicator key={`empty-field-${index}`} fieldName={fieldName} />
+        );
+      } else if (part) {
+        // Apply other formatting to non-empty-field parts
+        formattedParts.push(formatOtherInlineText(part, index));
+      }
+    });
+    
+    return formattedParts;
+  }
+  
+  // If no empty fields, apply regular formatting
+  return formatOtherInlineText(text, 0);
+}
+
+/**
+ * Handle other inline formatting (bold, italic) excluding empty fields
+ */
+function formatOtherInlineText(text: string, keyOffset: number = 0): React.ReactNode {
+  if (!text) return text;
+
+  // Handle bold text
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   const formattedParts: React.ReactNode[] = [];
   
   parts.forEach((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       formattedParts.push(
-        <strong key={`bold-${index}`} className="font-semibold text-slate-900 dark:text-slate-100">
+        <strong key={`bold-${keyOffset}-${index}`} className="font-semibold text-slate-900 dark:text-slate-100">
           {part.slice(2, -2)}
         </strong>
       );
@@ -165,7 +216,7 @@ function formatInlineText(text: string): React.ReactNode {
       italicParts.forEach((subpart, subindex) => {
         if (subpart.startsWith('*') && subpart.endsWith('*') && !subpart.startsWith('**')) {
           formattedParts.push(
-            <em key={`italic-${index}-${subindex}`} className="italic">
+            <em key={`italic-${keyOffset}-${index}-${subindex}`} className="italic">
               {subpart.slice(1, -1)}
             </em>
           );
@@ -176,9 +227,7 @@ function formatInlineText(text: string): React.ReactNode {
     }
   });
   
-  formatted = formattedParts;
-
-  return formatted;
+  return formattedParts;
 }
 
 /**
@@ -196,6 +245,7 @@ export function extractCleanText(markdownText: string): string {
     // Clean up list markers
     .replace(/^[-*+]\s/gm, '• ')
     .replace(/^\d+\.\s/gm, '')
+    // Keep Value_to_be_filled as-is for identification
     // Clean up extra whitespace
     .replace(/\n{3,}/g, '\n\n')
     .trim();
@@ -216,4 +266,50 @@ export function hasMarkdownFormatting(text: string): boolean {
   ];
   
   return markdownPatterns.some(pattern => pattern.test(text));
+}
+
+/**
+ * Count empty fields in text
+ */
+export function countEmptyFields(text: string): number {
+  if (!text) return 0;
+  const matches = text.match(/Value_to_be_filled/g);
+  return matches ? matches.length : 0;
+}
+
+/**
+ * Check if text contains empty fields
+ */
+export function hasEmptyFields(text: string): boolean {
+  return countEmptyFields(text) > 0;
+}
+
+/**
+ * Extract field names that are empty
+ */
+export function extractEmptyFieldNames(text: string): string[] {
+  if (!text) return [];
+  
+  const fieldNames: string[] = [];
+  const lines = text.split('\n');
+  
+  lines.forEach(line => {
+    if (line.includes('Value_to_be_filled')) {
+      // Try to extract field name from patterns like "Field Name: Value_to_be_filled"
+      const fieldMatch = line.match(/([\w\s]+):\s*Value_to_be_filled/i);
+      if (fieldMatch) {
+        fieldNames.push(fieldMatch[1].trim());
+      } else {
+        // Look for patterns where the field name is before the value
+        const contextMatch = line.match(/([\w\s]+).*Value_to_be_filled/i);
+        if (contextMatch) {
+          fieldNames.push(contextMatch[1].trim());
+        } else {
+          fieldNames.push('Unknown field');
+        }
+      }
+    }
+  });
+  
+  return fieldNames;
 }

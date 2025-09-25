@@ -168,12 +168,22 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
 
   const handleCopy = async () => {
     // Debug: Log the actual content being processed
+    console.log('🔍 DEBUG - UI Content Analysis:', {
+      isDiagnosis: analysisType.isDiagnosis,
+      responseLength: analysis.aiResponse?.length || 0,
+      responsePreview: analysis.aiResponse?.substring(0, 200) + '...',
+      hasGeorgianChars: /[\u10A0-\u10FF]/.test(analysis.aiResponse || ''),
+      model: analysis.model,
+      emptyFieldsCount,
+      hasEmptyFields: hasEmptyFieldsPresent
+    });
     
     let content: string;
     
     if (analysisType.isDiagnosis) {
       // For diagnosis reports, copy only the clean response text
       content = extractCleanText(analysis.aiResponse);
+      console.log('🔍 DEBUG - Extracted clean text preview:', content.substring(0, 200) + '...');
     } else {
       // For regular reports, copy full content
       content = `Medical Analysis Report
@@ -247,6 +257,7 @@ Medical AI Processing System`;
 
   const handleEditComplete = (editResult: any) => {
     // Handle successful edit
+    console.log('Edit completed:', editResult);
     setIsEditMode(false);
     
     // Update the local content state with the edited content
@@ -257,6 +268,7 @@ Medical AI Processing System`;
   };
 
   const handleEditError = (error: Error) => {
+    console.error('Edit failed:', error);
     // You might want to show an error message to the user
   };
 
@@ -319,7 +331,9 @@ Medical AI Processing System`;
                   </div>
                 </div>
               </div>
-
+              
+              
+              
               {/* Enhanced Delete Button */}
               {onDelete && (
                 <div className="relative group">

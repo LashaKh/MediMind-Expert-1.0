@@ -100,6 +100,7 @@ export class OfflineStorageService {
       request.onerror = () => reject(request.error)
       request.onsuccess = () => {
         this.db = request.result
+        console.log('Offline database initialized')
         resolve()
       }
       
@@ -186,6 +187,7 @@ export class OfflineStorageService {
     this.syncStatus.pendingOperations++
     await this.scheduleSync()
 
+    console.log(`Saved report ${reportId} offline (v${report.version})`)
   }
 
   /**
@@ -383,6 +385,7 @@ export class OfflineStorageService {
     if (!this.syncStatus.isOnline || this.syncStatus.syncInProgress) return
 
     this.syncStatus.syncInProgress = true
+    console.log('Starting offline data sync...')
 
     try {
       const pendingOps = await this.getPendingOperations()
@@ -395,6 +398,7 @@ export class OfflineStorageService {
           await this.markOperationSynced(operation.id)
           this.syncStatus.pendingOperations--
         } catch (error) {
+          console.error(`Failed to sync operation ${operation.id}:`, error)
           operation.retryCount++
         }
       }
@@ -405,12 +409,15 @@ export class OfflineStorageService {
           await this.syncReport(report)
           await this.markReportSynced(report.id)
         } catch (error) {
+          console.error(`Failed to sync report ${report.id}:`, error)
         }
       }
 
       this.syncStatus.lastSync = new Date()
+      console.log('Offline data sync completed')
 
     } catch (error) {
+      console.error('Sync failed:', error)
     } finally {
       this.syncStatus.syncInProgress = false
       this.syncStatus.nextSyncAttempt = null
@@ -444,6 +451,7 @@ export class OfflineStorageService {
    */
   private async syncOperation(operation: OfflineOperation & { sessionId: string }): Promise<void> {
     // This would integrate with the retry service and API calls
+    console.log(`Syncing operation: ${operation.type}`)
     
     switch (operation.type) {
       case 'edit':
@@ -466,6 +474,7 @@ export class OfflineStorageService {
    */
   private async syncReport(report: OfflineReport): Promise<void> {
     // This would integrate with the API to upload the report
+    console.log(`Syncing report: ${report.id}`)
     
     // Simulate API call
     // const response = await api.saveReport(report.id, report.content)
@@ -501,11 +510,13 @@ export class OfflineStorageService {
    */
   private setupNetworkListeners(): void {
     window.addEventListener('online', () => {
+      console.log('Network restored - starting sync')
       this.syncStatus.isOnline = true
       this.syncWithServer()
     })
 
     window.addEventListener('offline', () => {
+      console.log('Network lost - enabling offline mode')
       this.syncStatus.isOnline = false
     })
   }
@@ -595,6 +606,7 @@ export class OfflineStorageService {
       }
     }
 
+    console.log(`Cleaned up ${oldOps.length} old operations`)
   }
 
   /**

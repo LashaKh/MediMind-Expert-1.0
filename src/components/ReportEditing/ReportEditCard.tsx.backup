@@ -191,11 +191,13 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
     // Keep only last 20 versions to prevent memory issues
     setVersionHistory(prev => prev.slice(0, 20))
     
+    console.log(`Version ${newVersion} created:`, { editType, summary })
   }, [currentVersion, autoVersioning])
 
   const restoreVersion = useCallback((version: number) => {
     const versionEntry = versionHistory.find(v => v.version === version)
     if (!versionEntry) {
+      console.error('Version not found:', version)
       return
     }
     
@@ -230,6 +232,7 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
     const handleSessionRestored = (event: CustomEvent) => {
       const { session, data } = event.detail
       if (session.sessionId === sessionId) {
+        console.log('Session restored from network interruption:', session)
         
         // Restore content if available
         if (data && data.content) {
@@ -242,19 +245,23 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
 
     const handleServiceDegraded = (event: CustomEvent) => {
       const { serviceName, reason, capabilities } = event.detail
+      console.warn(`Service degraded: ${serviceName} - ${reason}`)
       
       // Update UI to reflect limited capabilities
       if (!capabilities.voiceRecording) {
         // Could disable voice features in the UI
+        console.log('Voice recording disabled due to service degradation')
       }
       
       if (!capabilities.basicEditing) {
         // Could show read-only mode
+        console.log('Basic editing disabled due to service degradation')
       }
     }
 
     const handleMedicalError = (event: CustomEvent) => {
       const errorData = event.detail
+      console.warn('Medical error detected:', errorData)
       
       // Additional error handling specific to this component
       if (errorData.type === 'error' && isProcessing) {
@@ -452,6 +459,13 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
           }
 
           // Process the edit instruction using the Flowise endpoint
+          console.log('Processing instruction:', { 
+            instruction, 
+            voiceTranscript, 
+            reportId, 
+            sessionId,
+            validation: validation
+          })
           
           // Use the same format as initial report generation - just send the content and instruction
           const editPrompt = `${currentContent}
@@ -468,6 +482,11 @@ ${instruction}`
           const reportEndpoint = flowiseEndpoint || '/api/flowise/chat';
           const isDirectFlowiseCall = reportEndpoint.startsWith('https://flowise-2-0.onrender.com');
 
+          console.log('🎯 Using generation endpoint for edit:', {
+            endpoint: reportEndpoint,
+            isDirect: isDirectFlowiseCall,
+            passedFromProps: !!flowiseEndpoint
+          });
 
           // Call the same endpoint that was used to generate the report
           const response = await fetch(reportEndpoint, {
@@ -548,6 +567,7 @@ ${instruction}`
       }
       
     } catch (error) {
+      console.error('Edit processing failed:', error)
       setProcessingStage('Processing failed')
       
       // Log comprehensive error
@@ -610,6 +630,7 @@ ${instruction}`
     
     try {
       // This will be implemented when hooks are ready
+      console.log('Saving manual changes:', { reportId, content: currentContent })
       
       await new Promise(resolve => setTimeout(resolve, 1000))
       setLastSaved(new Date())
@@ -628,6 +649,7 @@ ${instruction}`
         sessionId
       })
     } catch (error) {
+      console.error('Save failed:', error)
       setProcessingStage('Save failed')
       onError?.(error as Error)
     } finally {

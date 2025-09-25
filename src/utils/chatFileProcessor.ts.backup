@@ -149,12 +149,14 @@ async function processPdfForChat(
     const base64Data = await convertFileToBase64(file);
     
     // Try text extraction like case study does, but gracefully handle failures
+    console.log('📄 Attempting text extraction (same as case study approach)...');
     
     try {
       // Try the exact same extraction as case study processPdfFile
       const textResult = await extractTextFromPdf(file, onProgress);
       
       if (textResult.hasText && textResult.text && textResult.text.trim()) {
+        console.log('✅ Text extraction successful:', textResult.text.length, 'characters');
         return {
           base64Data,
           extractedText: textResult.text,
@@ -167,9 +169,11 @@ async function processPdfForChat(
         };
       } else if (textResult.needsOCR) {
         // Try OCR fallback like case study does
+        console.log('🔍 Trying OCR fallback...');
         const ocrResult = await extractTextFromPdfWithOCR(file, onProgress);
         
         if (ocrResult.text && ocrResult.text.trim()) {
+          console.log('✅ OCR extraction successful:', ocrResult.text.length, 'characters');
           return {
             base64Data,
             extractedText: ocrResult.text,
@@ -183,9 +187,11 @@ async function processPdfForChat(
         }
       }
     } catch (extractionError) {
+      console.log('⚠️ Text extraction failed, continuing with base64 only:', extractionError);
     }
     
     // Return base64 for visual analysis (like case study would if extraction failed)
+    console.log('📄 Returning PDF as base64 for visual analysis');
     return {
       base64Data,
       metadata: {
@@ -195,6 +201,7 @@ async function processPdfForChat(
     };
     
   } catch (error) {
+    console.error('❌ PDF processing error:', error);
     throw error;
   }
 }
@@ -396,14 +403,28 @@ export const processFileForChatUpload = async (
     
     // Process based on file type
     const fileType = file.type.toLowerCase();
+    console.log('🔍 Processing file for chat:', {
+      name: file.name,
+      type: fileType,
+      size: file.size
+    });
     
     let processingResult: { base64Data: string; extractedText?: string; metadata?: Record<string, unknown> };
     
     if (fileType === 'application/pdf') {
+      console.log('📄 Starting PDF processing for:', file.name);
       processingResult = await processPdfForChat(file, onProgress);
+      console.log('📄 PDF processing completed:', {
+        hasBase64: !!processingResult.base64Data,
+        hasExtractedText: !!processingResult.extractedText,
+        extractedTextLength: processingResult.extractedText?.length || 0,
+        metadata: processingResult.metadata
+      });
     } else if (fileType.startsWith('image/')) {
+      console.log('🖼️ Starting image processing for:', file.name);
       processingResult = await processImageForChat(file, onProgress);
     } else {
+      console.log('📝 Starting document processing for:', file.name);
       processingResult = await processDocumentForChat(file);
     }
     
@@ -420,6 +441,12 @@ export const processFileForChatUpload = async (
     return enhancedAttachment;
     
   } catch (error) {
+    console.error('❌ File processing failed:', {
+      fileName: file.name,
+      fileType: file.type,
+      error: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined
+    });
 
     // Return basic attachment on error
     const fallbackBase64 = await convertFileToBase64(file);

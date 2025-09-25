@@ -131,6 +131,7 @@ export class NetworkRecoveryService {
    * Handle connection restored
    */
   private async handleConnectionRestored(): Promise<void> {
+    console.log('Network connection restored')
     
     const oldStatus = { ...this.connectionStatus }
     this.connectionStatus.isOnline = true
@@ -165,6 +166,7 @@ export class NetworkRecoveryService {
    * Handle connection lost
    */
   private handleConnectionLost(reason: NetworkInterruption['reason']): void {
+    console.warn('Network connection lost:', reason)
     
     this.connectionStatus.isOnline = false
     this.connectionStatus.lastChanged = new Date()
@@ -201,6 +203,7 @@ export class NetworkRecoveryService {
 
     // If quality significantly degraded, take action
     if (this.isSignificantQualityChange(oldQuality, newQuality)) {
+      console.warn(`Network quality changed: ${oldQuality} → ${newQuality}`)
       
       if (newQuality === 'poor') {
         this.handleConnectionLost('quality_degraded')
@@ -261,19 +264,23 @@ export class NetworkRecoveryService {
     
     const attemptReconnection = async () => {
       if (attempts >= this.config.maxReconnectionAttempts) {
+        console.error('Maximum reconnection attempts exceeded')
         return
       }
 
       attempts++
+      console.log(`Reconnection attempt ${attempts}/${this.config.maxReconnectionAttempts}`)
 
       try {
         const isConnected = await this.testConnectivity()
         
         if (isConnected) {
+          console.log('Connectivity test successful - connection restored')
           this.handleConnectionRestored()
           return
         }
       } catch (error) {
+        console.warn(`Reconnection attempt ${attempts} failed:`, error)
       }
 
       // Schedule next attempt with exponential backoff
@@ -313,6 +320,7 @@ export class NetworkRecoveryService {
     if (this.isRecovering) return
 
     this.isRecovering = true
+    console.log('Starting network recovery process...')
 
     try {
       // Restore interrupted sessions
@@ -324,7 +332,9 @@ export class NetworkRecoveryService {
       // Resume pending operations
       await this.resumePendingOperations()
 
+      console.log('Network recovery process completed')
     } catch (error) {
+      console.error('Recovery process failed:', error)
     } finally {
       this.isRecovering = false
     }
@@ -341,6 +351,7 @@ export class NetworkRecoveryService {
       session.recoveryAttempts++
 
       try {
+        console.log(`Restoring session ${sessionId}...`)
         
         // Load session data from offline storage
         const offlineData = await offlineStorageService.loadReportOffline(session.reportId)
@@ -362,6 +373,7 @@ export class NetworkRecoveryService {
         }
 
       } catch (error) {
+        console.error(`Failed to restore session ${sessionId}:`, error)
         session.isRecovering = false
       }
     }
@@ -383,6 +395,7 @@ export class NetworkRecoveryService {
               maxRetries: 2,
               initialDelay: 1000,
               onRetry: (error, attempt) => {
+                console.warn(`Retrying operation ${operation.id} (attempt ${attempt}):`, error)
               }
             },
             'network-recovery'
@@ -390,12 +403,16 @@ export class NetworkRecoveryService {
 
           if (result.success) {
             await offlineStorageService.markOperationSynced(operation.id)
+            console.log(`Successfully resumed operation ${operation.id}`)
           } else {
+            console.error(`Failed to resume operation ${operation.id}:`, result.error)
           }
         } catch (error) {
+          console.error(`Error resuming operation ${operation.id}:`, error)
         }
       }
     } catch (error) {
+      console.error('Failed to resume pending operations:', error)
     }
   }
 
@@ -404,6 +421,7 @@ export class NetworkRecoveryService {
    */
   private async resumeOperation(operation: any): Promise<any> {
     // This would integrate with the specific operation handlers
+    console.log(`Resuming operation: ${operation.type}`)
     
     switch (operation.type) {
       case 'edit':
@@ -511,6 +529,7 @@ export class NetworkRecoveryService {
       recoveryAttempts: 0
     })
 
+    console.log(`Registered session ${sessionId} for network recovery`)
   }
 
   /**
@@ -518,6 +537,7 @@ export class NetworkRecoveryService {
    */
   public unregisterSession(sessionId: string): void {
     this.recoverySessions.delete(sessionId)
+    console.log(`Unregistered session ${sessionId} from network recovery`)
   }
 
   /**
@@ -545,6 +565,7 @@ export class NetworkRecoveryService {
       try {
         listener(this.connectionStatus)
       } catch (error) {
+        console.error('Error in connection listener:', error)
       }
     })
   }

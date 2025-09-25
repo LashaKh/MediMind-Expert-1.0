@@ -181,6 +181,7 @@ const ReportTextEditor: React.FC<ReportTextEditorProps> = ({
     try {
       await navigator.clipboard.writeText(localContent)
     } catch (error) {
+      console.error('Failed to copy content:', error)
     }
   }, [localContent])
 

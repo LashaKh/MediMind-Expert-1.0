@@ -74,7 +74,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     conversations,
     activeConversationId,
     setActiveConversation,
-    updateCase,
     activeCase,
     setActiveCase,
     resetCaseContext,
@@ -93,7 +92,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   } = useAppStore();
 
   // Get Flowise metadata functions and case management from ChatContext
-  const { saveFlowiseConversationMetadata, incrementFlowiseMessageCount, loadCases, createCase } = useChatContext();
+  const { saveFlowiseConversationMetadata, incrementFlowiseMessageCount, loadCases, createCase, updateCase } = useChatContext();
 
   const navigate = useNavigate();
   const [showConversationList, setShowConversationList] = useState(false);
@@ -322,6 +321,17 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     }
   }, [flowiseError]);
 
+  // Update editingCase when caseHistory changes (after case updates)
+  useEffect(() => {
+    if (editingCase && caseHistory.length > 0) {
+      const freshCase = caseHistory.find(c => c.id === editingCase.id);
+      if (freshCase && JSON.stringify(freshCase) !== JSON.stringify(editingCase)) {
+        console.log('DEBUG: Auto-updating editingCase with fresh data:', freshCase);
+        setEditingCase(freshCase);
+      }
+    }
+  }, [caseHistory, editingCase]);
+
   // Handle sending a message
   const handleSendMessage = useCallback(async (
     content: string, 
@@ -348,7 +358,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       );
       
     } else {
-
+      console.log('💬 Using enhanced content from attachments:', !!enhancedContent);
     }
     
     const userMessage: Message = {
@@ -378,6 +388,14 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       async () => {
         // Send enhanced content (with ABG context or PDF text) to AI, but display original content in UI
         const messageToSend = finalEnhancedContent || content;
+        
+        console.log('📤 Message sending details:', {
+          originalContent: content,
+          hasEnhancedContent: !!finalEnhancedContent,
+          enhancedContentLength: finalEnhancedContent?.length,
+          messageToSend: messageToSend === finalEnhancedContent ? 'enhanced' : 'original',
+          hasAttachments: !!attachments?.length
+        });
         
         // If we have enhanced content, don't send attachments (text already extracted)
         const attachmentsToSend = finalEnhancedContent ? undefined : attachments;
@@ -468,16 +486,38 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         } : null;
 
         // Combine message attachments with case attachment uploads
+        // Convert case attachment uploads to proper Attachment format
+        const caseAttachments: Attachment[] = (caseAttachmentUploads || []).map(upload => {
+          if (upload.type === 'url') {
+            // Image URL attachments
+            return {
+              id: uuidv4(),
+              name: upload.name,
+              type: upload.mime,
+              url: upload.data,
+              uploadType: 'url',
+              size: 0
+            };
+          } else {
+            // Text content from documents - create a proper base64 text file
+            const textContent = upload.data;
+            const base64Text = btoa(unescape(encodeURIComponent(textContent)));
+            const dataUrl = `data:text/plain;base64,${base64Text}`;
+            
+            return {
+              id: uuidv4(),
+              name: upload.name,
+              type: 'text/plain',
+              base64Data: dataUrl,
+              uploadType: 'file',
+              size: textContent.length
+            };
+          }
+        });
+        
         const allAttachments = [
           ...(messageAttachments || []),
-          ...(caseAttachmentUploads || []).map(upload => ({
-            id: uuidv4(),
-            name: upload.name,
-            type: upload.mime,
-            url: upload.data,
-            uploadType: (upload.type === 'url' ? 'url' : 'file') as 'file' | 'url',
-            size: upload.size || 0 // Add missing size property
-          }))
+          ...caseAttachments
         ];
 
         // Pass the enhanced case context and combined attachments to the API
@@ -525,11 +565,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   // Handle case creation
   const handleCaseCreate = async (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>): Promise<PatientCase> => {
     try {
-      console.log('Creating case with data:', caseData);
-      console.log('🔍 DEBUG: createCase function is:', createCase);
-      console.log('🔍 DEBUG: typeof createCase:', typeof createCase);
       const newCase = await createCase(caseData);
-      console.log('Case created successfully:', newCase);
       
       // Reload cases to ensure the list is up-to-date
       await loadCases();
@@ -548,10 +584,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       // Add an initial AI message with case context
       const caseIntroMessage: Message = {
         id: uuidv4(),
-        content: t('chat.caseReceived', { title: newCase.title }) + 
-                '\n\n' + t('chat.caseSummary') + 
-                `\n${newCase.description}` +
-                '\n\n' + t('chat.caseDiscussionPrompt'),
+        content: `I'm ready to discuss the case "${newCase.title}". What would you like to explore first?`,
         type: 'ai',
         timestamp: new Date(),
         sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
@@ -561,7 +594,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       
       return newCase;
     } catch (error) {
-      console.error('Failed to create case:', error);
       setChatError('Failed to create case. Please try again.');
       throw error; // Re-throw so the modal can handle it
     }
@@ -569,17 +601,24 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
   // Handle case update
   const handleCaseUpdate = async (caseId: string, caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => {
-    updateCase(caseId, caseData);
+    console.log('DEBUG: handleCaseUpdate called with caseId:', caseId);
+    console.log('DEBUG: handleCaseUpdate caseData.metadata:', caseData.metadata);
+    if (caseData.metadata?.attachments) {
+      console.log('DEBUG: handleCaseUpdate attachments being passed:', caseData.metadata.attachments.length);
+      console.log('DEBUG: handleCaseUpdate attachment files:', caseData.metadata.attachments.map(att => att.fileName || att.file_name || 'Unknown file'));
+    }
     
-    // Reload cases to ensure the list is up-to-date
-    await loadCases();
-    
-    // Return the updated case (the store should handle this)
-    const updatedCase = caseHistory.find(c => c.id === caseId);
-    if (updatedCase) {
-      // Update the case data with the new information
-      Object.assign(updatedCase, caseData);
+    try {
+      const updatedCase = await updateCase(caseId, caseData);
+      console.log('DEBUG: updateCase completed successfully, returned:', updatedCase);
+      
+      // The updateCase function now returns the exact data from the database
+      // This ensures we have the most up-to-date case information
       return updatedCase;
+      
+    } catch (error) {
+      console.error('DEBUG: updateCase failed:', error);
+      throw error;
     }
     
     // Fallback - create a minimal updated case object
@@ -593,6 +632,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
   // Handle edit case
   const handleEditCase = (caseItem: PatientCase) => {
+    console.log('DEBUG: handleEditCase called for case:', caseItem.id, caseItem.title);
     setEditingCase(caseItem);
     setShowCaseModal(true);
     setShowCaseListModal(false); // Close the case list modal
@@ -647,17 +687,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         // Step 5: Set the new conversation as active
         setActiveConversation(newConversationId);
         
-        // Step 6: Add a welcoming AI message for the fresh start
-        setTimeout(() => {
-          const welcomeMessage = {
-            id: `msg-${Date.now()}`,
-            content: `Hello! I've cleared the previous case context and we're starting fresh. How can I assist you with your ${profile?.medical_specialty || 'medical'} practice today?`,
-            type: 'ai' as const,
-            timestamp: new Date(),
-            sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
-          };
-          addMessage(welcomeMessage);
-        }, 100);
+        // Step 6: Don't add any messages - let the clinical dashboard show
+        // This ensures a clean state with the welcome screen visible
         
         // Step 7: Reload cases to ensure case list is up-to-date
         await loadCases();
@@ -704,8 +735,16 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     // Set the new conversation as active
     setActiveConversation(newConversationId);
     
-    // Case context will be automatically included when user sends their first message
-    // No automatic AI response - user must initiate the conversation
+    // Add an initial AI message with case context (similar to case creation)
+    const caseIntroMessage: Message = {
+      id: uuidv4(),
+      content: `I'm ready to discuss the case "${selectedCase.title}". What would you like to explore first?`,
+      type: 'ai',
+      timestamp: new Date(),
+      sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
+    };
+    
+    addMessage(caseIntroMessage);
     
     // Close the case list modal
     setShowCaseListModal(false);
@@ -745,31 +784,31 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       return {
         icon: <Heart className="w-5 h-5" />,
         title: 'Cardiology Expert',
-        gradient: 'from-rose-500 via-pink-500 to-red-500',
-        bgGradient: 'from-rose-50/80 via-pink-50/80 to-red-50/80',
-        borderColor: 'border-rose-200/60',
-        accentColor: 'rose',
-        glowColor: 'rose-500'
+        gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+        bgGradient: 'from-[#90cdf4]/20 via-[#63b3ed]/10 to-transparent',
+        borderColor: 'border-[#63b3ed]/60',
+        accentColor: '[#2b6cb0]',
+        glowColor: '[#63b3ed]'
       };
     } else if (profile?.medical_specialty === 'obgyn') {
       return {
         icon: <Stethoscope className="w-5 h-5" />,
         title: 'OB/GYN Expert',
-        gradient: 'from-violet-500 via-purple-500 to-indigo-500',
-        bgGradient: 'from-violet-50/80 via-purple-50/80 to-indigo-50/80',
-        borderColor: 'border-violet-200/60',
-        accentColor: 'violet',
-        glowColor: 'violet-500'
+        gradient: 'from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4]',
+        bgGradient: 'from-[#90cdf4]/20 via-[#63b3ed]/10 to-transparent',
+        borderColor: 'border-[#63b3ed]/60',
+        accentColor: '[#63b3ed]',
+        glowColor: '[#90cdf4]'
       };
     } else {
       return {
         icon: <Sparkles className="w-5 h-5" />,
         title: 'Medical AI Expert',
-        gradient: 'from-blue-500 via-indigo-500 to-purple-500',
-        bgGradient: 'from-blue-50/80 via-indigo-50/80 to-purple-50/80',
-        borderColor: 'border-blue-200/60',
-        accentColor: 'blue',
-        glowColor: 'blue-500'
+        gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
+        bgGradient: 'from-[#90cdf4]/20 via-[#63b3ed]/10 to-transparent',
+        borderColor: 'border-[#2b6cb0]/60',
+        accentColor: '[#2b6cb0]',
+        glowColor: '[#63b3ed]'
       };
     }
   };
@@ -791,8 +830,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         {animationClasses.orbCount >= 1 && (
           <div 
             className={optimizeClasses(
-              `absolute top-0 left-0 w-96 h-96 bg-gradient-radial from-${specialtyConfig.glowColor}/8 via-${specialtyConfig.glowColor}/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
-              `absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-${specialtyConfig.glowColor}/4 to-transparent rounded-full ${animationClasses.blur}`,
+              `absolute top-0 left-0 w-96 h-96 bg-gradient-radial from-[#63b3ed]/8 via-[#63b3ed]/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
+              `absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-[#63b3ed]/4 to-transparent rounded-full ${animationClasses.blur}`,
               shouldOptimize
             )}
           />
@@ -800,8 +839,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         {animationClasses.orbCount >= 2 && (
           <div 
             className={optimizeClasses(
-              `absolute bottom-0 right-0 w-80 h-80 bg-gradient-radial from-blue-500/6 via-indigo-500/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
-              `absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-br from-blue-500/3 to-transparent rounded-full ${animationClasses.blur}`,
+              `absolute bottom-0 right-0 w-80 h-80 bg-gradient-radial from-[#2b6cb0]/6 via-[#90cdf4]/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
+              `absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-br from-[#2b6cb0]/3 to-transparent rounded-full ${animationClasses.blur}`,
               shouldOptimize
             )}
             style={getOptimizedDelay('-3s', shouldOptimize)}
@@ -810,8 +849,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         {animationClasses.orbCount >= 3 && (
           <div 
             className={optimizeClasses(
-              `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-radial from-emerald-500/5 via-teal-500/2 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
-              `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-emerald-500/3 to-transparent rounded-full ${animationClasses.blur}`,
+              `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-radial from-[#90cdf4]/5 via-[#63b3ed]/2 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations}`,
+              `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-[#90cdf4]/3 to-transparent rounded-full ${animationClasses.blur}`,
               shouldOptimize
             )}
             style={getOptimizedDelay('-6s', shouldOptimize)}
@@ -830,9 +869,9 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
           <div className="absolute inset-0 overflow-hidden">
             {!shouldOptimize && (
               <>
-                <div className={`absolute -top-16 -left-16 w-32 h-32 bg-gradient-radial from-${specialtyConfig.glowColor}/8 via-${specialtyConfig.glowColor}/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-60`} />
+                <div className={`absolute -top-16 -left-16 w-32 h-32 bg-gradient-radial from-[#63b3ed]/8 via-[#63b3ed]/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-60`} />
                 <div 
-                  className={`absolute -top-12 -right-12 w-28 h-28 bg-gradient-radial from-indigo-500/6 via-blue-500/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-40`}
+                  className={`absolute -top-12 -right-12 w-28 h-28 bg-gradient-radial from-[#2b6cb0]/6 via-[#90cdf4]/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-40`}
                   style={getOptimizedDelay('-4s', shouldOptimize)}
                 />
               </>
@@ -872,7 +911,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-white/25 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     
                     {/* Performance-optimized ambient glow */}
-                    <div className={`absolute -inset-1 rounded-xl sm:rounded-2xl bg-gradient-to-br ${specialtyConfig.gradient} opacity-15 group-hover:opacity-25 transition-opacity duration-500 blur-lg`} />
+                    <div className={`absolute -inset-1 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] opacity-15 group-hover:opacity-25 transition-opacity duration-500 blur-lg`} />
                   </div>
                   
                   {/* Mobile-optimized status indicator */}
@@ -902,8 +941,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                   <div className="flex items-center space-x-1.5 sm:space-x-3">
                     <span className={`
                       px-1.5 sm:px-2.5 py-0.5 rounded text-xs font-bold uppercase tracking-wider
-                      bg-gradient-to-r from-${specialtyConfig.accentColor}-50/90 to-${specialtyConfig.accentColor}-100/90
-                      text-${specialtyConfig.accentColor}-700 border border-${specialtyConfig.accentColor}-200/40
+                      bg-gradient-to-r from-[#90cdf4]/90 to-[#63b3ed]/90
+                      text-[#1a365d] border border-[#63b3ed]/40
                       ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)} shadow-sm whitespace-nowrap truncate max-w-[120px] sm:max-w-none
                     `}>
                       {profile?.medical_specialty === 'cardiology' ? 'Cardiology' : 
@@ -953,34 +992,12 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     <HeaderCaseIndicator
                       activeCase={activeCase}
                       onViewCase={handleViewCase}
+                      onEditCase={handleEditCase}
                       onResetCase={handleResetCase}
                     />
                   </div>
                 )}
                 
-                {/* ABG Context Indicator - Mobile optimized */}
-                {abgContext && (
-                  <div className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 bg-gradient-to-r from-red-50 to-rose-50 rounded-lg sm:rounded-xl border border-red-200/40 shadow-sm">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-red-500 to-rose-600 rounded-md sm:rounded-lg flex items-center justify-center">
-                      <TestTube2 className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
-                    </div>
-                    <div className="hidden md:flex flex-col min-w-0">
-                      <span className="text-sm font-medium text-red-900 truncate">{t('chat.abg.active', 'ABG Analysis Active')}</span>
-                      <span className="text-xs text-red-600 truncate">{abgContext.type}</span>
-                    </div>
-                    <Badge variant="secondary" className="text-xs bg-red-100 text-red-800 border-red-200 hidden sm:inline-flex">
-                      Context
-                    </Badge>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setAbgContext(null)}
-                      className="p-1 h-6 w-6 text-red-500 hover:text-red-700 hover:bg-red-100 rounded"
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </div>
-                )}
                 
                 {!activeCase && (
                   <>
@@ -1012,7 +1029,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         title="Chat History"
                         description="View and manage all your previous AI conversations."
                         icon={History}
-                        gradient="from-emerald-500 to-teal-600"
+                        gradient="from-[#1a365d] to-[#2b6cb0]"
                         badge="Browse"
                       >
                         <Button
@@ -1036,13 +1053,13 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     </div>
 
                     {/* Case Management Actions Group */}
-                    <div className="flex items-center space-x-1 bg-violet-50/40 backdrop-blur-sm rounded-xl p-1 border border-violet-200/60 shadow-sm">
+                    <div className="flex items-center space-x-1 bg-[#90cdf4]/20 backdrop-blur-sm rounded-xl p-1 border border-[#63b3ed]/60 shadow-sm">
                       {/* Mobile-optimized Cases button with badge */}
                       <EnhancedTooltip
                         title="My Cases"
                         description="View and switch between your saved clinical cases."
                         icon={FileText}
-                        gradient="from-violet-500 to-purple-600"
+                        gradient="from-[#2b6cb0] to-[#63b3ed]"
                         badge="Switch Cases"
                       >
                         <Button
@@ -1054,16 +1071,16 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           }}
                           className={`
                             group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
-                            bg-white/80 hover:bg-violet-50/80
-                            border border-transparent hover:border-violet-200/60
+                            bg-white/80 hover:bg-[#90cdf4]/20
+                            border border-transparent hover:border-[#63b3ed]/60
                             hover:shadow-md hover:scale-105 active:scale-95
                             transition-all duration-200
                           `}
                           title={`${t('chat.patientCases', 'Patient Cases')}: ${caseHistory.length}`}
                         >
-                          <FileText className="w-4 h-4 text-violet-600 group-hover:text-violet-800 transition-colors duration-200" />
+                          <FileText className="w-4 h-4 text-[#2b6cb0] group-hover:text-[#1a365d] transition-colors duration-200" />
                           {caseHistory.length > 0 && (
-                            <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-violet-500 to-purple-600 text-white text-xs font-bold flex items-center justify-center shadow-md shadow-violet-500/30">
+                            <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white text-xs font-bold flex items-center justify-center shadow-md shadow-[#63b3ed]/30">
                               {caseHistory.length > 9 ? '9+' : caseHistory.length}
                             </div>
                           )}
@@ -1079,8 +1096,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                           size="sm"
                           className={`
                             group relative min-h-[44px] px-4 rounded-lg font-medium text-sm
-                            bg-white/80 hover:bg-violet-50/80 text-violet-700
-                            border border-transparent hover:border-violet-200/60
+                            bg-white/80 hover:bg-[#90cdf4]/20 text-[#2b6cb0]
+                            border border-transparent hover:border-[#63b3ed]/60
                             hover:shadow-md hover:scale-105 active:scale-95
                             disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
                             transition-all duration-200
@@ -1099,6 +1116,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 <HeaderCaseIndicator
                   activeCase={activeCase}
                   onViewCase={handleViewCase}
+                  onEditCase={handleEditCase}
                   onResetCase={handleResetCase}
                 />
               </div>
@@ -1109,11 +1127,11 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
           {(isLoading || isAnalyzing) && (
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white/60 to-transparent overflow-hidden">
               <div 
-                className={`h-full bg-gradient-to-r ${specialtyConfig.gradient} shadow-sm`}
+                className={`h-full bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] shadow-sm`}
                 style={{ 
                   width: '35%',
                   animation: 'elegantSlide 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite',
-                  filter: `drop-shadow(0 0 6px rgb(var(--${specialtyConfig.glowColor}-500) / 0.4))`
+                  filter: `drop-shadow(0 0 6px rgb(99 179 237 / 0.4))`
                 }} 
               />
             </div>
@@ -1127,7 +1145,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       {/* ABG Context Banner - Prominent display when context is active */}
       {abgContext && (
         <div className="relative z-20 mx-3 sm:mx-4 -mb-1">
-          <div className={`bg-gradient-to-r from-red-50 via-rose-50 to-red-50 border border-red-200/50 rounded-xl p-3 sm:p-4 shadow-lg ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)}`}>
+          <div className={`bg-gradient-to-r from-[#90cdf4]/20 via-[#63b3ed]/20 to-[#90cdf4]/20 border border-[#63b3ed]/40 rounded-xl p-3 sm:p-4 shadow-lg ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)}`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -1135,12 +1153,12 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2">
-                    <span className="font-semibold text-red-900">{t('chat.abg.contextActive', 'Blood Gas Analysis Context Active')}</span>
-                    <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">
+                    <span className="font-semibold text-[#1a365d]">{t('chat.abg.contextActive', 'Blood Gas Analysis Context Active')}</span>
+                    <Badge variant="secondary" className="bg-[#90cdf4]/30 text-red-600 border-[#63b3ed]/40">
                       {abgContext.type}
                     </Badge>
                   </div>
-                  <p className="text-sm text-red-700 mt-1">
+                  <p className="text-sm text-[#2b6cb0] mt-1">
                     {isContextLoading ? 
                       t('chat.abg.loading', 'Context is being loaded...') : 
                       t('chat.abg.loaded', 'Context loaded! Ask questions about this ABG analysis, interpretation, or treatment recommendations.')
@@ -1159,7 +1177,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => setAbgContext(null)}
-                className="text-red-500 hover:text-red-700 hover:bg-red-100 p-2"
+                className="text-[#2b6cb0] hover:text-[#1a365d] hover:bg-[#90cdf4]/20 p-2"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -1179,6 +1197,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                 recentCases={caseHistory}
                 onCreateCase={() => setShowCaseModal(true)}
                 specialtyConfig={specialtyConfig}
+                activeCase={activeCase}
               />
             </div>
           ) : (
@@ -1377,6 +1396,20 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         onClose={() => {
           setShowCaseModal(false);
           setEditingCase(null); // Reset editing case when modal closes
+          
+          // If we were editing a case, briefly show the case list again to see the updated case
+          if (editingCase) {
+            setTimeout(() => {
+              console.log('DEBUG: Auto-reopening case list to show updated case');
+              console.log('DEBUG: Current caseHistory length:', caseHistory.length);
+              console.log('DEBUG: Current cases in history:', caseHistory.map(c => ({ id: c.id, title: c.title })));
+              
+              // Force refresh cases from database before showing modal
+              loadCases(true).then(() => {
+                setShowCaseListModal(true);
+              });
+            }, 300);
+          }
         }}
         onCaseCreate={handleCaseCreate}
         onCaseUpdate={handleCaseUpdate}
@@ -1385,6 +1418,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       />
 
       <CaseListModal
+        key={`cases-modal-${showCaseListModal ? Date.now() : 'closed'}`}
         isOpen={showCaseListModal}
         onClose={() => setShowCaseListModal(false)}
         cases={caseHistory}

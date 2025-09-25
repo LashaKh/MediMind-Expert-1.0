@@ -326,7 +326,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     if (editingCase && caseHistory.length > 0) {
       const freshCase = caseHistory.find(c => c.id === editingCase.id);
       if (freshCase && JSON.stringify(freshCase) !== JSON.stringify(editingCase)) {
-        console.log('DEBUG: Auto-updating editingCase with fresh data:', freshCase);
         setEditingCase(freshCase);
       }
     }
@@ -358,7 +357,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       );
       
     } else {
-      console.log('💬 Using enhanced content from attachments:', !!enhancedContent);
     }
     
     const userMessage: Message = {
@@ -389,13 +387,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         // Send enhanced content (with ABG context or PDF text) to AI, but display original content in UI
         const messageToSend = finalEnhancedContent || content;
         
-        console.log('📤 Message sending details:', {
-          originalContent: content,
-          hasEnhancedContent: !!finalEnhancedContent,
-          enhancedContentLength: finalEnhancedContent?.length,
-          messageToSend: messageToSend === finalEnhancedContent ? 'enhanced' : 'original',
-          hasAttachments: !!attachments?.length
-        });
         
         // If we have enhanced content, don't send attachments (text already extracted)
         const attachmentsToSend = finalEnhancedContent ? undefined : attachments;
@@ -601,23 +592,17 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
   // Handle case update
   const handleCaseUpdate = async (caseId: string, caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => {
-    console.log('DEBUG: handleCaseUpdate called with caseId:', caseId);
-    console.log('DEBUG: handleCaseUpdate caseData.metadata:', caseData.metadata);
     if (caseData.metadata?.attachments) {
-      console.log('DEBUG: handleCaseUpdate attachments being passed:', caseData.metadata.attachments.length);
-      console.log('DEBUG: handleCaseUpdate attachment files:', caseData.metadata.attachments.map(att => att.fileName || att.file_name || 'Unknown file'));
     }
     
     try {
       const updatedCase = await updateCase(caseId, caseData);
-      console.log('DEBUG: updateCase completed successfully, returned:', updatedCase);
       
       // The updateCase function now returns the exact data from the database
       // This ensures we have the most up-to-date case information
       return updatedCase;
       
     } catch (error) {
-      console.error('DEBUG: updateCase failed:', error);
       throw error;
     }
     
@@ -632,7 +617,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
   // Handle edit case
   const handleEditCase = (caseItem: PatientCase) => {
-    console.log('DEBUG: handleEditCase called for case:', caseItem.id, caseItem.title);
     setEditingCase(caseItem);
     setShowCaseModal(true);
     setShowCaseListModal(false); // Close the case list modal
@@ -1400,9 +1384,6 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
           // If we were editing a case, briefly show the case list again to see the updated case
           if (editingCase) {
             setTimeout(() => {
-              console.log('DEBUG: Auto-reopening case list to show updated case');
-              console.log('DEBUG: Current caseHistory length:', caseHistory.length);
-              console.log('DEBUG: Current cases in history:', caseHistory.map(c => ({ id: c.id, title: c.title })));
               
               // Force refresh cases from database before showing modal
               loadCases(true).then(() => {

@@ -385,10 +385,8 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log('Desktop speaker count clicked, current state:', speakerDropdownOpen);
                       if (!recordingState.isRecording) {
                         setSpeakerDropdownOpen(!speakerDropdownOpen);
-                        console.log('Setting desktop speaker dropdown to:', !speakerDropdownOpen);
                       }
                     }}
                     role="button"

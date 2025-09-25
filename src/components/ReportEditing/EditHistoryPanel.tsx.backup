@@ -132,6 +132,7 @@ const EditHistoryPanel: React.FC<EditHistoryPanelProps> = ({
         setVersions(mockVersions)
         setEdits(mockEdits)
       } catch (error) {
+        console.error('Failed to load edit history:', error)
       } finally {
         setIsLoading(false)
       }

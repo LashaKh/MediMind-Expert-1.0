@@ -192,7 +192,7 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
             placeholder="Search templates..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-xl text-sm placeholder-[#2b6cb0]/60 dark:placeholder-[#63b3ed]/60 focus:outline-none focus:ring-2 focus:ring-[#2b6cb0] focus:border-transparent transition-all duration-200 text-[#1a365d] dark:text-[#90cdf4]"
+            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-xl text-sm placeholder-[#2b6cb0]/60 dark:placeholder-[#63b3ed]/60 focus:outline-none focus:ring-2 focus:ring-[#2b6cb0] focus:border-transparent transition-all duration-200 text-slate-700 dark:text-slate-200"
           />
         </div>
         
@@ -201,8 +201,8 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
               showFilters 
-                ? 'bg-[#90cdf4]/30 text-[#1a365d] dark:bg-[#2b6cb0]/30 dark:text-[#90cdf4]' 
-                : 'bg-[#90cdf4]/10 text-[#2b6cb0] dark:bg-[#1a365d]/30 dark:text-[#63b3ed] hover:bg-[#63b3ed]/20 dark:hover:bg-[#2b6cb0]/30'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' 
+                : 'bg-blue-50 text-blue-600 dark:bg-slate-800 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/20'
             }`}
           >
             <Filter className="w-4 h-4" />
@@ -213,12 +213,12 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
 
       {/* Filter Options */}
       {showFilters && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 p-4 space-y-3">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-blue-200/50 dark:border-slate-700/50 p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-semibold text-[#1a365d] dark:text-[#90cdf4]">Priority Level</h4>
+            <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Priority Level</h4>
             <button
               onClick={() => setPriorityFilter('all')}
-              className="text-xs text-[#2b6cb0] dark:text-[#63b3ed] hover:underline"
+              className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
             >
               Clear
             </button>
@@ -230,8 +230,8 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                 onClick={() => setPriorityFilter(priority)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
                   priorityFilter === priority
-                    ? 'bg-[#90cdf4]/30 text-[#1a365d] dark:bg-[#2b6cb0]/30 dark:text-[#90cdf4]'
-                    : 'bg-[#90cdf4]/10 text-[#2b6cb0] dark:bg-[#1a365d]/30 dark:text-[#63b3ed] hover:bg-[#63b3ed]/20 dark:hover:bg-[#2b6cb0]/20'
+                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                    : 'bg-blue-50 text-blue-600 dark:bg-slate-800 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/20'
                 }`}
               >
                 {priority === 'all' ? 'All Priorities' : `${priority.charAt(0).toUpperCase() + priority.slice(1)} Priority`}
@@ -249,13 +249,13 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
               <div className="w-8 h-8 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center shadow-lg">
                 <HeartHandshake className="w-4 h-4 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-[#1a365d] dark:text-[#90cdf4]">
+              <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200">
                 Cardiologist Consults
               </h3>
             </div>
-            <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#1a365d]/30 dark:to-[#2b6cb0]/30 rounded-lg">
-              <Star className="w-3 h-3 text-[#2b6cb0] dark:text-[#90cdf4]" />
-              <span className="text-xs font-semibold text-[#1a365d] dark:text-[#63b3ed]">FEATURED</span>
+            <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg">
+              <Star className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+              <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">FEATURED</span>
             </div>
           </div>
 
@@ -266,38 +266,41 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
               return (
                 <div
                   key={template.id}
-                  className={`group relative bg-gradient-to-br ${template.color} rounded-2xl p-6 shadow-lg hover:shadow-2xl scale-hover premium-transition cursor-pointer stagger-item ${
-                    template.isSpecialDiagnosis ? 'transform hover:scale-105' : ''
-                  } ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
+                  className={`group relative bg-gradient-to-br ${template.color} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer min-h-[180px] flex flex-col justify-between ${
+                    disabled ? 'opacity-50 pointer-events-none' : ''
+                  }`}
                   onClick={() => handleTemplateSelect(template)}
                 >
-                  {/* Premium Shimmer Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-700 pointer-events-none rounded-2xl" />
+                  {/* Subtle Hover Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none rounded-2xl" />
                   
-                  {/* Content */}
-                  <div className="relative text-white">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                        <IconComponent className="w-6 h-6" />
-                      </div>
-                      <div className="flex flex-col items-end space-y-1">
-                        {template.isSpecialDiagnosis && (
-                          <div className="flex items-center space-x-1 text-xs font-bold bg-white/30 backdrop-blur-sm rounded-lg px-2 py-1">
-                            <Sparkles className="w-3 h-3" />
-                            <span>AI DIAGNOSIS</span>
+                  {/* Standardized Content Layout */}
+                  <div className="relative text-white flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center flex-shrink-0">
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+                        <div className="flex flex-col items-end space-y-1">
+                          {template.isSpecialDiagnosis && (
+                            <div className="flex items-center space-x-1 text-xs font-semibold bg-white/25 backdrop-blur-sm rounded-md px-2 py-0.5">
+                              <Sparkles className="w-3 h-3" />
+                              <span>AI DIAGNOSIS</span>
+                            </div>
+                          )}
+                          <div className="flex items-center space-x-1 text-xs font-medium bg-white/15 backdrop-blur-sm rounded-md px-2 py-0.5">
+                            <Clock className="w-3 h-3" />
+                            <span>{template.estimatedTime}</span>
                           </div>
-                        )}
-                        <div className="flex items-center space-x-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-lg px-2 py-1">
-                          <Clock className="w-3 h-3" />
-                          <span>{template.estimatedTime}</span>
                         </div>
                       </div>
+                      
+                      <h4 className="font-bold text-lg leading-tight mb-2 line-clamp-2 text-white">
+                        {template.title}
+                      </h4>
                     </div>
                     
-                    <h4 className="font-bold text-lg leading-tight mb-2">
-                      {template.title}
-                    </h4>
-                    <p className="text-white/90 text-sm leading-relaxed">
+                    <p className="text-white/85 text-sm leading-relaxed line-clamp-2">
                       {template.description}
                     </p>
                   </div>
@@ -312,15 +315,11 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                     </div>
                   )}
 
-                  {/* Hover Action */}
-                  <div className={`absolute bottom-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center transition-all duration-300 transform ${
-                    processingCards.has(template.id) ? 'opacity-0' : 'opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0'
+                  {/* Simplified Hover Action */}
+                  <div className={`absolute bottom-3 right-3 w-6 h-6 bg-white/15 backdrop-blur-sm rounded-md flex items-center justify-center transition-all duration-200 ${
+                    processingCards.has(template.id) ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'
                   }`}>
-                    {template.isSpecialDiagnosis ? (
-                      <Sparkles className="w-4 h-4 text-white" />
-                    ) : (
-                      <Zap className="w-4 h-4 text-white" />
-                    )}
+                    <Zap className="w-3 h-3 text-white" />
                   </div>
                 </div>
               );
@@ -341,22 +340,22 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
           return (
             <div
               key={category}
-              className="bg-white dark:bg-gray-800 rounded-xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-sm overflow-hidden"
+              className="bg-white dark:bg-gray-800 rounded-xl border border-blue-200/50 dark:border-slate-700/50 shadow-sm overflow-hidden"
             >
               {/* Category Header */}
               <button
                 onClick={() => toggleCategory(category)}
-                className="w-full flex items-center justify-between p-4 hover:bg-[#90cdf4]/10 dark:hover:bg-[#1a365d]/30 premium-transition premium-focus"
+                className="w-full flex items-center justify-between p-4 hover:bg-blue-50 dark:hover:bg-slate-800/50 transition-colors duration-200"
               >
                 <div className="flex items-center space-x-3">
                   <div className={`w-8 h-8 bg-gradient-to-br ${categoryColor} rounded-lg flex items-center justify-center shadow-sm`}>
                     <CategoryIcon className="w-4 h-4 text-white" />
                   </div>
                   <div className="text-left">
-                    <h4 className="font-semibold text-[#1a365d] dark:text-[#90cdf4]">
+                    <h4 className="font-semibold text-slate-700 dark:text-slate-200">
                       {category}
                     </h4>
-                    <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed]">
+                    <p className="text-xs text-slate-600 dark:text-slate-400">
                       {templates.length} template{templates.length !== 1 ? 's' : ''}
                     </p>
                   </div>
@@ -373,29 +372,29 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                   </div>
                   
                   {isExpanded ? (
-                    <ChevronUp className="w-4 h-4 text-[#63b3ed]" />
+                    <ChevronUp className="w-4 h-4 text-blue-500" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-[#63b3ed]" />
+                    <ChevronDown className="w-4 h-4 text-blue-500" />
                   )}
                 </div>
               </button>
 
               {/* Category Content */}
               {isExpanded && (
-                <div className="border-t border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 bg-[#90cdf4]/10 dark:bg-[#1a365d]/30 accordion-content accordion-expand">
+                <div className="border-t border-blue-200/50 dark:border-slate-700/50 bg-blue-50/30 dark:bg-slate-800/30">
                   <div className="p-4 space-y-2">
                     {templates.map((template) => {
                       const IconComponent = template.icon;
                       const priorityColors = {
-                        high: 'border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 bg-[#90cdf4]/20 dark:bg-[#1a365d]/20',
-                        medium: 'border-[#90cdf4]/50 dark:border-[#63b3ed]/50 bg-[#90cdf4]/10 dark:bg-[#2b6cb0]/10',
-                        low: 'border-[#90cdf4]/30 dark:border-[#63b3ed]/30 bg-white dark:bg-[#1a365d]/10'
+                        high: 'border-blue-200 dark:border-slate-600 bg-blue-50 dark:bg-slate-800',
+                        medium: 'border-blue-150 dark:border-slate-650 bg-blue-25 dark:bg-slate-825',
+                        low: 'border-blue-100 dark:border-slate-700 bg-white dark:bg-slate-850'
                       };
 
                       return (
                         <div
                           key={template.id}
-                          className={`group flex items-center justify-between p-3 rounded-lg border ${priorityColors[template.priority]} hover:shadow-md premium-transition cursor-pointer scale-hover premium-focus stagger-item ${
+                          className={`group flex items-center justify-between p-3 rounded-lg border ${priorityColors[template.priority]} hover:shadow-md transition-all duration-200 cursor-pointer ${
                             disabled ? 'opacity-50 pointer-events-none' : ''
                           }`}
                           onClick={() => handleTemplateSelect(template)}
@@ -406,23 +405,23 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                             </div>
                             
                             <div className="flex-1 min-w-0">
-                              <h5 className="font-medium text-[#1a365d] dark:text-[#90cdf4] truncate">
+                              <h5 className="font-medium text-slate-700 dark:text-slate-200 truncate">
                                 {template.title}
                               </h5>
-                              <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed] line-clamp-1">
+                              <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-1">
                                 {template.description}
                               </p>
                             </div>
                           </div>
                           
                           <div className="flex items-center space-x-2 flex-shrink-0 ml-3">
-                            <div className="flex items-center space-x-1 text-xs text-[#2b6cb0]/60 dark:text-[#63b3ed]/60">
+                            <div className="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400">
                               <Clock className="w-3 h-3" />
                               <span>{template.estimatedTime}</span>
                             </div>
                             
-                            <div className="w-6 h-6 bg-[#90cdf4]/20 dark:bg-[#1a365d]/40 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
-                              <Zap className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                            <div className="w-6 h-6 bg-blue-100 dark:bg-slate-700 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+                              <Zap className="w-3 h-3 text-blue-600 dark:text-blue-400" />
                             </div>
                           </div>
                         </div>
@@ -439,18 +438,18 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
       {/* No Results State */}
       {Object.values(categorizedTemplates).every(templates => templates.length === 0) && searchQuery && (
         <div className="text-center py-12">
-          <div className="w-16 h-16 bg-[#90cdf4]/20 dark:bg-[#1a365d]/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Search className="w-8 h-8 text-[#63b3ed]" />
+          <div className="w-16 h-16 bg-blue-100 dark:bg-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Search className="w-8 h-8 text-blue-600 dark:text-blue-400" />
           </div>
-          <h3 className="text-lg font-semibold text-[#1a365d] dark:text-[#90cdf4] mb-2">
+          <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">
             No templates found
           </h3>
-          <p className="text-sm text-[#2b6cb0] dark:text-[#63b3ed] mb-4">
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
             Try adjusting your search terms or filters
           </p>
           <button
             onClick={() => setSearchQuery('')}
-            className="text-[#2b6cb0] dark:text-[#63b3ed] hover:underline text-sm font-medium"
+            className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
           >
             Clear search
           </button>

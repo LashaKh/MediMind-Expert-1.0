@@ -110,6 +110,7 @@ export class GracefulDegradationService {
    */
   private setupNetworkListeners(): void {
     window.addEventListener('online', () => {
+      console.log('Network connectivity restored')
       this.isOnline = true
       this.fallbackCapabilities.voiceRecording = true
       this.attemptServiceRecovery()
@@ -117,6 +118,7 @@ export class GracefulDegradationService {
     })
 
     window.addEventListener('offline', () => {
+      console.log('Network connectivity lost')
       this.isOnline = false
       this.fallbackCapabilities.voiceRecording = false
       this.activateDegradedMode('network', 'No internet connection')
@@ -268,6 +270,7 @@ export class GracefulDegradationService {
     const service = this.services.get(serviceName)
     if (!service) return
 
+    console.warn(`Service ${serviceName} failed health check:`, error)
     
     service.error = error
     service.isAvailable = false
@@ -283,6 +286,7 @@ export class GracefulDegradationService {
     if (!service) return
 
     if (!service.isAvailable) {
+      console.log(`Service ${serviceName} recovered`)
       service.isAvailable = true
       service.error = undefined
       service.degradedMode = false
@@ -298,6 +302,7 @@ export class GracefulDegradationService {
       service.degradedMode = true
     }
 
+    console.warn(`Activated degraded mode for ${serviceName}:`, reason)
 
     // Adjust capabilities based on failed service
     switch (serviceName) {
@@ -321,6 +326,7 @@ export class GracefulDegradationService {
    * Attempt recovery of all services
    */
   private async attemptServiceRecovery(): Promise<void> {
+    console.log('Attempting service recovery...')
     await this.checkServiceHealth()
   }
 
@@ -346,6 +352,7 @@ export class GracefulDegradationService {
     this.offlineQueue.push(offlineOp)
     this.saveOfflineQueue()
 
+    console.log(`Queued offline operation: ${type} for report ${reportId}`)
   }
 
   /**
@@ -354,6 +361,7 @@ export class GracefulDegradationService {
   private async processOfflineQueue(): Promise<void> {
     if (this.offlineQueue.length === 0) return
 
+    console.log(`Processing ${this.offlineQueue.length} offline operations`)
 
     const processedOperations: string[] = []
 
@@ -361,12 +369,15 @@ export class GracefulDegradationService {
       try {
         await this.processQueuedOperation(operation)
         processedOperations.push(operation.id)
+        console.log(`Successfully processed offline operation: ${operation.id}`)
       } catch (error) {
         operation.retryCount++
+        console.error(`Failed to process offline operation ${operation.id}:`, error)
 
         // Remove operations that have failed too many times
         if (operation.retryCount >= 3) {
           processedOperations.push(operation.id)
+          console.warn(`Removing failed offline operation after 3 retries: ${operation.id}`)
         }
       }
     }
@@ -448,6 +459,7 @@ export class GracefulDegradationService {
     try {
       localStorage.setItem('medimind_offline_queue', JSON.stringify(this.offlineQueue))
     } catch (error) {
+      console.error('Failed to save offline queue:', error)
     }
   }
 
@@ -462,8 +474,10 @@ export class GracefulDegradationService {
           ...op,
           timestamp: new Date(op.timestamp)
         }))
+        console.log(`Loaded ${this.offlineQueue.length} operations from offline queue`)
       }
     } catch (error) {
+      console.error('Failed to load offline queue:', error)
       this.offlineQueue = []
     }
   }

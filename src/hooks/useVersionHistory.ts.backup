@@ -134,6 +134,7 @@ export const useVersionHistory = (
       // Validate version sequence integrity
       const sequenceValidation = ReportVersionModel.isValidVersionSequence(loadedVersions)
       if (!sequenceValidation.isValid) {
+        console.warn('Version sequence issues detected:', sequenceValidation.issues)
         setError(`Version integrity warning: ${sequenceValidation.issues.join(', ')}`)
       }
       
@@ -141,6 +142,7 @@ export const useVersionHistory = (
       setLastLoadTime(new Date())
       
     } catch (error) {
+      console.error('Failed to load version history:', error)
       const errorMessage = error instanceof Error ? error.message : 'Failed to load version history'
       setError(errorMessage)
     } finally {
@@ -210,6 +212,7 @@ export const useVersionHistory = (
       return newVersion
       
     } catch (error) {
+      console.error('Failed to create version:', error)
       const errorMessage = error instanceof Error ? error.message : 'Failed to create version'
       setError(errorMessage)
       throw error
@@ -243,6 +246,7 @@ export const useVersionHistory = (
       })))
       
     } catch (error) {
+      console.error('Failed to set current version:', error)
       const errorMessage = error instanceof Error ? error.message : 'Failed to set current version'
       setError(errorMessage)
       throw error

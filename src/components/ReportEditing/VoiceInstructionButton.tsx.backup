@@ -90,6 +90,7 @@ const VoiceInstructionButton: React.FC<VoiceInstructionButtonProps> = ({
         await startRecording()
       }
     } catch (error) {
+      console.error('Recording toggle failed:', error)
     }
   }, [disabled, isSupported, recordingState.isRecording, startRecording, stopRecording, clearError])
 

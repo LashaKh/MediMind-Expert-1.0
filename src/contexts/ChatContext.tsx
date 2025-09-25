@@ -222,13 +222,11 @@ const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
       };
 
     case 'UPDATE_CASE':
-      console.log('DEBUG: UPDATE_CASE reducer called with:', action.payload);
       const updatedCaseHistory = state.caseContext.caseHistory.map(caseItem =>
         caseItem.id === action.payload.id
           ? { ...caseItem, ...action.payload.updates }
           : caseItem
       );
-      console.log('DEBUG: Updated case history:', updatedCaseHistory.find(c => c.id === action.payload.id));
       
       return {
         ...state,
@@ -1041,11 +1039,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
     };
     
     // Debug logging for attachment removal
-    console.log('DEBUG: updateCase received updates:', updates);
-    console.log('DEBUG: updatedCase metadata:', updatedCase.metadata);
     if (updatedCase.metadata?.attachments) {
-      console.log('DEBUG: Attachment count being sent to DB:', updatedCase.metadata.attachments.length);
-      console.log('DEBUG: Attachment files being sent to DB:', updatedCase.metadata.attachments.map(att => att.fileName || att.file_name || 'Unknown file'));
     }
     
     try {
@@ -1058,7 +1052,6 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
         .single();
 
       if (error) {
-        console.error('Failed to update case in database:', error);
         throw error;
       }
 
@@ -1076,14 +1069,8 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
         updated_at: new Date(dbResult.updated_at)
       };
       
-      console.log('DEBUG: Final mapped case for state update:', {
-        id: dbUpdatedCase.id,
-        title: dbUpdatedCase.title,
-        updated_at: dbUpdatedCase.updated_at
-      });
 
       // Update local state with the exact data from database
-      console.log('DEBUG: About to update local state with DB result:', dbUpdatedCase);
       
       // Force a completely new object reference by creating a fresh case object
       const freshCaseUpdate = {
@@ -1093,11 +1080,9 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
       };
       
       dispatch({ type: 'UPDATE_CASE', payload: { id, updates: freshCaseUpdate } });
-      console.log(`Successfully updated case ${id} in database and local state`);
       
       return dbUpdatedCase;
     } catch (error) {
-      console.error('Error updating case:', error);
       throw error;
     }
   };

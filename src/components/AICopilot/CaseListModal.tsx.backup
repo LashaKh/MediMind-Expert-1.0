@@ -45,6 +45,8 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
   
   // Debug: Track when cases prop changes
   useEffect(() => {
+    console.log('DEBUG: CaseListModal cases prop updated:', cases.length);
+    console.log('DEBUG: Case titles:', cases.map(c => ({ id: c.id, title: c.title, updated_at: c.updated_at })));
   }, [cases]);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [isDeleting, setIsDeleting] = useState<string | null>(null);

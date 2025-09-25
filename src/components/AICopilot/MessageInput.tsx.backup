@@ -369,7 +369,13 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           } else {
             aiMessage = `${t('chat.analyzeAttachedDocuments')}${attachmentTextContext}`;
           }
+          console.log('💬 Enhanced message created:', {
+            originalLength: currentMessage.length,
+            contextLength: attachmentTextContext.length,
+            totalLength: aiMessage.length
+          });
         } else {
+          console.log('⚠️ No attachment text context generated');
         }
         
         // Convert enhanced attachments to standard format for API

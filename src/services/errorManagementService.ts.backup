@@ -207,6 +207,7 @@ export class ErrorManagementService {
     this.updateErrorPatterns(error)
 
     // Log to console for debugging
+    console.error(`[${error.severity.toUpperCase()}] ${error.code}:`, error.message, error)
 
     // Save to localStorage (without PHI)
     this.saveErrorHistory()
@@ -699,6 +700,7 @@ export class ErrorManagementService {
       try {
         callback(error)
       } catch (error) {
+        console.error('Error in feedback callback:', error)
       }
     })
   }
@@ -726,6 +728,7 @@ export class ErrorManagementService {
       const sanitizedErrors = this.errors.map(error => this.sanitizeErrorForReport(error))
       localStorage.setItem('medimind_error_history', JSON.stringify(sanitizedErrors.slice(0, 100)))
     } catch (error) {
+      console.error('Failed to save error history:', error)
     }
   }
 
@@ -737,8 +740,10 @@ export class ErrorManagementService {
       const saved = localStorage.getItem('medimind_error_history')
       if (saved) {
         const errors = JSON.parse(saved)
+        console.log(`Loaded ${errors.length} errors from history`)
       }
     } catch (error) {
+      console.error('Failed to load error history:', error)
     }
   }
 
@@ -761,6 +766,7 @@ export class ErrorManagementService {
     )
 
     if (recentErrors.length > 10) {
+      console.warn(`High error rate detected: ${recentErrors.length} errors in the last hour`)
       
       // Group by category
       const categories = recentErrors.reduce((acc, error) => {
@@ -768,6 +774,7 @@ export class ErrorManagementService {
         return acc
       }, {} as Record<string, number>)
 
+      console.warn('Error breakdown by category:', categories)
     }
   }
 
@@ -781,6 +788,7 @@ export class ErrorManagementService {
     this.errors = this.errors.filter(error => error.timestamp.getTime() > cutoff)
     
     if (this.errors.length < initialCount) {
+      console.log(`Cleaned up ${initialCount - this.errors.length} old errors`)
     }
   }
 
@@ -849,6 +857,7 @@ export class ErrorManagementService {
     this.errors = []
     this.errorPatterns.clear()
     localStorage.removeItem('medimind_error_history')
+    console.log('Error history cleared')
   }
 }
 

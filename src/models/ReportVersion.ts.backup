@@ -143,6 +143,7 @@ export class ReportVersionModel {
     // This would be replaced with actual database operations:
     // 1. UPDATE report_versions SET is_current = false WHERE report_id = ? AND is_current = true
     // 2. UPDATE report_versions SET is_current = true WHERE id = ?
+    console.log(`Setting version ${newCurrentVersionId} as current for report ${reportId}`)
   }
   
   // Content Operations

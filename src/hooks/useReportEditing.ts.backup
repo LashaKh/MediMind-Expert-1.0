@@ -71,6 +71,7 @@ export const useReportEditing = (
         
         setIsLoaded(true)
       } catch (error) {
+        console.error('Failed to initialize report:', error)
         setError('Failed to load report data. Please refresh and try again.')
       }
     }
@@ -99,6 +100,7 @@ export const useReportEditing = (
         setActiveSession(null)
         setError('Edit session timed out for security. Please start a new session.')
       } catch (error) {
+        console.error('Failed to handle session timeout:', error)
       }
     }
   }, [activeSession])
@@ -135,6 +137,7 @@ export const useReportEditing = (
       sessionTimeoutRef.current = setTimeout(handleSessionTimeout, SESSION_TIMEOUT_MS)
       
     } catch (error) {
+      console.error('Failed to start edit session:', error)
       setError('Failed to start edit session. Please try again.')
     }
   }, [reportId, userId, activeSession, handleSessionTimeout])
@@ -222,6 +225,7 @@ export const useReportEditing = (
         throw new Error('Processing cancelled')
       }
       
+      console.error('Edit processing failed:', error)
       setError('Failed to process edit instruction. Please try again.')
       throw error
     } finally {
@@ -313,6 +317,7 @@ export const useReportEditing = (
       return result
       
     } catch (error) {
+      console.error('Manual edit failed:', error)
       setError('Failed to save manual edit. Please try again.')
       throw error
     } finally {
@@ -336,6 +341,7 @@ export const useReportEditing = (
       }
       
     } catch (error) {
+      console.error('Failed to complete session:', error)
       setError('Failed to complete edit session')
     }
   }, [activeSession])
@@ -356,6 +362,7 @@ export const useReportEditing = (
       }
       
     } catch (error) {
+      console.error('Failed to cancel session:', error)
       setError('Failed to cancel edit session')
     }
   }, [activeSession])
@@ -380,6 +387,7 @@ export const useReportEditing = (
       setVersionHistory(updatedVersions)
       
     } catch (error) {
+      console.error('Failed to load version:', error)
       setError('Failed to load selected version')
     }
   }, [versionHistory])
