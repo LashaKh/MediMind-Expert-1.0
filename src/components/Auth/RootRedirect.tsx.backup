@@ -19,11 +19,20 @@ export const RootRedirect: React.FC = () => {
       const type = hashParams.get('type');
       const error = hashParams.get('error');
 
+      console.log('🔍 RootRedirect: Checking for auth tokens:', {
+        hasAccessToken: !!accessToken,
+        hasRefreshToken: !!refreshToken,
+        type,
+        error,
+        fullHash: window.location.hash
+      });
 
       // If we have auth tokens, process them immediately
       if (accessToken || refreshToken || type || error) {
+        console.log('✅ RootRedirect: Auth tokens detected, will process');
         return true;
       }
+      console.log('❌ RootRedirect: No auth tokens found');
       return false;
     };
 
@@ -50,12 +59,14 @@ export const RootRedirect: React.FC = () => {
 
       // Handle auth errors
       if (error) {
+        console.error('Auth error:', error, errorDescription);
         navigate('/signin?error=' + encodeURIComponent(errorDescription || error), { replace: true });
         return;
       }
 
       // Handle password recovery
       if (type === 'recovery' && accessToken && refreshToken) {
+        console.log('🔄 RootRedirect: Processing password recovery tokens');
         try {
           const { data: { session }, error } = await supabase.auth.setSession({
             access_token: accessToken,
@@ -63,11 +74,13 @@ export const RootRedirect: React.FC = () => {
           });
 
           if (error) {
+            console.error('❌ RootRedirect: Error setting session for password reset:', error);
             navigate('/forgot-password?error=' + encodeURIComponent('Invalid or expired reset link'), { replace: true });
             return;
           }
 
           if (session) {
+            console.log('✅ RootRedirect: Session set successfully, redirecting to reset-password');
             // Clear the URL hash for security
             window.history.replaceState({}, document.title, window.location.pathname);
             // Redirect to reset password form
@@ -75,6 +88,7 @@ export const RootRedirect: React.FC = () => {
             return;
           }
         } catch (err) {
+          console.error('❌ RootRedirect: Failed to process reset token:', err);
           navigate('/forgot-password?error=' + encodeURIComponent('Failed to process reset link'), { replace: true });
           return;
         }
@@ -89,6 +103,7 @@ export const RootRedirect: React.FC = () => {
           });
 
           if (error) {
+            console.error('Error confirming email:', error);
             navigate('/signin?error=' + encodeURIComponent('Email confirmation failed'), { replace: true });
             return;
           }
@@ -101,6 +116,7 @@ export const RootRedirect: React.FC = () => {
             return;
           }
         } catch (err) {
+          console.error('Failed to confirm email:', err);
           navigate('/signin?error=' + encodeURIComponent('Email confirmation failed'), { replace: true });
           return;
         }
@@ -114,14 +130,23 @@ export const RootRedirect: React.FC = () => {
 
   // Normal redirect logic - only runs after auth processing is done
   useEffect(() => {
+    console.log('🏠 RootRedirect: Normal redirect logic:', {
+      authProcessed,
+      hasUser: !!user,
+      isLoading,
+      specialty,
+      isSpecialtyVerified
+    });
 
     if (!authProcessed || !user || isLoading) {
+      console.log('⏳ RootRedirect: Waiting - authProcessed:', authProcessed, 'user:', !!user, 'isLoading:', isLoading);
       return;
     }
 
     // If user has a specialty, redirect to their workspace
     if (specialty && isSpecialtyVerified) {
       const specialtyRoute = getSpecialtyRoute(specialty);
+      console.log('🏥 RootRedirect: Redirecting to workspace:', specialtyRoute);
       navigate(specialtyRoute, { replace: true });
     }
   }, [authProcessed, user, specialty, isSpecialtyVerified, isLoading, navigate]);

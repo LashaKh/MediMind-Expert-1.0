@@ -85,7 +85,13 @@ interface TranscriptPanelProps {
   onClearAIError?: () => void;
   onClearHistory?: () => void;
   onDeleteReport?: (analysis: ProcessingHistory) => void;
+  onAddToHistory?: (instruction: string, response: string, model: string, tokensUsed?: number, processingTime?: number) => void;
   onExpandChat?: (expandFunction: () => void) => void;
+  
+  // Template selection props
+  selectedTemplate?: any; // UserReportTemplate
+  onTemplateSelect?: (template: any | null) => void;
+  availableTemplates?: any[]; // UserReportTemplate[]
   
   // Speaker diarization props
   enableSpeakerDiarization?: boolean;
@@ -137,6 +143,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   onClearAIError,
   onClearHistory,
   onDeleteReport,
+  onAddToHistory,
   onExpandChat,
   activeTab,
   onActiveTabChange,
@@ -157,6 +164,10 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   isHistoryOpen = false,
   onToggleHistory,
   sessionCount = 0,
+  // Template selection props
+  selectedTemplate,
+  onTemplateSelect,
+  availableTemplates = [],
   // Mobile optimization props
   textareaRef,
   isKeyboardAdjusted
@@ -645,6 +656,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onClearAIError={onClearAIError}
             onClearHistory={onClearHistory}
             onDeleteReport={onDeleteReport}
+            onAddToHistory={onAddToHistory}
             onSwitchToHistory={() => {
               // Switch to history view in AI tab by updating the view mode
 
@@ -654,6 +666,10 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onCloseChat={(closeFunction) => {
               closeChatFunctionRef.current = closeFunction;
             }}
+            selectedTemplate={selectedTemplate}
+            onTemplateSelect={onTemplateSelect}
+            availableTemplates={availableTemplates}
+            sessionTitle={currentSession?.title || ''}
           />
         );
       

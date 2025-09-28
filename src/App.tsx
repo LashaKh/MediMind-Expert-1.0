@@ -23,6 +23,7 @@ import { GeorgianSTTAppWrapper } from './components/Georgian/GeorgianSTTAppWrapp
 
 // Import SignIn directly to avoid loading issues
 import { SignIn } from './components/Auth/SignIn';
+import { AuthRedirectHandler } from './components/Auth/AuthRedirectHandler';
 // Keep lazy loading for SignUp
 const SignUp = React.lazy(() => import('./components/Auth/SignUp').then(module => ({ default: module.SignUp })));
 const PasswordRecoveryForm = React.lazy(() => import('./components/Auth/PasswordRecoveryForm').then(module => ({ default: module.PasswordRecoveryForm })));
@@ -68,6 +69,9 @@ function App() {
       <AppInitializer>
         <MainLayout>
           <Routes>
+            {/* Auth redirect handler - handles reset password tokens and other auth flows */}
+            <Route path="/auth/callback" element={<AuthRedirectHandler />} />
+            
             {/* Auth routes - SignIn loaded directly to avoid loading issues */}
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={

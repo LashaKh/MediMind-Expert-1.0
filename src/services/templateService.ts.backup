@@ -1,0 +1,658 @@
+/**
+ * Template Service
+ * 
+ * CRUD operations for user report templates using Supabase.
+ * Implements business logic for template management with medical data compliance.
+ */
+
+import { supabase } from '../lib/supabase';
+import type {
+  UserReportTemplate,
+  CreateTemplateRequest,
+  UpdateTemplateRequest,
+  TemplateListResponse,
+  TemplateUsageResponse,
+  TemplateSearchFilters,
+  TemplateError,
+} from '../types/templates';
+import {
+  createTemplateSchema,
+  updateTemplateSchema,
+  templateSearchSchema,
+  templateIdSchema,
+  sanitizeTemplateContent,
+  validateMedicalContent,
+} from '../lib/validations/template-schemas';
+
+/**
+ * Custom error class for template operations
+ */
+export class TemplateServiceError extends Error {
+  constructor(
+    message: string,
+    public code: string,
+    public details?: any
+  ) {
+    super(message);
+    this.name = 'TemplateServiceError';
+  }
+}
+
+/**
+ * Template Service Class
+ */
+export class TemplateService {
+  /**
+   * Get all templates for the authenticated user
+   */
+  async getUserTemplates(filters?: Partial<TemplateSearchFilters>): Promise<TemplateListResponse> {
+    try {
+      // Validate and set defaults for filters
+      const validatedFilters = templateSearchSchema.parse(filters || {});
+      
+      let query = supabase
+        .from('user_report_templates')
+        .select('*', { count: 'exact' });
+
+      // Apply search filter
+      if (validatedFilters.search) {
+        query = query.or(`name.ilike.%${validatedFilters.search}%,notes.ilike.%${validatedFilters.search}%`);
+      }
+
+      // Apply ordering
+      const ascending = validatedFilters.order_direction === 'asc';
+      query = query.order(validatedFilters.order_by, { ascending });
+
+      const { data, error, count } = await query;
+
+      if (error) {
+        throw new TemplateServiceError(
+          'Failed to fetch templates',
+          'FETCH_ERROR',
+          error
+        );
+      }
+
+      return {
+        templates: data || [],
+        total_count: count || 0,
+      };
+    } catch (error) {
+      if (error instanceof TemplateServiceError) {
+        throw error;
+      }
+      throw new TemplateServiceError(
+        'An unexpected error occurred while fetching templates',
+        'UNKNOWN_ERROR',
+        error
+      );
+    }
+  }
+
+  /**
+   * Get a specific template by ID
+   */
+  async getTemplate(templateId: string): Promise<UserReportTemplate> {
+    try {
+      // Validate template ID
+      templateIdSchema.parse(templateId);
+
+      const { data, error } = await supabase
+        .from('user_report_templates')
+        .select('*')
+        .eq('id', templateId)
+        .single();
+
+      if (error) {
+        if (error.code === 'PGRST116') {
+          throw new TemplateServiceError(
+            'Template not found',
+            'NOT_FOUND',
+            { templateId }
+          );
+        }
+        throw new TemplateServiceError(
+          'Failed to fetch template',
+          'FETCH_ERROR',
+          error
+        );
+      }
+
+      return data;
+    } catch (error) {
+      if (error instanceof TemplateServiceError) {
+        throw error;
+      }
+      throw new TemplateServiceError(
+        'An unexpected error occurred while fetching template',
+        'UNKNOWN_ERROR',
+        error
+      );
+    }
+  }
+
+  /**
+   * Create a new template
+   */
+  async createTemplate(templateData: CreateTemplateRequest): Promise<UserReportTemplate> {
+    try {
+      // Validate input data
+      const validatedData = createTemplateSchema.parse(templateData);
+
+      // Sanitize content
+      const sanitizedData = {
+        name: sanitizeTemplateContent(validatedData.name),
+        example_structure: sanitizeTemplateContent(validatedData.example_structure),
+        notes: sanitizeTemplateContent(validatedData.notes || ''),
+      };
+
+      // Validate medical content
+      if (!validateMedicalContent(sanitizedData.example_structure)) {
+        throw new TemplateServiceError(
+          'Template structure must contain medical content with appropriate keywords or formatting',
+          'INVALID_MEDICAL_CONTENT',
+          { example_structure: sanitizedData.example_structure }
+        );
+      }
+
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new TemplateServiceError(
+          'Authentication required to create templates',
+          'AUTH_REQUIRED'
+        );
+      }
+
+      const { data, error } = await supabase
+        .from('user_report_templates')
+        .insert([{
+          ...sanitizedData,
+          user_id: user.id
+        }])
+        .select()
+        .single();
+
+      if (error) {
+        if (error.code === '23505') {
+          throw new TemplateServiceError(
+            'A template with this name already exists',
+            'DUPLICATE_NAME',
+            { name: sanitizedData.name }
+          );
+        }
+        if (error.code === 'P0001') {
+          throw new TemplateServiceError(
+            'Template limit exceeded. You can have a maximum of 50 templates.',
+            'TEMPLATE_LIMIT_EXCEEDED',
+            { limit: 50 }
+          );
+        }
+        throw new TemplateServiceError(
+          'Failed to create template',
+          'CREATE_ERROR',
+          error
+        );
+      }
+
+      return data;
+    } catch (error) {
+      if (error instanceof TemplateServiceError) {
+        throw error;
+      }
+      throw new TemplateServiceError(
+        'An unexpected error occurred while creating template',
+        'UNKNOWN_ERROR',
+        error
+      );
+    }
+  }
+
+  /**
+   * Update an existing template
+   */
+  async updateTemplate(
+    templateId: string, 
+    updateData: UpdateTemplateRequest
+  ): Promise<UserReportTemplate> {
+    try {
+      // Validate template ID and update data
+      templateIdSchema.parse(templateId);
+      const validatedData = updateTemplateSchema.parse(updateData);
+
+      // Sanitize content
+      const sanitizedData: Partial<UpdateTemplateRequest> = {};
+      if (validatedData.name) {
+        sanitizedData.name = sanitizeTemplateContent(validatedData.name);
+      }
+      if (validatedData.example_structure) {
+        sanitizedData.example_structure = sanitizeTemplateContent(validatedData.example_structure);
+        
+        // Validate medical content if structure is being updated
+        if (!validateMedicalContent(sanitizedData.example_structure)) {
+          throw new TemplateServiceError(
+            'Template structure must contain medical content with appropriate keywords or formatting',
+            'INVALID_MEDICAL_CONTENT',
+            { example_structure: sanitizedData.example_structure }
+          );
+        }
+      }
+      if (validatedData.notes !== undefined) {
+        sanitizedData.notes = sanitizeTemplateContent(validatedData.notes);
+      }
+
+      const { data, error } = await supabase
+        .from('user_report_templates')
+        .update(sanitizedData)
+        .eq('id', templateId)
+        .select()
+        .single();
+
+      if (error) {
+        if (error.code === 'PGRST116') {
+          throw new TemplateServiceError(
+            'Template not found',
+            'NOT_FOUND',
+            { templateId }
+          );
+        }
+        if (error.code === '23505') {
+          throw new TemplateServiceError(
+            'A template with this name already exists',
+            'DUPLICATE_NAME',
+            { name: sanitizedData.name }
+          );
+        }
+        throw new TemplateServiceError(
+          'Failed to update template',
+          'UPDATE_ERROR',
+          error
+        );
+      }
+
+      return data;
+    } catch (error) {
+      if (error instanceof TemplateServiceError) {
+        throw error;
+      }
+      throw new TemplateServiceError(
+        'An unexpected error occurred while updating template',
+        'UNKNOWN_ERROR',
+        error
+      );
+    }
+  }
+
+  /**
+   * Delete a template
+   */
+  async deleteTemplate(templateId: string): Promise<boolean> {
+    try {
+      // Validate template ID
+      templateIdSchema.parse(templateId);
+
+      const { error, count } = await supabase
+        .from('user_report_templates')
+        .delete({ count: 'exact' })
+        .eq('id', templateId);
+
+      if (error) {
+        throw new TemplateServiceError(
+          'Failed to delete template',
+          'DELETE_ERROR',
+          error
+        );
+      }
+
+      if (count === 0) {
+        throw new TemplateServiceError(
+          'Template not found',
+          'NOT_FOUND',
+          { templateId }
+        );
+      }
+
+      return true;
+    } catch (error) {
+      if (error instanceof TemplateServiceError) {
+        throw error;
+      }
+      throw new TemplateServiceError(
+        'An unexpected error occurred while deleting template',
+        'UNKNOWN_ERROR',
+        error
+      );
+    }
+  }
+
+  /**
+   * Record template usage and increment usage count
+   */
+  async recordTemplateUsage(templateId: string): Promise<TemplateUsageResponse> {
+    try {
+      // Validate template ID
+      templateIdSchema.parse(templateId);
+
+      // Use the database function for atomic increment
+      const { data, error } = await supabase
+        .rpc('increment_template_usage', { template_id: templateId });
+
+      if (error) {
+        if (error.code === 'P0002') {
+          throw new TemplateServiceError(
+            'Template not found',
+            'NOT_FOUND',
+            { templateId }
+          );
+        }
+        if (error.code === 'P0003') {
+          throw new TemplateServiceError(
+            'Access denied. Can only use own templates',
+            'ACCESS_DENIED',
+            { templateId }
+          );
+        }
+        throw new TemplateServiceError(
+          'Failed to record template usage',
+          'USAGE_ERROR',
+          error
+        );
+      }
+
+      // Get updated template data to return usage count
+      const { data: templateData, error: fetchError } = await supabase
+        .from('user_report_templates')
+        .select('usage_count')
+        .eq('id', templateId)
+        .single();
+
+      return {
+        message: 'Template usage recorded',
+        usage_count: templateData?.usage_count || 1,
+      };
+    } catch (error) {
+      if (error instanceof TemplateServiceError) {
+        throw error;
+      }
+      throw new TemplateServiceError(
+        'An unexpected error occurred while recording template usage',
+        'UNKNOWN_ERROR',
+        error
+      );
+    }
+  }
+
+  /**
+   * Get template statistics for the user
+   */
+  async getTemplateStats() {
+    try {
+      const { data, error } = await supabase
+        .rpc('get_user_template_stats');
+
+      if (error) {
+        throw new TemplateServiceError(
+          'Failed to fetch template statistics',
+          'STATS_ERROR',
+          error
+        );
+      }
+
+      return data[0];
+    } catch (error) {
+      if (error instanceof TemplateServiceError) {
+        throw error;
+      }
+      throw new TemplateServiceError(
+        'An unexpected error occurred while fetching template statistics',
+        'UNKNOWN_ERROR',
+        error
+      );
+    }
+  }
+
+  /**
+   * Search templates with advanced filtering
+   */
+  async searchTemplates(
+    searchQuery: string = '',
+    orderBy: string = 'created_at',
+    orderDirection: string = 'desc',
+    limit: number = 50,
+    offset: number = 0
+  ) {
+    try {
+      const { data, error } = await supabase
+        .rpc('search_user_templates', {
+          search_query: searchQuery,
+          order_by_field: orderBy,
+          order_direction: orderDirection,
+          limit_count: limit,
+          offset_count: offset,
+        });
+
+      if (error) {
+        throw new TemplateServiceError(
+          'Failed to search templates',
+          'SEARCH_ERROR',
+          error
+        );
+      }
+
+      return data || [];
+    } catch (error) {
+      if (error instanceof TemplateServiceError) {
+        throw error;
+      }
+      throw new TemplateServiceError(
+        'An unexpected error occurred while searching templates',
+        'UNKNOWN_ERROR',
+        error
+      );
+    }
+  }
+}
+
+/**
+ * Enhanced template service with caching and synchronization
+ */
+export class EnhancedTemplateService extends TemplateService {
+  private syncQueue: Array<() => Promise<void>> = [];
+  private isOnline = navigator.onLine;
+  private syncInProgress = false;
+
+  constructor() {
+    super();
+    this.initializeOfflineSync();
+  }
+
+  /**
+   * Initialize offline synchronization
+   */
+  private initializeOfflineSync() {
+    // Listen for online/offline events
+    window.addEventListener('online', () => {
+      console.log('🌐 Connection restored, syncing templates...');
+      this.isOnline = true;
+      this.processSyncQueue();
+    });
+
+    window.addEventListener('offline', () => {
+      console.log('📴 Connection lost, queuing operations...');
+      this.isOnline = false;
+    });
+  }
+
+  /**
+   * Add operation to sync queue for offline support
+   */
+  private queueForSync(operation: () => Promise<void>) {
+    this.syncQueue.push(operation);
+    console.log(`📝 Queued operation for sync (${this.syncQueue.length} pending)`);
+
+    // Try to process immediately if online
+    if (this.isOnline) {
+      this.processSyncQueue();
+    }
+  }
+
+  /**
+   * Process queued operations when back online
+   */
+  private async processSyncQueue() {
+    if (this.syncInProgress || this.syncQueue.length === 0) {
+      return;
+    }
+
+    this.syncInProgress = true;
+    console.log(`🔄 Processing ${this.syncQueue.length} queued operations...`);
+
+    while (this.syncQueue.length > 0) {
+      const operation = this.syncQueue.shift();
+      if (operation) {
+        try {
+          await operation();
+          console.log('✅ Queued operation completed');
+        } catch (error) {
+          console.error('❌ Queued operation failed:', error);
+          // Re-queue failed operations for retry
+          this.syncQueue.unshift(operation);
+          break;
+        }
+      }
+    }
+
+    this.syncInProgress = false;
+    console.log('🎯 Sync queue processing completed');
+  }
+
+  /**
+   * Enhanced create with offline support
+   */
+  async createTemplate(templateData: CreateTemplateRequest): Promise<UserReportTemplate> {
+    if (!this.isOnline) {
+      // Get current user for offline template
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new TemplateServiceError(
+          'Authentication required to create templates',
+          'AUTH_REQUIRED'
+        );
+      }
+
+      // Store in local storage for offline support
+      const offlineTemplate = {
+        ...templateData,
+        id: `offline-${Date.now()}`,
+        user_id: user.id,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        usage_count: 0,
+        last_used_at: null,
+      };
+
+      localStorage.setItem(`template-${offlineTemplate.id}`, JSON.stringify(offlineTemplate));
+      
+      // Queue for sync when back online
+      this.queueForSync(async () => {
+        const realTemplate = await super.createTemplate(templateData);
+        localStorage.removeItem(`template-${offlineTemplate.id}`);
+        console.log('✅ Offline template synced:', realTemplate.id);
+      });
+
+      return offlineTemplate as UserReportTemplate;
+    }
+
+    return super.createTemplate(templateData);
+  }
+
+  /**
+   * Enhanced update with offline support
+   */
+  async updateTemplate(templateId: string, updateData: UpdateTemplateRequest): Promise<UserReportTemplate> {
+    if (!this.isOnline) {
+      // Update local storage if exists
+      const stored = localStorage.getItem(`template-${templateId}`);
+      if (stored) {
+        const template = JSON.parse(stored);
+        const updated = { ...template, ...updateData, updated_at: new Date().toISOString() };
+        localStorage.setItem(`template-${templateId}`, JSON.stringify(updated));
+
+        this.queueForSync(async () => {
+          await super.updateTemplate(templateId, updateData);
+          console.log('✅ Offline template update synced:', templateId);
+        });
+
+        return updated;
+      }
+    }
+
+    return super.updateTemplate(templateId, updateData);
+  }
+
+  /**
+   * Enhanced usage recording with retry logic
+   */
+  async recordTemplateUsage(templateId: string): Promise<TemplateUsageResponse> {
+    try {
+      return await super.recordTemplateUsage(templateId);
+    } catch (error) {
+      console.warn('⚠️ Usage recording failed, will retry later:', error);
+      
+      // Queue for retry
+      this.queueForSync(async () => {
+        try {
+          await super.recordTemplateUsage(templateId);
+          console.log('✅ Usage recording retried successfully:', templateId);
+        } catch (retryError) {
+          console.error('❌ Usage recording retry failed:', retryError);
+        }
+      });
+
+      // Return mock response for UI consistency
+      return {
+        message: 'Template usage recorded (pending sync)',
+        usage_count: 1, // Optimistic value
+      };
+    }
+  }
+
+  /**
+   * Get sync queue status
+   */
+  getSyncStatus() {
+    return {
+      isOnline: this.isOnline,
+      queueLength: this.syncQueue.length,
+      syncInProgress: this.syncInProgress,
+    };
+  }
+
+  /**
+   * Manual sync trigger
+   */
+  async forcSync() {
+    if (this.isOnline) {
+      await this.processSyncQueue();
+    }
+  }
+
+  /**
+   * Clear offline data
+   */
+  clearOfflineData() {
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+      if (key.startsWith('template-')) {
+        localStorage.removeItem(key);
+      }
+    });
+    console.log('🗑️ Offline template data cleared');
+  }
+}
+
+// Export enhanced singleton instance
+export const templateService = new EnhancedTemplateService();
+
+// Export base class for testing
+export type { TemplateService };

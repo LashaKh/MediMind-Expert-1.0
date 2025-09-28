@@ -1,0 +1,102 @@
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabase';
+
+export const AuthRedirectHandler: React.FC = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleAuthRedirect = async () => {
+      try {
+        // Check for auth tokens in URL fragments
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
+        const type = hashParams.get('type');
+        const error = hashParams.get('error');
+        const errorDescription = hashParams.get('error_description');
+
+        // Handle errors first
+        if (error) {
+          console.error('Auth error:', error, errorDescription);
+          navigate('/signin?error=' + encodeURIComponent(errorDescription || error), { replace: true });
+          return;
+        }
+
+        // Handle password recovery
+        if (type === 'recovery' && accessToken && refreshToken) {
+          try {
+            const { data: { session }, error } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken
+            });
+
+            if (error) {
+              console.error('Error setting session for password reset:', error);
+              navigate('/forgot-password?error=' + encodeURIComponent('Invalid or expired reset link'), { replace: true });
+              return;
+            }
+
+            if (session) {
+              // Clear the URL hash for security
+              window.history.replaceState({}, document.title, window.location.pathname);
+              // Redirect to reset password form
+              navigate('/reset-password', { replace: true });
+              return;
+            }
+          } catch (err) {
+            console.error('Failed to process reset token:', err);
+            navigate('/forgot-password?error=' + encodeURIComponent('Failed to process reset link'), { replace: true });
+            return;
+          }
+        }
+
+        // Handle email confirmation
+        if (type === 'signup' && accessToken && refreshToken) {
+          try {
+            const { data: { session }, error } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken
+            });
+
+            if (error) {
+              console.error('Error confirming email:', error);
+              navigate('/signin?error=' + encodeURIComponent('Email confirmation failed'), { replace: true });
+              return;
+            }
+
+            if (session) {
+              // Clear the URL hash for security
+              window.history.replaceState({}, document.title, window.location.pathname);
+              // Redirect to onboarding or workspace
+              navigate('/onboarding', { replace: true });
+              return;
+            }
+          } catch (err) {
+            console.error('Failed to confirm email:', err);
+            navigate('/signin?error=' + encodeURIComponent('Email confirmation failed'), { replace: true });
+            return;
+          }
+        }
+
+        // If no auth tokens, redirect to signin
+        navigate('/signin', { replace: true });
+      } catch (err) {
+        console.error('Error handling auth redirect:', err);
+        navigate('/signin?error=' + encodeURIComponent('Authentication error occurred'), { replace: true });
+      }
+    };
+
+    handleAuthRedirect();
+  }, [navigate]);
+
+  // Show loading while processing
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Processing authentication...</p>
+      </div>
+    </div>
+  );
+};

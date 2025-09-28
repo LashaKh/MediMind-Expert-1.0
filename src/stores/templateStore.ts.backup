@@ -1,0 +1,330 @@
+/**
+ * Template Store (Zustand)
+ * 
+ * Centralized state management for user templates with optimistic updates
+ * and caching for improved performance.
+ */
+
+import { create } from 'zustand';
+import { templateService } from '../services/templateService';
+import type {
+  UserReportTemplate,
+  CreateTemplateRequest,
+  UpdateTemplateRequest,
+  TemplateSearchFilters,
+} from '../types/templates';
+
+interface TemplateStore {
+  // State
+  templates: UserReportTemplate[];
+  loading: boolean;
+  error: string | null;
+  filters: TemplateSearchFilters;
+  totalCount: number;
+  stats: {
+    total_templates: number;
+    templates_remaining: number;
+    most_used_template_name: string | null;
+    total_usage_count: number;
+  } | null;
+
+  // Actions
+  loadTemplates: () => Promise<void>;
+  createTemplate: (data: CreateTemplateRequest) => Promise<UserReportTemplate>;
+  updateTemplate: (id: string, data: UpdateTemplateRequest) => Promise<UserReportTemplate>;
+  deleteTemplate: (id: string) => Promise<void>;
+  recordUsage: (id: string) => Promise<void>;
+  setFilters: (filters: Partial<TemplateSearchFilters>) => void;
+  loadStats: () => Promise<void>;
+  clearError: () => void;
+  reset: () => void;
+}
+
+const initialState = {
+  templates: [],
+  loading: false,
+  error: null,
+  filters: {
+    search: '',
+    order_by: 'created_at' as const,
+    order_direction: 'desc' as const,
+  },
+  totalCount: 0,
+  stats: null,
+};
+
+export const useTemplateStore = create<TemplateStore>((set, get) => ({
+  ...initialState,
+
+  // Load templates with current filters
+  loadTemplates: async () => {
+    try {
+      set({ loading: true, error: null });
+      
+      const response = await templateService.getUserTemplates(get().filters);
+      
+      set({
+        templates: response.templates,
+        totalCount: response.total_count,
+        loading: false,
+      });
+    } catch (error: any) {
+      console.error('Failed to load templates:', error);
+      set({
+        error: error.message || 'Failed to load templates',
+        loading: false,
+      });
+    }
+  },
+
+  // Create new template with optimistic update
+  createTemplate: async (data: CreateTemplateRequest) => {
+    try {
+      set({ error: null });
+      
+      const newTemplate = await templateService.createTemplate(data);
+      
+      // Add to templates array (optimistic update)
+      set(state => ({
+        templates: [newTemplate, ...state.templates],
+        totalCount: state.totalCount + 1,
+      }));
+
+      // Update stats if loaded
+      const currentStats = get().stats;
+      if (currentStats) {
+        set({
+          stats: {
+            ...currentStats,
+            total_templates: currentStats.total_templates + 1,
+            templates_remaining: Math.max(0, currentStats.templates_remaining - 1),
+          },
+        });
+      }
+
+      return newTemplate;
+    } catch (error: any) {
+      console.error('Failed to create template:', error);
+      set({ error: error.message || 'Failed to create template' });
+      throw error;
+    }
+  },
+
+  // Update template with optimistic update
+  updateTemplate: async (id: string, data: UpdateTemplateRequest) => {
+    try {
+      set({ error: null });
+      
+      const updatedTemplate = await templateService.updateTemplate(id, data);
+      
+      // Update in templates array
+      set(state => ({
+        templates: state.templates.map(template =>
+          template.id === id ? updatedTemplate : template
+        ),
+      }));
+
+      return updatedTemplate;
+    } catch (error: any) {
+      console.error('Failed to update template:', error);
+      set({ error: error.message || 'Failed to update template' });
+      throw error;
+    }
+  },
+
+  // Delete template with optimistic update
+  deleteTemplate: async (id: string) => {
+    try {
+      set({ error: null });
+      
+      // Optimistic update - remove from UI immediately
+      const templateToDelete = get().templates.find(t => t.id === id);
+      set(state => ({
+        templates: state.templates.filter(template => template.id !== id),
+        totalCount: state.totalCount - 1,
+      }));
+
+      await templateService.deleteTemplate(id);
+
+      // Update stats if loaded
+      const currentStats = get().stats;
+      if (currentStats && templateToDelete) {
+        set({
+          stats: {
+            ...currentStats,
+            total_templates: Math.max(0, currentStats.total_templates - 1),
+            templates_remaining: currentStats.templates_remaining + 1,
+            total_usage_count: Math.max(0, currentStats.total_usage_count - templateToDelete.usage_count),
+          },
+        });
+      }
+    } catch (error: any) {
+      console.error('Failed to delete template:', error);
+      
+      // Revert optimistic update on error
+      await get().loadTemplates();
+      
+      set({ error: error.message || 'Failed to delete template' });
+      throw error;
+    }
+  },
+
+  // Record template usage with optimistic update
+  recordUsage: async (id: string) => {
+    try {
+      set({ error: null });
+      
+      // Optimistic update - increment usage count immediately
+      const now = new Date().toISOString();
+      set(state => ({
+        templates: state.templates.map(template =>
+          template.id === id
+            ? {
+                ...template,
+                usage_count: template.usage_count + 1,
+                last_used_at: now,
+              }
+            : template
+        ),
+      }));
+
+      const result = await templateService.recordTemplateUsage(id);
+
+      // Update with actual server response if different
+      set(state => ({
+        templates: state.templates.map(template =>
+          template.id === id
+            ? {
+                ...template,
+                usage_count: result.usage_count,
+              }
+            : template
+        ),
+      }));
+
+      // Update stats if loaded
+      const currentStats = get().stats;
+      if (currentStats) {
+        set({
+          stats: {
+            ...currentStats,
+            total_usage_count: currentStats.total_usage_count + 1,
+          },
+        });
+      }
+    } catch (error: any) {
+      console.error('Failed to record template usage:', error);
+      
+      // Revert optimistic update on error
+      await get().loadTemplates();
+      
+      // Don't show error for usage recording failures (non-critical)
+      console.warn('Template usage tracking failed, but continuing with operation');
+    }
+  },
+
+  // Update search/filter settings
+  setFilters: (newFilters: Partial<TemplateSearchFilters>) => {
+    set(state => ({
+      filters: { ...state.filters, ...newFilters },
+    }));
+    
+    // Automatically reload templates with new filters
+    // Use a small delay to avoid excessive API calls during typing
+    clearTimeout((set as any)._filterTimeout);
+    (set as any)._filterTimeout = setTimeout(() => {
+      get().loadTemplates();
+    }, 300);
+  },
+
+  // Load template statistics
+  loadStats: async () => {
+    try {
+      const stats = await templateService.getTemplateStats();
+      set({ stats });
+    } catch (error: any) {
+      console.error('Failed to load template stats:', error);
+      // Don't set error for stats loading failures (non-critical)
+    }
+  },
+
+  // Clear error state
+  clearError: () => {
+    set({ error: null });
+  },
+
+  // Reset store to initial state
+  reset: () => {
+    set(initialState);
+  },
+}));
+
+// Selectors for computed values
+export const useTemplateSelectors = () => {
+  const store = useTemplateStore();
+  
+  return {
+    // Get templates by usage (most used first)
+    templatesByUsage: [...store.templates].sort((a, b) => b.usage_count - a.usage_count),
+    
+    // Get recently created templates
+    recentTemplates: [...store.templates]
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(0, 5),
+    
+    // Get recently used templates
+    recentlyUsedTemplates: [...store.templates]
+      .filter(t => t.last_used_at)
+      .sort((a, b) => {
+        if (!a.last_used_at) return 1;
+        if (!b.last_used_at) return -1;
+        return new Date(b.last_used_at).getTime() - new Date(a.last_used_at).getTime();
+      })
+      .slice(0, 5),
+    
+    // Check if template limit is approaching (90% of 50)
+    isApproachingLimit: store.totalCount >= 45,
+    
+    // Check if template limit is reached
+    isAtLimit: store.totalCount >= 50,
+    
+    // Get template usage statistics
+    usageStats: {
+      totalTemplates: store.totalCount,
+      totalUsage: store.templates.reduce((sum, t) => sum + t.usage_count, 0),
+      averageUsage: store.totalCount > 0 
+        ? store.templates.reduce((sum, t) => sum + t.usage_count, 0) / store.totalCount 
+        : 0,
+      mostUsedTemplate: store.templates.reduce((max, t) => 
+        t.usage_count > max.usage_count ? t : max, 
+        store.templates[0] || null
+      ),
+    },
+  };
+};
+
+// Hooks for specific use cases
+export const useTemplateActions = () => {
+  return useTemplateStore(state => ({
+    loadTemplates: state.loadTemplates,
+    createTemplate: state.createTemplate,
+    updateTemplate: state.updateTemplate,
+    deleteTemplate: state.deleteTemplate,
+    recordUsage: state.recordUsage,
+    setFilters: state.setFilters,
+    loadStats: state.loadStats,
+    clearError: state.clearError,
+    reset: state.reset,
+  }));
+};
+
+export const useTemplateState = () => {
+  return useTemplateStore(state => ({
+    templates: state.templates,
+    loading: state.loading,
+    error: state.error,
+    filters: state.filters,
+    totalCount: state.totalCount,
+    stats: state.stats,
+  }));
+};

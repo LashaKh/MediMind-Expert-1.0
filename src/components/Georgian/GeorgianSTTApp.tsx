@@ -29,7 +29,9 @@ import { useAuth } from '../../stores/useAppStore';
 import { useViewportHeight } from '../../hooks/useViewportHeight';
 import { useMobileViewport } from '../../hooks/useMobileViewport';
 import { useKeyboardAwareTextarea } from '../../hooks/useKeyboardAwareTextarea';
-import { isDiagnosisTemplate, extractDiagnosisFromInstruction, generateDiagnosisReport } from '../../services/diagnosisFlowiseService';
+import { isDiagnosisTemplate, extractDiagnosisFromInstruction, generateDiagnosisReport, generateTemplateBasedReport } from '../../services/diagnosisFlowiseService';
+import { useTemplateSelection } from '../../hooks/useTemplateManagement';
+import type { UserReportTemplate } from '../../types/templates';
 import { supabase } from '../../lib/supabase';
 
 // Import extracted components
@@ -85,6 +87,10 @@ export const GeorgianSTTApp: React.FC = () => {
   // Store the expand chat function from AIProcessingContent
   const [expandChatFunction, setExpandChatFunction] = useState<(() => void) | null>(null);
 
+  // Template selection for AI processing
+  const [selectedTemplate, setSelectedTemplate] = useState<UserReportTemplate | null>(null);
+  const { templates, selectTemplate, getSuggestedTemplates } = useTemplateSelection();
+
   // Debug when expand function is set
   const handleSetExpandChatFunction = useCallback((fn: () => void) => {
 
@@ -120,6 +126,17 @@ export const GeorgianSTTApp: React.FC = () => {
     searchSessions,
     cleanupEmptyTemporarySessions
   } = useSessionManagement();
+  
+  // Handle title change for both new and existing sessions
+  const handleTitleChange = useCallback(async (title: string) => {
+    if (currentSession) {
+      // Update existing session title
+      await updateSession(currentSession.id, { title: title.trim() });
+    } else {
+      // Update pending title for new session
+      setPendingSessionTitle(title);
+    }
+  }, [currentSession, updateSession]);
   
   // Session-aware transcript updates - prevents cross-session contamination
   const lastProcessedContentRef = useRef<string>('');
@@ -357,6 +374,68 @@ export const GeorgianSTTApp: React.FC = () => {
     
     if (!transcript.trim()) {
 
+      return;
+    }
+
+    // Check if a custom template is selected
+    if (selectedTemplate) {
+      console.log('📋 Custom template selected:', selectedTemplate.name);
+      
+      // Record template usage
+      try {
+        await selectTemplate(selectedTemplate);
+      } catch (error) {
+        console.warn('Failed to record template usage:', error);
+      }
+      
+      // Use template-based report generation
+      setProcessing(true);
+      
+      try {
+        console.log('🚀 Starting template-based report generation...');
+        const startTime = Date.now();
+        const templateResult = await generateTemplateBasedReport(transcript, selectedTemplate);
+        const processingTime = Date.now() - startTime;
+        
+        console.log('✅ Template-based report completed:', {
+          success: templateResult.success,
+          processingTime,
+          reportLength: templateResult.success ? templateResult.report?.length : 0
+        });
+
+        if (templateResult.success && currentSession) {
+          // Save template result to session
+          const processingResultData = {
+            userInstruction: `${instruction} (Template: ${selectedTemplate.name})`,
+            aiResponse: templateResult.report,
+            model: 'flowise-template-agent',
+            tokensUsed: Math.floor(templateResult.report.length / 4),
+            processingTime
+          };
+          
+          const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
+          console.log('💾 Template session save result:', { saveSuccess, sessionId: currentSession.id });
+          
+          if (saveSuccess) {
+            addToHistory(
+              processingResultData.userInstruction,
+              processingResultData.aiResponse,
+              processingResultData.model,
+              processingResultData.tokensUsed,
+              processingResultData.processingTime
+            );
+            console.log('✅ Template result added to UI history');
+          }
+        } else if (!templateResult.success) {
+          console.error('❌ Template processing failed:', templateResult.error);
+          setAIError(`Template processing failed: ${templateResult.error}`);
+        }
+      } catch (error) {
+        console.error('🚨 Template processing failed:', error);
+        setAIError('Failed to generate template-based report. Please try again.');
+      } finally {
+        setProcessing(false);
+      }
       return;
     }
 
@@ -1031,6 +1110,7 @@ export const GeorgianSTTApp: React.FC = () => {
                 onClearAIError={clearAIError}
                 onClearHistory={clearHistory}
                 onDeleteReport={handleDeleteReport}
+                onAddToHistory={addToHistory}
                 enableSpeakerDiarization={enableSpeakerDiarization}
                 onToggleSpeakerDiarization={setEnableSpeakerDiarization}
                 speakerCount={speakerCount}
@@ -1042,9 +1122,13 @@ export const GeorgianSTTApp: React.FC = () => {
                 onModelChange={updateSelectedSTTModel}
                 // Session title props
                 pendingSessionTitle={pendingSessionTitle}
-                onPendingTitleChange={setPendingSessionTitle}
+                onPendingTitleChange={handleTitleChange}
                 speakers={speakerSegments}
                 onExpandChat={handleSetExpandChatFunction}
+                // Template selection props
+                selectedTemplate={selectedTemplate}
+                onTemplateSelect={setSelectedTemplate}
+                availableTemplates={templates}
                 // History controls
                 isHistoryOpen={!isHistoryCollapsed}
                 onToggleHistory={() => setIsHistoryCollapsed(!isHistoryCollapsed)}
@@ -1089,6 +1173,7 @@ export const GeorgianSTTApp: React.FC = () => {
               onClearAIError={clearAIError}
               onClearHistory={clearHistory}
               onDeleteReport={handleDeleteReport}
+              onAddToHistory={addToHistory}
               activeTab={activeTab}
               onActiveTabChange={setActiveTab}
               enableSpeakerDiarization={enableSpeakerDiarization}
@@ -1103,8 +1188,12 @@ export const GeorgianSTTApp: React.FC = () => {
               onModelChange={updateSelectedSTTModel}
               // Session title props
               pendingSessionTitle={pendingSessionTitle}
-              onPendingTitleChange={setPendingSessionTitle}
+              onPendingTitleChange={handleTitleChange}
               onExpandChat={handleSetExpandChatFunction}
+              // Template selection props
+              selectedTemplate={selectedTemplate}
+              onTemplateSelect={setSelectedTemplate}
+              availableTemplates={templates}
               // History controls - pass sessionCount but no toggle for mobile (uses drawer)
               sessionCount={sessions.length}
             />

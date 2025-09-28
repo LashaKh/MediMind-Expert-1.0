@@ -1,0 +1,394 @@
+openapi: 3.0.3
+info:
+  title: Custom Report Templates API
+  description: API for managing user-created medical report templates in MediScribe
+  version: 1.0.0
+  
+paths:
+  /user-templates:
+    get:
+      summary: List user's report templates
+      description: Retrieve all templates for the authenticated user, ordered by creation date
+      parameters:
+        - name: search
+          in: query
+          description: Search term for template names and notes
+          required: false
+          schema:
+            type: string
+            maxLength: 100
+        - name: order_by
+          in: query
+          description: Ordering criteria
+          required: false
+          schema:
+            type: string
+            enum: [created_at, usage_count, name]
+            default: created_at
+        - name: order_direction
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+      responses:
+        '200':
+          description: List of user templates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  templates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserReportTemplate'
+                  total_count:
+                    type: integer
+                    description: Total number of templates for the user
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    post:
+      summary: Create a new report template
+      description: Create a new custom report template for the authenticated user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTemplateRequest'
+      responses:
+        '201':
+          description: Template created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserReportTemplate'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Template name already exists for user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Template limit exceeded (50 templates per user)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /user-templates/{template_id}:
+    get:
+      summary: Get a specific template
+      description: Retrieve a single template by ID (user must own the template)
+      parameters:
+        - name: template_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Template details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserReportTemplate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    put:
+      summary: Update a template
+      description: Update an existing template (user must own the template)
+      parameters:
+        - name: template_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTemplateRequest'
+      responses:
+        '200':
+          description: Template updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserReportTemplate'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Template name conflicts with existing template
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    delete:
+      summary: Delete a template
+      description: Delete a template (user must own the template)
+      parameters:
+        - name: template_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Template deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /user-templates/{template_id}/use:
+    post:
+      summary: Record template usage
+      description: Increment usage count and update last_used_at timestamp
+      parameters:
+        - name: template_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Usage recorded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Template usage recorded"
+                  usage_count:
+                    type: integer
+                    description: Updated usage count
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    UserReportTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique template identifier
+        user_id:
+          type: string
+          format: uuid
+          description: ID of the user who owns this template
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: User-defined template name
+          example: "Cardiology Consultation Report"
+        example_structure:
+          type: string
+          minLength: 10
+          maxLength: 50000
+          description: Template structure and formatting example
+          example: "# Patient Assessment\n\n## Chief Complaint\n[Patient's primary concern]\n\n## History of Present Illness\n[Detailed history]"
+        notes:
+          type: string
+          maxLength: 10000
+          description: Additional notes and guidance for AI prompt
+          example: "Focus on differential diagnosis and include medication reconciliation"
+        created_at:
+          type: string
+          format: date-time
+          description: Template creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last modification timestamp
+        usage_count:
+          type: integer
+          minimum: 0
+          description: Number of times this template has been used
+        last_used_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp of last usage
+      required:
+        - id
+        - user_id
+        - name
+        - example_structure
+        - notes
+        - created_at
+        - updated_at
+        - usage_count
+
+    CreateTemplateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9\s\-_.,()]+$'
+          description: Template name (unique per user)
+          example: "Emergency Cardiology Assessment"
+        example_structure:
+          type: string
+          minLength: 10
+          maxLength: 50000
+          description: Template structure example
+          example: "# Emergency Cardiac Assessment\n\n## Vital Signs\n- BP: [value]\n- HR: [value]\n\n## ECG Findings\n[interpretation]"
+        notes:
+          type: string
+          maxLength: 10000
+          description: Optional guidance notes
+          example: "Emphasize STEMI criteria and time-to-intervention protocols"
+      required:
+        - name
+        - example_structure
+
+    UpdateTemplateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9\s\-_.,()]+$'
+          description: Updated template name
+        example_structure:
+          type: string
+          minLength: 10
+          maxLength: 50000
+          description: Updated template structure
+        notes:
+          type: string
+          maxLength: 10000
+          description: Updated guidance notes
+      minProperties: 1
+      description: At least one field must be provided for update
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code for client handling
+        details:
+          type: object
+          description: Additional error context
+      required:
+        - error
+        - code
+
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Validation failed"
+        code:
+          type: string
+          example: "VALIDATION_ERROR"
+        details:
+          type: object
+          properties:
+            field_errors:
+              type: object
+              description: Field-specific validation errors
+              example:
+                name: ["Name must be at least 2 characters"]
+                example_structure: ["Example structure is required"]
+      required:
+        - error
+        - code
+        - details
+
+  responses:
+    Unauthorized:
+      description: Authentication required or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Authentication required"
+            code: "UNAUTHORIZED"
+
+    NotFound:
+      description: Template not found or access denied
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Template not found"
+            code: "NOT_FOUND"
+
+    ValidationError:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Internal server error"
+            code: "INTERNAL_ERROR"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase JWT token for authenticated requests
+
+security:
+  - BearerAuth: []

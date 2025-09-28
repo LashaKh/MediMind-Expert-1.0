@@ -55,6 +55,7 @@ interface MedicalAnalysisCardProps {
   onEdit?: (analysis: ProcessingHistory) => void;
   enableEditing?: boolean;
   flowiseEndpoint?: string;
+  sessionTitle?: string; // Add session title prop
 }
 
 const formatProcessingTime = (milliseconds: number): string => {
@@ -65,14 +66,15 @@ const formatProcessingTime = (milliseconds: number): string => {
 const getAnalysisType = (instruction: string, model?: string): { type: string; icon: React.ElementType; color: string; isDiagnosis: boolean; endpoint: string } => {
   const lower = instruction.toLowerCase();
   
-  // Check if this is a diagnosis report (by instruction content)
+  // Check if this is a diagnosis report (by instruction content or custom template)
   const isDiagnosis = lower.includes('i50.0') || 
                       lower.includes('i24.9') ||
                       lower.includes('heart failure') ||
                       lower.includes('nstemi') ||
                       lower.includes('გულის შეგუბებითი უკმარისობა') ||
                       lower.includes('გულის მწვავე იშემიური ავადმყოფობა') ||
-                      (lower.includes('diagnosis') && lower.includes('emergency room'));
+                      (lower.includes('diagnosis') && lower.includes('emergency room')) ||
+                      lower.includes('template:'); // Add support for custom templates
   
   if (isDiagnosis) {
     if (lower.includes('i50.0') || lower.includes('heart failure') || lower.includes('გულის შეგუბებითი უკმარისობა')) {
@@ -91,6 +93,17 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
         color: 'from-[#1a365d] to-[#2b6cb0]', 
         isDiagnosis: true,
         endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4'
+      };
+    }
+    if (lower.includes('template:')) {
+      // Extract template name from instruction like "Template: test 3"
+      const templateName = instruction.split(':')[1]?.trim() || 'Custom Template';
+      return { 
+        type: `Custom Template Report: ${templateName}`, 
+        icon: FileText, 
+        color: 'from-[#63b3ed] to-[#90cdf4]', 
+        isDiagnosis: true,
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf'
       };
     }
     return { 
@@ -151,7 +164,8 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
   onDelete,
   onEdit,
   enableEditing = false,
-  flowiseEndpoint = ''
+  flowiseEndpoint = '',
+  sessionTitle = ''
 }) => {
   const [isExpanded, setIsExpanded] = useState(index === 0); // First card expanded by default
   const [isEditMode, setIsEditMode] = useState(false);
@@ -373,6 +387,11 @@ Medical AI Processing System`;
                   <div className="space-y-2">
                     <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 line-clamp-2 leading-tight">
                       {analysisType.type}
+                      {sessionTitle && (
+                        <span className="block md:inline md:ml-2 text-sm font-medium text-[#2b6cb0] dark:text-[#63b3ed] opacity-75">
+                          • {sessionTitle}
+                        </span>
+                      )}
                     </h3>
                     
                     {/* Desktop Only Badges */}

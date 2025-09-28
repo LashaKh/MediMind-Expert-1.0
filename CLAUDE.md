@@ -437,3 +437,4 @@ liked_search_results, clinical_trials_monitoring
 - Monitor build sizes and performance metrics
 - Verify mobile optimization in production builds
 ```
+- do not use playwrite unless requested

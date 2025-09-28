@@ -5,6 +5,8 @@
  * the specialized Flowise agent for medical diagnosis analysis.
  */
 
+import type { UserReportTemplate } from '../types/templates';
+
 interface DiagnosisFlowiseRequest {
   question: string;
 }
@@ -28,28 +30,49 @@ const HEART_FAILURE_API_URL = "https://flowise-2-0.onrender.com/api/v1/predictio
 // Red card (NSTEMI) endpoint  
 const NSTEMI_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4";
 
-/**
- * Formats the transcript with diagnosis context for the Flowise agent
- */
-function formatDiagnosisRequest(transcript: string, diagnosis: DiagnosisContext): string {
-  // Use the same simple prompt format as regular processing
-  return `Please generate a comprehensive cardiologist's consultation report based on this transcript. Follow the examples and instructions on how the report should look, and make sure it's in Georgian as in the examples.
+// General template processing endpoint
+const GENERAL_TEMPLATE_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf";
 
-${transcript}`;
+/**
+ * Formats the transcript with diagnosis context and optional template for the Flowise agent
+ */
+function formatDiagnosisRequest(
+  transcript: string, 
+  diagnosis: DiagnosisContext, 
+  template?: UserReportTemplate
+): string {
+  let prompt = `Please generate a comprehensive cardiologist's consultation report based on this transcript. Follow the examples and instructions on how the report should look, and make sure it's in Georgian as in the examples.`;
+  
+  // If a template is provided, include its structure and guidance
+  if (template) {
+    prompt += `\n\nUse this template structure as a guide for the report format:
+${template.example_structure}`;
+    
+    // Add template notes if available
+    if (template.notes?.trim()) {
+      prompt += `\n\nAdditional guidance: ${template.notes}`;
+    }
+  }
+  
+  prompt += `\n\n${transcript}`;
+  
+  return prompt;
 }
 
 /**
- * Calls the diagnosis Flowise agent for heart failure consultation reports
+ * Calls the diagnosis Flowise agent for consultation reports with optional custom template
  */
 export async function generateDiagnosisReport(
   transcript: string,
-  diagnosis: DiagnosisContext
+  diagnosis: DiagnosisContext,
+  template?: UserReportTemplate
 ): Promise<{ success: true; report: string } | { success: false; error: string }> {
   console.log('🔬 Diagnosis service: Starting report generation');
   console.log('📋 Input:', {
     transcriptLength: transcript.length,
     diagnosis: diagnosis.diagnosisEnglish,
-    icdCode: diagnosis.icdCode
+    icdCode: diagnosis.icdCode,
+    templateName: template?.name || 'none'
   });
   
   try {
@@ -66,7 +89,7 @@ export async function generateDiagnosisReport(
     const apiUrl = diagnosis.icdCode === 'I50.0' ? HEART_FAILURE_API_URL : NSTEMI_API_URL;
     console.log('🌐 API URL selected:', apiUrl);
 
-    const formattedRequest = formatDiagnosisRequest(transcript, diagnosis);
+    const formattedRequest = formatDiagnosisRequest(transcript, diagnosis, template);
     console.log('📄 Formatted request length:', formattedRequest.length);
     
     const requestPayload: DiagnosisFlowiseRequest = {
@@ -166,16 +189,16 @@ export const NSTEMI_DIAGNOSIS: DiagnosisContext = {
  * Generate heart failure consultation report
  * Convenience function for the specific heart failure diagnosis
  */
-export async function generateHeartFailureReport(transcript: string) {
-  return generateDiagnosisReport(transcript, HEART_FAILURE_DIAGNOSIS);
+export async function generateHeartFailureReport(transcript: string, template?: UserReportTemplate) {
+  return generateDiagnosisReport(transcript, HEART_FAILURE_DIAGNOSIS, template);
 }
 
 /**
  * Generate NSTEMI consultation report
  * Convenience function for the specific NSTEMI diagnosis
  */
-export async function generateNSTEMIReport(transcript: string) {
-  return generateDiagnosisReport(transcript, NSTEMI_DIAGNOSIS);
+export async function generateNSTEMIReport(transcript: string, template?: UserReportTemplate) {
+  return generateDiagnosisReport(transcript, NSTEMI_DIAGNOSIS, template);
 }
 
 /**
@@ -204,4 +227,99 @@ export function extractDiagnosisFromInstruction(instruction: string): DiagnosisC
   }
   
   return null;
+}
+
+/**
+ * Generate report with custom template using general endpoint
+ * Enhanced function that uses template structure to guide AI generation
+ */
+export async function generateTemplateBasedReport(
+  transcript: string,
+  template: UserReportTemplate,
+  diagnosis?: DiagnosisContext
+): Promise<{ success: true; report: string } | { success: false; error: string }> {
+  // If diagnosis context is provided and matches our specialized endpoints, use diagnosis service
+  if (diagnosis && (diagnosis.icdCode === 'I50.0' || diagnosis.icdCode === 'I24.9')) {
+    return generateDiagnosisReport(transcript, diagnosis, template);
+  }
+  
+  console.log('🔬 Template-based report: Using general template processing');
+  console.log('📋 Template:', template.name);
+  console.log('📄 Transcript length:', transcript.length);
+  
+  try {
+    if (!transcript.trim()) {
+      return {
+        success: false,
+        error: 'Transcript is required for template-based report generation'
+      };
+    }
+
+    // Create template-enhanced prompt for general endpoint
+    let prompt = `Please generate a comprehensive medical consultation report based on this transcript. Use this template structure as a guide for the report format:
+
+${template.example_structure}`;
+    
+    // Add template notes if available
+    if (template.notes?.trim()) {
+      prompt += `\n\nAdditional guidance: ${template.notes}`;
+    }
+    
+    prompt += `\n\nTranscript to analyze:\n${transcript}`;
+
+    console.log('🚀 Making API request to general template endpoint...');
+    const response = await fetch(GENERAL_TEMPLATE_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        question: prompt
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Template API request failed:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorText: errorText.substring(0, 500)
+      });
+      
+      return {
+        success: false,
+        error: `API request failed: ${response.status} ${response.statusText}`
+      };
+    }
+
+    const data: DiagnosisFlowiseResponse = await response.json();
+    console.log('📥 Template API Response received:', {
+      hasText: !!data.text,
+      textLength: data.text?.length || 0
+    });
+    
+    if (!data.text) {
+      console.error('❌ Invalid response format from template API:', data);
+      return {
+        success: false,
+        error: 'Invalid response format from template API'
+      };
+    }
+
+    console.log('✅ Template-based report generated successfully');
+    return {
+      success: true,
+      report: data.text
+    };
+
+  } catch (error) {
+    console.error('🚨 Fatal error in template service:', error);
+    return {
+      success: false,
+      error: error instanceof Error 
+        ? error.message 
+        : 'Unknown error occurred while generating template-based report'
+    };
+  }
 }

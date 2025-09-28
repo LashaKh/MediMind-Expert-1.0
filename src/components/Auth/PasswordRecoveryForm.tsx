@@ -30,12 +30,32 @@ export const PasswordRecoveryForm: React.FC = () => {
   const onSubmit: SubmitHandler<RecoveryFormValues> = async (data) => {
     setError('');
     
+    // Get the correct base path for redirect URL
+    const getResetUrl = () => {
+      const origin = window.location.origin;
+      const pathname = window.location.pathname;
+      const hostname = window.location.hostname;
+      
+      // If we're on the proxy domain (medimind.md) or path starts with /expert
+      if (hostname === 'medimind.md' || pathname.startsWith('/expert')) {
+        return `${origin}/expert/`;
+      }
+      
+      // If we're on the direct netlify domain in production
+      if (hostname.includes('netlify.app')) {
+        return `${origin}/expert/`;
+      }
+      
+      // For local development
+      return `${origin}/expert/`;
+    };
+    
     const [result, errorResult] = await safeAsync(
       async () => {
         const { error: resetError } = await supabase.auth.resetPasswordForEmail(
           data.email,
           {
-            redirectTo: `${window.location.origin}/reset-password`,
+            redirectTo: getResetUrl(),
           }
         );
 

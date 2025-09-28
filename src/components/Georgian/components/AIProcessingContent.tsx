@@ -46,6 +46,15 @@ interface AIProcessingContentProps {
   onSwitchToHistory?: () => void; // New callback for switching tabs
   onExpandChat?: (expandFunction: () => void) => void; // Pass expand function to parent
   onCloseChat?: (closeFunction: () => void) => void; // New callback to pass close function to parent
+  onAddToHistory?: (instruction: string, response: string, model: string, tokensUsed?: number, processingTime?: number) => void;
+  
+  // Template selection props
+  selectedTemplate?: any; // UserReportTemplate
+  onTemplateSelect?: (template: any | null) => void;
+  availableTemplates?: any[]; // UserReportTemplate[]
+  
+  // Session info for report cards
+  sessionTitle?: string;
 }
 
 type ViewMode = 'templates' | 'history';
@@ -62,8 +71,13 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   onClearHistory,
   onDeleteReport,
   onSwitchToHistory,
+  onAddToHistory,
   onExpandChat,
-  onCloseChat
+  onCloseChat,
+  selectedTemplate,
+  onTemplateSelect,
+  availableTemplates = [],
+  sessionTitle = ''
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('templates');
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('grid');
@@ -217,6 +231,52 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
       {/* Compact Header */}
       <div className="flex-shrink-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-[#63b3ed]/50 dark:border-[#2b6cb0]/50">
         <div className="px-4 py-3">
+          {/* Template Selector */}
+          {availableTemplates.length > 0 && (
+            <div className="mb-3">
+              <label className="block text-sm font-medium text-[#1a365d] dark:text-[#90cdf4] mb-2">
+                Select Template (Optional)
+              </label>
+              <div className="flex items-center space-x-2">
+                <select
+                  value={selectedTemplate?.id || ''}
+                  onChange={(e) => {
+                    const templateId = e.target.value;
+                    const template = templateId ? availableTemplates.find(t => t.id === templateId) : null;
+                    onTemplateSelect?.(template);
+                  }}
+                  className="flex-1 bg-white dark:bg-gray-700 border border-[#63b3ed]/30 dark:border-[#2b6cb0]/50 rounded-lg px-3 py-2 text-sm text-[#1a365d] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#63b3ed] dark:focus:ring-[#90cdf4]"
+                >
+                  <option value="">No template (default)</option>
+                  {availableTemplates.map((template) => (
+                    <option key={template.id} value={template.id}>
+                      {template.name} {template.usage_count > 0 && `(used ${template.usage_count}x)`}
+                    </option>
+                  ))}
+                </select>
+                {selectedTemplate && (
+                  <button
+                    onClick={() => onTemplateSelect?.(null)}
+                    className="p-2 text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4] transition-colors"
+                    title="Clear template selection"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              {selectedTemplate && (
+                <div className="mt-2 p-2 bg-[#90cdf4]/10 dark:bg-[#1a365d]/20 rounded-lg">
+                  <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed]">
+                    Using template: <span className="font-medium">{selectedTemplate.name}</span>
+                    {selectedTemplate.notes && (
+                      <span className="block mt-1 italic">{selectedTemplate.notes}</span>
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+          
           {/* Navigation Tabs */}
           <div className="flex items-center justify-between">
             <div className="flex bg-[#90cdf4]/20 dark:bg-[#1a365d]/60 rounded-xl p-1.5 shadow-inner">
@@ -338,6 +398,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                 onSelectTemplate={handleTemplateSelect}
                 disabled={processing}
                 hasTranscript={hasTranscript}
+                transcript={transcript}
+                onAddToHistory={onAddToHistory}
               />
             </div>
           )}
@@ -355,6 +417,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       totalCount={processingHistory.length}
                       onDelete={onDeleteReport}
                       enableEditing={true}
+                      sessionTitle={sessionTitle}
                       flowiseEndpoint={(() => {
                         const lower = analysis.userInstruction.toLowerCase();
                         if ((lower.includes('i50.0') || lower.includes('heart failure') || lower.includes('გულის შეგუბებითი უკმარისობა')) && analysis.model === 'flowise-diagnosis-agent') {
@@ -362,6 +425,9 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                         }
                         if ((lower.includes('i24.9') || lower.includes('nstemi') || lower.includes('გულის მწვავე იშემიური ავადმყოფობა')) && analysis.model === 'flowise-diagnosis-agent') {
                           return 'https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4';
+                        }
+                        if (lower.includes('template:') && analysis.model === 'flowise-diagnosis-agent') {
+                          return 'https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf';
                         }
                         return 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy';
                       })()}

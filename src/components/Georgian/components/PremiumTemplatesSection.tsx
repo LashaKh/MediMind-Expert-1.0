@@ -11,8 +11,10 @@ import {
   Stethoscope,
   Activity,
   HeartHandshake,
-  Zap
+  Zap,
+  FileText
 } from 'lucide-react';
+import { MyTemplatesSection } from './MyTemplatesSection';
 
 // Import template data from existing component
 // import { QuickActionTemplates } from './QuickActionTemplates';
@@ -35,6 +37,8 @@ interface PremiumTemplatesSectionProps {
   onSelectTemplate: (instruction: string) => void;
   disabled?: boolean;
   hasTranscript: boolean;
+  transcript: string;
+  onAddToHistory?: (instruction: string, response: string, model: string, tokensUsed?: number, processingTime?: number) => void;
 }
 
 // Enhanced template data with featured flag - Cardiology Consults Only
@@ -84,7 +88,9 @@ const getCategoryColor = (category: string): string => {
 export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = ({
   onSelectTemplate,
   disabled = false,
-  hasTranscript
+  hasTranscript,
+  transcript,
+  onAddToHistory
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
@@ -135,7 +141,7 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
   const [processingCards, setProcessingCards] = useState<Set<string>>(new Set());
 
   const handleTemplateSelect = useCallback((template: Template) => {
-    if (!disabled && !processingCards.has(template.id)) {
+    if (!disabled && !processingCards.has(template.id) && hasTranscript) {
       // Add brief visual feedback before triggering processing
       setProcessingCards(prev => new Set(prev).add(template.id));
       
@@ -151,38 +157,50 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
         });
       }, 500);
     }
-  }, [onSelectTemplate, disabled, processingCards]);
+  }, [onSelectTemplate, disabled, processingCards, hasTranscript]);
 
-  if (!hasTranscript) {
-    return (
-      <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
-        <div className="relative mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-[#90cdf4]/30 via-[#63b3ed]/20 to-[#90cdf4]/30 dark:from-[#1a365d]/60 dark:via-[#2b6cb0]/40 dark:to-[#1a365d]/60 rounded-3xl flex items-center justify-center shadow-xl">
-            <Stethoscope className="w-10 h-10 text-[#2b6cb0] dark:text-[#63b3ed]" />
-          </div>
-          <div className="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-2xl flex items-center justify-center shadow-lg">
-            <Sparkles className="w-4 h-4 text-white" />
-          </div>
-        </div>
-        
-        <div className="max-w-md">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#1a365d] dark:from-[#90cdf4] dark:via-[#63b3ed] dark:to-[#90cdf4] bg-clip-text text-transparent mb-4">
-            Premium Medical Templates
-          </h3>
-          <p className="text-[#2b6cb0] dark:text-[#63b3ed] leading-relaxed mb-6">
-            Start recording, upload an audio file, or attach medical documents to access our comprehensive suite of medical analysis templates designed for healthcare professionals.
-          </p>
-          <div className="flex items-center justify-center space-x-2 text-sm text-[#1a365d] dark:text-[#90cdf4]">
-            <Heart className="w-4 h-4" />
-            <span>Specialized for Cardiology Practice</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Show empty state message when no transcript, but still show templates below
+  const showEmptyMessage = !hasTranscript;
+
 
   return (
     <div className="space-y-6">
+      {/* My Templates Section - User's Custom Templates */}
+      <MyTemplatesSection
+        onSelectTemplate={onSelectTemplate}
+        disabled={disabled} // Template creation is always enabled, only usage might be disabled
+        hasTranscript={hasTranscript}
+        transcript={transcript}
+        onAddToHistory={onAddToHistory}
+      />
+      
+      {/* Empty State Message */}
+      {showEmptyMessage && (
+        <div className="flex flex-col items-center justify-center py-8 px-6 text-center bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/5 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/10 rounded-2xl border border-[#63b3ed]/20 dark:border-[#2b6cb0]/30">
+          <div className="relative mb-6">
+            <div className="w-16 h-16 bg-gradient-to-br from-[#90cdf4]/30 via-[#63b3ed]/20 to-[#90cdf4]/30 dark:from-[#1a365d]/60 dark:via-[#2b6cb0]/40 dark:to-[#1a365d]/60 rounded-2xl flex items-center justify-center shadow-lg">
+              <Stethoscope className="w-8 h-8 text-[#2b6cb0] dark:text-[#63b3ed]" />
+            </div>
+            <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-xl flex items-center justify-center shadow-md">
+              <Sparkles className="w-3 h-3 text-white" />
+            </div>
+          </div>
+          
+          <div className="max-w-sm">
+            <h3 className="text-lg font-bold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#1a365d] dark:from-[#90cdf4] dark:via-[#63b3ed] dark:to-[#90cdf4] bg-clip-text text-transparent mb-3">
+              Premium Medical Templates
+            </h3>
+            <p className="text-[#2b6cb0] dark:text-[#63b3ed] leading-relaxed text-sm mb-4">
+              Start recording, upload an audio file, or attach medical documents to activate these professional medical analysis templates.
+            </p>
+            <div className="flex items-center justify-center space-x-2 text-xs text-[#1a365d] dark:text-[#90cdf4]">
+              <Heart className="w-3 h-3" />
+              <span>Specialized for Cardiology Practice</span>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Search and Filter Header */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="relative flex-1 max-w-md">
@@ -241,23 +259,22 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
         </div>
       )}
 
-      {/* Featured Cardiology Section */}
-      {featuredTemplates.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center shadow-lg">
-                <HeartHandshake className="w-4 h-4 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200">
-                Cardiologist Consults
-              </h3>
+      {/* Featured Cardiology Section - Always Show for Testing */}
+      <div className="space-y-4">
+        <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center shadow-lg">
+              <HeartHandshake className="w-4 h-4 text-white" />
             </div>
-            <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg">
-              <Star className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-              <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">FEATURED</span>
-            </div>
+            <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200">
+              Cardiologist Consults
+            </h3>
           </div>
+          <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg">
+            <Star className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+            <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">FEATURED</span>
+          </div>
+        </div>
 
           {/* Featured Templates Grid */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -266,8 +283,8 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
               return (
                 <div
                   key={template.id}
-                  className={`group relative bg-gradient-to-br ${template.color} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer min-h-[180px] flex flex-col justify-between ${
-                    disabled ? 'opacity-50 pointer-events-none' : ''
+                  className={`group relative bg-gradient-to-br ${template.color} rounded-2xl p-6 shadow-lg transition-all duration-300 min-h-[180px] flex flex-col justify-between ${
+                    disabled || !hasTranscript ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:shadow-xl'
                   }`}
                   onClick={() => handleTemplateSelect(template)}
                 >
@@ -305,6 +322,18 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                     </p>
                   </div>
                   
+                  {/* Disabled State Overlay */}
+                  {!hasTranscript && (
+                    <div className="absolute inset-0 bg-black/10 rounded-2xl flex items-center justify-center backdrop-blur-[1px]">
+                      <div className="flex flex-col items-center space-y-2">
+                        <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                          <FileText className="w-4 h-4 text-white/70" />
+                        </div>
+                        <span className="text-xs text-white/80 font-medium">Needs Content</span>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Processing Indicator for Special Diagnosis Cards */}
                   {processingCards.has(template.id) && template.isSpecialDiagnosis && (
                     <div className="absolute inset-0 bg-black/20 rounded-2xl flex items-center justify-center">
@@ -326,7 +355,6 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
             })}
           </div>
         </div>
-      )}
 
       {/* Other Categories */}
       <div className="space-y-3">
@@ -394,8 +422,8 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                       return (
                         <div
                           key={template.id}
-                          className={`group flex items-center justify-between p-3 rounded-lg border ${priorityColors[template.priority]} hover:shadow-md transition-all duration-200 cursor-pointer ${
-                            disabled ? 'opacity-50 pointer-events-none' : ''
+                          className={`group flex items-center justify-between p-3 rounded-lg border ${priorityColors[template.priority]} transition-all duration-200 ${
+                            disabled || !hasTranscript ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:shadow-md'
                           }`}
                           onClick={() => handleTemplateSelect(template)}
                         >

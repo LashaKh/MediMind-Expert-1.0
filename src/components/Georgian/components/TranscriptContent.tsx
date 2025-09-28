@@ -243,16 +243,26 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         {/* Main Content Structure */}
         <div className="relative h-full flex flex-col p-1 sm:p-1 lg:p-1">
           
-          {/* Optional Session Title Input */}
-          {onPendingTitleChange && !currentSession && (
+          {/* Session Title Input - Always show when handler is available */}
+          {onPendingTitleChange && (
             <div className="relative mb-3 sm:mb-2 lg:mb-2 z-10 px-3 sm:px-4 lg:px-4 pt-2 sm:pt-1 lg:pt-1">
               <div className="w-full">
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Session title (optional)"
-                    value={pendingSessionTitle}
-                    onChange={(e) => onPendingTitleChange(e.target.value)}
+                    placeholder={currentSession ? "Edit session title" : "Session title (optional)"}
+                    value={currentSession ? currentSession.title : pendingSessionTitle}
+                    onChange={(e) => {
+                      if (currentSession) {
+                        // Update existing session title immediately
+                        const updatedSession = { ...currentSession, title: e.target.value };
+                        // This will trigger a session update
+                        onPendingTitleChange(e.target.value);
+                      } else {
+                        // Update pending title for new session
+                        onPendingTitleChange(e.target.value);
+                      }
+                    }}
                     className="w-full h-10 px-3 py-2 bg-white/95 border-2 border-[#63b3ed]/30 hover:border-[#63b3ed]/50 focus:border-[#2b6cb0] rounded-lg text-sm font-medium text-[#1a365d] placeholder-[#1a365d]/60 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20"
                     maxLength={100}
                     disabled={recordingState.isRecording}
@@ -261,10 +271,10 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                 </div>
                 <div className="flex justify-between items-center mt-1">
                   <div className="text-xs text-[#1a365d]/60 font-medium">
-                    💡 Add a title to organize your recordings
+                    {currentSession ? '✏️ Edit title to organize your recordings' : '💡 Add a title to organize your recordings'}
                   </div>
                   <div className="text-xs text-[#1a365d]/40 font-mono">
-                    {pendingSessionTitle.length}/100
+                    {(currentSession ? currentSession.title : pendingSessionTitle).length}/100
                   </div>
                 </div>
               </div>
