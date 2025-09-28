@@ -74,7 +74,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
         canProceed: false
       });
     }
-  }, [workflow, startWorkflow]); // Remove workflowHook from dependencies
+  }, [workflow, startWorkflow, workflowHook]);
 
   // Handle navigation from history - load existing result
   useEffect(() => {
@@ -87,7 +87,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
       // Clear the location state to prevent re-loading
       navigate(location.pathname, { replace: true, state: undefined });
     }
-  }, [location, navigate]); // Remove workflowHook from dependencies
+  }, [location, navigate, workflowHook]);
 
   // Navigate between steps
   const goToStep = (step: WorkflowStep) => {
@@ -122,7 +122,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
       {/* Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#2b6cb0]/10 -z-10" />
       
-      <div className="max-w-5xl mx-auto p-5 space-y-4">
+      <div className="max-w-5xl mx-auto p-5 space-y-4 min-h-screen">
         {/* Header */}
         <PremiumABGHeader />
 

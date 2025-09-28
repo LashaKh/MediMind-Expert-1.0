@@ -112,7 +112,7 @@ Please extract ALL visible text and numerical values exactly as shown, maintaini
 
 
     const apiResponse = await fetch(
-      'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=' + 
+      'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=' + 
       import.meta.env.VITE_GEMINI_API_KEY,
       {
         method: 'POST',

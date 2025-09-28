@@ -89,7 +89,7 @@ export const UploadStep: React.FC<UploadStepProps> = ({
   const { t } = useTranslation();
 
   return (
-    <div className="space-y-6" data-tour="abg-upload-step">
+    <div className="space-y-6 pb-20 md:pb-6" data-tour="abg-upload-step">
       {/* ABG Type Selection */}
       <div className="abg-card abg-glass p-6" data-tour="abg-type-selection">
         <div className="flex items-center gap-3 mb-4">
@@ -216,39 +216,41 @@ export const UploadStep: React.FC<UploadStepProps> = ({
         )}
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex justify-between items-center pt-6">
-        <Button
-          variant="outline"
-          onClick={() => navigate(-1)}
-          className="border-slate-300 hover:border-slate-400"
-        >
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          {t('common.cancel', 'Cancel')}
-        </Button>
-        
-        <Button
-          onClick={onProcessAnalysis}
-          disabled={!selectedFile || isProcessing}
-          className={cn(
-            "abg-btn-primary relative overflow-hidden",
-            !selectedFile && "opacity-50 cursor-not-allowed"
-          )}
-          size="md"
-        >
-          {isProcessing ? (
-            <>
-              <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-              {unifiedProgress?.currentTask || t('common.processing', 'Processing...')}
-            </>
-          ) : (
-            <>
-              <Brain className="h-5 w-5 mr-2" />
-              {t('abg.upload.actions.startAIAnalysis', 'Start AI Analysis')}
-              <ChevronRight className="h-4 w-4 ml-2" />
-            </>
-          )}
-        </Button>
+      {/* Action Buttons - Fixed for mobile visibility */}
+      <div className="sticky bottom-0 bg-white/95 backdrop-blur-sm p-4 -mx-6 mt-6 border-t border-slate-200">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
+          <Button
+            variant="outline"
+            onClick={() => navigate(-1)}
+            className="w-full sm:w-auto border-slate-300 hover:border-slate-400 order-2 sm:order-1"
+          >
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            {t('common.cancel', 'Cancel')}
+          </Button>
+          
+          <Button
+            onClick={onProcessAnalysis}
+            disabled={!selectedFile || isProcessing}
+            className={cn(
+              "abg-btn-primary relative overflow-hidden w-full sm:w-auto order-1 sm:order-2",
+              !selectedFile && "opacity-50 cursor-not-allowed"
+            )}
+            size="md"
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                {unifiedProgress?.currentTask || t('common.processing', 'Processing...')}
+              </>
+            ) : (
+              <>
+                <Brain className="h-5 w-5 mr-2" />
+                {t('abg.upload.actions.startAIAnalysis', 'Start AI Analysis')}
+                <ChevronRight className="h-4 w-4 ml-2" />
+              </>
+            )}
+          </Button>
+        </div>
       </div>
 
       {/* Unified Progress Display */}

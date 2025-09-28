@@ -474,6 +474,25 @@
   .abg-upload-zone {
     min-height: 7rem;
   }
+
+  /* Ensure action buttons are always visible on mobile */
+  .abg-mobile-action-buttons {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(148, 163, 184, 0.2);
+    padding: 1rem;
+    margin: 0 -1.5rem -1.5rem -1.5rem;
+  }
+
+  /* Add padding to prevent content overlap with sticky buttons */
+  .abg-upload-step-mobile {
+    padding-bottom: 5rem;
+  }
 }
 
 /* Dark Mode Support */

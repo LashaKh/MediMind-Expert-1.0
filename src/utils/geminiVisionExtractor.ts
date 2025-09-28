@@ -181,7 +181,7 @@ Return the complete extracted text:`;
 
     // Make API request with retry mechanism
     const response = await makeRequestWithRetry(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: {
@@ -329,7 +329,7 @@ Raw extracted text:`;
     };
 
     const response = await makeRequestWithRetry(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: {
