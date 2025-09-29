@@ -1,0 +1,853 @@
+/* Mobile Medical Report Display Optimizations */
+/* Specifically addresses Georgian text readability and report card layout issues */
+
+@media (max-width: 767px) {
+  /* 1. FORCE WHITE BACKGROUND - Override all dark styling */
+  .medical-report-card,
+  .medical-report-card *,
+  .medical-report-card > *,
+  .medical-report-card .group,
+  .medical-report-card .relative,
+  .medical-report-card .absolute,
+  .medical-report-card div,
+  [class*="medical-report"] {
+    background: white !important;
+    background-color: white !important;
+    background-image: none !important;
+  }
+
+  /* Main card container - force white and full width */
+  .medical-report-card {
+    margin-bottom: 20px !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    background: white !important;
+    background-color: white !important;
+    background-image: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid #e5e7eb !important;
+    transition: all 0.2s ease !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Target group containers specifically */
+  .group.relative.overflow-hidden.w-full.max-w-full {
+    background: white !important;
+    background-color: white !important;
+    background-image: none !important;
+  }
+
+  /* Target the outer container with specific class pattern */
+  div[class*="group"][class*="relative"][class*="overflow-hidden"] {
+    background: white !important;
+    background-color: white !important;
+    background-image: none !important;
+  }
+
+  /* Aggressive targeting for medical report cards only */
+  div[class*="medical-report"],
+  div[class*="medical-report"] * {
+    background-color: white !important;
+    background-image: none !important;
+  }
+
+  /* Specifically target the cards that are showing dark */
+  div[class*="group"] div[class*="relative"],
+  div[class*="group"] div[class*="absolute"],
+  .group > div,
+  .group .relative > div,
+  .relative.overflow-hidden > div {
+    background: white !important;
+    background-color: white !important;
+    background-image: none !important;
+    background-attachment: unset !important;
+    background-blend-mode: unset !important;
+    background-clip: unset !important;
+    background-origin: unset !important;
+    background-position: unset !important;
+    background-repeat: unset !important;
+    background-size: unset !important;
+  }
+
+  .medical-report-card:active {
+    transform: scale(0.99) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  /* 2. REPORT HEADER - Better visual hierarchy */
+  .medical-report-header {
+    margin-bottom: 20px !important;
+    padding-bottom: 20px !important;
+    border-bottom: 2px solid #f1f5f9 !important;
+  }
+
+  .medical-report-type-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 8px 16px !important;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: white !important;
+    border-radius: 12px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25) !important;
+  }
+
+  .medical-report-type-icon {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .medical-report-title {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #1e40af !important;
+    margin-bottom: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  .medical-report-meta {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    font-size: 14px !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+  }
+
+  .medical-report-meta-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 6px 12px !important;
+    background: #f1f5f9 !important;
+    border-radius: 8px !important;
+    border: 1px solid #d1d5db !important;
+  }
+
+  .medical-report-meta-icon {
+    width: 16px !important;
+    height: 16px !important;
+    color: #3b82f6 !important;
+  }
+
+  /* 3. IMPROVED TEXT READABILITY - Georgian and general text optimization */
+  .improved-georgian-text {
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    font-family: 'Noto Sans Georgian', 'BPG Arial', 'Sylfaen', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    margin-bottom: 16px !important;
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  /* MOBILE REPORT CONTENT - Better space utilization */
+  .medical-report-content {
+    padding: 16px 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .medical-report-text-area {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* AGGRESSIVE TARGETING - Force content to use full width */
+  
+  /* Target the main content wrapper inside the card */
+  .group.relative.overflow-hidden .relative.p-8,
+  .group.relative.overflow-hidden .relative.p-6,
+  .group.relative.overflow-hidden .p-8,
+  .group.relative.overflow-hidden .p-6 {
+    padding: 8px 4px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Target the prose container */
+  .group.relative.overflow-hidden .prose {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Target all elements within the prose container */
+  .group.relative.overflow-hidden .prose > *,
+  .group.relative.overflow-hidden .prose div,
+  .group.relative.overflow-hidden .prose p {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: left !important;
+  }
+
+  /* Target the text content container with specific classes */
+  .group.relative.overflow-hidden div[class*="text-sm"],
+  .group.relative.overflow-hidden div[class*="leading-relaxed"],
+  .group.relative.overflow-hidden div[class*="whitespace-pre-wrap"] {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Force full width for all report content elements */
+  .medical-report-card .improved-georgian-text,
+  .medical-report-card p,
+  .medical-report-card div,
+  .medical-report-card .report-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Specific targeting for Georgian medical text */
+  .medical-report-card .improved-georgian-text {
+    padding: 0 !important;
+    margin: 0 0 12px 0 !important;
+    width: 100% !important;
+    text-align: left !important;
+  }
+
+  /* ULTRA-SPECIFIC TARGETING - Based on component structure */
+  
+  /* Target the collapsible content area */
+  .group.relative.overflow-hidden div[class*="transition-all"] div[class*="relative"][class*="p-8"] {
+    padding: 8px 4px !important;
+  }
+
+  /* AGGRESSIVE TARGETING - Force white card to expand into blue space */
+  .group.relative.overflow-hidden div[class*="bg-white/60"],
+  .group.relative.overflow-hidden div[class*="bg-white/98"],
+  .group.relative.overflow-hidden div[class*="backdrop-blur-sm"][class*="rounded-2xl"] {
+    margin-left: -16px !important;
+    margin-right: -8px !important;
+    padding-left: 20px !important;
+    padding-right: 12px !important;
+    width: calc(100% + 24px) !important;
+    max-width: calc(100% + 24px) !important;
+  }
+
+  /* Target the inner content container */
+  .group.relative.overflow-hidden div[class*="shadow-inner"] {
+    margin-left: -16px !important;
+    padding-left: 20px !important;
+    width: calc(100% + 24px) !important;
+  }
+
+  /* Target the content background container */
+  .group.relative.overflow-hidden div[class*="bg-white/60"] + div[class*="relative"][class*="p-6"] {
+    padding: 0 !important;
+  }
+
+  /* Target any div with p-6 or p-8 inside the card */
+  .group.relative.overflow-hidden div[class*="p-6"],
+  .group.relative.overflow-hidden div[class*="p-8"] {
+    padding: 8px 4px !important;
+  }
+
+  /* NUCLEAR OPTION - Ultra specific targeting */
+  @media (max-width: 767px) {
+    .group.relative.overflow-hidden.w-full.max-w-full > div > div:nth-child(2) > div > div > div:nth-child(2) > div > div[class*="bg-white"] {
+      margin-left: -20px !important;
+      padding-left: 24px !important;
+      width: calc(100% + 28px) !important;
+      max-width: calc(100% + 28px) !important;
+    }
+  }
+
+  /* Force zero padding on all text containers */
+  .group.relative.overflow-hidden * {
+    box-sizing: border-box !important;
+  }
+
+  /* Remove any inherited padding that might cause indentation */
+  .medical-report-card * {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  /* Ensure the main card uses full container width */
+  .medical-report-card {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 12px !important;
+  }
+
+  /* Better mobile header layout */
+  .ai-processing-header {
+    padding: 8px 16px !important;
+    background: white !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+
+  .ai-tab-navigation {
+    display: flex !important;
+    background: #f8fafc !important;
+    border-radius: 12px !important;
+    padding: 4px !important;
+    margin: 0 !important;
+  }
+
+  .ai-tab-button {
+    flex: 1 !important;
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    color: #64748b !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+  }
+
+  .ai-tab-button.active {
+    background: white !important;
+    color: #1a365d !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .ai-tab-button svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  .medical-report-content h1,
+  .medical-report-content h2,
+  .medical-report-content h3,
+  .medical-report-content h4 {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #1a365d !important;
+    margin: 24px 0 12px 0 !important;
+    line-height: 1.4 !important;
+  }
+
+  .medical-report-content ul,
+  .medical-report-content ol {
+    margin: 16px 0 !important;
+    padding-left: 24px !important;
+  }
+
+  .medical-report-content li {
+    margin-bottom: 8px !important;
+    line-height: 1.7 !important;
+  }
+
+  .medical-report-content strong,
+  .medical-report-content b {
+    font-weight: 700 !important;
+    color: #1a365d !important;
+  }
+
+  /* 4. REPORT ACTIONS - Optimized mobile layout */
+  .medical-report-actions {
+    margin-top: 12px !important;
+    padding-top: 12px !important;
+    border-top: 1px solid #e2e8f0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    max-width: 100% !important;
+  }
+
+  .medical-report-action-button {
+    min-height: 40px !important;
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .medical-report-action-button:active {
+    transform: scale(0.96) !important;
+  }
+
+  .medical-report-action-button svg {
+    width: 14px !important;
+    height: 14px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Better 2x2 grid for 4 buttons */
+  .medical-report-actions.four-buttons {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+  }
+
+  .medical-report-actions.four-buttons .medical-report-action-button {
+    padding: 6px 8px !important;
+    font-size: 12px !important;
+    min-height: 36px !important;
+    gap: 3px !important;
+  }
+
+  .medical-report-actions.four-buttons .medical-report-action-button svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  /* Compact single row for 5+ buttons */
+  .medical-report-actions.many-buttons {
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)) !important;
+    gap: 4px !important;
+  }
+
+  .medical-report-actions.many-buttons .medical-report-action-button {
+    padding: 4px 6px !important;
+    font-size: 10px !important;
+    min-height: 32px !important;
+    flex-direction: column !important;
+    gap: 1px !important;
+  }
+
+  .medical-report-actions.many-buttons .medical-report-action-button svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  /* Primary actions */
+  .medical-report-action-button.primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25) !important;
+  }
+
+  .medical-report-action-button.primary:hover {
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3) !important;
+  }
+
+  /* Secondary actions */
+  .medical-report-action-button.secondary {
+    background: white !important;
+    color: #3b82f6 !important;
+    border: 1px solid #d1d5db !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .medical-report-action-button.secondary:hover {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15) !important;
+  }
+
+  /* Danger actions */
+  .medical-report-action-button.danger {
+    background: white !important;
+    color: #dc2626 !important;
+    border: 2px solid #fecaca !important;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1) !important;
+  }
+
+  .medical-report-action-button.danger:hover {
+    background: #fef2f2 !important;
+    border-color: #dc2626 !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15) !important;
+  }
+
+  /* 5. COLLAPSIBLE REPORT CONTENT */
+  .medical-report-collapsible {
+    margin-top: 16px !important;
+  }
+
+  .medical-report-expand-button {
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 16px 20px !important;
+    background: #f9fafb !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 12px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #3b82f6 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .medical-report-expand-button:hover {
+    background: #f3f4f6 !important;
+    border-color: #3b82f6 !important;
+  }
+
+  .medical-report-expand-button:active {
+    transform: scale(0.98) !important;
+  }
+
+  .medical-report-expand-icon {
+    width: 20px !important;
+    height: 20px !important;
+    transition: transform 0.2s ease !important;
+  }
+
+  .medical-report-expand-button[aria-expanded="true"] .medical-report-expand-icon {
+    transform: rotate(180deg) !important;
+  }
+
+  /* 6. REPORT CARDS GRID - Single column on mobile with optimized spacing */
+  .medical-reports-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 12px 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Better mobile content container */
+  .ai-processing-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .ai-processing-main {
+    padding: 4px 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Force reports grid to use full width */
+  .medical-reports-grid {
+    padding: 8px 4px !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Ensure individual report cards span full container */
+  .medical-reports-grid > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Target the specific report card wrapper */
+  div[class*="group"][class*="relative"][class*="overflow-hidden"][class*="w-full"] {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Remove any default spacing from the main content area */
+  .h-full.overflow-y-auto {
+    padding: 4px 0 !important;
+  }
+
+  /* Optimized search and sort controls for mobile */
+  .ai-processing-controls {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    padding: 8px 16px !important;
+    background: white !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+  }
+
+  .ai-processing-controls .controls-row {
+    display: flex !important;
+    gap: 8px !important;
+    align-items: center !important;
+  }
+
+  .ai-processing-controls input[type="text"],
+  .ai-processing-controls select {
+    font-size: 14px !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    border: 1px solid #d1d5db !important;
+  }
+
+  .ai-processing-controls input[type="text"] {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  /* 7. REPORT EMPTY STATE */
+  .medical-reports-empty {
+    padding: 40px 20px !important;
+    text-align: center !important;
+    margin: 24px 16px !important;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%) !important;
+    border-radius: 24px !important;
+    border: 1px solid #d1d5db !important;
+  }
+
+  .medical-reports-empty-icon {
+    width: 64px !important;
+    height: 64px !important;
+    margin: 0 auto 24px !important;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    border-radius: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25) !important;
+  }
+
+  .medical-reports-empty-icon svg {
+    width: 32px !important;
+    height: 32px !important;
+    color: white !important;
+  }
+
+  .medical-reports-empty-title {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #1e40af !important;
+    margin-bottom: 12px !important;
+  }
+
+  .medical-reports-empty-description {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+  }
+
+  /* 8. LOADING STATES */
+  .medical-report-loading {
+    padding: 32px 20px !important;
+    text-align: center !important;
+    background: white !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+    margin-bottom: 24px !important;
+  }
+
+  .medical-report-loading-spinner {
+    width: 40px !important;
+    height: 40px !important;
+    margin: 0 auto 16px !important;
+    border: 3px solid #f3f4f6 !important;
+    border-top-color: #3b82f6 !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+  }
+
+  .medical-report-loading-text {
+    font-size: 16px !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+  }
+
+  /* 9. EDIT MODE OPTIMIZATIONS */
+  .medical-report-edit-mode {
+    background: #fefce8 !important;
+    border-color: #fbbf24 !important;
+  }
+
+  .medical-report-edit-badge {
+    background: #f59e0b !important;
+    color: white !important;
+    padding: 4px 12px !important;
+    border-radius: 8px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    margin-bottom: 16px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  /* 10. ERROR STATES */
+  .medical-report-error {
+    background: #fef2f2 !important;
+    border-color: #fecaca !important;
+    padding: 20px !important;
+    border-radius: 16px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .medical-report-error-title {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #dc2626 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .medical-report-error-message {
+    font-size: 15px !important;
+    color: #991b1b !important;
+    line-height: 1.6 !important;
+  }
+
+  /* 11. SUCCESS FEEDBACK */
+  .medical-report-success {
+    background: #f0fdf4 !important;
+    border: 2px solid #bbf7d0 !important;
+    border-radius: 16px !important;
+    padding: 16px 20px !important;
+    margin-bottom: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .medical-report-success-icon {
+    width: 20px !important;
+    height: 20px !important;
+    color: #16a34a !important;
+  }
+
+  .medical-report-success-text {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #166534 !important;
+  }
+
+  /* 12. RESPONSIVE ADJUSTMENTS FOR VERY SMALL SCREENS */
+  @media (max-width: 360px) {
+    .medical-report-card {
+      padding: 20px 16px !important;
+      margin-bottom: 20px !important;
+    }
+
+    .medical-report-title {
+      font-size: 18px !important;
+    }
+
+    .improved-georgian-text {
+      font-size: 15px !important;
+      line-height: 1.7 !important;
+    }
+
+    .medical-report-action-button {
+      min-height: 44px !important;
+      padding: 12px 16px !important;
+      font-size: 14px !important;
+    }
+  }
+
+  /* 13. ACCESSIBILITY IMPROVEMENTS */
+  .medical-report-action-button:focus,
+  .medical-report-expand-button:focus {
+    outline: 3px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .medical-report-card {
+      border-width: 3px !important;
+    }
+
+    .medical-report-action-button {
+      border-width: 3px !important;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .medical-report-card,
+    .medical-report-action-button,
+    .medical-report-expand-button {
+      transition: none !important;
+    }
+
+    .medical-report-loading-spinner {
+      animation: none !important;
+    }
+
+    .medical-report-expand-icon {
+      transition: none !important;
+    }
+  }
+
+  /* 14. DARK MODE SUPPORT */
+  @media (prefers-color-scheme: dark) {
+    .medical-report-card {
+      background: #1f2937 !important;
+      border-color: #374151 !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .medical-report-title {
+      color: #f9fafb !important;
+    }
+
+    .medical-report-content {
+      color: #e5e7eb !important;
+    }
+
+    .medical-report-content h1,
+    .medical-report-content h2,
+    .medical-report-content h3,
+    .medical-report-content h4 {
+      color: #f3f4f6 !important;
+    }
+
+    .medical-report-meta-item {
+      background: #374151 !important;
+      border-color: #4b5563 !important;
+      color: #d1d5db !important;
+    }
+
+    .medical-report-expand-button {
+      background: #374151 !important;
+      border-color: #4b5563 !important;
+      color: #93c5fd !important;
+    }
+
+    .medical-report-expand-button:hover {
+      background: #4b5563 !important;
+      border-color: #93c5fd !important;
+    }
+  }
+}
+
+/* Desktop and all screen sizes - Text readability improvements */
+.improved-georgian-text {
+  font-size: 16px !important;
+  line-height: 1.8 !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  font-family: 'Noto Sans Georgian', 'BPG Arial', 'Sylfaen', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* Desktop larger text */
+@media (min-width: 768px) {
+  .improved-georgian-text {
+    font-size: 17px !important;
+    line-height: 1.9 !important;
+  }
+}

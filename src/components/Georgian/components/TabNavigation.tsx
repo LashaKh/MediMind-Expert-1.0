@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Edit3, Stethoscope, MessageSquare, Sparkles, Mic, Square, History, Zap, Brain, FileText, Play, Pause, Activity, Upload, Paperclip } from 'lucide-react';
+import { Edit3, Stethoscope, MessageSquare, Sparkles, Mic, Square, History, Zap, Brain, FileText, Play, Pause, Activity, Upload, Paperclip, Plus } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { TRANSCRIPT_TABS, TabId } from '../utils/uiConstants';
 

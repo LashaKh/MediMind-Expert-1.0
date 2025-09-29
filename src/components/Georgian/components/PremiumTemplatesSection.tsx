@@ -68,6 +68,19 @@ const PREMIUM_TEMPLATES: Template[] = [
     estimatedTime: '45s',
     isFeatured: true,
     isSpecialDiagnosis: true
+  },
+  {
+    id: 'diagnosis-pulmonary-embolism',
+    category: 'Cardiologist Consults',
+    title: 'Diagnosis-(I26.0) - ფილტვის არტერიის ემბოლია მწვავე ფილტვისმიერი გულის დროს',
+    instruction: 'Generate a comprehensive pulmonary embolism diagnosis report (I26.0 - Pulmonary embolism with acute cor pulmonale / ფილტვის არტერიის ემბოლია მწვავე ფილტვისმიერი გულის დროს) including clinical presentation, diagnostic criteria, severity assessment, treatment protocol, and disposition recommendations based on this medical transcript.',
+    description: 'Specialized pulmonary embolism diagnosis with acute cor pulmonale assessment',
+    icon: HeartHandshake,
+    color: 'from-[#2b6cb0] via-[#1a365d] to-[#2b6cb0]',
+    priority: 'high',
+    estimatedTime: '45s',
+    isFeatured: true,
+    isSpecialDiagnosis: true
   }
 ];
 

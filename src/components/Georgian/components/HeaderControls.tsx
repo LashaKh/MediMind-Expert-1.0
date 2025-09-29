@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Activity, Sparkles, Zap, Mic, Square, Stethoscope, FileText, Clock, Settings } from 'lucide-react';
+import { Shield, Activity, Sparkles, Zap, Mic, Square, Stethoscope, FileText, Clock, Settings, Plus } from 'lucide-react';
 
 interface AuthStatus {
   isAuthenticated: boolean;
@@ -25,6 +25,8 @@ interface HeaderControlsProps {
   // STT model selection
   selectedSTTModel?: 'STT1' | 'STT2' | 'STT3';
   onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
+  // New Session control
+  onCreateSession?: () => void;
 }
 
 export const HeaderControls: React.FC<HeaderControlsProps> = ({
@@ -39,7 +41,8 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
   onStartRecording,
   onStopRecording,
   selectedSTTModel = 'STT3',
-  onModelChange
+  onModelChange,
+  onCreateSession
 }) => {
   const navigate = useNavigate();
   return (
@@ -110,54 +113,62 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
             </div>
           </div>
 
-          {/* Right Section - Mobile-Optimized Status */}
+          {/* Right Section - New Session Button */}
           <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 flex-shrink-0">
 
-            {/* Compact Connection Status */}
-            <div className={`relative flex items-center space-x-1.5 sm:space-x-2 lg:space-x-3 px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 rounded-lg sm:rounded-xl transition-all duration-300 shadow-md ${
-              authStatus.isAuthenticated
-                ? 'bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 border border-[#63b3ed]/50'
-                : 'bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 border border-[#90cdf4]/50'
-            }`}>
-              {/* Compact Status Light */}
-              <div className="relative">
-                <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${
-                  authStatus.isAuthenticated 
-                    ? 'bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] shadow-sm shadow-[#2b6cb0]/30' 
-                    : 'bg-gradient-to-r from-[#90cdf4] to-[#63b3ed] shadow-sm shadow-[#63b3ed]/30'
-                }`} />
-                {authStatus.isAuthenticated && (
-                  <div className="absolute inset-0 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#63b3ed] animate-ping opacity-40" />
+            {/* New Session Button - Mobile Optimized */}
+            {onCreateSession && authStatus.isAuthenticated && (
+              <button
+                onClick={() => onCreateSession?.()}
+                disabled={recordingState.isRecording || processing}
+                className={`
+                  group relative flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 lg:py-3 rounded-lg sm:rounded-xl transition-all duration-300 font-bold text-xs sm:text-sm transform hover:scale-105 active:scale-95 shadow-lg
+                  ${recordingState.isRecording || processing
+                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-gray-200/30' 
+                    : 'bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d] text-white shadow-[#2b6cb0]/30'
+                  }
+                `}
+                title={recordingState.isRecording ? "Cannot create new session during recording" : processing ? "Please wait for current process to complete" : "Create new recording session"}
+                style={{ minWidth: '44px', minHeight: '44px' }}
+              >
+                <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
+                  {processing ? (
+                    <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-white animate-pulse" />
+                  ) : (
+                    <Plus className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                  )}
+                </div>
+                
+                {/* Desktop label */}
+                <div className="hidden lg:flex flex-col items-start">
+                  <span className="font-bold text-sm leading-tight">
+                    {processing ? 'Processing' : 'New'}
+                  </span>
+                  <span className="text-xs opacity-90 leading-tight">
+                    {processing ? 'Please wait' : 'Session'}
+                  </span>
+                </div>
+                
+                {/* Tablet/Mobile label */}
+                <span className="lg:hidden font-bold text-xs sm:text-sm">
+                  {processing ? 'Processing' : 'New'}
+                </span>
+                
+                {/* Recording Indicator */}
+                {recordingState.isRecording && (
+                  <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-2 h-2 sm:w-3 sm:h-3 bg-gradient-to-r from-red-500 to-rose-600 rounded-full shadow-sm shadow-red-500/40 animate-pulse" />
                 )}
+              </button>
+            )}
+
+            {/* Fallback Status - Only show when not authenticated */}
+            {!authStatus.isAuthenticated && (
+              <div className="relative flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 border border-[#90cdf4]/50">
+                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-[#90cdf4] to-[#63b3ed]" />
+                <span className="hidden sm:inline text-xs sm:text-sm font-semibold text-[#2b6cb0]">Connecting</span>
+                <Activity className="sm:hidden w-3 h-3 text-[#2b6cb0]" />
               </div>
-              
-              {/* Status Text - Hidden on smallest screens, icon only on mobile */}
-              <span className={`hidden sm:inline text-xs sm:text-sm font-semibold tracking-wide ${
-                authStatus.isAuthenticated
-                  ? 'text-[#1a365d]'
-                  : 'text-[#2b6cb0]'
-              }`}>
-                {processing ? 'Processing' : authStatus.isAuthenticated ? 'Ready' : 'Connecting'}
-              </span>
-              
-              {/* Mobile Status Icon - Only show on mobile */}
-              <div className="sm:hidden">
-                {processing ? (
-                  <Zap className="w-3 h-3 text-[#2b6cb0] animate-pulse" />
-                ) : (
-                  <Activity className={`w-3 h-3 ${
-                    authStatus.isAuthenticated 
-                      ? 'text-[#2b6cb0]' 
-                      : 'text-[#2b6cb0]'
-                  }`} />
-                )}
-              </div>
-              
-              {/* Recording Indicator */}
-              {recordingState.isRecording && (
-                <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-2 h-2 sm:w-3 sm:h-3 bg-gradient-to-r from-red-500 to-rose-600 rounded-full shadow-sm shadow-red-500/40 animate-pulse" />
-              )}
-            </div>
+            )}
           </div>
         </div>
       </div>

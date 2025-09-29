@@ -69,10 +69,13 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
   // Check if this is a diagnosis report (by instruction content or custom template)
   const isDiagnosis = lower.includes('i50.0') || 
                       lower.includes('i24.9') ||
+                      lower.includes('i26.0') ||
                       lower.includes('heart failure') ||
                       lower.includes('nstemi') ||
+                      lower.includes('pulmonary embolism') ||
                       lower.includes('გულის შეგუბებითი უკმარისობა') ||
                       lower.includes('გულის მწვავე იშემიური ავადმყოფობა') ||
+                      lower.includes('ფილტვის არტერიის ემბოლია') ||
                       (lower.includes('diagnosis') && lower.includes('emergency room')) ||
                       lower.includes('template:'); // Add support for custom templates
   
@@ -93,6 +96,15 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
         color: 'from-[#1a365d] to-[#2b6cb0]', 
         isDiagnosis: true,
         endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4'
+      };
+    }
+    if (lower.includes('i26.0') || lower.includes('pulmonary embolism') || lower.includes('ფილტვის არტერიის ემბოლია')) {
+      return { 
+        type: 'Pulmonary Embolism ER Report (I26.0)', 
+        icon: HeartHandshake, 
+        color: 'from-[#2b6cb0] to-[#1a365d]', 
+        isDiagnosis: true,
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/3602b392-65e5-4dbd-a649-cac18280bea5'
       };
     }
     if (lower.includes('template:')) {
@@ -669,8 +681,8 @@ Medical AI Processing System`;
                 </div>
               </div>
             )}
-            {/* Premium User Request Section - Hide for diagnosis reports */}
-            {!analysisType.isDiagnosis && (
+            {/* Premium User Request Section - Hidden for cleaner UI */}
+            {false && (
               <div className="relative overflow-hidden">
                 {/* Request Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-[#90cdf4]/15 to-[#63b3ed]/10 dark:from-slate-800/80 dark:via-[#2b6cb0]/20 dark:to-[#1a365d]/15 rounded-3xl" />

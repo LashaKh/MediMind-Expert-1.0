@@ -1,0 +1,505 @@
+/* Mobile Template Section Optimizations */
+/* Specifically addresses screenshot issues with template selection cramped layout */
+
+@media (max-width: 767px) {
+  /* 1. MOBILE HEADER NAVIGATION - Clean and compact */
+  .mobile-ai-header {
+    padding: 12px 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .mobile-ai-tab-navigation {
+    display: flex !important;
+    background: #f8fafc !important;
+    border-radius: 12px !important;
+    padding: 4px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    margin-bottom: 16px !important;
+  }
+
+  .mobile-ai-tab-button {
+    flex: 1 !important;
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    background: transparent !important;
+    color: #64748b !important;
+    border: none !important;
+  }
+
+  .mobile-ai-tab-button.active {
+    background: white !important;
+    color: #1a365d !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .mobile-ai-tab-button svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .mobile-ai-tab-button .tab-badge {
+    background: #e2e8f0 !important;
+    color: #64748b !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 2px 6px !important;
+    border-radius: 8px !important;
+    margin-left: 4px !important;
+  }
+
+  .mobile-ai-tab-button.active .tab-badge {
+    background: #2b6cb0 !important;
+    color: white !important;
+  }
+
+  /* 2. TEMPLATE SELECTION DROPDOWN - Much larger and more prominent */
+  .template-dropdown-container {
+    padding: 0 16px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .template-dropdown-label {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    margin-bottom: 12px !important;
+    color: #1a365d !important;
+    display: block !important;
+  }
+
+  .template-dropdown-button {
+    width: 100% !important;
+    min-height: 56px !important;
+    padding: 16px 20px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    border-radius: 16px !important;
+    background: white !important;
+    border: 2px solid #e2e8f0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .template-dropdown-button:focus,
+  .template-dropdown-button:active {
+    border-color: #2b6cb0 !important;
+    box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15) !important;
+    outline: none !important;
+  }
+
+  .template-dropdown-text {
+    font-size: 16px !important;
+    color: #374151 !important;
+    font-weight: 600 !important;
+  }
+
+  .template-dropdown-icon {
+    width: 24px !important;
+    height: 24px !important;
+    color: #6b7280 !important;
+  }
+
+  /* 3. TEMPLATE SEARCH BAR - More prominent and easier to use */
+  .template-search-container {
+    padding: 0 16px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .template-search-wrapper {
+    position: relative !important;
+    width: 100% !important;
+  }
+
+  .template-search-input {
+    width: 100% !important;
+    min-height: 52px !important;
+    padding: 16px 20px 16px 56px !important;
+    font-size: 16px !important;
+    border-radius: 16px !important;
+    border: 2px solid #e2e8f0 !important;
+    background: white !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    font-weight: 500 !important;
+    color: #374151 !important;
+  }
+
+  .template-search-input::placeholder {
+    color: #9ca3af !important;
+    font-weight: 500 !important;
+  }
+
+  .template-search-input:focus {
+    border-color: #2b6cb0 !important;
+    box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15) !important;
+    outline: none !important;
+  }
+
+  .template-search-icon {
+    position: absolute !important;
+    left: 18px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 20px !important;
+    height: 20px !important;
+    color: #6b7280 !important;
+    pointer-events: none !important;
+  }
+
+  /* 4. TEMPLATE GRID - Larger cards with better spacing */
+  .templates-grid {
+    padding: 0 16px !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* Single column on mobile for better readability */
+  @media (max-width: 480px) {
+    .templates-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* 5. TEMPLATE CARDS - Much larger with better touch targets */
+  .template-card {
+    min-height: 140px !important;
+    padding: 20px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+    border: 2px solid transparent !important;
+    transition: all 0.2s ease !important;
+    background: white !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  .template-card:active {
+    transform: scale(0.98) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .template-card.featured {
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 24px rgba(26, 54, 93, 0.3) !important;
+  }
+
+  .template-card-header {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    margin-bottom: 16px !important;
+  }
+
+  .template-card-icon {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(43, 108, 176, 0.1) !important;
+    flex-shrink: 0 !important;
+  }
+
+  .template-card.featured .template-card-icon {
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .template-card-icon svg {
+    width: 24px !important;
+    height: 24px !important;
+    color: #2b6cb0 !important;
+  }
+
+  .template-card.featured .template-card-icon svg {
+    color: white !important;
+  }
+
+  .template-card-badge {
+    padding: 6px 12px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    background: rgba(43, 108, 176, 0.1) !important;
+    color: #2b6cb0 !important;
+  }
+
+  .template-card.featured .template-card-badge {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+  }
+
+  .template-card-title {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 8px !important;
+    color: #1a365d !important;
+  }
+
+  .template-card.featured .template-card-title {
+    color: white !important;
+  }
+
+  .template-card-description {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+  }
+
+  .template-card.featured .template-card-description {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  /* 6. GENERATED REPORTS SECTION - Better readability */
+  .generated-reports-container {
+    padding: 0 16px !important;
+    margin-top: 32px !important;
+  }
+
+  .generated-reports-header {
+    margin-bottom: 20px !important;
+  }
+
+  .generated-reports-title {
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    color: #1a365d !important;
+    margin-bottom: 8px !important;
+  }
+
+  .generated-reports-subtitle {
+    font-size: 15px !important;
+    color: #2b6cb0 !important;
+    font-weight: 500 !important;
+  }
+
+  /* 7. REPORT CARDS - Larger with better Georgian text rendering */
+  .report-card {
+    margin-bottom: 20px !important;
+    padding: 20px !important;
+    border-radius: 20px !important;
+    background: white !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+    border: 2px solid #f1f5f9 !important;
+  }
+
+  .report-card-header {
+    margin-bottom: 16px !important;
+    padding-bottom: 16px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+  }
+
+  .report-card-title {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #1a365d !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+  }
+
+  .report-card-meta {
+    font-size: 14px !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+  }
+
+  .report-card-content {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+    color: #374151 !important;
+    font-weight: 500 !important;
+  }
+
+  /* Special handling for Georgian text */
+  .report-card-content[lang="ka"],
+  .report-card-content:lang(ka) {
+    font-size: 17px !important;
+    line-height: 1.8 !important;
+    letter-spacing: 0.02em !important;
+    font-family: 'Noto Sans Georgian', 'BPG Arial', 'Sylfaen', serif !important;
+  }
+
+  /* 8. ACTION BUTTONS - Larger touch targets */
+  .template-action-button {
+    min-height: 52px !important;
+    padding: 16px 24px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    border-radius: 16px !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+
+  .template-action-button:active {
+    transform: scale(0.98) !important;
+  }
+
+  .template-action-button svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Primary button */
+  .template-action-button.primary {
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 16px rgba(26, 54, 93, 0.3) !important;
+  }
+
+  .template-action-button.primary:hover {
+    box-shadow: 0 8px 24px rgba(26, 54, 93, 0.4) !important;
+  }
+
+  /* Secondary button */
+  .template-action-button.secondary {
+    background: white !important;
+    color: #2b6cb0 !important;
+    border: 2px solid #e2e8f0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .template-action-button.secondary:hover {
+    border-color: #2b6cb0 !important;
+    box-shadow: 0 4px 12px rgba(43, 108, 176, 0.15) !important;
+  }
+
+  /* 9. EMPTY STATES - More engaging on mobile */
+  .template-empty-state {
+    padding: 40px 20px !important;
+    text-align: center !important;
+    margin: 24px 16px !important;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+    border-radius: 24px !important;
+    border: 2px solid #e2e8f0 !important;
+  }
+
+  .template-empty-state-icon {
+    width: 64px !important;
+    height: 64px !important;
+    margin: 0 auto 24px !important;
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%) !important;
+    border-radius: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 8px 24px rgba(26, 54, 93, 0.3) !important;
+  }
+
+  .template-empty-state-icon svg {
+    width: 32px !important;
+    height: 32px !important;
+    color: white !important;
+  }
+
+  .template-empty-state-title {
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    color: #1a365d !important;
+    margin-bottom: 12px !important;
+  }
+
+  .template-empty-state-description {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+  }
+
+  /* 10. RESPONSIVE GRID ADJUSTMENTS */
+  @media (max-width: 420px) {
+    .templates-grid {
+      padding: 0 12px !important;
+      gap: 16px !important;
+    }
+
+    .template-card {
+      min-height: 120px !important;
+      padding: 16px !important;
+    }
+
+    .template-card-title {
+      font-size: 16px !important;
+    }
+
+    .template-card-description {
+      font-size: 13px !important;
+    }
+  }
+
+  /* 11. LOADING STATES - Better mobile experience */
+  .template-loading {
+    padding: 40px 16px !important;
+    text-align: center !important;
+  }
+
+  .template-loading-spinner {
+    width: 40px !important;
+    height: 40px !important;
+    margin: 0 auto 16px !important;
+    border: 3px solid #f3f4f6 !important;
+    border-top-color: #2b6cb0 !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+  }
+
+  .template-loading-text {
+    font-size: 16px !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* 12. ACCESSIBILITY IMPROVEMENTS */
+  .template-card:focus,
+  .template-action-button:focus,
+  .template-dropdown-button:focus,
+  .template-search-input:focus {
+    outline: 3px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .template-card,
+    .template-action-button,
+    .template-dropdown-button {
+      border-width: 3px !important;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .template-card,
+    .template-action-button,
+    .template-dropdown-button,
+    .template-search-input {
+      transition: none !important;
+    }
+
+    .template-loading-spinner {
+      animation: none !important;
+    }
+  }
+}

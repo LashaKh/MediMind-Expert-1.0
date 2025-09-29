@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, FileText, Activity, Zap } from 'lucide-react';
+import { ArrowLeft, FileText, Activity, Zap, Plus } from 'lucide-react';
 
 interface AuthStatus {
   isAuthenticated: boolean;
@@ -16,6 +16,7 @@ interface MobileHeaderProps {
   processing?: boolean;
   onOpenMobileSessions?: () => void;
   sessionsCount?: number;
+  onCreateSession?: () => void;
 }
 
 export const MobileHeader: React.FC<MobileHeaderProps> = ({
@@ -24,6 +25,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
   processing = false,
   onOpenMobileSessions,
   sessionsCount = 0,
+  onCreateSession,
 }) => {
   const navigate = useNavigate();
 
@@ -57,42 +59,35 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
           </div>
         </div>
 
-        {/* Right Section - Status & Sessions */}
+        {/* Right Section - New Session & Sessions */}
         <div className="flex items-center space-x-2">
-          {/* Status Indicator */}
-          <div className={`relative flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg transition-all duration-300 ${
-            authStatus.isAuthenticated
-              ? 'bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 border border-[#63b3ed]/50'
-              : 'bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 border border-[#90cdf4]/50'
-          }`}>
-            {/* Status Light */}
-            <div className="relative">
-              <div className={`w-2 h-2 rounded-full ${
-                authStatus.isAuthenticated 
-                  ? 'bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0]' 
-                  : 'bg-gradient-to-r from-[#90cdf4] to-[#63b3ed]'
-              }`} />
-              {authStatus.isAuthenticated && (
-                <div className="absolute inset-0 w-2 h-2 rounded-full bg-[#63b3ed] animate-ping opacity-40" />
+          {/* New Session Button - Mobile Optimized */}
+          {onCreateSession && authStatus.isAuthenticated && (
+            <button
+              onClick={() => onCreateSession?.()}
+              disabled={recordingState.isRecording || processing}
+              className={`
+                relative flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300 font-bold text-xs transform hover:scale-105 active:scale-95 shadow-lg
+                ${recordingState.isRecording || processing
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-gray-200/30' 
+                  : 'bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d] text-white shadow-[#2b6cb0]/30'
+                }
+              `}
+              title={recordingState.isRecording ? "Cannot create new session during recording" : processing ? "Please wait for current process to complete" : "Create new recording session"}
+              style={{ minWidth: '44px', minHeight: '44px' }}
+            >
+              {processing ? (
+                <Zap className="w-5 h-5 text-white animate-pulse" />
+              ) : (
+                <Plus className="w-5 h-5 text-white" />
               )}
-            </div>
-            
-            {/* Status Icon */}
-            {processing ? (
-              <Zap className="w-3 h-3 text-[#2b6cb0] animate-pulse" />
-            ) : (
-              <Activity className={`w-3 h-3 ${
-                authStatus.isAuthenticated 
-                  ? 'text-[#2b6cb0]' 
-                  : 'text-[#2b6cb0]'
-              }`} />
-            )}
-            
-            {/* Recording Indicator */}
-            {recordingState.isRecording && (
-              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-gradient-to-r from-red-500 to-rose-600 rounded-full animate-pulse" />
-            )}
-          </div>
+              
+              {/* Recording Indicator */}
+              {recordingState.isRecording && (
+                <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-gradient-to-r from-red-500 to-rose-600 rounded-full animate-pulse" />
+              )}
+            </button>
+          )}
 
           {/* Sessions Button */}
           {onOpenMobileSessions && (
@@ -111,6 +106,14 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
                 )}
               </div>
             </button>
+          )}
+
+          {/* Fallback Status - Only show when not authenticated */}
+          {!authStatus.isAuthenticated && (
+            <div className="relative flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 border border-[#90cdf4]/50">
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#90cdf4] to-[#63b3ed]" />
+              <Activity className="w-3 h-3 text-[#2b6cb0]" />
+            </div>
           )}
         </div>
       </div>

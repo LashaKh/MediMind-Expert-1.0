@@ -30,6 +30,9 @@ const HEART_FAILURE_API_URL = "https://flowise-2-0.onrender.com/api/v1/predictio
 // Red card (NSTEMI) endpoint  
 const NSTEMI_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4";
 
+// Pulmonary embolism (I26.0) endpoint
+const PULMONARY_EMBOLISM_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3602b392-65e5-4dbd-a649-cac18280bea5";
+
 // General template processing endpoint
 const GENERAL_TEMPLATE_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf";
 
@@ -86,7 +89,17 @@ export async function generateDiagnosisReport(
     }
 
     // Select the correct endpoint based on diagnosis type
-    const apiUrl = diagnosis.icdCode === 'I50.0' ? HEART_FAILURE_API_URL : NSTEMI_API_URL;
+    let apiUrl: string;
+    if (diagnosis.icdCode === 'I50.0') {
+      apiUrl = HEART_FAILURE_API_URL;
+    } else if (diagnosis.icdCode === 'I24.9') {
+      apiUrl = NSTEMI_API_URL;
+    } else if (diagnosis.icdCode === 'I26.0') {
+      apiUrl = PULMONARY_EMBOLISM_API_URL;
+    } else {
+      // Fallback to NSTEMI for unknown codes
+      apiUrl = NSTEMI_API_URL;
+    }
     console.log('🌐 API URL selected:', apiUrl);
 
     const formattedRequest = formatDiagnosisRequest(transcript, diagnosis, template);
@@ -186,6 +199,16 @@ export const NSTEMI_DIAGNOSIS: DiagnosisContext = {
 };
 
 /**
+ * Pulmonary embolism diagnosis context
+ */
+export const PULMONARY_EMBOLISM_DIAGNOSIS: DiagnosisContext = {
+  icdCode: 'I26.0',
+  diagnosisGeorgian: 'ფილტვის არტერიის ემბოლია მწვავე ფილტვისმიერი გულის დროს',
+  diagnosisEnglish: 'Pulmonary embolism with acute cor pulmonale',
+  specialty: 'Cardiology'
+};
+
+/**
  * Generate heart failure consultation report
  * Convenience function for the specific heart failure diagnosis
  */
@@ -202,12 +225,21 @@ export async function generateNSTEMIReport(transcript: string, template?: UserRe
 }
 
 /**
+ * Generate pulmonary embolism consultation report
+ * Convenience function for the specific pulmonary embolism diagnosis
+ */
+export async function generatePulmonaryEmbolismReport(transcript: string, template?: UserReportTemplate) {
+  return generateDiagnosisReport(transcript, PULMONARY_EMBOLISM_DIAGNOSIS, template);
+}
+
+/**
  * Check if a template instruction is for diagnosis processing
  */
 export function isDiagnosisTemplate(instruction: string): boolean {
   return instruction.toLowerCase().includes('diagnosis') && 
          (instruction.toLowerCase().includes('i50.0') || 
-          instruction.toLowerCase().includes('i24.9'));
+          instruction.toLowerCase().includes('i24.9') ||
+          instruction.toLowerCase().includes('i26.0'));
 }
 
 /**
@@ -226,6 +258,12 @@ export function extractDiagnosisFromInstruction(instruction: string): DiagnosisC
     return NSTEMI_DIAGNOSIS;
   }
   
+  if (instruction.toLowerCase().includes('i26.0') || 
+      instruction.toLowerCase().includes('pulmonary embolism') ||
+      instruction.toLowerCase().includes('ფილტვის არტერიის ემბოლია')) {
+    return PULMONARY_EMBOLISM_DIAGNOSIS;
+  }
+  
   return null;
 }
 
@@ -239,7 +277,7 @@ export async function generateTemplateBasedReport(
   diagnosis?: DiagnosisContext
 ): Promise<{ success: true; report: string } | { success: false; error: string }> {
   // If diagnosis context is provided and matches our specialized endpoints, use diagnosis service
-  if (diagnosis && (diagnosis.icdCode === 'I50.0' || diagnosis.icdCode === 'I24.9')) {
+  if (diagnosis && (diagnosis.icdCode === 'I50.0' || diagnosis.icdCode === 'I24.9' || diagnosis.icdCode === 'I26.0')) {
     return generateDiagnosisReport(transcript, diagnosis, template);
   }
   

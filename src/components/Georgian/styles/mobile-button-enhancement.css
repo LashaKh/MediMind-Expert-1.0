@@ -1,0 +1,417 @@
+/* Mobile Button Enhancement for Medical UI */
+/* Ensures all buttons meet 44px minimum touch target requirement */
+/* Optimized for medical professionals using gloved hands */
+
+@media (max-width: 767px) {
+  /* 1. UNIVERSAL BUTTON STANDARDS */
+  .btn,
+  button,
+  [role="button"],
+  .button,
+  .medical-button {
+    min-height: 48px !important;
+    min-width: 48px !important;
+    padding: 12px 20px !important;
+    border-radius: 12px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    transition: all 0.2s ease !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    cursor: pointer !important;
+    position: relative !important;
+    overflow: hidden !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+
+  /* Active state for tactile feedback */
+  .btn:active,
+  button:active,
+  [role="button"]:active,
+  .button:active,
+  .medical-button:active {
+    transform: scale(0.98) !important;
+  }
+
+  /* 2. PRIMARY MEDICAL BUTTONS */
+  .medical-btn-primary,
+  .bg-gradient-to-r.from-\[--2b6cb0\],
+  .bg-blue-600,
+  .bg-blue-500 {
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 4px 16px rgba(26, 54, 93, 0.3) !important;
+  }
+
+  .medical-btn-primary:hover,
+  .bg-gradient-to-r.from-\[--2b6cb0\]:hover {
+    box-shadow: 0 8px 24px rgba(26, 54, 93, 0.4) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  .medical-btn-primary:active,
+  .bg-gradient-to-r.from-\[--2b6cb0\]:active {
+    transform: scale(0.98) translateY(0) !important;
+    box-shadow: 0 2px 8px rgba(26, 54, 93, 0.3) !important;
+  }
+
+  /* 3. SECONDARY MEDICAL BUTTONS */
+  .medical-btn-secondary,
+  .bg-white,
+  .border-gray-300 {
+    background: white !important;
+    color: #2b6cb0 !important;
+    border: 2px solid #e2e8f0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .medical-btn-secondary:hover {
+    border-color: #2b6cb0 !important;
+    box-shadow: 0 4px 12px rgba(43, 108, 176, 0.15) !important;
+    background: #f8fafc !important;
+  }
+
+  .medical-btn-secondary:active {
+    transform: scale(0.98) !important;
+    background: #f1f5f9 !important;
+  }
+
+  /* 4. DANGER/DELETE BUTTONS */
+  .medical-btn-danger,
+  .text-red-600,
+  .bg-red-500 {
+    background: white !important;
+    color: #dc2626 !important;
+    border: 2px solid #fecaca !important;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1) !important;
+  }
+
+  .medical-btn-danger:hover {
+    background: #fef2f2 !important;
+    border-color: #dc2626 !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15) !important;
+  }
+
+  .medical-btn-danger:active {
+    transform: scale(0.98) !important;
+    background: #fee2e2 !important;
+  }
+
+  /* 5. ICON BUTTONS - Special handling for small icons */
+  .icon-button,
+  .w-8.h-8,
+  .w-10.h-10 {
+    min-width: 48px !important;
+    min-height: 48px !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .icon-button svg,
+  .w-8.h-8 svg,
+  .w-10.h-10 svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* 6. FLOATING ACTION BUTTONS (FAB) */
+  .fab,
+  .fixed.bottom-4.right-4 {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 50% !important;
+    box-shadow: 0 8px 24px rgba(26, 54, 93, 0.3) !important;
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%) !important;
+    color: white !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .fab:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 12px 32px rgba(26, 54, 93, 0.4) !important;
+  }
+
+  .fab:active {
+    transform: scale(0.95) !important;
+    box-shadow: 0 4px 16px rgba(26, 54, 93, 0.3) !important;
+  }
+
+  .fab svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  /* 7. RECORDING BUTTON SPECIAL STATES */
+  .recording-button {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4) !important;
+    animation: recordingPulse 2s infinite !important;
+  }
+
+  @keyframes recordingPulse {
+    0%, 100% {
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+    }
+    50% {
+      box-shadow: 0 12px 32px rgba(239, 68, 68, 0.6);
+    }
+  }
+
+  /* 8. DISABLED STATES */
+  .btn:disabled,
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  .button:disabled,
+  .medical-button:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    pointer-events: none !important;
+  }
+
+  /* 9. FORM CONTROL BUTTONS */
+  .form-control-button {
+    min-height: 52px !important;
+    padding: 16px 20px !important;
+    border-radius: 12px !important;
+    font-size: 16px !important;
+    width: 100% !important;
+    background: white !important;
+    border: 2px solid #e2e8f0 !important;
+    color: #374151 !important;
+    text-align: left !important;
+    justify-content: space-between !important;
+  }
+
+  .form-control-button:hover {
+    border-color: #2b6cb0 !important;
+    box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1) !important;
+  }
+
+  .form-control-button:focus {
+    border-color: #2b6cb0 !important;
+    box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15) !important;
+    outline: none !important;
+  }
+
+  /* 10. BUTTON GROUPS */
+  .button-group {
+    display: flex !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .button-group .btn,
+  .button-group button {
+    flex: 1 !important;
+    min-width: 120px !important;
+  }
+
+  @media (max-width: 360px) {
+    .button-group {
+      flex-direction: column !important;
+    }
+    
+    .button-group .btn,
+    .button-group button {
+      width: 100% !important;
+    }
+  }
+
+  /* 11. SPLIT BUTTONS */
+  .split-button {
+    display: flex !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .split-button .main-action {
+    flex: 1 !important;
+    border-radius: 0 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .split-button .dropdown-action {
+    min-width: 48px !important;
+    border-radius: 0 !important;
+    padding: 12px !important;
+  }
+
+  /* 12. TOGGLE BUTTONS */
+  .toggle-button {
+    position: relative !important;
+  }
+
+  .toggle-button[aria-pressed="true"] {
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 16px rgba(26, 54, 93, 0.3) !important;
+  }
+
+  .toggle-button[aria-pressed="false"] {
+    background: white !important;
+    color: #6b7280 !important;
+    border: 2px solid #e2e8f0 !important;
+  }
+
+  /* 13. LOADING STATES */
+  .btn-loading,
+  .button-loading {
+    position: relative !important;
+    color: transparent !important;
+    pointer-events: none !important;
+  }
+
+  .btn-loading::after,
+  .button-loading::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 20px !important;
+    height: 20px !important;
+    border: 2px solid currentColor !important;
+    border-top-color: transparent !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+  }
+
+  /* 14. STEPPER BUTTONS */
+  .stepper-button {
+    min-width: 48px !important;
+    min-height: 48px !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    border: 2px solid #e2e8f0 !important;
+    color: #2b6cb0 !important;
+    font-weight: 700 !important;
+    font-size: 18px !important;
+  }
+
+  .stepper-button:hover {
+    background: #f1f5f9 !important;
+    border-color: #2b6cb0 !important;
+  }
+
+  .stepper-button:active {
+    background: #e2e8f0 !important;
+    transform: scale(0.95) !important;
+  }
+
+  /* 15. CHIP/TAG BUTTONS */
+  .chip-button {
+    min-height: 40px !important;
+    padding: 8px 16px !important;
+    border-radius: 20px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    background: #f1f5f9 !important;
+    color: #2b6cb0 !important;
+    border: 2px solid #e2e8f0 !important;
+  }
+
+  .chip-button.selected {
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%) !important;
+    color: white !important;
+    border-color: transparent !important;
+  }
+
+  /* 16. ACCESSIBILITY IMPROVEMENTS */
+  .btn:focus,
+  button:focus,
+  [role="button"]:focus {
+    outline: 3px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .btn,
+    button,
+    .medical-button {
+      border-width: 3px !important;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    button,
+    .medical-button {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .fab {
+      animation: none !important;
+    }
+
+    .recording-button {
+      animation: none !important;
+    }
+  }
+
+  /* 17. DARK MODE SUPPORT */
+  @media (prefers-color-scheme: dark) {
+    .medical-btn-secondary {
+      background: #374151 !important;
+      color: #93c5fd !important;
+      border-color: #4b5563 !important;
+    }
+
+    .medical-btn-secondary:hover {
+      background: #4b5563 !important;
+      border-color: #93c5fd !important;
+    }
+
+    .form-control-button {
+      background: #374151 !important;
+      color: #e5e7eb !important;
+      border-color: #4b5563 !important;
+    }
+
+    .form-control-button:hover,
+    .form-control-button:focus {
+      border-color: #93c5fd !important;
+      box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.15) !important;
+    }
+  }
+
+  /* 18. COMPACT MODE FOR VERY SMALL SCREENS */
+  @media (max-width: 360px) {
+    .btn,
+    button,
+    .medical-button {
+      min-height: 44px !important;
+      padding: 10px 16px !important;
+      font-size: 15px !important;
+    }
+
+    .icon-button {
+      min-width: 44px !important;
+      min-height: 44px !important;
+      padding: 10px !important;
+    }
+
+    .fab {
+      width: 56px !important;
+      height: 56px !important;
+    }
+
+    .fab svg {
+      width: 24px !important;
+      height: 24px !important;
+    }
+  }
+}

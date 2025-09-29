@@ -9,9 +9,6 @@ import {
   Plus,
   FileText,
   Stethoscope,
-  Search,
-  Grid3X3,
-  List,
   Zap,
   HeartHandshake,
   Activity
@@ -58,7 +55,6 @@ interface AIProcessingContentProps {
 }
 
 type ViewMode = 'templates' | 'history';
-type LayoutMode = 'grid' | 'list';
 
 export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   transcript,
@@ -80,10 +76,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   sessionTitle = ''
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('templates');
-  const [layoutMode, setLayoutMode] = useState<LayoutMode>('grid');
   const [customInstruction, setCustomInstruction] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'processing-time'>('newest');
   const [isChatExpanded, setIsChatExpanded] = useState(false);
   const switchToHistoryRef = useRef<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -202,27 +195,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
     }
   };
 
-  // Filter and sort history
-  const filteredHistory = processingHistory
-    .filter(item => {
-      if (!searchQuery) return true;
-      return (
-        item.userInstruction.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.aiResponse.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'newest':
-          return b.timestamp - a.timestamp;
-        case 'oldest':
-          return a.timestamp - b.timestamp;
-        case 'processing-time':
-          return b.processingTime - a.processingTime;
-        default:
-          return b.timestamp - a.timestamp;
-      }
-    });
+  // Sort history by newest first (simplified)
+  const filteredHistory = processingHistory.sort((a, b) => b.timestamp - a.timestamp);
 
   return (
     <>
@@ -231,129 +205,42 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
       {/* Compact Header */}
       <div className="flex-shrink-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-[#63b3ed]/50 dark:border-[#2b6cb0]/50">
         <div className="px-4 py-3">
-          {/* Template Selector */}
-          {availableTemplates.length > 0 && (
-            <div className="mb-3">
-              <label className="block text-sm font-medium text-[#1a365d] dark:text-[#90cdf4] mb-2">
-                Select Template (Optional)
-              </label>
-              <div className="flex items-center space-x-2">
-                <select
-                  value={selectedTemplate?.id || ''}
-                  onChange={(e) => {
-                    const templateId = e.target.value;
-                    const template = templateId ? availableTemplates.find(t => t.id === templateId) : null;
-                    onTemplateSelect?.(template);
-                  }}
-                  className="flex-1 bg-white dark:bg-gray-700 border border-[#63b3ed]/30 dark:border-[#2b6cb0]/50 rounded-lg px-3 py-2 text-sm text-[#1a365d] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#63b3ed] dark:focus:ring-[#90cdf4]"
-                >
-                  <option value="">No template (default)</option>
-                  {availableTemplates.map((template) => (
-                    <option key={template.id} value={template.id}>
-                      {template.name} {template.usage_count > 0 && `(used ${template.usage_count}x)`}
-                    </option>
-                  ))}
-                </select>
-                {selectedTemplate && (
-                  <button
-                    onClick={() => onTemplateSelect?.(null)}
-                    className="p-2 text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4] transition-colors"
-                    title="Clear template selection"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-              {selectedTemplate && (
-                <div className="mt-2 p-2 bg-[#90cdf4]/10 dark:bg-[#1a365d]/20 rounded-lg">
-                  <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed]">
-                    Using template: <span className="font-medium">{selectedTemplate.name}</span>
-                    {selectedTemplate.notes && (
-                      <span className="block mt-1 italic">{selectedTemplate.notes}</span>
-                    )}
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+          {/* Template Selector - HIDDEN for cleaner mobile UI */}
+          {/* Template selection is now handled directly within template cards */}
           
-          {/* Navigation Tabs */}
-          <div className="flex items-center justify-between">
-            <div className="flex bg-[#90cdf4]/20 dark:bg-[#1a365d]/60 rounded-xl p-1.5 shadow-inner">
+          {/* Enhanced Navigation Tabs */}
+          <div className="flex items-center justify-center">
+            <div className="flex bg-gradient-to-r from-[#90cdf4]/30 via-white/80 to-[#90cdf4]/30 dark:from-[#1a365d]/80 dark:via-[#2b6cb0]/40 dark:to-[#1a365d]/80 rounded-2xl p-2 shadow-lg border border-white/50 backdrop-blur-sm">
               <button
                 onClick={() => setViewMode('templates')}
-                className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center space-x-3 px-6 py-3 rounded-xl text-base font-bold transition-all duration-300 transform ${
                   viewMode === 'templates'
-                    ? 'bg-white dark:bg-[#2b6cb0] text-[#1a365d] dark:text-white shadow-sm'
-                    : 'text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4]'
+                    ? 'bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white shadow-lg scale-105 shadow-[#2b6cb0]/30'
+                    : 'text-[#2b6cb0] dark:text-[#63b3ed] hover:bg-white/60 hover:scale-102 hover:text-[#1a365d] dark:hover:text-[#90cdf4] hover:shadow-md'
                 }`}
               >
-                <Stethoscope className="w-4 h-4" />
-                <span>Templates</span>
+                <Stethoscope className={`${viewMode === 'templates' ? 'w-6 h-6' : 'w-5 h-5'} transition-all duration-300`} />
+                <span className="text-lg">Templates</span>
               </button>
               <button
                 onClick={() => setViewMode('history')}
-                className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center space-x-3 px-6 py-3 rounded-xl text-base font-bold transition-all duration-300 transform ${
                   viewMode === 'history'
-                    ? 'bg-white dark:bg-[#2b6cb0] text-[#1a365d] dark:text-white shadow-sm'
-                    : 'text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4]'
+                    ? 'bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white shadow-lg scale-105 shadow-[#2b6cb0]/30'
+                    : 'text-[#2b6cb0] dark:text-[#63b3ed] hover:bg-white/60 hover:scale-102 hover:text-[#1a365d] dark:hover:text-[#90cdf4] hover:shadow-md'
                 }`}
               >
-                <FileText className="w-4 h-4" />
-                <span>Generated Reports ({processingHistory.length})</span>
+                <FileText className={`${viewMode === 'history' ? 'w-6 h-6' : 'w-5 h-5'} transition-all duration-300`} />
+                <span className="text-lg">Generated Reports</span>
+                <span className={`px-3 py-1 rounded-full text-sm font-extrabold transition-all duration-300 ${
+                  viewMode === 'history'
+                    ? 'bg-white/20 text-white'
+                    : 'bg-[#2b6cb0]/20 text-[#1a365d] dark:bg-[#63b3ed]/20 dark:text-[#90cdf4]'
+                }`}>
+                  {processingHistory.length}
+                </span>
               </button>
             </div>
-
-            {/* History View Controls */}
-            {viewMode === 'history' && processingHistory.length > 0 && (
-              <div className="flex items-center space-x-2">
-                <div className="flex bg-[#90cdf4]/20 dark:bg-[#1a365d]/60 rounded-lg p-1">
-                  <button
-                    onClick={() => setLayoutMode('grid')}
-                    className={`p-1.5 rounded-md transition-all ${
-                      layoutMode === 'grid'
-                        ? 'bg-white dark:bg-[#2b6cb0] text-[#1a365d] dark:text-white shadow-sm'
-                        : 'text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4]'
-                    }`}
-                  >
-                    <Grid3X3 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setLayoutMode('list')}
-                    className={`p-1.5 rounded-md transition-all ${
-                      layoutMode === 'list'
-                        ? 'bg-white dark:bg-[#2b6cb0] text-[#1a365d] dark:text-white shadow-sm'
-                        : 'text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4]'
-                    }`}
-                  >
-                    <List className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <div className="relative">
-                    <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#63b3ed]" />
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-32 pl-9 pr-3 py-1.5 text-sm border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-[#2b6cb0] focus:border-transparent text-[#1a365d] dark:text-[#90cdf4]"
-                    />
-                  </div>
-
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as any)}
-                    className="px-2 py-1.5 text-sm border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-[#2b6cb0] focus:border-transparent text-[#1a365d] dark:text-[#90cdf4]"
-                  >
-                    <option value="newest">Newest</option>
-                    <option value="oldest">Oldest</option>
-                    <option value="processing-time">Time</option>
-                  </select>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -408,7 +295,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
           {viewMode === 'history' && (
             <>
               {filteredHistory.length > 0 ? (
-                <div className={`${layoutMode === 'grid' ? 'space-y-4 md:space-y-6' : 'space-y-3 md:space-y-4'} max-w-full`}>
+                <div className="space-y-4 md:space-y-6 max-w-full">
                   {filteredHistory.map((analysis, index) => (
                     <MedicalAnalysisCard
                       key={`analysis-${analysis.timestamp}-${index}`}
@@ -426,6 +313,9 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                         if ((lower.includes('i24.9') || lower.includes('nstemi') || lower.includes('გულის მწვავე იშემიური ავადმყოფობა')) && analysis.model === 'flowise-diagnosis-agent') {
                           return 'https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4';
                         }
+                        if ((lower.includes('i26.0') || lower.includes('pulmonary embolism') || lower.includes('ფილტვის არტერიის ემბოლია')) && analysis.model === 'flowise-diagnosis-agent') {
+                          return 'https://flowise-2-0.onrender.com/api/v1/prediction/3602b392-65e5-4dbd-a649-cac18280bea5';
+                        }
                         if (lower.includes('template:') && analysis.model === 'flowise-diagnosis-agent') {
                           return 'https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf';
                         }
@@ -436,28 +326,27 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#1a365d]/60 dark:to-[#2b6cb0]/60 rounded-3xl flex items-center justify-center mb-6">
-                    <FileText className="w-10 h-10 text-[#63b3ed] dark:text-[#90cdf4]" />
+                  <div className="w-24 h-24 bg-gradient-to-br from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#1a365d]/60 dark:to-[#2b6cb0]/60 rounded-3xl flex items-center justify-center mb-8 shadow-lg">
+                    <FileText className="w-12 h-12 text-[#63b3ed] dark:text-[#90cdf4]" />
                   </div>
-                  <h3 className="text-xl font-bold text-[#1a365d] dark:text-[#90cdf4] mb-3">
-                    {searchQuery ? 'No matching analyses found' : 'No analysis history yet'}
+                  <h3 className="text-2xl font-bold text-[#1a365d] dark:text-[#90cdf4] mb-4">
+                    No reports generated yet
                   </h3>
-                  <p className="text-[#2b6cb0] dark:text-[#63b3ed] max-w-md">
-                    {searchQuery 
-                      ? 'Try adjusting your search terms or filters.'
-                      : hasTranscript 
-                        ? 'Start by selecting a medical analysis template or create a custom analysis.'
-                        : 'Record a transcript or attach medical documents to begin AI analysis.'
+                  <p className="text-[#2b6cb0] dark:text-[#63b3ed] max-w-md text-lg leading-relaxed">
+                    {hasTranscript 
+                      ? 'Switch to Templates to generate your first medical analysis report.'
+                      : 'Record a transcript or attach medical documents, then use Templates to generate AI analysis reports.'
                     }
                   </p>
-                  {searchQuery && (
+                  {hasTranscript && (
                     <MedicalButton
-                      variant="outline"
-                      size="md"
-                      onClick={() => setSearchQuery('')}
-                      className="mt-4"
+                      variant="gradient"
+                      size="lg"
+                      onClick={() => setViewMode('templates')}
+                      className="mt-6 text-lg px-8 py-3"
                     >
-                      Clear Search
+                      <Stethoscope className="w-5 h-5 mr-2" />
+                      View Templates
                     </MedicalButton>
                   )}
                 </div>

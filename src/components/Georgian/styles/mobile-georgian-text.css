@@ -1,0 +1,101 @@
+/* Mobile Georgian Text Optimization for Medical Reports */
+/* Specifically designed for better readability of AI-generated Georgian medical content */
+
+@media (max-width: 767px) {
+  /* Primary Georgian text containers */
+  .medical-report-text,
+  .prose .medical-report-text,
+  .prose-sm .medical-report-text {
+    font-size: 18px !important;
+    line-height: 2.2 !important;
+    color: #1f2937 !important;
+    font-weight: 600 !important;
+    font-family: 'Noto Sans Georgian', 'BPG Arial', 'Sylfaen', serif !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.15em !important;
+    text-align: left !important;
+    padding: 24px !important;
+    margin: 0 !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto !important;
+  }
+
+  /* Enhanced spacing for Georgian paragraphs */
+  .medical-report-text br + br {
+    display: block !important;
+    margin: 16px 0 !important;
+    content: "" !important;
+  }
+
+  /* Georgian numeric text (medical codes, values) */
+  .medical-report-text:contains("I50.0"),
+  .medical-report-text:contains("I24.9"),
+  .medical-report-text:contains("150.0") {
+    font-family: 'Noto Sans Georgian', monospace, 'BPG Arial' !important;
+    font-weight: 700 !important;
+  }
+
+  /* Better line breaks and spacing for Georgian text */
+  .medical-report-text {
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  /* Container improvements */
+  .prose.prose-sm {
+    padding: 0 !important;
+    max-width: none !important;
+  }
+
+  .prose.prose-sm > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Dark mode support for Georgian text */
+  .dark .medical-report-text {
+    color: #e5e7eb !important;
+  }
+
+  /* Very small screens - slightly reduced size but maintain readability */
+  @media (max-width: 360px) {
+    .medical-report-text {
+      font-size: 17px !important;
+      line-height: 2.1 !important;
+      padding: 20px !important;
+      letter-spacing: 0.04em !important;
+      word-spacing: 0.12em !important;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .medical-report-text {
+      color: #000000 !important;
+      font-weight: 700 !important;
+    }
+
+    .dark .medical-report-text {
+      color: #ffffff !important;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .medical-report-text {
+      transition: none !important;
+    }
+  }
+}
+
+/* Tablet portrait adjustments */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .medical-report-text {
+    font-size: 17px !important;
+    line-height: 1.9 !important;
+    padding: 20px !important;
+  }
+}

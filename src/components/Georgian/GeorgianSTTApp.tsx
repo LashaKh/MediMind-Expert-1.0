@@ -814,6 +814,7 @@ export const GeorgianSTTApp: React.FC = () => {
           onStopRecording={stopRecording}
           selectedSTTModel={selectedSTTModel}
           onModelChange={updateSelectedSTTModel}
+          onCreateSession={handleCreateSession}
         />
       </div>
 
@@ -825,6 +826,7 @@ export const GeorgianSTTApp: React.FC = () => {
           processing={processing}
           onOpenMobileSessions={openMobileDrawer}
           sessionsCount={sessions.length}
+          onCreateSession={handleCreateSession}
         />
       </div>
 
