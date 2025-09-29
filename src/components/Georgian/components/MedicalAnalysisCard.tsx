@@ -635,7 +635,7 @@ Medical AI Processing System`;
 
         {/* Premium Collapsible Content */}
         <div className={`transition-all duration-500 ${isExpanded ? 'max-h-none opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-          <div className="relative p-8 pt-6 space-y-8">
+          <div className="relative p-3 sm:p-8 pt-4 sm:pt-6 space-y-6 sm:space-y-8">
             {/* Premium Interactive Report Editor */}
             {isEditMode && enableEditing && analysisType.isDiagnosis && flowiseEndpoint && (
               <div className="relative overflow-hidden">
@@ -726,8 +726,8 @@ Medical AI Processing System`;
               
               <div className="relative p-6">
                 <div className="flex items-start space-x-4">
-                  {/* Enhanced AI Icon */}
-                  <div className="relative">
+                  {/* Enhanced AI Icon - Hidden on mobile */}
+                  <div className="relative hidden sm:block">
                     <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30 animate-pulse" />
                     <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-3 shadow-xl shadow-[#2b6cb0]/25">
                       <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
@@ -744,11 +744,11 @@ Medical AI Processing System`;
                   
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-4">
-                      <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                      <h4 className="hidden sm:block text-xl font-bold text-slate-900 dark:text-slate-100">
                         {analysisType.isDiagnosis ? 'Medical Report' : 'AI Clinical Analysis'}
                       </h4>
                       
-                      <div className="flex items-center space-x-2">
+                      <div className="hidden sm:flex items-center space-x-2">
                         <div className="px-3 py-1 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-full border border-white/50 dark:border-slate-700/50">
                           <span className="text-xs font-bold text-[#2b6cb0] dark:text-[#63b3ed]">AI GENERATED</span>
                         </div>
@@ -763,9 +763,9 @@ Medical AI Processing System`;
                     </div>
                     
                     {/* Enhanced Content Display */}
-                    <div className="relative">
+                    <div className="relative -mx-3 sm:mx-0">
                       <div className="absolute inset-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-inner" />
-                      <div className="relative p-6 prose prose-sm dark:prose-invert max-w-none">
+                      <div className="relative px-4 py-2 sm:p-6 prose prose-sm dark:prose-invert max-w-none">
                         {(() => {
                           const displayContent = editedContent || analysis.aiResponse;
                           return hasMarkdownFormatting(displayContent) ? (

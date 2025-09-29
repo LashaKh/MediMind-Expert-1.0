@@ -1,7 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import {
-  Search,
-  Filter,
   Star,
   Clock,
   ChevronDown,
@@ -105,12 +103,9 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
   transcript,
   onAddToHistory
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(['Cardiologist Consults']) // Cardiology consults expanded by default
   );
-  const [showFilters, setShowFilters] = useState(false);
-  const [priorityFilter, setPriorityFilter] = useState<'all' | 'high' | 'medium' | 'low'>('all');
 
   // Separate featured and regular templates
   const { featuredTemplates, categorizedTemplates } = useMemo(() => {
@@ -122,13 +117,6 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
     const categorized = categories.reduce((acc, category) => {
       acc[category] = regular
         .filter(t => t.category === category)
-        .filter(t => {
-          const matchesSearch = searchQuery === '' || 
-            t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            t.description.toLowerCase().includes(searchQuery.toLowerCase());
-          const matchesPriority = priorityFilter === 'all' || t.priority === priorityFilter;
-          return matchesSearch && matchesPriority;
-        })
         .sort((a, b) => {
           const priorityOrder = { high: 3, medium: 2, low: 1 };
           return priorityOrder[b.priority] - priorityOrder[a.priority];
@@ -137,7 +125,7 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
     }, {} as Record<string, Template[]>);
     
     return { featuredTemplates: featured, categorizedTemplates: categorized };
-  }, [searchQuery, priorityFilter]);
+  }, []);
 
   const toggleCategory = useCallback((category: string) => {
     setExpandedCategories(prev => {
@@ -214,63 +202,6 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
         </div>
       )}
       
-      {/* Search and Filter Header */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#63b3ed] dark:text-[#63b3ed]" />
-          <input
-            type="text"
-            placeholder="Search templates..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 rounded-xl text-sm placeholder-[#2b6cb0]/60 dark:placeholder-[#63b3ed]/60 focus:outline-none focus:ring-2 focus:ring-[#2b6cb0] focus:border-transparent transition-all duration-200 text-slate-700 dark:text-slate-200"
-          />
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-              showFilters 
-                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' 
-                : 'bg-blue-50 text-blue-600 dark:bg-slate-800 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/20'
-            }`}
-          >
-            <Filter className="w-4 h-4" />
-            <span>Filter</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Filter Options */}
-      {showFilters && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-blue-200/50 dark:border-slate-700/50 p-4 space-y-3">
-          <div className="flex items-center justify-between">
-            <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Priority Level</h4>
-            <button
-              onClick={() => setPriorityFilter('all')}
-              className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Clear
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {(['all', 'high', 'medium', 'low'] as const).map((priority) => (
-              <button
-                key={priority}
-                onClick={() => setPriorityFilter(priority)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                  priorityFilter === priority
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                    : 'bg-blue-50 text-blue-600 dark:bg-slate-800 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/20'
-                }`}
-              >
-                {priority === 'all' ? 'All Priorities' : `${priority.charAt(0).toUpperCase() + priority.slice(1)} Priority`}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Featured Cardiology Section - Always Show for Testing */}
       <div className="space-y-4">
@@ -476,26 +407,6 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
         })}
       </div>
 
-      {/* No Results State */}
-      {Object.values(categorizedTemplates).every(templates => templates.length === 0) && searchQuery && (
-        <div className="text-center py-12">
-          <div className="w-16 h-16 bg-blue-100 dark:bg-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Search className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-          </div>
-          <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">
-            No templates found
-          </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-            Try adjusting your search terms or filters
-          </p>
-          <button
-            onClick={() => setSearchQuery('')}
-            className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
-          >
-            Clear search
-          </button>
-        </div>
-      )}
     </div>
   );
 };

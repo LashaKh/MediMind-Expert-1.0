@@ -25,6 +25,9 @@ export default defineConfig(({ mode }) => {
         'react-i18next',
         'framer-motion',
         'lucide-react'
+      ],
+      exclude: [
+        'pdfjs-dist'
       ]
     },
     server: {

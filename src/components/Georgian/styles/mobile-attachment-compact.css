@@ -1,0 +1,307 @@
+/* Mobile Compact Attachment Optimizations */
+/* Ultra compact attachment display for mobile devices */
+
+@media (max-width: 767px) {
+  /* Prevent viewport shifting on mobile */
+  html {
+    overflow-x: hidden;
+    overscroll-behavior: none;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    overflow-x: hidden;
+    overscroll-behavior: none;
+    position: relative;
+  }
+
+  /* Ultra compact attachment container */
+  .mediscribe-compact-attachments {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    border: 1px solid rgba(99, 179, 237, 0.2);
+    padding: 6px;
+    margin-bottom: 6px;
+    max-height: 60px; /* Ultra compact height */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+  }
+
+  .mediscribe-compact-attachments::-webkit-scrollbar {
+    display: none; /* Webkit browsers */
+  }
+
+  /* Ultra compact attachment items */
+  .mediscribe-attachment-item-compact {
+    display: flex;
+    align-items: center;
+    padding: 2px 6px;
+    margin-bottom: 2px;
+    background: rgba(99, 179, 237, 0.08);
+    border-radius: 4px;
+    font-size: 11px;
+    min-height: 24px; /* Very compact */
+    border: 1px solid rgba(99, 179, 237, 0.1);
+    transition: background-color 0.2s ease;
+  }
+
+  .mediscribe-attachment-item-compact:last-child {
+    margin-bottom: 0;
+  }
+
+  .mediscribe-attachment-item-compact:hover {
+    background: rgba(99, 179, 237, 0.12);
+  }
+
+  /* Tiny file icons */
+  .mediscribe-attachment-icon-compact {
+    width: 14px !important;
+    height: 14px !important;
+    flex-shrink: 0;
+    margin-right: 6px;
+    background: #2b6cb0;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mediscribe-attachment-icon-compact svg {
+    width: 8px !important;
+    height: 8px !important;
+    color: white;
+  }
+
+  /* Compact file info */
+  .mediscribe-attachment-info-compact {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .mediscribe-attachment-name-compact {
+    font-weight: 500;
+    color: #1a365d;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+    line-height: 1.2;
+  }
+
+  .mediscribe-attachment-status-compact {
+    font-size: 9px;
+    margin-left: 4px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  /* Status indicators */
+  .mediscribe-status-processing {
+    color: #d97706;
+  }
+
+  .mediscribe-status-success {
+    color: #059669;
+  }
+
+  .mediscribe-status-failed {
+    color: #dc2626;
+  }
+
+  .mediscribe-status-pending {
+    color: #6b7280;
+  }
+
+  /* Compact remove button */
+  .mediscribe-attachment-remove-compact {
+    width: 14px;
+    height: 14px;
+    padding: 1px;
+    margin-left: 4px;
+    opacity: 0.7;
+    flex-shrink: 0;
+    color: #dc2626;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+  }
+
+  .mediscribe-attachment-remove-compact:hover {
+    opacity: 1;
+    background: rgba(220, 38, 38, 0.1);
+  }
+
+  .mediscribe-attachment-remove-compact svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  /* Compact progress bar */
+  .mediscribe-progress-compact {
+    margin-top: 4px;
+    padding: 4px 6px;
+    background: rgba(144, 205, 244, 0.08);
+    border-radius: 4px;
+    border: 1px solid rgba(99, 179, 237, 0.15);
+  }
+
+  .mediscribe-progress-header-compact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+  }
+
+  .mediscribe-progress-text-compact {
+    font-size: 9px;
+    color: #1a365d;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+  }
+
+  .mediscribe-progress-percentage-compact {
+    font-size: 9px;
+    color: #2b6cb0;
+    font-weight: 600;
+    font-family: monospace;
+  }
+
+  .mediscribe-progress-bar-compact {
+    width: 100%;
+    height: 3px;
+    background: rgba(99, 179, 237, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .mediscribe-progress-fill-compact {
+    height: 100%;
+    background: linear-gradient(90deg, #1a365d, #2b6cb0);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  /* Header compact styling */
+  .mediscribe-attachment-header-compact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    padding: 0 2px;
+  }
+
+  .mediscribe-attachment-title-compact {
+    font-size: 10px;
+    font-weight: 600;
+    color: #1a365d;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .mediscribe-attachment-title-compact svg {
+    width: 12px !important;
+    height: 12px !important;
+    color: #2b6cb0;
+  }
+
+  /* Loading spinner for compact view */
+  .mediscribe-loading-compact {
+    width: 10px !important;
+    height: 10px !important;
+    color: #2b6cb0;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Ensure layout doesn't shift */
+  .mediscribe-compact-attachments-container {
+    min-height: 0;
+    max-height: 80px;
+    overflow: visible;
+    contain: layout style;
+  }
+
+  /* Minimal mobile layout fixes - less aggressive */
+  @media (max-width: 767px) {
+    /* Only target the specific transcript component */
+    .mediscribe-mobile-transcript .transcription-textarea {
+      padding-bottom: 40px; /* Just enough padding for content visibility */
+    }
+
+    /* Clean button footer styling without breaking layout */
+    .mediscribe-mobile-button-footer {
+      background: rgba(255, 255, 255, 0.9);
+      border-top: 1px solid rgba(144, 205, 244, 0.15);
+      backdrop-filter: blur(8px);
+      border-radius: 12px 12px 0 0;
+      margin-top: 8px;
+    }
+
+    /* Remove problematic container overrides */
+    .mediscribe-mobile-main-container,
+    .mediscribe-mobile-content-area {
+      min-height: unset;
+      max-height: unset;
+      padding-bottom: unset;
+    }
+  }
+
+  /* Mobile landscape adjustments */
+  @media (orientation: landscape) {
+    .mediscribe-compact-attachments {
+      max-height: 50px;
+    }
+
+    .mediscribe-attachment-item-compact {
+      min-height: 20px;
+      padding: 1px 4px;
+    }
+
+    .mediscribe-attachment-name-compact {
+      max-width: 60px;
+      font-size: 9px;
+    }
+
+    .mediscribe-attachment-status-compact {
+      font-size: 8px;
+    }
+  }
+}
+
+/* Tablets and larger screens - preserve original styling */
+@media (min-width: 768px) {
+  .mediscribe-compact-attachments,
+  .mediscribe-attachment-item-compact,
+  .mediscribe-attachment-icon-compact,
+  .mediscribe-attachment-info-compact,
+  .mediscribe-attachment-name-compact,
+  .mediscribe-attachment-status-compact,
+  .mediscribe-attachment-remove-compact,
+  .mediscribe-progress-compact {
+    /* Reset mobile styles for larger screens */
+    all: unset;
+  }
+}

@@ -266,13 +266,31 @@
     padding: 8px 4px !important;
   }
 
-  /* NUCLEAR OPTION - Ultra specific targeting */
+  /* ULTIMATE FIX - Force white content box to expand into blue space */
   @media (max-width: 767px) {
-    .group.relative.overflow-hidden.w-full.max-w-full > div > div:nth-child(2) > div > div > div:nth-child(2) > div > div[class*="bg-white"] {
-      margin-left: -20px !important;
-      padding-left: 24px !important;
-      width: calc(100% + 28px) !important;
-      max-width: calc(100% + 28px) !important;
+    /* Target the white background container specifically */
+    .group.relative.overflow-hidden div[class*="bg-white/60"],
+    .group.relative.overflow-hidden div[class*="shadow-inner"] {
+      margin-left: -12px !important;
+      margin-right: -4px !important;
+      width: calc(100% + 16px) !important;
+      max-width: calc(100% + 16px) !important;
+    }
+    
+    /* Target the prose content container */
+    .group.relative.overflow-hidden .prose {
+      padding-left: 16px !important;
+      padding-right: 8px !important;
+      margin: 0 !important;
+    }
+    
+    /* Force any text content to use full width */
+    .group.relative.overflow-hidden .prose *,
+    .group.relative.overflow-hidden div[class*="text-sm"] {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
     }
   }
 

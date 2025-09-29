@@ -8,8 +8,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Plus,
-  Search,
-  Filter,
   Clock,
   TrendingUp,
   FileText,
@@ -22,7 +20,6 @@ import { templateService } from '../../../services/templateService';
 import { generateTemplateBasedReport } from '../../../services/diagnosisFlowiseService';
 import { TemplateCreationModal } from './TemplateCreationModal';
 import { TemplateManagementCard } from './TemplateManagementCard';
-import { TemplateSearchBar } from './TemplateSearchBar';
 import { TemplateDeleteConfirmation } from './TemplateDeleteConfirmation';
 
 // Skeleton component for loading state - Premium card style
@@ -48,7 +45,6 @@ const TemplateSkeletonCard: React.FC = () => (
 import type { 
   MyTemplatesSectionProps, 
   UserReportTemplate,
-  TemplateSearchFilters,
 } from '../../../types/templates';
 
 export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
@@ -64,11 +60,6 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<UserReportTemplate | null>(null);
-  const [searchFilters, setSearchFilters] = useState<TemplateSearchFilters>({
-    search: '',
-    order_by: 'created_at',
-    order_direction: 'desc',
-  });
   const [totalCount, setTotalCount] = useState(0);
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
     isOpen: boolean;
@@ -86,7 +77,7 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
       setLoading(true);
       setError(null);
       
-      const response = await templateService.getUserTemplates(searchFilters);
+      const response = await templateService.getUserTemplates();
       setTemplates(response.templates);
       setTotalCount(response.total_count);
     } catch (err) {
@@ -94,7 +85,7 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [searchFilters]);
+  }, []);
 
   // Initial load - always load templates to show them in the UI
   useEffect(() => {
@@ -257,14 +248,6 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
         </div>
       )}
 
-      {/* Search and Filters */}
-      <TemplateSearchBar
-        searchQuery={searchFilters.search}
-        onSearchChange={(search) => setSearchFilters(prev => ({ ...prev, search }))}
-        filters={searchFilters}
-        onFiltersChange={setSearchFilters}
-        isLoading={loading}
-      />
 
       {/* Loading State with Skeleton Cards */}
       {loading && (
@@ -328,19 +311,15 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
                 No templates found
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                {searchFilters.search 
-                  ? 'Try adjusting your search terms or filters' 
-                  : 'Create your first template to get started'}
+                Create your first template to get started
               </p>
-              {!searchFilters.search && (
-                <button
-                  onClick={() => setIsCreateModalOpen(true)}
-                  disabled={false} // Template creation is always enabled
-                  className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
-                >
-                  Create your first template
-                </button>
-              )}
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                disabled={false} // Template creation is always enabled
+                className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
+              >
+                Create your first template
+              </button>
             </div>
           )}
         </>

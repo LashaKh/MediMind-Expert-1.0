@@ -22,6 +22,9 @@ import {
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { ProductionControls } from './ProductionControls';
 
+// Import mobile compact attachment styles
+import '../styles/mobile-attachment-compact.css';
+
 // Import types for file attachments
 import { EnhancedAttachment } from '../../../utils/chatFileProcessor';
 import type { ProgressInfo } from '../../../utils/pdfTextExtractor';
@@ -320,101 +323,91 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             multiple={true}
           />
 
-          {/* Attached Files Display */}
+          {/* Ultra Compact Attached Files Display - Mobile Optimized */}
           {attachedFiles.length > 0 && (
-            <div className="mb-4 px-3 sm:px-4 lg:px-4">
-              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 p-4">
-                <h4 className="text-sm font-semibold text-[#1a365d] dark:text-[#63b3ed] mb-3 flex items-center space-x-2">
-                  <FileIcon className="w-4 h-4" />
-                  <span>Attached Files ({attachedFiles.length})</span>
-                  {isProcessingAttachment && (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  )}
-                </h4>
-                <div className="flex flex-wrap gap-3">
+            <div className="mb-2 px-3 sm:px-4 lg:px-4">
+              <div className="mediscribe-compact-attachments-container">
+                <div className="mediscribe-compact-attachments">
+                  {/* Ultra Compact Header */}
+                  <div className="mediscribe-attachment-header-compact">
+                    <div className="mediscribe-attachment-title-compact">
+                      <Paperclip />
+                      <span>Files ({attachedFiles.length})</span>
+                      {isProcessingAttachment && (
+                        <Loader2 className="mediscribe-loading-compact" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Ultra Compact File List */}
                   {attachedFiles.map((attachment) => (
-                    <div key={attachment.id} className="group relative flex items-center space-x-3 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#1a365d]/30 dark:to-[#2b6cb0]/30 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 px-4 py-3 rounded-xl hover:shadow-lg hover:shadow-[#2b6cb0]/10 transition-all duration-300">
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center shadow-lg">
-                        <FileIcon className="w-5 h-5 text-white" />
+                    <div key={attachment.id} className="mediscribe-attachment-item-compact group">
+                      {/* Tiny File Icon */}
+                      <div className="mediscribe-attachment-icon-compact">
+                        <FileIcon />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[#1a365d] dark:text-[#90cdf4] font-semibold truncate max-w-40">
+                      
+                      {/* Compact File Info */}
+                      <div className="mediscribe-attachment-info-compact">
+                        <span className="mediscribe-attachment-name-compact">
                           {attachment.name}
-                        </p>
-                        <div className="flex items-center space-x-2 text-xs">
-                          <span className="text-[#2b6cb0] dark:text-[#63b3ed]">
-                            {(attachment.size / 1024).toFixed(1)} KB
+                        </span>
+                        <div className="flex items-center space-x-1">
+                          <span className="mediscribe-attachment-status-compact text-[#2b6cb0]">
+                            {(attachment.size / 1024).toFixed(0)}KB
                           </span>
-                          {(() => {
-                            const status = attachment.textExtractionStatus;
-                            switch (status) {
-                              case 'processing':
-                                return (
-                                  <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                                    <Loader2 className="w-3 h-3 animate-spin" />
-                                    Processing...
-                                  </span>
-                                );
-                              case 'success':
-                                return (
-                                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                                    <span className="text-green-600">✅</span>
-                                    Text extracted
-                                  </span>
-                                );
-                              case 'failed':
-                                return (
-                                  <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1" title={attachment.textExtractionError}>
-                                    <span className="text-red-600">❌</span>
-                                    Failed
-                                  </span>
-                                );
-                              case 'pending':
-                                return (
-                                  <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                                    <span className="text-gray-500">⏸️</span>
-                                    Pending
-                                  </span>
-                                );
-                              default:
-                                return (
-                                  <span className="bg-[#63b3ed]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
-                                    Ready for analysis
-                                  </span>
-                                );
-                            }
-                          })()}
+                          <span className={`mediscribe-attachment-status-compact ${
+                            attachment.textExtractionStatus === 'processing' ? 'mediscribe-status-processing' :
+                            attachment.textExtractionStatus === 'success' ? 'mediscribe-status-success' :
+                            attachment.textExtractionStatus === 'failed' ? 'mediscribe-status-failed' :
+                            attachment.textExtractionStatus === 'pending' ? 'mediscribe-status-pending' :
+                            'text-[#2b6cb0]'
+                          }`}>
+                            {(() => {
+                              switch (attachment.textExtractionStatus) {
+                                case 'processing': return '⚡';
+                                case 'success': return '✅';
+                                case 'failed': return '❌';
+                                case 'pending': return '⏸️';
+                                default: return '📎';
+                              }
+                            })()}
+                          </span>
                         </div>
                       </div>
+
+                      {/* Compact Remove Button */}
                       {onRemoveAttachment && (
                         <button
                           onClick={() => onRemoveAttachment(attachment.id)}
-                          className="opacity-0 group-hover:opacity-100 p-1.5 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all duration-300"
+                          className="mediscribe-attachment-remove-compact opacity-0 group-hover:opacity-100"
                         >
-                          <X className="w-4 h-4" />
+                          <X />
                         </button>
                       )}
                     </div>
                   ))}
+
+                  {/* Ultra Compact Progress Bar */}
+                  {attachmentProgress && (
+                    <div className="mediscribe-progress-compact">
+                      <div className="mediscribe-progress-header-compact">
+                        <span className="mediscribe-progress-text-compact">
+                          {attachmentProgress.stageDescription}
+                        </span>
+                        <span className="mediscribe-progress-percentage-compact">
+                          {attachmentProgress.percentage}%
+                        </span>
+                      </div>
+                      <div className="mediscribe-progress-bar-compact">
+                        <div 
+                          className="mediscribe-progress-fill-compact"
+                          style={{ width: `${attachmentProgress.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
-                {attachmentProgress && (
-                  <div className="mt-3 p-3 bg-[#90cdf4]/10 rounded-lg border border-[#63b3ed]/30">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-[#1a365d]">
-                        {attachmentProgress.stageDescription}
-                      </span>
-                      <span className="text-sm text-[#2b6cb0]">
-                        {attachmentProgress.percentage}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-[#63b3ed]/20 rounded-full h-2">
-                      <div 
-                        className="bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${attachmentProgress.percentage}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           )}
@@ -482,8 +475,8 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                       fontSize: '16px', // Prevents zoom on iOS
                       WebkitTextSizeAdjust: '100%', // Prevent text size adjustment
                       textSizeAdjust: '100%',
-                      height: isKeyboardAdjusted ? 'calc(100% - 60px)' : '100%', // Reserve space for bottom when keyboard is visible
-                      minHeight: isKeyboardAdjusted ? '200px' : 'auto' // Ensure minimum usable height
+                      height: isKeyboardAdjusted ? 'calc(100% - 60px)' : '100%',
+                      minHeight: isKeyboardAdjusted ? '200px' : 'auto'
                     }}
                     // Prevent viewport jumping on focus
                     onFocus={(e) => {
@@ -525,7 +518,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
           </div>
         </div>
 
-        {/* Mobile Button Footer - below textarea */}
+        {/* Mobile Button Footer - Optimized positioning */}
         <div 
           className={`lg:hidden mediscribe-mobile-button-footer ${isKeyboardAdjusted ? 'keyboard-visible' : ''}`}
           style={{
