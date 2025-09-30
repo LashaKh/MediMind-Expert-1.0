@@ -1,44 +1,23 @@
 import React, { useState } from 'react';
 import {
   Brain,
-  Clock,
-  Copy,
-  Download,
-  Share2,
-  ChevronDown,
-  ChevronUp,
-  CheckCircle,
-  AlertCircle,
+  ClipboardList,
   FileText,
+  HeartHandshake,
   Stethoscope,
   Activity,
-  Zap,
-  Hash,
-  Calendar,
   User,
-  Shield,
-  HeartHandshake,
-  Trash2,
-  Edit3,
-  Settings,
-  Sparkles,
-  Crown,
-  Star,
-  Award,
-  Gem,
-  Wand2,
-  Target,
-  TrendingUp,
-  Layers,
-  ClipboardList
+  Shield
 } from 'lucide-react';
-import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { formatMarkdown, extractCleanText, hasMarkdownFormatting, countEmptyFields, hasEmptyFields, extractEmptyFieldNames } from '../../../utils/markdownFormatter';
-import ReportEditCard from '../../ReportEditing/ReportEditCard';
-import Form100Button from '../../Form100/Form100Button';
 import Form100Modal from '../../Form100/Form100Modal';
 import { useForm100Modal } from '../../Form100/hooks/useForm100Modal';
 import { Form100Service } from '../../../services/form100Service';
+import { AnalysisCardHeader } from './AnalysisCardHeader';
+import { AnalysisCardContent } from './AnalysisCardContent';
+import { AnalysisCardEditMode } from './AnalysisCardEditMode';
+import { Form100DisplayCard } from './Form100DisplayCard';
+import { AnalysisCardFooter } from './AnalysisCardFooter';
 
 interface ProcessingHistory {
   userInstruction: string;
@@ -238,6 +217,11 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
   // State for generated Form 100 content
   const [generatedForm100Content, setGeneratedForm100Content] = useState<string | null>(null);
   const [form100GeneratedAt, setForm100GeneratedAt] = useState<Date | null>(null);
+  
+  // State for Form 100 editing functionality
+  const [isForm100Expanded, setIsForm100Expanded] = useState(true);
+  const [isForm100EditMode, setIsForm100EditMode] = useState(false);
+  const [editedForm100Content, setEditedForm100Content] = useState<string | null>(null);
   const analysisType = getAnalysisType(analysis.userInstruction, analysis.model);
   const IconComponent = analysisType.icon;
 
@@ -348,6 +332,23 @@ Medical AI Processing System`;
   const handleEditError = (error: Error) => {
     // You might want to show an error message to the user
   };
+  
+  // Form 100 edit handlers
+  const handleForm100EditComplete = (editResult: any) => {
+    // Handle successful Form 100 edit
+    setIsForm100EditMode(false);
+    
+    // Update the local content state with the edited content
+    if (editResult?.updatedContent) {
+      setEditedForm100Content(editResult.updatedContent);
+      setIsForm100Expanded(true); // Keep card expanded to show the changes
+    }
+  };
+
+  const handleForm100EditError = (error: any) => {
+    setIsForm100EditMode(false);
+    console.error('Form 100 edit error:', error);
+  };
 
   const handleCancelEdit = () => {
     setIsEditMode(false);
@@ -391,742 +392,76 @@ Medical AI Processing System`;
       {/* Standardized Container with Fixed Height */}
       <div className="relative bg-white/98 dark:bg-slate-900/98 backdrop-blur-sm rounded-2xl border border-blue-200/40 dark:border-slate-700/40 shadow-lg shadow-blue-500/5 dark:shadow-blue-500/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 min-h-[180px] flex flex-col">
         
-        {/* Luxury Header */}
-        <div className="relative overflow-hidden">
-          {/* Header Background Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/5 via-[#63b3ed]/3 to-[#1a365d]/5 dark:from-[#2b6cb0]/10 dark:via-[#63b3ed]/5 dark:to-[#1a365d]/10" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white/90 dark:via-slate-900/50 dark:to-slate-900/90" />
-          
-          {/* Animated Particles Background */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-3 left-6 w-1.5 h-1.5 bg-[#63b3ed]/30 rounded-full animate-ping" style={{ animationDelay: '0s', animationDuration: '3s' }} />
-            <div className="absolute top-6 right-8 w-1 h-1 bg-[#90cdf4]/20 rounded-full animate-ping" style={{ animationDelay: '1s', animationDuration: '4s' }} />
-            <div className="absolute bottom-4 left-12 w-0.5 h-0.5 bg-[#2b6cb0]/25 rounded-full animate-ping" style={{ animationDelay: '2s', animationDuration: '5s' }} />
-          </div>
-          
-          {/* Premium Priority Badge and Controls - Desktop Only */}
-          <div className="absolute top-6 right-6 z-20 hidden md:flex">
-            <div className="flex items-center space-x-3">
-              {/* Enhanced Priority Badge */}
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-400/20 to-slate-500/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                <div className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl px-4 py-2 border border-white/50 dark:border-slate-700/50 shadow-lg">
-                  <div className="flex items-center space-x-2">
-                    <Hash className="w-3 h-3 text-slate-600 dark:text-slate-400" />
-                    <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
-                      {totalCount - index}
-                    </span>
-                  </div>
-                </div>
-              </div>
+        {/* Header Section */}
+        <AnalysisCardHeader
+          analysis={analysis}
+          analysisType={analysisType}
+          index={index}
+          totalCount={totalCount}
+          sessionTitle={sessionTitle}
+          sessionId={sessionId}
+          isExpanded={isExpanded}
+          isEditMode={isEditMode}
+          enableEditing={enableEditing}
+          hasEmptyFieldsPresent={hasEmptyFieldsPresent}
+          emptyFieldsCount={emptyFieldsCount}
+          onCopy={handleCopy}
+          onDownload={handleDownload}
+          onShare={handleShare}
+          onDelete={onDelete ? handleDelete : undefined}
+          onEdit={handleEdit}
+          onCancelEdit={handleCancelEdit}
+          onExpandToggle={() => setIsExpanded(!isExpanded)}
+          onForm100Generation={handleForm100Generation}
+        />
 
-              {/* Enhanced Delete Button */}
-              {onDelete && (
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-rose-500/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                  <button
-                    onClick={handleDelete}
-                    className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm hover:bg-red-50 dark:hover:bg-red-900/20 rounded-2xl p-3 border border-white/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 group"
-                    title="Delete Report"
-                  >
-                    <Trash2 className="w-5 h-5 text-red-600 dark:text-red-400 group-hover:text-red-700 dark:group-hover:text-red-300 transition-colors duration-200" />
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Mobile-Only Delete Button */}
-          {onDelete && (
-            <div className="absolute top-4 right-4 z-20 md:hidden">
-              <button
-                onClick={handleDelete}
-                className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl p-2 border border-white/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all duration-300"
-                title="Delete Report"
-              >
-                <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
-              </button>
-            </div>
-          )}
-
-          <div className="relative p-8 pr-32">
-            {/* Premium Analysis Type & Status */}
-            <div className="space-y-6">
-              {/* Main Title Section */}
-              <div className="flex items-center space-x-6">
-                {/* Enhanced Analysis Icon */}
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-3xl blur-lg opacity-30 animate-pulse" />
-                  <div className={`relative bg-gradient-to-br ${analysisType.color} rounded-3xl p-4 shadow-2xl shadow-[#2b6cb0]/25`}>
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-3xl" />
-                    <IconComponent className="w-8 h-8 text-white relative z-10" />
-                  </div>
-                  {analysisType.isDiagnosis && (
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                      <Award className="w-3 h-3 text-white" />
-                    </div>
-                  )}
-                </div>
-                
-                <div className="flex-1 space-y-3">
-                  {/* Standardized Title */}
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 line-clamp-2 leading-tight">
-                      {analysisType.type}
-                      {sessionTitle && (
-                        <span className="block md:inline md:ml-2 text-sm font-medium text-[#2b6cb0] dark:text-[#63b3ed] opacity-75">
-                          • {sessionTitle}
-                        </span>
-                      )}
-                    </h3>
-                    
-                    {/* Desktop Only Badges */}
-                    <div className="hidden md:flex md:items-center md:space-x-4">
-                      {isEditMode && (
-                        <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#1a365d]/30 rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-lg">
-                          <Edit3 className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                          <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4] tracking-wide">
-                            EDIT MODE
-                          </span>
-                        </div>
-                      )}
-                      
-                      {hasEmptyFieldsPresent && (
-                        <div className="flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-amber-100/50 to-yellow-100/50 dark:from-amber-900/30 dark:to-yellow-900/30 rounded-full border border-amber-300/50 dark:border-amber-600/50 animate-pulse">
-                          <AlertCircle className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                          <span className="text-xs font-bold text-amber-800 dark:text-amber-200">
-                            {emptyFieldsCount} FIELD{emptyFieldsCount !== 1 ? 'S' : ''} INCOMPLETE
-                          </span>
-                        </div>
-                      )}
-                      
-                    </div>
-                  </div>
-                  
-                  {/* Premium Status Information */}
-                  <div className="flex items-center space-x-6">
-                    <div className="flex items-center space-x-6">
-                      <div className="flex items-center space-x-3 px-4 py-2 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-slate-700/40 shadow-sm">
-                        <div className="p-1 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-lg shadow-lg">
-                          <Calendar className="w-3 h-3 text-white" />
-                        </div>
-                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                          {new Date(analysis.timestamp).toLocaleDateString()}
-                        </span>
-                      </div>
-                      
-                      {/* Mobile Empty Fields Indicator */}
-                      {hasEmptyFieldsPresent && (
-                        <div className="md:hidden flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-amber-100/70 to-yellow-100/70 dark:from-amber-900/40 dark:to-yellow-900/40 rounded-xl border border-amber-300/60 dark:border-amber-600/40">
-                          <AlertCircle className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                          <span className="text-xs font-bold text-amber-800 dark:text-amber-200">
-                            {emptyFieldsCount} Missing
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    
-                  </div>
-                </div>
-              </div>
-
-              {/* Premium Quick Actions - Mobile-First Layout */}
-              <div className="space-y-4 pt-4">
-                {/* Mobile Layout - Stacked Rows */}
-                <div className="block md:hidden">
-                  {/* First Row: Main Actions */}
-                  <div className="flex flex-wrap items-center gap-2 mb-3">
-                    {/* Enhanced Copy Button */}
-                    <div className="relative group flex-shrink-0">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                      <MedicalButton
-                        variant="ghost"
-                        size="sm"
-                        leftIcon={Copy}
-                        onClick={handleCopy}
-                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
-                      >
-                        <span className="text-sm">Copy</span>
-                      </MedicalButton>
-                    </div>
-                    
-                    {/* Enhanced Export Button */}
-                    <div className="relative group flex-shrink-0">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                      <MedicalButton
-                        variant="ghost"
-                        size="sm"
-                        leftIcon={Download}
-                        onClick={handleDownload}
-                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
-                      >
-                        <span className="text-sm">Export</span>
-                      </MedicalButton>
-                    </div>
-                    
-                    {/* Enhanced Share Button */}
-                    {navigator.share && (
-                      <div className="relative group flex-shrink-0">
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                        <MedicalButton
-                          variant="ghost"
-                          size="sm"
-                          leftIcon={Share2}
-                          onClick={handleShare}
-                          className="relative text-slate-600 dark:text-slate-400 hover:text-[#1a365d] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
-                        >
-                          <span className="text-sm">Share</span>
-                        </MedicalButton>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Second Row: Edit, Form 100, and Expand Actions */}
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      {/* Premium Edit Button */}
-                      {enableEditing && analysisType.isDiagnosis && (
-                        <div className="relative group flex-shrink-0">
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-xl blur-md opacity-70 animate-pulse" />
-                          <MedicalButton
-                            variant={isEditMode ? "primary" : "ghost"}
-                            size="sm"
-                            leftIcon={isEditMode ? Settings : Edit3}
-                            onClick={isEditMode ? handleCancelEdit : handleEdit}
-                            className={isEditMode 
-                              ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200 min-h-[36px]" 
-                              : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
-                            }
-                          >
-                            <span className="text-sm font-medium">
-                              {isEditMode ? 'Cancel Edit' : 'Edit Report'}
-                            </span>
-                          </MedicalButton>
-                        </div>
-                      )}
-
-                      {/* Premium Form 100 Button */}
-                      {analysisType.supportsForm100 && (
-                        <div className="relative group flex-shrink-0">
-                          {/* Premium ambient glow container */}
-                          <div className="absolute -inset-2 bg-gradient-to-r from-[#63b3ed]/20 via-[#2b6cb0]/30 to-[#1a365d]/20 
-                                          rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out
-                                          animate-pulse group-hover:animate-none" />
-                          
-                          {/* Premium inner glow */}
-                          <div className="absolute -inset-1 bg-gradient-to-r from-[#90cdf4]/40 to-[#63b3ed]/40 
-                                          rounded-xl opacity-0 group-hover:opacity-60 transition-all duration-500" />
-                          
-                          {/* Premium importance indicator */}
-                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] 
-                                          rounded-full opacity-80 animate-pulse z-10">
-                            <div className="absolute inset-0.5 bg-white rounded-full" />
-                            <div className="absolute inset-1 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-full animate-ping" />
-                          </div>
-                          
-                          <Form100Button
-                            sessionId={sessionId}
-                            variant="secondary"
-                            size="sm"
-                            onClick={handleForm100Generation}
-                            className="relative min-h-[36px] text-sm px-4 font-semibold
-                                       shadow-lg hover:shadow-xl
-                                       transform hover:scale-105 active:scale-95
-                                       transition-all duration-300 ease-out
-                                       border-2 border-[#63b3ed]/40 hover:border-[#2b6cb0]/70
-                                       bg-gradient-to-r from-white/95 to-[#90cdf4]/10 
-                                       hover:from-[#90cdf4]/20 hover:to-[#63b3ed]/20
-                                       backdrop-blur-xl"
-                          />
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Enhanced Expand/Collapse */}
-                    <div className="relative group flex-shrink-0">
-                      <MedicalButton
-                        variant="ghost"
-                        size="sm"
-                        rightIcon={isExpanded ? ChevronUp : ChevronDown}
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className="text-slate-600 dark:text-slate-400 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
-                      >
-                        <span className="text-sm">{isExpanded ? 'Minimize' : 'Expand'}</span>
-                      </MedicalButton>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Desktop Layout - Single Row */}
-                <div className="hidden md:flex md:items-center md:justify-between">
-                  <div className="flex items-center space-x-3">
-                    {/* Enhanced Copy Button */}
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                      <MedicalButton
-                        variant="ghost"
-                        size="sm"
-                        leftIcon={Copy}
-                        onClick={handleCopy}
-                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                      >
-                        Copy
-                      </MedicalButton>
-                    </div>
-                    
-                    {/* Enhanced Export Button */}
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                      <MedicalButton
-                        variant="ghost"
-                        size="sm"
-                        leftIcon={Download}
-                        onClick={handleDownload}
-                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                      >
-                        Export
-                      </MedicalButton>
-                    </div>
-                    
-                    {/* Enhanced Share Button */}
-                    {navigator.share && (
-                      <div className="relative group">
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                        <MedicalButton
-                          variant="ghost"
-                          size="sm"
-                          leftIcon={Share2}
-                          onClick={handleShare}
-                          className="relative text-slate-600 dark:text-slate-400 hover:text-[#1a365d] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                        >
-                          Share
-                        </MedicalButton>
-                      </div>
-                    )}
-                    
-                    {/* Premium Edit Button */}
-                    {enableEditing && analysisType.isDiagnosis && (
-                      <div className="relative group">
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-xl blur-md opacity-70 animate-pulse" />
-                        <MedicalButton
-                          variant={isEditMode ? "primary" : "ghost"}
-                          size="sm"
-                          leftIcon={isEditMode ? Settings : Edit3}
-                          onClick={isEditMode ? handleCancelEdit : handleEdit}
-                          className={isEditMode 
-                            ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200" 
-                            : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                          }
-                        >
-                          <span className="flex items-center space-x-2">
-                            <span>{isEditMode ? 'Cancel Edit' : 'Edit Report'}</span>
-                            {isEditMode && <Wand2 className="w-4 h-4" />}
-                          </span>
-                        </MedicalButton>
-                      </div>
-                    )}
-                    
-                    {/* Premium Form 100 Button - Desktop */}
-                    {analysisType.supportsForm100 && (
-                      <div className="relative group">
-                        {/* Premium desktop ambient glow */}
-                        <div className="absolute -inset-3 bg-gradient-to-r from-[#63b3ed]/15 via-[#2b6cb0]/25 to-[#1a365d]/15 
-                                        rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-1000 ease-out
-                                        animate-pulse group-hover:animate-none" />
-                        
-                        {/* Premium desktop shimmer effect */}
-                        <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-[#90cdf4]/30 to-transparent 
-                                        rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-600" />
-                        
-                        {/* Premium desktop importance badge */}
-                        <div className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] 
-                                        rounded-full shadow-lg opacity-90 animate-pulse z-10">
-                          <div className="absolute inset-0.5 bg-white rounded-full" />
-                          <div className="absolute inset-1 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-full 
-                                          animate-ping opacity-80" />
-                          <div className="absolute inset-1.5 bg-[#63b3ed] rounded-full animate-pulse" />
-                        </div>
-                        
-                        <Form100Button
-                          sessionId={sessionId}
-                          variant="secondary"
-                          size="md"
-                          onClick={handleForm100Generation}
-                          className="relative font-bold shadow-xl hover:shadow-2xl
-                                     transform hover:scale-110 active:scale-95
-                                     transition-all duration-400 ease-out
-                                     border-2 border-[#63b3ed]/50 hover:border-[#2b6cb0]/80
-                                     bg-gradient-to-r from-white/98 via-[#90cdf4]/5 to-white/98
-                                     hover:from-[#90cdf4]/15 hover:via-[#63b3ed]/20 hover:to-[#90cdf4]/15
-                                     backdrop-blur-xl text-[#1a365d] hover:text-[#2b6cb0]
-                                     hover:-translate-y-1 hover:rotate-1"
-                        />
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Enhanced Expand/Collapse */}
-                  <div className="relative group">
-                    <MedicalButton
-                      variant="ghost"
-                      size="sm"
-                      rightIcon={isExpanded ? ChevronUp : ChevronDown}
-                      onClick={() => setIsExpanded(!isExpanded)}
-                      className="text-slate-600 dark:text-slate-400 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                    >
-                      {isExpanded ? 'Minimize' : 'Expand Details'}
-                    </MedicalButton>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Premium Collapsible Content */}
+        {/* Collapsible Content */}
         <div className={`transition-all duration-500 ${isExpanded ? 'max-h-none opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-          <div className="relative p-3 sm:p-8 pt-4 sm:pt-6 space-y-6 sm:space-y-8">
-            {/* Premium Interactive Report Editor */}
-            {isEditMode && enableEditing && analysisType.isDiagnosis && flowiseEndpoint && (
-              <div className="relative overflow-hidden">
-                {/* Luxury Editor Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/20 via-[#63b3ed]/15 to-[#2b6cb0]/10 dark:from-[#2b6cb0]/20 dark:via-[#1a365d]/15 dark:to-[#63b3ed]/20 rounded-3xl" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(43,108,176,0.1),transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(43,108,176,0.2),transparent_70%)]" />
-                
-                <div className="relative p-6">
-                  {/* Editor Header */}
-                  <div className="flex items-center space-x-4 mb-6">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30 animate-pulse" />
-                      <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-3 shadow-xl shadow-[#2b6cb0]/25">
-                        <Edit3 className="w-6 h-6 text-white" />
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
-                        <span>AI Report Editor</span>
-                        <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#63b3ed]/30 rounded-full">
-                          <Crown className="w-3 h-3 text-[#2b6cb0] dark:text-[#90cdf4]" />
-                          <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4]">STUDIO</span>
-                        </div>
-                      </h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                        Advanced medical report editing with AI assistance
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {/* Enhanced Report Edit Card */}
-                  <div className="relative">
-                    <ReportEditCard
-                      reportId={analysis.timestamp.toString()}
-                      initialContent={analysis.aiResponse}
-                      sessionId={`edit-${analysis.timestamp}`}
-                      flowiseEndpoint={analysisType.endpoint}
-                      onEditComplete={handleEditComplete}
-                      onError={handleEditError}
-                      className="border-2 border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-2xl shadow-[#2b6cb0]/10"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-            {/* Premium User Request Section - Hidden for cleaner UI */}
-            {false && (
-              <div className="relative overflow-hidden">
-                {/* Request Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-[#90cdf4]/15 to-[#63b3ed]/10 dark:from-slate-800/80 dark:via-[#2b6cb0]/20 dark:to-[#1a365d]/15 rounded-3xl" />
-                
-                <div className="relative p-6">
-                  <div className="flex items-start space-x-4">
-                    {/* Enhanced User Icon */}
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30" />
-                      <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-3 shadow-xl shadow-[#2b6cb0]/25">
-                        <User className="w-5 h-5 text-white" />
-                      </div>
-                    </div>
-                    
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-3">
-                        <h4 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-                          Analysis Request
-                        </h4>
-                        <div className="px-3 py-1 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-full border border-white/40 dark:border-slate-700/40">
-                          <span className="text-xs font-bold text-[#2b6cb0] dark:text-[#63b3ed]">USER INPUT</span>
-                        </div>
-                      </div>
-                      
-                      <div className="p-4 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-lg">
-                        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
-                          {analysis.userInstruction}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+          {/* Edit Mode Section */}
+          <AnalysisCardEditMode
+            analysis={analysis}
+            analysisType={analysisType}
+            isEditMode={isEditMode}
+            enableEditing={enableEditing}
+            flowiseEndpoint={flowiseEndpoint}
+            onEditComplete={handleEditComplete}
+            onEditError={handleEditError}
+          />
 
-            {/* Premium AI Response Section */}
-            <div className="relative overflow-hidden">
-              {/* Response Background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/20 via-[#63b3ed]/15 to-[#2b6cb0]/10 dark:from-[#2b6cb0]/25 dark:via-[#1a365d]/20 dark:to-[#63b3ed]/15 rounded-3xl" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(43,108,176,0.1),transparent_70%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(43,108,176,0.2),transparent_70%)]" />
-              
-              <div className="relative p-6">
-                <div className="flex items-start space-x-4">
-                  {/* Enhanced AI Icon - Hidden on mobile */}
-                  <div className="relative hidden sm:block">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30 animate-pulse" />
-                    <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-3 shadow-xl shadow-[#2b6cb0]/25">
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
-                      {analysisType.isDiagnosis ? (
-                        <HeartHandshake className="w-6 h-6 text-white relative z-10" />
-                      ) : (
-                        <Brain className="w-6 h-6 text-white relative z-10" />
-                      )}
-                    </div>
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] rounded-full flex items-center justify-center animate-bounce">
-                      <Sparkles className="w-3 h-3 text-white" />
-                    </div>
-                  </div>
-                  
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <h4 className="hidden sm:block text-xl font-bold text-slate-900 dark:text-slate-100">
-                        {analysisType.isDiagnosis ? 'Medical Report' : 'AI Clinical Analysis'}
-                      </h4>
-                      
-                      <div className="hidden sm:flex items-center space-x-2">
-                        <div className="px-3 py-1 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-full border border-white/50 dark:border-slate-700/50">
-                          <span className="text-xs font-bold text-[#2b6cb0] dark:text-[#63b3ed]">AI GENERATED</span>
-                        </div>
-                        
-                        {analysisType.isDiagnosis && (
-                          <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#63b3ed]/30 rounded-full">
-                            <Target className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                            <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4]">CLINICAL</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    {/* Enhanced Content Display */}
-                    <div className="relative -mx-3 sm:mx-0">
-                      <div className="absolute inset-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-inner" />
-                      <div className="relative px-4 py-2 sm:p-6 prose prose-sm dark:prose-invert max-w-none">
-                        {(() => {
-                          const displayContent = editedContent || analysis.aiResponse;
-                          return hasMarkdownFormatting(displayContent) ? (
-                            formatMarkdown(displayContent)
-                          ) : (
-                            <div className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap font-medium">
-                              {displayContent}
-                            </div>
-                          );
-                        })()}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Main Content Section */}
+          <AnalysisCardContent
+            analysis={analysis}
+            analysisType={analysisType}
+            editedContent={editedContent}
+            isExpanded={isExpanded}
+          />
 
-            {/* Premium Metadata Footer */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-50/80 to-[#90cdf4]/15 dark:from-slate-800/60 dark:to-[#2b6cb0]/20 rounded-3xl" />
-              
-              <div className="relative p-6">
-                <div className="flex items-center justify-between">
-                  {/* Enhanced Metadata */}
-                  <div className="flex items-center space-x-6">
-                    
-                    <div className="flex items-center space-x-3 px-4 py-2 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-xl border border-white/50 dark:border-slate-700/50 shadow-sm">
-                      <div className="p-1 bg-gradient-to-r from-[#63b3ed] to-red-600 rounded-lg shadow-lg">
-                        <Clock className="w-3 h-3 text-white" />
-                      </div>
-                      <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
-                        {new Date(analysis.timestamp).toLocaleTimeString()}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  {/* Premium Status Indicator */}
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-2xl blur-md opacity-70 animate-pulse" />
-                    <div className="relative flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#2b6cb0]/30 dark:to-[#63b3ed]/30 backdrop-blur-sm rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30 shadow-lg">
-                      <div className="relative">
-                        <div className="w-3 h-3 bg-[#2b6cb0] rounded-full animate-pulse" />
-                        <div className="absolute inset-0 w-3 h-3 bg-[#63b3ed] rounded-full animate-ping" />
-                      </div>
-                      <span className="text-sm font-bold text-[#1a365d] dark:text-[#90cdf4] tracking-wide">
-                        ANALYSIS COMPLETE
-                      </span>
-                      <Award className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Footer Section */}
+          <AnalysisCardFooter
+            analysis={analysis}
+            isExpanded={isExpanded}
+          />
         </div>
       </div>
 
-      {/* Form 100 Generated Report Display */}
-      {generatedForm100Content && (
-        <>
-          {/* Visual Connector */}
-          <div className="flex justify-center py-3">
-            <div className="flex items-center space-x-2">
-              <div className="w-4 h-px bg-[#63b3ed]" />
-              <div className="p-1 bg-[#63b3ed] rounded-full">
-                <ChevronDown className="w-2 h-2 text-white" />
-              </div>
-              <div className="w-4 h-px bg-[#63b3ed]" />
-            </div>
-          </div>
-
-          {/* Form 100 Display Card */}
-          <div className="relative mt-4">
-            {/* Enhanced Premium Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#1a365d]/10 via-[#2b6cb0]/5 to-[#1a365d]/15 dark:from-[#1a365d]/20 dark:via-[#2b6cb0]/10 dark:to-[#1a365d]/25 rounded-3xl blur-sm" />
-            
-            <div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl border border-[#63b3ed]/30 dark:border-[#2b6cb0]/30 shadow-xl dark:shadow-2xl overflow-hidden">
-              {/* Form 100 Header */}
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] opacity-95" />
-                
-                <div className="relative p-4 sm:p-6">
-                  <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                    {/* Form 100 Title */}
-                    <div className="flex items-center space-x-3 sm:space-x-4">
-                      <div className="relative flex-shrink-0">
-                        <div className="absolute inset-0 bg-white/20 rounded-xl blur-sm" />
-                        <div className="relative p-2 sm:p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-                          <ClipboardList className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                        </div>
-                      </div>
-                      
-                      <div className="min-w-0 flex-1">
-                        <h3 className="text-lg sm:text-xl font-bold text-white tracking-wide truncate">
-                          Form 100 Emergency Report
-                        </h3>
-                        <p className="text-xs sm:text-sm text-white/80 mt-1">
-                          Generated from initial ER consultation
-                        </p>
-                      </div>
-                    </div>
-                    
-                    {/* Form 100 Badge */}
-                    <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-                      <div className="px-4 py-2 bg-[#2b6cb0] rounded-full border border-white/20">
-                        <span className="text-sm font-bold text-white tracking-wide">FORM 100</span>
-                      </div>
-                      
-                      {form100GeneratedAt && (
-                        <div className="flex items-center space-x-2 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-                          <Clock className="w-4 h-4 text-white/80" />
-                          <span className="text-sm font-medium text-white/90">
-                            {form100GeneratedAt.toLocaleTimeString()}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Form 100 Content */}
-              <div className="relative p-4 sm:p-6">
-                <div className="relative -mx-3 sm:mx-0">
-                  <div className="absolute inset-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-inner" />
-                  <div className="relative px-4 py-2 sm:p-6 prose prose-sm dark:prose-invert max-w-none">
-                    {(() => {
-                      return hasMarkdownFormatting(generatedForm100Content) ? (
-                        formatMarkdown(generatedForm100Content)
-                      ) : (
-                        <div className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap font-medium">
-                          {generatedForm100Content}
-                        </div>
-                      );
-                    })()}
-                  </div>
-                </div>
-              </div>
-
-              {/* Form 100 Footer with Actions */}
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-50/80 to-[#1a365d]/15 dark:from-slate-800/60 dark:to-[#2b6cb0]/20 rounded-3xl" />
-                
-                <div className="relative p-4 sm:p-6">
-                  <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                    {/* Form 100 Actions */}
-                    <div className="flex flex-wrap items-center gap-2 sm:space-x-3">
-                      <MedicalButton
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => onCopy?.({ 
-                          ...analysis, 
-                          aiResponse: generatedForm100Content,
-                          userInstruction: 'Form 100 Emergency Report' 
-                        })}
-                        className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-[#63b3ed]/30 hover:bg-[#63b3ed]/10"
-                      >
-                        <Copy className="w-4 h-4 mr-2" />
-                        Copy Form 100
-                      </MedicalButton>
-                      
-                      <MedicalButton
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => onDownload?.({ 
-                          ...analysis, 
-                          aiResponse: generatedForm100Content,
-                          userInstruction: 'Form 100 Emergency Report' 
-                        })}
-                        className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-[#63b3ed]/30 hover:bg-[#63b3ed]/10"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Export
-                      </MedicalButton>
-                      
-                      <MedicalButton
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => onShare?.({ 
-                          ...analysis, 
-                          aiResponse: generatedForm100Content,
-                          userInstruction: 'Form 100 Emergency Report' 
-                        })}
-                        className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-[#63b3ed]/30 hover:bg-[#63b3ed]/10"
-                      >
-                        <Share2 className="w-4 h-4 mr-2" />
-                        Share
-                      </MedicalButton>
-                    </div>
-                    
-                    {/* Form 100 Status */}
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#63b3ed]/20 to-[#2b6cb0]/20 rounded-2xl blur-md opacity-70 animate-pulse" />
-                      <div className="relative flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-[#63b3ed]/20 to-[#2b6cb0]/20 dark:from-[#2b6cb0]/30 dark:to-[#1a365d]/30 backdrop-blur-sm rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30 shadow-lg">
-                        <div className="relative">
-                          <div className="w-3 h-3 bg-[#2b6cb0] rounded-full animate-pulse" />
-                          <div className="absolute inset-0 w-3 h-3 bg-[#63b3ed] rounded-full animate-ping" />
-                        </div>
-                        <span className="text-sm font-bold text-[#1a365d] dark:text-[#63b3ed] tracking-wide">
-                          FORM 100 GENERATED
-                        </span>
-                        <CheckCircle className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+      {/* Form 100 Display Card */}
+      <Form100DisplayCard
+        generatedForm100Content={generatedForm100Content}
+        form100GeneratedAt={form100GeneratedAt}
+        isForm100Expanded={isForm100Expanded}
+        isForm100EditMode={isForm100EditMode}
+        editedForm100Content={editedForm100Content}
+        analysis={analysis}
+        sessionId={sessionId}
+        flowiseEndpoint={flowiseEndpoint}
+        onForm100ExpandToggle={() => setIsForm100Expanded(!isForm100Expanded)}
+        onForm100EditToggle={() => setIsForm100EditMode(!isForm100EditMode)}
+        onForm100EditComplete={handleForm100EditComplete}
+        onForm100EditError={handleForm100EditError}
+        onCopy={onCopy}
+        onDownload={onDownload}
+        onShare={onShare}
+      />
 
       {/* Form 100 Modal Integration */}
       <Form100Modal
