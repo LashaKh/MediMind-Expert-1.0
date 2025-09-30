@@ -134,12 +134,14 @@ const withFlowiseRetry = async <T>(
 
 // Make HTTP request to Flowise with timeout and error handling
 const makeFlowiseRequest = async (
-  payload: FlowiseForm100Payload
+  payload: FlowiseForm100Payload,
+  endpoint?: string
 ): Promise<FlowiseForm100Response> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), FLOWISE_CONFIG.timeout);
   
-  const url = `${FLOWISE_CONFIG.baseUrl}${FLOWISE_CONFIG.form100Endpoint}`;
+  // Use provided endpoint or fall back to default
+  const url = endpoint || `${FLOWISE_CONFIG.baseUrl}${FLOWISE_CONFIG.form100Endpoint}`;
   
   try {
     const response = await fetch(url, {
@@ -293,7 +295,8 @@ export class FlowiseIntegrationService {
   
   // Generate Form 100 using Flowise AI
   static async generateForm100(
-    payload: FlowiseForm100Payload
+    payload: FlowiseForm100Payload,
+    endpoint?: string
   ): Promise<Form100ServiceResponse<FlowiseForm100Response>> {
     return safeFlowiseAsync(async () => {
       // Validate payload
@@ -312,7 +315,7 @@ export class FlowiseIntegrationService {
       
       // Make request with retry mechanism
       const response = await withFlowiseRetry(() => 
-        makeFlowiseRequest(enhancedPayload as FlowiseForm100Payload)
+        makeFlowiseRequest(enhancedPayload as FlowiseForm100Payload, endpoint)
       );
       
       // Validate response

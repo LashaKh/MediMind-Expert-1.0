@@ -8,14 +8,20 @@ import {
   FlowiseForm100Response,
   Form100ServiceResponse,
   Form100Config,
-  FORM100_DEFAULTS
+  FORM100_DEFAULTS,
+  DiagnosisCode
 } from '../types/form100';
+import { 
+  getFlowiseEndpointForDiagnosis, 
+  STEMI_FORM100_ENDPOINT,
+  DEFAULT_FORM100_ENDPOINT 
+} from '../components/Form100/config/diagnosisEndpoints';
 
 // Service configuration
 const FORM100_CONFIG: Form100Config = {
-  flowiseEndpoint: process.env.VITE_FLOWISE_FORM100_ENDPOINT || '/api/flowise/form100',
-  maxGenerationTime: FORM100_DEFAULTS.maxGenerationTime || 5000,
-  retryAttempts: FORM100_DEFAULTS.retryAttempts || 3,
+  flowiseEndpoint: DEFAULT_FORM100_ENDPOINT, // Direct Flowise endpoint
+  maxGenerationTime: FORM100_DEFAULTS.maxGenerationTime || 15000, // 15 seconds to test faster
+  retryAttempts: FORM100_DEFAULTS.retryAttempts || 1, // Single retry to avoid multiple long waits
   validationRules: [],
   supportedDepartments: FORM100_DEFAULTS.supportedDepartments || [],
   defaultPriority: FORM100_DEFAULTS.defaultPriority || 'normal'
@@ -67,6 +73,26 @@ const safeAsync = async <T>(
 // Generate unique request ID for tracing
 const generateRequestId = (): string => {
   return `form100_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
+
+// Resolve the appropriate Flowise endpoint for a given diagnosis
+const resolveFlowiseEndpoint = (
+  diagnosis: DiagnosisCode,
+  options?: {
+    isFromSTEMI?: boolean;
+    troponinPositive?: boolean;
+  }
+): string => {
+  // First check if the diagnosis has its own endpoint configured
+  if (diagnosis.flowiseEndpoint) {
+    return diagnosis.flowiseEndpoint;
+  }
+  
+  // Use the endpoint resolution function with diagnosis code
+  return getFlowiseEndpointForDiagnosis(diagnosis.code, {
+    isFromSTEMI: options?.isFromSTEMI,
+    troponinPositive: diagnosis.troponinStatus === 'positive' || options?.troponinPositive
+  });
 };
 
 // Validate Form 100 request data
@@ -148,34 +174,152 @@ const prepareFlowisePayload = (request: Form100Request): FlowiseForm100Payload =
   };
 };
 
-// Make authenticated request to Flowise endpoint
+// Make direct request to Flowise endpoint (EXACT same pattern as flowise-simple.mjs)
 const makeFlowiseRequest = async (
-  payload: FlowiseForm100Payload
+  payload: FlowiseForm100Payload,
+  endpoint?: string
 ): Promise<FlowiseForm100Response> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), FORM100_CONFIG.maxGenerationTime);
+  
+  // Get the diagnosis-specific endpoint for this request
+  const diagnosisCode = payload.patientData?.clinicalData?.primaryDiagnosis?.code;
+  const flowiseEndpoint = endpoint || resolveFlowiseEndpoint(payload.patientData.clinicalData.primaryDiagnosis);
 
   try {
-    const response = await fetch(FORM100_CONFIG.flowiseEndpoint, {
+    // Build clean medical data input (no redundant sections)
+    let questionContent = "";
+    
+    // Include existing ER report (initial consult transcript)
+    if (payload.patientData?.existingERReport) {
+      questionContent += `${payload.patientData.existingERReport}\n\n`;
+    }
+    
+    // Include angiography report if available
+    if (payload.patientData?.angiographyReport) {
+      questionContent += `**Angiography Report:**\n${payload.patientData.angiographyReport}\n\n`;
+    }
+    
+    // Include voice transcript if available
+    if (payload.patientData?.voiceTranscript) {
+      questionContent += `**Voice Notes:**\n${payload.patientData.voiceTranscript}\n\n`;
+    }
+    
+    // Include patient demographics only if not already in ER report
+    if (payload.patientData?.demographics) {
+      const demo = payload.patientData.demographics;
+      let hasNewDemographics = false;
+      let demographicsContent = `**Patient Information:**\n`;
+      
+      if (demo.age) { demographicsContent += `Age: ${demo.age}\n`; hasNewDemographics = true; }
+      if (demo.gender) { demographicsContent += `Gender: ${demo.gender}\n`; hasNewDemographics = true; }
+      if (demo.weight) { demographicsContent += `Weight: ${demo.weight}kg\n`; hasNewDemographics = true; }
+      if (demo.height) { demographicsContent += `Height: ${demo.height}cm\n`; hasNewDemographics = true; }
+      
+      if (hasNewDemographics) {
+        questionContent += demographicsContent + `\n`;
+      }
+    }
+    
+    // Include vital signs only if not already in ER report
+    if (payload.patientData?.clinicalData?.vitalSigns) {
+      const vitals = payload.patientData.clinicalData.vitalSigns;
+      let hasNewVitals = false;
+      let vitalsContent = `**Additional Vital Signs:**\n`;
+      
+      if (vitals.bloodPressure) { vitalsContent += `Blood Pressure: ${vitals.bloodPressure}\n`; hasNewVitals = true; }
+      if (vitals.heartRate) { vitalsContent += `Heart Rate: ${vitals.heartRate} bpm\n`; hasNewVitals = true; }
+      if (vitals.temperature) { vitalsContent += `Temperature: ${vitals.temperature}°C\n`; hasNewVitals = true; }
+      if (vitals.respiratoryRate) { vitalsContent += `Respiratory Rate: ${vitals.respiratoryRate}\n`; hasNewVitals = true; }
+      if (vitals.oxygenSaturation) { vitalsContent += `Oxygen Saturation: ${vitals.oxygenSaturation}%\n`; hasNewVitals = true; }
+      
+      if (hasNewVitals) {
+        questionContent += vitalsContent + `\n`;
+      }
+    }
+
+    // Use EXACT same request format as flowise-simple.mjs working call
+    const flowiseRequest = {
+      question: questionContent.trim(),
+      overrideConfig: { 
+        sessionId: payload.sessionId || 'default-session' 
+      }
+    };
+
+    console.log('🚀 Making direct request to Flowise (exact flowise-simple.mjs format):', {
+      endpoint: flowiseEndpoint,
+      sessionId: payload.sessionId,
+      diagnosisCode,
+      hasQuestion: !!flowiseRequest.question,
+      questionLength: flowiseRequest.question.length
+    });
+
+    console.log('📤 Full request payload (flowise-simple.mjs format):', flowiseRequest);
+
+    const requestStartTime = Date.now();
+    console.log('⏰ Starting Flowise request at:', new Date().toISOString());
+
+    // Use EXACT same fetch call as flowise-simple.mjs
+    const flowiseResponse = await fetch(flowiseEndpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${await getAuthToken()}`,
-        'X-Session-ID': payload.sessionId,
-        'X-Request-ID': generateRequestId()
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(payload),
-      signal: controller.signal
+      body: JSON.stringify(flowiseRequest)
     });
 
     clearTimeout(timeoutId);
 
-    if (!response.ok) {
-      throw new Error(`Flowise API error: ${response.status} ${response.statusText}`);
+    const requestDuration = Date.now() - requestStartTime;
+    console.log('✅ Flowise response received:', {
+      status: flowiseResponse.status,
+      statusText: flowiseResponse.statusText,
+      duration: `${requestDuration}ms`,
+      ok: flowiseResponse.ok
+    });
+
+    if (!flowiseResponse.ok) {
+      const errorText = await flowiseResponse.text();
+      console.error('❌ Flowise API error:', {
+        status: flowiseResponse.status,
+        statusText: flowiseResponse.statusText,
+        body: errorText,
+        endpoint: flowiseEndpoint
+      });
+      throw new Error(`Flowise error: ${flowiseResponse.status}`);
     }
 
-    const data = await response.json();
-    return data as FlowiseForm100Response;
+    const flowiseResult = await flowiseResponse.json();
+    
+    console.log('📄 Flowise response data:', {
+      responseType: typeof flowiseResult,
+      hasText: !!flowiseResult.text,
+      hasResult: !!flowiseResult.result,
+      hasResponse: !!flowiseResult.response,
+      hasAnswer: !!flowiseResult.answer,
+      dataKeys: Object.keys(flowiseResult),
+      textLength: flowiseResult.text?.length || 0
+    });
+    
+    // Use EXACT same response parsing as flowise-simple.mjs
+    const generatedContent = flowiseResult.text || flowiseResult.response || flowiseResult.answer || 'No response from AI';
+    
+    const transformedResponse: FlowiseForm100Response = {
+      success: true,
+      data: {
+        generatedForm: generatedContent,
+        confidence: 0.9,
+        processingTime: requestDuration,
+        recommendations: []
+      }
+    };
+
+    console.log('🎉 Form 100 generation successful:', {
+      contentLength: generatedContent.length,
+      preview: generatedContent.substring(0, 100) + '...'
+    });
+
+    return transformedResponse;
   } catch (error) {
     clearTimeout(timeoutId);
     
@@ -187,19 +331,7 @@ const makeFlowiseRequest = async (
   }
 };
 
-// Get authentication token for Flowise
-const getAuthToken = async (): Promise<string> => {
-  // Integration with existing Supabase auth
-  const { data: { session } } = await import('../lib/supabase').then(m => 
-    m.supabase.auth.getSession()
-  );
-  
-  if (!session?.access_token) {
-    throw new Error('User not authenticated');
-  }
-  
-  return session.access_token;
-};
+// Note: getAuthToken removed - not needed for direct Flowise calls
 
 // Retry mechanism with exponential backoff
 const withRetry = async <T>(
@@ -232,7 +364,11 @@ export class Form100Service {
   
   // Generate Form 100 document
   static async generateForm100(
-    request: Partial<Form100Request>
+    request: Partial<Form100Request>,
+    options?: {
+      isFromSTEMI?: boolean;
+      troponinPositive?: boolean;
+    }
   ): Promise<Form100ServiceResponse<{ generatedForm: string; processingTime: number }>> {
     return safeAsync(async () => {
       // Validation
@@ -243,10 +379,23 @@ export class Form100Service {
 
       const startTime = Date.now();
       
-      // Prepare and send request to Flowise
+      // Resolve the appropriate Flowise endpoint for this diagnosis
+      const endpoint = request.primaryDiagnosis 
+        ? resolveFlowiseEndpoint(request.primaryDiagnosis, options)
+        : DEFAULT_FORM100_ENDPOINT;
+
+      console.log('🎯 Form 100 generation started:', {
+        diagnosisCode: request.primaryDiagnosis?.code,
+        sessionId: request.sessionId,
+        endpoint,
+        isFromSTEMI: options?.isFromSTEMI,
+        troponinPositive: options?.troponinPositive
+      });
+      
+      // Prepare and send request directly to Flowise (same as chat.ts)
       const payload = prepareFlowisePayload(request as Form100Request);
       
-      const response = await withRetry(() => makeFlowiseRequest(payload));
+      const response = await withRetry(() => makeFlowiseRequest(payload, endpoint));
       
       if (!response.success) {
         throw new Error(response.error?.message || 'Form 100 generation failed');
@@ -391,11 +540,15 @@ export class Form100Service {
   // Test Flowise connection
   static async testFlowiseConnection(): Promise<Form100ServiceResponse<boolean>> {
     return safeAsync(async () => {
-      const response = await fetch(`${FORM100_CONFIG.flowiseEndpoint}/health`, {
-        method: 'GET',
+      const response = await fetch(FORM100_CONFIG.flowiseEndpoint, {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${await getAuthToken()}`
-        }
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          question: 'Test connection',
+          overrideConfig: {}
+        })
       });
 
       return response.ok;

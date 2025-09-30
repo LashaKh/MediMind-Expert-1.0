@@ -23,7 +23,9 @@ import {
   Star,
   ChevronRight,
   Shield,
-  Award
+  Award,
+  Mic,
+  Activity
 } from 'lucide-react';
 import { Dialog, DialogContent } from '../ui/Dialog';
 import { Button } from '../ui/button';
@@ -57,6 +59,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
   const [currentStep, setCurrentStep] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedForm, setGeneratedForm] = useState<string | null>(null);
+  const [generationError, setGenerationError] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<Form100Request>>(initialData || {});
 
   // Form validation
@@ -116,12 +119,23 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
   // Handle form generation
   const handleGenerate = useCallback(async () => {
     setIsGenerating(true);
+    setGenerationError(null);
+    
     try {
       if (onGenerate) {
-        await onGenerate(formData as Form100Request);
-        setGeneratedForm("Generated Form 100 content would appear here");
+        const generatedContent = await onGenerate(formData as Form100Request);
+        if (generatedContent) {
+          setGeneratedForm(generatedContent);
+          setGenerationError(null);
+        } else {
+          throw new Error('No content generated');
+        }
       }
     } catch (error) {
+      console.error('Form generation failed:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      setGenerationError(errorMessage);
+      setGeneratedForm(null);
     } finally {
       setIsGenerating(false);
     }
@@ -146,6 +160,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
       setCurrentStep(1);
       setIsGenerating(false);
       setGeneratedForm(null);
+      setGenerationError(null);
       if (sessionId) {
         updateFormData({ sessionId });
       }
@@ -281,6 +296,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
                   sessionId={sessionId}
                   generatedForm={generatedForm}
                   isGenerating={isGenerating}
+                  generationError={generationError}
                   onGenerate={handleGenerate}
                   reportType={reportType}
                 />
@@ -555,6 +571,7 @@ interface GenerationStepProps {
   formData: any;
   generatedForm?: string;
   isGenerating: boolean;
+  generationError?: string | null;
   onGenerate: () => void;
 }
 
@@ -562,6 +579,7 @@ const GenerationStep: React.FC<GenerationStepProps> = ({
   formData, 
   generatedForm, 
   isGenerating, 
+  generationError,
   onGenerate 
 }) => {
   if (generatedForm) {
@@ -599,57 +617,260 @@ const GenerationStep: React.FC<GenerationStepProps> = ({
     );
   }
 
-  return (
-    <div className="space-y-8">
-      {/* Clean diagnosis indicator */}
-      {formData.primaryDiagnosis && (
-        <div className="bg-gradient-to-r from-[#63b3ed]/5 to-[#90cdf4]/5 rounded-2xl p-6 border border-[#63b3ed]/20">
-          <div className="flex items-center space-x-3">
-            <Heart className="w-6 h-6 text-[#2b6cb0]" />
-            <div>
-              <h4 className="font-bold text-[#1a365d]">Primary Diagnosis</h4>
-              <p className="text-[#2b6cb0] font-medium">{formData.primaryDiagnosis.name}</p>
+  // Error state display
+  if (generationError) {
+    return (
+      <div className="space-y-8">
+        {/* Error state */}
+        <div className="text-center">
+          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-6">
+            <div className="absolute inset-0 bg-gradient-to-r from-red-400 to-red-600 rounded-full opacity-80" />
+            <div className="relative w-16 h-16 bg-white rounded-full flex items-center justify-center">
+              <AlertCircle className="w-10 h-10 text-red-600" />
+            </div>
+          </div>
+          <h2 className="text-2xl font-bold text-red-600 mb-2">Generation Failed</h2>
+          <p className="text-slate-600 font-medium">Please try again or check your data</p>
+        </div>
+        
+        {/* Error details */}
+        <div className="relative group">
+          <div className="absolute -inset-2 bg-gradient-to-r from-red-400/20 to-red-600/20 rounded-2xl blur-lg opacity-50" />
+          <div className="relative bg-red-50 border-2 border-red-200 rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-4 pb-4 border-b border-red-200">
+              <h3 className="text-lg font-bold text-red-800">Error Details</h3>
+              <AlertCircle className="w-5 h-5 text-red-600" />
+            </div>
+            <p className="text-sm text-red-700 leading-relaxed">
+              {generationError}
+            </p>
+            
+            {/* Retry button */}
+            <div className="mt-6 text-center">
+              <button
+                onClick={onGenerate}
+                className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl
+                           hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105
+                           shadow-lg hover:shadow-xl"
+              >
+                Try Again
+              </button>
             </div>
           </div>
         </div>
-      )}
+      </div>
+    );
+  }
 
-      {/* Prominent generation button */}
-      <div className="text-center">
-        <div className="relative group inline-block">
-          <div className="absolute -inset-2 bg-gradient-to-r from-[#2b6cb0]/40 to-[#1a365d]/40 rounded-2xl 
-                          blur-lg opacity-70 group-hover:opacity-100 transition-all duration-500" />
-          <button
-            onClick={onGenerate}
-            disabled={isGenerating || !formData.primaryDiagnosis}
-            className={cn(
-              "relative px-12 py-4 rounded-2xl font-bold text-lg overflow-hidden transition-all duration-500",
-              isGenerating || !formData.primaryDiagnosis
-                ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                : "bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] text-white shadow-2xl shadow-[#2b6cb0]/40 micro-interaction"
-            )}
-          >
-            {!isGenerating && formData.primaryDiagnosis && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent
-                              translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-            )}
+  return (
+    <div className="relative h-full overflow-hidden">
+      {/* Sophisticated background with animated gradients */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-[#2b6cb0]/10 to-[#63b3ed]/5 rounded-full blur-2xl animate-pulse" />
+        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-tr from-[#1a365d]/8 to-[#2b6cb0]/5 rounded-full blur-2xl animate-pulse delay-1000" />
+      </div>
+
+      <div className="relative h-full overflow-y-auto p-2">
+        {/* Compact diagnosis card */}
+        {formData.primaryDiagnosis && (
+          <div className="group relative">
+            {/* Subtle glow effect */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-[#2b6cb0]/15 to-[#63b3ed]/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500" />
             
-            <div className="relative flex items-center space-x-3">
-              {isGenerating ? (
-                <>
-                  <Loader2 className="w-6 h-6 animate-spin" />
-                  <span>Generating Report...</span>
-                </>
-              ) : (
-                <>
-                  <Award className="w-6 h-6" />
-                  <span>Generate Emergency Report</span>
-                  <Sparkles className="w-5 h-5 animate-pulse" />
-                </>
-              )}
+            {/* Main diagnosis container */}
+            <div className="relative bg-white/90 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow-lg shadow-[#2b6cb0]/5">
+              {/* Compact header */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] p-2 rounded-lg">
+                    <Heart className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-[#1a365d]">Primary Diagnosis</h3>
+                    <p className="text-[#2b6cb0]/70 text-sm">Clinical Assessment Complete</p>
+                  </div>
+                </div>
+                
+                {/* Compact status badge */}
+                <div className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-emerald-50 to-emerald-100/50 rounded-full border border-emerald-200/50">
+                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                  <span className="text-xs font-semibold text-emerald-700">Confirmed</span>
+                </div>
+              </div>
+
+              {/* Compact diagnosis display */}
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#63b3ed]/5 to-[#90cdf4]/5 rounded-lg blur" />
+                <div className="relative bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] rounded-lg p-4 border border-[#e2e8f0]/50">
+                  <div className="space-y-3">
+                    <div className="flex items-start space-x-2">
+                      <div className="w-0.5 h-6 bg-gradient-to-b from-[#2b6cb0] to-[#63b3ed] rounded-full mt-1" />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-base font-bold text-[#1a365d] leading-tight">
+                          {formData.primaryDiagnosis.name}
+                        </h4>
+                        <p className="text-[#475569] text-sm mt-1">
+                          {formData.primaryDiagnosis.nameEn}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Compact ICD Code */}
+                    <div className="flex items-center space-x-2">
+                      <span className="inline-flex items-center px-2 py-1 rounded bg-[#2b6cb0]/10 border border-[#2b6cb0]/20">
+                        <span className="text-xs font-bold text-[#2b6cb0]">ICD-10</span>
+                      </span>
+                      <span className="font-mono text-xs font-bold text-[#1a365d]">
+                        {formData.primaryDiagnosis.code}
+                      </span>
+                    </div>
+
+                    {/* Compact description */}
+                    {formData.primaryDiagnosis.description && (
+                      <p className="text-[#64748b] text-xs leading-relaxed italic border-l border-[#e2e8f0] pl-3">
+                        {formData.primaryDiagnosis.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Compact status indicators grid */}
+              <div className="mt-4 grid grid-cols-3 gap-2">
+                {/* Voice Transcript Indicator */}
+                <div className="group/item relative">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-indigo-100/50 to-blue-100/50 rounded-xl blur opacity-0 group-hover/item:opacity-100 transition-all duration-300" />
+                  <div className="relative bg-white/60 backdrop-blur-sm rounded-lg p-2 border border-white/30 hover:border-[#2b6cb0]/20 transition-all duration-300">
+                    <div className="flex items-center space-x-1.5">
+                      <div className={cn(
+                        "w-6 h-6 rounded flex items-center justify-center",
+                        formData.voiceTranscript 
+                          ? "bg-gradient-to-r from-[#2b6cb0] to-[#1a365d]" 
+                          : "bg-slate-300"
+                      )}>
+                        <Mic className="w-3 h-3 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h5 className="font-semibold text-[#1a365d] text-xs truncate">Voice Transcript</h5>
+                        <p className={cn(
+                          "text-xs",
+                          formData.voiceTranscript ? "text-[#2b6cb0]" : "text-slate-500"
+                        )}>
+                          {formData.voiceTranscript ? "Available" : "Not recorded"}
+                        </p>
+                      </div>
+                      {formData.voiceTranscript && (
+                        <CheckCircle className="w-3 h-3 text-[#2b6cb0]" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Symptoms Indicator */}
+                <div className="group/item relative">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#2b6cb0]/10 to-[#63b3ed]/10 rounded-lg blur opacity-0 group-hover/item:opacity-100 transition-all duration-300" />
+                  <div className="relative bg-white/60 backdrop-blur-sm rounded-lg p-2 border border-white/30 hover:border-[#2b6cb0]/20 transition-all duration-300">
+                    <div className="flex items-center space-x-1.5">
+                      <div className={cn(
+                        "w-6 h-6 rounded flex items-center justify-center",
+                        (formData.symptoms?.length || 0) > 0
+                          ? "bg-gradient-to-r from-[#2b6cb0] to-[#1a365d]" 
+                          : "bg-slate-300"
+                      )}>
+                        <Activity className="w-3 h-3 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h5 className="font-semibold text-[#1a365d] text-xs truncate">Symptoms</h5>
+                        <p className={cn(
+                          "text-xs",
+                          (formData.symptoms?.length || 0) > 0 ? "text-[#2b6cb0]" : "text-slate-500"
+                        )}>
+                          {formData.symptoms?.length || 0} documented
+                        </p>
+                      </div>
+                      {(formData.symptoms?.length || 0) > 0 && (
+                        <span className="bg-[#2b6cb0]/10 text-[#2b6cb0] text-xs font-bold px-1 py-0.5 rounded">
+                          {formData.symptoms?.length}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Medical Reports Indicator */}
+                <div className="group/item relative">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#2b6cb0]/10 to-[#63b3ed]/10 rounded-lg blur opacity-0 group-hover/item:opacity-100 transition-all duration-300" />
+                  <div className="relative bg-white/60 backdrop-blur-sm rounded-lg p-2 border border-white/30 hover:border-[#2b6cb0]/20 transition-all duration-300">
+                    <div className="flex items-center space-x-1.5">
+                      <div className={cn(
+                        "w-6 h-6 rounded flex items-center justify-center",
+                        formData.angiographyReport 
+                          ? "bg-gradient-to-r from-[#2b6cb0] to-[#1a365d]" 
+                          : "bg-slate-300"
+                      )}>
+                        <FileText className="w-3 h-3 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h5 className="font-semibold text-[#1a365d] text-xs truncate">Medical Reports</h5>
+                        <p className={cn(
+                          "text-xs",
+                          formData.angiographyReport ? "text-[#2b6cb0]" : "text-slate-500"
+                        )}>
+                          {formData.angiographyReport ? "Available" : "None added"}
+                        </p>
+                      </div>
+                      {formData.angiographyReport && (
+                        <CheckCircle className="w-3 h-3 text-[#2b6cb0]" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Compact completion progress */}
+              <div className="mt-4 pt-3 border-t border-[#e2e8f0]/50">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold text-[#475569]">Consultation Readiness</span>
+                  <span className="text-xs font-bold text-[#2b6cb0]">
+                    {Math.round((
+                      (formData.primaryDiagnosis ? 1 : 0) +
+                      (formData.voiceTranscript ? 1 : 0) +
+                      ((formData.symptoms?.length || 0) > 0 ? 1 : 0) +
+                      (formData.angiographyReport ? 1 : 0)
+                    ) / 4 * 100)}%
+                  </span>
+                </div>
+                <div className="relative h-1.5 bg-[#e2e8f0] rounded-full overflow-hidden">
+                  <div 
+                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] rounded-full transition-all duration-1000 ease-out"
+                    style={{ 
+                      width: `${(
+                        (formData.primaryDiagnosis ? 1 : 0) +
+                        (formData.voiceTranscript ? 1 : 0) +
+                        ((formData.symptoms?.length || 0) > 0 ? 1 : 0) +
+                        (formData.angiographyReport ? 1 : 0)
+                      ) / 4 * 100}%` 
+                    }}
+                  />
+                </div>
+              </div>
             </div>
-          </button>
-        </div>
+          </div>
+        )}
+
+        {/* Fallback for no diagnosis selected */}
+        {!formData.primaryDiagnosis && (
+          <div className="text-center py-16">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/10 to-[#63b3ed]/10 rounded-full blur-2xl" />
+              <div className="relative w-20 h-20 mx-auto bg-gradient-to-r from-[#e2e8f0] to-[#cbd5e1] rounded-full flex items-center justify-center">
+                <Heart className="w-10 h-10 text-[#94a3b8]" />
+              </div>
+            </div>
+            <h3 className="text-xl font-bold text-[#475569] mb-2">Diagnosis Required</h3>
+            <p className="text-[#64748b]">Please select a primary diagnosis to continue</p>
+          </div>
+        )}
       </div>
     </div>
   );

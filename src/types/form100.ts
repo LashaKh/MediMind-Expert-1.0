@@ -11,6 +11,9 @@ export interface DiagnosisCode {
   severity?: 'mild' | 'moderate' | 'severe' | 'critical';
   isActive: boolean;
   references?: string[]; // Medical literature references
+  flowiseEndpoint?: string; // Specialized Flowise endpoint for Form 100 generation
+  isForm100Eligible?: boolean; // Flag indicating if this diagnosis supports Form 100 generation
+  troponinStatus?: 'positive' | 'negative' | 'unknown'; // For I20.0 diagnosis variants
   createdAt: Date;
   updatedAt: Date;
 }
@@ -182,7 +185,10 @@ export interface UseForm100GenerationReturn {
   
   // Actions
   setFormData: (data: Partial<Form100Request>) => void;
-  generateForm: () => Promise<void>;
+  generateForm: (options?: {
+    isFromSTEMI?: boolean;
+    troponinPositive?: boolean;
+  }) => Promise<void>;
   resetForm: () => void;
   saveForm: () => Promise<void>;
   

@@ -33,6 +33,9 @@ const NSTEMI_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3db46
 // Pulmonary embolism (I26.0) endpoint
 const PULMONARY_EMBOLISM_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3602b392-65e5-4dbd-a649-cac18280bea5";
 
+// STEMI (I21.0) endpoint
+const STEMI_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/a18d5e28-05a5-4991-af4a-186ceb558383";
+
 // General template processing endpoint
 const GENERAL_TEMPLATE_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf";
 
@@ -96,6 +99,8 @@ export async function generateDiagnosisReport(
       apiUrl = NSTEMI_API_URL;
     } else if (diagnosis.icdCode === 'I26.0') {
       apiUrl = PULMONARY_EMBOLISM_API_URL;
+    } else if (diagnosis.icdCode === 'I21.0') {
+      apiUrl = STEMI_API_URL;
     } else {
       // Fallback to NSTEMI for unknown codes
       apiUrl = NSTEMI_API_URL;
@@ -209,6 +214,16 @@ export const PULMONARY_EMBOLISM_DIAGNOSIS: DiagnosisContext = {
 };
 
 /**
+ * STEMI diagnosis context
+ */
+export const STEMI_DIAGNOSIS: DiagnosisContext = {
+  icdCode: 'I21.0',
+  diagnosisGeorgian: 'ST ელევაციური მიოკარდიუმის ინფარქტი',
+  diagnosisEnglish: 'ST elevation myocardial infarction',
+  specialty: 'Cardiology'
+};
+
+/**
  * Generate heart failure consultation report
  * Convenience function for the specific heart failure diagnosis
  */
@@ -230,6 +245,14 @@ export async function generateNSTEMIReport(transcript: string, template?: UserRe
  */
 export async function generatePulmonaryEmbolismReport(transcript: string, template?: UserReportTemplate) {
   return generateDiagnosisReport(transcript, PULMONARY_EMBOLISM_DIAGNOSIS, template);
+}
+
+/**
+ * Generate STEMI consultation report
+ * Convenience function for the specific STEMI diagnosis
+ */
+export async function generateSTEMIReport(transcript: string, template?: UserReportTemplate) {
+  return generateDiagnosisReport(transcript, STEMI_DIAGNOSIS, template);
 }
 
 /**
@@ -262,6 +285,13 @@ export function extractDiagnosisFromInstruction(instruction: string): DiagnosisC
       instruction.toLowerCase().includes('pulmonary embolism') ||
       instruction.toLowerCase().includes('ფილტვის არტერიის ემბოლია')) {
     return PULMONARY_EMBOLISM_DIAGNOSIS;
+  }
+  
+  if (instruction.toLowerCase().includes('i21.0') || 
+      instruction.toLowerCase().includes('stemi') ||
+      instruction.toLowerCase().includes('st elevation') ||
+      instruction.toLowerCase().includes('st ელევაციური მიოკარდიუმის ინფარქტი')) {
+    return STEMI_DIAGNOSIS;
   }
   
   return null;

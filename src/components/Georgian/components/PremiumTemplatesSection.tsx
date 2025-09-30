@@ -45,7 +45,7 @@ const PREMIUM_TEMPLATES: Template[] = [
   {
     id: 'diagnosis-heart-failure',
     category: 'Cardiologist Consults',
-    title: 'Diagnosis - (I50.0) გულის შეგუბებითი უკმარისობა',
+    title: 'Initial Diagnosis - (I50.0) გულის შეგუბებითი უკმარისობა',
     instruction: 'Generate a comprehensive Cardiologist Emergency Room consultation report for Heart Failure diagnosis (I50.0 - Congestive Heart Failure / გულის შეგუბებითი უკმარისობა). Include clinical summary, diagnostic assessment, treatment plan, risk stratification, and disposition recommendations based on this medical transcript.',
     description: 'ER Cardiologist consultation report for heart failure diagnosis with comprehensive clinical analysis',
     icon: HeartHandshake,
@@ -57,7 +57,7 @@ const PREMIUM_TEMPLATES: Template[] = [
   {
     id: 'diagnosis-nstemi',
     category: 'Cardiologist Consults',
-    title: 'I24.9 - გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი',
+    title: 'Initial Diagnosis - (I24.9) გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი',
     instruction: 'Generate a comprehensive NSTEMI diagnosis report (I24.9 - Non-ST elevation myocardial infarction / გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი) including clinical presentation, diagnostic criteria, risk stratification, treatment protocol, and disposition recommendations based on this medical transcript.',
     description: 'Specialized NSTEMI diagnosis and management protocol with ICD-10 coding to I24.9 - გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი',
     icon: HeartHandshake,
@@ -70,11 +70,24 @@ const PREMIUM_TEMPLATES: Template[] = [
   {
     id: 'diagnosis-pulmonary-embolism',
     category: 'Cardiologist Consults',
-    title: 'Diagnosis-(I26.0) - ფილტვის არტერიის ემბოლია მწვავე ფილტვისმიერი გულის დროს',
+    title: 'Initial Diagnosis - (I26.0) ფილტვის არტერიის ემბოლია მწვავე ფილტვისმიერი გულის დროს',
     instruction: 'Generate a comprehensive pulmonary embolism diagnosis report (I26.0 - Pulmonary embolism with acute cor pulmonale / ფილტვის არტერიის ემბოლია მწვავე ფილტვისმიერი გულის დროს) including clinical presentation, diagnostic criteria, severity assessment, treatment protocol, and disposition recommendations based on this medical transcript.',
     description: 'Specialized pulmonary embolism diagnosis with acute cor pulmonale assessment',
     icon: HeartHandshake,
     color: 'from-[#2b6cb0] via-[#1a365d] to-[#2b6cb0]',
+    priority: 'high',
+    estimatedTime: '45s',
+    isFeatured: true,
+    isSpecialDiagnosis: true
+  },
+  {
+    id: 'diagnosis-stemi',
+    category: 'Cardiologist Consults',
+    title: 'Initial Diagnosis - (I21.0) ST ელევაციური მიოკარდიუმის ინფარქტი',
+    instruction: 'Generate a comprehensive STEMI diagnosis report (I21.0 - ST elevation myocardial infarction / ST ელევაციური მიოკარდიუმის ინფარქტი) including clinical presentation, diagnostic criteria, ECG findings, emergency intervention protocols, treatment plan, and disposition recommendations based on this medical transcript.',
+    description: 'Emergency STEMI diagnosis and management protocol with rapid intervention guidelines',
+    icon: HeartHandshake,
+    color: 'from-[#dc2626] via-[#991b1b] to-[#dc2626]',
     priority: 'high',
     estimatedTime: '45s',
     isFeatured: true,

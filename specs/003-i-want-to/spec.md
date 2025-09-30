@@ -8,30 +8,30 @@
 ## Execution Flow (main)
 ```
 1. Parse user description from Input
-   ’ Feature identified: Custom report templates for MediScribe transcription
+   ï¿½ Feature identified: Custom report templates for MediScribe transcription
 2. Extract key concepts from description
-   ’ Actors: Medical professionals (cardiologists)
-   ’ Actions: Create templates, input structure examples, generate reports
-   ’ Data: Template names, example structures, comments/notes, transcripts
-   ’ Constraints: Integration with existing Flowise endpoint
+   ï¿½ Actors: Medical professionals (cardiologists)
+   ï¿½ Actions: Create templates, input structure examples, generate reports
+   ï¿½ Data: Template names, example structures, comments/notes, transcripts
+   ï¿½ Constraints: Integration with existing Flowise endpoint
 3. For each unclear aspect:
-   ’ [NEEDS CLARIFICATION: Template sharing/privacy permissions]
-   ’ [NEEDS CLARIFICATION: Template versioning and editing capabilities]
-   ’ [NEEDS CLARIFICATION: Maximum template limits per user]
+   ï¿½ [not necessaary : Template sharing/privacy permissions]
+   ï¿½ [no need: Template versioning and editing capabilities]
+   ï¿½ [no limit: Maximum template limits per user]
 4. Fill User Scenarios & Testing section
-   ’ Primary flow: Create template ’ Use template for report generation
+   ï¿½ Primary flow: Create template ï¿½ Use template for report generation
 5. Generate Functional Requirements
-   ’ Template CRUD operations, UI integration, AI prompt enhancement
+   ï¿½ Template CRUD operations, UI integration, AI prompt enhancement
 6. Identify Key Entities
-   ’ Report Template, Template Categories, User Templates
+   ï¿½ Report Template, Template Categories, User Templates
 7. Run Review Checklist
-   ’ WARN "Spec has uncertainties around template management and limits"
+   ï¿½ WARN "Spec has uncertainties around template management and limits"
 8. Return: SUCCESS (spec ready for planning)
 ```
 
 ---
 
-## ¡ Quick Guidelines
+## ï¿½ Quick Guidelines
 -  Focus on WHAT users need and WHY
 - L Avoid HOW to implement (no tech stack, APIs, code structure)
 - =e Written for business stakeholders, not developers

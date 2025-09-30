@@ -125,6 +125,8 @@ export const DIAGNOSIS_CODES: DiagnosisCode[] = [
       'AHA/ACC MINOCA Scientific Statement',
       'Universal Definition of MI (4th Edition)'
     ],
+    flowiseEndpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/77a48098-671d-4dea-b476-fcea11cd1b5a',
+    isForm100Eligible: true,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01')
   },
@@ -148,7 +150,7 @@ export const DIAGNOSIS_CODES: DiagnosisCode[] = [
   {
     id: 'i20.0',
     code: 'I20.0',
-    name: 'არასტაბილური სტენოკარდია',
+    name: 'არასტაბილური სტენოკარდია Braunwald III Troponin +',
     nameEn: 'Unstable angina (Troponin + Braunwald III)',
     category: 'cardiology',
     description: 'კორონარული არტერიის მწვავე სინდრომი',
@@ -158,6 +160,9 @@ export const DIAGNOSIS_CODES: DiagnosisCode[] = [
       'ESC Guidelines for ACS 2023',
       'NSTE-ACS Management Guidelines 2023'
     ],
+    flowiseEndpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/6dc8bb6d-ce79-4a40-9561-9108ba05e7c7',
+    isForm100Eligible: true,
+    troponinStatus: 'positive',
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01')
   },
@@ -174,6 +179,8 @@ export const DIAGNOSIS_CODES: DiagnosisCode[] = [
       'ESC Guidelines for STEMI/NSTEMI 2023',
       'Universal Definition of MI (4th Edition)'
     ],
+    flowiseEndpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/b7a97ee2-31f1-4a68-a80a-83142c3c2d6e',
+    isForm100Eligible: true,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01')
   },
@@ -190,6 +197,27 @@ export const DIAGNOSIS_CODES: DiagnosisCode[] = [
       'ESC Guidelines for Chronic Coronary Syndromes 2023',
       'AHA/ACC Stable Ischemic Heart Disease Guidelines'
     ],
+    flowiseEndpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/26c0feef-1d01-4350-8bdd-be6b0a315ac0',
+    isForm100Eligible: true,
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01')
+  },
+  {
+    id: 'i20.0-tn-negative',
+    code: 'I20.0',
+    name: 'არასტაბილური სტენოკარდია Tn-',
+    nameEn: 'Unstable angina (Troponin negative)',
+    category: 'cardiology',
+    description: 'კორონარული არტერიის მწვავე სინდრომი, ტროპონინი უარყოფითი',
+    severity: 'moderate',
+    isActive: true,
+    references: [
+      'ESC Guidelines for ACS 2023',
+      'NSTE-ACS Management Guidelines 2023'
+    ],
+    flowiseEndpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/99079fbc-b9cf-4c9c-832c-ac71c864d9fb',
+    isForm100Eligible: true,
+    troponinStatus: 'negative',
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01')
   },

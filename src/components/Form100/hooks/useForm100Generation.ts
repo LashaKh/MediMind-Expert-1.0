@@ -217,7 +217,10 @@ export const useForm100Generation = (
   }, []);
 
   // Generate Form 100
-  const generateForm = useCallback(async (): Promise<void> => {
+  const generateForm = useCallback(async (options?: {
+    isFromSTEMI?: boolean;
+    troponinPositive?: boolean;
+  }): Promise<void> => {
     if (!formData || isGenerating) return;
     
     // Validate form before generation
@@ -237,8 +240,14 @@ export const useForm100Generation = (
       // Update generation status
       setFormDataCallback({ generationStatus: 'processing' });
       
-      // Generate form using Flowise integration
-      const result = await Form100Service.generateForm100(formData);
+      console.log('🎯 Form 100 generation started with options:', {
+        diagnosisCode: formData.primaryDiagnosis?.code,
+        isFromSTEMI: options?.isFromSTEMI,
+        troponinPositive: options?.troponinPositive
+      });
+      
+      // Generate form using Flowise integration with diagnosis-specific endpoint
+      const result = await Form100Service.generateForm100(formData, options);
       
       if (result.success && result.data) {
         // Update form with generated content

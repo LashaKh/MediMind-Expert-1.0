@@ -319,6 +319,9 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                         if ((lower.includes('i26.0') || lower.includes('pulmonary embolism') || lower.includes('ფილტვის არტერიის ემბოლია')) && analysis.model === 'flowise-diagnosis-agent') {
                           return 'https://flowise-2-0.onrender.com/api/v1/prediction/3602b392-65e5-4dbd-a649-cac18280bea5';
                         }
+                        if ((lower.includes('i21.0') || lower.includes('stemi') || lower.includes('st elevation') || lower.includes('st ელევაციური მიოკარდიუმის ინფარქტი')) && analysis.model === 'flowise-diagnosis-agent') {
+                          return 'https://flowise-2-0.onrender.com/api/v1/prediction/a18d5e28-05a5-4991-af4a-186ceb558383';
+                        }
                         if (lower.includes('template:') && analysis.model === 'flowise-diagnosis-agent') {
                           return 'https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf';
                         }

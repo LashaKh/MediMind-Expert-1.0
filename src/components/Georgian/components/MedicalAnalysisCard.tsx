@@ -38,6 +38,7 @@ import ReportEditCard from '../../ReportEditing/ReportEditCard';
 import Form100Button from '../../Form100/Form100Button';
 import Form100Modal from '../../Form100/Form100Modal';
 import { useForm100Modal } from '../../Form100/hooks/useForm100Modal';
+import { Form100Service } from '../../../services/form100Service';
 
 interface ProcessingHistory {
   userInstruction: string;
@@ -143,6 +144,16 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
         supportsForm100: true
       };
     }
+    if (lower.includes('i21.0') || lower.includes('stemi') || lower.includes('st elevation') || lower.includes('st ელევაციური მიოკარდიუმის ინფარქტი')) {
+      return { 
+        type: 'STEMI ER Report (I21.0)', 
+        icon: HeartHandshake, 
+        color: 'from-[#dc2626] to-[#991b1b]', 
+        isDiagnosis: true,
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/a18d5e28-05a5-4991-af4a-186ceb558383',
+        supportsForm100: true
+      };
+    }
     if (lower.includes('template:')) {
       // Extract template name from instruction like "Template: test 3"
       const templateName = instruction.split(':')[1]?.trim() || 'Custom Template';
@@ -221,6 +232,12 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
   const [isExpanded, setIsExpanded] = useState(index === 0); // First card expanded by default
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedContent, setEditedContent] = useState<string | null>(null);
+  const [isGeneratingForm100, setIsGeneratingForm100] = useState(false);
+  const [form100Error, setForm100Error] = useState<string | null>(null);
+  
+  // State for generated Form 100 content
+  const [generatedForm100Content, setGeneratedForm100Content] = useState<string | null>(null);
+  const [form100GeneratedAt, setForm100GeneratedAt] = useState<Date | null>(null);
   const analysisType = getAnalysisType(analysis.userInstruction, analysis.model);
   const IconComponent = analysisType.icon;
 
@@ -956,6 +973,161 @@ Medical AI Processing System`;
         </div>
       </div>
 
+      {/* Form 100 Generated Report Display */}
+      {generatedForm100Content && (
+        <>
+          {/* Visual Connector */}
+          <div className="flex justify-center py-3">
+            <div className="flex items-center space-x-2">
+              <div className="w-4 h-px bg-[#63b3ed]" />
+              <div className="p-1 bg-[#63b3ed] rounded-full">
+                <ChevronDown className="w-2 h-2 text-white" />
+              </div>
+              <div className="w-4 h-px bg-[#63b3ed]" />
+            </div>
+          </div>
+
+          {/* Form 100 Display Card */}
+          <div className="relative mt-4">
+            {/* Enhanced Premium Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#1a365d]/10 via-[#2b6cb0]/5 to-[#1a365d]/15 dark:from-[#1a365d]/20 dark:via-[#2b6cb0]/10 dark:to-[#1a365d]/25 rounded-3xl blur-sm" />
+            
+            <div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl border border-[#63b3ed]/30 dark:border-[#2b6cb0]/30 shadow-xl dark:shadow-2xl overflow-hidden">
+              {/* Form 100 Header */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] opacity-95" />
+                
+                <div className="relative p-4 sm:p-6">
+                  <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                    {/* Form 100 Title */}
+                    <div className="flex items-center space-x-3 sm:space-x-4">
+                      <div className="relative flex-shrink-0">
+                        <div className="absolute inset-0 bg-white/20 rounded-xl blur-sm" />
+                        <div className="relative p-2 sm:p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+                          <ClipboardList className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                        </div>
+                      </div>
+                      
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-lg sm:text-xl font-bold text-white tracking-wide truncate">
+                          Form 100 Emergency Report
+                        </h3>
+                        <p className="text-xs sm:text-sm text-white/80 mt-1">
+                          Generated from initial ER consultation
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Form 100 Badge */}
+                    <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+                      <div className="px-4 py-2 bg-[#2b6cb0] rounded-full border border-white/20">
+                        <span className="text-sm font-bold text-white tracking-wide">FORM 100</span>
+                      </div>
+                      
+                      {form100GeneratedAt && (
+                        <div className="flex items-center space-x-2 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+                          <Clock className="w-4 h-4 text-white/80" />
+                          <span className="text-sm font-medium text-white/90">
+                            {form100GeneratedAt.toLocaleTimeString()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form 100 Content */}
+              <div className="relative p-4 sm:p-6">
+                <div className="relative -mx-3 sm:mx-0">
+                  <div className="absolute inset-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-inner" />
+                  <div className="relative px-4 py-2 sm:p-6 prose prose-sm dark:prose-invert max-w-none">
+                    {(() => {
+                      return hasMarkdownFormatting(generatedForm100Content) ? (
+                        formatMarkdown(generatedForm100Content)
+                      ) : (
+                        <div className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap font-medium">
+                          {generatedForm100Content}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
+              </div>
+
+              {/* Form 100 Footer with Actions */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-50/80 to-[#1a365d]/15 dark:from-slate-800/60 dark:to-[#2b6cb0]/20 rounded-3xl" />
+                
+                <div className="relative p-4 sm:p-6">
+                  <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                    {/* Form 100 Actions */}
+                    <div className="flex flex-wrap items-center gap-2 sm:space-x-3">
+                      <MedicalButton
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => onCopy?.({ 
+                          ...analysis, 
+                          aiResponse: generatedForm100Content,
+                          userInstruction: 'Form 100 Emergency Report' 
+                        })}
+                        className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-[#63b3ed]/30 hover:bg-[#63b3ed]/10"
+                      >
+                        <Copy className="w-4 h-4 mr-2" />
+                        Copy Form 100
+                      </MedicalButton>
+                      
+                      <MedicalButton
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => onDownload?.({ 
+                          ...analysis, 
+                          aiResponse: generatedForm100Content,
+                          userInstruction: 'Form 100 Emergency Report' 
+                        })}
+                        className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-[#63b3ed]/30 hover:bg-[#63b3ed]/10"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Export
+                      </MedicalButton>
+                      
+                      <MedicalButton
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => onShare?.({ 
+                          ...analysis, 
+                          aiResponse: generatedForm100Content,
+                          userInstruction: 'Form 100 Emergency Report' 
+                        })}
+                        className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-[#63b3ed]/30 hover:bg-[#63b3ed]/10"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Share
+                      </MedicalButton>
+                    </div>
+                    
+                    {/* Form 100 Status */}
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#63b3ed]/20 to-[#2b6cb0]/20 rounded-2xl blur-md opacity-70 animate-pulse" />
+                      <div className="relative flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-[#63b3ed]/20 to-[#2b6cb0]/20 dark:from-[#2b6cb0]/30 dark:to-[#1a365d]/30 backdrop-blur-sm rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/30 shadow-lg">
+                        <div className="relative">
+                          <div className="w-3 h-3 bg-[#2b6cb0] rounded-full animate-pulse" />
+                          <div className="absolute inset-0 w-3 h-3 bg-[#63b3ed] rounded-full animate-ping" />
+                        </div>
+                        <span className="text-sm font-bold text-[#1a365d] dark:text-[#63b3ed] tracking-wide">
+                          FORM 100 GENERATED
+                        </span>
+                        <CheckCircle className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Form 100 Modal Integration */}
       <Form100Modal
         isOpen={form100Modal.isOpen}
@@ -967,7 +1139,41 @@ Medical AI Processing System`;
           form100Modal.closeModal();
         }}
         onGenerate={async (formData) => {
-          // Integration with existing Flowise endpoint
+          setIsGeneratingForm100(true);
+          setForm100Error(null);
+          
+          try {
+            // Prepare form data with the existing ER report
+            const form100Request = {
+              ...formData,
+              userId: sessionId,
+              existingERReport: analysis.aiResponse,
+              additionalNotes: formData.additionalNotes || `Analysis from: ${analysisType.type}\nGenerated: ${new Date(analysis.timestamp).toLocaleString()}`,
+              department: 'Emergency',
+              priority: formData.priority || 'normal'
+            };
+
+            // Call the Form100Service to generate the report
+            const result = await Form100Service.generateForm100(form100Request);
+            
+            if (result.success && result.data) {
+              // Store the generated Form 100 content locally
+              setGeneratedForm100Content(result.data.generatedForm);
+              setForm100GeneratedAt(new Date());
+              
+              // Return the generated form to the modal
+              return result.data.generatedForm;
+            } else {
+              throw new Error(result.error?.message || 'Form 100 generation failed');
+            }
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+            setForm100Error(errorMessage);
+            console.error('Form 100 generation error:', error);
+            throw error;
+          } finally {
+            setIsGeneratingForm100(false);
+          }
         }}
       />
     </div>
