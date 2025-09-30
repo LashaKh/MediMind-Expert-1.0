@@ -57,9 +57,9 @@ const PREMIUM_TEMPLATES: Template[] = [
   {
     id: 'diagnosis-nstemi',
     category: 'Cardiologist Consults',
-    title: 'Diagnosis - I24.9 NSTEMI (გულის მწვავე იშემიური ავადმყოფობა)',
+    title: 'I24.9 - გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი',
     instruction: 'Generate a comprehensive NSTEMI diagnosis report (I24.9 - Non-ST elevation myocardial infarction / გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი) including clinical presentation, diagnostic criteria, risk stratification, treatment protocol, and disposition recommendations based on this medical transcript.',
-    description: 'Specialized NSTEMI diagnosis and management protocol with ICD-10 coding',
+    description: 'Specialized NSTEMI diagnosis and management protocol with ICD-10 coding to I24.9 - გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი',
     icon: HeartHandshake,
     color: 'from-[#1a365d] via-[#2b6cb0] to-[#1a365d]',
     priority: 'high',

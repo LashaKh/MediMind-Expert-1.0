@@ -1,0 +1,544 @@
+/* Premium Mobile-specific styles for Form 100 components */
+/* World-class medical interface optimized for professional use */
+/* All touch targets exceed 44px requirement with premium visual effects */
+
+/* Premium touch target utilities */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Premium haptic feedback simulation */
+.premium-touch-feedback {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.premium-touch-feedback:active {
+  transform: scale(0.97);
+  filter: brightness(0.95);
+}
+
+/* Premium mobile touch targets (exceeds 44px Apple guidelines) */
+@media (max-width: 640px) {
+  /* Premium Form 100 button - Main */
+  .form100-button {
+    min-height: 48px; /* Enhanced from 44px */
+    min-width: 140px; /* Premium width */
+    padding: 14px 20px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    line-height: 1.2;
+    font-weight: 600;
+    border-radius: 12px;
+    touch-action: manipulation;
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%);
+    color: white;
+    border: 2px solid rgba(99, 179, 237, 0.3);
+    box-shadow: 
+      0 4px 16px rgba(43, 108, 176, 0.3),
+      0 2px 8px rgba(26, 54, 93, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form100-button:hover,
+  .form100-button:focus {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 
+      0 8px 24px rgba(43, 108, 176, 0.4),
+      0 4px 12px rgba(26, 54, 93, 0.3);
+    border-color: rgba(99, 179, 237, 0.6);
+  }
+
+  .form100-button:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 
+      0 2px 8px rgba(43, 108, 176, 0.3),
+      0 1px 4px rgba(26, 54, 93, 0.2);
+  }
+
+  /* Premium Form 100 button - Compact */
+  .form100-button-small {
+    min-height: 46px; /* Enhanced from 44px */
+    min-width: 120px; /* Premium width */
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(144, 205, 244, 0.1) 100%);
+    color: #1a365d;
+    border: 2px solid rgba(99, 179, 237, 0.4);
+    backdrop-filter: blur(12px);
+    box-shadow: 
+      0 2px 12px rgba(99, 179, 237, 0.2),
+      0 1px 6px rgba(43, 108, 176, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .form100-button-small:hover,
+  .form100-button-small:focus {
+    transform: translateY(-1px) scale(1.05);
+    background: linear-gradient(135deg, rgba(144, 205, 244, 0.2) 0%, rgba(99, 179, 237, 0.2) 100%);
+    border-color: rgba(43, 108, 176, 0.6);
+    color: #2b6cb0;
+  }
+
+  /* Input field touch targets */
+  .form100-input {
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    line-height: 1.4;
+    touch-action: manipulation;
+  }
+
+  /* Select dropdown touch targets */
+  .form100-select {
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 16px;
+    line-height: 1.4;
+    touch-action: manipulation;
+  }
+
+  /* Textarea touch targets */
+  .form100-textarea {
+    min-height: 88px; /* 2x44px for multiline */
+    padding: 12px 16px;
+    font-size: 16px;
+    line-height: 1.4;
+    resize: none;
+    touch-action: manipulation;
+  }
+
+  /* Premium Voice recording button */
+  .form100-voice-button {
+    min-height: 64px; /* Enhanced from 56px */
+    min-width: 64px;
+    padding: 18px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 50%, #2b6cb0 100%);
+    color: white;
+    border: 3px solid rgba(99, 179, 237, 0.4);
+    box-shadow: 
+      0 6px 20px rgba(43, 108, 176, 0.4),
+      0 3px 10px rgba(26, 54, 93, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    touch-action: manipulation;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form100-voice-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s;
+  }
+
+  .form100-voice-button:hover::before,
+  .form100-voice-button:focus::before {
+    left: 100%;
+  }
+
+  .form100-voice-button:hover,
+  .form100-voice-button:focus {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 
+      0 10px 28px rgba(43, 108, 176, 0.5),
+      0 6px 16px rgba(26, 54, 93, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: rgba(99, 179, 237, 0.7);
+  }
+
+  .form100-voice-button:active {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 
+      0 4px 16px rgba(43, 108, 176, 0.4),
+      0 2px 8px rgba(26, 54, 93, 0.3);
+  }
+
+  /* Premium Modal navigation buttons */
+  .form100-nav-button {
+    min-height: 48px; /* Enhanced from 44px */
+    min-width: 120px; /* Enhanced from 88px */
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 12px;
+    touch-action: manipulation;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form100-nav-button.primary {
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%);
+    color: white;
+    border: 2px solid rgba(99, 179, 237, 0.3);
+    box-shadow: 
+      0 4px 16px rgba(43, 108, 176, 0.3),
+      0 2px 8px rgba(26, 54, 93, 0.2);
+  }
+
+  .form100-nav-button.secondary {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(144, 205, 244, 0.1) 100%);
+    color: #1a365d;
+    border: 2px solid rgba(99, 179, 237, 0.4);
+    backdrop-filter: blur(12px);
+  }
+
+  .form100-nav-button:hover,
+  .form100-nav-button:focus {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .form100-nav-button:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* Progress step indicators */
+  .form100-progress-step {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+
+  /* Close button */
+  .form100-close-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px;
+    touch-action: manipulation;
+  }
+
+  /* Dropdown option touch targets */
+  .form100-dropdown-option {
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 16px;
+    line-height: 1.2;
+    touch-action: manipulation;
+  }
+
+  /* Safe area adjustments for modern phones */
+  .form100-modal-safe-area {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Keyboard handling */
+  .form100-keyboard-aware {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  /* When mobile keyboard is visible */
+  .form100-keyboard-visible {
+    transform: translateY(-50px);
+  }
+
+  /* Prevent zoom on form focus */
+  .form100-no-zoom {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Enhanced tap feedback */
+  .form100-tap-feedback {
+    transition: all 0.1s ease-in-out;
+  }
+
+  .form100-tap-feedback:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+  }
+
+  /* Voice recording specific styles */
+  .form100-voice-container {
+    padding: 16px;
+    margin: 8px 0;
+  }
+
+  .form100-voice-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .form100-voice-status {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* Angiography report field mobile optimizations */
+  .form100-angiography-textarea {
+    min-height: 132px; /* 3x44px for extended content */
+    padding: 16px;
+    font-size: 16px;
+    line-height: 1.5;
+    resize: none;
+    touch-action: manipulation;
+  }
+
+  /* Mobile-specific spacing */
+  .form100-mobile-spacing {
+    gap: 16px;
+  }
+
+  .form100-mobile-section {
+    margin-bottom: 24px;
+  }
+
+  /* Premium focus states for accessibility */
+  .form100-focus-ring:focus {
+    outline: 3px solid #63b3ed;
+    outline-offset: 3px;
+    box-shadow: 
+      0 0 0 6px rgba(99, 179, 237, 0.2),
+      0 4px 16px rgba(43, 108, 176, 0.3);
+    transform: scale(1.02);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Premium error state styling */
+  .form100-error-input {
+    border-color: #ef4444;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.02) 100%);
+    box-shadow: 
+      0 0 0 4px rgba(239, 68, 68, 0.15),
+      0 2px 8px rgba(239, 68, 68, 0.1);
+    animation: shake 0.3s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+  }
+
+  /* Premium success state styling */
+  .form100-success-input {
+    border-color: #22c55e;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(34, 197, 94, 0.02) 100%);
+    box-shadow: 
+      0 0 0 4px rgba(34, 197, 94, 0.15),
+      0 2px 8px rgba(34, 197, 94, 0.1);
+    animation: success-pulse 0.6s ease-out;
+  }
+
+  @keyframes success-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+}
+
+/* Landscape phone adjustments */
+@media (max-width: 896px) and (orientation: landscape) {
+  .form100-modal-landscape {
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+
+  .form100-compact-header {
+    padding: 8px 16px;
+  }
+
+  .form100-compact-spacing {
+    gap: 8px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 375px) {
+  .form100-xs-button {
+    min-width: 80px;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .form100-xs-spacing {
+    gap: 12px;
+    margin: 12px 0;
+  }
+}
+
+/* Premium High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2),
+       (min-resolution: 192dpi) {
+  .form100-high-dpi {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* World-class Form 100 Premium Animations */
+
+/* Premium loading shimmer effect */
+@keyframes premium-shimmer {
+  0% { 
+    background-position: -200px 0; 
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% { 
+    background-position: calc(200px + 100%) 0; 
+    opacity: 0.8;
+  }
+}
+
+.form100-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(99, 179, 237, 0.3),
+    transparent
+  );
+  background-size: 200px 100%;
+  animation: premium-shimmer 2s infinite;
+}
+
+/* Premium button press effect */
+@keyframes premium-button-press {
+  0% { 
+    transform: scale(1); 
+    box-shadow: 0 4px 16px rgba(43, 108, 176, 0.3);
+  }
+  50% { 
+    transform: scale(0.97); 
+    box-shadow: 0 2px 8px rgba(43, 108, 176, 0.4);
+  }
+  100% { 
+    transform: scale(1.02); 
+    box-shadow: 0 6px 20px rgba(43, 108, 176, 0.4);
+  }
+}
+
+.form100-button-press {
+  animation: premium-button-press 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Premium success celebration */
+@keyframes premium-success {
+  0% { 
+    transform: scale(1) rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+  25% { 
+    transform: scale(1.1) rotate(5deg);
+    filter: hue-rotate(90deg);
+  }
+  50% { 
+    transform: scale(1.05) rotate(-3deg);
+    filter: hue-rotate(180deg);
+  }
+  75% { 
+    transform: scale(1.08) rotate(2deg);
+    filter: hue-rotate(270deg);
+  }
+  100% { 
+    transform: scale(1) rotate(0deg);
+    filter: hue-rotate(360deg);
+  }
+}
+
+.form100-success-celebration {
+  animation: premium-success 1.2s ease-out;
+}
+
+/* Premium particle effect */
+@keyframes premium-particle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(0);
+    opacity: 0;
+  }
+}
+
+.form100-particle {
+  animation: premium-particle 1s ease-out forwards;
+  pointer-events: none;
+}
+
+/* Premium modal entrance */
+@keyframes premium-modal-entrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+    filter: blur(10px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02) translateY(-5px);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+.form100-modal-entrance {
+  animation: premium-modal-entrance 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Premium performance optimizations */
+.form100-gpu-optimized {
+  will-change: transform, opacity, filter;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Premium smooth scrolling */
+.form100-smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Premium reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .form100-button,
+  .form100-button-small,
+  .form100-voice-button,
+  .form100-nav-button {
+    animation: none;
+    transition: none;
+  }
+  
+  .form100-shimmer,
+  .form100-particle,
+  .premium-success,
+  .premium-modal-entrance {
+    animation: none;
+  }
+}

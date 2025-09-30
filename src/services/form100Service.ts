@@ -1,0 +1,413 @@
+// Form 100 Generation Service
+// Flowise integration for medical ER consultation reports
+// HIPAA-compliant with secure authentication and error handling
+
+import { 
+  Form100Request, 
+  FlowiseForm100Payload, 
+  FlowiseForm100Response,
+  Form100ServiceResponse,
+  Form100Config,
+  FORM100_DEFAULTS
+} from '../types/form100';
+
+// Service configuration
+const FORM100_CONFIG: Form100Config = {
+  flowiseEndpoint: process.env.VITE_FLOWISE_FORM100_ENDPOINT || '/api/flowise/form100',
+  maxGenerationTime: FORM100_DEFAULTS.maxGenerationTime || 5000,
+  retryAttempts: FORM100_DEFAULTS.retryAttempts || 3,
+  validationRules: [],
+  supportedDepartments: FORM100_DEFAULTS.supportedDepartments || [],
+  defaultPriority: FORM100_DEFAULTS.defaultPriority || 'normal'
+};
+
+// Error codes for medical safety compliance
+export const FORM100_ERROR_CODES = {
+  VALIDATION_FAILED: 'FORM100_VALIDATION_FAILED',
+  MISSING_DIAGNOSIS: 'FORM100_MISSING_DIAGNOSIS',
+  FLOWISE_TIMEOUT: 'FORM100_FLOWISE_TIMEOUT',
+  FLOWISE_ERROR: 'FORM100_FLOWISE_ERROR',
+  AUTHENTICATION_FAILED: 'FORM100_AUTH_FAILED',
+  PATIENT_DATA_ERROR: 'FORM100_PATIENT_DATA_ERROR',
+  GENERATION_FAILED: 'FORM100_GENERATION_FAILED',
+  NETWORK_ERROR: 'FORM100_NETWORK_ERROR'
+} as const;
+
+// Safe async wrapper for error handling
+const safeAsync = async <T>(
+  operation: () => Promise<T>,
+  errorCode: string
+): Promise<Form100ServiceResponse<T>> => {
+  try {
+    const data = await operation();
+    return {
+      success: true,
+      data,
+      metadata: {
+        timestamp: new Date(),
+        requestId: generateRequestId()
+      }
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        code: errorCode,
+        message: error instanceof Error ? error.message : 'Unknown error occurred',
+        details: error
+      },
+      metadata: {
+        timestamp: new Date(),
+        requestId: generateRequestId()
+      }
+    };
+  }
+};
+
+// Generate unique request ID for tracing
+const generateRequestId = (): string => {
+  return `form100_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
+
+// Validate Form 100 request data
+const validateForm100Request = (request: Partial<Form100Request>): { 
+  isValid: boolean; 
+  errors: string[] 
+} => {
+  const errors: string[] = [];
+
+  // Required fields validation
+  if (!request.primaryDiagnosis) {
+    errors.push('Primary diagnosis is required');
+  }
+
+  if (!request.sessionId) {
+    errors.push('Session ID is required');
+  }
+
+  if (!request.userId) {
+    errors.push('User ID is required');
+  }
+
+  // Medical validation
+  if (request.primaryDiagnosis && !request.primaryDiagnosis.code) {
+    errors.push('Primary diagnosis must have valid ICD-10 code');
+  }
+
+  if (request.vitalSigns) {
+    const { bloodPressure, heartRate, temperature } = request.vitalSigns;
+    
+    if (heartRate && (heartRate < 20 || heartRate > 300)) {
+      errors.push('Heart rate must be between 20-300 bpm');
+    }
+    
+    if (temperature && (temperature < 25 || temperature > 45)) {
+      errors.push('Temperature must be between 25-45°C');
+    }
+    
+    if (bloodPressure && !/^\d{2,3}\/\d{2,3}$/.test(bloodPressure)) {
+      errors.push('Blood pressure must be in format "120/80"');
+    }
+  }
+
+  // Priority validation
+  if (request.priority && !['low', 'normal', 'high', 'urgent'].includes(request.priority)) {
+    errors.push('Invalid priority level');
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+};
+
+// Prepare payload for Flowise API
+const prepareFlowisePayload = (request: Form100Request): FlowiseForm100Payload => {
+  return {
+    sessionId: request.sessionId,
+    patientData: {
+      demographics: request.patientInfo,
+      clinicalData: {
+        primaryDiagnosis: request.primaryDiagnosis,
+        secondaryDiagnoses: request.secondaryDiagnoses,
+        symptoms: request.symptoms,
+        vitalSigns: request.vitalSigns
+      },
+      voiceTranscript: request.voiceTranscript,
+      angiographyReport: request.angiographyReport,
+      labResults: request.labResults,
+      additionalNotes: request.additionalNotes,
+      existingERReport: request.existingERReport
+    },
+    formParameters: {
+      priority: request.priority,
+      department: request.department,
+      attendingPhysician: request.attendingPhysician,
+      submissionDeadline: request.submissionDeadline?.toISOString()
+    }
+  };
+};
+
+// Make authenticated request to Flowise endpoint
+const makeFlowiseRequest = async (
+  payload: FlowiseForm100Payload
+): Promise<FlowiseForm100Response> => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), FORM100_CONFIG.maxGenerationTime);
+
+  try {
+    const response = await fetch(FORM100_CONFIG.flowiseEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${await getAuthToken()}`,
+        'X-Session-ID': payload.sessionId,
+        'X-Request-ID': generateRequestId()
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`Flowise API error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data as FlowiseForm100Response;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    
+    if (error.name === 'AbortError') {
+      throw new Error('Form 100 generation timed out');
+    }
+    
+    throw error;
+  }
+};
+
+// Get authentication token for Flowise
+const getAuthToken = async (): Promise<string> => {
+  // Integration with existing Supabase auth
+  const { data: { session } } = await import('../lib/supabase').then(m => 
+    m.supabase.auth.getSession()
+  );
+  
+  if (!session?.access_token) {
+    throw new Error('User not authenticated');
+  }
+  
+  return session.access_token;
+};
+
+// Retry mechanism with exponential backoff
+const withRetry = async <T>(
+  operation: () => Promise<T>,
+  maxAttempts: number = FORM100_CONFIG.retryAttempts
+): Promise<T> => {
+  let lastError: Error;
+  
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error as Error;
+      
+      if (attempt === maxAttempts) {
+        throw lastError;
+      }
+      
+      // Exponential backoff: 1s, 2s, 4s
+      const delay = Math.pow(2, attempt - 1) * 1000;
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+  
+  throw lastError!;
+};
+
+// Main Form 100 generation service
+export class Form100Service {
+  
+  // Generate Form 100 document
+  static async generateForm100(
+    request: Partial<Form100Request>
+  ): Promise<Form100ServiceResponse<{ generatedForm: string; processingTime: number }>> {
+    return safeAsync(async () => {
+      // Validation
+      const validation = validateForm100Request(request);
+      if (!validation.isValid) {
+        throw new Error(`Validation failed: ${validation.errors.join(', ')}`);
+      }
+
+      const startTime = Date.now();
+      
+      // Prepare and send request to Flowise
+      const payload = prepareFlowisePayload(request as Form100Request);
+      
+      const response = await withRetry(() => makeFlowiseRequest(payload));
+      
+      if (!response.success) {
+        throw new Error(response.error?.message || 'Form 100 generation failed');
+      }
+
+      const processingTime = Date.now() - startTime;
+
+      return {
+        generatedForm: response.data!.generatedForm,
+        processingTime
+      };
+      
+    }, FORM100_ERROR_CODES.GENERATION_FAILED);
+  }
+
+  // Save Form 100 request to database
+  static async saveForm100Request(
+    request: Form100Request
+  ): Promise<Form100ServiceResponse<{ id: string }>> {
+    return safeAsync(async () => {
+      const { supabase } = await import('../lib/supabase');
+      
+      const { data, error } = await supabase
+        .from('form100_requests')
+        .insert([{
+          session_id: request.sessionId,
+          user_id: request.userId,
+          patient_info: request.patientInfo,
+          primary_diagnosis: request.primaryDiagnosis,
+          secondary_diagnoses: request.secondaryDiagnoses,
+          symptoms: request.symptoms,
+          vital_signs: request.vitalSigns,
+          voice_transcript: request.voiceTranscript,
+          angiography_report: request.angiographyReport,
+          lab_results: request.labResults,
+          additional_notes: request.additionalNotes,
+          generated_form: request.generatedForm,
+          generation_status: request.generationStatus,
+          priority: request.priority,
+          department: request.department,
+          attending_physician: request.attendingPhysician,
+          submission_deadline: request.submissionDeadline,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }])
+        .select('id')
+        .single();
+
+      if (error) {
+        throw new Error(`Database error: ${error.message}`);
+      }
+
+      return { id: data.id };
+      
+    }, FORM100_ERROR_CODES.PATIENT_DATA_ERROR);
+  }
+
+  // Get Form 100 request by ID
+  static async getForm100Request(
+    id: string
+  ): Promise<Form100ServiceResponse<Form100Request>> {
+    return safeAsync(async () => {
+      const { supabase } = await import('../lib/supabase');
+      
+      const { data, error } = await supabase
+        .from('form100_requests')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        throw new Error(`Database error: ${error.message}`);
+      }
+
+      // Transform database response to Form100Request
+      return {
+        id: data.id,
+        sessionId: data.session_id,
+        userId: data.user_id,
+        patientInfo: data.patient_info,
+        primaryDiagnosis: data.primary_diagnosis,
+        secondaryDiagnoses: data.secondary_diagnoses,
+        symptoms: data.symptoms,
+        vitalSigns: data.vital_signs,
+        voiceTranscript: data.voice_transcript,
+        angiographyReport: data.angiography_report,
+        labResults: data.lab_results,
+        additionalNotes: data.additional_notes,
+        generatedForm: data.generated_form,
+        generationStatus: data.generation_status,
+        generationError: data.generation_error,
+        priority: data.priority,
+        department: data.department,
+        attendingPhysician: data.attending_physician,
+        submissionDeadline: data.submission_deadline ? new Date(data.submission_deadline) : undefined,
+        createdAt: new Date(data.created_at),
+        updatedAt: new Date(data.updated_at),
+        generatedAt: data.generated_at ? new Date(data.generated_at) : undefined
+      } as Form100Request;
+      
+    }, FORM100_ERROR_CODES.PATIENT_DATA_ERROR);
+  }
+
+  // Update Form 100 generation status
+  static async updateGenerationStatus(
+    id: string,
+    status: Form100Request['generationStatus'],
+    generatedForm?: string,
+    error?: string
+  ): Promise<Form100ServiceResponse<boolean>> {
+    return safeAsync(async () => {
+      const { supabase } = await import('../lib/supabase');
+      
+      const updateData: any = {
+        generation_status: status,
+        updated_at: new Date().toISOString()
+      };
+
+      if (generatedForm) {
+        updateData.generated_form = generatedForm;
+        updateData.generated_at = new Date().toISOString();
+      }
+
+      if (error) {
+        updateData.generation_error = error;
+      }
+
+      const { error: dbError } = await supabase
+        .from('form100_requests')
+        .update(updateData)
+        .eq('id', id);
+
+      if (dbError) {
+        throw new Error(`Database error: ${dbError.message}`);
+      }
+
+      return true;
+      
+    }, FORM100_ERROR_CODES.PATIENT_DATA_ERROR);
+  }
+
+  // Test Flowise connection
+  static async testFlowiseConnection(): Promise<Form100ServiceResponse<boolean>> {
+    return safeAsync(async () => {
+      const response = await fetch(`${FORM100_CONFIG.flowiseEndpoint}/health`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${await getAuthToken()}`
+        }
+      });
+
+      return response.ok;
+      
+    }, FORM100_ERROR_CODES.FLOWISE_ERROR);
+  }
+}
+
+// Export utility functions
+export {
+  validateForm100Request,
+  prepareFlowisePayload,
+  generateRequestId,
+  FORM100_CONFIG
+};

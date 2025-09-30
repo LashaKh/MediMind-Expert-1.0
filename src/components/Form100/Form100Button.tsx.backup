@@ -1,0 +1,158 @@
+// Form 100 Generation Button Component
+// Medical-themed button for triggering Form 100 generation
+// Mobile-optimized with 44px touch targets and medical iconography
+
+import React from 'react';
+import { FileText, Sparkles, Loader2, AlertCircle } from 'lucide-react';
+import { Button } from '../ui/button';
+import { cn } from '../../lib/utils';
+import { Form100ButtonProps } from '../../types/form100';
+
+// Medical-themed button variants for Form 100
+const form100ButtonVariants = {
+  primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200",
+  secondary: "bg-white hover:bg-blue-50 text-blue-600 border-2 border-blue-200 hover:border-blue-300 transition-all duration-200",
+  disabled: "bg-gray-300 text-gray-500 cursor-not-allowed"
+};
+
+const Form100Button: React.FC<Form100ButtonProps> = ({
+  sessionId,
+  disabled = false,
+  variant = 'primary',
+  size = 'md',
+  className,
+  onClick
+}) => {
+  // Determine button state and styling
+  const isDisabled = disabled || !sessionId;
+  const buttonVariant = isDisabled ? 'disabled' : variant;
+  
+  // Size configurations with medical professional touch targets
+  const sizeStyles = {
+    sm: "h-10 px-4 text-sm min-w-[120px]",
+    md: "h-12 px-6 text-base min-w-[160px]", // 44px+ touch target
+    lg: "h-14 px-8 text-lg min-w-[200px]"
+  };
+
+  // Handle button click with session validation
+  const handleClick = () => {
+    if (isDisabled) return;
+    
+    if (!sessionId) {
+      console.warn('Form100Button: No sessionId provided');
+      return;
+    }
+    
+    onClick?.();
+  };
+
+  // Render appropriate icon based on state
+  const renderIcon = () => {
+    if (isDisabled && !sessionId) {
+      return <AlertCircle className="w-4 h-4 mr-2" />;
+    }
+    return <FileText className="w-4 h-4 mr-2" />;
+  };
+
+  // Button text based on state
+  const getButtonText = () => {
+    if (!sessionId) {
+      return "ჩაწერეთ ხმა"; // "Record voice" in Georgian
+    }
+    return "ფორმა 100"; // "Form 100" in Georgian
+  };
+
+  return (
+    <Button
+      onClick={handleClick}
+      disabled={isDisabled}
+      className={cn(
+        // Base styles
+        "inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:ring-4 focus:ring-blue-200",
+        // Size styles
+        sizeStyles[size],
+        // Variant styles
+        form100ButtonVariants[buttonVariant],
+        // Medical professional styling
+        "relative overflow-hidden group",
+        // Mobile optimizations
+        "touch-manipulation select-none",
+        // Accessibility
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+        className
+      )}
+      aria-label={sessionId ? "Generate Form 100 medical report" : "Record voice first to enable Form 100 generation"}
+      role="button"
+    >
+      {/* Background animation for active state */}
+      {!isDisabled && (
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+      )}
+      
+      {/* Button content */}
+      <div className="relative flex items-center">
+        {renderIcon()}
+        <span className="font-medium">
+          {getButtonText()}
+        </span>
+        
+        {/* Sparkle effect for available state */}
+        {sessionId && !isDisabled && (
+          <Sparkles className="w-3 h-3 ml-2 opacity-60 group-hover:opacity-100 transition-opacity duration-200" />
+        )}
+      </div>
+      
+      {/* Ripple effect for touch feedback */}
+      <div className="absolute inset-0 rounded-lg overflow-hidden">
+        <div className="absolute inset-0 bg-white opacity-0 group-active:opacity-20 transition-opacity duration-150" />
+      </div>
+    </Button>
+  );
+};
+
+// Enhanced Form100Button with loading state
+export const Form100ButtonWithLoading: React.FC<Form100ButtonProps & {
+  isLoading?: boolean;
+  loadingText?: string;
+}> = ({
+  isLoading = false,
+  loadingText = "ფორმა 100 იქმნება...", // "Form 100 is being created..." in Georgian
+  disabled,
+  ...props
+}) => {
+  return (
+    <Form100Button
+      {...props}
+      disabled={disabled || isLoading}
+      className={cn(
+        props.className,
+        isLoading && "cursor-wait"
+      )}
+    >
+      {isLoading ? (
+        <div className="flex items-center">
+          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          <span>{loadingText}</span>
+        </div>
+      ) : (
+        props.children
+      )}
+    </Form100Button>
+  );
+};
+
+// Compact Form100Button for mobile/card layouts
+export const Form100ButtonCompact: React.FC<Form100ButtonProps> = (props) => {
+  return (
+    <Form100Button
+      {...props}
+      size="sm"
+      className={cn(
+        "min-w-[100px] h-9",
+        props.className
+      )}
+    />
+  );
+};
+
+export default Form100Button;

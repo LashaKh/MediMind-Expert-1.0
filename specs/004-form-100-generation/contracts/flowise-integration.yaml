@@ -1,0 +1,265 @@
+openapi: 3.0.3
+info:
+  title: Flowise Integration Contracts
+  description: External API contracts for Flowise endpoints used in Form 100 generation
+  version: 1.0.0
+
+paths:
+  /api/v1/prediction/{flowId}:
+    post:
+      summary: Generate Form 100 via Flowise
+      description: External Flowise endpoint for AI-powered Form 100 generation
+      parameters:
+        - name: flowId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "6dc8bb6d-ce79-4a40-9561-9108ba05e7c7"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlowiseRequest'
+      responses:
+        '200':
+          description: Form 100 content generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowiseResponse'
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowiseError'
+        '500':
+          description: Internal Flowise error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowiseError'
+        '503':
+          description: Service temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowiseError'
+
+components:
+  schemas:
+    FlowiseRequest:
+      type: object
+      properties:
+        question:
+          type: string
+          description: "Formatted prompt containing ER report, diagnosis, and supplementary information"
+          example: |
+            Generate Form 100 based on the following information:
+            
+            ER Consultation Report:
+            Patient presents with chest pain, ECG shows ST depression...
+            
+            Selected Final Diagnosis: I20.0 - არასტაბილური სტენოკარდია Braunwald III Troponin +
+            
+            Doctor's Additional Notes:
+            Patient has family history of CAD, current medications include...
+            
+            Angiography Report:
+            Coronary angiography reveals 80% stenosis in LAD...
+            
+            Please generate a complete Form 100 document following Georgian medical standards.
+        overrideConfig:
+          type: object
+          description: "Optional configuration overrides"
+          properties:
+            temperature:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.7
+            maxTokens:
+              type: integer
+              example: 4000
+        sessionId:
+          type: string
+          description: "Session identifier for tracking"
+          example: "form100_session_20251001_001"
+      required:
+        - question
+
+    FlowiseResponse:
+      type: object
+      properties:
+        text:
+          type: string
+          description: "Generated Form 100 content"
+          example: |
+            FORM 100 - Emergency Department Consultation Report
+            
+            Date: October 1, 2025
+            Patient ID: [REDACTED]
+            
+            Chief Complaint: Chest pain
+            
+            History of Present Illness:
+            Patient presents with acute onset chest pain...
+            
+            Physical Examination:
+            Vital signs stable, cardiovascular examination reveals...
+            
+            Diagnostic Studies:
+            ECG: ST depression in leads V4-V6
+            Troponin: Elevated (3.2 ng/mL)
+            
+            Final Diagnosis: I20.0 - Unstable Angina Braunwald III Troponin +
+            
+            Treatment Plan:
+            1. Dual antiplatelet therapy
+            2. Anticoagulation with heparin
+            3. Beta-blocker therapy
+            4. Statin therapy
+            5. Urgent cardiology consultation
+            
+            Disposition: Admitted to cardiac care unit
+            
+            Physician: [Doctor Name]
+            Date: [Current Date]
+            Signature: [Digital Signature]
+        chatId:
+          type: string
+          description: "Chat session identifier"
+          example: "chat_6dc8bb6d_20251001_001"
+        sessionId:
+          type: string
+          description: "Session identifier"
+          example: "form100_session_20251001_001"
+        memoryType:
+          type: string
+          description: "Memory type used"
+          example: "buffer"
+      required:
+        - text
+
+    FlowiseError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Internal server error"
+        message:
+          type: string
+          example: "Unable to process the request due to insufficient context"
+        statusCode:
+          type: integer
+          example: 500
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-10-01T10:30:00.000Z"
+      required:
+        - error
+        - statusCode
+
+# Mock Endpoint Specifications
+paths_mock:
+  /mock/api/v1/prediction/{flowId}:
+    post:
+      summary: Mock Flowise endpoint for development
+      description: Mock implementation for diagnosis codes without live Flowise endpoints
+      parameters:
+        - name: flowId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "mock-flow-id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlowiseRequest'
+      responses:
+        '200':
+          description: Mock Form 100 content generated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FlowiseResponse'
+                  - type: object
+                    properties:
+                      isMock:
+                        type: boolean
+                        example: true
+                      mockReason:
+                        type: string
+                        example: "Live endpoint not yet configured for this diagnosis"
+
+# Request/Response Examples
+examples:
+  I20_0_Request:
+    summary: "Request for I20.0 diagnosis (live endpoint)"
+    value:
+      question: |
+        Generate Form 100 based on the following information:
+        
+        ER Consultation Report:
+        67-year-old male presents to ED with acute onset chest pain, described as crushing, substernal, radiating to left arm. Pain started 2 hours ago while at rest. Associated with diaphoresis and nausea. No shortness of breath. History of hypertension and diabetes mellitus type 2.
+        
+        Physical examination reveals BP 150/90, HR 88, RR 18, O2 sat 98% on room air. Cardiovascular examination shows regular rate and rhythm, no murmurs. Lungs clear bilaterally.
+        
+        ECG shows ST depression in leads V4-V6. Troponin elevated at 3.2 ng/mL (normal <0.04).
+        
+        Selected Final Diagnosis: I20.0 - არასტაბილური სტენოკარდია Braunwald III Troponin +
+        
+        Doctor's Additional Notes:
+        Patient reports family history of coronary artery disease. Currently taking metformin and lisinopril. Pain improved with nitroglycerin administration.
+        
+        Angiography Report:
+        Coronary angiography performed urgently. Left anterior descending artery shows 80% stenosis in mid-segment. Right coronary artery shows 50% stenosis proximally. Left circumflex appears normal.
+        
+        Please generate a complete Form 100 document following Georgian medical standards for emergency department consultation.
+      sessionId: "form100_unstable_angina_20251001"
+
+  Mock_Response:
+    summary: "Mock response for unsupported diagnosis"
+    value:
+      text: |
+        FORM 100 - Emergency Department Consultation Report [MOCK]
+        
+        Date: October 1, 2025
+        Case ID: MOCK_CASE_001
+        
+        This is a mock Form 100 document generated for development purposes.
+        
+        Chief Complaint: [Based on provided ER consultation]
+        
+        History of Present Illness:
+        [Generated from ER consultation report content]
+        
+        Physical Examination:
+        [Extracted from original report]
+        
+        Diagnostic Studies:
+        [Laboratory and imaging results from ER report]
+        
+        Final Diagnosis: [Selected diagnosis from dropdown]
+        
+        Assessment and Plan:
+        [AI-generated treatment recommendations based on diagnosis]
+        
+        Disposition: [Appropriate disposition based on condition severity]
+        
+        NOTE: This is a mock document generated for testing purposes.
+        Live endpoint will be configured for this diagnosis in future updates.
+        
+        Generated by: MediMind Expert Form 100 System (Mock Mode)
+        Timestamp: [Current timestamp]
+      chatId: "mock_chat_001"
+      sessionId: "mock_session_001"
+      isMock: true
+      mockReason: "Live Flowise endpoint not yet configured for this diagnosis code"

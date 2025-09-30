@@ -52,6 +52,7 @@ interface AIProcessingContentProps {
   
   // Session info for report cards
   sessionTitle?: string;
+  sessionId?: string;
 }
 
 type ViewMode = 'templates' | 'history';
@@ -73,7 +74,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   selectedTemplate,
   onTemplateSelect,
   availableTemplates = [],
-  sessionTitle = ''
+  sessionTitle = '',
+  sessionId
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('templates');
   const [customInstruction, setCustomInstruction] = useState('');
@@ -305,6 +307,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       onDelete={onDeleteReport}
                       enableEditing={true}
                       sessionTitle={sessionTitle}
+                      sessionId={sessionId}
                       flowiseEndpoint={(() => {
                         const lower = analysis.userInstruction.toLowerCase();
                         if ((lower.includes('i50.0') || lower.includes('heart failure') || lower.includes('გულის შეგუბებითი უკმარისობა')) && analysis.model === 'flowise-diagnosis-agent') {

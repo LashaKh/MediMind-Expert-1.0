@@ -670,6 +670,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onTemplateSelect={onTemplateSelect}
             availableTemplates={availableTemplates}
             sessionTitle={currentSession?.title || ''}
+            sessionId={currentSession?.id}
           />
         );
       

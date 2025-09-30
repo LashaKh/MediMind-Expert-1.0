@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { X } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
 interface DialogProps {
   open: boolean;
@@ -10,6 +11,7 @@ interface DialogProps {
 interface DialogContentProps {
   children: ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 interface DialogHeaderProps {
@@ -42,9 +44,17 @@ export const Dialog: React.FC<DialogProps> = ({ open, onOpenChange, children }) 
   );
 };
 
-export const DialogContent: React.FC<DialogContentProps> = ({ children, className = '' }) => {
+export const DialogContent: React.FC<DialogContentProps> = ({ children, className = '', style }) => {
   return (
-    <div className={`relative bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-4 ${className}`}>
+    <div 
+      className={cn(
+        "relative bg-white dark:bg-gray-800 rounded-lg shadow-xl",
+        // Only apply default sizing if no custom className is provided
+        !className && "p-6 w-full max-w-md mx-4",
+        className
+      )}
+      style={style}
+    >
       {children}
     </div>
   );

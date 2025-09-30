@@ -29,11 +29,15 @@ import {
   Wand2,
   Target,
   TrendingUp,
-  Layers
+  Layers,
+  ClipboardList
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { formatMarkdown, extractCleanText, hasMarkdownFormatting, countEmptyFields, hasEmptyFields, extractEmptyFieldNames } from '../../../utils/markdownFormatter';
 import ReportEditCard from '../../ReportEditing/ReportEditCard';
+import Form100Button from '../../Form100/Form100Button';
+import Form100Modal from '../../Form100/Form100Modal';
+import { useForm100Modal } from '../../Form100/hooks/useForm100Modal';
 
 interface ProcessingHistory {
   userInstruction: string;
@@ -56,6 +60,7 @@ interface MedicalAnalysisCardProps {
   enableEditing?: boolean;
   flowiseEndpoint?: string;
   sessionTitle?: string; // Add session title prop
+  sessionId?: string; // Add session ID for Form 100 integration
 }
 
 const formatProcessingTime = (milliseconds: number): string => {
@@ -63,8 +68,20 @@ const formatProcessingTime = (milliseconds: number): string => {
   return `${(milliseconds / 1000).toFixed(1)}s`;
 };
 
-const getAnalysisType = (instruction: string, model?: string): { type: string; icon: React.ElementType; color: string; isDiagnosis: boolean; endpoint: string } => {
+const getAnalysisType = (instruction: string, model?: string): { type: string; icon: React.ElementType; color: string; isDiagnosis: boolean; endpoint: string; supportsForm100?: boolean } => {
   const lower = instruction.toLowerCase();
+  
+  // Check if this is a Form 100 eligible consultation
+  const isForm100Eligible = lower.includes('form 100') ||
+                           lower.includes('form100') ||
+                           lower.includes('emergency consultation') ||
+                           lower.includes('er consultation') ||
+                           lower.includes('emergency room') ||
+                           lower.includes('medical consultation') ||
+                           lower.includes('emergency report') ||
+                           lower.includes('emergency medicine') ||
+                           lower.includes('სასწრაფო კონსულტაცია') ||
+                           lower.includes('სამედიცინო კონსულტაცია');
   
   // Check if this is a diagnosis report (by instruction content or custom template)
   const isDiagnosis = lower.includes('i50.0') || 
@@ -77,8 +94,24 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
                       lower.includes('გულის მწვავე იშემიური ავადმყოფობა') ||
                       lower.includes('ფილტვის არტერიის ემბოლია') ||
                       (lower.includes('diagnosis') && lower.includes('emergency room')) ||
-                      lower.includes('template:'); // Add support for custom templates
+                      lower.includes('template:') || // Add support for custom templates
+                      lower.includes('medical report') || // Add support for general medical reports
+                      lower.includes('er report') || // Add support for ER reports
+                      lower.includes('notes er report') || // Add support for specific ER note reports
+                      isForm100Eligible;
   
+  // Handle Form 100 specific reports first
+  if (isForm100Eligible) {
+    return {
+      type: 'Form 100 Emergency Consultation Report',
+      icon: ClipboardList,
+      color: 'from-[#2b6cb0] to-[#1a365d]',
+      isDiagnosis: true,
+      endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy',
+      supportsForm100: true
+    };
+  }
+
   if (isDiagnosis) {
     if (lower.includes('i50.0') || lower.includes('heart failure') || lower.includes('გულის შეგუბებითი უკმარისობა')) {
       return { 
@@ -86,7 +119,8 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
         icon: HeartHandshake, 
         color: 'from-[#2b6cb0] to-[#1a365d]', 
         isDiagnosis: true,
-        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/89920f52-74cb-46bc-bf6c-b9099746dfe9'
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/89920f52-74cb-46bc-bf6c-b9099746dfe9',
+        supportsForm100: true
       };
     }
     if (lower.includes('i24.9') || lower.includes('nstemi') || lower.includes('გულის მწვავე იშემიური ავადმყოფობა')) {
@@ -95,7 +129,8 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
         icon: HeartHandshake, 
         color: 'from-[#1a365d] to-[#2b6cb0]', 
         isDiagnosis: true,
-        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4'
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4',
+        supportsForm100: true
       };
     }
     if (lower.includes('i26.0') || lower.includes('pulmonary embolism') || lower.includes('ფილტვის არტერიის ემბოლია')) {
@@ -104,7 +139,8 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
         icon: HeartHandshake, 
         color: 'from-[#2b6cb0] to-[#1a365d]', 
         isDiagnosis: true,
-        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/3602b392-65e5-4dbd-a649-cac18280bea5'
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/3602b392-65e5-4dbd-a649-cac18280bea5',
+        supportsForm100: true
       };
     }
     if (lower.includes('template:')) {
@@ -115,7 +151,8 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
         icon: FileText, 
         color: 'from-[#63b3ed] to-[#90cdf4]', 
         isDiagnosis: true,
-        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf'
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf',
+        supportsForm100: true
       };
     }
     return { 
@@ -123,27 +160,28 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
       icon: HeartHandshake, 
       color: 'from-[#63b3ed] to-[#90cdf4]', 
       isDiagnosis: true,
-      endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy'
+      endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy',
+      supportsForm100: true
     };
   }
   
   if (lower.includes('symptom') || lower.includes('diagnos')) {
-    return { type: 'Clinical Assessment', icon: Stethoscope, color: 'from-[#63b3ed] to-[#2b6cb0]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
+    return { type: 'Clinical Assessment', icon: Stethoscope, color: 'from-[#63b3ed] to-[#2b6cb0]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy', supportsForm100: true };
   }
   if (lower.includes('medication') || lower.includes('drug') || lower.includes('dosage')) {
-    return { type: 'Medication Review', icon: Shield, color: 'from-[#2b6cb0] to-[#1a365d]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
+    return { type: 'Medication Review', icon: Shield, color: 'from-[#2b6cb0] to-[#1a365d]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy', supportsForm100: true };
   }
   if (lower.includes('summary') || lower.includes('summarize')) {
-    return { type: 'Clinical Summary', icon: FileText, color: 'from-[#90cdf4] to-[#63b3ed]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
+    return { type: 'Clinical Summary', icon: FileText, color: 'from-[#90cdf4] to-[#63b3ed]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy', supportsForm100: true };
   }
   if (lower.includes('procedure') || lower.includes('treatment')) {
-    return { type: 'Treatment Plan', icon: Activity, color: 'from-[#1a365d] to-[#63b3ed]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
+    return { type: 'Treatment Plan', icon: Activity, color: 'from-[#1a365d] to-[#63b3ed]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy', supportsForm100: true };
   }
   if (lower.includes('demographic') || lower.includes('history')) {
-    return { type: 'Patient History', icon: User, color: 'from-[#90cdf4] to-[#2b6cb0]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
+    return { type: 'Patient History', icon: User, color: 'from-[#90cdf4] to-[#2b6cb0]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy', supportsForm100: false };
   }
   
-  return { type: 'General Analysis', icon: Brain, color: 'from-[#2b6cb0] to-[#90cdf4]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy' };
+  return { type: 'General Analysis', icon: Brain, color: 'from-[#2b6cb0] to-[#90cdf4]', isDiagnosis: false, endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy', supportsForm100: true };
 };
 
 const copyToClipboard = async (content: string) => {
@@ -177,13 +215,21 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
   onEdit,
   enableEditing = false,
   flowiseEndpoint = '',
-  sessionTitle = ''
+  sessionTitle = '',
+  sessionId
 }) => {
   const [isExpanded, setIsExpanded] = useState(index === 0); // First card expanded by default
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedContent, setEditedContent] = useState<string | null>(null);
   const analysisType = getAnalysisType(analysis.userInstruction, analysis.model);
   const IconComponent = analysisType.icon;
+
+  // Form 100 modal integration
+  const form100Modal = useForm100Modal({
+    sessionId,
+    department: 'Emergency',
+    priority: 'normal'
+  });
 
   // Analysis type and icon setup
 
@@ -288,6 +334,17 @@ Medical AI Processing System`;
 
   const handleCancelEdit = () => {
     setIsEditMode(false);
+  };
+
+  // Handle Form 100 generation
+  const handleForm100Generation = () => {
+    form100Modal.openModal({
+      sessionId,
+      additionalNotes: `Analysis from: ${analysisType.type}\nGenerated: ${new Date(analysis.timestamp).toLocaleString()}`,
+      department: 'Emergency',
+      priority: 'normal',
+      existingERReport: analysis.aiResponse || '' // Store ER report separately for generation
+    });
   };
 
   // Safety check for analysis data
@@ -507,28 +564,66 @@ Medical AI Processing System`;
                     )}
                   </div>
                   
-                  {/* Second Row: Edit and Expand Actions */}
+                  {/* Second Row: Edit, Form 100, and Expand Actions */}
                   <div className="flex items-center justify-between gap-2">
-                    {/* Premium Edit Button */}
-                    {enableEditing && analysisType.isDiagnosis && (
-                      <div className="relative group flex-shrink-0">
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-xl blur-md opacity-70 animate-pulse" />
-                        <MedicalButton
-                          variant={isEditMode ? "primary" : "ghost"}
-                          size="sm"
-                          leftIcon={isEditMode ? Settings : Edit3}
-                          onClick={isEditMode ? handleCancelEdit : handleEdit}
-                          className={isEditMode 
-                            ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200 min-h-[36px]" 
-                            : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
-                          }
-                        >
-                          <span className="text-sm font-medium">
-                            {isEditMode ? 'Cancel Edit' : 'Edit Report'}
-                          </span>
-                        </MedicalButton>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {/* Premium Edit Button */}
+                      {enableEditing && analysisType.isDiagnosis && (
+                        <div className="relative group flex-shrink-0">
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-xl blur-md opacity-70 animate-pulse" />
+                          <MedicalButton
+                            variant={isEditMode ? "primary" : "ghost"}
+                            size="sm"
+                            leftIcon={isEditMode ? Settings : Edit3}
+                            onClick={isEditMode ? handleCancelEdit : handleEdit}
+                            className={isEditMode 
+                              ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200 min-h-[36px]" 
+                              : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[36px]"
+                            }
+                          >
+                            <span className="text-sm font-medium">
+                              {isEditMode ? 'Cancel Edit' : 'Edit Report'}
+                            </span>
+                          </MedicalButton>
+                        </div>
+                      )}
+
+                      {/* Premium Form 100 Button */}
+                      {analysisType.supportsForm100 && (
+                        <div className="relative group flex-shrink-0">
+                          {/* Premium ambient glow container */}
+                          <div className="absolute -inset-2 bg-gradient-to-r from-[#63b3ed]/20 via-[#2b6cb0]/30 to-[#1a365d]/20 
+                                          rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out
+                                          animate-pulse group-hover:animate-none" />
+                          
+                          {/* Premium inner glow */}
+                          <div className="absolute -inset-1 bg-gradient-to-r from-[#90cdf4]/40 to-[#63b3ed]/40 
+                                          rounded-xl opacity-0 group-hover:opacity-60 transition-all duration-500" />
+                          
+                          {/* Premium importance indicator */}
+                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] 
+                                          rounded-full opacity-80 animate-pulse z-10">
+                            <div className="absolute inset-0.5 bg-white rounded-full" />
+                            <div className="absolute inset-1 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-full animate-ping" />
+                          </div>
+                          
+                          <Form100Button
+                            sessionId={sessionId}
+                            variant="secondary"
+                            size="sm"
+                            onClick={handleForm100Generation}
+                            className="relative min-h-[36px] text-sm px-4 font-semibold
+                                       shadow-lg hover:shadow-xl
+                                       transform hover:scale-105 active:scale-95
+                                       transition-all duration-300 ease-out
+                                       border-2 border-[#63b3ed]/40 hover:border-[#2b6cb0]/70
+                                       bg-gradient-to-r from-white/95 to-[#90cdf4]/10 
+                                       hover:from-[#90cdf4]/20 hover:to-[#63b3ed]/20
+                                       backdrop-blur-xl"
+                          />
+                        </div>
+                      )}
+                    </div>
                     
                     {/* Enhanced Expand/Collapse */}
                     <div className="relative group flex-shrink-0">
@@ -611,6 +706,44 @@ Medical AI Processing System`;
                             {isEditMode && <Wand2 className="w-4 h-4" />}
                           </span>
                         </MedicalButton>
+                      </div>
+                    )}
+                    
+                    {/* Premium Form 100 Button - Desktop */}
+                    {analysisType.supportsForm100 && (
+                      <div className="relative group">
+                        {/* Premium desktop ambient glow */}
+                        <div className="absolute -inset-3 bg-gradient-to-r from-[#63b3ed]/15 via-[#2b6cb0]/25 to-[#1a365d]/15 
+                                        rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-1000 ease-out
+                                        animate-pulse group-hover:animate-none" />
+                        
+                        {/* Premium desktop shimmer effect */}
+                        <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-[#90cdf4]/30 to-transparent 
+                                        rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-600" />
+                        
+                        {/* Premium desktop importance badge */}
+                        <div className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] 
+                                        rounded-full shadow-lg opacity-90 animate-pulse z-10">
+                          <div className="absolute inset-0.5 bg-white rounded-full" />
+                          <div className="absolute inset-1 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-full 
+                                          animate-ping opacity-80" />
+                          <div className="absolute inset-1.5 bg-[#63b3ed] rounded-full animate-pulse" />
+                        </div>
+                        
+                        <Form100Button
+                          sessionId={sessionId}
+                          variant="secondary"
+                          size="md"
+                          onClick={handleForm100Generation}
+                          className="relative font-bold shadow-xl hover:shadow-2xl
+                                     transform hover:scale-110 active:scale-95
+                                     transition-all duration-400 ease-out
+                                     border-2 border-[#63b3ed]/50 hover:border-[#2b6cb0]/80
+                                     bg-gradient-to-r from-white/98 via-[#90cdf4]/5 to-white/98
+                                     hover:from-[#90cdf4]/15 hover:via-[#63b3ed]/20 hover:to-[#90cdf4]/15
+                                     backdrop-blur-xl text-[#1a365d] hover:text-[#2b6cb0]
+                                     hover:-translate-y-1 hover:rotate-1"
+                        />
                       </div>
                     )}
                   </div>
@@ -822,6 +955,21 @@ Medical AI Processing System`;
           </div>
         </div>
       </div>
+
+      {/* Form 100 Modal Integration */}
+      <Form100Modal
+        isOpen={form100Modal.isOpen}
+        onClose={form100Modal.closeModal}
+        sessionId={sessionId}
+        initialData={form100Modal.modalData}
+        reportType={analysisType.type}
+        onSubmit={(formData) => {
+          form100Modal.closeModal();
+        }}
+        onGenerate={async (formData) => {
+          // Integration with existing Flowise endpoint
+        }}
+      />
     </div>
   );
 };

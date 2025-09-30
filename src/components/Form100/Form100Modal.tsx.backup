@@ -1,0 +1,468 @@
+// Form 100 Generation Modal Component
+// Multi-step medical form wizard for ER consultation reports
+// HIPAA-compliant with mobile-optimized design
+
+import React, { useState, useCallback, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { 
+  X, 
+  FileText, 
+  Stethoscope, 
+  User, 
+  Heart, 
+  CheckCircle, 
+  ArrowLeft, 
+  ArrowRight,
+  AlertCircle,
+  Loader2,
+  Sparkles,
+  Download,
+  Share2
+} from 'lucide-react';
+import { Dialog, DialogContent } from '../ui/Dialog';
+import { Button } from '../ui/button';
+import { cn } from '../../lib/utils';
+import { Form100ModalProps, Form100Request } from '../../types/form100';
+import DiagnosisDropdown from './DiagnosisDropdown';
+import VoiceTranscriptField from './VoiceTranscriptField';
+import AngiographyReportField from './AngiographyReportField';
+
+// Multi-step wizard configuration
+interface WizardStep {
+  id: number;
+  title: string;
+  subtitle: string;
+  icon: React.ComponentType<any>;
+  component: React.ComponentType<any>;
+  validation?: string[];
+}
+
+const Form100Modal: React.FC<Form100ModalProps> = ({
+  isOpen,
+  onClose,
+  sessionId,
+  initialData,
+  onSubmit,
+  onGenerate
+}) => {
+  // Form state management
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedForm, setGeneratedForm] = useState<string | null>(null);
+  const [formData, setFormData] = useState<Partial<Form100Request>>(initialData || {});
+
+  // Form validation
+  const { formState: { errors }, trigger } = useForm();
+
+  // Wizard steps configuration
+  const wizardSteps: WizardStep[] = [
+    {
+      id: 1,
+      title: 'Patient Information',
+      subtitle: 'Basic demographics and medical history',
+      icon: User,
+      component: PatientInfoStep,
+      validation: ['patientInfo']
+    },
+    {
+      id: 2,
+      title: 'Clinical Data',
+      subtitle: 'Diagnosis, symptoms, and vital signs',
+      icon: Stethoscope,
+      component: ClinicalDataStep,
+      validation: ['primaryDiagnosis', 'symptoms']
+    },
+    {
+      id: 3,
+      title: 'Voice & Reports',
+      subtitle: 'Transcripts and additional documentation',
+      icon: FileText,
+      component: DocumentationStep
+    },
+    {
+      id: 4,
+      title: 'Generate Form',
+      subtitle: 'Review and generate Form 100',
+      icon: Heart,
+      component: GenerationStep
+    }
+  ];
+
+  const currentStepData = wizardSteps.find(step => step.id === currentStep);
+  const isLastStep = currentStep === wizardSteps.length;
+  const isFirstStep = currentStep === 1;
+
+  // Handle step navigation
+  const handleNextStep = useCallback(async () => {
+    const current = wizardSteps[currentStep - 1];
+    
+    // Validate current step if validation rules exist
+    if (current.validation) {
+      const isValid = await trigger(current.validation);
+      if (!isValid) return;
+    }
+    
+    if (currentStep < wizardSteps.length) {
+      setCurrentStep(currentStep + 1);
+    }
+  }, [currentStep, trigger, wizardSteps]);
+
+  const handlePreviousStep = useCallback(() => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  }, [currentStep]);
+
+  // Handle form generation
+  const handleGenerate = useCallback(async () => {
+    setIsGenerating(true);
+    try {
+      if (onGenerate) {
+        await onGenerate(formData as Form100Request);
+        setGeneratedForm("Generated Form 100 content would appear here");
+      }
+    } catch (error) {
+      console.error('Form generation failed:', error);
+    } finally {
+      setIsGenerating(false);
+    }
+  }, [formData, onGenerate]);
+
+  // Handle form submission
+  const handleSubmit = useCallback(() => {
+    if (onSubmit) {
+      onSubmit(formData as Form100Request);
+    }
+    onClose();
+  }, [formData, onSubmit, onClose]);
+
+  // Update form data
+  const updateFormData = useCallback((updates: Partial<Form100Request>) => {
+    setFormData(prev => ({ ...prev, ...updates }));
+  }, []);
+
+  // Reset form state when modal opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentStep(1);
+      setIsGenerating(false);
+      setGeneratedForm(null);
+      if (sessionId) {
+        updateFormData({ sessionId });
+      }
+    }
+  }, [isOpen, sessionId, updateFormData]);
+
+  if (!isOpen) return null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl w-[95vw] sm:w-full max-h-[95vh] sm:max-h-[90vh] p-0 overflow-hidden">
+        {/* Mobile viewport height adjustment */}
+        <style jsx>{`
+          @media (max-width: 640px) {
+            .mobile-modal-content {
+              height: calc(100vh - 2rem);
+              max-height: calc(100vh - 2rem);
+            }
+          }
+        `}</style>
+        {/* Modal Header */}
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <FileText className="w-6 h-6 text-blue-600" />
+            </div>
+            <div>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+                Form 100 Generation
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600">
+                Emergency consultation report
+              </p>
+            </div>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="h-10 w-10 sm:h-8 sm:w-8 rounded-full hover:bg-white/80 touch-manipulation"
+          >
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* Progress Indicator */}
+        <div className="px-4 sm:px-6 py-3 sm:py-4 bg-gray-50">
+          <div className="flex items-center justify-between">
+            {wizardSteps.map((step, index) => (
+              <div key={step.id} className="flex items-center">
+                <div className={cn(
+                  "flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 rounded-full border-2 transition-all duration-200 touch-manipulation",
+                  step.id === currentStep 
+                    ? "bg-blue-600 border-blue-600 text-white" 
+                    : step.id < currentStep 
+                    ? "bg-green-500 border-green-500 text-white"
+                    : "bg-white border-gray-300 text-gray-400"
+                )}>
+                  {step.id < currentStep ? (
+                    <CheckCircle className="w-4 h-4" />
+                  ) : (
+                    <step.icon className="w-4 h-4" />
+                  )}
+                </div>
+                {index < wizardSteps.length - 1 && (
+                  <div className={cn(
+                    "w-8 sm:w-12 h-0.5 mx-1 sm:mx-2 transition-colors duration-200",
+                    step.id < currentStep ? "bg-green-500" : "bg-gray-300"
+                  )} />
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="mt-2">
+            <p className="text-sm font-medium text-gray-900">
+              {currentStepData?.title}
+            </p>
+            <p className="text-xs text-gray-600 hidden sm:block">
+              {currentStepData?.subtitle}
+            </p>
+          </div>
+        </div>
+
+        {/* Modal Content */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 mobile-modal-content">
+          {currentStepData && (
+            <currentStepData.component
+              formData={formData}
+              updateFormData={updateFormData}
+              errors={errors}
+              sessionId={sessionId}
+              generatedForm={generatedForm}
+              isGenerating={isGenerating}
+              onGenerate={handleGenerate}
+            />
+          )}
+        </div>
+
+        {/* Modal Footer */}
+        <div className="flex items-center justify-between p-4 sm:p-6 border-t border-gray-200 bg-gray-50">
+          <Button
+            variant="outline"
+            onClick={handlePreviousStep}
+            disabled={isFirstStep}
+            className="min-w-[80px] sm:min-w-[100px] h-11 sm:h-10 touch-manipulation"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Previous
+          </Button>
+
+          <div className="text-xs sm:text-sm text-gray-500">
+            Step {currentStep} of {wizardSteps.length}
+          </div>
+
+          {isLastStep ? (
+            <div className="flex space-x-2">
+              {generatedForm && (
+                <Button
+                  variant="outline"
+                  onClick={handleSubmit}
+                  className="min-w-[80px] sm:min-w-[100px] h-11 sm:h-10 touch-manipulation"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Save
+                </Button>
+              )}
+              <Button
+                onClick={handleGenerate}
+                disabled={isGenerating || !formData.primaryDiagnosis}
+                className="min-w-[100px] sm:min-w-[120px] h-11 sm:h-10 touch-manipulation"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Generate
+                  </>
+                )}
+              </Button>
+            </div>
+          ) : (
+            <Button
+              onClick={handleNextStep}
+              className="min-w-[80px] sm:min-w-[100px] h-11 sm:h-10 touch-manipulation"
+            >
+              Next
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Step 1: Patient Information
+const PatientInfoStep: React.FC<any> = ({ formData, updateFormData }) => {
+  return (
+    <div className="space-y-4 sm:space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Age
+          </label>
+          <input
+            type="number"
+            className="w-full p-4 sm:p-3 text-base sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent touch-manipulation"
+            value={formData.patientInfo?.age || ''}
+            onChange={(e) => updateFormData({
+              patientInfo: { 
+                ...formData.patientInfo, 
+                age: parseInt(e.target.value) || undefined 
+              }
+            })}
+            placeholder="Patient age"
+            inputMode="numeric"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Gender
+          </label>
+          <select
+            className="w-full p-4 sm:p-3 text-base sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent touch-manipulation"
+            value={formData.patientInfo?.gender || ''}
+            onChange={(e) => updateFormData({
+              patientInfo: { 
+                ...formData.patientInfo, 
+                gender: e.target.value as 'male' | 'female' | 'other'
+              }
+            })}
+          >
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Step 2: Clinical Data
+const ClinicalDataStep: React.FC<any> = ({ formData, updateFormData }) => {
+  return (
+    <div className="space-y-4 sm:space-y-6">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Primary Diagnosis *
+        </label>
+        <DiagnosisDropdown
+          value={formData.primaryDiagnosis}
+          onChange={(diagnosis) => updateFormData({ primaryDiagnosis: diagnosis })}
+          required
+          placeholder="Select primary diagnosis"
+        />
+      </div>
+      
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Symptoms
+        </label>
+        <textarea
+          className="w-full p-4 sm:p-3 text-base sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent touch-manipulation resize-none"
+          rows={4}
+          value={formData.symptoms?.join(', ') || ''}
+          onChange={(e) => updateFormData({
+            symptoms: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
+          })}
+          placeholder="List symptoms separated by commas"
+        />
+      </div>
+    </div>
+  );
+};
+
+// Step 3: Documentation
+const DocumentationStep: React.FC<any> = ({ formData, updateFormData, sessionId }) => {
+  return (
+    <div className="space-y-4 sm:space-y-6">
+      <VoiceTranscriptField
+        value={formData.voiceTranscript}
+        onChange={(transcript) => updateFormData({ voiceTranscript: transcript })}
+        sessionId={sessionId}
+        placeholder="Voice transcript will appear here..."
+      />
+      
+      <AngiographyReportField
+        value={formData.angiographyReport}
+        onChange={(report) => updateFormData({ angiographyReport: report })}
+        placeholder="Enter angiography report details..."
+      />
+    </div>
+  );
+};
+
+// Step 4: Generation
+const GenerationStep: React.FC<any> = ({ 
+  formData, 
+  generatedForm, 
+  isGenerating, 
+  onGenerate 
+}) => {
+  if (generatedForm) {
+    return (
+      <div className="space-y-4">
+        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex items-center mb-2">
+            <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+            <h3 className="font-medium text-green-800">Form 100 Generated Successfully</h3>
+          </div>
+          <p className="text-sm text-green-700">
+            Your medical consultation report has been generated.
+          </p>
+        </div>
+        
+        <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 max-h-96 overflow-y-auto">
+          <pre className="text-sm text-gray-800 whitespace-pre-wrap">
+            {generatedForm}
+          </pre>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center">
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <FileText className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Ready to Generate Form 100
+          </h3>
+          <p className="text-sm text-gray-600 mb-4">
+            Review your information and click Generate to create the medical report.
+          </p>
+          
+          {/* Summary */}
+          <div className="text-left bg-white p-4 rounded-lg border">
+            <h4 className="font-medium text-gray-900 mb-2">Summary:</h4>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>Primary Diagnosis: {formData.primaryDiagnosis?.name || 'Not selected'}</li>
+              <li>Symptoms: {formData.symptoms?.length || 0} listed</li>
+              <li>Voice Transcript: {formData.voiceTranscript ? 'Available' : 'Not available'}</li>
+              <li>Additional Reports: {formData.angiographyReport ? 'Available' : 'None'}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Form100Modal;

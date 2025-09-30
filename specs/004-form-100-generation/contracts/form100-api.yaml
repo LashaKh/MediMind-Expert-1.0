@@ -1,0 +1,253 @@
+openapi: 3.0.3
+info:
+  title: Form 100 Generation API
+  description: API contracts for Form 100 generation from ER consultation reports
+  version: 1.0.0
+  
+paths:
+  /api/form100/diagnoses/{primaryCode}:
+    get:
+      summary: Get available diagnoses for primary diagnosis code
+      description: Returns list of specific diagnoses available for Form 100 generation based on primary ER diagnosis
+      parameters:
+        - name: primaryCode
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: ["I24.9", "I26.0", "I50.0"]
+          example: "I24.9"
+      responses:
+        '200':
+          description: Available diagnoses for the primary code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  primaryCode:
+                    type: string
+                    example: "I24.9"
+                  categoryName:
+                    type: string
+                    example: "გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი"
+                  diagnoses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DiagnosisCode'
+                required:
+                  - primaryCode
+                  - categoryName
+                  - diagnoses
+        '404':
+          description: Primary diagnosis code not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/form100/generate:
+    post:
+      summary: Generate Form 100 document
+      description: Creates Form 100 document from ER consultation report, selected diagnosis, and supplementary information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Form100Request'
+      responses:
+        '200':
+          description: Form 100 generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Form100Response'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Flowise endpoint unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/form100/validate:
+    post:
+      summary: Validate Form 100 request data
+      description: Validates request data before submission to ensure all required fields and formats are correct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Form100Request'
+      responses:
+        '200':
+          description: Validation successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isValid:
+                    type: boolean
+                    example: true
+                  warnings:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Angiography report not provided"]
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ErrorResponse'
+                  - type: object
+                    properties:
+                      validationErrors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            field:
+                              type: string
+                            message:
+                              type: string
+
+components:
+  schemas:
+    DiagnosisCode:
+      type: object
+      properties:
+        code:
+          type: string
+          pattern: '^I\d{2}\.\d$'
+          example: "I20.0"
+        georgianName:
+          type: string
+          example: "არასტაბილური სტენოკარდია Braunwald III Troponin +"
+        englishName:
+          type: string
+          example: "Unstable Angina Braunwald III Troponin +"
+        hasLiveEndpoint:
+          type: boolean
+          example: true
+        description:
+          type: string
+          example: "Acute coronary syndrome with elevated troponin"
+      required:
+        - code
+        - georgianName
+        - englishName
+        - hasLiveEndpoint
+
+    Form100Request:
+      type: object
+      properties:
+        erConsultReport:
+          type: string
+          minLength: 100
+          description: "Original ER consultation report text"
+          example: "Patient presents with chest pain, ECG shows ST depression..."
+        selectedDiagnosis:
+          $ref: '#/components/schemas/DiagnosisCode'
+        doctorTranscript:
+          type: string
+          nullable: true
+          description: "Optional voice transcript from doctor"
+          example: "Additional clinical notes: Patient has family history of CAD..."
+        angiographyReport:
+          type: string
+          nullable: true
+          description: "Optional angiography findings"
+          example: "Coronary angiography reveals 80% stenosis in LAD..."
+        sessionId:
+          type: string
+          format: uuid
+          description: "Session isolation identifier"
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      required:
+        - erConsultReport
+        - selectedDiagnosis
+        - sessionId
+
+    Form100Response:
+      type: object
+      properties:
+        requestId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440001"
+        form100Content:
+          type: string
+          description: "Generated Form 100 document content"
+          example: "FORM 100 - Emergency Department Consultation\n\nPatient Information:..."
+        processingTime:
+          type: number
+          description: "Processing time in milliseconds"
+          example: 2450
+        endpoint:
+          type: string
+          description: "Flowise endpoint used for generation"
+          example: "https://flowise-2-0.onrender.com/api/v1/prediction/6dc8bb6d-ce79-4a40-9561-9108ba05e7c7"
+        isMockResponse:
+          type: boolean
+          description: "True if mock endpoint was used"
+          example: false
+        generatedAt:
+          type: number
+          description: "Unix timestamp of generation"
+          example: 1696118400000
+        metadata:
+          type: object
+          properties:
+            diagnosisCode:
+              type: string
+            hasTranscript:
+              type: boolean
+            hasAngiography:
+              type: boolean
+      required:
+        - requestId
+        - form100Content
+        - processingTime
+        - endpoint
+        - isMockResponse
+        - generatedAt
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Invalid diagnosis code"
+        message:
+          type: string
+          example: "The provided diagnosis code is not supported for Form 100 generation"
+        code:
+          type: string
+          example: "INVALID_DIAGNOSIS"
+        timestamp:
+          type: number
+          example: 1696118400000
+      required:
+        - error
+        - message
+        - code
+        - timestamp
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []

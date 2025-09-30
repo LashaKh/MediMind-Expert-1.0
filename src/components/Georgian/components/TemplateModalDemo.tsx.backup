@@ -71,10 +71,12 @@ Patient presents with: [Primary concern]
   };
 
   const handleTemplateCreated = (template: UserTemplate) => {
+    console.log('Template created:', template);
     setIsModalOpen(false);
   };
 
   const handleTemplateUpdated = (template: UserTemplate) => {
+    console.log('Template updated:', template);
     setIsModalOpen(false);
     setEditTemplate(null);
   };
