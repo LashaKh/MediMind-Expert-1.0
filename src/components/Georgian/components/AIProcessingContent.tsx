@@ -18,7 +18,6 @@ import { isDiagnosisTemplate, extractDiagnosisFromInstruction } from '../../../s
 
 // Import new components
 import { MedicalAnalysisCard } from './MedicalAnalysisCard';
-import { QuickActionTemplates } from './QuickActionTemplates';
 import { PremiumTemplatesSection } from './PremiumTemplatesSection';
 
 interface ProcessingHistory {
@@ -281,7 +280,6 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
           {/* Templates View */}
           {viewMode === 'templates' && (
             <div className="space-y-6">
-
               {/* Premium Templates Section */}
               <PremiumTemplatesSection
                 onSelectTemplate={handleTemplateSelect}

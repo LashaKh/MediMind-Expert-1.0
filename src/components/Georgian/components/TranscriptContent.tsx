@@ -323,91 +323,104 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             multiple={true}
           />
 
-          {/* Ultra Compact Attached Files Display - Mobile Optimized */}
+          {/* Attached Files Display */}
           {attachedFiles.length > 0 && (
-            <div className="mb-2 px-3 sm:px-4 lg:px-4">
-              <div className="mediscribe-compact-attachments-container">
-                <div className="mediscribe-compact-attachments">
-                  {/* Ultra Compact Header */}
-                  <div className="mediscribe-attachment-header-compact">
-                    <div className="mediscribe-attachment-title-compact">
-                      <Paperclip />
-                      <span>Files ({attachedFiles.length})</span>
-                      {isProcessingAttachment && (
-                        <Loader2 className="mediscribe-loading-compact" />
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Ultra Compact File List */}
+            <div className="mb-4 px-3 sm:px-4 lg:px-4">
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 p-4">
+                <h4 className="text-sm font-semibold text-[#1a365d] dark:text-[#63b3ed] mb-3 flex items-center space-x-2">
+                  <FileIcon className="w-4 h-4" />
+                  <span>Attached Files ({attachedFiles.length})</span>
+                  {isProcessingAttachment && (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  )}
+                </h4>
+                <div className="flex flex-wrap gap-3">
                   {attachedFiles.map((attachment) => (
-                    <div key={attachment.id} className="mediscribe-attachment-item-compact group">
-                      {/* Tiny File Icon */}
-                      <div className="mediscribe-attachment-icon-compact">
-                        <FileIcon />
+                    <div key={attachment.id} className="group relative flex items-center space-x-3 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#1a365d]/30 dark:to-[#2b6cb0]/30 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 px-4 py-3 rounded-xl hover:shadow-lg hover:shadow-[#2b6cb0]/10 transition-all duration-300">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center shadow-lg">
+                        <FileIcon className="w-5 h-5 text-white" />
                       </div>
-                      
-                      {/* Compact File Info */}
-                      <div className="mediscribe-attachment-info-compact">
-                        <span className="mediscribe-attachment-name-compact">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[#1a365d] dark:text-[#90cdf4] font-semibold truncate max-w-40">
                           {attachment.name}
-                        </span>
-                        <div className="flex items-center space-x-1">
-                          <span className="mediscribe-attachment-status-compact text-[#2b6cb0]">
-                            {(attachment.size / 1024).toFixed(0)}KB
+                        </p>
+                        <div className="flex items-center space-x-2 text-xs">
+                          <span className="text-[#2b6cb0] dark:text-[#63b3ed]">
+                            {(attachment.size / 1024).toFixed(1)} KB
                           </span>
-                          <span className={`mediscribe-attachment-status-compact ${
-                            attachment.textExtractionStatus === 'processing' ? 'mediscribe-status-processing' :
-                            attachment.textExtractionStatus === 'success' ? 'mediscribe-status-success' :
-                            attachment.textExtractionStatus === 'failed' ? 'mediscribe-status-failed' :
-                            attachment.textExtractionStatus === 'pending' ? 'mediscribe-status-pending' :
-                            'text-[#2b6cb0]'
-                          }`}>
-                            {(() => {
-                              switch (attachment.textExtractionStatus) {
-                                case 'processing': return '⚡';
-                                case 'success': return '✅';
-                                case 'failed': return '❌';
-                                case 'pending': return '⏸️';
-                                default: return '📎';
-                              }
-                            })()}
-                          </span>
+                          {(() => {
+                            const status = attachment.textExtractionStatus;
+                            switch (status) {
+                              case 'processing':
+                                return (
+                                  <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                    Processing...
+                                  </span>
+                                );
+                              case 'success':
+                                return (
+                                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <span className="text-green-600">✅</span>
+                                    Text extracted
+                                  </span>
+                                );
+                              case 'failed':
+                                return (
+                                  <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1" title={attachment.textExtractionError}>
+                                    <span className="text-red-600">❌</span>
+                                    Failed
+                                  </span>
+                                );
+                              case 'pending':
+                                return (
+                                  <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <span className="text-gray-500">⏸️</span>
+                                    Pending
+                                  </span>
+                                );
+                              default:
+                                return (
+                                  <span className="bg-[#63b3ed]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
+                                    Ready for analysis
+                                  </span>
+                                );
+                            }
+                          })()}
                         </div>
                       </div>
-
-                      {/* Compact Remove Button */}
                       {onRemoveAttachment && (
                         <button
                           onClick={() => onRemoveAttachment(attachment.id)}
-                          className="mediscribe-attachment-remove-compact opacity-0 group-hover:opacity-100"
+                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
+                          title="Remove attachment"
                         >
-                          <X />
+                          <X className="w-4 h-4" />
                         </button>
                       )}
                     </div>
                   ))}
-
-                  {/* Ultra Compact Progress Bar */}
-                  {attachmentProgress && (
-                    <div className="mediscribe-progress-compact">
-                      <div className="mediscribe-progress-header-compact">
-                        <span className="mediscribe-progress-text-compact">
-                          {attachmentProgress.stageDescription}
-                        </span>
-                        <span className="mediscribe-progress-percentage-compact">
-                          {attachmentProgress.percentage}%
-                        </span>
-                      </div>
-                      <div className="mediscribe-progress-bar-compact">
-                        <div 
-                          className="mediscribe-progress-fill-compact"
-                          style={{ width: `${attachmentProgress.percentage}%` }}
-                        />
-                      </div>
-                    </div>
-                  )}
                 </div>
+                
+                {/* Progress Bar */}
+                {attachmentProgress && (
+                  <div className="mt-4 p-3 bg-[#63b3ed]/10 dark:bg-[#1a365d]/20 rounded-xl border border-[#63b3ed]/30 dark:border-[#2b6cb0]/30">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-[#1a365d] dark:text-[#63b3ed]">
+                        {attachmentProgress.stageDescription}
+                      </span>
+                      <span className="text-sm font-bold text-[#2b6cb0] dark:text-[#90cdf4]">
+                        {attachmentProgress.percentage}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-[#63b3ed]/20 dark:bg-[#1a365d]/40 rounded-full h-2 overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] rounded-full transition-all duration-300 ease-out"
+                        style={{ width: `${attachmentProgress.percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}

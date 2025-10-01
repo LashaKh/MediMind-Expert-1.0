@@ -111,7 +111,10 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-rose-500/20 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-all duration-300" />
               <button
-                onClick={onDelete}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete();
+                }}
                 className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm hover:bg-red-50 dark:hover:bg-red-900/20 rounded-2xl p-3 border border-white/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 group"
                 title="Delete Report"
               >
@@ -126,7 +129,10 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
       {onDelete && (
         <div className="absolute top-4 right-4 z-20 md:hidden">
           <button
-            onClick={onDelete}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
             className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl p-2 border border-white/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all duration-300"
             title="Delete Report"
           >
@@ -234,7 +240,10 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                         variant={isEditMode ? "primary" : "ghost"}
                         size="sm"
                         leftIcon={isEditMode ? Settings : Edit3}
-                        onClick={isEditMode ? onCancelEdit : onEdit}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          isEditMode ? onCancelEdit() : onEdit();
+                        }}
                         className={isEditMode 
                           ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-lg shadow-[#2b6cb0]/25 hover:shadow-xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200 min-h-[30px] px-2" 
                           : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[30px] px-2"
@@ -270,7 +279,10 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                         sessionId={sessionId}
                         variant="secondary"
                         size="sm"
-                        onClick={onForm100Generation}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onForm100Generation();
+                        }}
                         className="relative min-h-[30px] text-xs px-3 font-semibold
                                    shadow-md hover:shadow-lg
                                    transform hover:scale-105 active:scale-95
@@ -285,7 +297,10 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                       {onViewReportHistory && recentReportsCount > 0 && (
                         <div className="relative">
                           <button
-                            onClick={onViewReportHistory}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onViewReportHistory?.();
+                            }}
                             className="relative ml-2 inline-flex items-center space-x-1.5 min-h-[30px] text-xs px-3 py-1.5 font-semibold
                                        shadow-md hover:shadow-lg
                                        transform hover:scale-105 active:scale-95
@@ -316,7 +331,10 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                     variant="ghost"
                     size="sm"
                     rightIcon={isExpanded ? ChevronUp : ChevronDown}
-                    onClick={onExpandToggle}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onExpandToggle();
+                    }}
                     className="text-slate-600 dark:text-slate-400 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[30px] px-2"
                   >
                     <span className="text-xs">{isExpanded ? 'Minimize' : 'Expand'}</span>
@@ -338,7 +356,10 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                       variant={isEditMode ? "primary" : "ghost"}
                       size="sm"
                       leftIcon={isEditMode ? Settings : Edit3}
-                      onClick={isEditMode ? onCancelEdit : onEdit}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        isEditMode ? onCancelEdit() : onEdit();
+                      }}
                       className={isEditMode 
                         ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200" 
                         : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
@@ -377,7 +398,10 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                       sessionId={sessionId}
                       variant="secondary"
                       size="md"
-                      onClick={onForm100Generation}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onForm100Generation();
+                      }}
                       className="relative font-bold shadow-xl hover:shadow-2xl
                                  transform hover:scale-110 active:scale-95
                                  transition-all duration-400 ease-out
@@ -397,7 +421,10 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                   variant="ghost"
                   size="sm"
                   rightIcon={isExpanded ? ChevronUp : ChevronDown}
-                  onClick={onExpandToggle}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onExpandToggle();
+                  }}
                   className="text-slate-600 dark:text-slate-400 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
                 >
                   {isExpanded ? 'Minimize' : 'Expand Details'}

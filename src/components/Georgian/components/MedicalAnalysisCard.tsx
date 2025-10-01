@@ -219,7 +219,7 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
   sessionTitle = '',
   sessionId
 }) => {
-  const [isExpanded, setIsExpanded] = useState(index === 0); // First card expanded by default
+  const [isExpanded, setIsExpanded] = useState(false); // All cards collapsed by default
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedContent, setEditedContent] = useState<string | null>(null);
   const [isGeneratingForm100, setIsGeneratingForm100] = useState(false);
@@ -451,8 +451,11 @@ Medical AI Processing System`;
       {/* Subtle Border Glow - Reduced animation */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-300" />
       
-      {/* Standardized Container with Fixed Height */}
-      <div className="relative bg-white/98 dark:bg-slate-900/98 backdrop-blur-sm rounded-2xl border border-blue-200/40 dark:border-slate-700/40 shadow-lg shadow-blue-500/5 dark:shadow-blue-500/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 min-h-[125px] flex flex-col">
+      {/* Standardized Container with Fixed Height - Now clickable */}
+      <div 
+        className="relative bg-white/98 dark:bg-slate-900/98 backdrop-blur-sm rounded-2xl border border-blue-200/40 dark:border-slate-700/40 shadow-lg shadow-blue-500/5 dark:shadow-blue-500/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 min-h-[125px] flex flex-col cursor-pointer"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
         
         {/* Header Section */}
         <AnalysisCardHeader

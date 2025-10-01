@@ -7,7 +7,7 @@ import {
   X,
   Clock,
   CheckCircle,
-  Crown
+  // Crown removed - no longer used
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { formatMarkdown, hasMarkdownFormatting } from '../../../utils/markdownFormatter';
@@ -161,27 +161,7 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                 <div className="absolute inset-0 bg-gradient-to-br from-[#1a365d]/10 via-[#2b6cb0]/5 to-[#1a365d]/15 dark:from-[#1a365d]/20 dark:via-[#2b6cb0]/10 dark:to-[#1a365d]/25 rounded-3xl blur-sm" />
                 
                 <div className="relative">
-                  {/* AI Report Editor Header */}
-                  <div className="flex items-center space-x-4 mb-6">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30 animate-pulse" />
-                      <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-3 shadow-xl shadow-[#2b6cb0]/25">
-                        <Edit3 className="w-6 h-6 text-white" />
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
-                        <span>Form 100 Editor</span>
-                        <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-[#1a365d]/30 to-[#2b6cb0]/30 dark:from-[#2b6cb0]/30 dark:to-[#1a365d]/30 rounded-full">
-                          <Crown className="w-3 h-3 text-[#2b6cb0] dark:text-[#1a365d]" />
-                          <span className="text-xs font-bold text-[#1a365d] dark:text-[#2b6cb0]">STUDIO</span>
-                        </div>
-                      </h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                        Advanced Form 100 report editing with AI assistance
-                      </p>
-                    </div>
-                  </div>
+                  {/* Header section removed - content starts directly */}
                   
                   {/* Enhanced Report Edit Card */}
                   <div className="relative">

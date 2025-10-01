@@ -182,40 +182,12 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
       {/* My Templates Section - User's Custom Templates */}
       <MyTemplatesSection
         onSelectTemplate={onSelectTemplate}
-        disabled={disabled} // Template creation is always enabled, only usage might be disabled
+        disabled={disabled}
         hasTranscript={hasTranscript}
         transcript={transcript}
         onAddToHistory={onAddToHistory}
       />
       
-      {/* Empty State Message */}
-      {showEmptyMessage && (
-        <div className="flex flex-col items-center justify-center py-8 px-6 text-center bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/5 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/10 rounded-2xl border border-[#63b3ed]/20 dark:border-[#2b6cb0]/30">
-          <div className="relative mb-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-[#90cdf4]/30 via-[#63b3ed]/20 to-[#90cdf4]/30 dark:from-[#1a365d]/60 dark:via-[#2b6cb0]/40 dark:to-[#1a365d]/60 rounded-2xl flex items-center justify-center shadow-lg">
-              <Stethoscope className="w-8 h-8 text-[#2b6cb0] dark:text-[#63b3ed]" />
-            </div>
-            <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-xl flex items-center justify-center shadow-md">
-              <Sparkles className="w-3 h-3 text-white" />
-            </div>
-          </div>
-          
-          <div className="max-w-sm">
-            <h3 className="text-lg font-bold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#1a365d] dark:from-[#90cdf4] dark:via-[#63b3ed] dark:to-[#90cdf4] bg-clip-text text-transparent mb-3">
-              Premium Medical Templates
-            </h3>
-            <p className="text-[#2b6cb0] dark:text-[#63b3ed] leading-relaxed text-sm mb-4">
-              Start recording, upload an audio file, or attach medical documents to activate these professional medical analysis templates.
-            </p>
-            <div className="flex items-center justify-center space-x-2 text-xs text-[#1a365d] dark:text-[#90cdf4]">
-              <Heart className="w-3 h-3" />
-              <span>Specialized for Cardiology Practice</span>
-            </div>
-          </div>
-        </div>
-      )}
-      
-
       {/* Featured Cardiology Section - Always Show for Testing */}
       <div className="space-y-4">
         <div className="flex items-center space-x-3">

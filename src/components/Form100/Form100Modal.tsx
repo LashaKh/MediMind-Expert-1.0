@@ -118,24 +118,15 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
     }
   }, [STORAGE_KEY, STEP_KEY]);
 
-  // Handle modal close with unsaved changes warning
+  // Handle modal close without confirmation
   const handleClose = useCallback(() => {
-    if (hasUnsavedChanges && !generatedForm) {
-      const confirmClose = window.confirm(
-        'You have unsaved changes. Are you sure you want to close? Your progress will be saved for later.'
-      );
-      if (!confirmClose) {
-        return;
-      }
-    }
-    
     // Only clear saved data if form was successfully generated
     if (generatedForm) {
       clearSavedData();
     }
     
     onClose();
-  }, [hasUnsavedChanges, generatedForm, clearSavedData, onClose]);
+  }, [generatedForm, clearSavedData, onClose]);
 
   // Premium wizard steps configuration with enhanced icons
   const wizardSteps: WizardStep[] = [

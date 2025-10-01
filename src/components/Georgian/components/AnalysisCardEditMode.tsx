@@ -1,7 +1,6 @@
 import React from 'react';
 import {
-  Edit3,
-  Crown
+  // Edit3 and Crown removed - no longer used
 } from 'lucide-react';
 import ReportEditCard from '../../ReportEditing/ReportEditCard';
 
@@ -54,26 +53,7 @@ export const AnalysisCardEditMode: React.FC<AnalysisCardEditModeProps> = ({
       
       <div className="relative p-6">
         {/* Editor Header */}
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl blur-md opacity-30 animate-pulse" />
-            <div className="relative bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl p-3 shadow-xl shadow-[#2b6cb0]/25">
-              <Edit3 className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <div>
-            <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
-              <span>AI Report Editor</span>
-              <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/30 dark:from-[#2b6cb0]/30 dark:to-[#63b3ed]/30 rounded-full">
-                <Crown className="w-3 h-3 text-[#2b6cb0] dark:text-[#90cdf4]" />
-                <span className="text-xs font-bold text-[#1a365d] dark:text-[#90cdf4]">STUDIO</span>
-              </div>
-            </h4>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-              Advanced medical report editing with AI assistance
-            </p>
-          </div>
-        </div>
+        {/* Header section removed - content starts directly */}
         
         {/* Enhanced Report Edit Card */}
         <div className="relative">

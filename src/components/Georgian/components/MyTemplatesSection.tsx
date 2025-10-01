@@ -229,24 +229,6 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
         </button>
       </div>
 
-      {/* Empty Content Message */}
-      {showEmptyTemplateMessage && (
-        <div className="bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/5 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/10 rounded-xl border border-[#63b3ed]/20 dark:border-[#2b6cb0]/30 p-4">
-          <div className="flex items-start space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-lg flex items-center justify-center flex-shrink-0">
-              <FileText className="w-4 h-4 text-white" />
-            </div>
-            <div className="flex-1">
-              <h4 className="text-sm font-semibold text-[#1a365d] dark:text-[#90cdf4] mb-1">
-                Custom Templates
-              </h4>
-              <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed] leading-relaxed">
-                Create and manage your own report templates. Templates can be created anytime, but require transcript content or medical documents to generate reports.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
 
       {/* Loading State with Skeleton Cards */}
