@@ -203,14 +203,14 @@
 
   /* Mobile Transcript Area - ONLY TEXTAREA SCROLLS */
   .mediscribe-mobile-transcript {
-    padding: 16px;
-    height: calc(100vh - 300px); /* Force smaller height */
-    max-height: calc(100vh - 300px);
-    min-height: 200px;
+    /* ❌ REMOVED: height: calc(100vh - 300px); - Fixed height constraint causing white space */
+    /* ❌ REMOVED: max-height: calc(100vh - 300px); - Max height constraint causing white space */
+    /* ❌ REMOVED: min-height: 200px; - Min height constraint causing white space */
+    /* ❌ REMOVED: padding: 16px; - Excessive padding creating white space */
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* NO SCROLLING HERE */
-    padding-bottom: 40px; /* Add padding for the fixed footer - reduced by 50% */
+    overflow: hidden;
+    padding-bottom: 70px; /* Increased by another 20% from 58px - more space for content area */
   }
 
   .mediscribe-mobile-textarea-container {
@@ -465,7 +465,7 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     min-height: 0;
-    padding-bottom: 50px; /* Space for floating buttons - reduced by 50% */
+    padding-bottom: 86px; /* Increased by another 20% from 72px - space for floating buttons */
   }
 
   /* Mobile Keyboard Avoidance - Enhanced */
@@ -730,7 +730,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 50px;
+  bottom: 86px; /* Increased by another 20% from 72px */
   z-index: 100;
   transition: bottom 0.2s ease-out;
   padding: 16px 20px;
@@ -740,5 +740,5 @@
 }
 
 .mediscribe-mobile-transcript {
-  padding-bottom: 40px; /* Adjust this value to match the footer height - reduced by 50% */
+  padding-bottom: 70px; /* Increased by another 20% from 58px - adjusted to match footer height */
 }
