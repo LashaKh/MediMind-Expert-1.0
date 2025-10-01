@@ -251,26 +251,44 @@ export const useForm100Generation = (
       
       if (result.success && result.data) {
         // Update form with generated content
-        setFormDataCallback({
+        const updatedFormData = {
           generatedForm: result.data.generatedForm,
-          generationStatus: 'completed',
+          generationStatus: 'completed' as const,
           generatedAt: new Date()
-        });
+        };
         
+        setFormDataCallback(updatedFormData);
         setGenerationProgress(100);
         
-        // Save to database
-        if (formData.id) {
-          await Form100Service.updateGenerationStatus(
-            formData.id,
-            'completed',
-            result.data.generatedForm
-          );
-        } else {
-          const saveResult = await Form100Service.saveForm100Request(formData);
-          if (saveResult.success) {
-            setFormDataCallback({ id: saveResult.data?.id });
+        // Auto-save to database (CRITICAL: This ensures persistence)
+        try {
+          if (formData.id) {
+            // Update existing record
+            await Form100Service.updateGenerationStatus(
+              formData.id,
+              'completed',
+              result.data.generatedForm
+            );
+            console.log('✅ Form 100 report updated in database:', formData.id);
+          } else {
+            // Create new record
+            const completeFormData = {
+              ...formData,
+              ...updatedFormData
+            } as Form100Request;
+            
+            const saveResult = await Form100Service.saveForm100Request(completeFormData);
+            if (saveResult.success && saveResult.data?.id) {
+              setFormDataCallback({ id: saveResult.data.id });
+              console.log('✅ Form 100 report saved to database:', saveResult.data.id);
+            } else {
+              console.error('❌ Failed to save Form 100 report:', saveResult.error);
+              // Don't throw error - generation was successful, just saving failed
+            }
           }
+        } catch (saveError) {
+          console.error('❌ Error saving Form 100 report to database:', saveError);
+          // Don't throw error - generation was successful, just saving failed
         }
       } else {
         throw new Error(result.error?.message || 'Form generation failed');

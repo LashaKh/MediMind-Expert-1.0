@@ -61,9 +61,82 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
   const [generatedForm, setGeneratedForm] = useState<string | null>(null);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<Form100Request>>(initialData || {});
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // Form validation
   const { formState: { errors }, trigger } = useForm();
+
+  // localStorage keys for session recovery
+  const STORAGE_KEY = `form100_draft_${sessionId}`;
+  const STEP_KEY = `form100_step_${sessionId}`;
+
+  // Auto-save to localStorage on form data changes
+  useEffect(() => {
+    if (isOpen && formData && Object.keys(formData).length > 0) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+        localStorage.setItem(STEP_KEY, currentStep.toString());
+        setHasUnsavedChanges(true);
+      } catch (error) {
+        console.warn('Failed to save form data to localStorage:', error);
+      }
+    }
+  }, [formData, currentStep, isOpen, STORAGE_KEY, STEP_KEY]);
+
+  // Recover form data on modal open
+  useEffect(() => {
+    if (isOpen && sessionId) {
+      try {
+        const savedFormData = localStorage.getItem(STORAGE_KEY);
+        const savedStep = localStorage.getItem(STEP_KEY);
+        
+        if (savedFormData) {
+          const parsedData = JSON.parse(savedFormData);
+          // Only recover if we don't have initial data or if saved data is newer
+          if (!initialData || Object.keys(initialData).length === 0) {
+            setFormData(prev => ({ ...prev, ...parsedData }));
+            if (savedStep) {
+              setCurrentStep(parseInt(savedStep, 10));
+            }
+            console.log('✅ Recovered Form 100 draft from localStorage');
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to recover form data from localStorage:', error);
+      }
+    }
+  }, [isOpen, sessionId, STORAGE_KEY, STEP_KEY, initialData]);
+
+  // Clean up localStorage on successful generation or modal close
+  const clearSavedData = useCallback(() => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STEP_KEY);
+      setHasUnsavedChanges(false);
+      console.log('✅ Cleared Form 100 draft from localStorage');
+    } catch (error) {
+      console.warn('Failed to clear saved data:', error);
+    }
+  }, [STORAGE_KEY, STEP_KEY]);
+
+  // Handle modal close with unsaved changes warning
+  const handleClose = useCallback(() => {
+    if (hasUnsavedChanges && !generatedForm) {
+      const confirmClose = window.confirm(
+        'You have unsaved changes. Are you sure you want to close? Your progress will be saved for later.'
+      );
+      if (!confirmClose) {
+        return;
+      }
+    }
+    
+    // Only clear saved data if form was successfully generated
+    if (generatedForm) {
+      clearSavedData();
+    }
+    
+    onClose();
+  }, [hasUnsavedChanges, generatedForm, clearSavedData, onClose]);
 
   // Premium wizard steps configuration with enhanced icons
   const wizardSteps: WizardStep[] = [
@@ -127,6 +200,8 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
         if (generatedContent) {
           setGeneratedForm(generatedContent);
           setGenerationError(null);
+          // Clear saved draft data after successful generation
+          clearSavedData();
         } else {
           throw new Error('No content generated');
         }
@@ -170,7 +245,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent 
         className="p-0 overflow-hidden bg-white/95 backdrop-blur-xl border-0 rounded-2xl 
                    shadow-[0_32px_64px_-12px_rgba(26,54,93,0.25)] 
@@ -274,7 +349,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
               <div className="relative group">
                 <div className="absolute inset-0 bg-white/10 rounded-2xl blur-lg scale-110 opacity-0 group-hover:opacity-100 transition-all duration-500" />
                 <button
-                  onClick={onClose}
+                  onClick={handleClose}
                   className="relative w-12 h-12 glass-morphism rounded-2xl group-hover:bg-white/20 
                              transition-all duration-500 touch-manipulation group-hover:scale-110 group-hover:rotate-45"
                 >

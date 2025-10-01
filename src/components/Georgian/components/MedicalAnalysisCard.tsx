@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Brain,
   ClipboardList,
@@ -7,10 +7,13 @@ import {
   Stethoscope,
   Activity,
   User,
-  Shield
+  Shield,
+  History,
+  X
 } from 'lucide-react';
 import { formatMarkdown, extractCleanText, hasMarkdownFormatting, countEmptyFields, hasEmptyFields, extractEmptyFieldNames } from '../../../utils/markdownFormatter';
 import Form100Modal from '../../Form100/Form100Modal';
+import Form100ReportHistory from '../../Form100/Form100ReportHistory';
 import { useForm100Modal } from '../../Form100/hooks/useForm100Modal';
 import { Form100Service } from '../../../services/form100Service';
 import { AnalysisCardHeader } from './AnalysisCardHeader';
@@ -222,6 +225,13 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
   const [isForm100Expanded, setIsForm100Expanded] = useState(true);
   const [isForm100EditMode, setIsForm100EditMode] = useState(false);
   const [editedForm100Content, setEditedForm100Content] = useState<string | null>(null);
+  
+  // State for Form 100 report history
+  const [showReportHistory, setShowReportHistory] = useState(false);
+  const [recentReportsCount, setRecentReportsCount] = useState(0);
+
+  // LocalStorage key for this specific analysis
+  const analysisStorageKey = `form100_generated_${sessionId}_${analysis.timestamp}`;
   const analysisType = getAnalysisType(analysis.userInstruction, analysis.model);
   const IconComponent = analysisType.icon;
 
@@ -231,6 +241,50 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
     department: 'Emergency',
     priority: 'normal'
   });
+
+  // Load recent reports count and check for existing Form 100 for this analysis
+  useEffect(() => {
+    // First, check localStorage for previously generated Form 100 for this specific analysis
+    try {
+      const savedReport = localStorage.getItem(analysisStorageKey);
+      if (savedReport) {
+        const reportData = JSON.parse(savedReport);
+        setGeneratedForm100Content(reportData.generatedForm);
+        setForm100GeneratedAt(new Date(reportData.generatedAt));
+        console.log('✅ Recovered Form 100 report from localStorage for this analysis');
+      }
+    } catch (error) {
+      console.warn('Error loading Form 100 from localStorage:', error);
+    }
+
+    if (sessionId && analysisType.supportsForm100) {
+      // Load recent reports count from database
+      Form100Service.getRecentForm100Reports(sessionId, 5)
+        .then(result => {
+          if (result.success && result.data) {
+            setRecentReportsCount(result.data.length);
+            
+            // Check if there's a Form 100 report generated for this specific analysis in database
+            const relatedReport = result.data.find(report => {
+              // Look for reports that contain content similar to this analysis
+              return report.generatedForm && 
+                     report.generationStatus === 'completed' &&
+                     (report.existingERReport?.includes(analysis.aiResponse.substring(0, 100)) ||
+                      report.additionalNotes?.includes(`Analysis from: ${analysisType.type}`));
+            });
+            
+            if (relatedReport && !generatedForm100Content) {
+              setGeneratedForm100Content(relatedReport.generatedForm);
+              setForm100GeneratedAt(relatedReport.generatedAt || relatedReport.createdAt);
+              console.log('✅ Found existing Form 100 report for this analysis in database:', relatedReport.id);
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error loading recent reports count:', error);
+        });
+    }
+  }, [sessionId, analysisType.supportsForm100, analysis.aiResponse, analysisType.type, analysisStorageKey, generatedForm100Content]);
 
   // Analysis type and icon setup
 
@@ -390,7 +444,7 @@ Medical AI Processing System`;
       <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-300" />
       
       {/* Standardized Container with Fixed Height */}
-      <div className="relative bg-white/98 dark:bg-slate-900/98 backdrop-blur-sm rounded-2xl border border-blue-200/40 dark:border-slate-700/40 shadow-lg shadow-blue-500/5 dark:shadow-blue-500/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 min-h-[180px] flex flex-col">
+      <div className="relative bg-white/98 dark:bg-slate-900/98 backdrop-blur-sm rounded-2xl border border-blue-200/40 dark:border-slate-700/40 shadow-lg shadow-blue-500/5 dark:shadow-blue-500/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 min-h-[125px] flex flex-col">
         
         {/* Header Section */}
         <AnalysisCardHeader
@@ -413,6 +467,8 @@ Medical AI Processing System`;
           onCancelEdit={handleCancelEdit}
           onExpandToggle={() => setIsExpanded(!isExpanded)}
           onForm100Generation={handleForm100Generation}
+          onViewReportHistory={() => setShowReportHistory(!showReportHistory)}
+          recentReportsCount={recentReportsCount}
         />
 
         {/* Collapsible Content */}
@@ -492,9 +548,36 @@ Medical AI Processing System`;
             const result = await Form100Service.generateForm100(form100Request);
             
             if (result.success && result.data) {
-              // Store the generated Form 100 content locally
+              const generatedAt = new Date();
+              
+              // Store the generated Form 100 content locally for immediate display
               setGeneratedForm100Content(result.data.generatedForm);
-              setForm100GeneratedAt(new Date());
+              setForm100GeneratedAt(generatedAt);
+              
+              // Save to localStorage for persistence across page refreshes
+              try {
+                const reportData = {
+                  generatedForm: result.data.generatedForm,
+                  generatedAt: generatedAt.toISOString(),
+                  analysisType: analysisType.type,
+                  sessionId: sessionId,
+                  timestamp: analysis.timestamp
+                };
+                localStorage.setItem(analysisStorageKey, JSON.stringify(reportData));
+                console.log('✅ Form 100 report saved to localStorage for persistence');
+              } catch (error) {
+                console.warn('Failed to save Form 100 to localStorage:', error);
+              }
+              
+              // Update the reports count to reflect the new report
+              setRecentReportsCount(prev => prev + 1);
+              
+              // Close the modal after successful generation
+              setTimeout(() => {
+                form100Modal.closeModal();
+              }, 2000); // Give user time to see success message
+              
+              console.log('✅ Form 100 report generated and stored locally');
               
               // Return the generated form to the modal
               return result.data.generatedForm;
@@ -511,6 +594,52 @@ Medical AI Processing System`;
           }
         }}
       />
+
+      {/* Form 100 Report History Modal/Panel */}
+      {showReportHistory && sessionId && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
+            <div className="flex items-center justify-between p-6 border-b border-slate-200">
+              <div className="flex items-center space-x-3">
+                <div className="bg-blue-100 p-2 rounded-lg">
+                  <History className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-slate-900">Form 100 Report History</h2>
+                  <p className="text-slate-600">Previous medical emergency reports</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowReportHistory(false)}
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-slate-600" />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              <Form100ReportHistory
+                userId={sessionId}
+                sessionId={sessionId}
+                onReportSelect={(report) => {
+                  // Handle report selection - could show in modal or copy to clipboard
+                  if (report.generatedForm) {
+                    navigator.clipboard.writeText(report.generatedForm);
+                    alert('Report copied to clipboard!');
+                  }
+                }}
+                onReportDelete={(reportId) => {
+                  // Update the count after deletion
+                  setRecentReportsCount(prev => Math.max(0, prev - 1));
+                }}
+                maxHeight="max-h-[50vh]"
+                showSearch={true}
+                showFilters={true}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

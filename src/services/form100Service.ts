@@ -537,6 +537,183 @@ export class Form100Service {
     }, FORM100_ERROR_CODES.PATIENT_DATA_ERROR);
   }
 
+  // Get user's Form 100 reports with pagination and filtering
+  static async getUserForm100Reports(
+    userId: string,
+    options?: {
+      limit?: number;
+      offset?: number;
+      sessionId?: string;
+      status?: string;
+      startDate?: Date;
+      endDate?: Date;
+    }
+  ): Promise<Form100ServiceResponse<{ reports: Form100Request[]; totalCount: number }>> {
+    return safeAsync(async () => {
+      const { supabase } = await import('../lib/supabase');
+      
+      let query = supabase
+        .from('form100_requests')
+        .select('*', { count: 'exact' })
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+
+      // Apply filters
+      if (options?.sessionId) {
+        query = query.eq('session_id', options.sessionId);
+      }
+      
+      if (options?.status) {
+        query = query.eq('generation_status', options.status);
+      }
+      
+      if (options?.startDate) {
+        query = query.gte('created_at', options.startDate.toISOString());
+      }
+      
+      if (options?.endDate) {
+        query = query.lte('created_at', options.endDate.toISOString());
+      }
+
+      // Apply pagination
+      if (options?.limit) {
+        query = query.limit(options.limit);
+      }
+      
+      if (options?.offset) {
+        query = query.range(options.offset, (options.offset + (options.limit || 10)) - 1);
+      }
+
+      const { data, error, count } = await query;
+
+      if (error) {
+        throw new Error(`Database error: ${error.message}`);
+      }
+
+      // Transform database response to Form100Request objects
+      const reports: Form100Request[] = (data || []).map(row => ({
+        id: row.id,
+        sessionId: row.session_id,
+        userId: row.user_id,
+        patientInfo: row.patient_info,
+        primaryDiagnosis: row.primary_diagnosis,
+        secondaryDiagnoses: row.secondary_diagnoses,
+        symptoms: row.symptoms,
+        vitalSigns: row.vital_signs,
+        voiceTranscript: row.voice_transcript,
+        angiographyReport: row.angiography_report,
+        labResults: row.lab_results,
+        additionalNotes: row.additional_notes,
+        existingERReport: row.existing_er_report,
+        generatedForm: row.generated_form,
+        generationStatus: row.generation_status,
+        generationError: row.generation_error,
+        priority: row.priority,
+        department: row.department,
+        attendingPhysician: row.attending_physician,
+        submissionDeadline: row.submission_deadline ? new Date(row.submission_deadline) : undefined,
+        createdAt: new Date(row.created_at),
+        updatedAt: new Date(row.updated_at),
+        generatedAt: row.generated_at ? new Date(row.generated_at) : undefined
+      }));
+
+      return {
+        reports,
+        totalCount: count || 0
+      };
+      
+    }, FORM100_ERROR_CODES.PATIENT_DATA_ERROR);
+  }
+
+  // Get recent Form 100 reports for quick access
+  static async getRecentForm100Reports(
+    userId: string,
+    limit: number = 5
+  ): Promise<Form100ServiceResponse<Form100Request[]>> {
+    return safeAsync(async () => {
+      const result = await this.getUserForm100Reports(userId, { 
+        limit,
+        status: 'completed' // Only show completed reports
+      });
+      
+      if (!result.success) {
+        throw new Error(result.error?.message || 'Failed to fetch recent reports');
+      }
+      
+      return result.data?.reports || [];
+      
+    }, FORM100_ERROR_CODES.PATIENT_DATA_ERROR);
+  }
+
+  // Delete Form 100 report
+  static async deleteForm100Report(
+    reportId: string,
+    userId: string
+  ): Promise<Form100ServiceResponse<boolean>> {
+    return safeAsync(async () => {
+      const { supabase } = await import('../lib/supabase');
+      
+      const { error } = await supabase
+        .from('form100_requests')
+        .delete()
+        .eq('id', reportId)
+        .eq('user_id', userId); // Ensure user can only delete their own reports
+
+      if (error) {
+        throw new Error(`Database error: ${error.message}`);
+      }
+
+      return true;
+      
+    }, FORM100_ERROR_CODES.PATIENT_DATA_ERROR);
+  }
+
+  // Get report statistics for user dashboard
+  static async getForm100Statistics(
+    userId: string
+  ): Promise<Form100ServiceResponse<{
+    totalReports: number;
+    completedReports: number;
+    failedReports: number;
+    pendingReports: number;
+    lastGenerated?: Date;
+  }>> {
+    return safeAsync(async () => {
+      const { supabase } = await import('../lib/supabase');
+      
+      const { data, error } = await supabase
+        .from('form100_requests')
+        .select('generation_status, created_at, generated_at')
+        .eq('user_id', userId);
+
+      if (error) {
+        throw new Error(`Database error: ${error.message}`);
+      }
+
+      const reports = data || [];
+      const totalReports = reports.length;
+      const completedReports = reports.filter(r => r.generation_status === 'completed').length;
+      const failedReports = reports.filter(r => r.generation_status === 'failed').length;
+      const pendingReports = reports.filter(r => ['pending', 'processing'].includes(r.generation_status)).length;
+      
+      // Find most recent generated report
+      const lastGeneratedReport = reports
+        .filter(r => r.generated_at)
+        .sort((a, b) => new Date(b.generated_at).getTime() - new Date(a.generated_at).getTime())[0];
+      
+      const lastGenerated = lastGeneratedReport ? new Date(lastGeneratedReport.generated_at) : undefined;
+
+      return {
+        totalReports,
+        completedReports,
+        failedReports,
+        pendingReports,
+        lastGenerated
+      };
+      
+    }, FORM100_ERROR_CODES.PATIENT_DATA_ERROR);
+  }
+
   // Test Flowise connection
   static async testFlowiseConnection(): Promise<Form100ServiceResponse<boolean>> {
     return safeAsync(async () => {
