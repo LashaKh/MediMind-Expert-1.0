@@ -31,10 +31,9 @@ import { Dialog, DialogContent } from '../ui/Dialog';
 import { Button } from '../ui/button';
 import { cn } from '../../lib/utils';
 import { Form100ModalProps, Form100Request } from '../../types/form100';
-import DiagnosisDropdown from './DiagnosisDropdown';
+import DiagnosisCards from './DiagnosisCards';
 import VoiceTranscriptField from './VoiceTranscriptField';
 import AngiographyReportField from './AngiographyReportField';
-import { getNSTEMIDiagnoses } from './config/diagnosisConfig';
 
 // Multi-step wizard configuration
 interface WizardStep {
@@ -519,13 +518,8 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
 };
 
 
-// Step 1: Clinical Data - Advanced Medical Interface
-const ClinicalDataStep: React.FC<any> = ({ formData, updateFormData, reportType }) => {
-  // Determine if this is an I24.9 NSTEMI report
-  const isNSTEMIReport = reportType?.toLowerCase().includes('i24.9') || 
-                         reportType?.toLowerCase().includes('nstemi');
-  const specializedDiagnoses = isNSTEMIReport ? getNSTEMIDiagnoses() : undefined;
-
+// Step 1: Clinical Data - Advanced Medical Interface with Diagnosis Cards
+const ClinicalDataStep: React.FC<any> = ({ formData, updateFormData }) => {
   return (
     <div className="space-y-6">
       {/* Sophisticated section header */}
@@ -536,46 +530,13 @@ const ClinicalDataStep: React.FC<any> = ({ formData, updateFormData, reportType 
         </div>
       </div>
       
-      {/* Prominent Primary Diagnosis Section */}
-      <div className="max-w-4xl mx-auto">
-        <div className="space-y-6">
-          {/* Enhanced diagnosis label with prominent styling */}
-          <div className="text-center mb-6">
-            <label className="block text-2xl font-bold text-[#1a365d] mb-3 flex items-center justify-center space-x-3">
-              <div className="w-4 h-4 bg-[#2b6cb0] rounded-full animate-pulse" />
-              <span>Primary Diagnosis</span>
-              <span className="text-lg text-red-500 font-bold">*</span>
-              <div className="w-4 h-4 bg-[#2b6cb0] rounded-full animate-pulse" />
-            </label>
-          </div>
-          
-          {/* Prominent diagnosis dropdown with enhanced styling */}
-          <div className="relative group">
-            <div className="absolute -inset-2 bg-gradient-to-r from-[#2b6cb0]/30 to-[#63b3ed]/30 rounded-3xl blur-lg opacity-0 group-focus-within:opacity-100 transition-all duration-700" />
-            <div className="relative bg-white/95 backdrop-blur-sm border-2 border-[#63b3ed]/30 rounded-3xl p-6 shadow-xl">
-              <DiagnosisDropdown
-                value={formData.primaryDiagnosis}
-                onChange={(diagnosis) => updateFormData({ primaryDiagnosis: diagnosis })}
-                required
-                placeholder="Select primary diagnosis..."
-                specializedDiagnosisList={specializedDiagnoses}
-                className="text-lg"
-              />
-            </div>
-          </div>
-          
-          {/* Additional information for specialized lists */}
-          {specializedDiagnoses && (
-            <div className="text-center mt-4">
-              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-50 rounded-lg border border-blue-200">
-                <Heart className="w-5 h-5 text-blue-600" />
-                <span className="text-sm font-medium text-blue-800">
-                  Showing specialized NSTEMI diagnosis codes
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
+      {/* Diagnosis Cards Section */}
+      <div className="max-w-6xl mx-auto">
+        <DiagnosisCards
+          selectedDiagnosis={formData.primaryDiagnosis}
+          onDiagnosisSelect={(diagnosis) => updateFormData({ primaryDiagnosis: diagnosis })}
+          className="mt-6"
+        />
       </div>
     </div>
   );

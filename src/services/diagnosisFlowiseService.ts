@@ -24,11 +24,11 @@ interface DiagnosisContext {
   specialty: string;
 }
 
-// Blue card (Heart Failure) endpoint
+// Cardiac consult endpoints - updated to match the user's requirements
 const HEART_FAILURE_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/89920f52-74cb-46bc-bf6c-b9099746dfe9";
 
-// Red card (NSTEMI) endpoint  
-const NSTEMI_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4";
+// Acute Ischaemic Heart Disease (I24.9) endpoint - corrected to use the working endpoint from the diagnosis config
+const ACUTE_ISCHAEMIC_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4";
 
 // Pulmonary embolism (I26.0) endpoint
 const PULMONARY_EMBOLISM_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3602b392-65e5-4dbd-a649-cac18280bea5";
@@ -96,14 +96,14 @@ export async function generateDiagnosisReport(
     if (diagnosis.icdCode === 'I50.0') {
       apiUrl = HEART_FAILURE_API_URL;
     } else if (diagnosis.icdCode === 'I24.9') {
-      apiUrl = NSTEMI_API_URL;
+      apiUrl = ACUTE_ISCHAEMIC_API_URL;
     } else if (diagnosis.icdCode === 'I26.0') {
       apiUrl = PULMONARY_EMBOLISM_API_URL;
     } else if (diagnosis.icdCode === 'I21.0') {
       apiUrl = STEMI_API_URL;
     } else {
-      // Fallback to NSTEMI for unknown codes
-      apiUrl = NSTEMI_API_URL;
+      // Fallback to Acute Ischaemic for unknown codes
+      apiUrl = ACUTE_ISCHAEMIC_API_URL;
     }
     console.log('🌐 API URL selected:', apiUrl);
 
@@ -194,12 +194,12 @@ export const HEART_FAILURE_DIAGNOSIS: DiagnosisContext = {
 };
 
 /**
- * NSTEMI diagnosis context
+ * Acute Ischaemic Heart Disease diagnosis context
  */
-export const NSTEMI_DIAGNOSIS: DiagnosisContext = {
+export const ACUTE_ISCHAEMIC_DIAGNOSIS: DiagnosisContext = {
   icdCode: 'I24.9',
   diagnosisGeorgian: 'გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი',
-  diagnosisEnglish: 'Non-ST elevation myocardial infarction',
+  diagnosisEnglish: 'Acute ischaemic heart disease, unspecified',
   specialty: 'Cardiology'
 };
 
@@ -232,11 +232,11 @@ export async function generateHeartFailureReport(transcript: string, template?: 
 }
 
 /**
- * Generate NSTEMI consultation report
- * Convenience function for the specific NSTEMI diagnosis
+ * Generate Acute Ischaemic Heart Disease consultation report
+ * Convenience function for the specific Acute Ischaemic Heart Disease diagnosis
  */
-export async function generateNSTEMIReport(transcript: string, template?: UserReportTemplate) {
-  return generateDiagnosisReport(transcript, NSTEMI_DIAGNOSIS, template);
+export async function generateAcuteIschaemicReport(transcript: string, template?: UserReportTemplate) {
+  return generateDiagnosisReport(transcript, ACUTE_ISCHAEMIC_DIAGNOSIS, template);
 }
 
 /**
@@ -262,7 +262,8 @@ export function isDiagnosisTemplate(instruction: string): boolean {
   return instruction.toLowerCase().includes('diagnosis') && 
          (instruction.toLowerCase().includes('i50.0') || 
           instruction.toLowerCase().includes('i24.9') ||
-          instruction.toLowerCase().includes('i26.0'));
+          instruction.toLowerCase().includes('i26.0') ||
+          instruction.toLowerCase().includes('i21.0'));
 }
 
 /**
@@ -276,9 +277,10 @@ export function extractDiagnosisFromInstruction(instruction: string): DiagnosisC
   }
   
   if (instruction.toLowerCase().includes('i24.9') || 
-      instruction.toLowerCase().includes('nstemi') ||
+      instruction.toLowerCase().includes('acute ischaemic') ||
+      instruction.toLowerCase().includes('acute ischemic') ||
       instruction.toLowerCase().includes('გულის მწვავე იშემიური ავადმყოფობა')) {
-    return NSTEMI_DIAGNOSIS;
+    return ACUTE_ISCHAEMIC_DIAGNOSIS;
   }
   
   if (instruction.toLowerCase().includes('i26.0') || 
@@ -307,7 +309,7 @@ export async function generateTemplateBasedReport(
   diagnosis?: DiagnosisContext
 ): Promise<{ success: true; report: string } | { success: false; error: string }> {
   // If diagnosis context is provided and matches our specialized endpoints, use diagnosis service
-  if (diagnosis && (diagnosis.icdCode === 'I50.0' || diagnosis.icdCode === 'I24.9' || diagnosis.icdCode === 'I26.0')) {
+  if (diagnosis && (diagnosis.icdCode === 'I50.0' || diagnosis.icdCode === 'I24.9' || diagnosis.icdCode === 'I26.0' || diagnosis.icdCode === 'I21.0')) {
     return generateDiagnosisReport(transcript, diagnosis, template);
   }
   

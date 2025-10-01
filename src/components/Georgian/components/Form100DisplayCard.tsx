@@ -7,9 +7,6 @@ import {
   X,
   Clock,
   CheckCircle,
-  Copy,
-  Download,
-  Share2,
   Crown
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
@@ -40,9 +37,7 @@ interface Form100DisplayCardProps {
   onForm100EditToggle: () => void;
   onForm100EditComplete: (editResult: any) => void;
   onForm100EditError: (error: any) => void;
-  onCopy?: (analysis: ProcessingHistory) => void;
-  onDownload?: (analysis: ProcessingHistory) => void;
-  onShare?: (analysis: ProcessingHistory) => void;
+  // onCopy, onDownload, onShare removed per user request
 }
 
 export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
@@ -57,10 +52,8 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
   onForm100ExpandToggle,
   onForm100EditToggle,
   onForm100EditComplete,
-  onForm100EditError,
-  onCopy,
-  onDownload,
-  onShare
+  onForm100EditError
+  // onCopy, onDownload, onShare removed
 }) => {
   if (!generatedForm100Content) {
     return null;
@@ -235,49 +228,9 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
               
               <div className="relative p-4 sm:p-6">
                 <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                  {/* Form 100 Actions */}
+                  {/* Form 100 Actions - Copy, Export, Share buttons removed per user request */}
                   <div className="flex flex-wrap items-center gap-2 sm:space-x-3">
-                    <MedicalButton
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => onCopy?.({ 
-                        ...analysis, 
-                        aiResponse: generatedForm100Content,
-                        userInstruction: 'Form 100 Emergency Report' 
-                      })}
-                      className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-[#63b3ed]/30 hover:bg-[#63b3ed]/10"
-                    >
-                      <Copy className="w-4 h-4 mr-2" />
-                      Copy Form 100
-                    </MedicalButton>
-                    
-                    <MedicalButton
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => onDownload?.({ 
-                        ...analysis, 
-                        aiResponse: generatedForm100Content,
-                        userInstruction: 'Form 100 Emergency Report' 
-                      })}
-                      className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-[#63b3ed]/30 hover:bg-[#63b3ed]/10"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Export
-                    </MedicalButton>
-                    
-                    <MedicalButton
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => onShare?.({ 
-                        ...analysis, 
-                        aiResponse: generatedForm100Content,
-                        userInstruction: 'Form 100 Emergency Report' 
-                      })}
-                      className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-[#63b3ed]/30 hover:bg-[#63b3ed]/10"
-                    >
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share
-                    </MedicalButton>
+                    {/* Actions removed */}
                   </div>
                   
                   {/* Form 100 Status */}

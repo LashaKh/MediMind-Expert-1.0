@@ -2,9 +2,6 @@ import React from 'react';
 import {
   ChevronDown,
   ChevronUp,
-  Copy,
-  Download,
-  Share2,
   Edit3,
   Settings,
   AlertCircle,
@@ -48,10 +45,7 @@ interface AnalysisCardHeaderProps {
   hasEmptyFieldsPresent: boolean;
   emptyFieldsCount: number;
   
-  // Handlers
-  onCopy: () => void;
-  onDownload: () => void;
-  onShare?: () => void;
+  // Handlers (Copy, Download, Share removed)
   onDelete?: () => void;
   onEdit: () => void;
   onCancelEdit: () => void;
@@ -73,9 +67,6 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
   enableEditing = false,
   hasEmptyFieldsPresent,
   emptyFieldsCount,
-  onCopy,
-  onDownload,
-  onShare,
   onDelete,
   onEdit,
   onCancelEdit,
@@ -227,51 +218,9 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
           <div className="space-y-3 pt-2">
             {/* Mobile Layout - Stacked Rows */}
             <div className="block md:hidden">
-              {/* First Row: Main Actions */}
+              {/* First Row: Main Actions - Removed Copy, Export, Share buttons */}
               <div className="flex flex-wrap items-center gap-1.5 mb-2">
-                {/* Enhanced Copy Button */}
-                <div className="relative group flex-shrink-0">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                  <MedicalButton
-                    variant="ghost"
-                    size="sm"
-                    leftIcon={Copy}
-                    onClick={onCopy}
-                    className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[30px] px-2"
-                  >
-                    <span className="text-xs">Copy</span>
-                  </MedicalButton>
-                </div>
-                
-                {/* Enhanced Export Button */}
-                <div className="relative group flex-shrink-0">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                  <MedicalButton
-                    variant="ghost"
-                    size="sm"
-                    leftIcon={Download}
-                    onClick={onDownload}
-                    className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[30px] px-2"
-                  >
-                    <span className="text-xs">Export</span>
-                  </MedicalButton>
-                </div>
-                
-                {/* Enhanced Share Button */}
-                {navigator.share && onShare && (
-                  <div className="relative group flex-shrink-0">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    <MedicalButton
-                      variant="ghost"
-                      size="sm"
-                      leftIcon={Share2}
-                      onClick={onShare}
-                      className="relative text-slate-600 dark:text-slate-400 hover:text-[#1a365d] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[30px] px-2"
-                    >
-                      <span className="text-xs">Share</span>
-                    </MedicalButton>
-                  </div>
-                )}
+                {/* Actions removed per user request */}
               </div>
               
               {/* Second Row: Edit, Form 100, and Expand Actions */}
@@ -379,49 +328,7 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
             {/* Desktop Layout - Single Row */}
             <div className="hidden md:flex md:items-center md:justify-between">
               <div className="flex items-center space-x-3">
-                {/* Enhanced Copy Button */}
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                  <MedicalButton
-                    variant="ghost"
-                    size="sm"
-                    leftIcon={Copy}
-                    onClick={onCopy}
-                    className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                  >
-                    Copy
-                  </MedicalButton>
-                </div>
-                
-                {/* Enhanced Export Button */}
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 to-[#1a365d]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                  <MedicalButton
-                    variant="ghost"
-                    size="sm"
-                    leftIcon={Download}
-                    onClick={onDownload}
-                    className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                  >
-                    Export
-                  </MedicalButton>
-                </div>
-                
-                {/* Enhanced Share Button */}
-                {navigator.share && onShare && (
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    <MedicalButton
-                      variant="ghost"
-                      size="sm"
-                      leftIcon={Share2}
-                      onClick={onShare}
-                      className="relative text-slate-600 dark:text-slate-400 hover:text-[#1a365d] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
-                    >
-                      Share
-                    </MedicalButton>
-                  </div>
-                )}
+                {/* Copy, Export, and Share buttons removed per user request */}
                 
                 {/* Premium Edit Button */}
                 {enableEditing && analysisType.isDiagnosis && (

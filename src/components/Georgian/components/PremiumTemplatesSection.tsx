@@ -55,11 +55,11 @@ const PREMIUM_TEMPLATES: Template[] = [
     isFeatured: true
   },
   {
-    id: 'diagnosis-nstemi',
+    id: 'diagnosis-acute-ischaemic',
     category: 'Cardiologist Consults',
     title: 'Initial Diagnosis - (I24.9) გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი',
-    instruction: 'Generate a comprehensive NSTEMI diagnosis report (I24.9 - Non-ST elevation myocardial infarction / გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი) including clinical presentation, diagnostic criteria, risk stratification, treatment protocol, and disposition recommendations based on this medical transcript.',
-    description: 'Specialized NSTEMI diagnosis and management protocol with ICD-10 coding to I24.9 - გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი',
+    instruction: 'Generate a comprehensive Acute Ischaemic Heart Disease diagnosis report (I24.9 - Acute ischaemic heart disease, unspecified / გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი) including clinical presentation, diagnostic criteria, risk stratification, treatment protocol, and disposition recommendations based on this medical transcript.',
+    description: 'Specialized Acute Ischaemic Heart Disease diagnosis and management protocol with ICD-10 coding to I24.9 - გულის მწვავე იშემიური ავადმყოფობა, დაუზუსტებელი',
     icon: HeartHandshake,
     color: 'from-[#1a365d] via-[#2b6cb0] to-[#1a365d]',
     priority: 'high',

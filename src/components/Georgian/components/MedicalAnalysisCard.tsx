@@ -70,33 +70,29 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
   const isDiagnosis = lower.includes('i50.0') || 
                       lower.includes('i24.9') ||
                       lower.includes('i26.0') ||
+                      lower.includes('i21.0') ||
                       lower.includes('heart failure') ||
-                      lower.includes('nstemi') ||
+                      lower.includes('congestive heart failure') ||
+                      lower.includes('acute ischaemic') ||
+                      lower.includes('acute ischemic') ||
                       lower.includes('pulmonary embolism') ||
+                      lower.includes('stemi') ||
+                      lower.includes('st elevation') ||
                       lower.includes('გულის შეგუბებითი უკმარისობა') ||
                       lower.includes('გულის მწვავე იშემიური ავადმყოფობა') ||
                       lower.includes('ფილტვის არტერიის ემბოლია') ||
+                      lower.includes('st ელევაციური მიოკარდიუმის ინფარქტი') ||
                       (lower.includes('diagnosis') && lower.includes('emergency room')) ||
+                      (lower.includes('diagnosis') && lower.includes('cardiologist')) ||
                       lower.includes('template:') || // Add support for custom templates
                       lower.includes('medical report') || // Add support for general medical reports
                       lower.includes('er report') || // Add support for ER reports
                       lower.includes('notes er report') || // Add support for specific ER note reports
                       isForm100Eligible;
   
-  // Handle Form 100 specific reports first
-  if (isForm100Eligible) {
-    return {
-      type: 'Form 100 Emergency Consultation Report',
-      icon: ClipboardList,
-      color: 'from-[#2b6cb0] to-[#1a365d]',
-      isDiagnosis: true,
-      endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy',
-      supportsForm100: true
-    };
-  }
-
   if (isDiagnosis) {
-    if (lower.includes('i50.0') || lower.includes('heart failure') || lower.includes('გულის შეგუბებითი უკმარისობა')) {
+    // Check specific cardiac diagnoses FIRST before generic Form 100
+    if (lower.includes('i50.0') || lower.includes('heart failure') || lower.includes('congestive heart failure') || lower.includes('გულის შეგუბებითი უკმარისობა')) {
       return { 
         type: 'Heart Failure ER Report (I50.0)', 
         icon: HeartHandshake, 
@@ -106,9 +102,9 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
         supportsForm100: true
       };
     }
-    if (lower.includes('i24.9') || lower.includes('nstemi') || lower.includes('გულის მწვავე იშემიური ავადმყოფობა')) {
+    if (lower.includes('i24.9') || lower.includes('acute ischaemic') || lower.includes('acute ischemic') || lower.includes('გულის მწვავე იშემიური ავადმყოფობა')) {
       return { 
-        type: 'NSTEMI ER Report (I24.9)', 
+        type: 'Acute Ischaemic Heart Disease ER Report (I24.9)', 
         icon: HeartHandshake, 
         color: 'from-[#1a365d] to-[#2b6cb0]', 
         isDiagnosis: true,
@@ -133,6 +129,18 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
         color: 'from-[#dc2626] to-[#991b1b]', 
         isDiagnosis: true,
         endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/a18d5e28-05a5-4991-af4a-186ceb558383',
+        supportsForm100: true
+      };
+    }
+    
+    // Handle Form 100 specific reports AFTER specific diagnoses
+    if (isForm100Eligible) {
+      return {
+        type: 'Form 100 Emergency Consultation Report',
+        icon: ClipboardList,
+        color: 'from-[#2b6cb0] to-[#1a365d]',
+        isDiagnosis: true,
+        endpoint: 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/flowise-proxy',
         supportsForm100: true
       };
     }
@@ -459,9 +467,7 @@ Medical AI Processing System`;
           enableEditing={enableEditing}
           hasEmptyFieldsPresent={hasEmptyFieldsPresent}
           emptyFieldsCount={emptyFieldsCount}
-          onCopy={handleCopy}
-          onDownload={handleDownload}
-          onShare={handleShare}
+          // onCopy, onDownload, onShare removed per user request
           onDelete={onDelete ? handleDelete : undefined}
           onEdit={handleEdit}
           onCancelEdit={handleCancelEdit}
@@ -514,9 +520,7 @@ Medical AI Processing System`;
         onForm100EditToggle={() => setIsForm100EditMode(!isForm100EditMode)}
         onForm100EditComplete={handleForm100EditComplete}
         onForm100EditError={handleForm100EditError}
-        onCopy={onCopy}
-        onDownload={onDownload}
-        onShare={onShare}
+        // onCopy, onDownload, onShare removed per user request
       />
 
       {/* Form 100 Modal Integration */}
