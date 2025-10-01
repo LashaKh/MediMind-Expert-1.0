@@ -6,7 +6,13 @@ import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
 import { Brain } from 'lucide-react';
 
 // Import file processing utilities - using case study approach
-import { processFileForUpload } from '../../utils/fileUpload';
+import { 
+  processFileForUpload, 
+  validateFileForMedicalTranscription, 
+  compressImageForMedicalUse,
+  convertBase64ToFile,
+  FILE_SIZE_LIMITS 
+} from '../../utils/fileUpload';
 import { processCaseAttachments, ProcessedAttachment } from '../../utils/caseFileProcessor';
 import type { ProgressInfo } from '../../utils/pdfTextExtractor';
 import type { Attachment } from '../../types/chat';
@@ -377,17 +383,65 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     try {
       const processedAttachments: Attachment[] = [];
 
-      // Step 1: Basic file processing (convert to base64)
+      // Step 1: Validate and process files with compression if needed
       for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+        let file = files[i];
+        const basePercentage = Math.round((i / files.length) * 40);
+        
         setAttachmentProgress({
           stage: 'processing',
-          stageDescription: `Processing ${file.name}...`,
-          percentage: Math.round((i / files.length) * 40), // First 40% for basic processing
+          stageDescription: `Validating ${file.name}...`,
+          percentage: basePercentage,
           method: 'standard'
         });
 
-        // Use simple processing like case studies (just convert to base64)
+        // Validate file for medical transcription
+        const validation = validateFileForMedicalTranscription(file);
+        if (!validation.isValid) {
+          console.error(`❌ File validation failed: ${validation.error}`);
+          setAttachmentProgress({
+            stage: 'error',
+            stageDescription: validation.error || 'File validation failed',
+            percentage: basePercentage,
+            method: 'error'
+          });
+          
+          // Show error for 3 seconds then continue with other files
+          setTimeout(() => {
+            if (i === files.length - 1) {
+              setAttachmentProgress(null);
+            }
+          }, 3000);
+          continue;
+        }
+
+        // Compress image if needed
+        if (validation.needsCompression) {
+          setAttachmentProgress({
+            stage: 'processing',
+            stageDescription: `Compressing ${file.name} for optimal performance...`,
+            percentage: basePercentage + 10,
+            method: 'compression'
+          });
+
+          try {
+            file = await compressImageForMedicalUse(file, 500); // Compress to 500KB max
+            console.log(`✅ Image compressed: ${files[i].name} (${(files[i].size / 1024).toFixed(1)}KB → ${(file.size / 1024).toFixed(1)}KB)`);
+          } catch (compressionError) {
+            console.warn(`⚠️ Compression failed for ${file.name}, using original:`, compressionError);
+            // Continue with original file
+            file = files[i];
+          }
+        }
+
+        setAttachmentProgress({
+          stage: 'processing',
+          stageDescription: `Processing ${file.name}...`,
+          percentage: basePercentage + 20,
+          method: 'standard'
+        });
+
+        // Convert to base64 with optimized method
         const processed = await processFileForUpload(file);
         processedAttachments.push({
           ...processed,
@@ -406,28 +460,28 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         method: 'ocr'
       });
 
-      // Convert to case attachment format for text extraction
+      // Convert to case attachment format for text extraction using optimized conversion
       const caseAttachments = processedAttachments.map(attachment => {
         const base64Data = attachment.base64Data || '';
-        let fileBlob: Blob;
+        let file: File;
         
         if (base64Data.startsWith('data:')) {
-          const base64String = base64Data.split(',')[1];
           const mimeType = base64Data.split(';')[0].split(':')[1];
-          const byteCharacters = atob(base64String);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          try {
+            // Use optimized base64 to File conversion that handles large files efficiently
+            file = convertBase64ToFile(base64Data, attachment.name, mimeType);
+          } catch (error) {
+            console.error(`❌ Failed to convert base64 to file for ${attachment.name}:`, error);
+            // Fallback to empty file
+            file = new File([], attachment.name, { type: attachment.type });
           }
-          const byteArray = new Uint8Array(byteNumbers);
-          fileBlob = new Blob([byteArray], { type: mimeType });
         } else {
-          fileBlob = new Blob([], { type: attachment.type });
+          file = new File([], attachment.name, { type: attachment.type });
         }
 
         return {
           id: attachment.id,
-          file: new File([fileBlob], attachment.name, { type: attachment.type }),
+          file,
           base64Data: base64Data,
           uploadType: attachment.type.startsWith('image/') ? 'image' as const : 
                     attachment.type === 'application/pdf' ? 'pdf' as const : 'document' as const,
@@ -486,18 +540,38 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       console.log('✅ Files processed successfully with immediate text extraction');
     } catch (error) {
       console.error('❌ File processing failed:', error);
+      
+      // Provide more specific error messages for common issues
+      let errorMessage = 'File processing failed';
+      if (error instanceof Error) {
+        if (error.message.includes('memory') || error.message.includes('allocation')) {
+          errorMessage = 'File too large for processing. Please use smaller images (under 5MB).';
+        } else if (error.message.includes('base64') || error.message.includes('convert')) {
+          errorMessage = 'File format error. Please try uploading a different image format.';
+        } else if (error.message.includes('compression')) {
+          errorMessage = 'Image compression failed. File may be corrupted.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
       setAttachmentProgress({
         stage: 'error',
-        stageDescription: `File processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        stageDescription: errorMessage,
         percentage: 0,
         method: 'error'
       });
 
-      // Mark failed files
+      // Clear error message after 5 seconds for better UX
+      setTimeout(() => {
+        setAttachmentProgress(null);
+      }, 5000);
+
+      // Mark failed files with specific error info
       setAttachedFiles(prev => prev.map(file => ({
         ...file,
         textExtractionStatus: 'failed',
-        textExtractionError: error instanceof Error ? error.message : 'Unknown error'
+        textExtractionError: errorMessage
       })));
     } finally {
       setIsProcessingAttachment(false);

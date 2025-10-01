@@ -94,11 +94,11 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
   const CurrentEngineIcon = currentEngine.icon;
 
   return (
-    <div className="w-full lg:gap-3" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.75rem'}}>
+    <div className="w-full lg:gap-3 hidden md:flex" style={{justifyContent: 'space-between', alignItems: 'center', gap: '0.75rem'}}>
       
-      {/* Compact Engine Selection - LEFT SIDE */}
+      {/* Compact Engine Selection - LEFT SIDE - Hidden on Mobile */}
       {onModelChange && (
-        <div ref={engineRef} style={{width: 'calc(50% - 0.375rem)'}}>
+        <div ref={engineRef} style={{width: 'calc(50% - 0.375rem)'}} className="hidden md:block">
           
           {/* Compact Button */}
           <button
@@ -289,9 +289,9 @@ export const ProductionControls: React.FC<ProductionControlsProps> = ({
         </div>
       )}
       
-      {/* Speaker Detection - RIGHT SIDE */}
+      {/* Speaker Detection - RIGHT SIDE - Hidden on Mobile */}
       {onToggleSpeakerDiarization && (
-        <div ref={speakerRef} style={{width: 'calc(50% - 0.375rem)'}}>
+        <div ref={speakerRef} style={{width: 'calc(50% - 0.375rem)'}} className="hidden md:block">
             
             {/* Responsive Speaker Toggle Button */}
             <div

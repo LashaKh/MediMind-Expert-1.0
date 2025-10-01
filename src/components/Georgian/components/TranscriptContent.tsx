@@ -325,26 +325,27 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
 
           {/* Attached Files Display */}
           {attachedFiles.length > 0 && (
-            <div className="mb-4 px-3 sm:px-4 lg:px-4">
-              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 p-4">
-                <h4 className="text-sm font-semibold text-[#1a365d] dark:text-[#63b3ed] mb-3 flex items-center space-x-2">
-                  <FileIcon className="w-4 h-4" />
-                  <span>Attached Files ({attachedFiles.length})</span>
+            <div className="mb-2 md:mb-4 px-2 md:px-3 lg:px-4">
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl md:rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 p-2 md:p-4">
+                <h4 className="text-xs md:text-sm font-semibold text-[#1a365d] dark:text-[#63b3ed] mb-2 md:mb-3 flex items-center space-x-1 md:space-x-2">
+                  <FileIcon className="w-3 h-3 md:w-4 md:h-4" />
+                  <span className="md:hidden">{attachedFiles.length} files</span>
+                  <span className="hidden md:inline">Attached Files ({attachedFiles.length})</span>
                   {isProcessingAttachment && (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" />
                   )}
                 </h4>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-col md:flex-row md:flex-wrap gap-2 md:gap-3">
                   {attachedFiles.map((attachment) => (
-                    <div key={attachment.id} className="group relative flex items-center space-x-3 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#1a365d]/30 dark:to-[#2b6cb0]/30 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 px-4 py-3 rounded-xl hover:shadow-lg hover:shadow-[#2b6cb0]/10 transition-all duration-300">
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center shadow-lg">
-                        <FileIcon className="w-5 h-5 text-white" />
+                    <div key={attachment.id} className="group relative flex items-center space-x-2 md:space-x-3 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 dark:from-[#1a365d]/30 dark:to-[#2b6cb0]/30 border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 px-2 md:px-4 py-2 md:py-3 rounded-lg md:rounded-xl hover:shadow-lg hover:shadow-[#2b6cb0]/10 transition-all duration-300">
+                      <div className="w-6 h-6 md:w-10 md:h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-lg md:rounded-xl flex items-center justify-center shadow-lg">
+                        <FileIcon className="w-3 h-3 md:w-5 md:h-5 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[#1a365d] dark:text-[#90cdf4] font-semibold truncate max-w-40">
+                        <p className="text-[#1a365d] dark:text-[#90cdf4] font-medium md:font-semibold text-xs md:text-sm truncate max-w-32 md:max-w-40">
                           {attachment.name}
                         </p>
-                        <div className="flex items-center space-x-2 text-xs">
+                        <div className="flex items-center space-x-1 md:space-x-2 text-[10px] md:text-xs">
                           <span className="text-[#2b6cb0] dark:text-[#63b3ed]">
                             {(attachment.size / 1024).toFixed(1)} KB
                           </span>
@@ -353,30 +354,30 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                             switch (status) {
                               case 'processing':
                                 return (
-                                  <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                                    <Loader2 className="w-3 h-3 animate-spin" />
-                                    Processing...
+                                  <span className="bg-yellow-100 text-yellow-800 px-1 md:px-2 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium flex items-center gap-0.5 md:gap-1">
+                                    <Loader2 className="w-2 h-2 md:w-3 md:h-3 animate-spin" />
+                                    <span className="hidden md:inline">Processing...</span>
                                   </span>
                                 );
                               case 'success':
                                 return (
-                                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                  <span className="bg-green-100 text-green-800 px-1 md:px-2 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium flex items-center gap-0.5 md:gap-1">
                                     <span className="text-green-600">✅</span>
-                                    Text extracted
+                                    <span className="hidden md:inline">Text extracted</span>
                                   </span>
                                 );
                               case 'failed':
                                 return (
-                                  <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1" title={attachment.textExtractionError}>
+                                  <span className="bg-red-100 text-red-800 px-1 md:px-2 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium flex items-center gap-0.5 md:gap-1" title={attachment.textExtractionError}>
                                     <span className="text-red-600">❌</span>
-                                    Failed
+                                    <span className="hidden md:inline">Failed</span>
                                   </span>
                                 );
                               case 'pending':
                                 return (
-                                  <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                  <span className="bg-gray-100 text-gray-600 px-1 md:px-2 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium flex items-center gap-0.5 md:gap-1">
                                     <span className="text-gray-500">⏸️</span>
-                                    Pending
+                                    <span className="hidden md:inline">Pending</span>
                                   </span>
                                 );
                               default:
@@ -392,10 +393,10 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                       {onRemoveAttachment && (
                         <button
                           onClick={() => onRemoveAttachment(attachment.id)}
-                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
+                          className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-5 h-5 md:w-6 md:h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-70 md:opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
                           title="Remove attachment"
                         >
-                          <X className="w-4 h-4" />
+                          <X className="w-3 h-3 md:w-4 md:h-4" />
                         </button>
                       )}
                     </div>
