@@ -210,7 +210,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding-bottom: 70px; /* Increased by another 20% from 58px - more space for content area */
+    padding-bottom: 127px; /* Increased by 30% from 98px - more space for content area */
   }
 
   .mediscribe-mobile-textarea-container {
@@ -465,7 +465,7 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     min-height: 0;
-    padding-bottom: 86px; /* Increased by another 20% from 72px - space for floating buttons */
+    padding-bottom: 156px; /* Increased by 30% from 120px - space for floating buttons */
   }
 
   /* Mobile Keyboard Avoidance - Enhanced */
@@ -730,7 +730,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 86px; /* Increased by another 20% from 72px */
+  bottom: 156px; /* Increased by 30% from 120px */
   z-index: 100;
   transition: bottom 0.2s ease-out;
   padding: 16px 20px;
@@ -740,5 +740,5 @@
 }
 
 .mediscribe-mobile-transcript {
-  padding-bottom: 70px; /* Increased by another 20% from 58px - adjusted to match footer height */
+  padding-bottom: 127px; /* Increased by 30% from 98px - adjusted to match footer height */
 }
