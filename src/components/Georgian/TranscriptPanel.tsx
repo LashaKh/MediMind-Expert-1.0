@@ -13,7 +13,7 @@ import {
   convertBase64ToFile,
   FILE_SIZE_LIMITS 
 } from '../../utils/fileUpload';
-import { processCaseAttachments, ProcessedAttachment } from '../../utils/caseFileProcessor';
+import { processCaseAttachments, processCaseAttachmentsParallel, ProcessedAttachment } from '../../utils/caseFileProcessor';
 import type { ProgressInfo } from '../../utils/pdfTextExtractor';
 import type { Attachment } from '../../types/chat';
 
@@ -372,6 +372,20 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const handleFileUploadFromContent = useCallback(async (files: File[]) => {
     if (files.length === 0) return;
 
+    // Prevent duplicate processing
+    if (isProcessingAttachment) {
+      console.warn('⚠️ [PERFORMANCE] Ignoring duplicate file processing request - already processing');
+      return;
+    }
+
+    const processingStartTime = performance.now();
+    console.log('🚀 [PERFORMANCE] Starting file upload processing:', {
+      fileCount: files.length,
+      fileSizes: files.map(f => ({ name: f.name, size: (f.size / 1024).toFixed(1) + 'KB' })),
+      timestamp: new Date().toISOString(),
+      sessionId: currentSession?.id
+    });
+
     setIsProcessingAttachment(true);
     setAttachmentProgress({
       stage: 'processing',
@@ -384,9 +398,15 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       const processedAttachments: Attachment[] = [];
 
       // Step 1: Validate and process files with compression if needed
+      const step1StartTime = performance.now();
+      console.log('⚡ [PERFORMANCE] Step 1: Starting validation and compression phase');
+      
       for (let i = 0; i < files.length; i++) {
         let file = files[i];
+        const fileStartTime = performance.now();
         const basePercentage = Math.round((i / files.length) * 40);
+        
+        console.log(`📁 [PERFORMANCE] Processing file ${i + 1}/${files.length}: ${file.name} (${(file.size / 1024).toFixed(1)}KB)`);
         
         setAttachmentProgress({
           stage: 'processing',
@@ -396,7 +416,10 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         });
 
         // Validate file for medical transcription
+        const validationStartTime = performance.now();
         const validation = validateFileForMedicalTranscription(file);
+        console.log(`🔍 [PERFORMANCE] Validation took: ${(performance.now() - validationStartTime).toFixed(2)}ms`);
+        
         if (!validation.isValid) {
           console.error(`❌ File validation failed: ${validation.error}`);
           setAttachmentProgress({
@@ -424,9 +447,11 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             method: 'compression'
           });
 
+          const compressionStartTime = performance.now();
           try {
             file = await compressImageForMedicalUse(file, 500); // Compress to 500KB max
-            console.log(`✅ Image compressed: ${files[i].name} (${(files[i].size / 1024).toFixed(1)}KB → ${(file.size / 1024).toFixed(1)}KB)`);
+            const compressionTime = performance.now() - compressionStartTime;
+            console.log(`✅ [PERFORMANCE] Image compressed: ${files[i].name} (${(files[i].size / 1024).toFixed(1)}KB → ${(file.size / 1024).toFixed(1)}KB) in ${compressionTime.toFixed(2)}ms`);
           } catch (compressionError) {
             console.warn(`⚠️ Compression failed for ${file.name}, using original:`, compressionError);
             // Continue with original file
@@ -442,17 +467,33 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         });
 
         // Convert to base64 with optimized method
+        const base64StartTime = performance.now();
         const processed = await processFileForUpload(file);
+        const base64Time = performance.now() - base64StartTime;
+        console.log(`📄 [PERFORMANCE] Base64 conversion took: ${base64Time.toFixed(2)}ms`);
+        
         processedAttachments.push({
           ...processed,
           textExtractionStatus: 'pending' // Mark for text extraction
         });
+        
+        const fileProcessingTime = performance.now() - fileStartTime;
+        console.log(`✅ [PERFORMANCE] File ${file.name} processed in: ${fileProcessingTime.toFixed(2)}ms`);
       }
+      
+      const step1Time = performance.now() - step1StartTime;
+      console.log(`⚡ [PERFORMANCE] Step 1 completed in: ${step1Time.toFixed(2)}ms`);
+      
 
       // Add files to UI with pending status
+      const uiUpdateStartTime = performance.now();
       setAttachedFiles(prev => [...prev, ...processedAttachments]);
+      console.log(`🎨 [PERFORMANCE] UI update took: ${(performance.now() - uiUpdateStartTime).toFixed(2)}ms`);
 
       // Step 2: Immediately extract text from all uploaded files
+      const step2StartTime = performance.now();
+      console.log('⚡ [PERFORMANCE] Step 2: Starting text extraction phase');
+      
       setAttachmentProgress({
         stage: 'extracting',
         stageDescription: 'Extracting text from files...',
@@ -461,15 +502,23 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       });
 
       // Convert to case attachment format for text extraction using optimized conversion
-      const caseAttachments = processedAttachments.map(attachment => {
+      const conversionStartTime = performance.now();
+      console.log('🔄 [PERFORMANCE] Starting base64 to File conversion for text extraction...');
+      
+      const caseAttachments = processedAttachments.map((attachment, index) => {
+        const fileConversionStartTime = performance.now();
         const base64Data = attachment.base64Data || '';
         let file: File;
+        
+        console.log(`🔄 [PERFORMANCE] Converting file ${index + 1}/${processedAttachments.length}: ${attachment.name}`);
         
         if (base64Data.startsWith('data:')) {
           const mimeType = base64Data.split(';')[0].split(':')[1];
           try {
             // Use optimized base64 to File conversion that handles large files efficiently
             file = convertBase64ToFile(base64Data, attachment.name, mimeType);
+            const conversionTime = performance.now() - fileConversionStartTime;
+            console.log(`✅ [PERFORMANCE] File conversion for ${attachment.name} took: ${conversionTime.toFixed(2)}ms`);
           } catch (error) {
             console.error(`❌ Failed to convert base64 to file for ${attachment.name}:`, error);
             // Fallback to empty file
@@ -489,18 +538,27 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
           category: 'medical-images'
         };
       });
+      
+      const conversionTime = performance.now() - conversionStartTime;
+      console.log(`🔄 [PERFORMANCE] All file conversions completed in: ${conversionTime.toFixed(2)}ms`);
 
-      console.log('🔍 Starting immediate text extraction from uploaded files...');
+      console.log('🔍 [PERFORMANCE] Starting immediate text extraction from uploaded files...');
 
       // Update status to processing for each file
+      const statusUpdateStartTime = performance.now();
       setAttachedFiles(prev => prev.map(file => 
         processedAttachments.find(p => p.id === file.id) 
           ? { ...file, textExtractionStatus: 'processing' }
           : file
       ));
+      console.log(`🎨 [PERFORMANCE] Status update took: ${(performance.now() - statusUpdateStartTime).toFixed(2)}ms`);
 
-      // Extract text immediately
-      const processedWithText = await processCaseAttachments(caseAttachments, (fileIndex, fileName, progress) => {
+      // Extract text immediately - this is often the slowest part - now using parallel processing
+      const textExtractionStartTime = performance.now();
+      console.log('🔍 [PERFORMANCE] Starting PARALLEL OCR text extraction...');
+      
+      const processedWithText = await processCaseAttachmentsParallel(caseAttachments, (fileIndex, fileName, progress) => {
+        console.log(`📝 [PERFORMANCE] Parallel text extraction progress for ${fileName}: ${progress.stage} - ${progress.percentage}%`);
         const currentFile = processedAttachments[fileIndex];
         setAttachmentProgress({
           stage: progress.stage,
@@ -509,8 +567,12 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
           method: progress.method || 'standard'
         });
       });
+      
+      const textExtractionTime = performance.now() - textExtractionStartTime;
+      console.log(`📝 [PERFORMANCE] Text extraction completed in: ${textExtractionTime.toFixed(2)}ms`);
 
       // Update files with extracted text results
+      const finalUpdateStartTime = performance.now();
       setAttachedFiles(prev => prev.map(file => {
         const attachmentIndex = processedAttachments.findIndex(p => p.id === file.id);
         if (attachmentIndex >= 0) {
@@ -524,6 +586,11 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         }
         return file;
       }));
+      const finalUpdateTime = performance.now() - finalUpdateStartTime;
+      console.log(`🎨 [PERFORMANCE] Final UI update took: ${finalUpdateTime.toFixed(2)}ms`);
+
+      const step2Time = performance.now() - step2StartTime;
+      console.log(`⚡ [PERFORMANCE] Step 2 (text extraction) completed in: ${step2Time.toFixed(2)}ms`);
 
       setAttachmentProgress({
         stage: 'complete',
@@ -537,6 +604,8 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         setAttachmentProgress(null);
       }, 2000);
 
+      const totalProcessingTime = performance.now() - processingStartTime;
+      console.log(`🏁 [PERFORMANCE] TOTAL PROCESSING TIME: ${totalProcessingTime.toFixed(2)}ms`);
       console.log('✅ Files processed successfully with immediate text extraction');
     } catch (error) {
       console.error('❌ File processing failed:', error);

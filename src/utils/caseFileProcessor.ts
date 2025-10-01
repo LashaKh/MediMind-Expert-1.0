@@ -194,7 +194,10 @@ async function processImageFile(
   onProgress?: (progress: ProgressInfo) => void
 ): Promise<ProcessedAttachment> {
   try {
+    const startTime = performance.now();
     const sizeKB = attachment.file.size / 1024;
+    
+    console.log(`🖼️ [PERFORMANCE] Starting image processing for ${attachment.file.name} (${sizeKB.toFixed(1)}KB)`);
     
     onProgress?.({
       stage: 'analyzing',
@@ -204,7 +207,10 @@ async function processImageFile(
     });
 
     // Analyze image for text content
+    const analysisStartTime = performance.now();
     const textAnalysis = await analyzeImageForText(attachment.file);
+    const analysisTime = performance.now() - analysisStartTime;
+    console.log(`🔍 [PERFORMANCE] Image analysis took: ${analysisTime.toFixed(2)}ms - hasText: ${textAnalysis.hasSignificantText}, action: ${textAnalysis.recommendedAction}`);
     
     let extractedText: string | undefined;
     let extractionMethod: 'gemini' | undefined;
@@ -214,6 +220,7 @@ async function processImageFile(
     if (textAnalysis.hasSignificantText && 
         (textAnalysis.recommendedAction === 'extract_text' || textAnalysis.recommendedAction === 'extract_and_send')) {
       
+      console.log(`📝 [PERFORMANCE] Starting OCR extraction for ${attachment.file.name}`);
       onProgress?.({
         stage: 'extracting',
         stageDescription: 'Extracting text from image...',
@@ -222,15 +229,20 @@ async function processImageFile(
       });
 
       try {
+        const ocrStartTime = performance.now();
         // Import the unified OCR extractor
         const { extractTextFromImage } = await import('./unifiedOcrExtractor');
         
         const ocrResult = await extractTextFromImage(attachment.file, (ocrProgress) => {
+          console.log(`📝 [PERFORMANCE] OCR progress for ${attachment.file.name}: ${ocrProgress.stage} - ${ocrProgress.percentage}%`);
           onProgress?.({
             ...ocrProgress,
             percentage: 30 + (ocrProgress.percentage || 0) * 0.5
           });
         });
+
+        const ocrTime = performance.now() - ocrStartTime;
+        console.log(`📝 [PERFORMANCE] OCR extraction took: ${ocrTime.toFixed(2)}ms - success: ${ocrResult.success}, textLength: ${ocrResult.text?.length || 0}`);
 
         if (ocrResult.success && ocrResult.text && ocrResult.text.trim()) {
           extractedText = ocrResult.text;
@@ -238,8 +250,10 @@ async function processImageFile(
           confidence = ocrResult.confidence;
         }
       } catch (ocrError) {
-
+        console.error(`❌ [PERFORMANCE] OCR extraction failed for ${attachment.file.name}:`, ocrError);
       }
+    } else {
+      console.log(`⏭️ [PERFORMANCE] Skipping OCR for ${attachment.file.name} - no significant text detected`);
     }
 
     onProgress?.({
@@ -275,6 +289,9 @@ async function processImageFile(
       method: extractionMethod || 'standard'
     });
     
+    const totalTime = performance.now() - startTime;
+    console.log(`✅ [PERFORMANCE] Image processing completed for ${attachment.file.name} in: ${totalTime.toFixed(2)}ms`);
+    
     return {
       ...attachment,
       status: 'ready',
@@ -299,6 +316,8 @@ async function processImageFile(
     };
     
   } catch (error) {
+    const totalTime = performance.now() - startTime;
+    console.error(`❌ [PERFORMANCE] Image processing failed for ${attachment.file.name} after ${totalTime.toFixed(2)}ms:`, error);
     return {
       ...attachment,
       status: 'error',
@@ -343,7 +362,7 @@ export async function processFileForCaseUpload(
   }
 }
 
-// Batch processing function
+// Batch processing function (sequential)
 export async function processCaseAttachments(
   attachments: CaseAttachment[],
   onProgress?: (fileIndex: number, fileName: string, progress: ProgressInfo) => void
@@ -361,4 +380,140 @@ export async function processCaseAttachments(
   }
   
   return results;
+}
+
+// Timeout wrapper to prevent infinite hanging
+async function withTimeout<T>(
+  promise: Promise<T>, 
+  timeoutMs: number, 
+  timeoutMessage: string
+): Promise<T> {
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => {
+      reject(new Error(timeoutMessage));
+    }, timeoutMs);
+  });
+  
+  return Promise.race([promise, timeoutPromise]);
+}
+
+// Semaphore to limit concurrent OCR operations
+class Semaphore {
+  private permits: number;
+  private waitQueue: Array<() => void> = [];
+
+  constructor(permits: number) {
+    this.permits = permits;
+  }
+
+  async acquire(): Promise<void> {
+    if (this.permits > 0) {
+      this.permits--;
+      return Promise.resolve();
+    }
+
+    return new Promise<void>((resolve) => {
+      this.waitQueue.push(resolve);
+    });
+  }
+
+  release(): void {
+    this.permits++;
+    if (this.waitQueue.length > 0) {
+      const resolve = this.waitQueue.shift()!;
+      this.permits--;
+      resolve();
+    }
+  }
+}
+
+// Limit concurrent OCR operations to prevent resource conflicts
+const ocrSemaphore = new Semaphore(2); // Max 2 concurrent OCR operations
+
+// Parallel batch processing function with timeout and concurrency control
+export async function processCaseAttachmentsParallel(
+  attachments: CaseAttachment[],
+  onProgress?: (fileIndex: number, fileName: string, progress: ProgressInfo) => void
+): Promise<ProcessedAttachment[]> {
+  console.log(`🚀 [PERFORMANCE] Starting parallel processing of ${attachments.length} files (max 2 concurrent OCR operations)`);
+  const startTime = performance.now();
+  
+  // Create progress tracking for each file
+  const fileProgress = attachments.map(() => ({ stage: 'pending', percentage: 0 }));
+  
+  // Process all files in parallel with timeout and concurrency control
+  const processingPromises = attachments.map(async (attachment, index) => {
+    const progressCallback = (progress: ProgressInfo) => {
+      // Update progress for this specific file
+      fileProgress[index] = {
+        stage: progress.stage || 'processing',
+        percentage: progress.percentage || 0
+      };
+      
+      // Report progress for this file
+      onProgress?.(index, attachment.file.name, progress);
+    };
+    
+    console.log(`🔄 [PERFORMANCE] Starting parallel processing for file ${index + 1}: ${attachment.file.name}`);
+    const fileStartTime = performance.now();
+    
+    try {
+      // Acquire semaphore for OCR operations
+      await ocrSemaphore.acquire();
+      console.log(`🎫 [PERFORMANCE] OCR slot acquired for file ${index + 1}: ${attachment.file.name}`);
+      
+      try {
+        // Add 60 second timeout to prevent infinite hanging
+        const processed = await withTimeout(
+          processFileForCaseUpload(attachment, progressCallback),
+          60000, // 60 seconds timeout
+          `Timeout: File processing took longer than 60 seconds for ${attachment.file.name}`
+        );
+        
+        const fileTime = performance.now() - fileStartTime;
+        console.log(`✅ [PERFORMANCE] File ${index + 1} (${attachment.file.name}) completed in parallel after: ${fileTime.toFixed(2)}ms`);
+        return processed;
+      } finally {
+        // Always release the semaphore
+        ocrSemaphore.release();
+        console.log(`🎫 [PERFORMANCE] OCR slot released for file ${index + 1}: ${attachment.file.name}`);
+      }
+    } catch (error) {
+      const fileTime = performance.now() - fileStartTime;
+      console.error(`❌ [PERFORMANCE] File ${index + 1} (${attachment.file.name}) failed in parallel after: ${fileTime.toFixed(2)}ms`, error);
+      
+      // Return a failed attachment instead of throwing
+      return {
+        ...attachment,
+        status: 'error' as const,
+        error: error instanceof Error ? error.message : 'Processing failed'
+      };
+    }
+  });
+  
+  // Use Promise.allSettled to continue even if some files fail
+  const results = await Promise.allSettled(processingPromises);
+  
+  const totalTime = performance.now() - startTime;
+  console.log(`🏁 [PERFORMANCE] Parallel processing completed for ${attachments.length} files in: ${totalTime.toFixed(2)}ms`);
+  
+  // Extract successful results and handle failed ones
+  const processedAttachments: ProcessedAttachment[] = results.map((result, index) => {
+    if (result.status === 'fulfilled') {
+      return result.value;
+    } else {
+      console.error(`❌ [PERFORMANCE] Final error for file ${index + 1}:`, result.reason);
+      return {
+        ...attachments[index],
+        status: 'error' as const,
+        error: result.reason instanceof Error ? result.reason.message : 'Processing failed'
+      };
+    }
+  });
+  
+  const successCount = processedAttachments.filter(p => p.status === 'ready').length;
+  const failureCount = processedAttachments.filter(p => p.status === 'error').length;
+  console.log(`📊 [PERFORMANCE] Final results: ${successCount} successful, ${failureCount} failed`);
+  
+  return processedAttachments;
 }
