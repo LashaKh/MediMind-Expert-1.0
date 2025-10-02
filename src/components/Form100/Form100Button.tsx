@@ -97,21 +97,23 @@ const Form100Button: React.FC<Form100ButtonProps> = ({
 
   // Handle premium button click with animations
   const handleClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent event bubbling to parent card
+
     if (isDisabled) return;
-    
+
     if (!sessionId) {
       return;
     }
-    
+
     createParticles(event);
     setIsPressed(true);
-    
+
     // Success animation
     setTimeout(() => {
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 2000);
     }, 100);
-    
+
     setTimeout(() => setIsPressed(false), 150);
     onClick?.();
   };

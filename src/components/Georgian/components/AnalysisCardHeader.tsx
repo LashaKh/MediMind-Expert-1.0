@@ -275,23 +275,22 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                         <div className="absolute inset-0.5 bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] rounded-full animate-ping" />
                       </div>
                       
-                      <Form100Button
-                        sessionId={sessionId}
-                        variant="secondary"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onForm100Generation();
-                        }}
-                        className="relative min-h-[30px] text-xs px-3 font-semibold
-                                   shadow-md hover:shadow-lg
-                                   transform hover:scale-105 active:scale-95
-                                   transition-all duration-300 ease-out
-                                   border-2 border-[#63b3ed]/40 hover:border-[#2b6cb0]/70
-                                   bg-gradient-to-r from-white/95 to-[#90cdf4]/10 
-                                   hover:from-[#90cdf4]/20 hover:to-[#63b3ed]/20
-                                   backdrop-blur-xl"
-                      />
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Form100Button
+                          sessionId={sessionId}
+                          variant="secondary"
+                          size="sm"
+                          onClick={onForm100Generation}
+                          className="relative min-h-[30px] text-xs px-3 font-semibold
+                                     shadow-md hover:shadow-lg
+                                     transform hover:scale-105 active:scale-95
+                                     transition-all duration-300 ease-out
+                                     border-2 border-[#63b3ed]/40 hover:border-[#2b6cb0]/70
+                                     bg-gradient-to-r from-white/95 to-[#90cdf4]/10
+                                     hover:from-[#90cdf4]/20 hover:to-[#63b3ed]/20
+                                     backdrop-blur-xl"
+                        />
+                      </div>
                       
                       {/* Form 100 Report History Button */}
                       {onViewReportHistory && recentReportsCount > 0 && (
@@ -394,23 +393,22 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                       <div className="absolute inset-1.5 bg-[#63b3ed] rounded-full animate-pulse" />
                     </div>
                     
-                    <Form100Button
-                      sessionId={sessionId}
-                      variant="secondary"
-                      size="md"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onForm100Generation();
-                      }}
-                      className="relative font-bold shadow-xl hover:shadow-2xl
-                                 transform hover:scale-110 active:scale-95
-                                 transition-all duration-400 ease-out
-                                 border-2 border-[#63b3ed]/50 hover:border-[#2b6cb0]/80
-                                 bg-gradient-to-r from-white/98 via-[#90cdf4]/5 to-white/98
-                                 hover:from-[#90cdf4]/15 hover:via-[#63b3ed]/20 hover:to-[#90cdf4]/15
-                                 backdrop-blur-xl text-[#1a365d] hover:text-[#2b6cb0]
-                                 hover:-translate-y-1 hover:rotate-1"
-                    />
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <Form100Button
+                        sessionId={sessionId}
+                        variant="secondary"
+                        size="md"
+                        onClick={onForm100Generation}
+                        className="relative font-bold shadow-xl hover:shadow-2xl
+                                   transform hover:scale-110 active:scale-95
+                                   transition-all duration-400 ease-out
+                                   border-2 border-[#63b3ed]/50 hover:border-[#2b6cb0]/80
+                                   bg-gradient-to-r from-white/98 via-[#90cdf4]/5 to-white/98
+                                   hover:from-[#90cdf4]/15 hover:via-[#63b3ed]/20 hover:to-[#90cdf4]/15
+                                   backdrop-blur-xl text-[#1a365d] hover:text-[#2b6cb0]
+                                   hover:-translate-y-1 hover:rotate-1"
+                      />
+                    </div>
                   </div>
                 )}
               </div>
