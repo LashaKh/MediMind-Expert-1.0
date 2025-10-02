@@ -78,7 +78,10 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
   const IconComponent = analysisType.icon;
 
   return (
-    <div className="relative overflow-hidden">
+    <div
+      className="relative overflow-hidden cursor-pointer"
+      onClick={onExpandToggle}
+    >
       {/* Header Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/5 via-[#63b3ed]/3 to-[#1a365d]/5 dark:from-[#2b6cb0]/10 dark:via-[#63b3ed]/5 dark:to-[#1a365d]/10" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white/90 dark:via-slate-900/50 dark:to-slate-900/90" />
@@ -234,18 +237,17 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                 <div className="flex items-center gap-1.5">
                   {/* Premium Edit Button */}
                   {enableEditing && analysisType.isDiagnosis && (
-                    <div className="relative group flex-shrink-0">
+                    <div className="relative group flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                       <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-lg blur-md opacity-70 animate-pulse" />
                       <MedicalButton
                         variant={isEditMode ? "primary" : "ghost"}
                         size="sm"
                         leftIcon={isEditMode ? Settings : Edit3}
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={() => {
                           isEditMode ? onCancelEdit() : onEdit();
                         }}
-                        className={isEditMode 
-                          ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-lg shadow-[#2b6cb0]/25 hover:shadow-xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200 min-h-[30px] px-2" 
+                        className={isEditMode
+                          ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-lg shadow-[#2b6cb0]/25 hover:shadow-xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200 min-h-[30px] px-2"
                           : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[30px] px-2"
                         }
                       >
@@ -325,15 +327,12 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                 </div>
                 
                 {/* Enhanced Expand/Collapse */}
-                <div className="relative group flex-shrink-0">
+                <div className="relative group flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                   <MedicalButton
                     variant="ghost"
                     size="sm"
                     rightIcon={isExpanded ? ChevronUp : ChevronDown}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onExpandToggle();
-                    }}
+                    onClick={onExpandToggle}
                     className="text-slate-600 dark:text-slate-400 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[30px] px-2"
                   >
                     <span className="text-xs">{isExpanded ? 'Minimize' : 'Expand'}</span>
@@ -349,18 +348,17 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                 
                 {/* Premium Edit Button */}
                 {enableEditing && analysisType.isDiagnosis && (
-                  <div className="relative group">
+                  <div className="relative group" onClick={(e) => e.stopPropagation()}>
                     <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-xl blur-md opacity-70 animate-pulse" />
                     <MedicalButton
                       variant={isEditMode ? "primary" : "ghost"}
                       size="sm"
                       leftIcon={isEditMode ? Settings : Edit3}
-                      onClick={(e) => {
-                        e.stopPropagation();
+                      onClick={() => {
                         isEditMode ? onCancelEdit() : onEdit();
                       }}
-                      className={isEditMode 
-                        ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200" 
+                      className={isEditMode
+                        ? "relative bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] text-white shadow-xl shadow-[#2b6cb0]/25 hover:shadow-2xl hover:shadow-[#2b6cb0]/30 transform hover:scale-105 transition-all duration-200"
                         : "relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
                       }
                     >
@@ -414,15 +412,12 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
               </div>
               
               {/* Enhanced Expand/Collapse */}
-              <div className="relative group">
+              <div className="relative group" onClick={(e) => e.stopPropagation()}>
                 <MedicalButton
                   variant="ghost"
                   size="sm"
                   rightIcon={isExpanded ? ChevronUp : ChevronDown}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onExpandToggle();
-                  }}
+                  onClick={onExpandToggle}
                   className="text-slate-600 dark:text-slate-400 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
                 >
                   {isExpanded ? 'Minimize' : 'Expand Details'}

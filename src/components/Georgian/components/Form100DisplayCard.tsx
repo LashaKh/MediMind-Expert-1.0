@@ -79,9 +79,9 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
         
         <div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl border border-[#63b3ed]/30 dark:border-[#2b6cb0]/30 shadow-xl dark:shadow-2xl overflow-hidden">
           {/* Form 100 Header */}
-          <div className="relative">
+          <div className="relative cursor-pointer" onClick={onForm100ExpandToggle}>
             <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] opacity-95" />
-            
+
             <div className="relative p-4 sm:p-6">
               <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                 {/* Form 100 Title */}
@@ -104,7 +104,7 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                 </div>
                 
                 {/* Form 100 Actions */}
-                <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-3 sm:space-y-0 flex-shrink-0">
+                <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-3 sm:space-y-0 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                   {/* Mobile: Action Buttons Row */}
                   <div className="flex items-center space-x-2 sm:space-x-3">
                     {/* Edit Button */}
@@ -119,7 +119,7 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                         {isForm100EditMode ? 'Cancel' : 'Edit'}
                       </span>
                     </MedicalButton>
-                    
+
                     {/* Collapse Button */}
                     <MedicalButton
                       variant="ghost"
