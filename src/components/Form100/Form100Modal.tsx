@@ -181,9 +181,14 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
 
   // Handle form generation
   const handleGenerate = useCallback(async () => {
+    // If on step 2, navigate to step 3 first to show progress
+    if (currentStep === 2) {
+      setCurrentStep(3);
+    }
+
     setIsGenerating(true);
     setGenerationError(null);
-    
+
     try {
       if (onGenerate) {
         const generatedContent = await onGenerate(formData as Form100Request);
@@ -204,7 +209,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
     } finally {
       setIsGenerating(false);
     }
-  }, [formData, onGenerate]);
+  }, [formData, onGenerate, currentStep]);
 
   // Handle form submission
   const handleSubmit = useCallback(() => {
@@ -419,12 +424,12 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
               </div>
 
               {/* Revolutionary Action Buttons */}
-              {isLastStep ? (
+              {currentStep === 2 || isLastStep ? (
                 <div className="flex space-x-4">
                   {/* Supreme Save Button */}
                   {generatedForm && (
                     <div className="relative group">
-                      <div className="absolute -inset-2 bg-gradient-to-r from-emerald-400/30 to-emerald-600/30 rounded-2xl 
+                      <div className="absolute -inset-2 bg-gradient-to-r from-emerald-400/30 to-emerald-600/30 rounded-2xl
                                       blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500" />
                       <button
                         onClick={handleSubmit}
@@ -440,10 +445,10 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
                       </button>
                     </div>
                   )}
-                  
+
                   {/* Ultimate Generate Button */}
                   <div className="relative group">
-                    <div className="absolute -inset-2 bg-gradient-to-r from-[#2b6cb0]/40 to-[#1a365d]/40 rounded-2xl 
+                    <div className="absolute -inset-2 bg-gradient-to-r from-[#2b6cb0]/40 to-[#1a365d]/40 rounded-2xl
                                     blur-lg opacity-70 group-hover:opacity-100 transition-all duration-500" />
                     <button
                       onClick={handleGenerate}
@@ -459,7 +464,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent
                                         translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
                       )}
-                      
+
                       <div className="relative flex items-center space-x-3">
                         {isGenerating ? (
                           <>
@@ -478,9 +483,9 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
                   </div>
                 </div>
               ) : (
-                /* Supreme Next Button */
+                /* Supreme Next Button - Only shown on Step 1 */
                 <div className="relative group">
-                  <div className="absolute -inset-2 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-2xl 
+                  <div className="absolute -inset-2 bg-gradient-to-r from-[#2b6cb0]/30 to-[#1a365d]/30 rounded-2xl
                                   blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500" />
                   <button
                     onClick={handleNextStep}
@@ -491,7 +496,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent
                                     translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-                    
+
                     <div className="relative flex items-center space-x-3">
                       <span>Continue</span>
                       <ArrowRight className="w-5 h-5" />
@@ -602,13 +607,98 @@ interface GenerationStepProps {
   onGenerate: () => void;
 }
 
-const GenerationStep: React.FC<GenerationStepProps> = ({ 
-  formData, 
-  generatedForm, 
-  isGenerating, 
+const GenerationStep: React.FC<GenerationStepProps> = ({
+  formData,
+  generatedForm,
+  isGenerating,
   generationError,
-  onGenerate 
+  onGenerate
 }) => {
+  // Show progress UI while generating
+  if (isGenerating) {
+    return (
+      <div className="space-y-8">
+        {/* Diagnosis Summary Card */}
+        {formData.primaryDiagnosis && (
+          <div className="relative group">
+            <div className="absolute -inset-2 bg-gradient-to-r from-[#2b6cb0]/15 to-[#63b3ed]/10 rounded-xl blur-lg opacity-50" />
+            <div className="relative bg-white/90 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] p-2 rounded-lg">
+                    <Heart className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-[#1a365d]">{formData.primaryDiagnosis.name}</h3>
+                    <p className="text-[#2b6cb0]/70 text-sm">{formData.primaryDiagnosis.nameEn}</p>
+                  </div>
+                </div>
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#2b6cb0]/10 border border-[#2b6cb0]/20">
+                  <span className="text-sm font-bold text-[#2b6cb0]">{formData.primaryDiagnosis.code}</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Progress Animation */}
+        <div className="text-center space-y-6">
+          <div className="relative inline-flex items-center justify-center w-24 h-24">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] rounded-full animate-pulse" />
+            <div className="relative w-20 h-20 bg-white rounded-full flex items-center justify-center">
+              <Loader2 className="w-12 h-12 text-[#2b6cb0] animate-spin" />
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-2xl font-bold text-[#1a365d] mb-2">Generating Form 100</h2>
+            <p className="text-[#2b6cb0] font-medium">AI is creating your professional medical report...</p>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="max-w-md mx-auto space-y-3">
+            <div className="relative h-3 bg-slate-200 rounded-full overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4] animate-pulse"
+                   style={{
+                     animation: 'progressPulse 2s ease-in-out infinite'
+                   }} />
+            </div>
+
+            {/* Processing Stages */}
+            <div className="flex justify-between text-xs text-[#64748b]">
+              <span className="flex items-center space-x-1">
+                <div className="w-1.5 h-1.5 bg-[#2b6cb0] rounded-full animate-pulse" />
+                <span>Analyzing data</span>
+              </span>
+              <span className="flex items-center space-x-1">
+                <div className="w-1.5 h-1.5 bg-[#63b3ed] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
+                <span>Generating report</span>
+              </span>
+              <span className="flex items-center space-x-1">
+                <div className="w-1.5 h-1.5 bg-[#90cdf4] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
+                <span>Finalizing</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Add keyframe animation for progress bar */}
+        <style>{`
+          @keyframes progressPulse {
+            0%, 100% {
+              transform: translateX(-100%);
+              opacity: 0.5;
+            }
+            50% {
+              transform: translateX(100%);
+              opacity: 1;
+            }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
   if (generatedForm) {
     return (
       <div className="space-y-8">

@@ -82,11 +82,11 @@ const DiagnosisCards: React.FC<DiagnosisCardsProps> = ({
 
               {/* Compact Main Card */}
               <div className={cn(
-                "relative bg-white rounded-xl p-3 shadow-md border transition-all duration-300",
+                "relative rounded-xl p-3 shadow-md border transition-all duration-300",
                 "hover:shadow-lg min-h-[140px] flex flex-col",
-                isSelected 
-                  ? "border-[#63b3ed] shadow-[#63b3ed]/20" 
-                  : "border-transparent hover:border-[#90cdf4]"
+                isSelected
+                  ? "bg-gradient-to-br from-[#63b3ed]/10 via-white to-[#90cdf4]/10 border-[#63b3ed] shadow-[#63b3ed]/30"
+                  : "bg-white border-transparent hover:border-[#90cdf4] hover:bg-gradient-to-br hover:from-[#90cdf4]/5 hover:to-transparent"
               )}>
                 
                 {/* Selection Indicator */}

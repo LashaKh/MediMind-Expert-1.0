@@ -128,15 +128,17 @@ export const AnalysisCardContent: React.FC<AnalysisCardContentProps> = ({
               </div>
               
               {/* Enhanced Content Display */}
-              <div className="relative -mx-3 sm:mx-0">
+              <div className="relative -mx-3 sm:mx-0" style={{ width: '100%', maxWidth: '100%', margin: 0, boxSizing: 'border-box' }}>
                 <div className="absolute inset-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-inner" />
-                <div className="relative px-4 py-2 sm:p-6 prose prose-sm dark:prose-invert max-w-none">
+                <div className="relative px-4 py-2 sm:p-6 w-full" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: '16px', boxSizing: 'border-box' }}>
                   {(() => {
                     const displayContent = editedContent || analysis.aiResponse;
                     return hasMarkdownFormatting(displayContent) ? (
-                      formatMarkdown(displayContent)
+                      <div className="w-full markdown-content text-slate-800 dark:text-slate-200" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>
+                        {formatMarkdown(displayContent)}
+                      </div>
                     ) : (
-                      <div className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap font-medium">
+                      <div className="w-full text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap font-medium" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>
                         {displayContent}
                       </div>
                     );

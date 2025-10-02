@@ -14,41 +14,76 @@ interface FormattedTextProps {
 }
 
 const FormattedParagraph: React.FC<FormattedTextProps> = ({ children, className = '' }) => (
-  <p className={`mb-3 text-slate-800 dark:text-slate-200 leading-relaxed ${className}`}>
+  <p
+    className={`mb-3 text-slate-800 dark:text-slate-200 leading-relaxed ${className}`}
+    style={{
+      width: '100%',
+      maxWidth: '100%',
+      margin: '0 0 12px 0',
+      padding: 0,
+      boxSizing: 'border-box'
+    }}
+  >
     {children}
   </p>
 );
 
 const FormattedHeading: React.FC<FormattedTextProps & { level: number }> = ({ children, level, className = '' }) => {
   const baseClasses = 'font-bold text-slate-900 dark:text-slate-100 mb-2 mt-4';
-  
+  const style = {
+    width: '100%',
+    maxWidth: '100%',
+    margin: '16px 0 8px 0',
+    padding: 0,
+    boxSizing: 'border-box' as const
+  };
+
   switch (level) {
     case 1:
-      return <h1 className={`text-xl ${baseClasses} ${className}`}>{children}</h1>;
+      return <h1 className={`text-xl ${baseClasses} ${className}`} style={style}>{children}</h1>;
     case 2:
-      return <h2 className={`text-lg ${baseClasses} ${className}`}>{children}</h2>;
+      return <h2 className={`text-lg ${baseClasses} ${className}`} style={style}>{children}</h2>;
     case 3:
-      return <h3 className={`text-base ${baseClasses} ${className}`}>{children}</h3>;
+      return <h3 className={`text-base ${baseClasses} ${className}`} style={style}>{children}</h3>;
     default:
-      return <h4 className={`text-sm ${baseClasses} ${className}`}>{children}</h4>;
+      return <h4 className={`text-sm ${baseClasses} ${className}`} style={style}>{children}</h4>;
   }
 };
 
 const FormattedList: React.FC<FormattedTextProps & { ordered?: boolean }> = ({ children, ordered = false, className = '' }) => {
   const Tag = ordered ? 'ol' : 'ul';
-  const listClasses = ordered 
-    ? 'list-decimal list-inside mb-3 space-y-1' 
+  const listClasses = ordered
+    ? 'list-decimal list-inside mb-3 space-y-1'
     : 'list-disc list-inside mb-3 space-y-1';
-    
+
   return (
-    <Tag className={`${listClasses} text-slate-800 dark:text-slate-200 ${className}`}>
+    <Tag
+      className={`${listClasses} text-slate-800 dark:text-slate-200 ${className}`}
+      style={{
+        width: '100%',
+        maxWidth: '100%',
+        margin: '0 0 12px 0',
+        padding: 0,
+        paddingLeft: '24px',
+        boxSizing: 'border-box'
+      }}
+    >
       {children}
     </Tag>
   );
 };
 
 const FormattedListItem: React.FC<FormattedTextProps> = ({ children, className = '' }) => (
-  <li className={`text-slate-800 dark:text-slate-200 leading-relaxed ${className}`}>
+  <li
+    className={`text-slate-800 dark:text-slate-200 leading-relaxed ${className}`}
+    style={{
+      width: '100%',
+      maxWidth: '100%',
+      margin: 0,
+      padding: 0,
+      boxSizing: 'border-box'
+    }}
+  >
     {children}
   </li>
 );
@@ -153,7 +188,20 @@ export function formatMarkdown(text: string): JSX.Element {
   // Flush any remaining list
   flushList();
 
-  return <div className="formatted-markdown">{elements}</div>;
+  return (
+    <div
+      className="formatted-markdown"
+      style={{
+        width: '100%',
+        maxWidth: '100%',
+        margin: 0,
+        padding: 0,
+        boxSizing: 'border-box'
+      }}
+    >
+      {elements}
+    </div>
+  );
 }
 
 /**
