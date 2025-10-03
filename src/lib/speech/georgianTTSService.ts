@@ -30,6 +30,7 @@ interface SpeakerDiarizationResult {
 
 export class GeorgianTTSService {
   private static readonly EDGE_FUNCTION_URL = 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/georgian-tts-proxy';
+  private static readonly GOOGLE_STT_URL = 'https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/google-stt-proxy';
   private static readonly SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2c3F0b2xzamdncHl2ZHRkcHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgzNjk3NzAsImV4cCI6MjA2Mzk0NTc3MH0.GcjFaO69jmW_nuJU4S8mZJdgi7PyM5Z736vGKvnKCyE';
 
   constructor() {
@@ -81,18 +82,18 @@ export class GeorgianTTSService {
       try {
         const base64Audio = await this.convertAudioToBase64(audioBlob);
         const result = await this.performSpeechRecognition(base64Audio, options);
-        
+
         if (attempt > 1) {
           console.log('✅ STT retry successful on attempt', attempt);
         }
-        
+
         return result;
       } catch (error) {
         lastError = error;
         const errorMessage = error instanceof Error ? error.message : String(error);
-        
+
         console.log(`❌ STT attempt ${attempt} failed:`, errorMessage.substring(0, 100));
-        
+
         // Don't retry on the last attempt
         if (attempt === maxRetries) {
           break;
@@ -102,7 +103,7 @@ export class GeorgianTTSService {
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
-    
+
     throw lastError;
   }
 
@@ -119,24 +120,72 @@ export class GeorgianTTSService {
       speakers?: number;
     }
   ): Promise<string | SpeakerDiarizationResult> {
-    // Add debug logging for speaker diarization options
-    console.log('🎤 Speaker diarization options:', { 
-      enableSpeakerDiarization: options.enableSpeakerDiarization,
-      speakers: options.speakers,
-      engine: options.engine,
-      willOmitEngine: options.engine === 'STT1'
-    });
-    
+    // Route to Google STT if GoogleChirp engine is selected
+    console.log('🎯 Engine selected:', options.engine);
+    if (options.engine === 'GoogleChirp') {
+      console.log('🌐 Routing to Google Speech-to-Text API...');
+
+      const googleRequest = {
+        theAudioDataAsBase64: base64Audio,
+        Language: options.language === 'ka-GE' ? 'ka-GE' : (options.language || 'ka-GE'),
+        Autocorrect: options.autocorrect ?? true,
+        Punctuation: options.punctuation ?? true,
+        Digits: options.digits ?? true
+      };
+
+      const [response, error] = await safeAsync(
+        () => fetch(`${GeorgianTTSService.GOOGLE_STT_URL}`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${GeorgianTTSService.SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(googleRequest)
+        })
+      );
+
+      if (error) {
+        throw new Error(`Google STT request failed: ${error.message}`);
+      }
+
+      if (!response.ok) {
+        let errorMessage = `Google STT failed: ${response.status} ${response.statusText}`;
+
+        try {
+          const errorBody = await response.text();
+          if (errorBody) {
+            try {
+              const errorData = JSON.parse(errorBody);
+              errorMessage = errorData.message || errorMessage;
+            } catch {
+              errorMessage += ` - ${errorBody}`;
+            }
+          }
+        } catch (e) {
+          // If we can't parse the error body, just use the basic message
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      // Google STT returns plain text
+      const result = await response.text();
+      console.log('✅ Google STT result:', result?.substring(0, 50) + (result?.length > 50 ? '...' : ''));
+      return result.trim();
+    }
+
+    // Enagram STT logic (Fast model)
+    // 'Fast' option uses Enagram STT1 (omit Engine parameter for default behavior)
     const request: SpeechRecognitionRequest = {
       theAudioDataAsBase64: base64Audio,
       Language: options.language === 'ka-GE' ? 'ka' : (options.language === 'Georgian' ? 'ka' : (options.language || 'ka')),
       Autocorrect: options.autocorrect ?? true,
       Punctuation: options.punctuation ?? true,
       Digits: options.digits ?? true,
-      // Only include Engine if it's not STT1 (let API use default for STT1)
-      ...(options.engine && options.engine !== 'STT1' && { Engine: options.engine }),
+      // 'Fast' model: omit Engine to use Enagram default (STT1)
+      // Other models: include Engine parameter
+      ...(options.engine && options.engine !== 'Fast' && { Engine: options.engine }),
       ...(options.model && { Model: options.model }),
-      // Always include speaker diarization parameters for debugging
       enableSpeakerDiarization: options.enableSpeakerDiarization ?? false,
       Speakers: options.speakers || 2
     };

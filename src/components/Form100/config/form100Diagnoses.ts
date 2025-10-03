@@ -24,7 +24,7 @@ export const FORM100_DIAGNOSES: DiagnosisCode[] = [
   {
     id: 'i20.0-troponin-positive-form100',
     code: 'I20.0',
-    name: 'არასტაბილური სტენოკარდია Braunwald III Troponin +',
+    name: 'არასტაბილური სტენოკარდია(Troponin+ Braunwald III)',
     nameEn: 'Unstable angina Braunwald III Troponin positive',
     category: 'cardiology',
     description: 'Unstable angina with positive troponin Braunwald classification III',
@@ -40,7 +40,7 @@ export const FORM100_DIAGNOSES: DiagnosisCode[] = [
   {
     id: 'i20.0-troponin-negative-form100',
     code: 'I20.0',
-    name: 'არასტაბილური სტენოკარდია Tn-',
+    name: 'არასტაბილური სტენოკარდია',
     nameEn: 'Unstable angina Troponin negative',
     category: 'cardiology',
     description: 'Unstable angina with negative troponin',
@@ -71,7 +71,7 @@ export const FORM100_DIAGNOSES: DiagnosisCode[] = [
   {
     id: 'i21.9-form100',
     code: 'I21.9',
-    name: 'მიოკარდიუმის მწვავე დაუზუსტებელი ინფარქტი',
+    name: 'მიოკარდიუმის მწვავე დაუზუსტებელი ინფარქტი(MINOCA)',
     nameEn: 'Acute myocardial infarction, unspecified',
     category: 'cardiology',
     description: 'Acute myocardial infarction, unspecified',
@@ -85,7 +85,7 @@ export const FORM100_DIAGNOSES: DiagnosisCode[] = [
   },
   {
     id: 'i21.x-stemi-form100',
-    code: 'I21.x',
+    code: 'I21.(-)',
     name: 'STEMI',
     nameEn: 'ST elevation myocardial infarction',
     category: 'cardiology',
@@ -110,6 +110,21 @@ export const FORM100_DIAGNOSES: DiagnosisCode[] = [
     flowiseEndpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/a206b4c8-1fb0-4eb5-be41-72f07cf4b8fd',
     isForm100Eligible: true,
     references: ['ESC Guidelines for Heart Failure 2021'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01')
+  },
+  {
+    id: 'i44.x-av-block-form100',
+    code: 'I44.(-)',
+    name: 'სრული/არასრული AV ბლოკადა და ბრადიარითმიები',
+    nameEn: 'Complete/Incomplete AV block and bradyarrhythmias',
+    category: 'cardiology',
+    description: 'Complete/Incomplete AV block and bradyarrhythmias',
+    severity: 'severe',
+    isActive: true,
+    flowiseEndpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/8fe1e45c-521a-485d-91a4-9cc9a054089f',
+    isForm100Eligible: true,
+    references: ['ESC Guidelines for Cardiac Pacing 2023'],
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01')
   }

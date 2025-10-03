@@ -90,18 +90,18 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     email: null
   });
   
-  // STT model selection state
-  const [selectedSTTModel, setSelectedSTTModel] = useState<'STT1' | 'STT2' | 'STT3'>(() => {
-    // Load from localStorage or default to STT1 (Fast model)
+  // STT model selection state - Default to Fast
+  const [selectedSTTModel, setSelectedSTTModel] = useState<'Fast' | 'GoogleChirp'>(() => {
+    // Load from localStorage or default to Fast
     const saved = localStorage.getItem('medimind_stt_model');
-    return (saved === 'STT1' || saved === 'STT2' || saved === 'STT3') ? saved : 'STT1';
+    return (saved === 'Fast' || saved === 'GoogleChirp') ? saved : 'Fast';
   });
-  
+
   // Update ref when state changes
   useEffect(() => {
     selectedSTTModelRef.current = selectedSTTModel;
   }, [selectedSTTModel]);
-  
+
   // Speaker diarization state
   const [speakerSegments, setSpeakerSegments] = useState<SpeakerSegment[]>([]);
   const [hasSpeakerResults, setHasSpeakerResults] = useState(false);
@@ -120,7 +120,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   const animationFrameRef = useRef<number | null>(null);
   const georgianTTSServiceRef = useRef<GeorgianTTSService | null>(null);
   const recordingStartTimeRef = useRef<number | null>(null);
-  
+
   // Chunked processing refs
   const audioChunksForProcessingRef = useRef<Blob[]>([]);
   const chunkProcessingIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -129,12 +129,12 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   const lastSavedTranscriptLengthRef = useRef<number>(0);
   const failedChunksCountRef = useRef<number>(0);
   const totalProcessedChunksRef = useRef<number>(0);
-  
+
   // Smart segmentation refs
   const segmentStartTimeRef = useRef<number>(0);
-  
+
   // STT model ref for async operations
-  const selectedSTTModelRef = useRef<'STT1' | 'STT2' | 'STT3'>(selectedSTTModel);
+  const selectedSTTModelRef = useRef<'Fast' | 'GoogleChirp'>(selectedSTTModel);
   const lastAudioLevelRef = useRef<number>(0);
   const silenceCountRef = useRef<number>(0);
   const autoRestartTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -164,7 +164,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     }
   }, []);
 
-  const updateSelectedSTTModel = useCallback((model: 'STT1' | 'STT2' | 'STT3') => {
+  const updateSelectedSTTModel = useCallback((model: 'Fast' | 'GoogleChirp') => {
     console.log('🎯 STT Model changed from', selectedSTTModel, 'to', model);
     setSelectedSTTModel(model);
     selectedSTTModelRef.current = model; // Update ref immediately
@@ -249,7 +249,10 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     const segmentDuration = Math.max(0, currentTime - segmentStartTimeRef.current);
     
     // OPTIMIZED: 15-second automatic restart for faster word capture
-    const maxSegmentDuration = 15000; // 15 seconds - faster, seamless segmentation
+    // Different segment durations based on STT model
+    // Google: 5 seconds for live feel, Enagram: 15 seconds
+    const isGoogleSTT = selectedSTTModelRef.current === 'GoogleChirp';
+    const maxSegmentDuration = isGoogleSTT ? 5000 : 15000; // Google: 5s, Enagram: 15s
     
     // Clean status logging every 5 seconds (disabled in production)
     // if (segmentDuration % 5000 < 50) { // Every 5 seconds
@@ -600,12 +603,16 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       let finalSegmentChunks: Blob[];
       
       // CRITICAL: Use blob size as primary safety check - larger blobs = longer audio
-      // First batch: 320KB worked perfectly, so use that as our safe maximum
-      const maxSafeBlobSizeKB = 320; // KB - proven safe limit from first batch
-      const needsTrimming = actualBlobSizeKB > maxSafeBlobSizeKB || theoreticalDurationSeconds > 24;
+      // Google STT: Send 3-5 second chunks for near real-time transcription
+      // Enagram: 320KB works (25 seconds)
+      const isGoogleSTT = selectedSTTModelRef.current === 'GoogleChirp';
+      const maxSafeBlobSizeKB = isGoogleSTT ? 80 : 320; // KB - Google: ~5s chunks, Enagram: 25s
+      const maxDurationSeconds = isGoogleSTT ? 5 : 24; // Google: 5s for live feel, Enagram: 24s
+      const needsTrimming = actualBlobSizeKB > maxSafeBlobSizeKB || theoreticalDurationSeconds > maxDurationSeconds;
       
       if (needsTrimming) {
-        console.warn(`⚠️  Batch too large (${actualBlobSizeKB}KB, ${theoreticalDurationSeconds}s), trimming to stay under 25s limit...`);
+        const limitDesc = isGoogleSTT ? '5s (Google)' : '25s (Enagram)';
+        console.warn(`⚠️  Batch too large (${actualBlobSizeKB}KB, ${theoreticalDurationSeconds}s), trimming to stay under ${limitDesc} limit...`);
         
         // Calculate safe chunk count based on successful first batch ratio
         // First batch: 320KB / 20 chunks = 16KB per chunk average
@@ -763,13 +770,19 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         
         if (hasMoreChunks || isStillRecording) {
           console.log(`🔄 Continuing batch processing... (${audioChunksForProcessingRef.current.length} chunks remaining)`);
+
+          // Different delays based on STT model
+          // Google: 3-5s for live feel, Enagram: 30s to avoid rate limits
+          const isGoogleSTT = selectedSTTModelRef.current === 'GoogleChirp';
+          const batchDelay = isGoogleSTT ? 3000 : 30000; // Google: 3s, Enagram: 30s
+
           setTimeout(() => {
             if (isProcessingActiveRef.current) {
               processChunksInParallel();
             } else {
 
             }
-          }, 30000); // 30 second delay between batches - maximum delay to allow full server reset
+          }, batchDelay);
         } else {
 
         }
@@ -777,20 +790,28 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       } catch (error) {
 
         // Continue with retry after error
+        // Different delays based on STT model
+        const isGoogleSTT = selectedSTTModelRef.current === 'GoogleChirp';
+        const retryDelay = isGoogleSTT ? 5000 : 30000; // Google: 5s retry, Enagram: 30s
+
         setTimeout(() => {
           if (isProcessingActiveRef.current) {
             processChunksInParallel();
           }
-        }, 30000); // 30 second delay after errors too
+        }, retryDelay);
       }
     };
 
     // Start the batch processing after a short delay to ensure clean state
+    // Different initial delays based on STT model
+    const isGoogleSTT = selectedSTTModelRef.current === 'GoogleChirp';
+    const initialDelay = isGoogleSTT ? 500 : 2000; // Google: 500ms for fast start, Enagram: 2s
+
     setTimeout(() => {
       if (isProcessingActiveRef.current) {
         processChunksInParallel();
       }
-    }, 2000); // 2 second delay to let any previous requests clear
+    }, initialDelay);
   }, [chunkSize, language, autocorrect, punctuation, digits, onLiveTranscriptUpdate]);
 
   const stopChunkedProcessing = useCallback(async () => {

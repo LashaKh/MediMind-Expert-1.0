@@ -133,8 +133,8 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
       return null;
     }
 
-    const sessionTitle = title || `Session ${new Date().toLocaleString()}`;
-    console.log('📝 Creating session with:', { title: sessionTitle, userId: user.id });
+    const sessionTitle = title || '';
+    console.log('📝 Creating session with:', { title: sessionTitle || '(Untitled)', userId: user.id });
     
     const [data, createError] = await safeAsync(
       () => supabase

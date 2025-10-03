@@ -218,32 +218,37 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
       className
     )}>
       {/* Header with status and controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-        <div className="flex items-center space-x-3">
-          <label className="text-sm font-medium text-gray-700">
-            Voice Transcript
-          </label>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center space-x-2">
+          <label className="text-sm font-semibold text-gray-700">Voice Transcript</label>
           {renderRecordingStatus()}
         </div>
-        
+
         {showRecordButton && !disabled && (
-          <div className="flex items-center space-x-2 w-full sm:w-auto justify-center sm:justify-end form100-voice-controls">
+          <div className="flex items-center space-x-2 form100-voice-controls">
             {renderAudioLevel()}
             
             {/* Recording controls */}
             <div className="flex items-center space-x-2 form100-mobile-spacing">
               {!recordingState.isRecording ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleRecordingToggle}
-                  disabled={!authStatus.isAuthenticated}
-                  className="form100-voice-button h-11 sm:h-9 px-4 sm:px-3 text-base sm:text-sm touch-manipulation"
-                >
-                  <Mic className="w-4 h-4 mr-1" />
-                  Record
-                </Button>
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#1a365d]/30 to-[#2b6cb0]/30 rounded-xl blur opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleRecordingToggle}
+                    disabled={!authStatus.isAuthenticated}
+                    className="relative form100-voice-button h-11 sm:h-10 px-6 sm:px-4 text-base sm:text-sm touch-manipulation
+                               bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white font-semibold
+                               hover:from-[#2b6cb0] hover:to-[#63b3ed] border-0
+                               shadow-lg hover:shadow-xl transition-all duration-300
+                               disabled:from-gray-300 disabled:to-gray-400"
+                  >
+                    <Mic className="w-5 h-5 mr-2" />
+                    Record
+                  </Button>
+                </div>
               ) : (
                 <>
                   <Button
@@ -303,7 +308,7 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
           disabled={disabled || recordingState.isRecording}
           maxLength={maxLength}
           className={cn(
-            "form100-textarea w-full min-h-[132px] sm:min-h-[120px] p-4 border border-gray-300 rounded-lg resize-none sm:resize-y",
+            "form100-textarea w-full min-h-[390px] sm:min-h-[325px] p-3 border border-gray-300 rounded-lg resize-y",
             "focus:ring-2 focus:ring-blue-500 focus:border-transparent form100-focus-ring",
             "transition-all duration-200 touch-manipulation form100-no-zoom",
             "placeholder-gray-400 text-gray-900 text-base sm:text-sm",
@@ -312,7 +317,7 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
             localTranscript && !ttsError && "border-green-300 form100-success-input",
             ttsError && "form100-error-input"
           )}
-          rows={5}
+          rows={16}
           onFocus={() => setIsEditing(true)}
           onBlur={() => setIsEditing(false)}
         />

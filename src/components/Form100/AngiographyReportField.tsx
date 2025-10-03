@@ -21,66 +21,9 @@ import '../Form100/styles/mobile.css';
 
 // Angiography report templates for quick insertion
 const ANGIOGRAPHY_TEMPLATES = {
-  normal: {
-    title: 'Normal Coronary Angiography',
-    content: `CORONARY ANGIOGRAPHY REPORT
-
-PROCEDURE: Coronary angiography via right femoral approach
-
-FINDINGS:
-- Left Main: Normal, no significant stenosis
-- LAD: Normal caliber, no significant stenosis
-- LCx: Normal caliber, no significant stenosis  
-- RCA: Dominant vessel, normal caliber, no significant stenosis
-
-CONCLUSION:
-Normal coronary arteries. No significant coronary artery disease.
-
-RECOMMENDATIONS:
-Continue optimal medical therapy for cardiovascular risk factors.`
-  },
-  stenosis: {
-    title: 'Coronary Stenosis Template',
-    content: `CORONARY ANGIOGRAPHY REPORT
-
-PROCEDURE: Coronary angiography via [approach]
-
-FINDINGS:
-- Left Main: [findings]
-- LAD: [% stenosis] stenosis in [location]
-- LCx: [findings]
-- RCA: [findings]
-
-VENTRICULAR FUNCTION:
-- LVEF: [%]
-- Wall motion: [normal/abnormal]
-
-CONCLUSION:
-[Significant/non-significant] coronary artery disease
-
-RECOMMENDATIONS:
-[PCI/CABG/medical therapy] recommended`
-  },
-  acute: {
-    title: 'Acute MI Angiography',
-    content: `EMERGENCY CORONARY ANGIOGRAPHY
-
-INDICATION: ST-elevation myocardial infarction
-
-PROCEDURE: Emergency coronary angiography and PCI
-
-CULPRIT VESSEL: [vessel]
-STENOSIS: [%] stenosis/occlusion
-
-INTERVENTION:
-- Thrombectomy: [yes/no]
-- Stent deployment: [type, size]
-- TIMI flow post-PCI: [grade]
-
-DOOR-TO-BALLOON TIME: [minutes]
-
-CONCLUSION:
-Successful primary PCI to [vessel]`
+  clearCoronaries: {
+    title: 'Clear Coronaries',
+    content: `კორონარული არტერიები ჰემოდინამიკურად მნიშვნელოვანი სტენოზირების გარეშე.`
   }
 };
 
@@ -216,31 +159,30 @@ const AngiographyReportField: React.FC<AngiographyReportFieldProps> = ({
       className
     )}>
       {/* Header with controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+      <div className="flex items-center justify-between gap-2">
+        <label className="text-sm font-semibold text-gray-700">Specialized Medical Reports</label>
+
         <div className="flex items-center space-x-2">
-          <Heart className="w-4 h-4 text-red-500" />
-          <label className="text-sm font-medium text-gray-700">
-            Angiography Report
-          </label>
-          <div className="text-xs text-gray-500 hidden sm:block">
-            {wordCount} words • {readingTime}min read
-          </div>
-        </div>
-        
-        <div className="flex items-center space-x-2 w-full sm:w-auto justify-center sm:justify-end">
           {/* Template dropdown */}
           <div className="relative">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setShowTemplates(!showTemplates)}
-              disabled={disabled}
-              className="form100-button h-11 sm:h-8 px-4 sm:px-3 text-base sm:text-sm touch-manipulation"
-            >
-              <Wand2 className="w-3 h-3 mr-1" />
-              Templates
-            </Button>
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#2b6cb0]/30 to-[#63b3ed]/30 rounded-xl blur opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setShowTemplates(!showTemplates)}
+                disabled={disabled}
+                className="relative form100-button h-11 sm:h-10 px-6 sm:px-4 text-base sm:text-sm touch-manipulation
+                           bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white font-semibold
+                           hover:from-[#63b3ed] hover:to-[#90cdf4] border-0
+                           shadow-lg hover:shadow-xl transition-all duration-300
+                           disabled:from-gray-300 disabled:to-gray-400"
+              >
+                <Wand2 className="w-4 h-4 mr-2" />
+                Templates
+              </Button>
+            </div>
             
             {showTemplates && (
               <div className="absolute right-0 mt-2 w-72 sm:w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
@@ -335,13 +277,13 @@ const AngiographyReportField: React.FC<AngiographyReportFieldProps> = ({
           disabled={disabled}
           maxLength={maxLength}
           className={cn(
-            "form100-angiography-textarea w-full min-h-[220px] sm:min-h-[200px] p-4 border border-gray-300 rounded-lg resize-none sm:resize-y font-mono text-base sm:text-sm",
+            "form100-angiography-textarea w-full min-h-[245px] sm:min-h-[210px] p-3 border border-gray-300 rounded-lg resize-y font-mono text-base sm:text-sm",
             "focus:ring-2 focus:ring-blue-500 focus:border-transparent form100-focus-ring",
             "transition-all duration-200 touch-manipulation form100-no-zoom",
             "placeholder-gray-400 text-gray-900",
             disabled && "bg-gray-50 text-gray-500 cursor-not-allowed"
           )}
-          rows={8}
+          rows={10}
         />
         
         {/* Character count */}

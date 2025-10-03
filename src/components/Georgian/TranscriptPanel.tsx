@@ -98,33 +98,22 @@ interface TranscriptPanelProps {
   selectedTemplate?: any; // UserReportTemplate
   onTemplateSelect?: (template: any | null) => void;
   availableTemplates?: any[]; // UserReportTemplate[]
-  
-  // Speaker diarization props
-  enableSpeakerDiarization?: boolean;
-  onToggleSpeakerDiarization?: (enabled: boolean) => void;
-  speakerCount?: number;
-  onSpeakerCountChange?: (count: number) => void;
-  // Speaker diarization results
-  hasSpeakers?: boolean;
-  speakers?: Array<{
-    Speaker: string;
-    Text: string;
-    StartSeconds: number;
-    EndSeconds: number;
-  }>;
-  
-  // STT Model selection props
-  selectedSTTModel?: 'STT1' | 'STT2' | 'STT3';
-  onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
-  
+
   // Session title props
   pendingSessionTitle?: string;
   onPendingTitleChange?: (title: string) => void;
-  
+  titleInputRef?: React.RefObject<HTMLInputElement>;
+  showTitleError?: boolean;
+  onTitleErrorTrigger?: () => void;
+
   // History controls
   isHistoryOpen?: boolean;
   onToggleHistory?: () => void;
   sessionCount?: number;
+
+  // STT Model selection props
+  selectedSTTModel?: 'Fast' | 'GoogleChirp';
+  onModelChange?: (model: 'Fast' | 'GoogleChirp') => void;
 }
 
 export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
@@ -153,19 +142,12 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   onExpandChat,
   activeTab,
   onActiveTabChange,
-  enableSpeakerDiarization = false,
-  onToggleSpeakerDiarization,
-  speakerCount = 2,
-  onSpeakerCountChange,
-  // Speaker diarization results
-  hasSpeakers: hasSpeakersFromHook = false,
-  speakers: speakersFromHook = [],
-  // STT Model selection props
-  selectedSTTModel = 'STT3',
-  onModelChange,
   // Session title props
   pendingSessionTitle = '',
   onPendingTitleChange,
+  titleInputRef,
+  showTitleError = false,
+  onTitleErrorTrigger,
   // History controls
   isHistoryOpen = false,
   onToggleHistory,
@@ -176,7 +158,10 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   availableTemplates = [],
   // Mobile optimization props
   textareaRef,
-  isKeyboardAdjusted
+  isKeyboardAdjusted,
+  // STT Model selection props
+  selectedSTTModel = 'Fast',
+  onModelChange
 }) => {
   // File attachment state - using simple attachment type like case studies
   const [attachedFiles, setAttachedFiles] = useState<Attachment[]>([]);
@@ -218,9 +203,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     };
   }, []);
   
-  // Use speaker diarization state from hook, fallback to local state
-  const hasSpeakers = hasSpeakersFromHook;
-  const speakerSegments = speakersFromHook;
+  // Speaker diarization removed per user request
   
 
   // Refs
@@ -722,23 +705,21 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             canStop={canStop}
             pendingSessionTitle={pendingSessionTitle}
             onPendingTitleChange={onPendingTitleChange}
+            titleInputRef={titleInputRef}
+            showTitleError={showTitleError}
+            onTitleErrorTrigger={onTitleErrorTrigger}
             currentSession={currentSession}
-            hasSpeakers={hasSpeakers}
-            speakers={speakerSegments}
-            enableSpeakerDiarization={enableSpeakerDiarization}
-            onToggleSpeakerDiarization={onToggleSpeakerDiarization}
-            speakerCount={speakerCount}
-            onSpeakerCountChange={onSpeakerCountChange}
             textareaRef={textareaRef}
             isKeyboardAdjusted={isKeyboardAdjusted}
-            selectedSTTModel={selectedSTTModel}
-            onModelChange={onModelChange}
             // File attachment props
             attachedFiles={attachedFiles}
             onAttachFiles={handleFileUploadFromContent}
             onRemoveAttachment={handleRemoveAttachment}
             isProcessingAttachment={isProcessingAttachment}
             attachmentProgress={attachmentProgress}
+            // STT Model selection props
+            selectedSTTModel={selectedSTTModel}
+            onModelChange={onModelChange}
           />
         );
       

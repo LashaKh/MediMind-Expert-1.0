@@ -248,11 +248,11 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
                    data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 
                    data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
         style={{
-          width: window.innerWidth < 768 ? 'calc(100vw - 1rem)' : window.innerWidth < 1024 ? 'min(85vw, 900px)' : 'min(80vw, 1100px)',
-          height: window.innerHeight < 600 ? 'calc(100vh - 2rem)' : 'min(80vh, 700px)',
+          width: window.innerWidth < 768 ? 'calc(100vw - 1rem)' : window.innerWidth < 1024 ? 'min(90vw, 1100px)' : 'min(92vw, 1400px)',
+          height: window.innerHeight < 600 ? 'calc(100vh - 2rem)' : 'min(85vh, 800px)',
           maxWidth: 'none',
           maxHeight: 'none',
-          margin: window.innerWidth < 768 ? '1rem 0.5rem' : '3rem 2rem'
+          margin: window.innerWidth < 768 ? '1rem 0.5rem' : '2rem 1.5rem'
         }}>
         {/* Optimized responsive design system with Dialog overrides */}
         <style>{`
@@ -356,8 +356,8 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
 
 
           {/* Premium Content Area */}
-          <div className="flex-1 overflow-y-auto px-8 py-6">
-            <div className="max-w-6xl mx-auto">
+          <div className="flex-1 overflow-y-auto px-4 py-3">
+            <div className="max-w-7xl mx-auto">
               {currentStepData && (
                 <currentStepData.component
                   formData={formData}
@@ -541,57 +541,25 @@ const ClinicalDataStep: React.FC<any> = ({ formData, updateFormData }) => {
 // Step 2: Documentation - Premium Medical Documentation Interface
 const DocumentationStep: React.FC<any> = ({ formData, updateFormData, sessionId }) => {
   return (
-    <div className="space-y-6">
-      {/* Premium section header */}
-      <div className="text-center pb-4 border-b border-[#63b3ed]/10">
-        <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-[#1a365d]/5 to-[#2b6cb0]/5 rounded-2xl">
-          <FileText className="w-6 h-6 text-[#2b6cb0]" />
-          <h3 className="text-lg font-bold text-[#1a365d]">Medical Documentation</h3>
-        </div>
-      </div>
-      
-      <div className="space-y-6">
+    <div className="space-y-3">
+      <div className="space-y-3">
         {/* Voice Transcript Section */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <label className="block text-base font-semibold text-[#1a365d] flex items-center space-x-2">
-              <div className="w-2 h-2 bg-[#1a365d] rounded-full" />
-              <span>Voice Transcript</span>
-            </label>
-            <div className="flex items-center space-x-2 text-sm text-[#2b6cb0]/70">
-              <Shield className="w-4 h-4" />
-              <span>AI-Powered Transcription</span>
-            </div>
-          </div>
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#1a365d]/20 to-[#2b6cb0]/20 rounded-2xl blur-sm opacity-0 group-focus-within:opacity-100 transition-all duration-500" />
-            <div className="relative">
-              <VoiceTranscriptField
-                value={formData.voiceTranscript}
-                onChange={(transcript) => updateFormData({ voiceTranscript: transcript })}
-                sessionId={sessionId}
-                placeholder="Voice transcript will appear here automatically..."
-              />
-            </div>
-          </div>
+        <div className="relative">
+          <VoiceTranscriptField
+            value={formData.voiceTranscript}
+            onChange={(transcript) => updateFormData({ voiceTranscript: transcript })}
+            sessionId={sessionId}
+            placeholder="Voice transcript will appear here automatically..."
+          />
         </div>
-        
+
         {/* Angiography Report Section */}
-        <div className="space-y-4">
-          <label className="block text-base font-semibold text-[#1a365d] flex items-center space-x-2">
-            <div className="w-2 h-2 bg-[#63b3ed] rounded-full" />
-            <span>Specialized Medical Reports</span>
-          </label>
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#63b3ed]/20 to-[#90cdf4]/20 rounded-2xl blur-sm opacity-0 group-focus-within:opacity-100 transition-all duration-500" />
-            <div className="relative">
-              <AngiographyReportField
-                value={formData.angiographyReport}
-                onChange={(report) => updateFormData({ angiographyReport: report })}
-                placeholder="Enter angiography report details, imaging findings, or other specialized medical documentation..."
-              />
-            </div>
-          </div>
+        <div className="relative">
+          <AngiographyReportField
+            value={formData.angiographyReport}
+            onChange={(report) => updateFormData({ angiographyReport: report })}
+            placeholder="Enter angiography report details, imaging findings, or other specialized medical documentation..."
+          />
         </div>
       </div>
     </div>

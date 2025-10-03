@@ -39,6 +39,7 @@ import { HeaderControls } from './components/HeaderControls';
 import { MobileHeader } from './components/MobileHeader';
 import { MobileSessionHeader } from './components/MobileSessionHeader';
 import { AudioUploadProgress } from './components/AudioUploadProgress';
+import { TitleRequiredModal } from './components/TitleRequiredModal';
 import { formatTime } from './utils/transcriptUtils';
 
 // Types
@@ -79,6 +80,11 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Session title state for pre-recording title input
   const [pendingSessionTitle, setPendingSessionTitle] = useState('');
+
+  // Title required modal state
+  const [showTitleModal, setShowTitleModal] = useState(false);
+  const [showTitleError, setShowTitleError] = useState(false);
+  const titleInputRef = useRef<HTMLInputElement>(null);
 
   // Mobile session editing states
   const [editingSessionId, setEditingSessionId] = useState<string>('');
@@ -129,6 +135,9 @@ export const GeorgianSTTApp: React.FC = () => {
   
   // Handle title change for both new and existing sessions
   const handleTitleChange = useCallback(async (title: string) => {
+    // Clear error when user starts typing
+    if (showTitleError) setShowTitleError(false);
+
     if (currentSession) {
       // Update existing session title
       await updateSession(currentSession.id, { title: title.trim() });
@@ -136,7 +145,7 @@ export const GeorgianSTTApp: React.FC = () => {
       // Update pending title for new session
       setPendingSessionTitle(title);
     }
-  }, [currentSession, updateSession]);
+  }, [currentSession, updateSession, showTitleError]);
   
   // Session-aware transcript updates - prevents cross-session contamination
   const lastProcessedContentRef = useRef<string>('');
@@ -232,7 +241,7 @@ export const GeorgianSTTApp: React.FC = () => {
     hasSpeakerResults,
     // STT model selection
     selectedSTTModel,
-    updateSelectedSTTModel,
+    updateSelectedSTTModel
     // service // Currently unused
   } = useGeorgianTTS({
     language: 'ka-GE',
@@ -720,11 +729,20 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Handle recording start - create temporary session if needed
   const handleStartRecording = useCallback(async () => {
+    // VALIDATION: Enforce title requirement for new sessions
+    if (!currentSession && !pendingSessionTitle.trim()) {
+      console.warn('⚠️ Recording blocked: Session title is required');
+      // Trigger error state
+      setShowTitleError(true);
+      titleInputRef.current?.focus();
+      titleInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
 
     // Generate new recording session ID for tracking
     const newRecordingSessionId = `rec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     setCurrentRecordingSessionId(newRecordingSessionId);
-    
+
     // Reset duplicate detection for new recording session
     lastProcessedContentRef.current = '';
     lastProcessedTimeRef.current = 0;
@@ -735,10 +753,10 @@ export const GeorgianSTTApp: React.FC = () => {
       setLocalTranscript(''); // Clear local transcript for new session
       resetTranscript(); // Reset TTS hook state for new session
       clearTTSResult(); // Clear old transcription result
-      
+
       const sessionTitle = pendingSessionTitle.trim() || 'New Recording';
       const newSession = await createSession(sessionTitle);
-      
+
       // Clear the pending title after creating the session
       setPendingSessionTitle('');
       if (newSession) {
@@ -751,7 +769,7 @@ export const GeorgianSTTApp: React.FC = () => {
       // This preserves user's typed/pasted content when starting recording
 
       clearTTSResult(); // Just clear pending results, keep existing transcript state
-      
+
       // CRITICAL: Initialize TTS hook's internal state with existing content
       // The TTS hook needs to know about existing content to properly append new transcriptions
       if (localTranscript.trim()) {
@@ -762,7 +780,7 @@ export const GeorgianSTTApp: React.FC = () => {
     }
 
     startRecording();
-  }, [currentSession, createSession, selectSession, startRecording, resetTranscript, clearTTSResult]);
+  }, [currentSession, createSession, selectSession, startRecording, resetTranscript, clearTTSResult, pendingSessionTitle]);
 
   // Clear all errors
   const clearAllErrors = useCallback(() => {
@@ -801,7 +819,7 @@ export const GeorgianSTTApp: React.FC = () => {
     >
       {/* Desktop Header - Hidden on Mobile */}
       <div className="hidden lg:block">
-        <HeaderControls 
+        <HeaderControls
           authStatus={authStatus}
           recordingState={recordingState}
           processing={processing}
@@ -812,8 +830,6 @@ export const GeorgianSTTApp: React.FC = () => {
           canStop={canStop}
           onStartRecording={handleStartRecording}
           onStopRecording={stopRecording}
-          selectedSTTModel={selectedSTTModel}
-          onModelChange={updateSelectedSTTModel}
           onCreateSession={handleCreateSession}
         />
       </div>
@@ -1113,19 +1129,12 @@ export const GeorgianSTTApp: React.FC = () => {
                 onClearHistory={clearHistory}
                 onDeleteReport={handleDeleteReport}
                 onAddToHistory={addToHistory}
-                enableSpeakerDiarization={enableSpeakerDiarization}
-                onToggleSpeakerDiarization={setEnableSpeakerDiarization}
-                speakerCount={speakerCount}
-                onSpeakerCountChange={setSpeakerCount}
-                // Speaker diarization results from hook
-                hasSpeakers={hasSpeakerResults}
-                // STT Model selection props
-                selectedSTTModel={selectedSTTModel}
-                onModelChange={updateSelectedSTTModel}
                 // Session title props
                 pendingSessionTitle={pendingSessionTitle}
                 onPendingTitleChange={handleTitleChange}
-                speakers={speakerSegments}
+                titleInputRef={titleInputRef}
+                showTitleError={showTitleError}
+                onTitleErrorTrigger={() => setShowTitleError(true)}
                 onExpandChat={handleSetExpandChatFunction}
                 // Template selection props
                 selectedTemplate={selectedTemplate}
@@ -1135,6 +1144,9 @@ export const GeorgianSTTApp: React.FC = () => {
                 isHistoryOpen={!isHistoryCollapsed}
                 onToggleHistory={() => setIsHistoryCollapsed(!isHistoryCollapsed)}
                 sessionCount={sessions.length}
+                // STT Model selection props
+                selectedSTTModel={selectedSTTModel}
+                onModelChange={updateSelectedSTTModel}
               />
             </div>
           </div>
@@ -1178,19 +1190,10 @@ export const GeorgianSTTApp: React.FC = () => {
               onAddToHistory={addToHistory}
               activeTab={activeTab}
               onActiveTabChange={setActiveTab}
-              enableSpeakerDiarization={enableSpeakerDiarization}
-              onToggleSpeakerDiarization={setEnableSpeakerDiarization}
-              speakerCount={speakerCount}
-              onSpeakerCountChange={setSpeakerCount}
-              // Speaker diarization results from hook
-              hasSpeakers={hasSpeakerResults}
-              speakers={speakerSegments}
-              // STT Model selection props
-              selectedSTTModel={selectedSTTModel}
-              onModelChange={updateSelectedSTTModel}
               // Session title props
               pendingSessionTitle={pendingSessionTitle}
               onPendingTitleChange={handleTitleChange}
+              titleInputRef={titleInputRef}
               onExpandChat={handleSetExpandChatFunction}
               // Template selection props
               selectedTemplate={selectedTemplate}
@@ -1198,6 +1201,9 @@ export const GeorgianSTTApp: React.FC = () => {
               availableTemplates={templates}
               // History controls - pass sessionCount but no toggle for mobile (uses drawer)
               sessionCount={sessions.length}
+              // STT Model selection props
+              selectedSTTModel={selectedSTTModel}
+              onModelChange={updateSelectedSTTModel}
             />
           </div>
         </div>
@@ -1241,6 +1247,17 @@ export const GeorgianSTTApp: React.FC = () => {
         fileName={uploadState.processingStage !== 'idle' ? 'Audio file' : undefined}
         error={uploadState.error}
         onCancel={canCancel ? cancelProcessing : undefined}
+      />
+
+      {/* Title Required Modal */}
+      <TitleRequiredModal
+        isOpen={showTitleModal}
+        onClose={() => setShowTitleModal(false)}
+        onFocusTitle={() => {
+          // Focus and highlight the title input
+          titleInputRef.current?.focus();
+          titleInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }}
       />
 
       {/* AI BUTTON - ONLY VISIBLE ON AI PROCESSING TAB */}

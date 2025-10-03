@@ -22,9 +22,6 @@ interface HeaderControlsProps {
   canStop?: boolean;
   onStartRecording?: () => void;
   onStopRecording?: () => void;
-  // STT model selection
-  selectedSTTModel?: 'STT1' | 'STT2' | 'STT3';
-  onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
   // New Session control
   onCreateSession?: () => void;
 }
@@ -40,8 +37,6 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
   canStop = false,
   onStartRecording,
   onStopRecording,
-  selectedSTTModel = 'STT3',
-  onModelChange,
   onCreateSession
 }) => {
   const navigate = useNavigate();
@@ -124,7 +119,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                 className={`
                   group relative flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 lg:py-3 rounded-lg sm:rounded-xl transition-all duration-300 font-bold text-xs sm:text-sm transform hover:scale-105 active:scale-95 shadow-lg
                   ${recordingState.isRecording || processing
-                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-gray-200/30' 
+                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-gray-200/30'
                     : 'bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d] text-white shadow-[#2b6cb0]/30'
                   }
                 `}
@@ -138,7 +133,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                     <Plus className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   )}
                 </div>
-                
+
                 {/* Desktop label */}
                 <div className="hidden lg:flex flex-col items-start">
                   <span className="font-bold text-sm leading-tight">
@@ -148,12 +143,12 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                     {processing ? 'Please wait' : 'Session'}
                   </span>
                 </div>
-                
+
                 {/* Tablet/Mobile label */}
                 <span className="lg:hidden font-bold text-xs sm:text-sm">
                   {processing ? 'Processing' : 'New'}
                 </span>
-                
+
                 {/* Recording Indicator */}
                 {recordingState.isRecording && (
                   <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-2 h-2 sm:w-3 sm:h-3 bg-gradient-to-r from-red-500 to-rose-600 rounded-full shadow-sm shadow-red-500/40 animate-pulse" />

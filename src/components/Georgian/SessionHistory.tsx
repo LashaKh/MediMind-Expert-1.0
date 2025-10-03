@@ -266,10 +266,37 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'complete': return 'text-[#2b6cb0]';
+      case 'complete': return 'text-[#1a365d]';
       case 'transcribed': return 'text-[#2b6cb0]';
       case 'recent': return 'text-[#63b3ed]';
       default: return 'text-[#90cdf4]';
+    }
+  };
+
+  const getCategoryBgColor = (category: string, isActive: boolean) => {
+    if (isActive) {
+      switch (category) {
+        case 'complete': return 'bg-[#1a365d]';
+        case 'transcribed': return 'bg-[#2b6cb0]';
+        case 'recent': return 'bg-[#63b3ed]';
+        default: return 'bg-[#90cdf4]';
+      }
+    }
+    switch (category) {
+      case 'complete': return 'bg-[#1a365d]/20';
+      case 'transcribed': return 'bg-[#2b6cb0]/20';
+      case 'recent': return 'bg-[#63b3ed]/20';
+      default: return 'bg-[#90cdf4]/20';
+    }
+  };
+
+  const getCategoryIconColor = (category: string, isActive: boolean) => {
+    if (isActive) return 'text-white';
+    switch (category) {
+      case 'complete': return 'text-[#1a365d]';
+      case 'transcribed': return 'text-[#2b6cb0]';
+      case 'recent': return 'text-[#63b3ed]';
+      default: return 'text-[#1a365d]';
     }
   };
 
@@ -373,10 +400,8 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
               {/* Compact session icon */}
               <div className={`
                 relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200
-                ${isActive 
-                  ? 'bg-medical-blue-600 text-white' 
-                  : 'bg-medical-gray-100 dark:bg-medical-gray-600 text-medical-gray-600 dark:text-medical-gray-300 group-hover:bg-medical-blue-100 dark:group-hover:bg-medical-blue-900/30'
-                }
+                ${getCategoryBgColor(category, isActive)} ${getCategoryIconColor(category, isActive)}
+                ${!isActive && 'group-hover:bg-[#63b3ed]/30'}
               `}>
                 <CategoryIcon className="w-5 h-5" />
                 

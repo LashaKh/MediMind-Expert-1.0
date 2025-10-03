@@ -2,20 +2,24 @@
 // Flowise integration for medical ER consultation reports
 // HIPAA-compliant with secure authentication and error handling
 
-import { 
-  Form100Request, 
-  FlowiseForm100Payload, 
+import {
+  Form100Request,
+  FlowiseForm100Payload,
   FlowiseForm100Response,
   Form100ServiceResponse,
   Form100Config,
   FORM100_DEFAULTS,
   DiagnosisCode
 } from '../types/form100';
-import { 
-  getFlowiseEndpointForDiagnosis, 
+import {
+  getFlowiseEndpointForDiagnosis,
   STEMI_FORM100_ENDPOINT,
-  DEFAULT_FORM100_ENDPOINT 
+  DEFAULT_FORM100_ENDPOINT
 } from '../components/Form100/config/diagnosisEndpoints';
+import {
+  parseGeorgianMedicalHistory,
+  insertBriefAnamnesisIntoForm100
+} from '../utils/medicalTextParser';
 
 // Service configuration
 const FORM100_CONFIG: Form100Config = {
@@ -302,8 +306,41 @@ const makeFlowiseRequest = async (
     });
     
     // Use EXACT same response parsing as flowise-simple.mjs
-    const generatedContent = flowiseResult.text || flowiseResult.response || flowiseResult.answer || 'No response from AI';
-    
+    let generatedContent = flowiseResult.text || flowiseResult.response || flowiseResult.answer || 'No response from AI';
+
+    // POST-PROCESSING: Parse and insert medical history section
+    if (payload.patientData?.existingERReport) {
+      console.log('🔍 Parsing medical history from existing ER report...');
+      console.log('📄 ER Report preview:', payload.patientData.existingERReport.substring(0, 200));
+
+      const medicalHistory = parseGeorgianMedicalHistory(payload.patientData.existingERReport);
+
+      if (medicalHistory) {
+        console.log('✅ Medical history parsed successfully:', {
+          length: medicalHistory.length,
+          preview: medicalHistory.substring(0, 100)
+        });
+
+        console.log('📋 Form 100 BEFORE insertion:', {
+          length: generatedContent.length,
+          hasMarkdown: generatedContent.includes('**'),
+          preview: generatedContent.substring(0, 200)
+        });
+
+        // Insert the parsed medical history into Form 100
+        generatedContent = insertBriefAnamnesisIntoForm100(generatedContent, medicalHistory);
+
+        console.log('✅ Medical history inserted into Form 100');
+        console.log('📋 Form 100 AFTER insertion:', {
+          length: generatedContent.length,
+          hasMarkdown: generatedContent.includes('**'),
+          preview: generatedContent.substring(0, 200)
+        });
+      } else {
+        console.warn('⚠️ Could not parse medical history section from ER report');
+      }
+    }
+
     const transformedResponse: FlowiseForm100Response = {
       success: true,
       data: {

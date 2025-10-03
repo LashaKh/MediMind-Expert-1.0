@@ -58,15 +58,15 @@ export const DIAGNOSIS_ENDPOINTS: Record<string, DiagnosisEndpointMapping> = {
   'I20.0-TROPONIN_POSITIVE': {
     diagnosisCode: 'I20.0',
     flowiseEndpoint: `${FLOWISE_BASE_URL}/6dc8bb6d-ce79-4a40-9561-9108ba05e7c7`,
-    description: 'არასტაბილური სტენოკარდია Braunwald III Troponin +',
+    description: 'არასტაბილური სტენოკარდია(Troponin+ Braunwald III)',
     isSpecialized: true
   },
-  
+
   // Unstable Angina without Troponin (I20.0 - Troponin-)
   'I20.0-TROPONIN_NEGATIVE': {
     diagnosisCode: 'I20.0',
     flowiseEndpoint: `${FLOWISE_BASE_URL}/99079fbc-b9cf-4c9c-832c-ac71c864d9fb`,
-    description: 'არასტაბილური სტენოკარდია Tn-',
+    description: 'არასტაბილური სტენოკარდია',
     isSpecialized: true
   },
   
@@ -82,13 +82,13 @@ export const DIAGNOSIS_ENDPOINTS: Record<string, DiagnosisEndpointMapping> = {
   'I21.9': {
     diagnosisCode: 'I21.9',
     flowiseEndpoint: `${FLOWISE_BASE_URL}/77a48098-671d-4dea-b476-fcea11cd1b5a`,
-    description: 'მიოკარდიუმის მწვავე დაუზუსტებელი ინფარქტი',
+    description: 'მიოკარდიუმის მწვავე დაუზუსტებელი ინფარქტი(MINOCA)',
     isSpecialized: true
   },
   
-  // STEMI Form 100 (I21.x) - Form 100 specific STEMI endpoint
-  'I21.x': {
-    diagnosisCode: 'I21.x',
+  // STEMI Form 100 (I21.(-)) - Form 100 specific STEMI endpoint
+  'I21.(-)': {
+    diagnosisCode: 'I21.(-)',
     flowiseEndpoint: `${FLOWISE_BASE_URL}/483bb23c-616a-4b49-9bc3-addb24930714`,
     description: 'STEMI',
     isSpecialized: true

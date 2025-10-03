@@ -114,8 +114,8 @@ export const DIAGNOSIS_CODES: DiagnosisCode[] = [
   {
     id: 'i21.9',
     code: 'I21.9',
-    name: 'მიოკარდიუმის მწვავე დაუზუსტებელი ინფარქტი (MINOCA)',
-    nameEn: 'Acute myocardial infarction, unspecified (MINOCA)',
+    name: 'მიოკარდიუმის მწვავე დაუზუსტებელი ინფარქტი(MINOCA)',
+    nameEn: 'Acute myocardial infarction, unspecified',
     category: 'cardiology',
     description: 'მიოკარდიუმის მწვავე ინფარქტი ნორმალური კორონარული არტერიებით',
     severity: 'critical',
@@ -150,7 +150,7 @@ export const DIAGNOSIS_CODES: DiagnosisCode[] = [
   {
     id: 'i20.0',
     code: 'I20.0',
-    name: 'არასტაბილური სტენოკარდია Braunwald III Troponin +',
+    name: 'არასტაბილური სტენოკარდია(Troponin+ Braunwald III)',
     nameEn: 'Unstable angina (Troponin + Braunwald III)',
     category: 'cardiology',
     description: 'კორონარული არტერიის მწვავე სინდრომი',
@@ -205,7 +205,7 @@ export const DIAGNOSIS_CODES: DiagnosisCode[] = [
   {
     id: 'i20.0-tn-negative',
     code: 'I20.0',
-    name: 'არასტაბილური სტენოკარდია Tn-',
+    name: 'არასტაბილური სტენოკარდია',
     nameEn: 'Unstable angina (Troponin negative)',
     category: 'cardiology',
     description: 'კორონარული არტერიის მწვავე სინდრომი, ტროპონინი უარყოფითი',

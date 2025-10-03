@@ -123,16 +123,36 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
       };
     }
     if (lower.includes('i21.0') || lower.includes('stemi') || lower.includes('st elevation') || lower.includes('st ელევაციური მიოკარდიუმის ინფარქტი')) {
-      return { 
-        type: 'STEMI ER Report (I21.0)', 
-        icon: HeartHandshake, 
-        color: 'from-[#dc2626] to-[#991b1b]', 
+      return {
+        type: 'STEMI ER Report (I21.0)',
+        icon: HeartHandshake,
+        color: 'from-[#dc2626] to-[#991b1b]',
         isDiagnosis: true,
         endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/a18d5e28-05a5-4991-af4a-186ceb558383',
         supportsForm100: true
       };
     }
-    
+    if (lower.includes('i20.8') || lower.includes('other forms of angina') || lower.includes('სტენოკარდიის სხვა ფორმები')) {
+      return {
+        type: 'Other Forms of Angina ER Report (I20.8)',
+        icon: HeartHandshake,
+        color: 'from-[#2b6cb0] to-[#1a365d]',
+        isDiagnosis: true,
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/8e25b323-f2ae-4e59-9e23-eedb4f658445',
+        supportsForm100: true
+      };
+    }
+    if (lower.includes('i44') || lower.includes('av block') || lower.includes('av ბლოკადა') || lower.includes('bradyarrhythmia') || lower.includes('ბრადიარითმიები')) {
+      return {
+        type: 'AV Block and Bradyarrhythmia ER Report (I44.(-))',
+        icon: HeartHandshake,
+        color: 'from-[#1a365d] to-[#2b6cb0]',
+        isDiagnosis: true,
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/deb8956f-1a1d-4910-bc40-d583805b695a',
+        supportsForm100: true
+      };
+    }
+
     // Handle Form 100 specific reports AFTER specific diagnoses
     if (isForm100Eligible) {
       return {
@@ -372,6 +392,27 @@ Medical AI Processing System`;
     }
   };
 
+  const handleForm100Delete = () => {
+    if (window.confirm('Are you sure you want to delete this Form 100 report? The original medical report will remain intact.')) {
+      // Clear local state
+      setGeneratedForm100Content(null);
+      setForm100GeneratedAt(null);
+      setEditedForm100Content(null);
+      setIsForm100EditMode(false);
+
+      // Remove from localStorage
+      try {
+        localStorage.removeItem(analysisStorageKey);
+        console.log('✅ Form 100 report deleted from localStorage');
+      } catch (error) {
+        console.warn('Failed to remove Form 100 from localStorage:', error);
+      }
+
+      // Update reports count
+      setRecentReportsCount(prev => Math.max(0, prev - 1));
+    }
+  };
+
   const handleEdit = () => {
     if (enableEditing) {
       setIsEditMode(true);
@@ -516,12 +557,14 @@ Medical AI Processing System`;
         isForm100EditMode={isForm100EditMode}
         editedForm100Content={editedForm100Content}
         analysis={analysis}
+        analysisType={analysisType}
         sessionId={sessionId}
         flowiseEndpoint={flowiseEndpoint}
         onForm100ExpandToggle={() => setIsForm100Expanded(!isForm100Expanded)}
         onForm100EditToggle={() => setIsForm100EditMode(!isForm100EditMode)}
         onForm100EditComplete={handleForm100EditComplete}
         onForm100EditError={handleForm100EditError}
+        onForm100Delete={handleForm100Delete}
         // onCopy, onDownload, onShare removed per user request
       />
 

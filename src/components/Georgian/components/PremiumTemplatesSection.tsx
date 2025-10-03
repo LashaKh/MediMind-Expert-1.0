@@ -92,6 +92,32 @@ const PREMIUM_TEMPLATES: Template[] = [
     estimatedTime: '45s',
     isFeatured: true,
     isSpecialDiagnosis: true
+  },
+  {
+    id: 'diagnosis-angina-i20-8',
+    category: 'Cardiologist Consults',
+    title: 'Initial Diagnosis - (I20.8) სტენოკარდიის სხვა ფორმები (Planned Angiography)',
+    instruction: 'Generate a comprehensive Other Forms of Angina diagnosis report (I20.8 - Other forms of angina pectoris / სტენოკარდიის სხვა ფორმები) with planned angiography protocol including clinical presentation, diagnostic criteria, risk stratification, treatment protocol, angiography planning, and disposition recommendations based on this medical transcript.',
+    description: 'Specialized angina pectoris diagnosis with planned angiography protocol and management plan',
+    icon: HeartHandshake,
+    color: 'from-[#2b6cb0] via-[#1a365d] to-[#2b6cb0]',
+    priority: 'high',
+    estimatedTime: '45s',
+    isFeatured: true,
+    isSpecialDiagnosis: true
+  },
+  {
+    id: 'diagnosis-av-block-i44',
+    category: 'Cardiologist Consults',
+    title: 'Initial Diagnosis - (I44.(-)) სრული/არასრული AV ბლოკადა და ბრადიარითმიები',
+    instruction: 'Generate a comprehensive AV Block and Bradyarrhythmia diagnosis report (I44.(-) - Complete/Incomplete AV block and bradyarrhythmias / სრული/არასრული AV ბლოკადა და ბრადიარითმიები) including clinical presentation, ECG findings, degree of AV block classification, hemodynamic assessment, pacemaker indication evaluation, treatment protocol, and disposition recommendations based on this medical transcript.',
+    description: 'Specialized AV block and bradyarrhythmia diagnosis with pacemaker evaluation protocol',
+    icon: HeartHandshake,
+    color: 'from-[#1a365d] via-[#2b6cb0] to-[#1a365d]',
+    priority: 'high',
+    estimatedTime: '45s',
+    isFeatured: true,
+    isSpecialDiagnosis: true
   }
 ];
 

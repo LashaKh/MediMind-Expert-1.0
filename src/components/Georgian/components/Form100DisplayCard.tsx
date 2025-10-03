@@ -7,6 +7,7 @@ import {
   X,
   Clock,
   CheckCircle,
+  Trash2,
   // Crown removed - no longer used
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
@@ -29,14 +30,23 @@ interface Form100DisplayCardProps {
   isForm100EditMode: boolean;
   editedForm100Content: string | null;
   analysis: ProcessingHistory;
+  analysisType: {
+    type: string;
+    icon: React.ElementType;
+    color: string;
+    isDiagnosis: boolean;
+    endpoint: string;
+    supportsForm100?: boolean;
+  };
   sessionId?: string;
   flowiseEndpoint?: string;
-  
+
   // Handlers
   onForm100ExpandToggle: () => void;
   onForm100EditToggle: () => void;
   onForm100EditComplete: (editResult: any) => void;
   onForm100EditError: (error: any) => void;
+  onForm100Delete: () => void;
   // onCopy, onDownload, onShare removed per user request
 }
 
@@ -47,17 +57,28 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
   isForm100EditMode,
   editedForm100Content,
   analysis,
+  analysisType,
   sessionId,
   flowiseEndpoint,
   onForm100ExpandToggle,
   onForm100EditToggle,
   onForm100EditComplete,
-  onForm100EditError
+  onForm100EditError,
+  onForm100Delete
   // onCopy, onDownload, onShare removed
 }) => {
   if (!generatedForm100Content) {
     return null;
   }
+
+  // Extract ICD code from diagnosis type string
+  // "STEMI ER Report (I21.x)" → "I21.x"
+  const extractICDCode = (typeString: string): string => {
+    const match = typeString.match(/\(([^)]+)\)/);
+    return match ? match[1] : '';
+  };
+
+  const icdCode = extractICDCode(analysisType.type);
 
   return (
     <>
@@ -95,10 +116,10 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                   
                   <div className="min-w-0 flex-1">
                     <h3 className="text-lg sm:text-xl font-bold text-white tracking-wide truncate">
-                      Form 100 Emergency Report
+                      Form 100 - {analysisType.type}
                     </h3>
                     <p className="text-xs sm:text-sm text-white/80 mt-1">
-                      Generated from initial ER consultation
+                      Generated from {icdCode} Consult Report
                     </p>
                   </div>
                 </div>
@@ -120,6 +141,17 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                       </span>
                     </MedicalButton>
 
+                    {/* Delete Button */}
+                    <MedicalButton
+                      variant="secondary"
+                      size="sm"
+                      leftIcon={Trash2}
+                      onClick={onForm100Delete}
+                      className="bg-red-500/20 hover:bg-red-500/30 border-red-400/30 hover:border-red-400/50 text-white hover:text-white backdrop-blur-sm min-h-[44px] sm:min-h-[36px]"
+                    >
+                      <span className="text-xs sm:text-sm font-medium">Delete</span>
+                    </MedicalButton>
+
                     {/* Collapse Button */}
                     <MedicalButton
                       variant="ghost"
@@ -132,13 +164,8 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                     </MedicalButton>
                   </div>
                   
-                  {/* Mobile: Badge and Timestamp Row */}
+                  {/* Timestamp */}
                   <div className="flex items-center space-x-2 sm:space-x-3">
-                    {/* Form 100 Badge */}
-                    <div className="px-3 py-1 sm:px-4 sm:py-2 bg-[#2b6cb0] rounded-full border border-white/20">
-                      <span className="text-xs sm:text-sm font-bold text-white tracking-wide">FORM 100</span>
-                    </div>
-                    
                     {form100GeneratedAt && (
                       <div className="flex items-center space-x-1 sm:space-x-2 px-2 py-1 sm:px-3 sm:py-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
                         <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-white/80" />

@@ -1,13 +1,13 @@
 import React, { useRef, useMemo } from 'react';
-import { 
-  Save, 
-  X, 
-  FileText, 
-  Stethoscope, 
-  Brain, 
-  Sparkles, 
-  Shield, 
-  Zap, 
+import {
+  Save,
+  X,
+  FileText,
+  Stethoscope,
+  Brain,
+  Sparkles,
+  Shield,
+  Zap,
   Star,
   Mic,
   Upload,
@@ -61,27 +61,23 @@ interface TranscriptContentProps {
   pendingSessionTitle?: string;
   onPendingTitleChange?: (title: string) => void;
   currentSession?: any;
+  titleInputRef?: React.RefObject<HTMLInputElement>;
+  showTitleError?: boolean;
+  onTitleErrorTrigger?: () => void;
   // Mobile optimization props
   textareaRef?: React.RefObject<HTMLTextAreaElement>;
   isKeyboardAdjusted?: boolean;
   // Empty field detection props
   showEmptyFieldIndicator?: boolean;
-  // Speaker diarization props
-  hasSpeakers?: boolean;
-  speakers?: SpeakerSegment[];
-  enableSpeakerDiarization?: boolean;
-  onToggleSpeakerDiarization?: (enabled: boolean) => void;
-  speakerCount?: number;
-  onSpeakerCountChange?: (count: number) => void;
-  // STT Model selection props
-  selectedSTTModel?: 'STT1' | 'STT2' | 'STT3';
-  onModelChange?: (model: 'STT1' | 'STT2' | 'STT3') => void;
   // File attachment props
   attachedFiles?: EnhancedAttachment[];
   onAttachFiles?: (files: File[]) => void;
   onRemoveAttachment?: (attachmentId: string) => void;
   isProcessingAttachment?: boolean;
   attachmentProgress?: ProgressInfo | null;
+  // STT Model selection props
+  selectedSTTModel?: 'Fast' | 'GoogleChirp';
+  onModelChange?: (model: 'Fast' | 'GoogleChirp') => void;
 }
 
 // Add mobile keyboard styles
@@ -89,15 +85,15 @@ const mobileKeyboardStyles = `
   .mediscribe-mobile-textarea-container.keyboard-active {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .mediscribe-mobile-textarea.keyboard-adjusted {
     transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .mediscribe-mobile-button-footer.keyboard-visible {
     animation: slideUpFromBottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   @keyframes slideUpFromBottom {
     from {
       transform: translateY(100%);
@@ -107,6 +103,16 @@ const mobileKeyboardStyles = `
       transform: translateY(0);
       opacity: 1;
     }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+  }
+
+  .animate-shake {
+    animation: shake 0.5s ease-in-out;
   }
 `;
 
@@ -122,14 +128,9 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   pendingSessionTitle = '',
   onPendingTitleChange,
   currentSession,
-  hasSpeakers = false,
-  speakers = [],
-  enableSpeakerDiarization = false,
-  onToggleSpeakerDiarization,
-  speakerCount = 2,
-  onSpeakerCountChange,
-  selectedSTTModel = 'STT3',
-  onModelChange,
+  titleInputRef,
+  showTitleError = false,
+  onTitleErrorTrigger,
   // File attachment props
   attachedFiles = [],
   onAttachFiles,
@@ -141,10 +142,26 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   isKeyboardAdjusted,
   // Empty field detection
   showEmptyFieldIndicator = true,
+  // STT Model selection props
+  selectedSTTModel = 'Fast',
+  onModelChange,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const attachmentInputRef = useRef<HTMLInputElement>(null);
-  
+
+  // Title validation state
+  const [titleError, setTitleError] = React.useState(false);
+  const [titleHighlight, setTitleHighlight] = React.useState(false);
+  const [titleTouched, setTitleTouched] = React.useState(false);
+  const isTitleEmpty = !currentSession && !pendingSessionTitle.trim();
+
+  // Update error state when parent triggers it
+  React.useEffect(() => {
+    if (showTitleError) {
+      setTitleError(true);
+    }
+  }, [showTitleError]);
+
   // Calculate empty fields in transcript
   const emptyFieldsCount = countEmptyFields(transcript);
   const hasEmptyFieldsPresent = hasEmptyFields(transcript);
@@ -179,55 +196,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
     }
   };
 
-  // Speaker colors for differentiation
-  const speakerColors = [
-    'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700',
-    'text-[#2b6cb0] dark:text-[#63b3ed] bg-[#63b3ed]/10 dark:bg-[#2b6cb0]/20 border-[#63b3ed]/30 dark:border-[#2b6cb0]/50',
-    'text-[#1a365d] dark:text-[#90cdf4] bg-[#90cdf4]/10 dark:bg-[#1a365d]/30 border-[#90cdf4]/30 dark:border-[#1a365d]/50',
-    'text-[#2b6cb0] dark:text-[#90cdf4] bg-[#90cdf4]/20 dark:bg-[#2b6cb0]/30 border-[#90cdf4]/40 dark:border-[#2b6cb0]/50',
-  ];
-
-  // Render speaker-differentiated transcript - memoized to prevent infinite re-renders
-  const renderSpeakerTranscript = useMemo(() => {
-    console.log('🎭 TranscriptContent: Rendering speaker transcript (memoized):', {
-      hasSpeakers,
-      speakersCount: speakers?.length || 0,
-      enableSpeakerDiarization,
-      speakers: speakers?.map(s => s.Speaker) || []
-    });
-    
-    if (!hasSpeakers || !speakers || speakers.length === 0) {
-
-      return null;
-    }
-
-    return (
-      <div className="space-y-4 p-4">
-        {speakers.map((segment, index) => {
-          const speakerIndex = parseInt(segment.Speaker.replace(/\D/g, '')) - 1 || 0;
-          const colorClass = speakerColors[speakerIndex % speakerColors.length];
-          
-          return (
-            <div key={index} className={`p-3 rounded-lg border ${colorClass} transition-all duration-200`}>
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-semibold text-sm">
-                  {segment.Speaker === 'Speaker_1' ? '👨‍⚕️ Doctor' : 
-                   segment.Speaker === 'Speaker_2' ? '🏥 Patient' : 
-                   segment.Speaker}
-                </span>
-                <span className="text-xs opacity-70">
-                  {Math.floor(segment.StartSeconds / 60)}:{(segment.StartSeconds % 60).toString().padStart(2, '0')}
-                </span>
-              </div>
-              <p className="text-sm leading-relaxed">
-                {segment.Text}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-    );
-  }, [hasSpeakers, speakers, enableSpeakerDiarization]);
+  // Speaker differentiation removed per user request
 
   return (
     <>
@@ -246,55 +215,122 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
         {/* Main Content Structure */}
         <div className="relative h-full flex flex-col p-1 sm:p-1 lg:p-1">
           
-          {/* Session Title Input - Always show when handler is available */}
+          {/* Enhanced Session Title Input - Production Ready Design */}
           {onPendingTitleChange && (
-            <div className="relative mb-3 sm:mb-2 lg:mb-2 z-10 px-3 sm:px-4 lg:px-4 pt-2 sm:pt-1 lg:pt-1">
+            <div className="relative mb-4 sm:mb-3 lg:mb-3 z-10 px-3 sm:px-4 lg:px-4 pt-3 sm:pt-2 lg:pt-2">
               <div className="w-full">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder={currentSession ? "Edit session title" : "Session title (optional)"}
-                    value={currentSession ? currentSession.title : pendingSessionTitle}
-                    onChange={(e) => {
-                      if (currentSession) {
-                        // Update existing session title immediately
-                        const updatedSession = { ...currentSession, title: e.target.value };
-                        // This will trigger a session update
-                        onPendingTitleChange(e.target.value);
-                      } else {
-                        // Update pending title for new session
-                        onPendingTitleChange(e.target.value);
-                      }
-                    }}
-                    className="w-full h-10 px-3 py-2 bg-white/95 border-2 border-[#63b3ed]/30 hover:border-[#63b3ed]/50 focus:border-[#2b6cb0] rounded-lg text-sm font-medium text-[#1a365d] placeholder-[#1a365d]/60 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20"
-                    maxLength={100}
-                    disabled={recordingState.isRecording}
-                  />
-                  <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#63b3ed]/5 via-transparent to-[#63b3ed]/5 pointer-events-none" />
+                {/* Beautiful Title Container with Icon */}
+                <div className="relative group">
+                  {/* Elegant Label with Icon */}
+                  <label className="flex items-center space-x-2 mb-2.5 text-sm font-bold text-[#1a365d]">
+                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#2b6cb0] to-[#63b3ed] flex items-center justify-center shadow-sm">
+                      <FileText className="w-3.5 h-3.5 text-white" />
+                    </div>
+                    <span>Session Title</span>
+                    {!currentSession && (
+                      <span className="text-red-600 text-base font-bold" title="Required field">*</span>
+                    )}
+                  </label>
+
+                  {/* Enhanced Input Container with Gradient Border */}
+                  <div className="relative">
+                    {/* Gradient Background Glow */}
+                    <div className={`absolute -inset-0.5 bg-gradient-to-r from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4] rounded-xl opacity-0 ${
+                      titleHighlight ? 'opacity-60 animate-pulse' : 'group-hover:opacity-30'
+                    } blur transition-all duration-500`} />
+
+                    {/* Main Input */}
+                    <div className="relative">
+                      <input
+                        ref={titleInputRef}
+                        type="text"
+                        placeholder={currentSession ? "Edit session title..." : "Enter a descriptive title for this medical session..."}
+                        value={currentSession ? currentSession.title : pendingSessionTitle}
+                        onChange={(e) => {
+                          // Mark as touched when user types
+                          if (!titleTouched) setTitleTouched(true);
+                          // Clear error when user starts typing
+                          if (titleError) setTitleError(false);
+                          if (titleHighlight) setTitleHighlight(false);
+
+                          if (currentSession) {
+                            // Update existing session title immediately
+                            onPendingTitleChange(e.target.value);
+                          } else {
+                            // Update pending title for new session
+                            onPendingTitleChange(e.target.value);
+                          }
+                        }}
+                        onBlur={() => {
+                          // Mark as touched on blur
+                          setTitleTouched(true);
+                          // Show error on blur if title is empty for new session
+                          if (isTitleEmpty) {
+                            setTitleError(true);
+                          }
+                        }}
+                        onFocus={() => {
+                          // Mark as touched when focused
+                          setTitleTouched(true);
+                          // Trigger highlight animation when focused
+                          setTitleHighlight(true);
+                          setTimeout(() => setTitleHighlight(false), 2000);
+                        }}
+                        className={`w-full h-12 sm:h-14 lg:h-14 px-4 py-3 sm:py-4 lg:py-4 bg-white border-4 ${
+                          titleError || (isTitleEmpty && titleError)
+                            ? 'border-red-500 focus:border-red-600 focus:ring-red-500/50 shadow-xl shadow-red-500/30 animate-shake'
+                            : titleHighlight
+                            ? 'border-[#2b6cb0] focus:border-[#2b6cb0] focus:ring-[#2b6cb0]/40 shadow-xl shadow-[#2b6cb0]/20'
+                            : 'border-[#63b3ed]/40 hover:border-[#63b3ed]/70 focus:border-[#2b6cb0] focus:ring-[#63b3ed]/30'
+                        } rounded-xl text-base sm:text-lg lg:text-lg font-semibold text-[#1a365d] placeholder-[#1a365d]/50 transition-all duration-300 focus:outline-none focus:ring-4 shadow-md hover:shadow-lg ${
+                          titleHighlight ? 'scale-[1.01]' : ''
+                        }`}
+                        style={{ minHeight: '48px' }}
+                        maxLength={100}
+                        disabled={recordingState.isRecording}
+                      />
+
+                      {/* Decorative Shimmer Effect */}
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-x-full transition-all duration-1000 pointer-events-none" />
+
+                      {/* Character Counter */}
+                      {(pendingSessionTitle || currentSession?.title) && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#2b6cb0]/60">
+                          {(currentSession?.title || pendingSessionTitle).length}/100
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Enhanced Error Message */}
+                  {titleError && isTitleEmpty && (
+                    <div className="mt-2.5 flex items-center space-x-2 text-sm text-red-600 font-semibold bg-red-50 border-l-4 border-red-600 px-3 py-2.5 rounded-r-lg animate-in slide-in-from-left-2 duration-300">
+                      <div className="flex items-center space-x-1.5">
+                        <span className="inline-block w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                        <span>⚠️ Session title is required before recording</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Success Indicator */}
+                  {!isTitleEmpty && !titleError && pendingSessionTitle.length >= 3 && (
+                    <div className="mt-2 flex items-center space-x-1.5 text-xs text-[#2b6cb0] font-medium">
+                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#2b6cb0]"></span>
+                      <span>✓ Title looks good!</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           )}
 
-          {/* Compact Production Controls */}
-          <div className="relative mb-4 sm:mb-3 lg:mb-3 z-10 px-3 sm:px-4 lg:px-4 pt-4 sm:pt-3 lg:pt-3 mediscribe-mobile-controls">
-            
-            {/* Compact Controls Row */}
-            <div className="w-full">
-              
-              {/* Engine & Speaker Controls */}
-              <ProductionControls
-                selectedSTTModel={selectedSTTModel}
-                onModelChange={onModelChange}
-                recordingState={recordingState}
-                enableSpeakerDiarization={enableSpeakerDiarization}
-                onToggleSpeakerDiarization={onToggleSpeakerDiarization}
-                speakerCount={speakerCount}
-                onSpeakerCountChange={onSpeakerCountChange}
-              />
-
-
-            </div>
+          {/* Compact Production Controls - Below Title */}
+          <div className="relative mb-3 z-10 px-3 sm:px-4 lg:px-4" style={{ width: 'fit-content', maxWidth: '50%' }}>
+            <ProductionControls
+              selectedSTTModel={selectedSTTModel}
+              onModelChange={onModelChange}
+              recordingState={recordingState}
+            />
           </div>
 
           {/* Hidden File Inputs */}
@@ -425,34 +461,25 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
           >
             
             <div className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl sm:rounded-2xl lg:rounded-2xl border border-[#63b3ed]/60 dark:border-[#2b6cb0]/60 shadow-inner shadow-[#1a365d]/5 dark:shadow-black/20 overflow-hidden mediscribe-mobile-transcript">
-              
-              {/* Conditional Content Display */}
-              {hasSpeakers && speakers && speakers.length > 0 ? (
-                /* Speaker-differentiated view */
-                <div className="h-full overflow-y-auto p-3 sm:p-4 lg:p-4">
-                  {speakers.map((segment, index) => (
-                    <div key={index} className={`p-4 sm:p-3 lg:p-3 mb-3 sm:mb-3 lg:mb-3 rounded-xl sm:rounded-lg lg:rounded-lg border transition-all duration-200 mediscribe-mobile-speaker-segment ${
-                      speakerColors[parseInt(segment.Speaker.replace(/\D/g, '')) - 1 || 0 % speakerColors.length]
-                    }`}>
-                      <div className="flex items-center justify-between mb-3 sm:mb-2 lg:mb-2 mediscribe-mobile-speaker-label">
-                        <span className="font-semibold text-sm sm:text-sm lg:text-sm">
-                          {segment.Speaker === 'Speaker_1' ? '👨‍⚕️ Doctor' : 
-                           segment.Speaker === 'Speaker_2' ? '🏥 Patient' : 
-                           segment.Speaker}
-                        </span>
-                        <span className="text-xs opacity-70">
-                          {Math.floor(segment.StartSeconds / 60)}:{(segment.StartSeconds % 60).toString().padStart(2, '0')}
-                        </span>
-                      </div>
-                      <p className="text-sm sm:text-sm lg:text-sm leading-relaxed">
-                        {segment.Text}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                /* Regular editable text area */
-                <div className="relative h-full p-0">
+
+              {/* Regular editable text area - speaker differentiation removed */}
+              <div
+                className="relative h-full p-0"
+                style={{ pointerEvents: isTitleEmpty ? 'auto' : undefined }}
+                onClick={(e) => {
+                  console.log('Textarea container clicked', { isTitleEmpty, target: e.target });
+                  // Show title error if trying to type without title (handles disabled textarea clicks)
+                  if (isTitleEmpty) {
+                    console.log('Triggering title error');
+                    setTitleError(true);
+                    setTitleTouched(true);
+                    // Trigger parent error state
+                    onTitleErrorTrigger?.();
+                    titleInputRef?.current?.focus();
+                    titleInputRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+                }}
+              >
                   {/* Empty Field Notification */}
                   {showEmptyFieldIndicator && hasEmptyFieldsPresent && (
                     <div className="absolute top-2 right-2 z-10">
@@ -464,36 +491,47 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                       </div>
                     </div>
                   )}
-                  
+
                   <textarea
                     ref={textareaRef}
                     value={transcript}
                     onChange={(e) => onEditChange(e.target.value)}
                     className={`transcription-textarea w-full resize-none border-0 px-5 py-5 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed mediscribe-mobile-textarea ${isKeyboardAdjusted ? 'keyboard-adjusted' : ''}`}
-                    placeholder=""
+                    placeholder={isTitleEmpty ? "Please enter a session title above to start..." : ""}
+                    disabled={isTitleEmpty}
                     dir="auto"
-                    style={{ 
+                    style={{
                       background: 'transparent',
                       fontSize: '16px', // Prevents zoom on iOS
                       WebkitTextSizeAdjust: '100%', // Prevent text size adjustment
                       textSizeAdjust: '100%',
                       height: isKeyboardAdjusted ? 'calc(100% - 60px)' : '100%',
-                      minHeight: isKeyboardAdjusted ? '200px' : 'auto'
+                      minHeight: isKeyboardAdjusted ? '200px' : 'auto',
+                      cursor: isTitleEmpty ? 'not-allowed' : 'text',
+                      pointerEvents: isTitleEmpty ? 'none' : 'auto',
+                      opacity: isTitleEmpty ? 0.5 : 1
                     }}
                     // Prevent viewport jumping on focus
                     onFocus={(e) => {
+                      // Prevent focus if title is empty
+                      if (isTitleEmpty) {
+                        e.currentTarget.blur();
+                        setTitleError(true);
+                        return;
+                      }
+
                       // Prevent default zoom behavior on iOS
                       e.currentTarget.style.fontSize = '16px';
-                      
+
                       // **SIMPLE VIEWPORT LOCK**: Prevent any scroll changes
                       const scrollX = window.scrollX;
                       const scrollY = window.scrollY;
-                      
+
                       // Lock scroll position after focus
                       setTimeout(() => {
                         window.scrollTo(scrollX, scrollY);
                       }, 0);
-                      
+
                       setTimeout(() => {
                         window.scrollTo(scrollX, scrollY);
                       }, 100);
@@ -515,7 +553,6 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                     <div className="w-full bg-gradient-to-b from-[#1a365d] to-[#2b6cb0] rounded-full transition-all duration-300" style={{height: '25%'}} />
                   </div>
                 </div>
-              )}
             </div>
           </div>
         </div>
@@ -578,17 +615,29 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             {/* Record Button */}
             <button
               onClick={() => {
+                // Show title error if trying to start recording without title
+                if (!recordingState.isRecording && isTitleEmpty) {
+                  setTitleError(true);
+                  return;
+                }
+
                 if (recordingState.isRecording) {
                   onStopRecording && onStopRecording();
                 } else {
                   onStartRecording && onStartRecording();
                 }
               }}
-              disabled={recordingState.isRecording ? !canStop : !canRecord}
+              disabled={recordingState.isRecording ? !canStop : (!canRecord || isTitleEmpty)}
               className={`mediscribe-mobile-footer-button flex items-center justify-center ${
                 recordingState.isRecording ? 'recording' : ''
-              }`}
-              title={recordingState.isRecording ? "Stop recording" : "Start recording"}
+              } ${isTitleEmpty && !recordingState.isRecording ? 'opacity-50 cursor-not-allowed' : ''}`}
+              title={
+                isTitleEmpty && !recordingState.isRecording
+                  ? "Please enter a session title first"
+                  : recordingState.isRecording
+                  ? "Stop recording"
+                  : "Start recording"
+              }
             >
               {recordingState.isProcessingChunks ? (
                 <Loader2 className="w-6 h-6 text-white animate-spin" />
