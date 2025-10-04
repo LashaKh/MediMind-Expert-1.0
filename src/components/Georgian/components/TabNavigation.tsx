@@ -170,73 +170,139 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
             {/* Action Buttons - Smaller, Subtle Design */}
             <div className="hidden sm:flex items-center space-x-1.5">
               
-              {/* History Button - Compact */}
+              {/* History Button - Enhanced Production Design */}
               {onToggleHistory && (
                 <button
                   onClick={onToggleHistory}
                   className={`
-                    group relative flex items-center space-x-1.5 px-2 lg:px-3 py-2 rounded-xl transition-all duration-200 text-xs font-medium
-                    ${isHistoryOpen 
-                      ? 'bg-[#1a365d] text-white shadow-md shadow-[#1a365d]/20' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-[#2b6cb0]'
+                    group relative flex items-center space-x-1.5 px-2 lg:px-3 py-2 rounded-xl transition-all duration-300 text-xs font-medium overflow-hidden
+                    ${isHistoryOpen
+                      ? 'bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] text-white shadow-lg shadow-[#2b6cb0]/30 border border-[#2b6cb0]/50'
+                      : 'bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/10 hover:from-[#90cdf4]/20 hover:to-[#63b3ed]/20 text-[#1a365d] border border-[#90cdf4]/30 hover:border-[#63b3ed]/50 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95'
                     }
                   `}
                   title={`${isHistoryOpen ? 'Hide' : 'Show'} History (${sessionCount} recordings)`}
                 >
-                  <History className={`w-4 h-4 ${isHistoryOpen ? 'text-white' : 'text-gray-500'}`} />
-                  <div className="hidden xl:flex flex-col items-start">
-                    <span className="font-semibold">History</span>
-                    <span className="text-[10px] opacity-70">{sessionCount} recordings</span>
+                  {/* Gradient Background Effect */}
+                  {!isHistoryOpen && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  )}
+
+                  {/* Icon Container with Enhanced Styling */}
+                  <div className={`
+                    relative w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300
+                    ${isHistoryOpen
+                      ? 'bg-white/20 shadow-inner'
+                      : 'bg-gradient-to-br from-[#63b3ed] to-[#90cdf4] shadow-inner group-hover:shadow-lg group-hover:scale-110'
+                    }
+                  `}>
+                    <History className={`w-4 h-4 ${isHistoryOpen ? 'text-white' : 'text-white'}`} />
                   </div>
-                  {/* Notification Badge */}
+
+                  {/* Text Content */}
+                  <div className="hidden xl:flex flex-col items-start relative z-10">
+                    <span className={`font-bold text-sm ${isHistoryOpen ? 'text-white' : 'text-[#1a365d] group-hover:text-[#2b6cb0]'}`}>
+                      History
+                    </span>
+                    <span className={`text-[10px] font-medium ${isHistoryOpen ? 'text-white/80' : 'text-[#2b6cb0]/70 group-hover:text-[#2b6cb0]'}`}>
+                      {sessionCount} recordings
+                    </span>
+                  </div>
+
+                  {/* Enhanced Notification Badge */}
                   {sessionCount > 0 && !isHistoryOpen && (
-                    <div className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold">
+                    <div className="absolute -top-2 -right-2 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-full min-w-[22px] h-[22px] px-1.5 flex items-center justify-center text-[10px] font-bold shadow-lg shadow-red-500/40 ring-2 ring-white animate-pulse z-10">
                       {sessionCount > 99 ? '99+' : sessionCount}
                     </div>
+                  )}
+
+                  {/* Active State Indicator */}
+                  {isHistoryOpen && (
+                    <div className="absolute inset-0 bg-white/5 rounded-xl animate-pulse" />
                   )}
                 </button>
               )}
 
-              {/* Upload Button - Compact */}
+              {/* Upload Button - Enhanced Production Design */}
               {onFileUpload && (
                 <button
                   onClick={handleFileUploadClick}
                   disabled={isRecording}
                   className={`
-                    group flex items-center space-x-1.5 px-2 lg:px-3 py-2 rounded-xl transition-all duration-200 text-xs font-medium
-                    ${isRecording 
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-[#2b6cb0] hover:border-blue-200'
+                    group relative flex items-center space-x-1.5 px-2 lg:px-3 py-2 rounded-xl transition-all duration-300 text-xs font-medium overflow-hidden
+                    ${isRecording
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-gradient-to-br from-[#63b3ed]/10 to-[#90cdf4]/10 hover:from-[#63b3ed]/20 hover:to-[#90cdf4]/20 text-[#1a365d] border border-[#90cdf4]/30 hover:border-[#63b3ed]/50 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95'
                     }
                   `}
                   title={isRecording ? "Cannot upload during recording" : "Upload audio file"}
                 >
-                  <Upload className={`w-4 h-4 ${isRecording ? 'text-gray-400' : 'text-gray-500 group-hover:text-[#2b6cb0]'}`} />
-                  <div className="hidden xl:flex flex-col items-start">
-                    <span className="font-semibold">Upload</span>
-                    <span className="text-[10px] opacity-70">Audio file</span>
+                  {/* Gradient Background Effect */}
+                  {!isRecording && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  )}
+
+                  {/* Icon Container with Enhanced Styling */}
+                  <div className={`
+                    relative w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300
+                    ${isRecording
+                      ? 'bg-gray-200'
+                      : 'bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] shadow-inner group-hover:shadow-lg group-hover:scale-110'
+                    }
+                  `}>
+                    <Upload className={`w-4 h-4 ${isRecording ? 'text-gray-400' : 'text-white'}`} />
+                  </div>
+
+                  {/* Text Content */}
+                  <div className="hidden xl:flex flex-col items-start relative z-10">
+                    <span className={`font-bold text-sm ${isRecording ? 'text-gray-400' : 'text-[#1a365d] group-hover:text-[#2b6cb0]'}`}>
+                      Upload
+                    </span>
+                    <span className={`text-[10px] font-medium ${isRecording ? 'text-gray-400' : 'text-[#2b6cb0]/70 group-hover:text-[#2b6cb0]'}`}>
+                      Audio file
+                    </span>
                   </div>
                 </button>
               )}
 
-              {/* Attach Button - Compact */}
+              {/* Attach Button - Enhanced Production Design */}
               {onAttachFiles && (
                 <button
                   onClick={handleAttachmentClick}
                   disabled={isRecording}
                   className={`
-                    group flex items-center space-x-1.5 px-2 lg:px-3 py-2 rounded-xl transition-all duration-200 text-xs font-medium
-                    ${isRecording 
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-[#2b6cb0] hover:border-blue-200'
+                    group relative flex items-center space-x-1.5 px-2 lg:px-3 py-2 rounded-xl transition-all duration-300 text-xs font-medium overflow-hidden
+                    ${isRecording
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/10 hover:from-[#90cdf4]/20 hover:to-[#63b3ed]/20 text-[#1a365d] border border-[#90cdf4]/30 hover:border-[#63b3ed]/50 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95'
                     }
                   `}
                   title={isRecording ? "Cannot attach during recording" : "Attach files & documents"}
                 >
-                  <Paperclip className={`w-4 h-4 ${isRecording ? 'text-gray-400' : 'text-gray-500 group-hover:text-[#2b6cb0]'}`} />
-                  <div className="hidden xl:flex flex-col items-start">
-                    <span className="font-semibold">Attach</span>
-                    <span className="text-[10px] opacity-70">Files & docs</span>
+                  {/* Gradient Background Effect */}
+                  {!isRecording && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  )}
+
+                  {/* Icon Container with Enhanced Styling */}
+                  <div className={`
+                    relative w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300
+                    ${isRecording
+                      ? 'bg-gray-200'
+                      : 'bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] shadow-inner group-hover:shadow-lg group-hover:scale-110 group-hover:rotate-12'
+                    }
+                  `}>
+                    <Paperclip className={`w-4 h-4 ${isRecording ? 'text-gray-400' : 'text-white'}`} />
+                  </div>
+
+                  {/* Text Content */}
+                  <div className="hidden xl:flex flex-col items-start relative z-10">
+                    <span className={`font-bold text-sm ${isRecording ? 'text-gray-400' : 'text-[#1a365d] group-hover:text-[#2b6cb0]'}`}>
+                      Attach
+                    </span>
+                    <span className={`text-[10px] font-medium ${isRecording ? 'text-gray-400' : 'text-[#2b6cb0]/70 group-hover:text-[#2b6cb0]'}`}>
+                      Files & docs
+                    </span>
                   </div>
                 </button>
               )}

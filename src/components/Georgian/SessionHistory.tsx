@@ -44,7 +44,8 @@ import {
   Lightbulb,
   Zap as ZapIcon,
   Crown,
-  Gem
+  Gem,
+  ClipboardList
 } from 'lucide-react';
 import { GeorgianSession } from '../../hooks/useSessionManagement';
 import { MedicalButton, MedicalCard, MedicalInput, MedicalLoading, MedicalBadge } from '../ui/MedicalDesignSystem';
@@ -103,11 +104,11 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   const [hoveredSession, setHoveredSession] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number } | null>(null);
-  
+
   // Title editing states
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState<string>('');
-  
+
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
@@ -329,6 +330,29 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
     }
   };
 
+  // Helper function to count Form 100 reports for a session
+  const getForm100Count = (session: GeorgianSession): number => {
+    // Form 100 reports are stored in localStorage with keys like:
+    // form100_generated_{sessionId}_{timestamp}
+
+    try {
+      let count = 0;
+
+      // Check all localStorage keys for Form 100 reports for this session
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('form100_generated_') && key.includes(session.id)) {
+          count++;
+        }
+      }
+
+      return count;
+    } catch (error) {
+      console.error('Error counting Form 100 reports:', error);
+      return 0;
+    }
+  };
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -365,160 +389,96 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
     const category = getSessionCategory(session);
     const metrics = getSessionMetrics(session);
     const CategoryIcon = getCategoryIcon(category);
-    const categoryColor = getCategoryColor(category);
+    const form100Count = getForm100Count(session);
 
     return (
       <MedicalCard
         key={session.id}
         variant={isActive ? "elevated" : "interactive"}
         className={`
-          group relative cursor-pointer transition-all duration-300 ease-out transform
+          group relative cursor-pointer transition-all duration-200 ease-out
           ${isActive
-            ? 'scale-[1.02] shadow-2xl shadow-medical-blue-500/25 border-medical-blue-400 bg-gradient-to-br from-medical-blue-50 via-white to-medical-blue-50/50 dark:from-medical-blue-900/20 dark:via-medical-gray-800 dark:to-medical-blue-900/10'
-            : isHovered
-            ? 'scale-[1.01] shadow-xl shadow-medical-gray-500/20 border-medical-blue-300 dark:border-medical-blue-600'
-            : 'hover:scale-[1.005] hover:shadow-lg hover:border-medical-blue-200 dark:hover:border-medical-blue-700'
+            ? 'shadow-lg border-[#2b6cb0] bg-gradient-to-br from-[#f0f9ff] to-white'
+            : 'hover:shadow-md border-gray-200 hover:border-[#90cdf4]'
           }
-          ${isActive ? 'ring-1 ring-medical-blue-500/30' : ''}
-          overflow-hidden backdrop-blur-sm
+          overflow-hidden
         `}
         onClick={() => onSelectSession(session.id)}
         onMouseEnter={() => setHoveredSession(session.id)}
         onMouseLeave={() => setHoveredSession(null)}
         padding="none"
       >
-        {/* Animated background gradient */}
-        <div className={`absolute inset-0 opacity-0 transition-opacity duration-500 ${isActive ? 'opacity-100' : ''}`}>
-          <div className="absolute inset-0 bg-gradient-to-r from-medical-blue-500/5 via-transparent to-medical-blue-500/5 animate-pulse" />
-        </div>
+        {/* Active indicator bar */}
+        {isActive && (
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#2b6cb0]" />
+        )}
 
-        {/* Compact Content - Fixed Height */}
-        <div className="relative p-4 h-32 flex flex-col justify-between">
-          {/* Compact Header */}
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center space-x-3 flex-1 min-w-0">
-              {/* Compact session icon */}
-              <div className={`
-                relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200
-                ${getCategoryBgColor(category, isActive)} ${getCategoryIconColor(category, isActive)}
-                ${!isActive && 'group-hover:bg-[#63b3ed]/30'}
-              `}>
-                <CategoryIcon className="w-5 h-5" />
-                
-                {/* Active indicator */}
-                {isActive && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#2b6cb0] rounded-full border-2 border-white dark:border-medical-gray-800" />
-                )}
-                
-                {/* Favorite star */}
-                {isFavorite && (
-                  <div className="absolute -top-1 -left-1 w-4 h-4 bg-[#90cdf4] rounded-full flex items-center justify-center">
-                    <Star className="w-2 h-2 text-white fill-current" />
-                  </div>
-                )}
-              </div>
-
-              {/* Compact session info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center mb-1">
-                  {editingSessionId === session.id ? (
-                    <div className="flex items-center space-x-2 w-full">
-                      <input
-                        type="text"
-                        value={editingTitle}
-                        onChange={(e) => setEditingTitle(e.target.value)}
-                        onKeyDown={handleTitleKeyDown}
-                        onBlur={handleSaveTitle}
-                        className="flex-1 text-sm font-bold bg-white border-2 border-[#63b3ed] rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#2b6cb0] text-[#1a365d]"
-                        maxLength={100}
-                        autoFocus
-                      />
-                      <button
-                        onClick={handleSaveTitle}
-                        className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-[#2b6cb0] text-white rounded-md hover:bg-[#1a365d] transition-colors"
-                        title="Save title"
-                      >
-                        <Check className="w-3 h-3" />
-                      </button>
-                      <button
-                        onClick={handleCancelEditTitle}
-                        className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-gray-400 text-white rounded-md hover:bg-gray-500 transition-colors"
-                        title="Cancel edit"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center space-x-2 w-full group/title">
-                      <h3 className={`
-                        text-sm font-bold truncate transition-colors duration-200 flex-1
-                        ${isActive 
-                          ? 'text-medical-blue-900 dark:text-medical-blue-100' 
-                          : 'text-medical-gray-900 dark:text-medical-gray-100 group-hover:text-medical-blue-800 dark:group-hover:text-medical-blue-200'
-                        }
-                      `}>
-                        {session.title}
-                      </h3>
-                      {onUpdateSession && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleStartEditingTitle(session);
-                          }}
-                          className="opacity-0 group-hover/title:opacity-100 group-hover:opacity-100 flex-shrink-0 w-5 h-5 flex items-center justify-center text-[#2b6cb0] hover:text-[#1a365d] transition-all duration-200"
-                          title="Edit title"
-                        >
-                          <Edit3 className="w-3 h-3" />
-                        </button>
-                      )}
-                    </div>
+        {/* Card Content */}
+        <div className="relative p-4 flex flex-col gap-3">
+          {/* Title Row */}
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              {editingSessionId === session.id ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={editingTitle}
+                    onChange={(e) => setEditingTitle(e.target.value)}
+                    onKeyDown={handleTitleKeyDown}
+                    onBlur={handleSaveTitle}
+                    className="flex-1 text-base font-semibold bg-white border-2 border-[#2b6cb0] rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#2b6cb0]/20 text-[#1a365d]"
+                    maxLength={100}
+                    autoFocus
+                  />
+                  <button
+                    onClick={handleSaveTitle}
+                    className="p-2 bg-[#2b6cb0] text-white rounded-lg hover:bg-[#1a365d] transition-colors"
+                    title="Save"
+                  >
+                    <Check className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleCancelEditTitle}
+                    className="p-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-colors"
+                    title="Cancel"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 group/title">
+                  <h3 className={`text-base font-semibold truncate ${isActive ? 'text-[#1a365d]' : 'text-gray-900'}`}>
+                    {session.title}
+                  </h3>
+                  {onUpdateSession && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleStartEditingTitle(session);
+                      }}
+                      className="opacity-0 group-hover/title:opacity-100 p-1 text-[#2b6cb0] hover:text-[#1a365d] transition-opacity"
+                      title="Edit"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                    </button>
                   )}
                 </div>
-
-                {/* Compact metadata */}
-                <div className="flex items-center space-x-3 text-xs text-medical-gray-500 dark:text-medical-gray-400">
-                  <span>{formatDate(session.createdAt)}</span>
-                  {session.durationMs > 0 && <span>{formatDuration(session.durationMs)}</span>}
-                  {metrics.wordCount > 0 && <span>{metrics.wordCount} words</span>}
-                </div>
-
-                {/* Compact status badges */}
-                <div className="flex items-center space-x-1 mt-2">
-                  {session.transcript && (
-                    <span className="px-2 py-0.5 text-xs font-medium bg-[#63b3ed]/20 text-[#1a365d] rounded-lg">
-                      Transcribed
-                    </span>
-                  )}
-                  {session.processingResults && session.processingResults.length > 0 && (
-                    <span className="px-2 py-0.5 text-xs font-medium bg-[#90cdf4]/20 text-[#1a365d] rounded-lg">
-                      AI: {session.processingResults.length}
-                    </span>
-                  )}
-                </div>
-              </div>
+              )}
             </div>
 
-            {/* Compact actions */}
-            <div className="flex items-center space-x-1">
-              {/* Favorite toggle */}
+            {/* Actions */}
+            <div className="flex items-center gap-1 flex-shrink-0">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleFavorite(session.id);
                 }}
-                className={`
-                  p-2 rounded-lg transition-all duration-200
-                  ${isFavorite
-                    ? 'text-[#90cdf4] hover:text-[#63b3ed] bg-[#90cdf4]/10 dark:bg-[#90cdf4]/20'
-                    : 'text-medical-gray-400 hover:text-[#90cdf4] hover:bg-[#90cdf4]/10 dark:hover:bg-[#90cdf4]/20'
-                  }
-                `}
-                title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                className={`p-2 rounded-lg transition-colors ${isFavorite ? 'text-[#90cdf4]' : 'text-gray-400 hover:text-[#90cdf4]'}`}
+                title={isFavorite ? "Unfavorite" : "Favorite"}
               >
-                <Star className={`w-3 h-3 ${isFavorite ? 'fill-current' : ''}`} />
+                <Star className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
               </button>
 
-              {/* Options dropdown */}
               <div className="relative">
                 <button
                   ref={(el) => { buttonRefs.current[session.id] = el; }}
@@ -533,39 +493,61 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                       setActiveDropdown(session.id);
                     }
                   }}
-                  className="p-2 rounded-lg transition-all duration-200 text-medical-gray-400 hover:text-medical-gray-600 dark:hover:text-medical-gray-300 hover:bg-medical-gray-100 dark:hover:bg-medical-gray-700"
-                  title="Session options"
+                  className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                  title="More options"
                 >
-                  <MoreVertical className="w-3 h-3" />
+                  <MoreVertical className="w-4 h-4" />
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Compact Session preview - Always visible for consistent height */}
-          <div className={`
-            p-2 rounded-lg text-xs leading-tight transition-all duration-200 h-8 flex items-center
-            ${isActive 
-              ? 'bg-medical-blue-50/70 dark:bg-medical-blue-900/20 text-medical-blue-800 dark:text-medical-blue-200 border border-medical-blue-200/50 dark:border-medical-blue-700/50' 
-              : 'bg-medical-gray-50/80 dark:bg-medical-gray-700/50 text-medical-gray-600 dark:text-medical-gray-400 border border-medical-gray-200/50 dark:border-medical-gray-600/50'
-            }
-          `}>
-            <div className="flex items-center space-x-2 w-full">
-              <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${categoryColor}`} />
-              <p className="font-medium truncate">
-                {isActive ? 'Currently active' : getSessionPreview(session)}
-              </p>
-            </div>
+          {/* Metadata Row */}
+          <div className="flex items-center gap-3 text-sm text-gray-500">
+            <span>{formatDate(session.createdAt)}</span>
+            {metrics.wordCount > 0 && (
+              <>
+                <span>•</span>
+                <span>{metrics.wordCount} words</span>
+              </>
+            )}
+            {session.durationMs > 0 && (
+              <>
+                <span>•</span>
+                <span>{formatDuration(session.durationMs)}</span>
+              </>
+            )}
           </div>
 
+          {/* Status Badges */}
+          <div className="flex flex-wrap items-center gap-2">
+            {session.transcript && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-[#e0f2fe] text-[#0369a1] rounded-full">
+                <Stethoscope className="w-3 h-3" />
+                Transcribed
+              </span>
+            )}
+            {session.processingResults && session.processingResults.length > 0 && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-[#dbeafe] text-[#1e40af] rounded-full">
+                <Brain className="w-3 h-3" />
+                AI: {session.processingResults.length}
+              </span>
+            )}
+            {form100Count > 0 && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-[#1e40af] text-white rounded-full">
+                <ClipboardList className="w-3 h-3" />
+                Form 100: {form100Count}
+              </span>
+            )}
+          </div>
+
+          {/* Preview Text */}
+          {!isActive && getSessionPreview(session) !== 'No content yet' && (
+            <p className="text-sm text-gray-600 line-clamp-2">
+              {getSessionPreview(session)}
+            </p>
+          )}
         </div>
-
-        {/* Active session indicator */}
-        {isActive && (
-          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1.5 h-16 bg-gradient-to-b from-medical-blue-600 to-medical-blue-700 rounded-r-full shadow-lg">
-            <div className="absolute inset-0 bg-medical-blue-500 rounded-r-full animate-pulse" />
-          </div>
-        )}
       </MedicalCard>
     );
   };

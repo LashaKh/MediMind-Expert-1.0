@@ -284,24 +284,39 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
               ))}
             </div>
           ) : (
-            // Empty State
-            <div className="text-center py-12">
-              <div className="w-16 h-16 bg-blue-100 dark:bg-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <FileText className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            // Empty State - Beautiful Production-Ready Design
+            <div className="text-center py-16 px-4">
+              {/* Gradient Icon Container */}
+              <div className="relative mx-auto mb-6 w-24 h-24">
+                {/* Gradient background glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-3xl blur-xl opacity-30"></div>
+                {/* Icon container */}
+                <div className="relative w-full h-full bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                  <FileText className="w-12 h-12 text-white" strokeWidth={1.5} />
+                </div>
               </div>
-              <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                No templates found
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Create your first template to get started
-              </p>
+
+              {/* Main CTA Button with Gradient */}
               <button
                 onClick={() => setIsCreateModalOpen(true)}
-                disabled={false} // Template creation is always enabled
-                className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
+                className="group relative inline-flex items-center justify-center space-x-3 px-8 py-4 rounded-2xl font-semibold text-white transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl transform hover:scale-105"
+                style={{ minHeight: '56px' }}
               >
-                Create your first template
+                {/* Gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] transition-all duration-300"></div>
+
+                {/* Hover effect overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#63b3ed] via-[#2b6cb0] to-[#1a365d] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                {/* Button content */}
+                <Plus className="relative w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                <span className="relative text-base">Create Your First Template</span>
               </button>
+
+              {/* Subtle hint text */}
+              <p className="mt-6 text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                Get started by creating a custom report template for your medical consultations
+              </p>
             </div>
           )}
         </>
