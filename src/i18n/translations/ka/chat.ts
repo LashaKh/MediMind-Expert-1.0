@@ -49,8 +49,7 @@ export const chat = {
   cardiologyAICoPilot: 'კარდიოლოგიის AI თანაპილოტი',
   obgynAICoPilot: 'მეანობა-გინეკოლოგიის AI თანაპილოტი',
   medicalAICoPilot: 'სამედიცინო AI თანაპილოტი',
-  
-  // Personal knowledge base guidance
+  medicalAI: 'სამედიცინო AI',
   usingPersonalDocs: 'იყენებს თქვენს {count} პირად დოკუმენტს',
   uploadDocsForKB: 'ატვირთეთ დოკუმენტები პირადი ცოდნის ბაზის შესაქმნელად',
   
@@ -231,7 +230,42 @@ export const chat = {
   patient: 'პაციენტი',
   connectionIssue: 'კავშირის პრობლემა',
   conversationHistory: 'საუბრის ისტორია',
-  createCaseStudy: 'კეისის შექმნა'
+  createCaseStudy: 'კეისის შექმნა',
+  dashboard: {
+    welcomeBack: 'კეთილი იყოს თქვენი დაბრუნება, {{name}}',
+    subtitle: 'რით შემიძლია დაგეხმაროთ თქვენს კარდიოლოიურ საქმიანობაში დღეს',
+    quickConsult: 'სწრაფი კონსულტაცია',
+    quickConsultDesc: 'ჰკითხეთ AI-ს სიმპტომების ან მკურნალობის შესახებ',
+    newCase: 'ახალი შემთხვევა',
+    newCaseDesc: 'პაციენტის შემთხვევის დოკუმენტირება და ანალიზი',
+    bgConsult: 'სისხლის აირების ანალიზი',
+    bgConsultDesc: 'სისხლის გაზების ატვირთვა და ანალიზი',
+    ecgConsult: 'ეკგ ანალიზი',
+    ecgConsultDesc: 'ეკგ სურათების ატვირთვა და ანალიზი',
+    popularCalculators: 'პოპულარული კალკულატორები',
+    viewAll: 'ყველას ნახვა',
+    recentCases: 'ბოლო შემთხვევები',
+    gettingStarted: 'დაწყება',
+    createFirstCase: 'შექმენით თქვენი პირველი შემთხვევა',
+    createFirstCaseDesc: 'პაციენტის შემთხვევების დოკუმენტირება AI-ზე დაფუძნებული შეხედულებების მისაღებად და თქვენი კლინიკური ცოდნის ბაზის შესაქმნელად.',
+    createCase: 'შემთხვევის შექმნა'
+  },
+  caseReadyMessage: 'შემთხვევა "{{title}}" მზად არის განსახილველად. მკითხეთ ყველაფერი დიაგნოზის, მკურნალობის ვარიანტების, დიფერენციალური დიაგნოზის ან ამ შემთხვევის ნებისმიერი კონკრეტული ასპექტის შესახებ.',
+  caseCreateFailed: 'შემთხვევის შექმნა ვერ მოხერხდა. გთხოვთ სცადოთ ხელახლა.',
+  freshConversation: 'ახალი საუბარი',
+  caseResetFailed: 'შემთხვევის განულება ვერ მოხერხდა. გთხოვთ სცადოთ ხელახლა.',
+  doctor: 'ექიმო',
+  medical: 'სამედიცინო',
+  waitForProcessing: 'გთხოვთ, დაელოდოთ {{count}} ფაილ(ებ)ის დამუშავების დასრულებას გაგზავნამდე.',
+  processingFailed: 'დამუშავება ვერ მოხერხდა',
+  tooltip: {
+    chatHistoryTitle: 'ჩატის ისტორია',
+    chatHistoryDescription: 'ნახეთ და მართეთ ყველა თქვენი წინა AI საუბარი.',
+    browse: 'დათვალიერება',
+    myCasesTitle: 'ჩემი შემთხვევები',
+    myCasesDescription: 'ნახეთ და გადაერთეთ თქვენს შენახულ კლინიკურ შემთხვევებს შორის.',
+    switchCases: 'შემთხვევების გადართვა'
+  }
 };
 
-export default chat; 
+export default chat;

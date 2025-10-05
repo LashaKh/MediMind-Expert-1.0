@@ -100,7 +100,7 @@ export default {
   
   categories: {
     risk_assessment: 'რისკის შეფასება',
-    acute_care: 'მწვავე მოვლა',
+    acute_care: 'გადაუდებელი დახმარება',
     therapy_management: 'თერაპიის მენეჯმენტი',
     heart_failure: 'გულის უკმარისობა',
     surgical_risk: 'ქირურგიული რისკი',

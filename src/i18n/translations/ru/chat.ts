@@ -49,8 +49,7 @@ export const chat = {
   cardiologyAICoPilot: 'ИИ Ко-пилот по кардиологии',
   obgynAICoPilot: 'ИИ Ко-пилот по акушерству-гинекологии',
   medicalAICoPilot: 'Медицинский ИИ Ко-пилот',
-  
-  // Personal knowledge base guidance
+  medicalAI: 'Медицинский ИИ',
   usingPersonalDocs: 'Используются ваши {count} личных документов',
   uploadDocsForKB: 'Загрузите документы для создания личной базы знаний',
   
@@ -150,6 +149,11 @@ export const chat = {
     issueAddressed: 'Проблема решена',
     clickToViewDetails: 'Нажмите, чтобы посмотреть детали лечения'
   },
+  specialtyTitles: {
+    cardiologyExpert: 'Эксперт по кардиологии с ИИ',
+    obgynExpert: 'Эксперт по акушерству и гинекологии с ИИ',
+    medicalExpert: 'Медицинский эксперт с ИИ'
+  },
   abg: {
     active: 'Анализ газов крови активен',
     contextActive: 'Контекст анализа газов крови активен',
@@ -161,34 +165,41 @@ export const chat = {
   connectionIssue: 'Проблема соединения',
   conversationHistory: 'История разговоров',
   createCaseStudy: 'Создать клинический случай',
-  specialtyTitles: {
-    cardiologyExpert: 'Эксперт ИИ по кардиологии',
-    obgynExpert: 'Эксперт ИИ по акушерству и гинекологии',
-    medicalExpert: 'Медицинский эксперт ИИ'
+  dashboard: {
+    welcomeBack: 'С возвращением, {{name}}',
+    subtitle: 'Чем я могу помочь вам в вашей',
+    quickConsult: 'Быстрая консультация',
+    quickConsultDesc: 'Спросите ИИ о симптомах или лечении',
+    newCase: 'Новый случай',
+    newCaseDesc: 'Документируйте и анализируйте случай пациента',
+    bgConsult: 'Анализ газов крови',
+    bgConsultDesc: 'Загрузите и проанализируйте газы крови',
+    ecgConsult: 'Анализ ЭКГ',
+    ecgConsultDesc: 'Загрузите и проанализируйте изображения ЭКГ',
+    popularCalculators: 'Популярные калькуляторы',
+    viewAll: 'Посмотреть все',
+    recentCases: 'Недавние случаи',
+    gettingStarted: 'Начало работы',
+    createFirstCase: 'Создайте свой первый случай',
+    createFirstCaseDesc: 'Документируйте случаи пациентов, чтобы получать информацию на основе ИИ и создавать свою базу клинических знаний.',
+    createCase: 'Создать клинический случай'
   },
-  specialtySubtitles: {
-    cardiology: 'Расширенная помощь в области сердечно-сосудистой системы',
-    obgyn: 'Здоровье женщин и репродуктивная медицина',
-    medical: 'Комплексная медицинская помощь'
-  },
-  quickActions: {
-    caseDesc: 'Начните анализ клинического случая с помощью ИИ',
-    calculatorsDesc: 'Доступ к клиническим калькуляторам и оценке рисков',
-    guidelinesDesc: 'Поиск медицинских протоколов, основанных на доказательствах',
-    discussionDesc: 'Начните медицинскую консультацию с ИИ'
-  },
-  features: {
-    aiPoweredAnalysis: 'Продвинутая медицинская логика и поддержка принятия решений',
-    evidenceBasedDesc: 'Курируется из 2,5 млн+ медицинских источников и руководств',
-    realTimeDesc: 'Мгновенные ответы для клинического принятия решений',
-    specialtyFocusedDesc: 'Экспертиза, адаптированная под вашу специальность'
-  },
-  welcomeTo: 'Добро пожаловать в',
-  liveAt: 'Время',
-  aiReady: 'ИИ готов',
-  recentCases: 'Недавние случаи',
-  startTypingOrSelectAction: 'Начните с ввода сообщения ниже или выберите действие выше',
-  aiAssistantReady: 'ИИ-помощник готов'
+  caseReadyMessage: 'Кейс "{{title}}" готов к обсуждению. Спрашивайте меня о диагнозе, вариантах лечения, дифференциальном диагнозе или любом конкретном аспекте этого случая.',
+  caseCreateFailed: 'Не удалось создать кейс. Пожалуйста, попробуйте еще раз.',
+  freshConversation: 'Новый разговор',
+  caseResetFailed: 'Не удалось сбросить кейс. Пожалуйста, попробуйте еще раз.',
+  doctor: 'Доктор',
+  medical: 'медицинской',
+  waitForProcessing: 'Пожалуйста, подождите, пока {{count}} файл(ов) закончат обработку перед отправкой.',
+  processingFailed: 'Ошибка обработки',
+  tooltip: {
+    chatHistoryTitle: 'История чата',
+    chatHistoryDescription: 'Просмотр и управление всеми вашими предыдущими разговорами с ИИ.',
+    browse: 'Обзор',
+    myCasesTitle: 'Мои случаи',
+    myCasesDescription: 'Просмотр и переключение между вашими сохраненными клиническими случаями.',
+    switchCases: 'Переключить случаи'
+  }
 };
 
-export default chat; 
+export default chat;

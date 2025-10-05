@@ -62,7 +62,7 @@ export const SignIn: React.FC = () => {
         {/* Enhanced Welcome Message */}
         <div className="text-center">
           <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed">
-            Welcome back! Please sign in to continue.
+            {t('auth.signInWelcome')}
           </p>
         </div>
 
@@ -135,7 +135,7 @@ export const SignIn: React.FC = () => {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-3 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
-                New here?
+                {t('auth.newHere', 'New here?')}
               </span>
             </div>
           </div>

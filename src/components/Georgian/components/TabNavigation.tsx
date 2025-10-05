@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Edit3, Stethoscope, MessageSquare, Sparkles, Mic, Square, History, Zap, Brain, FileText, Play, Pause, Activity, Upload, Paperclip, Plus } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { TRANSCRIPT_TABS, TabId } from '../utils/uiConstants';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface TabNavigationProps {
   activeTab: TabId;
@@ -23,26 +24,6 @@ interface TabNavigationProps {
   onAttachFiles?: (files: File[]) => void;
 }
 
-const tabs = TRANSCRIPT_TABS;
-
-// Modern blue theme tab configuration
-const enhancedTabs = [
-  { 
-    id: 'transcript', 
-    label: 'Record', 
-    sublabel: 'Live transcription',
-    icon: FileText, 
-    className: 'transcription-tab'
-  },
-  { 
-    id: 'ai', 
-    label: 'AI Processing', 
-    sublabel: 'Smart analysis',
-    icon: Sparkles, 
-    className: 'transcription-tab'
-  }
-] as const;
-
 export const TabNavigation: React.FC<TabNavigationProps> = ({
   activeTab,
   onTabChange,
@@ -58,9 +39,28 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
   onFileUpload,
   onAttachFiles
 }) => {
+  const { t } = useTranslation();
   const [hoveredTab, setHoveredTab] = useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const attachmentInputRef = React.useRef<HTMLInputElement>(null);
+
+  // Modern blue theme tab configuration
+  const enhancedTabs = [
+    {
+      id: 'transcript',
+      label: t('mediscribe.tabs.record.label', 'Record'),
+      sublabel: t('mediscribe.tabs.record.sublabel', 'Live transcription'),
+      icon: FileText,
+      className: 'transcription-tab'
+    },
+    {
+      id: 'ai',
+      label: t('mediscribe.tabs.aiProcessing.label', 'AI Processing'),
+      sublabel: t('mediscribe.tabs.aiProcessing.sublabel', 'Smart analysis'),
+      icon: Sparkles,
+      className: 'transcription-tab'
+    }
+  ] as const;
 
   const handleFileUploadClick = () => {
     fileInputRef.current?.click();
@@ -181,7 +181,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                       : 'bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/10 hover:from-[#90cdf4]/20 hover:to-[#63b3ed]/20 text-[#1a365d] border border-[#90cdf4]/30 hover:border-[#63b3ed]/50 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95'
                     }
                   `}
-                  title={`${isHistoryOpen ? 'Hide' : 'Show'} History (${sessionCount} recordings)`}
+                  title={t('mediscribe.historyButton.title', { isHistoryOpen: isHistoryOpen, sessionCount: sessionCount })}
                 >
                   {/* Gradient Background Effect */}
                   {!isHistoryOpen && (
@@ -202,10 +202,10 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                   {/* Text Content */}
                   <div className="hidden xl:flex flex-col items-start relative z-10">
                     <span className={`font-bold text-sm ${isHistoryOpen ? 'text-white' : 'text-[#1a365d] group-hover:text-[#2b6cb0]'}`}>
-                      History
+                      {t('mediscribe.historyButton.label', 'History')}
                     </span>
                     <span className={`text-[10px] font-medium ${isHistoryOpen ? 'text-white/80' : 'text-[#2b6cb0]/70 group-hover:text-[#2b6cb0]'}`}>
-                      {sessionCount} recordings
+                      {t('mediscribe.historyButton.sublabel', { count: sessionCount })}
                     </span>
                   </div>
 
@@ -235,7 +235,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                       : 'bg-gradient-to-br from-[#63b3ed]/10 to-[#90cdf4]/10 hover:from-[#63b3ed]/20 hover:to-[#90cdf4]/20 text-[#1a365d] border border-[#90cdf4]/30 hover:border-[#63b3ed]/50 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95'
                     }
                   `}
-                  title={isRecording ? "Cannot upload during recording" : "Upload audio file"}
+                  title={isRecording ? t('mediscribe.uploadButton.disabledTitle', 'Cannot upload during recording') : t('mediscribe.uploadButton.title', 'Upload audio file')}
                 >
                   {/* Gradient Background Effect */}
                   {!isRecording && (
@@ -256,10 +256,10 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                   {/* Text Content */}
                   <div className="hidden xl:flex flex-col items-start relative z-10">
                     <span className={`font-bold text-sm ${isRecording ? 'text-gray-400' : 'text-[#1a365d] group-hover:text-[#2b6cb0]'}`}>
-                      Upload
+                      {t('mediscribe.uploadButton.label', 'Upload')}
                     </span>
                     <span className={`text-[10px] font-medium ${isRecording ? 'text-gray-400' : 'text-[#2b6cb0]/70 group-hover:text-[#2b6cb0]'}`}>
-                      Audio file
+                      {t('mediscribe.uploadButton.sublabel', 'Audio file')}
                     </span>
                   </div>
                 </button>
@@ -277,7 +277,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                       : 'bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/10 hover:from-[#90cdf4]/20 hover:to-[#63b3ed]/20 text-[#1a365d] border border-[#90cdf4]/30 hover:border-[#63b3ed]/50 shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95'
                     }
                   `}
-                  title={isRecording ? "Cannot attach during recording" : "Attach files & documents"}
+                  title={isRecording ? t('mediscribe.attachButton.disabledTitle', 'Cannot attach during recording') : t('mediscribe.attachButton.title', 'Attach files & documents')}
                 >
                   {/* Gradient Background Effect */}
                   {!isRecording && (
@@ -298,10 +298,10 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                   {/* Text Content */}
                   <div className="hidden xl:flex flex-col items-start relative z-10">
                     <span className={`font-bold text-sm ${isRecording ? 'text-gray-400' : 'text-[#1a365d] group-hover:text-[#2b6cb0]'}`}>
-                      Attach
+                      {t('mediscribe.attachButton.label', 'Attach')}
                     </span>
                     <span className={`text-[10px] font-medium ${isRecording ? 'text-gray-400' : 'text-[#2b6cb0]/70 group-hover:text-[#2b6cb0]'}`}>
-                      Files & docs
+                      {t('mediscribe.attachButton.sublabel', 'Files & docs')}
                     </span>
                   </div>
                 </button>
@@ -338,10 +338,10 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 
                 <div className="hidden sm:flex flex-col items-start">
                   <span className="font-bold text-sm leading-tight">
-                    {isRecording ? 'Stop' : 'Record'}
+                    {isRecording ? t('mediscribe.recordButton.stop', 'Stop') : t('mediscribe.recordButton.record', 'Record')}
                   </span>
                   <span className="text-xs opacity-90 leading-tight">
-                    {isRecording ? 'End recording' : 'Start recording'}
+                    {isRecording ? t('mediscribe.recordButton.endRecording', 'End recording') : t('mediscribe.recordButton.startRecording', 'Start recording')}
                   </span>
                 </div>
                 

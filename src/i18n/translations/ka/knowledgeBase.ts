@@ -32,6 +32,12 @@ export const knowledgeBase = {
   uploadToEnable: 'ატვირთეთ გასააქტიურებლად',
   aiVerified: 'AI დამოწმება',
   selectionInfluenceNotice: 'ცოდნის ბაზის არჩევანი გავლენას ახდენს AI პასუხების სიზუსტესა და სიღრმეზე',
+
+  // Tooltip content
+  curatedTooltipTitle: 'სამედიცინო ცოდნის ბაზა',
+  curatedTooltipDesc: 'AI უპასუხებს კარდიოლოგიის დადგენილი ცოდნის გამოყენებით, რომელიც მიღებულია სამედიცინო ექსპერტებისა და სანდო წყაროებისგან.',
+  personalTooltipTitle: 'თქვენი დოკუმენტები',
+  personalTooltipDesc: 'AI უპასუხებს თქვენ მიერ ატვირთული დოკუმენტებისა და პირადი ფაილების ინფორმაციის გამოყენებით.',
   
   // Document management
   documents: {
