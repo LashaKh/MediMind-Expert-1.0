@@ -2,7 +2,7 @@
 // Integrated voice recording with Georgian TTS system
 // Real-time transcription with <200ms recording start performance
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { 
   Mic, 
   MicOff, 
@@ -37,6 +37,9 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
+  // Track transcript content when recording starts (to preserve typed text)
+  const transcriptAtRecordingStartRef = useRef<string>('');
+
   // Georgian TTS integration with session isolation
   const {
     recordingState,
@@ -55,8 +58,15 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
     onLiveTranscriptUpdate: useCallback((newText: string, fullText: string, currentSessionId?: string) => {
       // Only update if session matches or no session filtering
       if (!sessionId || currentSessionId === sessionId) {
-        setLocalTranscript(fullText);
-        onChange(fullText);
+        // PRESERVE existing content: combine base content with full transcript from current recording
+        const baseContent = transcriptAtRecordingStartRef.current;
+        const separator = baseContent && fullText ? '\n\n' : '';
+        const combinedContent = baseContent + separator + fullText.trim();
+
+        setLocalTranscript(combinedContent);
+        onChange(combinedContent);
+
+        console.log('🎯 Live update - Base:', baseContent.length, 'New recording:', fullText.length, 'Total:', combinedContent.length);
       }
     }, [sessionId, onChange])
   });
@@ -65,6 +75,8 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
   useEffect(() => {
     if (value !== localTranscript && !recordingState.isRecording) {
       setLocalTranscript(value);
+      // Also update the ref so next recording will preserve this content
+      transcriptAtRecordingStartRef.current = value;
     }
   }, [value, localTranscript, recordingState.isRecording]);
 
@@ -119,6 +131,10 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
         await pauseRecording();
       }
     } else {
+      // CRITICAL: Capture current transcript content BEFORE starting recording
+      // This preserves any manually typed text or previous recordings
+      transcriptAtRecordingStartRef.current = localTranscript;
+      console.log('🎯 Starting recording, preserving existing content:', localTranscript.length, 'characters');
       await startRecording();
     }
   };
@@ -126,6 +142,8 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
   // Handle stop recording
   const handleStopRecording = async () => {
     await stopRecording();
+    // Reset the ref after stopping so next recording starts fresh
+    console.log('🎯 Stopped recording, final content:', localTranscript.length, 'characters');
   };
 
   // Handle clear transcript
@@ -133,6 +151,9 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
     clearTranscription();
     setLocalTranscript('');
     onChange('');
+    // Also reset the recording start ref
+    transcriptAtRecordingStartRef.current = '';
+    console.log('🎯 Cleared transcript and reset recording ref');
   };
 
   // Format recording duration

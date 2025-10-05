@@ -94,12 +94,15 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   const [selectedSTTModel, setSelectedSTTModel] = useState<'Fast' | 'GoogleChirp'>(() => {
     // Load from localStorage or default to Fast
     const saved = localStorage.getItem('medimind_stt_model');
-    return (saved === 'Fast' || saved === 'GoogleChirp') ? saved : 'Fast';
+    const model = (saved === 'Fast' || saved === 'GoogleChirp') ? saved : 'Fast';
+    console.log('🎯 STT Model loaded from localStorage:', model, '(saved value:', saved, ')');
+    return model;
   });
 
   // Update ref when state changes
   useEffect(() => {
     selectedSTTModelRef.current = selectedSTTModel;
+    console.log('🎯 STT Model ref updated to:', selectedSTTModel);
   }, [selectedSTTModel]);
 
   // Speaker diarization state
@@ -479,6 +482,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     }
 
     try {
+      console.log('🎯 Processing audio chunk with STT model:', selectedSTTModelRef.current);
 
       const result = await georgianTTSServiceRef.current.recognizeSpeech(audioBlob, {
         language,
@@ -1353,8 +1357,10 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
 
     setIsTranscribing(true);
     setError(null);
-    
+
     try {
+      console.log('🎯 Processing file upload with STT model:', selectedSTTModelRef.current, 'File:', file.name);
+
       // Use the new processAudioFile method with chunking support
       const [transcriptResult, transcriptionError] = await safeAsync(
         () => georgianTTSServiceRef.current!.processAudioFile(file, {

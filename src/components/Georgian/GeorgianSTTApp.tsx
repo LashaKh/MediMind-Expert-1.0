@@ -451,22 +451,26 @@ export const GeorgianSTTApp: React.FC = () => {
     // Check if this is a diagnosis request and route to specialized service
     if (isDiagnosisTemplate(instruction)) {
       console.log('🩺 Diagnosis template detected:', instruction);
-      
+
       const diagnosisInfo = extractDiagnosisFromInstruction(instruction);
       if (diagnosisInfo) {
         console.log('🩺 Diagnosis info extracted:', diagnosisInfo);
         console.log('📝 Transcript length:', transcript.length);
         console.log('📝 Transcript preview:', transcript.substring(0, 200) + '...');
-        
+
+        // Extract card title from instruction (first line contains the title)
+        const cardTitle = `Initial Diagnosis - (${diagnosisInfo.icdCode}) ${diagnosisInfo.diagnosisGeorgian}`;
+        console.log('📋 Card title:', cardTitle);
+
         // Manually manage processing state for diagnosis service
         // We can't use the regular processText as it goes to a different endpoint
 
         setProcessing(true);
-        
+
         try {
           console.log('🚀 Starting diagnosis report generation...');
           const startTime = Date.now();
-          const diagnosisResult = await generateDiagnosisReport(transcript, diagnosisInfo);
+          const diagnosisResult = await generateDiagnosisReport(transcript, diagnosisInfo, cardTitle);
           const processingTime = Date.now() - startTime;
           
           console.log('✅ Diagnosis report completed:', {

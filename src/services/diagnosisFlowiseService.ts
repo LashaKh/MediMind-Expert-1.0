@@ -7,6 +7,8 @@
 
 import type { UserReportTemplate } from '../types/templates';
 
+// Flowise API request format - backend ONLY accepts "question" field
+// We encode structured metadata (cardTitle, type, etc.) within the question text
 interface DiagnosisFlowiseRequest {
   question: string;
 }
@@ -24,63 +26,47 @@ interface DiagnosisContext {
   specialty: string;
 }
 
-// Cardiac consult endpoints - updated to match the user's requirements
-const HEART_FAILURE_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/89920f52-74cb-46bc-bf6c-b9099746dfe9";
-
-// Acute Ischaemic Heart Disease (I24.9) endpoint - corrected to use the working endpoint from the diagnosis config
-const ACUTE_ISCHAEMIC_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3db46c83-334b-4ffc-9112-5d30e43f7cf4";
-
-// Pulmonary embolism (I26.0) endpoint
-const PULMONARY_EMBOLISM_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/3602b392-65e5-4dbd-a649-cac18280bea5";
-
-// STEMI (I21.0) endpoint
-const STEMI_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/a18d5e28-05a5-4991-af4a-186ceb558383";
-
-// General template processing endpoint
-const GENERAL_TEMPLATE_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf";
+// UNIFIED ENDPOINT - All requests (Initial Consults, Templates, Form 100) use this single endpoint
+const UNIFIED_API_URL = "https://flowise-2-0.onrender.com/api/v1/prediction/0dfbbc44-76d0-451f-b7ca-92a96f862924";
 
 /**
- * Formats the transcript with diagnosis context and optional template for the Flowise agent
+ * Formats the diagnosis request for the Flowise agent
+ * Converts structured data into the "question" format required by Flowise backend
  */
 function formatDiagnosisRequest(
-  transcript: string, 
-  diagnosis: DiagnosisContext, 
-  template?: UserReportTemplate
-): string {
-  let prompt = `Please generate a comprehensive cardiologist's consultation report based on this transcript. Follow the examples and instructions on how the report should look, and make sure it's in Georgian as in the examples.`;
-  
-  // If a template is provided, include its structure and guidance
-  if (template) {
-    prompt += `\n\nUse this template structure as a guide for the report format:
-${template.example_structure}`;
-    
-    // Add template notes if available
-    if (template.notes?.trim()) {
-      prompt += `\n\nAdditional guidance: ${template.notes}`;
-    }
-  }
-  
-  prompt += `\n\n${transcript}`;
-  
-  return prompt;
+  transcript: string,
+  diagnosis: DiagnosisContext,
+  cardTitle: string
+): { question: string } {
+  // Flowise backend requires "question" field format
+  // We encode our structured metadata within the question text
+  const questionContent = `Card Title: ${cardTitle}
+Type: Initial Consult
+Diagnosis Code: ${diagnosis.icdCode}
+
+${transcript}`;
+
+  return {
+    question: questionContent
+  };
 }
 
 /**
- * Calls the diagnosis Flowise agent for consultation reports with optional custom template
+ * Calls the diagnosis Flowise agent for consultation reports with structured JSON request
  */
 export async function generateDiagnosisReport(
   transcript: string,
   diagnosis: DiagnosisContext,
-  template?: UserReportTemplate
+  cardTitle: string
 ): Promise<{ success: true; report: string } | { success: false; error: string }> {
   console.log('🔬 Diagnosis service: Starting report generation');
   console.log('📋 Input:', {
     transcriptLength: transcript.length,
     diagnosis: diagnosis.diagnosisEnglish,
     icdCode: diagnosis.icdCode,
-    templateName: template?.name || 'none'
+    cardTitle
   });
-  
+
   try {
     if (!transcript.trim()) {
       const error = 'Transcript is required for diagnosis report generation';
@@ -91,31 +77,30 @@ export async function generateDiagnosisReport(
       };
     }
 
-    // Select the correct endpoint based on diagnosis type
-    let apiUrl: string;
-    if (diagnosis.icdCode === 'I50.0') {
-      apiUrl = HEART_FAILURE_API_URL;
-    } else if (diagnosis.icdCode === 'I24.9') {
-      apiUrl = ACUTE_ISCHAEMIC_API_URL;
-    } else if (diagnosis.icdCode === 'I26.0') {
-      apiUrl = PULMONARY_EMBOLISM_API_URL;
-    } else if (diagnosis.icdCode === 'I21.0') {
-      apiUrl = STEMI_API_URL;
-    } else {
-      // Fallback to Acute Ischaemic for unknown codes
-      apiUrl = ACUTE_ISCHAEMIC_API_URL;
-    }
-    console.log('🌐 API URL selected:', apiUrl);
+    // Use unified endpoint for all requests
+    console.log('🌐 Using unified API endpoint:', UNIFIED_API_URL);
 
-    const formattedRequest = formatDiagnosisRequest(transcript, diagnosis, template);
-    console.log('📄 Formatted request length:', formattedRequest.length);
-    
-    const requestPayload: DiagnosisFlowiseRequest = {
-      question: formattedRequest
-    };
+    const requestPayload = formatDiagnosisRequest(
+      transcript,
+      diagnosis,
+      cardTitle
+    );
 
-    console.log('🚀 Making API request to diagnosis endpoint...');
-    const response = await fetch(apiUrl, {
+    console.log('📄 Request metadata:', {
+      cardTitle,
+      type: 'Initial Consult',
+      diagnosisCode: diagnosis.icdCode,
+      transcriptLength: transcript.length,
+      questionLength: requestPayload.question.length
+    });
+
+    // Log the FULL request being sent to Flowise for debugging
+    console.log('📨 FULL Flowise Request Being Sent:');
+    console.log(JSON.stringify(requestPayload, null, 2));
+    console.log('🌐 Target Endpoint:', UNIFIED_API_URL);
+
+    console.log('🚀 Making API request to unified endpoint...');
+    const response = await fetch(UNIFIED_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -131,7 +116,7 @@ export async function generateDiagnosisReport(
         statusText: response.statusText,
         errorText: errorText.substring(0, 500)
       });
-      
+
       return {
         success: false,
         error: `API request failed: ${response.status} ${response.statusText}`
@@ -144,14 +129,14 @@ export async function generateDiagnosisReport(
       textLength: data.text?.length || 0,
       responseKeys: Object.keys(data)
     });
-    
+
     // Debug: Check the actual response content
     console.log('🔍 DEBUG - API Response Content Analysis:', {
       contentPreview: data.text?.substring(0, 300) + '...',
       hasGeorgianChars: /[\u10A0-\u10FF]/.test(data.text || ''),
       contentLanguage: /[\u10A0-\u10FF]/.test(data.text || '') ? 'Georgian detected' : 'No Georgian detected'
     });
-    
+
     if (!data.text) {
       console.error('❌ Invalid response format from diagnosis API:', data);
       return {
@@ -173,11 +158,11 @@ export async function generateDiagnosisReport(
       message: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined
     });
-    
+
     return {
       success: false,
-      error: error instanceof Error 
-        ? error.message 
+      error: error instanceof Error
+        ? error.message
         : 'Unknown error occurred while generating diagnosis report'
     };
   }
@@ -224,99 +209,131 @@ export const STEMI_DIAGNOSIS: DiagnosisContext = {
 };
 
 /**
+ * Angina Pectoris diagnosis context
+ */
+export const ANGINA_PECTORIS_DIAGNOSIS: DiagnosisContext = {
+  icdCode: 'I20.8',
+  diagnosisGeorgian: 'სტენოკარდიის სხვა ფორმები (Planned Angiography)',
+  diagnosisEnglish: 'Other forms of angina pectoris',
+  specialty: 'Cardiology'
+};
+
+/**
+ * AV Block and Bradyarrhythmia diagnosis context
+ */
+export const AV_BLOCK_DIAGNOSIS: DiagnosisContext = {
+  icdCode: 'I44.(-)',
+  diagnosisGeorgian: 'სრული/არასრული AV ბლოკადა და ბრადიარითმიები',
+  diagnosisEnglish: 'Complete/Incomplete AV block and bradyarrhythmias',
+  specialty: 'Cardiology'
+};
+
+/**
  * Generate heart failure consultation report
  * Convenience function for the specific heart failure diagnosis
  */
-export async function generateHeartFailureReport(transcript: string, template?: UserReportTemplate) {
-  return generateDiagnosisReport(transcript, HEART_FAILURE_DIAGNOSIS, template);
+export async function generateHeartFailureReport(transcript: string, cardTitle?: string) {
+  const title = cardTitle || `Initial Diagnosis - (I50.0) ${HEART_FAILURE_DIAGNOSIS.diagnosisGeorgian}`;
+  return generateDiagnosisReport(transcript, HEART_FAILURE_DIAGNOSIS, title);
 }
 
 /**
  * Generate Acute Ischaemic Heart Disease consultation report
  * Convenience function for the specific Acute Ischaemic Heart Disease diagnosis
  */
-export async function generateAcuteIschaemicReport(transcript: string, template?: UserReportTemplate) {
-  return generateDiagnosisReport(transcript, ACUTE_ISCHAEMIC_DIAGNOSIS, template);
+export async function generateAcuteIschaemicReport(transcript: string, cardTitle?: string) {
+  const title = cardTitle || `Initial Diagnosis - (I24.9) ${ACUTE_ISCHAEMIC_DIAGNOSIS.diagnosisGeorgian}`;
+  return generateDiagnosisReport(transcript, ACUTE_ISCHAEMIC_DIAGNOSIS, title);
 }
 
 /**
  * Generate pulmonary embolism consultation report
  * Convenience function for the specific pulmonary embolism diagnosis
  */
-export async function generatePulmonaryEmbolismReport(transcript: string, template?: UserReportTemplate) {
-  return generateDiagnosisReport(transcript, PULMONARY_EMBOLISM_DIAGNOSIS, template);
+export async function generatePulmonaryEmbolismReport(transcript: string, cardTitle?: string) {
+  const title = cardTitle || `Initial Diagnosis - (I26.0) ${PULMONARY_EMBOLISM_DIAGNOSIS.diagnosisGeorgian}`;
+  return generateDiagnosisReport(transcript, PULMONARY_EMBOLISM_DIAGNOSIS, title);
 }
 
 /**
  * Generate STEMI consultation report
  * Convenience function for the specific STEMI diagnosis
  */
-export async function generateSTEMIReport(transcript: string, template?: UserReportTemplate) {
-  return generateDiagnosisReport(transcript, STEMI_DIAGNOSIS, template);
+export async function generateSTEMIReport(transcript: string, cardTitle?: string) {
+  const title = cardTitle || `Initial Diagnosis - (I21.0) ${STEMI_DIAGNOSIS.diagnosisGeorgian}`;
+  return generateDiagnosisReport(transcript, STEMI_DIAGNOSIS, title);
 }
 
 /**
  * Check if a template instruction is for diagnosis processing
  */
 export function isDiagnosisTemplate(instruction: string): boolean {
-  return instruction.toLowerCase().includes('diagnosis') && 
-         (instruction.toLowerCase().includes('i50.0') || 
+  return instruction.toLowerCase().includes('diagnosis') &&
+         (instruction.toLowerCase().includes('i50.0') ||
           instruction.toLowerCase().includes('i24.9') ||
           instruction.toLowerCase().includes('i26.0') ||
-          instruction.toLowerCase().includes('i21.0'));
+          instruction.toLowerCase().includes('i21.0') ||
+          instruction.toLowerCase().includes('i20.8') ||
+          instruction.toLowerCase().includes('i44'));
 }
 
 /**
  * Extract diagnosis information from instruction
  */
 export function extractDiagnosisFromInstruction(instruction: string): DiagnosisContext | null {
-  if (instruction.toLowerCase().includes('i50.0') || 
+  if (instruction.toLowerCase().includes('i50.0') ||
       instruction.toLowerCase().includes('heart failure') ||
       instruction.toLowerCase().includes('გულის შეგუბებითი უკმარისობა')) {
     return HEART_FAILURE_DIAGNOSIS;
   }
-  
-  if (instruction.toLowerCase().includes('i24.9') || 
+
+  if (instruction.toLowerCase().includes('i24.9') ||
       instruction.toLowerCase().includes('acute ischaemic') ||
       instruction.toLowerCase().includes('acute ischemic') ||
       instruction.toLowerCase().includes('გულის მწვავე იშემიური ავადმყოფობა')) {
     return ACUTE_ISCHAEMIC_DIAGNOSIS;
   }
-  
-  if (instruction.toLowerCase().includes('i26.0') || 
+
+  if (instruction.toLowerCase().includes('i26.0') ||
       instruction.toLowerCase().includes('pulmonary embolism') ||
       instruction.toLowerCase().includes('ფილტვის არტერიის ემბოლია')) {
     return PULMONARY_EMBOLISM_DIAGNOSIS;
   }
-  
-  if (instruction.toLowerCase().includes('i21.0') || 
+
+  if (instruction.toLowerCase().includes('i21.0') ||
       instruction.toLowerCase().includes('stemi') ||
       instruction.toLowerCase().includes('st elevation') ||
       instruction.toLowerCase().includes('st ელევაციური მიოკარდიუმის ინფარქტი')) {
     return STEMI_DIAGNOSIS;
   }
-  
+
+  if (instruction.toLowerCase().includes('i20.8') ||
+      instruction.toLowerCase().includes('angina pectoris') ||
+      instruction.toLowerCase().includes('სტენოკარდიის სხვა ფორმები')) {
+    return ANGINA_PECTORIS_DIAGNOSIS;
+  }
+
+  if (instruction.toLowerCase().includes('i44') ||
+      instruction.toLowerCase().includes('av block') ||
+      instruction.toLowerCase().includes('bradyarrhythmia') ||
+      instruction.toLowerCase().includes('av ბლოკადა')) {
+    return AV_BLOCK_DIAGNOSIS;
+  }
+
   return null;
 }
 
 /**
- * Generate report with custom template using general endpoint
- * Enhanced function that uses template structure to guide AI generation
+ * Generate report with custom template using unified endpoint with question format
  */
 export async function generateTemplateBasedReport(
   transcript: string,
-  template: UserReportTemplate,
-  diagnosis?: DiagnosisContext
+  template: UserReportTemplate
 ): Promise<{ success: true; report: string } | { success: false; error: string }> {
-  // If diagnosis context is provided and matches our specialized endpoints, use diagnosis service
-  if (diagnosis && (diagnosis.icdCode === 'I50.0' || diagnosis.icdCode === 'I24.9' || diagnosis.icdCode === 'I26.0' || diagnosis.icdCode === 'I21.0')) {
-    return generateDiagnosisReport(transcript, diagnosis, template);
-  }
-  
-  console.log('🔬 Template-based report: Using general template processing');
+  console.log('🔬 Template-based report: Using unified endpoint');
   console.log('📋 Template:', template.name);
   console.log('📄 Transcript length:', transcript.length);
-  
+
   try {
     if (!transcript.trim()) {
       return {
@@ -325,28 +342,39 @@ export async function generateTemplateBasedReport(
       };
     }
 
-    // Create template-enhanced prompt for general endpoint
-    let prompt = `Please generate a comprehensive medical consultation report based on this transcript. Use this template structure as a guide for the report format:
+    // Flowise backend requires "question" field format
+    // We encode template metadata within the question text
+    const questionContent = `Card Title: Template
+Type: Template
+Template Name: ${template.name}
 
-${template.example_structure}`;
-    
-    // Add template notes if available
-    if (template.notes?.trim()) {
-      prompt += `\n\nAdditional guidance: ${template.notes}`;
-    }
-    
-    prompt += `\n\nTranscript to analyze:\n${transcript}`;
+${transcript}`;
 
-    console.log('🚀 Making API request to general template endpoint...');
-    const response = await fetch(GENERAL_TEMPLATE_API_URL, {
+    const requestPayload = {
+      question: questionContent
+    };
+
+    console.log('📄 Request metadata:', {
+      cardTitle: 'Template',
+      type: 'Template',
+      templateName: template.name,
+      transcriptLength: transcript.length,
+      questionLength: requestPayload.question.length
+    });
+
+    // Log the FULL request being sent to Flowise for debugging
+    console.log('📨 FULL Flowise Request Being Sent:');
+    console.log(JSON.stringify(requestPayload, null, 2));
+    console.log('🌐 Target Endpoint:', UNIFIED_API_URL);
+
+    console.log('🚀 Making API request to unified endpoint...');
+    const response = await fetch(UNIFIED_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      body: JSON.stringify({
-        question: prompt
-      })
+      body: JSON.stringify(requestPayload)
     });
 
     if (!response.ok) {
@@ -356,7 +384,7 @@ ${template.example_structure}`;
         statusText: response.statusText,
         errorText: errorText.substring(0, 500)
       });
-      
+
       return {
         success: false,
         error: `API request failed: ${response.status} ${response.statusText}`
@@ -368,7 +396,7 @@ ${template.example_structure}`;
       hasText: !!data.text,
       textLength: data.text?.length || 0
     });
-    
+
     if (!data.text) {
       console.error('❌ Invalid response format from template API:', data);
       return {
@@ -387,8 +415,8 @@ ${template.example_structure}`;
     console.error('🚨 Fatal error in template service:', error);
     return {
       success: false,
-      error: error instanceof Error 
-        ? error.message 
+      error: error instanceof Error
+        ? error.message
         : 'Unknown error occurred while generating template-based report'
     };
   }

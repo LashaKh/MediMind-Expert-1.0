@@ -119,11 +119,44 @@ export function formatMarkdown(text: string): JSX.Element {
     if (currentList) {
       elements.push(
         <FormattedList key={`list-${key++}`} ordered={currentList.type === 'ol'}>
-          {currentList.items.map((item, idx) => (
-            <FormattedListItem key={`item-${idx}`}>
-              {formatInlineText(item)}
-            </FormattedListItem>
-          ))}
+          {currentList.items.map((item, idx) => {
+            // Check if item contains nested sub-items (indicated by \n  prefix)
+            const hasSubItems = item.includes('\n  ');
+
+            if (hasSubItems) {
+              const [mainContent, ...subItems] = item.split('\n  ').filter(Boolean);
+              return (
+                <li
+                  key={`item-${idx}`}
+                  className="text-slate-800 dark:text-slate-200 leading-relaxed"
+                  style={{
+                    width: '100%',
+                    maxWidth: '100%',
+                    margin: 0,
+                    padding: 0,
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  {formatInlineText(mainContent)}
+                  {subItems.length > 0 && (
+                    <ul className="list-disc ml-6 mt-1 space-y-1">
+                      {subItems.map((subItem, subIdx) => (
+                        <li key={`sub-${subIdx}`} className="text-slate-800 dark:text-slate-200">
+                          {formatInlineText(subItem)}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              );
+            }
+
+            return (
+              <FormattedListItem key={`item-${idx}`}>
+                {formatInlineText(item)}
+              </FormattedListItem>
+            );
+          })}
         </FormattedList>
       );
       currentList = null;
@@ -132,10 +165,15 @@ export function formatMarkdown(text: string): JSX.Element {
 
   lines.forEach((line, index) => {
     const trimmedLine = line.trim();
-    
-    // Skip empty lines
+
+    // Skip empty lines but DON'T flush lists - allow empty lines within lists
     if (!trimmedLine) {
-      flushList();
+      // Only flush if we encounter 2+ consecutive empty lines (end of section)
+      const nextLine = lines[index + 1]?.trim();
+      const prevLine = lines[index - 1]?.trim();
+      if (!nextLine || (!prevLine && currentList)) {
+        flushList();
+      }
       return;
     }
 
@@ -152,9 +190,23 @@ export function formatMarkdown(text: string): JSX.Element {
       return;
     }
 
-    // Handle unordered lists
+    // Handle unordered lists (including nested bullets after numbered items)
     if (trimmedLine.match(/^[-*+]\s/)) {
       const content = trimmedLine.replace(/^[-*+]\s/, '');
+
+      // If we're currently in an ordered list, treat bullets as sub-items
+      // This handles the common pattern where bullets follow numbered items
+      if (currentList && currentList.type === 'ol') {
+        // This is a sub-bullet within a numbered list item
+        // Add it to the last numbered item as nested content
+        const lastItemIndex = currentList.items.length - 1;
+        if (lastItemIndex >= 0) {
+          currentList.items[lastItemIndex] += `\n  ${content}`;
+        }
+        return;
+      }
+
+      // Regular unordered list (only when NOT in an ordered list)
       if (!currentList || currentList.type !== 'ul') {
         flushList();
         currentList = { type: 'ul', items: [] };

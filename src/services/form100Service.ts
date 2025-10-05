@@ -12,24 +12,25 @@ import {
   DiagnosisCode
 } from '../types/form100';
 import {
-  getFlowiseEndpointForDiagnosis,
-  STEMI_FORM100_ENDPOINT,
-  DEFAULT_FORM100_ENDPOINT
-} from '../components/Form100/config/diagnosisEndpoints';
-import {
   parseGeorgianMedicalHistory,
   insertBriefAnamnesisIntoForm100
 } from '../utils/medicalTextParser';
 
+// UNIFIED ENDPOINT - All Form 100 requests use this single endpoint
+const UNIFIED_FORM100_ENDPOINT = "https://flowise-2-0.onrender.com/api/v1/prediction/0dfbbc44-76d0-451f-b7ca-92a96f862924";
+
 // Service configuration
 const FORM100_CONFIG: Form100Config = {
-  flowiseEndpoint: DEFAULT_FORM100_ENDPOINT, // Direct Flowise endpoint
+  flowiseEndpoint: UNIFIED_FORM100_ENDPOINT, // Unified Flowise endpoint
   maxGenerationTime: FORM100_DEFAULTS.maxGenerationTime || 15000, // 15 seconds to test faster
   retryAttempts: FORM100_DEFAULTS.retryAttempts || 1, // Single retry to avoid multiple long waits
   validationRules: [],
   supportedDepartments: FORM100_DEFAULTS.supportedDepartments || [],
   defaultPriority: FORM100_DEFAULTS.defaultPriority || 'normal'
 };
+
+// Note: Flowise backend ONLY accepts "question" field format
+// We encode Form 100 metadata (cardTitle, type, etc.) within the question text
 
 // Error codes for medical safety compliance
 export const FORM100_ERROR_CODES = {
@@ -79,25 +80,7 @@ const generateRequestId = (): string => {
   return `form100_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 };
 
-// Resolve the appropriate Flowise endpoint for a given diagnosis
-const resolveFlowiseEndpoint = (
-  diagnosis: DiagnosisCode,
-  options?: {
-    isFromSTEMI?: boolean;
-    troponinPositive?: boolean;
-  }
-): string => {
-  // First check if the diagnosis has its own endpoint configured
-  if (diagnosis.flowiseEndpoint) {
-    return diagnosis.flowiseEndpoint;
-  }
-  
-  // Use the endpoint resolution function with diagnosis code
-  return getFlowiseEndpointForDiagnosis(diagnosis.code, {
-    isFromSTEMI: options?.isFromSTEMI,
-    troponinPositive: diagnosis.troponinStatus === 'positive' || options?.troponinPositive
-  });
-};
+// Note: Endpoint resolution removed - all Form 100 requests use unified endpoint
 
 // Validate Form 100 request data
 const validateForm100Request = (request: Partial<Form100Request>): { 
@@ -185,85 +168,117 @@ const makeFlowiseRequest = async (
 ): Promise<FlowiseForm100Response> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), FORM100_CONFIG.maxGenerationTime);
-  
-  // Get the diagnosis-specific endpoint for this request
+
+  // Use unified endpoint for all Form 100 requests
   const diagnosisCode = payload.patientData?.clinicalData?.primaryDiagnosis?.code;
-  const flowiseEndpoint = endpoint || resolveFlowiseEndpoint(payload.patientData.clinicalData.primaryDiagnosis);
+  const diagnosisName = payload.patientData?.clinicalData?.primaryDiagnosis?.name; // Georgian name
+  const flowiseEndpoint = endpoint || UNIFIED_FORM100_ENDPOINT;
 
   try {
-    // Build clean medical data input (no redundant sections)
-    let questionContent = "";
-    
+    // Build clean medical data input (generatedInitialConsult content)
+    let generatedInitialConsult = "";
+
     // Include existing ER report (initial consult transcript)
     if (payload.patientData?.existingERReport) {
-      questionContent += `${payload.patientData.existingERReport}\n\n`;
+      generatedInitialConsult += `${payload.patientData.existingERReport}\n\n`;
     }
-    
+
     // Include angiography report if available
     if (payload.patientData?.angiographyReport) {
-      questionContent += `**Angiography Report:**\n${payload.patientData.angiographyReport}\n\n`;
+      generatedInitialConsult += `**Angiography Report:**\n${payload.patientData.angiographyReport}\n\n`;
     }
-    
+
     // Include voice transcript if available
     if (payload.patientData?.voiceTranscript) {
-      questionContent += `**Voice Notes:**\n${payload.patientData.voiceTranscript}\n\n`;
+      generatedInitialConsult += `**Voice Notes:**\n${payload.patientData.voiceTranscript}\n\n`;
     }
-    
+
     // Include patient demographics only if not already in ER report
     if (payload.patientData?.demographics) {
       const demo = payload.patientData.demographics;
       let hasNewDemographics = false;
       let demographicsContent = `**Patient Information:**\n`;
-      
+
       if (demo.age) { demographicsContent += `Age: ${demo.age}\n`; hasNewDemographics = true; }
       if (demo.gender) { demographicsContent += `Gender: ${demo.gender}\n`; hasNewDemographics = true; }
       if (demo.weight) { demographicsContent += `Weight: ${demo.weight}kg\n`; hasNewDemographics = true; }
       if (demo.height) { demographicsContent += `Height: ${demo.height}cm\n`; hasNewDemographics = true; }
-      
+
       if (hasNewDemographics) {
-        questionContent += demographicsContent + `\n`;
+        generatedInitialConsult += demographicsContent + `\n`;
       }
     }
-    
+
     // Include vital signs only if not already in ER report
     if (payload.patientData?.clinicalData?.vitalSigns) {
       const vitals = payload.patientData.clinicalData.vitalSigns;
       let hasNewVitals = false;
       let vitalsContent = `**Additional Vital Signs:**\n`;
-      
+
       if (vitals.bloodPressure) { vitalsContent += `Blood Pressure: ${vitals.bloodPressure}\n`; hasNewVitals = true; }
       if (vitals.heartRate) { vitalsContent += `Heart Rate: ${vitals.heartRate} bpm\n`; hasNewVitals = true; }
       if (vitals.temperature) { vitalsContent += `Temperature: ${vitals.temperature}°C\n`; hasNewVitals = true; }
       if (vitals.respiratoryRate) { vitalsContent += `Respiratory Rate: ${vitals.respiratoryRate}\n`; hasNewVitals = true; }
       if (vitals.oxygenSaturation) { vitalsContent += `Oxygen Saturation: ${vitals.oxygenSaturation}%\n`; hasNewVitals = true; }
-      
+
       if (hasNewVitals) {
-        questionContent += vitalsContent + `\n`;
+        generatedInitialConsult += vitalsContent + `\n`;
       }
     }
 
-    // Use EXACT same request format as flowise-simple.mjs working call
+    // Prepare card title in EXACT format required by Flowise
+    // Format: "Form 100 - (CODE) GEORGIAN_NAME"
+    const cardTitle = (diagnosisCode && diagnosisName)
+      ? `Form 100 - (${diagnosisCode}) ${diagnosisName}`
+      : 'Form 100 - Emergency Report';
+
+    console.log('🏷️ Form 100 Card Title Being Sent:', {
+      diagnosisCode,
+      diagnosisName,
+      fullCardTitle: cardTitle
+    });
+
+    // Flowise backend requires "question" field format
+    // We encode Form 100 metadata within the question text
+    const questionContent = `Card Title: ${cardTitle}
+Type: form 100
+
+Generated Initial Consult:
+${generatedInitialConsult.trim()}`;
+
     const flowiseRequest = {
-      question: questionContent.trim(),
-      overrideConfig: { 
-        sessionId: payload.sessionId || 'default-session' 
+      question: questionContent,
+      overrideConfig: {
+        sessionId: payload.sessionId || 'default-session'
       }
     };
 
-    console.log('🚀 Making direct request to Flowise (exact flowise-simple.mjs format):', {
+    console.log('🚀 Making request to unified Flowise endpoint:', {
       endpoint: flowiseEndpoint,
-      sessionId: payload.sessionId,
+      cardTitle,
+      type: 'form 100',
       diagnosisCode,
-      hasQuestion: !!flowiseRequest.question,
-      questionLength: flowiseRequest.question.length
+      sessionId: payload.sessionId,
+      hasGeneratedConsult: !!generatedInitialConsult,
+      consultLength: generatedInitialConsult.length,
+      questionLength: questionContent.length
     });
 
-    console.log('📤 Full request payload (flowise-simple.mjs format):', flowiseRequest);
+    console.log('📤 Request payload with question format:', {
+      hasQuestion: !!flowiseRequest.question,
+      questionLength: flowiseRequest.question.length,
+      sessionId: flowiseRequest.overrideConfig.sessionId
+    });
+
+    // Log the FULL request being sent to Flowise for debugging
+    console.log('📨 FULL Flowise Request Being Sent:');
+    console.log(JSON.stringify(flowiseRequest, null, 2));
+    console.log('🌐 Target Endpoint:', flowiseEndpoint);
 
     const requestStartTime = Date.now();
     console.log('⏰ Starting Flowise request at:', new Date().toISOString());
 
-    // Use EXACT same fetch call as flowise-simple.mjs
+    // Send request with "question" field format (required by Flowise backend)
     const flowiseResponse = await fetch(flowiseEndpoint, {
       method: 'POST',
       headers: {
@@ -415,11 +430,9 @@ export class Form100Service {
       }
 
       const startTime = Date.now();
-      
-      // Resolve the appropriate Flowise endpoint for this diagnosis
-      const endpoint = request.primaryDiagnosis 
-        ? resolveFlowiseEndpoint(request.primaryDiagnosis, options)
-        : DEFAULT_FORM100_ENDPOINT;
+
+      // Use unified endpoint for all Form 100 requests
+      const endpoint = UNIFIED_FORM100_ENDPOINT;
 
       console.log('🎯 Form 100 generation started:', {
         diagnosisCode: request.primaryDiagnosis?.code,
@@ -428,10 +441,10 @@ export class Form100Service {
         isFromSTEMI: options?.isFromSTEMI,
         troponinPositive: options?.troponinPositive
       });
-      
+
       // Prepare and send request directly to Flowise (same as chat.ts)
       const payload = prepareFlowisePayload(request as Form100Request);
-      
+
       const response = await withRetry(() => makeFlowiseRequest(payload, endpoint));
       
       if (!response.success) {
