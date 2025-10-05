@@ -1,4 +1,5 @@
 export default {
+  title: 'MediMind AI',
   newChat: 'New Chat',
   searchPlaceholder: 'Search conversations...',
   noConversations: 'No conversations yet',

@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { 
-  WorkflowStep, 
-  ProcessingStatus, 
+import { useTranslation } from 'react-i18next';
+import {
+  WorkflowStep,
+  ProcessingStatus,
   ABGType,
   ABGAnalysisError,
   LocalABGResponse
@@ -61,7 +62,8 @@ export const useABGWorkflow = ({
 }: UseABGWorkflowProps): UseABGWorkflowReturn => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const { t } = useTranslation();
+
   // Store state
   const workflow = useABGStore(state => state.currentWorkflow);
   
@@ -238,18 +240,18 @@ export const useABGWorkflow = ({
       setCurrentProcessingStatus('Interpretation completed - Ready for action plan');
 
     } catch (err) {
-      
-      let errorMessage = 'An unexpected error occurred during analysis';
+
+      let errorMessage = t('abg.analysis.error.unexpected', 'An unexpected error occurred during analysis');
       if (err instanceof Error) {
         // Enhanced error messages for specific API issues
         if (err.message.includes('503')) {
-          errorMessage = 'AI service is temporarily unavailable (503). This usually resolves within a few minutes. Please try again shortly.';
+          errorMessage = t('abg.analysis.error.service503', 'AI service is temporarily unavailable (503). This usually resolves within a few minutes. Please try again shortly.');
         } else if (err.message.includes('429')) {
-          errorMessage = 'Rate limit exceeded. Please wait a moment before trying again.';
+          errorMessage = t('abg.analysis.error.rateLimit', 'Rate limit exceeded. Please wait a moment before trying again.');
         } else if (err.message.includes('quota')) {
-          errorMessage = 'API quota exhausted for today. Please try again tomorrow or contact support.';
+          errorMessage = t('abg.analysis.error.quotaExhausted', 'API quota exhausted for today. Please try again tomorrow or contact support.');
         } else if (err.message.includes('Gemini API error')) {
-          errorMessage = `AI analysis service error: ${err.message}. This is likely temporary - please try again in a few minutes.`;
+          errorMessage = t('abg.analysis.error.geminiError', 'AI analysis service error: {{message}}. This is likely temporary - please try again in a few minutes.', { message: err.message });
         } else {
           errorMessage = err.message;
         }
@@ -394,7 +396,7 @@ export const useABGWorkflow = ({
 
     } catch (err) {
 
-      let errorMessage = 'An unexpected error occurred during interpretation';
+      let errorMessage = t('abg.analysis.error.unexpectedInterpretation', 'An unexpected error occurred during interpretation');
       
       if (err && typeof err === 'object') {
         if ('code' in err) {
@@ -583,7 +585,7 @@ export const useABGWorkflow = ({
 
     } catch (err) {
 
-      let errorMessage = 'An unexpected error occurred during action plan generation';
+      let errorMessage = t('abg.analysis.error.unexpectedActionPlan', 'An unexpected error occurred during action plan generation');
       
       if (err && typeof err === 'object') {
         if ('code' in err) {

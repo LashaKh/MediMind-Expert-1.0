@@ -124,6 +124,13 @@ export class GeorgianTTSService {
     console.log('🎯 Engine selected:', options.engine);
     if (options.engine === 'GoogleChirp') {
       console.log('🌐 Routing to Google Speech-to-Text API...');
+      console.log('📊 Audio data length:', base64Audio?.length || 0, 'bytes');
+      console.log('🗣️ Language:', options.language || 'ka-GE');
+
+      if (!base64Audio || base64Audio.length === 0) {
+        console.error('❌ Empty audio data sent to Google STT!');
+        return '';
+      }
 
       const googleRequest = {
         theAudioDataAsBase64: base64Audio,
@@ -171,6 +178,15 @@ export class GeorgianTTSService {
       // Google STT returns plain text
       const result = await response.text();
       console.log('✅ Google STT result:', result?.substring(0, 50) + (result?.length > 50 ? '...' : ''));
+
+      if (!result || result.trim().length === 0) {
+        console.warn('⚠️ Google STT returned empty result. This could mean:');
+        console.warn('   - No speech was detected in the audio');
+        console.warn('   - Audio quality is too low');
+        console.warn('   - Silence or background noise only');
+        console.warn('   - Language mismatch (expecting Georgian ka-GE)');
+      }
+
       return result.trim();
     }
 

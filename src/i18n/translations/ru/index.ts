@@ -671,18 +671,6 @@ export default {
     logout: 'Выйти'
   },
 
-  // Help
-  help: {
-    title: 'Помощь',
-    gettingStarted: 'Начало работы',
-    features: 'Возможности',
-    troubleshooting: 'Устранение неполадок',
-    contact: 'Связаться с нами',
-    documentation: 'Документация',
-    tutorials: 'Учебные материалы',
-    faq: 'Часто задаваемые вопросы'
-  },
-
   // UI elements
   ui: {
     save: 'Сохранить',

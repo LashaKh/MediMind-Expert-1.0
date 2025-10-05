@@ -1,5 +1,5 @@
 export const chat = {
-  title: 'AI ჩატი',
+  title: 'MediMind AI',
   placeholder: 'შეიყვანეთ თქვენი შეტყობინება...',
   send: 'გაგზავნა',
   sendMessage: 'შეტყობინების გაგზავნა',
