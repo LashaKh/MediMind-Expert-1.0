@@ -13,6 +13,10 @@ import news from './news';
 import { filters } from './filters';
 import abg from './abg';
 import tts from './tts';
+import workspace from './workspace';
+import diseases from './diseases';
+import help from './help';
+import mediscribe from './mediscribe';
 
 export default {
   common: {
@@ -28,7 +32,7 @@ export default {
   chat,
   documents,
   medical,
-  validation: validation.validation,
+  validation,
   knowledgeBase,
   podcast,
   search,
@@ -36,6 +40,10 @@ export default {
   filters,
   abg,
   tts,
+  workspace,
+  diseases,
+  help,
+  mediscribe,
   
   // Tour/i18n for tour tooltips and selector
   tour: {

@@ -34,31 +34,33 @@ import {
 } from 'lucide-react';
 import { getAllDiseases, searchDiseases, getDiseasesByCategory, MarkdownDiseaseItem } from './MarkdownDiseaseRegistry';
 import EvidenceLevelsTable from './EvidenceLevel/EvidenceLevelsTable';
-
-const categories = [
-  { id: 'all', name: 'All Categories', icon: Database, color: 'text-slate-600', gradient: 'from-slate-500 to-gray-600' },
-  { id: 'cardiomyopathy', name: 'Cardiomyopathy', icon: Heart, color: 'text-[#1a365d]', gradient: 'from-[#1a365d] to-[#2b6cb0]' },
-  { id: 'electrophysiology', name: 'Electrophysiology', icon: Zap, color: 'text-[#2b6cb0]', gradient: 'from-[#2b6cb0] to-[#63b3ed]' },
-  { id: 'heart-failure', name: 'Heart Failure', icon: Activity, color: 'text-[#2b6cb0]', gradient: 'from-[#2b6cb0] to-[#63b3ed]' },
-  { id: 'valvular', name: 'Valvular Disease', icon: Layers, color: 'text-[#1a365d]', gradient: 'from-[#1a365d] to-[#2b6cb0]' },
-  { id: 'emergency', name: 'Emergency', icon: Stethoscope, color: 'text-[#63b3ed]', gradient: 'from-[#63b3ed] to-[#90cdf4]' },
-  { id: 'electrolyte', name: 'Electrolyte Disorders', icon: Target, color: 'text-[#2b6cb0]', gradient: 'from-[#2b6cb0] to-[#90cdf4]' }
-];
-
-const sortOptions = [
-  { id: 'title', name: 'Title A-Z', icon: SortDesc },
-  { id: 'severity', name: 'Severity', icon: AlertTriangle },
-  { id: 'readTime', name: 'Read Time', icon: Clock },
-  { id: 'updated', name: 'Last Updated', icon: Calendar }
-];
+import { useTranslation } from '../../hooks/useTranslation';
 
 export const SimpleDiseasesIndex: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('title');
   const [showFilters, setShowFilters] = useState(false);
+
+  const categories = useMemo(() => [
+    { id: 'all', name: t('diseases.indexPage.filters.allCategories'), icon: Database, color: 'text-slate-600', gradient: 'from-slate-500 to-gray-600' },
+    { id: 'cardiomyopathy', name: t('diseases.indexPage.filters.cardiomyopathy'), icon: Heart, color: 'text-[#1a365d]', gradient: 'from-[#1a365d] to-[#2b6cb0]' },
+    { id: 'electrophysiology', name: t('diseases.indexPage.filters.electrophysiology'), icon: Zap, color: 'text-[#2b6cb0]', gradient: 'from-[#2b6cb0] to-[#63b3ed]' },
+    { id: 'heart-failure', name: t('diseases.indexPage.filters.heartFailure'), icon: Activity, color: 'text-[#2b6cb0]', gradient: 'from-[#2b6cb0] to-[#63b3ed]' },
+    { id: 'valvular', name: t('diseases.indexPage.filters.valvular'), icon: Layers, color: 'text-[#1a365d]', gradient: 'from-[#1a365d] to-[#2b6cb0]' },
+    { id: 'emergency', name: t('diseases.indexPage.filters.emergency'), icon: Stethoscope, color: 'text-[#63b3ed]', gradient: 'from-[#63b3ed] to-[#90cdf4]' },
+    { id: 'electrolyte', name: t('diseases.indexPage.filters.electrolyte'), icon: Target, color: 'text-[#2b6cb0]', gradient: 'from-[#2b6cb0] to-[#90cdf4]' }
+  ], [t]);
+
+  const sortOptions = useMemo(() => [
+    { id: 'title', name: t('diseases.indexPage.sort.title'), icon: SortDesc },
+    { id: 'severity', name: t('diseases.indexPage.sort.severity'), icon: AlertTriangle },
+    { id: 'readTime', name: t('diseases.indexPage.sort.readTime'), icon: Clock },
+    { id: 'updated', name: t('diseases.indexPage.sort.updated'), icon: Calendar }
+  ], [t]);
 
   // Get filtered and sorted diseases
   const filteredDiseases = useMemo(() => {
@@ -91,7 +93,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
     });
     
     return diseases;
-  }, [searchTerm, selectedCategory, sortBy]);
+  }, [searchTerm, selectedCategory, sortBy, t]);
 
   const getSeverityConfig = (severity: string) => {
     switch (severity) {
@@ -102,7 +104,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
           bgColor: 'bg-[#90cdf4]/20',
           borderColor: 'border-[#2b6cb0]/40',
           icon: AlertTriangle, 
-          label: 'Critical',
+          label: t('diseases.indexPage.severityLabels.critical'),
           pulse: 'animate-pulse'
         };
       case 'medium': 
@@ -112,7 +114,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
           bgColor: 'bg-[#90cdf4]/20',
           borderColor: 'border-[#63b3ed]/30',
           icon: Activity, 
-          label: 'Moderate',
+          label: t('diseases.indexPage.severityLabels.moderate'),
           pulse: ''
         };
       case 'low': 
@@ -122,7 +124,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
           bgColor: 'bg-[#90cdf4]/10',
           borderColor: 'border-[#63b3ed]/20',
           icon: Shield, 
-          label: 'Stable',
+          label: t('diseases.indexPage.severityLabels.stable'),
           pulse: ''
         };
       default: 
@@ -132,7 +134,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
           bgColor: 'bg-gray-50',
           borderColor: 'border-gray-200',
           icon: BookOpen, 
-          label: 'Unknown',
+          label: t('diseases.indexPage.severityLabels.unknown'),
           pulse: ''
         };
     }
@@ -150,7 +152,8 @@ export const SimpleDiseasesIndex: React.FC = () => {
   const DiseaseCard: React.FC<{ disease: MarkdownDiseaseItem }> = ({ disease }) => {
     const severityConfig = getSeverityConfig(disease.severity);
     const SeverityIcon = severityConfig.icon;
-    const CategoryIcon = getCategoryIcon(disease.category);
+    const CategoryIcon = getCategoryIcon(t(`diseases.registry.${disease.id}.category`));
+    const tags = t(`diseases.registry.${disease.id}.tags`, { returnObjects: true }) as string[];
 
     return (
       <div
@@ -174,9 +177,9 @@ export const SimpleDiseasesIndex: React.FC = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#2b6cb0] transition-colors mb-1 line-clamp-2">
-                  {disease.title}
+                  {t(`diseases.registry.${disease.id}.title`)}
                 </h3>
-                <p className="text-sm font-medium text-gray-600">{disease.category}</p>
+                <p className="text-sm font-medium text-gray-600">{t(`diseases.registry.${disease.id}.category`)}</p>
               </div>
             </div>
             
@@ -188,12 +191,12 @@ export const SimpleDiseasesIndex: React.FC = () => {
 
           {/* Description */}
           <p className="text-gray-700 text-sm mb-4 line-clamp-3 leading-relaxed">
-            {disease.description}
+            {t(`diseases.registry.${disease.id}.description`)}
           </p>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-4">
-            {disease.tags.slice(0, 3).map((tag) => (
+            {Array.isArray(tags) && tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
                 className="px-2 py-1 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/10 text-[#1a365d] text-xs rounded-lg flex items-center space-x-1 border border-[#63b3ed]/30"
@@ -202,8 +205,8 @@ export const SimpleDiseasesIndex: React.FC = () => {
                 <span className="font-medium">{tag}</span>
               </span>
             ))}
-            {disease.tags.length > 3 && (
-              <span className="text-xs text-gray-500 font-medium">+{disease.tags.length - 3} more</span>
+            {Array.isArray(tags) && tags.length > 3 && (
+              <span className="text-xs text-gray-500 font-medium">{t('diseases.indexPage.card.more_other', { count: tags.length - 3 })}</span>
             )}
           </div>
 
@@ -234,7 +237,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
   const DiseaseListItem: React.FC<{ disease: MarkdownDiseaseItem }> = ({ disease }) => {
     const severityConfig = getSeverityConfig(disease.severity);
     const SeverityIcon = severityConfig.icon;
-    const CategoryIcon = getCategoryIcon(disease.category);
+    const CategoryIcon = getCategoryIcon(t(`diseases.registry.${disease.id}.category`));
 
     return (
       <div
@@ -255,16 +258,16 @@ export const SimpleDiseasesIndex: React.FC = () => {
             <div className="flex-1 min-w-0">
               <div className="flex items-center space-x-3 mb-2">
                 <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#2b6cb0] transition-colors">
-                  {disease.title}
+                  {t(`diseases.registry.${disease.id}.title`)}
                 </h3>
                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${severityConfig.color} ${severityConfig.textColor} flex items-center space-x-1`}>
                   <SeverityIcon className="w-3 h-3" />
                   <span>{severityConfig.label}</span>
                 </div>
               </div>
-              <p className="text-sm font-medium text-gray-600 mb-2">{disease.category}</p>
+              <p className="text-sm font-medium text-gray-600 mb-2">{t(`diseases.registry.${disease.id}.category`)}</p>
               <p className="text-gray-700 text-sm line-clamp-2 leading-relaxed">
-                {disease.description}
+                {t(`diseases.registry.${disease.id}.description`)}
               </p>
             </div>
           </div>
@@ -294,13 +297,13 @@ export const SimpleDiseasesIndex: React.FC = () => {
             <div className="p-2 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] rounded-full">
               <Stethoscope className="w-5 h-5 text-white" />
             </div>
-            <span className="text-sm font-semibold text-gray-600">Medical Knowledge Base</span>
+            <span className="text-sm font-semibold text-gray-600">{t('diseases.indexPage.hero.knowledgeBase')}</span>
           </div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] bg-clip-text text-transparent mb-4">
-            Disease Guidelines & Pathways
+            {t('diseases.indexPage.hero.title')}
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Comprehensive medical guidelines and clinical pathways for evidence-based practice
+            {t('diseases.indexPage.hero.subtitle')}
           </p>
         </div>
 
@@ -313,7 +316,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
                 <Search className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search diseases, symptoms, treatments, or guidelines..."
+                  placeholder={t('diseases.indexPage.search.placeholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#63b3ed] focus:border-transparent transition-all text-gray-900 placeholder-gray-500"
@@ -386,7 +389,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
             <h2 className="text-2xl font-bold text-gray-900">
-              {filteredDiseases.length} Disease{filteredDiseases.length !== 1 ? 's' : ''} Found
+              {t('diseases.indexPage.results.found', { count: filteredDiseases.length })}
             </h2>
             {selectedCategory !== 'all' && (
               <div className="flex items-center space-x-2 px-4 py-2 bg-[#90cdf4]/20 text-[#1a365d] rounded-full">
@@ -403,7 +406,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
               onClick={() => setSearchTerm('')}
               className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
             >
-              Clear search
+              {t('diseases.indexPage.results.clearSearch')}
             </button>
           )}
         </div>
@@ -434,9 +437,9 @@ export const SimpleDiseasesIndex: React.FC = () => {
               <div className="bg-gray-100 p-6 rounded-full w-fit mx-auto mb-6">
                 <BookOpen className="w-12 h-12 text-gray-400" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">No diseases found</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">{t('diseases.indexPage.empty.title')}</h3>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                Try adjusting your search terms or filters to find the medical guidelines you're looking for.
+                {t('diseases.indexPage.empty.message')}
               </p>
               <button
                 onClick={() => {
@@ -445,7 +448,7 @@ export const SimpleDiseasesIndex: React.FC = () => {
                 }}
                 className="px-6 py-3 bg-[#1a365d] text-white rounded-xl hover:bg-[#2b6cb0] transition-colors font-medium"
               >
-                View All Diseases
+                {t('diseases.indexPage.empty.button')}
               </button>
             </div>
           </div>

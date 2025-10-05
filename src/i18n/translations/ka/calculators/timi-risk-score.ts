@@ -11,7 +11,7 @@ export const timiRiskScoreTranslations = {
   tool_description: 'TIMI რისკის ქულა არასტაბილური სტენოკარდიისა და NSTEMI-ს მქონე პაციენტების სწრაფი შეფასებისთვის. ეს ინსტრუმენტი გვეხმარება საგანგებო პირობებში რისკის სტრატიფიკაციასა და მართვის გადაწყვეტილებების მიღებაში.',
   
   // Step navigation - MISSING KEYS ADDED
-  patient_info: 'პაციენტის ინფო',
+  patient_info: 'პაციენტის ინფორმაცია',
   clinical_factors: 'კლინიკური ფაქტორები',
   
   alert_title: 'TIMI რისკის შეფასება',

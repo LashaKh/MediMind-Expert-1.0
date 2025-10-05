@@ -33,6 +33,7 @@ export default {
   cardiologyAICoPilot: 'Cardiology AI Co-Pilot',
   obgynAICoPilot: 'OB/GYN AI Co-Pilot',
   medicalAICoPilot: 'Medical AI Co-Pilot',
+  medicalAI: 'Medical AI',
   usingPersonalDocs: 'Using your {count} personal documents',
   uploadDocsForKB: 'Upload documents to create your personal knowledge base',
   welcomeToMediMind: 'Welcome to MediMind Expert',
@@ -131,7 +132,7 @@ export default {
   createCaseStudy: 'Create Case Study',
   // Clinical Dashboard translations
   dashboard: {
-    welcomeBack: 'Welcome back,',
+    welcomeBack: 'Welcome back, {{name}}',
     subtitle: 'How can I assist with your',
     quickConsult: 'Quick Consult',
     quickConsultDesc: 'Ask AI about symptoms or treatments',
@@ -148,5 +149,19 @@ export default {
     createFirstCase: 'Create Your First Case',
     createFirstCaseDesc: 'Document patient cases to get AI-powered insights and build your clinical knowledge base.',
     createCase: 'Create Case Study'
+  },
+  caseReadyTitle: 'Case Ready for Discussion',
+  caseReadyDescription: 'I\'m ready to discuss this case with you. Ask me anything about diagnosis, treatment options, differential diagnosis, or any specific aspect of this case.',
+  doctor: 'Doctor',
+  medical: 'medical',
+  waitForProcessing: 'Please wait for {{count}} file(s) to finish processing before sending.',
+  processingFailed: 'Processing failed',
+  tooltip: {
+    chatHistoryTitle: 'Chat History',
+    chatHistoryDescription: 'View and manage all your previous AI conversations.',
+    browse: 'Browse',
+    myCasesTitle: 'My Cases',
+    myCasesDescription: 'View and switch between your saved clinical cases.',
+    switchCases: 'Switch Cases'
   }
 }; 

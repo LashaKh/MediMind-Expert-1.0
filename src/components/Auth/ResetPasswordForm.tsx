@@ -8,22 +8,25 @@ import { AuthLayout } from './AuthLayout';
 import { MobileInput, MobileButton } from '../ui/mobile-form';
 import { supabase } from '../../lib/supabase';
 import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
+import { useTranslation } from '../../hooks/useTranslation';
 
-const resetPasswordSchema = z.object({
-  password: z.string()
-    .min(12, { message: 'Password must be at least 12 characters long' })
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, {
-      message: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-    }),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-});
+const ResetPasswordForm: React.FC = () => {
+  const { t } = useTranslation();
 
-type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
+  const resetPasswordSchema = z.object({
+    password: z.string()
+      .min(12, { message: t('validation.passwordMinLength12', 'Password must be at least 12 characters long') })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, {
+        message: t('validation.passwordComplexity', 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character')
+      }),
+    confirmPassword: z.string(),
+  }).refine((data) => data.password === data.confirmPassword, {
+    message: t('validation.passwordsDoNotMatch', 'Passwords do not match'),
+    path: ['confirmPassword'],
+  });
 
-export const ResetPasswordForm: React.FC = () => {
+  type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
+
   const [error, setError] = useState<string>('');
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
@@ -37,7 +40,6 @@ export const ResetPasswordForm: React.FC = () => {
   });
 
   useEffect(() => {
-    // Check for reset password token in URL fragments
     const handleResetPasswordToken = async () => {
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       const accessToken = hashParams.get('access_token');
@@ -45,7 +47,6 @@ export const ResetPasswordForm: React.FC = () => {
       const type = hashParams.get('type');
 
       if (type === 'recovery' && accessToken && refreshToken) {
-        // We have a valid reset password token
         try {
           const { data: { session }, error } = await supabase.auth.setSession({
             access_token: accessToken,
@@ -53,35 +54,30 @@ export const ResetPasswordForm: React.FC = () => {
           });
 
           if (error) {
-            setError('Invalid or expired reset link. Please request a new one.');
+            setError(t('auth.resetPassword.invalidLink', 'Invalid or expired reset link. Please request a new one.'));
             navigate('/forgot-password');
             return;
           }
 
           if (session) {
-            // Successfully authenticated with reset token
-            // Clear the URL hash for security
             window.history.replaceState({}, document.title, window.location.pathname);
-            // User can now reset their password
             return;
           }
         } catch (err) {
-          setError('Failed to process reset link. Please try again.');
+          setError(t('auth.resetPassword.linkProcessError', 'Failed to process reset link. Please try again.'));
           navigate('/forgot-password');
           return;
         }
       }
 
-      // If no reset token, check if we have a valid session
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        // No session and no reset token - redirect to sign in
         navigate('/signin');
       }
     };
 
     handleResetPasswordToken();
-  }, [navigate]);
+  }, [navigate, t]);
 
   const onSubmit: SubmitHandler<ResetPasswordFormValues> = async (data) => {
     setError('');
@@ -106,13 +102,12 @@ export const ResetPasswordForm: React.FC = () => {
     );
 
     if (errorResult) {
-      setError(errorResult.message || 'An error occurred while updating your password');
+      setError(errorResult.message || t('auth.resetPassword.genericError', 'An error occurred while updating your password'));
       return;
     }
 
     setIsSuccess(true);
     
-    // Redirect to dashboard after 3 seconds
     setTimeout(() => {
       navigate('/workspace');
     }, 3000);
@@ -120,11 +115,11 @@ export const ResetPasswordForm: React.FC = () => {
 
   if (isSuccess) {
     return (
-      <AuthLayout title="Password Updated">
+      <AuthLayout title={t('auth.resetPassword.successTitle', 'Password Updated')}>
         <div className="text-center">
           <div className="rounded-xl bg-green-50 p-4 dark:bg-green-900/20 mb-6">
             <div className="text-sm text-green-700 dark:text-green-300">
-              Your password has been successfully updated. You will be redirected to your dashboard shortly.
+              {t('auth.resetPassword.successMessage', 'Your password has been successfully updated. You will be redirected to your dashboard shortly.')}
             </div>
           </div>
           <MobileButton
@@ -133,7 +128,7 @@ export const ResetPasswordForm: React.FC = () => {
             className="w-full"
             onClick={() => navigate('/workspace')}
           >
-            Go to Dashboard
+            {t('auth.resetPassword.goToDashboard', 'Go to Dashboard')}
           </MobileButton>
         </div>
       </AuthLayout>
@@ -141,7 +136,7 @@ export const ResetPasswordForm: React.FC = () => {
   }
 
   return (
-    <AuthLayout title="Set New Password">
+    <AuthLayout title={t('auth.resetPassword.title', 'Set New Password')}>
       <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
         {error && (
           <div className="rounded-xl bg-red-50 p-4 dark:bg-red-900/20">
@@ -153,20 +148,20 @@ export const ResetPasswordForm: React.FC = () => {
           <MobileInput
             id="password"
             type="password"
-            label="New Password"
-            placeholder="Enter your new password"
+            label={t('auth.resetPassword.passwordLabel', 'New Password')}
+            placeholder={t('auth.resetPassword.passwordPlaceholder', 'Enter your new password')}
             icon={Lock}
             autoComplete="new-password"
             error={errors.password?.message}
-            hint="Must be at least 12 characters with uppercase, lowercase, number, and special character"
+            hint={t('validation.passwordHint12', 'Must be at least 12 characters with uppercase, lowercase, number, and special character')}
             {...register('password')}
           />
 
           <MobileInput
             id="confirmPassword"
             type="password"
-            label="Confirm New Password"
-            placeholder="Confirm your new password"
+            label={t('auth.resetPassword.confirmPasswordLabel', 'Confirm New Password')}
+            placeholder={t('auth.resetPassword.confirmPasswordPlaceholder', 'Confirm your new password')}
             icon={Lock}
             autoComplete="new-password"
             error={errors.confirmPassword?.message}
@@ -183,7 +178,7 @@ export const ResetPasswordForm: React.FC = () => {
             size="lg"
             className="w-full"
           >
-            Update Password
+            {t('auth.resetPassword.submitButton', 'Update Password')}
           </MobileButton>
         </div>
 
@@ -192,7 +187,7 @@ export const ResetPasswordForm: React.FC = () => {
             to="/signin"
             className="font-medium text-white hover:text-gray-200 dark:text-accent dark:hover:text-accent/90 touch-target-sm inline-block py-2 px-4 rounded-lg transition-colors hover:bg-white/10"
           >
-            Back to Sign In
+            {t('auth.passwordRecovery.backToSignIn', 'Back to Sign In')}
           </Link>
         </div>
       </form>

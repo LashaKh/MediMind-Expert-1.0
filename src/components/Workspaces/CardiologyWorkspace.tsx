@@ -51,36 +51,37 @@ const useResponsive = () => {
 
 // Simple Mobile Layout Component
 const MobileLayout: React.FC<{ navigate: any; profile: any; currentTime: Date }> = ({ navigate, profile, currentTime }) => {
+  const { t } = useTranslation();
   // Core medical tools
   const medicalTools = [
     {
       id: 'ai-copilot',
-      title: 'AI Assistant',
-      description: 'Medical consultation AI',
+      title: t('workspace.mobile.tools.aiAssistant.title'),
+      description: t('workspace.mobile.tools.aiAssistant.description'),
       icon: MessageSquare,
       color: 'from-[#1a365d] to-[#2b6cb0]',
       onClick: () => navigate('/ai-copilot')
     },
     {
       id: 'calculators',
-      title: 'Calculators',
-      description: 'Risk assessment tools',
+      title: t('workspace.mobile.tools.calculators.title'),
+      description: t('workspace.mobile.tools.calculators.description'),
       icon: Calculator,
       color: 'from-[#2b6cb0] to-[#63b3ed]',
       onClick: () => navigate('/calculators')
     },
     {
       id: 'knowledge-base',
-      title: 'Knowledge Base',
-      description: 'Medical literature',
+      title: t('workspace.mobile.tools.knowledgeBase.title'),
+      description: t('workspace.mobile.tools.knowledgeBase.description'),
       icon: BookOpen,
       color: 'from-[#63b3ed] to-[#90cdf4]',
       onClick: () => navigate('/knowledge-base')
     },
     {
       id: 'abg-analysis',
-      title: 'Blood Gas Analysis',
-      description: 'ABG interpretation',
+      title: t('workspace.mobile.tools.abgAnalysis.title'),
+      description: t('workspace.mobile.tools.abgAnalysis.description'),
       icon: TestTube2,
       color: 'from-[#1a365d] to-[#63b3ed]',
       onClick: () => navigate('/abg-analysis')
@@ -90,19 +91,19 @@ const MobileLayout: React.FC<{ navigate: any; profile: any; currentTime: Date }>
   // Emergency quick actions
   const emergencyActions = [
     { 
-      label: 'Emergency Protocol', 
+      label: t('workspace.mobile.emergencyActions.emergencyProtocol'), 
       icon: Heart, 
       color: 'from-[#1a365d] to-[#2b6cb0]',
       action: () => navigate('/calculators')
     },
     { 
-      label: 'ABG Analysis', 
+      label: t('workspace.mobile.emergencyActions.abgAnalysis'), 
       icon: TestTube2, 
       color: 'from-[#2b6cb0] to-[#63b3ed]',
       action: () => navigate('/abg-analysis')
     },
     { 
-      label: 'AI Consult', 
+      label: t('workspace.mobile.emergencyActions.aiConsult'), 
       icon: MessageSquare, 
       color: 'from-[#63b3ed] to-[#90cdf4]',
       action: () => navigate('/ai-copilot')
@@ -110,7 +111,7 @@ const MobileLayout: React.FC<{ navigate: any; profile: any; currentTime: Date }>
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6" role="main" aria-label="Cardiology Workspace">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-6" role="main" aria-label={t('workspace.mobile.ariaLabel')}>
       {/* Header */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
         <div className="flex items-center justify-between">
@@ -120,10 +121,10 @@ const MobileLayout: React.FC<{ navigate: any; profile: any; currentTime: Date }>
               <Heart className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Cardiology</h1>
+              <h1 className="text-xl font-bold text-gray-900">{t('workspace.mobile.headerTitle')}</h1>
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <User className="w-4 h-4" />
-                <span>{profile?.full_name || 'Dr. Physician'}</span>
+                <span>{profile?.full_name || t('workspace.mobile.drPhysician')}</span>
               </div>
             </div>
           </div>
@@ -132,7 +133,7 @@ const MobileLayout: React.FC<{ navigate: any; profile: any; currentTime: Date }>
           <div className="text-right">
             <div className="flex items-center space-x-2 text-sm text-[#63b3ed] mb-1">
               <div className="w-2 h-2 bg-[#63b3ed] rounded-full animate-pulse" />
-              <span className="font-medium">Online</span>
+              <span className="font-medium">{t('workspace.mobile.online')}</span>
             </div>
             <div className="text-lg font-mono font-bold text-gray-900">
               {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -146,7 +147,7 @@ const MobileLayout: React.FC<{ navigate: any; profile: any; currentTime: Date }>
 
       {/* Medical Tools Grid */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Medical Tools</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('workspace.mobile.medicalTools')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {medicalTools.map((tool) => {
             const IconComponent = tool.icon;
@@ -180,7 +181,7 @@ const MobileLayout: React.FC<{ navigate: any; profile: any; currentTime: Date }>
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
         <div className="flex items-center space-x-2 mb-4">
           <div className="w-2 h-2 bg-[#1a365d] rounded-full animate-pulse" />
-          <h2 className="text-lg font-semibold text-gray-900">Emergency Access</h2>
+          <h2 className="text-lg font-semibold text-gray-900">{t('workspace.mobile.emergencyAccess')}</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {emergencyActions.map((action, index) => {
@@ -206,8 +207,8 @@ const MobileLayout: React.FC<{ navigate: any; profile: any; currentTime: Date }>
         <div className="flex items-center space-x-3">
           <CheckCircle2 className="w-6 h-6 text-[#2b6cb0]" />
           <div>
-            <h3 className="font-semibold text-[#1a365d]">System Ready</h3>
-            <p className="text-sm text-[#2b6cb0]">All medical tools are operational</p>
+            <h3 className="font-semibold text-[#1a365d]">{t('workspace.mobile.systemReady')}</h3>
+            <p className="text-sm text-[#2b6cb0]">{t('workspace.mobile.allToolsOperational')}</p>
           </div>
         </div>
       </div>
@@ -269,102 +270,102 @@ export const CardiologyWorkspace: React.FC = () => {
   const premiumFeatures = [
     {
       id: 'ai-copilot',
-      title: 'AI Co-Pilot',
-      subtitle: 'Intelligent Medical Assistant',
-      description: 'Advanced AI-powered medical intelligence with real-time literature integration, evidence-based recommendations, and comprehensive diagnostic support for complex cardiac cases.',
+      title: t('workspace.cardiology.featureCards.aiCoPilot.title'),
+      subtitle: t('workspace.cardiology.featureCards.aiCoPilot.subtitle'),
+      description: t('workspace.cardiology.featureCards.aiCoPilot.description'),
       icon: MessageSquare,
       primaryColor: '#1a365d',
       secondaryColor: '#2b6cb0',
       accentColor: '#63b3ed',
       onClick: goToAICopilot,
-      stats: { value: '24/7', label: 'Available' },
-      badge: 'AI Powered',
-      features: ['Evidence-Based', 'Real-Time', 'Literature Integration'],
+      stats: { value: t('workspace.cardiology.featureCards.aiCoPilot.statsValue'), label: t('workspace.cardiology.featureCards.aiCoPilot.statsLabel') },
+      badge: t('workspace.cardiology.featureCards.aiCoPilot.badge'),
+      features: Object.values(t('workspace.cardiology.featureCards.aiCoPilot.features', { returnObjects: true })) as string[],
       tourId: 'ai-copilot',
       metrics: {
-        accuracy: '99.2%',
-        responseTime: '<500ms',
-        coverage: '50K+ Studies'
+        [t('workspace.cardiology.metrics.accuracy')]: '99.2%',
+        [t('workspace.cardiology.metrics.responseTime')]: '<500ms',
+        [t('workspace.cardiology.metrics.coverage')]: '50K+ Studies'
       }
     },
     {
       id: 'calculators',
-      title: 'Medical Calculators',
-      subtitle: 'Precision Risk Assessment',
-      description: 'Comprehensive suite of 16+ clinically validated cardiac risk calculators with real-time validation, automated interpretation, and seamless integration with patient records.',
+      title: t('workspace.cardiology.featureCards.calculators.title'),
+      subtitle: t('workspace.cardiology.featureCards.calculators.subtitle'),
+      description: t('workspace.cardiology.featureCards.calculators.description'),
       icon: Calculator,
       primaryColor: '#1a365d',
       secondaryColor: '#2b6cb0',
       accentColor: '#63b3ed',
       onClick: goToCalculators,
-      stats: { value: '16+', label: 'Calculators' },
-      badge: 'Validated',
-      features: ['ACC/AHA Guidelines', 'Auto-Interpretation', 'EHR Integration'],
+      stats: { value: t('workspace.cardiology.featureCards.calculators.statsValue'), label: t('workspace.cardiology.featureCards.calculators.statsLabel') },
+      badge: t('workspace.cardiology.featureCards.calculators.badge'),
+      features: Object.values(t('workspace.cardiology.featureCards.calculators.features', { returnObjects: true })) as string[],
       tourId: 'calculators',
       metrics: {
-        accuracy: '100%',
-        validation: 'Clinical',
-        compliance: 'ACC/AHA'
+        [t('workspace.cardiology.metrics.accuracy')]: '100%',
+        [t('workspace.cardiology.metrics.validation')]: 'Clinical',
+        [t('workspace.cardiology.metrics.compliance')]: 'ACC/AHA'
       }
     },
     {
       id: 'knowledge-base',
-      title: 'Knowledge Base',
-      subtitle: 'Medical Literature & Guidelines',
-      description: 'Expertly curated medical knowledge repository with AI-powered search, personalized recommendations, and seamless integration with current guidelines and latest research.',
+      title: t('workspace.cardiology.featureCards.knowledgeBase.title'),
+      subtitle: t('workspace.cardiology.featureCards.knowledgeBase.subtitle'),
+      description: t('workspace.cardiology.featureCards.knowledgeBase.description'),
       icon: BookOpen,
       primaryColor: '#1a365d',
       secondaryColor: '#2b6cb0',
       accentColor: '#63b3ed',
       onClick: goToKnowledgeBase,
-      stats: { value: '2.5K+', label: 'Resources' },
-      badge: 'AI-Curated',
-      features: ['Smart Search', 'Personalized', 'Always Updated'],
+      stats: { value: t('workspace.cardiology.featureCards.knowledgeBase.statsValue'), label: t('workspace.cardiology.featureCards.knowledgeBase.statsLabel') },
+      badge: t('workspace.cardiology.featureCards.knowledgeBase.badge'),
+      features: Object.values(t('workspace.cardiology.featureCards.knowledgeBase.features', { returnObjects: true })) as string[],
       tourId: 'knowledge-base',
       metrics: {
-        coverage: '2,500+',
-        updates: 'Daily',
-        relevance: 'AI-Scored'
+        [t('workspace.cardiology.metrics.coverage')]: '2,500+',
+        [t('workspace.cardiology.metrics.updates')]: 'Daily',
+        [t('workspace.cardiology.metrics.relevance')]: 'AI-Scored'
       }
     },
     {
       id: 'abg-analysis',
-      title: 'Blood Gas Analysis',
-      subtitle: 'AI-Powered ABG Intelligence',
-      description: 'Revolutionary blood gas analysis platform with machine learning interpretation, predictive analytics, automated alerts, and comprehensive clinical decision support.',
+      title: t('workspace.cardiology.featureCards.abgAnalysis.title'),
+      subtitle: t('workspace.cardiology.featureCards.abgAnalysis.subtitle'),
+      description: t('workspace.cardiology.featureCards.abgAnalysis.description'),
       icon: TestTube2,
       primaryColor: '#1a365d',
       secondaryColor: '#2b6cb0',
       accentColor: '#63b3ed',
       onClick: goToABGAnalysis,
-      stats: { value: 'AI', label: 'Powered' },
-      badge: 'Smart Analysis',
-      features: ['ML Interpretation', 'Predictive Alerts', 'Decision Support'],
+      stats: { value: t('workspace.cardiology.featureCards.abgAnalysis.statsValue'), label: t('workspace.cardiology.featureCards.abgAnalysis.statsLabel') },
+      badge: t('workspace.cardiology.featureCards.abgAnalysis.badge'),
+      features: Object.values(t('workspace.cardiology.featureCards.abgAnalysis.features', { returnObjects: true })) as string[],
       tourId: 'abg-analysis',
       metrics: {
-        accuracy: '98.7%',
-        speed: 'Instant',
-        integration: 'Seamless'
+        [t('workspace.cardiology.metrics.accuracy')]: '98.7%',
+        [t('workspace.cardiology.metrics.speed')]: 'Instant',
+        [t('workspace.cardiology.metrics.integration')]: 'Seamless'
       }
     },
     {
       id: 'case-management',
-      title: 'Case Intelligence',
-      subtitle: 'Clinical Collaboration Platform',
-      description: 'Next-generation case management with AI-driven insights, multi-disciplinary collaboration tools, predictive analytics, and comprehensive workflow automation.',
+      title: t('workspace.cardiology.featureCards.caseIntelligence.title'),
+      subtitle: t('workspace.cardiology.featureCards.caseIntelligence.subtitle'),
+      description: t('workspace.cardiology.featureCards.caseIntelligence.description'),
       icon: FileText,
       primaryColor: '#1a365d',
       secondaryColor: '#2b6cb0',
       accentColor: '#63b3ed',
       onClick: () => {},
-      stats: { value: 'Team', label: 'Ready' },
-      badge: 'AI-Driven',
-      features: ['Predictive Analytics', 'Team Workflows', 'Smart Documentation'],
+      stats: { value: t('workspace.cardiology.featureCards.caseIntelligence.statsValue'), label: t('workspace.cardiology.featureCards.caseIntelligence.statsLabel') },
+      badge: t('workspace.cardiology.featureCards.caseIntelligence.badge'),
+      features: Object.values(t('workspace.cardiology.featureCards.caseIntelligence.features', { returnObjects: true })) as string[],
       tourId: 'case-management',
       metrics: {
-        efficiency: '+40%',
-        collaboration: 'Real-time',
-        security: 'HIPAA'
+        [t('workspace.cardiology.metrics.efficiency')]: '+40%',
+        [t('workspace.cardiology.metrics.collaboration')]: 'Real-time',
+        [t('workspace.cardiology.metrics.security')]: 'HIPAA'
       }
     }
   ];
@@ -372,25 +373,25 @@ export const CardiologyWorkspace: React.FC = () => {
   // Quick action items
   const quickActions = [
     { 
-      label: 'Emergency Cardiac Protocol', 
+      label: t('workspace.cardiology.quickActions.emergencyCardiacProtocol'), 
       icon: Heart, 
       color: 'from-[#1a365d] to-[#2b6cb0]',
       action: () => navigate('/calculators')
     },
     { 
-      label: 'Blood Gas Analysis', 
+      label: t('workspace.cardiology.quickActions.bloodGasAnalysis'), 
       icon: TestTube2, 
       color: 'from-[#2b6cb0] to-[#63b3ed]',
       action: goToABGAnalysis
     },
     { 
-      label: 'AI Clinical Consult', 
+      label: t('workspace.cardiology.quickActions.aiClinicalConsult'), 
       icon: Brain, 
       color: 'from-[#63b3ed] to-[#2b6cb0]',
       action: goToAICopilot
     },
     { 
-      label: 'ASCVD Risk Calculator', 
+      label: t('workspace.cardiology.quickActions.ascvdRiskCalculator'), 
       icon: Calculator, 
       color: 'from-[#2b6cb0] to-[#1a365d]',
       action: () => navigate('/calculators')
@@ -398,14 +399,14 @@ export const CardiologyWorkspace: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" role="main" aria-label="Cardiology Workspace - Professional Medical Intelligence Platform">
+    <div className="min-h-screen bg-white" role="main" aria-label={t('workspace.cardiology.ariaLabel')}>
       {/* Skip to main content link for accessibility */}
       <a 
         href="#main-content" 
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 focus:z-50"
-        aria-label="Skip to main content"
+        aria-label={t('workspace.cardiology.skipToMain')}
       >
-        Skip to main content
+        {t('workspace.cardiology.skipToMain')}
       </a>
       
       {/* Revolutionary Luxury Header - World-Class Design */}
@@ -443,7 +444,7 @@ export const CardiologyWorkspace: React.FC = () => {
             <div className="flex items-center space-x-3 px-4 py-2 bg-white/60 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-[#63b3ed] rounded-full animate-pulse shadow-sm shadow-[#63b3ed]/50" />
-                <span className="text-sm font-semibold text-[#1a365d] tracking-wide">Live</span>
+                <span className="text-sm font-semibold text-[#1a365d] tracking-wide">{t('workspace.cardiology.live')}</span>
               </div>
               <div className="text-sm font-bold text-gray-900 font-mono tracking-wider">
                 {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -451,14 +452,14 @@ export const CardiologyWorkspace: React.FC = () => {
               <div className="text-xs text-gray-500 font-medium tracking-wide">
                 {currentTime.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
               </div>
-              <span className="text-xs font-semibold text-[#2b6cb0] uppercase tracking-widest">TBILISI</span>
+              <span className="text-xs font-semibold text-[#2b6cb0] uppercase tracking-widest">{t('workspace.cardiology.tbilisi')}</span>
             </div>
 
             {/* Professional Verification Badge */}
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#1a365d]/10 to-[#2b6cb0]/10 backdrop-blur-md rounded-2xl border border-[#63b3ed]/20">
                 <CheckCircle2 className="w-4 h-4 text-[#2b6cb0]" />
-                <span className="text-sm font-semibold text-[#1a365d]">All Systems Operational</span>
+                <span className="text-sm font-semibold text-[#1a365d]">{t('workspace.cardiology.allSystemsOperational')}</span>
                 <div className="w-2 h-2 bg-[#63b3ed] rounded-full animate-pulse" />
               </div>
             </div>
@@ -483,13 +484,13 @@ export const CardiologyWorkspace: React.FC = () => {
                 <div className="flex items-baseline space-x-4">
                   <div className="space-y-1">
                     <h1 className="text-5xl font-black bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] bg-clip-text text-transparent tracking-tight leading-none">
-                      Cardiology
+                      {t('workspace.cardiology.headerTitle')}
                     </h1>
                     <div className="flex items-center space-x-3">
-                      <span className="text-lg font-bold text-[#2b6cb0] tracking-wide">Professional</span>
+                      <span className="text-lg font-bold text-[#2b6cb0] tracking-wide">{t('workspace.cardiology.professional')}</span>
                     </div>
                   </div>
-                  <h2 className="text-3xl font-black text-gray-800 tracking-tight">Workspace</h2>
+                  <h2 className="text-3xl font-black text-gray-800 tracking-tight">{t('workspace.cardiology.workspace')}</h2>
                 </div>
                 
                 {/* User Welcome Section */}
@@ -499,8 +500,8 @@ export const CardiologyWorkspace: React.FC = () => {
                       <User className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-gray-900">Welcome back, {profile?.full_name || 'Medical Professional'}</div>
-                      <div className="text-xs font-medium text-[#2b6cb0]">Certified Cardiologist</div>
+                      <div className="text-sm font-semibold text-gray-900">{t('workspace.cardiology.welcomeBack', { name: profile?.full_name || t('workspace.cardiology.medicalProfessional') })}</div>
+                      <div className="text-xs font-medium text-[#2b6cb0]">{t('workspace.cardiology.certifiedCardiologist')}</div>
                     </div>
                   </div>
                 </div>
@@ -519,13 +520,13 @@ export const CardiologyWorkspace: React.FC = () => {
               <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <span className="text-sm font-bold text-[#2b6cb0] uppercase tracking-wider">PROFESSIONAL SUITE</span>
+              <span className="text-sm font-bold text-[#2b6cb0] uppercase tracking-wider">{t('workspace.cardiology.professionalSuite')}</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-tight">
-              Next-Generation Medical Tools
+              {t('workspace.cardiology.nextGenTools')}
             </h2>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Industry-leading cardiology platform featuring AI-powered clinical intelligence, validated risk calculators, and comprehensive diagnostic support trusted by healthcare professionals worldwide
+              {t('workspace.cardiology.platformDescription')}
             </p>
           </div>
         </section>
@@ -596,7 +597,7 @@ export const CardiologyWorkspace: React.FC = () => {
                   {/* Action Button */}
                   <button className="w-full mt-6 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white py-4 px-6 rounded-2xl font-semibold text-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105">
                     <div className="flex items-center justify-center space-x-2">
-                      <span>Launch {feature.title}</span>
+                      <span>{t('workspace.cardiology.featureCards.aiCoPilot.launch', { title: feature.title })}</span>
                       <ArrowUpRight className="w-5 h-5" />
                     </div>
                   </button>
@@ -615,29 +616,29 @@ export const CardiologyWorkspace: React.FC = () => {
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center space-x-2">
                       <div className="w-3 h-3 bg-[#1a365d] rounded-full animate-pulse" />
-                      <span className="text-sm font-bold text-[#1a365d] uppercase tracking-wider">EMERGENCY RESPONSE</span>
+                      <span className="text-sm font-bold text-[#1a365d] uppercase tracking-wider">{t('workspace.cardiology.emergencyResponse')}</span>
                     </div>
-                    <span className="text-xs font-bold text-red-600 uppercase tracking-wider">CRITICAL ACCESS</span>
+                    <span className="text-xs font-bold text-red-600 uppercase tracking-wider">{t('workspace.cardiology.criticalAccess')}</span>
                   </div>
-                  <h3 className="text-3xl font-black text-gray-900">Emergency Command Center</h3>
+                  <h3 className="text-3xl font-black text-gray-900">{t('workspace.cardiology.emergencyCommandCenter')}</h3>
                   <p className="text-lg text-gray-600">
-                    Instant access to critical cardiology protocols and life-saving diagnostic tools.
-                    <span className="block mt-2 font-semibold text-[#2b6cb0]">Evidence-based emergency response with one-click activation for time-critical patient care</span>
+                    {t('workspace.cardiology.emergencyDescription')}
+                    <span className="block mt-2 font-semibold text-[#2b6cb0]">{t('workspace.cardiology.emergencySubDescription')}</span>
                   </p>
                   
                   {/* Quick Stats */}
                   <div className="grid grid-cols-3 gap-4 pt-4">
                     <div className="flex items-center space-x-2">
                       <Zap className="w-4 h-4 text-[#2b6cb0]" />
-                      <span className="text-sm font-semibold text-gray-700">One-click response</span>
+                      <span className="text-sm font-semibold text-gray-700">{t('workspace.cardiology.oneClickResponse')}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Shield className="w-4 h-4 text-[#2b6cb0]" />
-                      <span className="text-sm font-semibold text-gray-700">Evidence-based protocols</span>
+                      <span className="text-sm font-semibold text-gray-700">{t('workspace.cardiology.evidenceBasedProtocols')}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Clock className="w-4 h-4 text-[#2b6cb0]" />
-                      <span className="text-sm font-semibold text-gray-700">Real-time results</span>
+                      <span className="text-sm font-semibold text-gray-700">{t('workspace.cardiology.realTimeResults')}</span>
                     </div>
                   </div>
                 </div>
@@ -648,7 +649,7 @@ export const CardiologyWorkspace: React.FC = () => {
                     <Heart className="w-6 h-6 text-white" />
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm font-bold text-[#1a365d] uppercase tracking-wider">EMERGENCY READY</span>
+                    <span className="text-sm font-bold text-[#1a365d] uppercase tracking-wider">{t('workspace.cardiology.emergencyReady')}</span>
                     <div className="w-2 h-2 bg-[#63b3ed] rounded-full animate-pulse" />
                   </div>
                 </div>
@@ -674,7 +675,7 @@ export const CardiologyWorkspace: React.FC = () => {
                         <h4 className="font-bold text-lg leading-tight">{action.label.split(' ')[0]}</h4>
                         <p className="text-sm opacity-90 font-medium">{action.label.split(' ').slice(1).join(' ')}</p>
                       </div>
-                      <div className="text-xs font-bold uppercase tracking-wider opacity-80">ACTIVATE</div>
+                      <div className="text-xs font-bold uppercase tracking-wider opacity-80">{t('workspace.cardiology.activate')}</div>
                     </div>
                   </button>
                 );
@@ -686,22 +687,22 @@ export const CardiologyWorkspace: React.FC = () => {
               <div className="flex items-center space-x-3">
                 <HeartHandshake className="w-6 h-6 text-[#2b6cb0]" />
                 <div>
-                  <div className="text-sm font-semibold text-gray-900">Emergency Support</div>
-                  <div className="text-xs text-gray-600">24/7 Clinical Assistance</div>
+                  <div className="text-sm font-semibold text-gray-900">{t('workspace.cardiology.emergencySupport')}</div>
+                  <div className="text-xs text-gray-600">{t('workspace.cardiology.clinicalAssistance')}</div>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Award className="w-6 h-6 text-[#2b6cb0]" />
                 <div>
-                  <div className="text-sm font-semibold text-gray-900">Protocol Compliance</div>
-                  <div className="text-xs text-gray-600">ACC/AHA Guidelines</div>
+                  <div className="text-sm font-semibold text-gray-900">{t('workspace.cardiology.protocolCompliance')}</div>
+                  <div className="text-xs text-gray-600">{t('workspace.cardiology.accAhaGuidelines')}</div>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Target className="w-6 h-6 text-[#2b6cb0]" />
                 <div>
-                  <div className="text-sm font-semibold text-gray-900">Response Time</div>
-                  <div className="text-xs text-gray-600">{'< 3 seconds'}</div>
+                  <div className="text-sm font-semibold text-gray-900">{t('workspace.cardiology.responseTime')}</div>
+                  <div className="text-xs text-gray-600">{t('workspace.cardiology.lessThan3Seconds')}</div>
                 </div>
               </div>
             </div>
@@ -714,8 +715,8 @@ export const CardiologyWorkspace: React.FC = () => {
             <div className="flex items-center space-x-4">
               <CheckCircle2 className="w-12 h-12 text-[#90cdf4]" />
               <div>
-                <h4 className="text-2xl font-bold mb-2">Production Excellence Achieved</h4>
-                <p className="text-[#90cdf4]">100% calculator validation • Mobile-first design • AI-powered intelligence</p>
+                <h4 className="text-2xl font-bold mb-2">{t('workspace.cardiology.productionExcellence')}</h4>
+                <p className="text-[#90cdf4]">{t('workspace.cardiology.productionDescription')}</p>
               </div>
             </div>
             <div className="w-24 h-24 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center">

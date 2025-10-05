@@ -240,7 +240,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       
       // Clear editable transcript when recording starts to ensure live transcript is visible
       if (editableTranscript) {
-        console.log('🧹 Clearing editable transcript to show live recording');
         setEditableTranscript('');
       }
     } else if (!recordingState.isRecording && lastRecordingSessionId) {
@@ -256,7 +255,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   useEffect(() => {
     // Don't update if user is currently typing to prevent interference
     if (isUserTypingRef.current) {
-      console.log('🚫 User is typing, skipping transcript update to prevent interference');
       return;
     }
     
@@ -270,19 +268,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     
     // Check if this is a session change
     const isSessionChange = currentSessionId !== previousSessionId;
-    
-    console.log('🔍 Transcript selection logic:', {
-      sessionId: currentSessionId,
-      previousSessionId,
-      isSessionChange,
-      sessionLength,
-      localLength,
-      currentEditableLength,
-      isUserTyping: isUserTypingRef.current,
-      sessionTranscript: sessionTranscript.substring(0, 50) + (sessionTranscript.length > 50 ? '...' : ''),
-      localTranscript: (localTranscript || '').substring(0, 50) + ((localTranscript?.length || 0) > 50 ? '...' : ''),
-      currentEditable: (editableTranscript || '').substring(0, 50) + ((editableTranscript?.length || 0) > 50 ? '...' : ''),
-    });
     
     // Update previous session ID tracker
     if (isSessionChange) {
@@ -299,7 +284,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     if (isSessionChange) {
       // Session changed - always load the new session transcript, ignore user edits from previous session
       transcript = sessionTranscript;
-      console.log('🔄 Session changed - loading new session transcript');
     } else {
       // Same session - check for user edits
       // During live recording, localTranscript grows with new segments, but that's not a "user edit"
@@ -313,40 +297,31 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       if (userHasEdits) {
         // User has made manual edits within the same session - preserve them
         transcript = editableTranscript;
-        console.log('✏️ Preserving user edits (manual changes detected within same session)');
       } else if (sessionLength > currentEditableLength) {
         // Session has more content (new transcription arrived) - use it
         transcript = sessionTranscript;
-        console.log('📄 Using session transcript (new content available)');
       } else if (localLength > currentEditableLength) {
         // Local has more content - use local
         transcript = localTranscript || '';
-        console.log('📝 Using local transcript (fresh recording)');
       } else if (sessionLength > 0) {
         // Session has content - use it
         transcript = sessionTranscript;
-        console.log('📄 Using session transcript (most complete)');
       } else if (localLength > 0) {
         // No session but we have local content - use local
         transcript = localTranscript || '';
-        console.log('📝 Using local transcript (available)');
       } else if (currentEditableLength > 0) {
         // Preserve any existing editable content
         transcript = editableTranscript || '';
-        console.log('💾 Preserving current editable content');
       } else {
         // Nothing available - start fresh
         transcript = '';
-        console.log('🆕 Starting with empty transcript');
       }
     }
     
     // Only update if the transcript actually changed
     if (transcript !== editableTranscript) {
-      console.log('🔄 Updating editable transcript');
       setEditableTranscript(transcript);
     } else {
-      console.log('⏭️ Transcript unchanged, skipping update');
     }
 
   }, [currentSession?.id, localTranscript, currentSession?.transcript]); // Remove editableTranscript to prevent infinite loop
@@ -668,7 +643,6 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       // When user finishes typing, save their changes to the database
       // This ensures manually typed text becomes part of the permanent transcript
       if (onUpdateTranscript && newTranscript.trim()) {
-        console.log('💾 Saving user typed text to database:', newTranscript.substring(0, 50) + '...');
         onUpdateTranscript(newTranscript);
       }
     }, 1000);

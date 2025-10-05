@@ -45,7 +45,7 @@ const initI18n = async () => {
       
       // Namespace configuration
       defaultNS: 'translation',
-      ns: ['translation'],
+      ns: ['translation', 'help', 'mediscribe'],
       
       // Key separator (use dot notation for nested keys)
       keySeparator: '.',

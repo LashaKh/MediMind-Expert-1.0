@@ -8,14 +8,16 @@ import { AuthLayout } from './AuthLayout';
 import { MobileInput, MobileButton } from '../ui/mobile-form';
 import { supabase } from '../../lib/supabase';
 import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const recoverySchema = z.object({
-  email: z.string().email({ message: 'Invalid email address' }),
+  email: z.string().email({ message: 'validation.invalidEmail' }),
 });
 
 type RecoveryFormValues = z.infer<typeof recoverySchema>;
 
 export const PasswordRecoveryForm: React.FC = () => {
+  const { t } = useTranslation();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string>('');
   const {
@@ -30,23 +32,19 @@ export const PasswordRecoveryForm: React.FC = () => {
   const onSubmit: SubmitHandler<RecoveryFormValues> = async (data) => {
     setError('');
     
-    // Get the correct base path for redirect URL
     const getResetUrl = () => {
       const origin = window.location.origin;
       const pathname = window.location.pathname;
       const hostname = window.location.hostname;
       
-      // If we're on the proxy domain (medimind.md) or path starts with /expert
       if (hostname === 'medimind.md' || pathname.startsWith('/expert')) {
         return `${origin}/expert/`;
       }
       
-      // If we're on the direct netlify domain in production
       if (hostname.includes('netlify.app')) {
         return `${origin}/expert/`;
       }
       
-      // For local development
       return `${origin}/expert/`;
     };
     
@@ -73,7 +71,7 @@ export const PasswordRecoveryForm: React.FC = () => {
     );
 
     if (errorResult) {
-      setError(errorResult.message || 'An error occurred while sending the recovery email');
+      setError(errorResult.message || t('auth.passwordRecovery.genericError', 'An error occurred while sending the recovery email'));
       return;
     }
 
@@ -83,17 +81,17 @@ export const PasswordRecoveryForm: React.FC = () => {
 
   if (isSubmitted) {
     return (
-      <AuthLayout title="Check your email">
+      <AuthLayout title={t('auth.passwordRecovery.successTitle', 'Check your email')}>
         <div className="text-center">
           <p className="text-white">
-            If an account exists for the email address you entered, you will receive a password reset link shortly.
+            {t('auth.passwordRecovery.successMessage', 'If an account exists for the email address you entered, you will receive a password reset link shortly.')}
           </p>
           <div className="mt-6">
             <Link
               to="/signin"
               className="font-medium text-accent hover:text-accent/90"
             >
-              Back to Sign In
+              {t('auth.passwordRecovery.backToSignIn', 'Back to Sign In')}
             </Link>
           </div>
         </div>
@@ -102,7 +100,7 @@ export const PasswordRecoveryForm: React.FC = () => {
   }
 
   return (
-    <AuthLayout title="Reset your password">
+    <AuthLayout title={t('auth.passwordRecovery.title', 'Reset your password')}>
       <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
         {error && (
           <div className="rounded-xl bg-red-50 p-4 dark:bg-red-900/20">
@@ -114,8 +112,8 @@ export const PasswordRecoveryForm: React.FC = () => {
           <MobileInput
             id="email"
             type="email"
-            label="Email address"
-            placeholder="Enter your email address"
+            label={t('auth.passwordRecovery.emailLabel', 'Email address')}
+            placeholder={t('auth.passwordRecovery.emailPlaceholder', 'Enter your email address')}
             icon={Mail}
             autoComplete="email"
             error={errors.email?.message}
@@ -132,7 +130,7 @@ export const PasswordRecoveryForm: React.FC = () => {
             size="lg"
             className="w-full"
           >
-            Send recovery link
+            {t('auth.passwordRecovery.submitButton', 'Send recovery link')}
           </MobileButton>
         </div>
 
@@ -141,7 +139,7 @@ export const PasswordRecoveryForm: React.FC = () => {
             to="/signin"
             className="font-medium text-white hover:text-gray-200 dark:text-accent dark:hover:text-accent/90 touch-target-sm inline-block py-2 px-4 rounded-lg transition-colors hover:bg-white/10"
           >
-            Back to Sign In
+            {t('auth.passwordRecovery.backToSignIn', 'Back to Sign In')}
           </Link>
         </div>
       </form>

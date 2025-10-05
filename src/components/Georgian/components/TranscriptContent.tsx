@@ -29,6 +29,7 @@ import '../styles/mobile-attachment-compact.css';
 import { EnhancedAttachment } from '../../../utils/chatFileProcessor';
 import type { ProgressInfo } from '../../../utils/pdfTextExtractor';
 import { countEmptyFields, hasEmptyFields } from '../../../utils/markdownFormatter';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface RecordingState {
   isRecording: boolean;
@@ -146,6 +147,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   selectedSTTModel = 'Fast',
   onModelChange,
 }) => {
+  const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const attachmentInputRef = useRef<HTMLInputElement>(null);
 
@@ -357,8 +359,8 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
               <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl md:rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 p-1 md:p-4 max-h-[80px] md:max-h-none">
                 <h4 className="text-xs md:text-sm font-semibold text-[#1a365d] dark:text-[#63b3ed] mb-1 md:mb-3 flex items-center space-x-1 md:space-x-2">
                   <FileIcon className="w-3 h-3 md:w-4 md:h-4" />
-                  <span className="md:hidden">{attachedFiles.length} files</span>
-                  <span className="hidden md:inline">Attached Files ({attachedFiles.length})</span>
+                  <span className="md:hidden">{t('mediscribe.attachedFiles.title.mobile', { count: attachedFiles.length })}</span>
+                  <span className="hidden md:inline">{t('mediscribe.attachedFiles.title.desktop', { count: attachedFiles.length })}</span>
                   {isProcessingAttachment && (
                     <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" />
                   )}
@@ -407,7 +409,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                               default:
                                 return (
                                   <span className="bg-[#63b3ed]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
-                                    Ready for analysis
+                                    {t('mediscribe.attachedFiles.readyForAnalysis', 'Ready for analysis')}
                                   </span>
                                 );
                             }
@@ -486,7 +488,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                       <div className="flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-amber-100/90 to-yellow-100/90 backdrop-blur-sm rounded-lg border border-amber-300/60 shadow-lg">
                         <span className="text-amber-600">⚠️</span>
                         <span className="text-xs font-bold text-amber-800">
-                          {emptyFieldsCount} field{emptyFieldsCount !== 1 ? 's' : ''} incomplete
+                          {t('mediscribe.emptyFields', { count: emptyFieldsCount })}
                         </span>
                       </div>
                     </div>
@@ -497,7 +499,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                     value={transcript}
                     onChange={(e) => onEditChange(e.target.value)}
                     className={`transcription-textarea w-full resize-none border-0 px-5 py-5 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed mediscribe-mobile-textarea ${isKeyboardAdjusted ? 'keyboard-adjusted' : ''}`}
-                    placeholder={isTitleEmpty ? "Please enter a session title above to start..." : ""}
+                    placeholder={isTitleEmpty ? t('mediscribe.transcriptPlaceholder.titleRequired', "Please enter a session title above to start...") : t('mediscribe.transcriptPlaceholder.startTyping', "Start typing, paste text, or begin recording...")}
                     disabled={isTitleEmpty}
                     dir="auto"
                     style={{
@@ -579,7 +581,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
               <button
                 onClick={handleFileUploadClick}
                 disabled={recordingState.isRecording}
-                title={recordingState.isRecording ? "Cannot upload files during recording" : "Upload an audio file for transcription"}
+                title={recordingState.isRecording ? t('mediscribe.uploadButton.disabledTitle') : t('mediscribe.uploadButton.title')}
                 className={`
                   mediscribe-mobile-footer-button
                   flex items-center justify-center
@@ -595,7 +597,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
               <button
                 onClick={handleAttachmentUploadClick}
                 disabled={recordingState.isRecording}
-                title={recordingState.isRecording ? "Cannot attach files during recording" : "Attach documents, images, or files"}
+                title={recordingState.isRecording ? t('mediscribe.attachButton.disabledTitle') : t('mediscribe.attachButton.title')}
                 className={`
                   mediscribe-mobile-footer-button
                   flex items-center justify-center bg-gradient-to-r from-[#63b3ed] to-[#90cdf4] hover:from-[#2b6cb0] hover:to-[#63b3ed]
@@ -633,10 +635,10 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
               } ${isTitleEmpty && !recordingState.isRecording ? 'opacity-50 cursor-not-allowed' : ''}`}
               title={
                 isTitleEmpty && !recordingState.isRecording
-                  ? "Please enter a session title first"
+                  ? t('mediscribe.recordButton.titleRequired', "Please enter a session title first")
                   : recordingState.isRecording
-                  ? "Stop recording"
-                  : "Start recording"
+                  ? t('mediscribe.recordButton.stopRecording', "Stop recording")
+                  : t('mediscribe.recordButton.startRecording', "Start recording")
               }
             >
               {recordingState.isProcessingChunks ? (

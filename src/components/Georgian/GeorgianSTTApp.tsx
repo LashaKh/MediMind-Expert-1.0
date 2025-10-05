@@ -29,6 +29,7 @@ import { useAuth } from '../../stores/useAppStore';
 import { useViewportHeight } from '../../hooks/useViewportHeight';
 import { useMobileViewport } from '../../hooks/useMobileViewport';
 import { useKeyboardAwareTextarea } from '../../hooks/useKeyboardAwareTextarea';
+import { useTranslation } from '../../hooks/useTranslation';
 import { isDiagnosisTemplate, extractDiagnosisFromInstruction, generateDiagnosisReport, generateTemplateBasedReport } from '../../services/diagnosisFlowiseService';
 import { useTemplateSelection } from '../../hooks/useTemplateManagement';
 import type { UserReportTemplate } from '../../types/templates';
@@ -53,6 +54,7 @@ interface ProcessingHistory {
 }
 
 export const GeorgianSTTApp: React.FC = () => {
+  const { t } = useTranslation();
   useAuth(); // Authentication hook
   useViewportHeight(); // Mobile viewport height management
   
@@ -857,8 +859,8 @@ export const GeorgianSTTApp: React.FC = () => {
         <MedicalDrawer
           isOpen={isMobileDrawerOpen}
           onClose={closeMobileDrawer}
-          title="Medical History"
-          subtitle={`${sessions.length} recordings available`}
+          title={t('mediscribe.drawer.title', 'Medical History')}
+          subtitle={t('mediscribe.drawer.subtitle', { count: sessions.length })}
           icon={Stethoscope}
           maxHeight="85vh"
           showHandle={true}
@@ -873,12 +875,12 @@ export const GeorgianSTTApp: React.FC = () => {
                 className="w-full bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d] text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2"
               >
                 <Plus className="w-4 h-4" />
-                <span>New Session</span>
+                <span>{t('mediscribe.drawer.newSession', 'New Session')}</span>
               </button>
               
               <input
                 type="text"
-                placeholder="Search sessions..."
+                placeholder={t('mediscribe.drawer.searchPlaceholder', 'Search sessions...')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#63b3ed]/20 focus:border-[#63b3ed]"
@@ -889,7 +891,7 @@ export const GeorgianSTTApp: React.FC = () => {
             <div className="space-y-3 overflow-y-auto" style={{ maxHeight: '50vh' }}>
               {sessionLoading ? (
                 <div className="flex items-center justify-center py-8">
-                  <div className="text-[#2b6cb0]">Loading sessions...</div>
+                  <div className="text-[#2b6cb0]">{t('mediscribe.drawer.loading', 'Loading sessions...')}</div>
                 </div>
               ) : filteredSessions.length === 0 ? (
                 <div className="bg-white p-6 rounded-lg border text-center">
@@ -898,11 +900,10 @@ export const GeorgianSTTApp: React.FC = () => {
                       <Stethoscope className="w-8 h-8 text-[#2b6cb0]" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        No History Yet
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-4 max-w-sm">
-                        Create your first medical transcription session to begin capturing patient consultations.
+                                              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                                                {t('mediscribe.drawer.noHistory', 'No History Yet')}
+                                              </h3>                      <p className="text-sm text-gray-600 mb-4 max-w-sm">
+                        {t('mediscribe.drawer.noHistoryDescription', 'Create your first medical transcription session to begin capturing patient consultations.')}
                       </p>
                       <button
                         onClick={() => {
@@ -912,7 +913,7 @@ export const GeorgianSTTApp: React.FC = () => {
                         className="bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d] text-white py-2 px-4 rounded-lg font-medium transition-all duration-200 flex items-center space-x-2"
                       >
                         <Plus className="w-4 h-4" />
-                        <span>Create First Session</span>
+                        <span>{t('mediscribe.drawer.createFirstSession', 'Create First Session')}</span>
                       </button>
                     </div>
                   </div>
@@ -984,7 +985,7 @@ export const GeorgianSTTApp: React.FC = () => {
                                     setEditingTitle('');
                                   }}
                                   className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-[#2b6cb0] text-white rounded-md hover:bg-[#1a365d] transition-colors"
-                                  title="Save title"
+                                  title={t('mediscribe.drawer.saveTitle', 'Save title')}
                                 >
                                   <Check className="w-3 h-3" />
                                 </button>
@@ -995,7 +996,7 @@ export const GeorgianSTTApp: React.FC = () => {
                                     setEditingTitle('');
                                   }}
                                   className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-gray-400 text-white rounded-md hover:bg-gray-500 transition-colors"
-                                  title="Cancel edit"
+                                  title={t('mediscribe.drawer.cancelEdit', 'Cancel edit')}
                                 >
                                   <X className="w-3 h-3" />
                                 </button>
@@ -1014,7 +1015,7 @@ export const GeorgianSTTApp: React.FC = () => {
                                     setEditingTitle(session.title);
                                   }}
                                   className="opacity-0 group-hover/mobile-title:opacity-100 flex-shrink-0 w-5 h-5 flex items-center justify-center text-[#2b6cb0] hover:text-[#1a365d] transition-all duration-200"
-                                  title="Edit title"
+                                  title={t('mediscribe.drawer.editTitle', 'Edit title')}
                                 >
                                   <Edit3 className="w-3 h-3" />
                                 </button>
@@ -1041,7 +1042,7 @@ export const GeorgianSTTApp: React.FC = () => {
                         
                         {hasTranscript && (
                           <span className="bg-[#90cdf4]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
-                            Transcribed
+                            {t('mediscribe.drawer.transcribed', 'Transcribed')}
                           </span>
                         )}
                       </div>
@@ -1224,17 +1225,17 @@ export const GeorgianSTTApp: React.FC = () => {
             </div>
             <div className="flex-1">
               <div className="flex items-center space-x-2 mb-3">
-                <h3 className="text-lg font-bold text-[#1a365d] dark:text-[#90cdf4]">Security Protocol Required</h3>
+                <h3 className="text-lg font-bold text-[#1a365d] dark:text-[#90cdf4]">{t('mediscribe.securityWarning.title', 'Security Protocol Required')}</h3>
                 <div className="px-2 py-1 bg-[#90cdf4]/20 dark:bg-[#90cdf4]/30 text-[#1a365d] dark:text-[#90cdf4] rounded-full text-xs font-semibold">
                   HIPAA
                 </div>
               </div>
               <p className="text-sm text-[#2b6cb0] dark:text-[#90cdf4] leading-relaxed mb-3">
-                Medical transcription requires secure HTTPS connection for patient privacy protection and microphone access.
+                {t('mediscribe.securityWarning.description', 'Medical transcription requires secure HTTPS connection for patient privacy protection and microphone access.')}
               </p>
               <div className="flex items-center space-x-2 text-xs text-[#2b6cb0] dark:text-[#90cdf4]">
                 <Activity className="w-3 h-3" />
-                <span>Please ensure secure connection before proceeding</span>
+                <span>{t('mediscribe.securityWarning.action', 'Please ensure secure connection before proceeding')}</span>
               </div>
             </div>
           </div>
