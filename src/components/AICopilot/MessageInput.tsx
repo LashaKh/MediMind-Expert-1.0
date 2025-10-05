@@ -234,7 +234,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           );
           
           if (fileError) {
-            processingErrors.push(`${file.name}: ${fileError.userMessage || 'Processing failed'}`);
+            processingErrors.push(`${file.name}: ${t('chat.processingFailed', 'Processing failed')}`);
           } else {
             newAttachments.push(attachment);
           }
@@ -319,7 +319,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     // Check if any attachments are still processing
     const processingAttachments = attachments.filter(att => att.processingStatus === 'processing');
     if (processingAttachments.length > 0) {
-      setUploadError(`Please wait for ${processingAttachments.length} file(s) to finish processing before sending.`);
+      setUploadError(t('chat.waitForProcessing', { count: processingAttachments.length }));
       return;
     }
 

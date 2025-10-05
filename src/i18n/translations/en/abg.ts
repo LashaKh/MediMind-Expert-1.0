@@ -244,7 +244,14 @@ const abg = {
       subtitle: 'Our advanced AI is analyzing your blood gas report using state-of-the-art vision technology.'
     },
     error: {
-      title: 'Analysis Failed'
+      title: 'Analysis Failed',
+      unexpected: 'An unexpected error occurred during analysis',
+      service503: 'AI service is temporarily unavailable (503). This usually resolves within a few minutes. Please try again shortly.',
+      rateLimit: 'Rate limit exceeded. Please wait a moment before trying again.',
+      quotaExhausted: 'API quota exhausted for today. Please try again tomorrow or contact support.',
+      geminiError: 'AI analysis service error: {{message}}. This is likely temporary - please try again in a few minutes.',
+      unexpectedInterpretation: 'An unexpected error occurred during interpretation',
+      unexpectedActionPlan: 'An unexpected error occurred during action plan generation'
     },
     empty: 'No analysis results available',
     header: {

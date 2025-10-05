@@ -96,10 +96,9 @@ export const ClinicalDashboard: React.FC<ClinicalDashboardProps> = ({
           
           {/* Case Ready Message */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-slate-800">
-              Case Ready for Discussion
-            </h2>
-            <div className={`
+                      <h2 className="text-2xl font-bold text-slate-800">
+                        {t('chat.dashboard.caseReadyTitle', 'Case Ready for Discussion')}
+                      </h2>            <div className={`
               inline-block px-4 py-2 rounded-lg 
               bg-gradient-to-r ${specialtyConfig.bgGradient} 
               border border-${specialtyConfig.accentColor}-200/60 
@@ -110,8 +109,7 @@ export const ClinicalDashboard: React.FC<ClinicalDashboardProps> = ({
               </p>
             </div>
             <p className="text-slate-600 max-w-2xl mx-auto">
-              I'm ready to discuss this case with you. Ask me anything about diagnosis, treatment options, 
-              differential diagnosis, or any specific aspect of this case.
+              {t('chat.dashboard.caseReadyDescription', 'I\'m ready to discuss this case with you. Ask me anything about diagnosis, treatment options, differential diagnosis, or any specific aspect of this case.')}
             </p>
           </div>
         </div>
@@ -134,11 +132,11 @@ export const ClinicalDashboard: React.FC<ClinicalDashboardProps> = ({
           </div>
         </div>
         <h2 className="text-2xl font-bold text-slate-800 mb-2">
-          {`${t('chat.dashboard.welcomeBack')} ${profile?.full_name?.split(' ')[0] || 'Doctor'}`}
+          {t('chat.dashboard.welcomeBack', { name: profile?.full_name?.split(' ')[0] || t('chat.dashboard.doctor', 'Doctor') })}
         </h2>
         <p className="text-slate-600">
-          {`${t('chat.dashboard.subtitle')} ${profile?.medical_specialty === 'cardiology' ? 'cardiology' : 
-                       profile?.medical_specialty === 'obgyn' ? 'OB/GYN' : 'medical'} practice today?`}
+          {`${t('chat.dashboard.subtitle')} ${profile?.medical_specialty === 'cardiology' ? t('specialties.cardiology', 'cardiology') : 
+                       profile?.medical_specialty === 'obgyn' ? t('specialties.obgyn', 'OB/GYN') : t('chat.medical', 'medical')} practice today?`}
         </p>
       </div>
 

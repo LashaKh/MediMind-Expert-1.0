@@ -62,9 +62,12 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
     onTextReAnalysis: workflowHook.handleTextReAnalysis
   });
 
+  // Destructure functions for useEffect dependencies to prevent infinite loops
+  const { setPageVisible, loadExistingResult } = workflowHook;
+
   // Initialize workflow on mount
   useEffect(() => {
-    workflowHook.setPageVisible(true);
+    setPageVisible(true);
     
     if (!workflow) {
       startWorkflow({
@@ -74,7 +77,7 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
         canProceed: false
       });
     }
-  }, [workflow, startWorkflow, workflowHook]);
+  }, [workflow, startWorkflow, setPageVisible]);
 
   // Handle navigation from history - load existing result
   useEffect(() => {
@@ -82,12 +85,12 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
     
     if (locationState?.resultId && locationState?.viewMode === 'history') {
 
-      workflowHook.loadExistingResult(locationState.resultId);
+      loadExistingResult(locationState.resultId);
       
       // Clear the location state to prevent re-loading
       navigate(location.pathname, { replace: true, state: undefined });
     }
-  }, [location, navigate, workflowHook]);
+  }, [location, navigate, loadExistingResult]);
 
   // Navigate between steps
   const goToStep = (step: WorkflowStep) => {

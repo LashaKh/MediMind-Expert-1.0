@@ -430,14 +430,14 @@ export const useAppStore = create<AppStore>()(
         languageError: null,
         
         // Language Actions
-        setLanguage: async (currentLanguage) => {
+        setLanguage: async (newLanguage) => {
           set({ languageLoading: true, languageError: null }); 
           try {
             // Import the changeLanguage function dynamically to avoid circular imports
             const { changeLanguage } = await import('../i18n/i18n');
-            const success = await changeLanguage(currentLanguage as any);
+            const success = await changeLanguage(newLanguage);
             if (success) {
-              set({ currentLanguage, languageLoading: false });
+              set({ currentLanguage: newLanguage, languageLoading: false });
               return true;
             } else {
               set({ languageError: 'Failed to change language', languageLoading: false });

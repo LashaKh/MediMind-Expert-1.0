@@ -1,5 +1,5 @@
 export type LanguageCode = 'en' | 'ka' | 'ru';
-export type Namespace = 'common' | 'calculators' | 'chat' | 'documents' | 'navigation' | 'medical' | 'auth' | 'validation' | 'knowledgeBase' | 'filters' | 'abg' | 'news' | 'search' | 'podcast';
+export type Namespace = 'common' | 'calculators' | 'chat' | 'documents' | 'navigation' | 'medical' | 'auth' | 'validation' | 'knowledgeBase' | 'filters' | 'abg' | 'news' | 'search' | 'podcast' | 'workspace' | 'diseases' | 'help' | 'mediscribe';
 
 // Enhanced language loading cache with namespace support
 const languageCache = new Map<string, Promise<any>>();

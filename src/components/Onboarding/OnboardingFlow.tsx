@@ -59,7 +59,6 @@ export const OnboardingFlow: React.FC = () => {
     setError('');
     
     try {
-      // Store onboarding data in localStorage as backup
       const onboardingComplete = {
         userId: user.id,
         specialty: finalData.specialty,
@@ -68,7 +67,6 @@ export const OnboardingFlow: React.FC = () => {
       };
       localStorage.setItem('medimind_onboarding', JSON.stringify(onboardingComplete));
       
-      // Try to update the database in the background, but don't block navigation
       if (finalData.specialty || finalData.aboutMe) {
         const updateData: any = {};
         
@@ -81,20 +79,14 @@ export const OnboardingFlow: React.FC = () => {
           updateData.about_me_context = finalData.aboutMe;
         }
         
-        // Update in background - don't await
         updateUserProfile(user.id, updateData)
           .then(() => {
-
-            // Refresh profile in background
             refreshProfile().catch(console.warn);
           })
           .catch((error) => {
-
-            // Could show a non-blocking toast here in the future
           });
       }
 
-      // Navigate immediately without waiting for database operations
       let targetRoute;
       if (finalData.specialty) {
         const dbSpecialty = finalData.specialty === 'ob-gyn' ? 'obstetrics_gynecology' : finalData.specialty;
@@ -104,15 +96,12 @@ export const OnboardingFlow: React.FC = () => {
         targetRoute = '/workspace';
       }
       
-      // Navigate immediately
       navigate(targetRoute, { replace: true });
       setIsLoading(false);
       
     } catch (error) {
-
-      setError('Something went wrong. Proceeding to workspace...');
+      setError(t('onboarding.genericError', 'Something went wrong. Proceeding to workspace...'));
       
-      // Even if there's an error, still navigate to workspace after a short delay
       setTimeout(() => {
         navigate('/workspace', { replace: true });
         setIsLoading(false);
@@ -138,7 +127,6 @@ export const OnboardingFlow: React.FC = () => {
 
   return (
     <div className="min-h-screen min-h-[100svh] bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 flex flex-col">
-      {/* Header */}
       <div className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-slate-100 safe-area-inset-top">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="text-center">
@@ -157,9 +145,7 @@ export const OnboardingFlow: React.FC = () => {
         </div>
       </div>
 
-      {/* Progress Steps */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1">
-        {/* Error Display */}
         {error && (
           <div className="mb-8 max-w-2xl mx-auto">
             <div className="rounded-md bg-red-50 p-4 dark:bg-red-900/20">
@@ -168,7 +154,6 @@ export const OnboardingFlow: React.FC = () => {
           </div>
         )}
 
-        {/* Mobile-Optimized Progress Steps */}
         <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-6 space-y-4 sm:space-y-0">
           {steps.map((step, index) => (
             <div key={index} className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
@@ -207,7 +192,6 @@ export const OnboardingFlow: React.FC = () => {
           ))}
         </div>
 
-        {/* Step Content */}
         <div className={`
           transition-all duration-500 transform
           ${currentStep === 0 ? 'bg-transparent' : 'bg-white/60 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-lg border border-white/20 p-4 sm:p-6 lg:p-8'}

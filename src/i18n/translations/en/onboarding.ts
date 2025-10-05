@@ -1,0 +1,50 @@
+export default {
+  steps: {
+    selectSpecialty: 'Select Specialty',
+    aboutYou: 'About You',
+  },
+  settingUpWorkspace: 'Setting up your workspace...',
+  welcome: 'Welcome to MediMind Expert',
+  setupMessage: 'Let\'s set up your personalized workspace in just a couple of steps.',
+  specialtySelection: {
+    title: 'Choose Your Specialty',
+    subtitle: 'Select your medical specialty to unlock personalized AI tools and evidence-based resources',
+    evidenceBased: 'Evidence-Based Medicine',
+    clinicallyValidated: 'Clinically Validated',
+    hipaaCompliant: 'HIPAA Compliant',
+    status: {
+      selected: 'Selected',
+      available: 'Available',
+      comingSoon: 'Coming Soon',
+    },
+    launchButton: 'Launch Workspace',
+  },
+  specialty: {
+    keyFeatures: 'Key Features',
+    cardiology: {
+      name: 'Cardiology',
+      subtitle: 'Cardiovascular Excellence',
+      description: 'Advanced AI-powered cardiovascular medicine platform with clinical intelligence and evidence-based diagnostics',
+      features: ['AI Diagnostics', 'Risk Assessment', 'Clinical Guidelines', 'Treatment Plans'],
+    },
+    obgyn: {
+      name: 'OB/GYN',
+      subtitle: 'Women\'s Health Innovation',
+      description: 'Comprehensive obstetrics and gynecology platform with specialized tools for maternal and reproductive care',
+      features: ['Prenatal Care', 'Risk Monitoring', 'Specialized Tools', 'Care Plans'],
+    },
+  },
+  aboutMe: {
+    title: 'Tell Us About Yourself',
+    subtitle: 'Help our AI assistant provide personalized medical insights by sharing your background and expertise.',
+    optional: 'Optional - You can skip this step if you prefer',
+    placeholder: 'Share your medical specialty, years of experience, practice setting, or areas of clinical interest that would help personalize your AI assistant...', 
+    charCount: '{{count}} characters',
+    backButton: 'Back',
+    skipButton: 'Skip for now',
+    continueButton: 'Continue',
+    settingUp: 'Setting up...', 
+    workspaceSetup: 'Setting up your workspace',
+    personalizing: 'Personalizing your MediMind experience...', 
+  },
+};

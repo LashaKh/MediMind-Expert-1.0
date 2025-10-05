@@ -158,7 +158,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     if (messages.length > 0 && newKnowledgeBase !== knowledgeBase) {
       // Start a new conversation to avoid mixing contexts
       const newConversationId = createNewConversation(
-        'Chat', 
+        t('chat.defaultChatTitle', 'Chat'), 
         profile?.medical_specialty as 'cardiology' | 'obgyn'
       );
       
@@ -547,7 +547,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     );
 
     if (error) {
-      setChatError('Failed to send message. Please try again.');
+      setChatError(t('chat.messageSendFailed', 'Failed to send message. Please try again.'));
     }
     
     setChatLoading(false);
@@ -575,7 +575,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       // Add an initial AI message with case context
       const caseIntroMessage: Message = {
         id: uuidv4(),
-        content: `I'm ready to discuss the case "${newCase.title}". What would you like to explore first?`,
+      content: t('chat.caseReadyMessage', { title: newCase.title }),
         type: 'ai',
         timestamp: new Date(),
         sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
@@ -585,7 +585,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
       
       return newCase;
     } catch (error) {
-      setChatError('Failed to create case. Please try again.');
+      setChatError(t('chat.caseCreateFailed', 'Failed to create case. Please try again.'));
       throw error; // Re-throw so the modal can handle it
     }
   };
@@ -663,7 +663,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
         // Step 4: Create a completely new conversation without any case context
         const newConversationId = createNewConversation(
-          'Fresh Conversation', 
+          t('chat.freshConversation', 'Fresh Conversation'), 
           profile?.medical_specialty as 'cardiology' | 'obgyn',
           undefined // explicitly no case ID
         );
@@ -688,7 +688,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     );
 
     if (error) {
-      setChatError('Failed to reset case. Please try again.');
+      setChatError(t('chat.caseResetFailed', 'Failed to reset case. Please try again.'));
     }
   };
 
@@ -722,7 +722,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     // Add an initial AI message with case context (similar to case creation)
     const caseIntroMessage: Message = {
       id: uuidv4(),
-      content: `I'm ready to discuss the case "${selectedCase.title}". What would you like to explore first?`,
+      content: t('chat.caseReadyMessage', { title: selectedCase.title }),
       type: 'ai',
       timestamp: new Date(),
       sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
@@ -767,7 +767,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     if (profile?.medical_specialty === 'cardiology') {
       return {
         icon: <Heart className="w-5 h-5" />,
-        title: 'Cardiology Expert',
+        title: t('chat.specialtyTitles.cardiologyExpert', 'Cardiology Expert'),
         gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
         bgGradient: 'from-[#90cdf4]/20 via-[#63b3ed]/10 to-transparent',
         borderColor: 'border-[#63b3ed]/60',
@@ -777,7 +777,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     } else if (profile?.medical_specialty === 'obgyn') {
       return {
         icon: <Stethoscope className="w-5 h-5" />,
-        title: 'OB/GYN Expert',
+        title: t('chat.specialtyTitles.obgynExpert', 'OB/GYN Expert'),
         gradient: 'from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4]',
         bgGradient: 'from-[#90cdf4]/20 via-[#63b3ed]/10 to-transparent',
         borderColor: 'border-[#63b3ed]/60',
@@ -787,7 +787,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     } else {
       return {
         icon: <Sparkles className="w-5 h-5" />,
-        title: 'Medical AI Expert',
+        title: t('chat.specialtyTitles.medicalExpert', 'Medical AI Expert'),
         gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
         bgGradient: 'from-[#90cdf4]/20 via-[#63b3ed]/10 to-transparent',
         borderColor: 'border-[#2b6cb0]/60',
@@ -920,7 +920,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     bg-gradient-to-r ${specialtyConfig.gradient} bg-clip-text text-transparent
                     drop-shadow-sm truncate
                   `}>
-                    MediMind AI
+                    {t('chat.title', 'MediMind AI')}
                   </h1>
                   <div className="flex items-center space-x-1.5 sm:space-x-3">
                     <span className={`
@@ -929,8 +929,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                       text-[#1a365d] border border-[#63b3ed]/40
                       ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)} shadow-sm whitespace-nowrap truncate max-w-[120px] sm:max-w-none
                     `}>
-                      {profile?.medical_specialty === 'cardiology' ? 'Cardiology' : 
-                       profile?.medical_specialty === 'obgyn' ? 'OB/GYN' : 'Medical AI'}
+                      {profile?.medical_specialty === 'cardiology' ? t('specialties.cardiology', 'Cardiology') : 
+                       profile?.medical_specialty === 'obgyn' ? t('specialties.obgyn', 'OB/GYN') : t('chat.medicalAI', 'Medical AI')}
                     </span>
                     <div className="flex items-center space-x-1 hidden sm:flex">
                       <div className={`
@@ -939,7 +939,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                         ${isConnected ? 'animate-pulse shadow-sm' : 'animate-bounce shadow-sm'}
                       `} />
                       <span className="text-xs font-medium text-slate-600">
-                        {isConnected ? 'Online' : 'Offline'}
+                        {isConnected ? t('chat.online', 'Online') : t('chat.offline', 'Offline')}
                       </span>
                     </div>
                   </div>
@@ -1010,11 +1010,11 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
 
                       {/* Mobile-optimized History button */}
                       <EnhancedTooltip
-                        title="Chat History"
-                        description="View and manage all your previous AI conversations."
+                        title={t('chat.tooltip.chatHistoryTitle', 'Chat History')}
+                        description={t('chat.tooltip.chatHistoryDescription', 'View and manage all your previous AI conversations.')}
                         icon={History}
                         gradient="from-[#1a365d] to-[#2b6cb0]"
-                        badge="Browse"
+                        badge={t('chat.tooltip.browse', 'Browse')}
                       >
                         <Button
                           variant="ghost"
@@ -1040,11 +1040,11 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
                     <div className="flex items-center space-x-1 bg-[#90cdf4]/20 backdrop-blur-sm rounded-xl p-1 border border-[#63b3ed]/60 shadow-sm">
                       {/* Mobile-optimized Cases button with badge */}
                       <EnhancedTooltip
-                        title="My Cases"
-                        description="View and switch between your saved clinical cases."
+                        title={t('chat.tooltip.myCasesTitle', 'My Cases')}
+                        description={t('chat.tooltip.myCasesDescription', 'View and switch between your saved clinical cases.')}
                         icon={FileText}
                         gradient="from-[#2b6cb0] to-[#63b3ed]"
-                        badge="Switch Cases"
+                        badge={t('chat.tooltip.switchCases', 'Switch Cases')}
                       >
                         <Button
                           variant="ghost"
