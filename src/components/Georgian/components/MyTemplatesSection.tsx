@@ -52,7 +52,9 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
   disabled = false,
   hasTranscript,
   transcript,
-  onAddToHistory
+  onAddToHistory,
+  onSwitchToHistory,
+  onTemplateSelect
 }) => {
   // State management
   const [templates, setTemplates] = useState<UserReportTemplate[]>([]);
@@ -107,52 +109,38 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
     setEditingTemplate(null);
   }, []);
 
-  // Handle template selection - Send directly to Flowise endpoint
+  // Handle template selection - Let parent handle generation with processing modal
   const handleTemplateSelect = useCallback(async (template: UserReportTemplate) => {
     if (disabled || !hasTranscript) return; // Prevent usage without transcript content
 
     try {
       // Record usage
       await templateService.recordTemplateUsage(template.id);
-      
+
       // Update local state
-      setTemplates(prev => 
-        prev.map(t => 
-          t.id === template.id 
+      setTemplates(prev =>
+        prev.map(t =>
+          t.id === template.id
             ? { ...t, usage_count: t.usage_count + 1, last_used_at: new Date().toISOString() }
             : t
         )
       );
 
-      
-      // Send directly to Flowise using the same pattern as diagnosis cards
-      const result = await generateTemplateBasedReport(transcript, template);
-      
-      if (result.success) {
-        
-        // Add the result to processing history for UI display with same structure as premium reports
-        if (onAddToHistory) {
-          const instruction = `Template: ${template.name}\n${template.example_structure.substring(0, 150)}...`;
-          onAddToHistory(
-            instruction,
-            result.report,
-            'flowise-diagnosis-agent', // Use same model name as premium cards for consistent display
-            undefined, // tokens used - not available
-            45 // Estimated processing time like premium cards
-          );
-        }
-        
-      } else {
-        // Fallback to original behavior if Flowise fails
-        const enhancedPrompt = `${template.example_structure}${template.notes ? `\n\nAdditional guidance: ${template.notes}` : ''}`;
-        onSelectTemplate(enhancedPrompt);
+      // Set the selected template so parent knows to use template generation
+      if (onTemplateSelect) {
+        onTemplateSelect(template);
       }
+
+      // Create instruction that triggers template processing in parent
+      const instruction = `CUSTOM_TEMPLATE:${template.name}`;
+
+      // Call parent's onSelectTemplate to trigger processing with modal
+      onSelectTemplate(instruction);
+
     } catch (err) {
-      // Fallback to original behavior on error
-      const enhancedPrompt = `${template.example_structure}${template.notes ? `\n\nAdditional guidance: ${template.notes}` : ''}`;
-      onSelectTemplate(enhancedPrompt);
+      console.error('Template selection failed:', err);
     }
-  }, [disabled, hasTranscript, transcript, onSelectTemplate]);
+  }, [disabled, hasTranscript, onSelectTemplate, onTemplateSelect]);
 
   // Handle template edit
   const handleTemplateEdit = useCallback((template: UserReportTemplate) => {

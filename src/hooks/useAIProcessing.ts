@@ -142,11 +142,7 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
       timestamp: Date.now()
     };
 
-
-    setProcessingHistory(prev => {
-      const newHistory = [historyItem, ...prev];
-      return newHistory;
-    });
+    setProcessingHistory(prev => [historyItem, ...prev]);
   }, [processingHistory.length]);
 
   // Clear error

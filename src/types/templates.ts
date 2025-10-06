@@ -73,6 +73,8 @@ export interface MyTemplatesSectionProps {
   hasTranscript: boolean;
   transcript: string;
   onAddToHistory?: (instruction: string, response: string, model: string, tokensUsed?: number, processingTime?: number) => void;
+  onSwitchToHistory?: () => void;
+  onTemplateSelect?: (template: UserReportTemplate) => void;
 }
 
 export interface TemplateCreationModalProps {

@@ -165,14 +165,15 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
       };
     }
     if (lower.includes('template:')) {
-      // Extract template name from instruction like "Template: test 3"
-      const templateName = instruction.split(':')[1]?.trim() || 'Custom Template';
-      return { 
-        type: `Custom Template Report: ${templateName}`, 
-        icon: FileText, 
-        color: 'from-[#63b3ed] to-[#90cdf4]', 
+      // Extract template name from instruction like "Template: Test Template"
+      const templateMatch = instruction.match(/Template:\s*([^\n]+)/i);
+      const templateName = templateMatch?.[1]?.trim() || 'Custom Template';
+      return {
+        type: `Custom Template: ${templateName}`,
+        icon: FileText,
+        color: 'from-[#2b6cb0] via-[#1a365d] to-[#2b6cb0]', // Match cardiac consult premium styling
         isDiagnosis: true,
-        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/f27756ae-aa35-4af3-afd1-f6912f9103cf',
+        endpoint: 'https://flowise-2-0.onrender.com/api/v1/prediction/0dfbbc44-76d0-451f-b7ca-92a96f862924',
         supportsForm100: true
       };
     }

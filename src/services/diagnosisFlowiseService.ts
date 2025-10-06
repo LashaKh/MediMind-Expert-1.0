@@ -330,10 +330,6 @@ export async function generateTemplateBasedReport(
   transcript: string,
   template: UserReportTemplate
 ): Promise<{ success: true; report: string } | { success: false; error: string }> {
-  console.log('🔬 Template-based report: Using unified endpoint');
-  console.log('📋 Template:', template.name);
-  console.log('📄 Transcript length:', transcript.length);
-
   try {
     if (!transcript.trim()) {
       return {
@@ -343,31 +339,24 @@ export async function generateTemplateBasedReport(
     }
 
     // Flowise backend requires "question" field format
-    // We encode template metadata within the question text
+    // Include the full template structure so AI knows how to format the report
     const questionContent = `Card Title: Template
-Type: Template
+Type: Custom Template Report
 Template Name: ${template.name}
 
-${transcript}`;
+TEMPLATE STRUCTURE (Follow this format exactly):
+${template.example_structure}
+${template.notes ? `\n\nADDITIONAL NOTES:\n${template.notes}` : ''}
+
+PATIENT TRANSCRIPT:
+${transcript}
+
+INSTRUCTIONS: Generate a medical report following the TEMPLATE STRUCTURE above, using the information from the PATIENT TRANSCRIPT.`;
 
     const requestPayload = {
       question: questionContent
     };
 
-    console.log('📄 Request metadata:', {
-      cardTitle: 'Template',
-      type: 'Template',
-      templateName: template.name,
-      transcriptLength: transcript.length,
-      questionLength: requestPayload.question.length
-    });
-
-    // Log the FULL request being sent to Flowise for debugging
-    console.log('📨 FULL Flowise Request Being Sent:');
-    console.log(JSON.stringify(requestPayload, null, 2));
-    console.log('🌐 Target Endpoint:', UNIFIED_API_URL);
-
-    console.log('🚀 Making API request to unified endpoint...');
     const response = await fetch(UNIFIED_API_URL, {
       method: 'POST',
       headers: {
@@ -379,11 +368,7 @@ ${transcript}`;
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('❌ Template API request failed:', {
-        status: response.status,
-        statusText: response.statusText,
-        errorText: errorText.substring(0, 500)
-      });
+      console.error('Template API request failed:', response.status, response.statusText);
 
       return {
         success: false,
@@ -392,20 +377,15 @@ ${transcript}`;
     }
 
     const data: DiagnosisFlowiseResponse = await response.json();
-    console.log('📥 Template API Response received:', {
-      hasText: !!data.text,
-      textLength: data.text?.length || 0
-    });
 
     if (!data.text) {
-      console.error('❌ Invalid response format from template API:', data);
+      console.error('Invalid response format from template API');
       return {
         success: false,
         error: 'Invalid response format from template API'
       };
     }
 
-    console.log('✅ Template-based report generated successfully');
     return {
       success: true,
       report: data.text

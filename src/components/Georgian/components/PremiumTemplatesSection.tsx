@@ -37,6 +37,8 @@ interface PremiumTemplatesSectionProps {
   hasTranscript: boolean;
   transcript: string;
   onAddToHistory?: (instruction: string, response: string, model: string, tokensUsed?: number, processingTime?: number) => void;
+  onSwitchToHistory?: () => void;
+  onTemplateSelect?: (template: any) => void;
 }
 
 // Enhanced template data with featured flag - Cardiology Consults Only
@@ -140,7 +142,9 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
   disabled = false,
   hasTranscript,
   transcript,
-  onAddToHistory
+  onAddToHistory,
+  onSwitchToHistory,
+  onTemplateSelect
 }) => {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(['Cardiologist Consults']) // Cardiology consults expanded by default
@@ -212,6 +216,8 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
         hasTranscript={hasTranscript}
         transcript={transcript}
         onAddToHistory={onAddToHistory}
+        onSwitchToHistory={onSwitchToHistory}
+        onTemplateSelect={onTemplateSelect}
       />
       
       {/* Featured Cardiology Section - Always Show for Testing */}

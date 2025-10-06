@@ -184,14 +184,15 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
 
   const handleTemplateSelect = (instruction: string) => {
     if (onProcessText) {
-      // Check if this is a diagnosis template for special handling
+      // Check if this is a diagnosis template or custom template for auto-switch
       const diagnosisInfo = extractDiagnosisFromInstruction(instruction);
-      if (diagnosisInfo) {
+      const isCustomTemplate = instruction.startsWith('CUSTOM_TEMPLATE:');
 
+      if (diagnosisInfo || isCustomTemplate) {
         // Set flag to auto-switch to history after processing completes
         switchToHistoryRef.current = true;
       }
-      
+
       onProcessText(instruction);
     }
   };
@@ -287,6 +288,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                 hasTranscript={hasTranscript}
                 transcript={transcript}
                 onAddToHistory={onAddToHistory}
+                onSwitchToHistory={() => setViewMode('history')}
+                onTemplateSelect={onTemplateSelect}
               />
             </div>
           )}

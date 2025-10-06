@@ -413,18 +413,18 @@ export const GeorgianSTTApp: React.FC = () => {
         });
 
         if (templateResult.success && currentSession) {
-          // Save template result to session
+          // Save template result to session with Template: prefix for UI recognition
           const processingResultData = {
-            userInstruction: `${instruction} (Template: ${selectedTemplate.name})`,
+            userInstruction: `Template: ${selectedTemplate.name}\n${selectedTemplate.example_structure.substring(0, 150)}...`,
             aiResponse: templateResult.report,
-            model: 'flowise-template-agent',
+            model: 'flowise-diagnosis-agent', // Use same model as diagnosis for consistent display
             tokensUsed: Math.floor(templateResult.report.length / 4),
             processingTime
           };
-          
+
           const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
           console.log('💾 Template session save result:', { saveSuccess, sessionId: currentSession.id });
-          
+
           if (saveSuccess) {
             addToHistory(
               processingResultData.userInstruction,
@@ -435,13 +435,20 @@ export const GeorgianSTTApp: React.FC = () => {
             );
             console.log('✅ Template result added to UI history');
           }
+
+          // Clear selected template after successful generation
+          setSelectedTemplate(null);
         } else if (!templateResult.success) {
           console.error('❌ Template processing failed:', templateResult.error);
           setAIError(`Template processing failed: ${templateResult.error}`);
+          // Clear selected template on error
+          setSelectedTemplate(null);
         }
       } catch (error) {
         console.error('🚨 Template processing failed:', error);
         setAIError('Failed to generate template-based report. Please try again.');
+        // Clear selected template on error
+        setSelectedTemplate(null);
       } finally {
         setProcessing(false);
       }
