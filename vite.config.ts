@@ -109,20 +109,24 @@ export default defineConfig(({ mode }) => {
       cssCodeSplit: false,
       reportCompressedSize: false, // Faster builds
       rollupOptions: {
+        external: [],
         output: {
           compact: true,
           format: 'es',
           hoistTransitiveImports: true,
+          // Make React external to all chunks except vendor-react
+          preserveModules: false,
           // CRITICAL FIX: Optimized manualChunks that guarantees React stays in main bundle
           manualChunks: (id) => {
-            // CRITICAL: React must ALWAYS be in vendor-react, never in feature chunks
+            // CRITICAL: React must ALWAYS be in vendor-react FIRST
             if (id.includes('node_modules')) {
-              if (id.includes('react-dom') || id.includes('react-router') || id.includes('/react/') || id.includes('scheduler')) {
-                return 'vendor-react'; // React core stays together - LOADS FIRST
+              // React ecosystem - highest priority, loads FIRST
+              if (id.includes('/react/') || id.includes('react-dom') || id.includes('react-is') || id.includes('scheduler') || id.includes('react-router')) {
+                return 'vendor-react';
               }
             }
 
-            // Heavy features - lazy loaded (React excluded above)
+            // Heavy features - lazy loaded (React must be external import)
             if (id.includes('jspdf') || id.includes('html2canvas')) {
               return 'feature-pdf';
             }
