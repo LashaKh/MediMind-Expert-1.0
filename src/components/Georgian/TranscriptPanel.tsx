@@ -254,28 +254,38 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
 
   // Load session transcript when session changes OR when localTranscript updates
   useEffect(() => {
+    // Get current state first to check for session changes
+    const currentSessionId = currentSession?.id || '';
+    const previousSessionId = previousSessionIdRef.current;
+    const isSessionChange = currentSessionId !== previousSessionId;
+
+    // If session changed, clear typing timeout and allow update
+    if (isSessionChange && typingTimeoutRef.current) {
+      console.log('🔄 Session changed - clearing typing timeout to allow immediate update');
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = undefined;
+      isUserTypingRef.current = false;
+    }
+
     // Don't update if user is currently typing to prevent interference
-    if (isUserTypingRef.current) {
+    // BUT allow updates during session changes
+    if (!isSessionChange && isUserTypingRef.current) {
       console.log('🚫 User is typing, skipping transcript update to prevent interference');
       return;
     }
 
     // Don't update if user just made changes in the last 2 seconds to prevent overriding deletions
-    if (typingTimeoutRef.current) {
+    // BUT always allow updates during session changes
+    if (!isSessionChange && typingTimeoutRef.current) {
       console.log('🚫 User recently made changes, skipping transcript update to prevent overriding deletions');
       return;
     }
-    
-    // Get current state
+
+    // Get remaining state
     const sessionTranscript = currentSession?.transcript || '';
     const localLength = localTranscript?.length || 0;
     const sessionLength = sessionTranscript.length;
     const currentEditableLength = editableTranscript?.length || 0;
-    const currentSessionId = currentSession?.id || '';
-    const previousSessionId = previousSessionIdRef.current;
-    
-    // Check if this is a session change
-    const isSessionChange = currentSessionId !== previousSessionId;
     
     console.log('🔍 Transcript selection logic:', {
       sessionId: currentSessionId,

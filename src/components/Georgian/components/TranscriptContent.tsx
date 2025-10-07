@@ -30,8 +30,7 @@ import { EnhancedAttachment } from '../../../utils/chatFileProcessor';
 import type { ProgressInfo } from '../../../utils/pdfTextExtractor';
 import { countEmptyFields, hasEmptyFields } from '../../../utils/markdownFormatter';
 
-// Import text formatting utilities
-import { formatForTextareaDisplay } from '../../../utils/textFormatting';
+// Text formatting utilities removed - using raw transcript to preserve all user input including spaces
 
 interface RecordingState {
   isRecording: boolean;
@@ -165,10 +164,10 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
     }
   }, [showTitleError]);
 
-  // Format transcript for display
-  const formattedTranscript = useMemo(() => {
-    return formatForTextareaDisplay(transcript);
-  }, [transcript]);
+  // Use raw transcript without formatting for textarea to preserve user input
+  // Formatting is only applied to AI transcription results, not user edits
+  // This ensures spaces and all characters work correctly during manual editing
+  const displayTranscript = transcript;
 
   // Calculate empty fields in transcript
   const emptyFieldsCount = countEmptyFields(transcript);
@@ -500,7 +499,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
 
                   <textarea
                     ref={textareaRef}
-                    value={formattedTranscript}
+                    value={displayTranscript}
                     onChange={(e) => onEditChange(e.target.value)}
                     className={`transcription-textarea w-full resize-none border-0 px-5 py-5 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed mediscribe-mobile-textarea ${isKeyboardAdjusted ? 'keyboard-adjusted' : ''}`}
                     placeholder={isTitleEmpty ? "Please enter a session title above to start..." : ""}
