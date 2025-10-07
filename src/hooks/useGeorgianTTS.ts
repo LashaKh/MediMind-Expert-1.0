@@ -386,7 +386,11 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         } as any // Cast to any for advanced Chrome constraints
       })
     ).then(([stream, error]) => {
-      console.timeEnd('🚀 Microphone pre-initialization');
+      try {
+        console.timeEnd('🚀 Microphone pre-initialization');
+      } catch (e) {
+        // Timer may not exist in React Strict Mode double-invoke
+      }
       isPreInitializingRef.current = false;
       preInitPromiseRef.current = null;
 

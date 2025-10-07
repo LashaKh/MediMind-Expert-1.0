@@ -62,10 +62,13 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
     onTextReAnalysis: workflowHook.handleTextReAnalysis
   });
 
-  // Initialize workflow on mount
+  // Set page visible on mount only
   useEffect(() => {
     workflowHook.setPageVisible(true);
-    
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Initialize workflow on mount
+  useEffect(() => {
     if (!workflow) {
       startWorkflow({
         currentStep: WorkflowStep.UPLOAD,
@@ -74,20 +77,20 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
         canProceed: false
       });
     }
-  }, [workflow, startWorkflow, workflowHook]);
+  }, [workflow, startWorkflow]);
 
   // Handle navigation from history - load existing result
   useEffect(() => {
     const locationState = location.state as { resultId?: string; viewMode?: string } | null;
-    
+
     if (locationState?.resultId && locationState?.viewMode === 'history') {
 
       workflowHook.loadExistingResult(locationState.resultId);
-      
+
       // Clear the location state to prevent re-loading
       navigate(location.pathname, { replace: true, state: undefined });
     }
-  }, [location, navigate, workflowHook]);
+  }, [location, navigate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Navigate between steps
   const goToStep = (step: WorkflowStep) => {
