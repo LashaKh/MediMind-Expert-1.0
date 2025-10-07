@@ -116,26 +116,26 @@ export default defineConfig(({ mode }) => {
           hoistTransitiveImports: true,
           // Make React external to all chunks except vendor-react
           preserveModules: false,
-          // CRITICAL FIX: Optimized manualChunks that guarantees React stays in main bundle
+          // CRITICAL FIX: Optimized manualChunks - React stays in MAIN bundle
           manualChunks: (id) => {
-            // CRITICAL: React must ALWAYS be in vendor-react FIRST
+            // FIRST: Ensure React NEVER goes into ANY chunk - stays in main only
             if (id.includes('node_modules')) {
-              // React ecosystem - highest priority, loads FIRST
               if (id.includes('/react/') || id.includes('react-dom') || id.includes('react-is') || id.includes('scheduler') || id.includes('react-router')) {
-                return 'vendor-react';
+                return undefined; // Force into main bundle
               }
             }
 
-            // Heavy features - lazy loaded (React must be external import)
+            // SECOND: Heavy features - lazy loaded (React already excluded)
             if (id.includes('jspdf') || id.includes('html2canvas')) {
               return 'feature-pdf';
             }
             if (id.includes('tesseract') || id.includes('pdfjs-dist')) {
               return 'feature-ocr';
             }
-            if (id.includes('recharts')) {
-              return 'feature-analytics';
-            }
+            // DO NOT split recharts - it causes circular deps with React
+            // if (id.includes('recharts')) {
+            //   return 'feature-analytics';
+            // }
 
             // Vendor splitting by update frequency
             if (id.includes('node_modules')) {
