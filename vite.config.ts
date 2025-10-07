@@ -112,10 +112,17 @@ export default defineConfig(({ mode }) => {
         output: {
           compact: true,
           format: 'es',
-          hoistTransitiveImports: false,
+          hoistTransitiveImports: true,
           // CRITICAL FIX: Optimized manualChunks that guarantees React stays in main bundle
           manualChunks: (id) => {
-            // Heavy features - lazy loaded
+            // CRITICAL: React must ALWAYS be in vendor-react, never in feature chunks
+            if (id.includes('node_modules')) {
+              if (id.includes('react-dom') || id.includes('react-router') || id.includes('/react/') || id.includes('scheduler')) {
+                return 'vendor-react'; // React core stays together - LOADS FIRST
+              }
+            }
+
+            // Heavy features - lazy loaded (React excluded above)
             if (id.includes('jspdf') || id.includes('html2canvas')) {
               return 'feature-pdf';
             }
@@ -128,10 +135,6 @@ export default defineConfig(({ mode }) => {
 
             // Vendor splitting by update frequency
             if (id.includes('node_modules')) {
-              // Stable vendors - rarely updated
-              if (id.includes('react-dom') || id.includes('react-router') || id.includes('/react/')) {
-                return 'vendor-react'; // React core stays together
-              }
 
               // UI vendors - occasionally updated
               if (id.includes('framer-motion') || id.includes('lucide-react') || id.includes('radix-ui')) {
