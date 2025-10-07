@@ -199,11 +199,11 @@ export function usePageVisibility(): boolean {
  * });
  * ```
  */
-export function useThrottledValue<T>(
-  value: T,
+export function useThrottledValue<TValue>(
+  value: TValue,
   options: Omit<UseVisibilityThrottleOptions, 'callback'> = {}
-): T {
-  const [throttledValue, setThrottledValue] = useState<T>(value);
+): TValue {
+  const [throttledValue, setThrottledValue] = useState<TValue>(value);
 
   useVisibilityThrottle({
     ...options,
