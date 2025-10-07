@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { debounce, throttle } from 'lodash';
 
 // Virtual scrolling for large lists
-export const useVirtualScrolling = <T>(
-  items: T[],
+export const useVirtualScrolling = <TItem>(
+  items: TItem[],
   itemHeight: number,
   containerHeight: number
 ) => {
@@ -138,9 +138,9 @@ export const useLazyImage = (src: string, placeholder?: string) => {
 };
 
 // Memoized calculations
-export const useMemoizedCalculation = <T, R>(
-  fn: (data: T) => R,
-  data: T,
+export const useMemoizedCalculation = <TData, TResult>(
+  fn: (data: TData) => TResult,
+  data: TData,
   dependencies: any[] = []
 ) => {
   return useMemo(() => fn(data), [data, ...dependencies]);
@@ -188,14 +188,14 @@ export const usePerformanceMonitor = (componentName: string) => {
 };
 
 // Optimized state updates
-export const useOptimizedState = <T>(initialState: T) => {
+export const useOptimizedState = <TState>(initialState: TState) => {
   const [state, setState] = useState(initialState);
   const stateRef = useRef(state);
 
-  const optimizedSetState = useCallback((newState: T | ((prev: T) => T)) => {
+  const optimizedSetState = useCallback((newState: TState | ((prev: TState) => TState)) => {
     setState(prev => {
-      const nextState = typeof newState === 'function' 
-        ? (newState as (prev: T) => T)(prev)
+      const nextState = typeof newState === 'function'
+        ? (newState as (prev: TState) => TState)(prev)
         : newState;
       
       // Only update if the state actually changed

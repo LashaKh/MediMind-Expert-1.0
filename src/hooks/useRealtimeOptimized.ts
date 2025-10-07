@@ -87,12 +87,12 @@ class RealtimeConnectionPool {
 // Singleton connection pool
 const connectionPool = new RealtimeConnectionPool();
 
-export interface UseRealtimeOptimizedOptions<T> {
+export interface UseRealtimeOptimizedOptions<TPayload> {
   channelName: string;
   table: string;
   filter?: string;
   event?: 'INSERT' | 'UPDATE' | 'DELETE' | '*';
-  onUpdate: (payload: T) => void;
+  onUpdate: (payload: TPayload) => void;
   enabled?: boolean;
 }
 
@@ -118,14 +118,14 @@ export interface UseRealtimeOptimizedOptions<T> {
  * });
  * ```
  */
-export function useRealtimeOptimized<T = any>({
+export function useRealtimeOptimized<TPayload = any>({
   channelName,
   table,
   filter,
   event = '*',
   onUpdate,
   enabled = true
-}: UseRealtimeOptimizedOptions<T>) {
+}: UseRealtimeOptimizedOptions<TPayload>) {
   const listenerIdRef = useRef<string>(`listener-${Date.now()}-${Math.random()}`);
   const onUpdateRef = useRef(onUpdate);
 
@@ -158,7 +158,7 @@ export function useRealtimeOptimized<T = any>({
         filter
       },
       (payload) => {
-        handleUpdate(payload.new as T);
+        handleUpdate(payload.new as TPayload);
       }
     );
 
