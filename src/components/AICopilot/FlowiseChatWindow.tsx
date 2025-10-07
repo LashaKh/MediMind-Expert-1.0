@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { History, Plus, FileText, Sparkles, Stethoscope, Heart, AlertCircle, X, Calculator, TestTube2 } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -37,7 +37,7 @@ interface FlowiseChatWindowProps {
   allowAttachments?: boolean;
 }
 
-export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
+const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   className = '',
   isDisabled = false,
   placeholder,
@@ -762,8 +762,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
   // Connection status
   const isConnected = !flowiseError;
 
-  // Get specialty configuration
-  const getSpecialtyConfig = () => {
+  // Get specialty configuration - memoized to prevent recreation on every render
+  const specialtyConfig = useMemo(() => {
     if (profile?.medical_specialty === 'cardiology') {
       return {
         icon: <Heart className="w-5 h-5" />,
@@ -795,9 +795,7 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
         glowColor: '[#63b3ed]'
       };
     }
-  };
-
-  const specialtyConfig = getSpecialtyConfig();
+  }, [profile?.medical_specialty]);
 
   return (
     <div className={`h-full w-full flex flex-col relative overflow-hidden chat-window-container ${className}`}>
@@ -1456,5 +1454,8 @@ export const FlowiseChatWindow: React.FC<FlowiseChatWindowProps> = ({
     </div>
   );
 };
+
+// Memoize component to prevent unnecessary re-renders
+export const FlowiseChatWindow = React.memo(FlowiseChatWindowComponent);
 
 export default FlowiseChatWindow;

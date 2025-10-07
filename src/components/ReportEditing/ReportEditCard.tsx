@@ -81,19 +81,16 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
   // Emergency session handlers
   useEffect(() => {
     const handleSessionRestored = (event: CustomEvent) => {
-      console.log('🚨 Emergency session restored:', event.detail)
       setCurrentContent(event.detail.content || initialContent)
       setHasUnsavedChanges(false)
     }
 
     const handleServiceDegraded = (event: CustomEvent) => {
-      console.warn('⚠️ Service degraded, entering emergency mode:', event.detail)
       setEmergencyMode(true)
       setUrgencyLevel('high')
     }
 
     const handleMedicalError = (event: CustomEvent) => {
-      console.error('🏥 Medical error detected:', event.detail)
       onError(new Error(`Medical validation error: ${event.detail.message}`))
     }
 
@@ -217,7 +214,6 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
       })
 
     } catch (error) {
-      console.error('Error processing edit instruction:', error)
       onError(error as Error)
       
       // Update metrics with error state

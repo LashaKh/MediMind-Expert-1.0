@@ -232,11 +232,6 @@ const makeFlowiseRequest = async (
       ? `Form 100 - (${diagnosisCode}) ${diagnosisName}`
       : 'Form 100 - Emergency Report';
 
-    console.log('🏷️ Form 100 Card Title Being Sent:', {
-      diagnosisCode,
-      diagnosisName,
-      fullCardTitle: cardTitle
-    });
 
     // Flowise backend requires "question" field format
     // We encode Form 100 metadata within the question text
@@ -253,30 +248,9 @@ ${generatedInitialConsult.trim()}`;
       }
     };
 
-    console.log('🚀 Making request to unified Flowise endpoint:', {
-      endpoint: flowiseEndpoint,
-      cardTitle,
-      type: 'form 100',
-      diagnosisCode,
-      sessionId: payload.sessionId,
-      hasGeneratedConsult: !!generatedInitialConsult,
-      consultLength: generatedInitialConsult.length,
-      questionLength: questionContent.length
-    });
-
-    console.log('📤 Request payload with question format:', {
-      hasQuestion: !!flowiseRequest.question,
-      questionLength: flowiseRequest.question.length,
-      sessionId: flowiseRequest.overrideConfig.sessionId
-    });
-
     // Log the FULL request being sent to Flowise for debugging
-    console.log('📨 FULL Flowise Request Being Sent:');
-    console.log(JSON.stringify(flowiseRequest, null, 2));
-    console.log('🌐 Target Endpoint:', flowiseEndpoint);
 
     const requestStartTime = Date.now();
-    console.log('⏰ Starting Flowise request at:', new Date().toISOString());
 
     // Send request with "question" field format (required by Flowise backend)
     const flowiseResponse = await fetch(flowiseEndpoint, {
@@ -290,69 +264,30 @@ ${generatedInitialConsult.trim()}`;
     clearTimeout(timeoutId);
 
     const requestDuration = Date.now() - requestStartTime;
-    console.log('✅ Flowise response received:', {
-      status: flowiseResponse.status,
-      statusText: flowiseResponse.statusText,
-      duration: `${requestDuration}ms`,
-      ok: flowiseResponse.ok
-    });
 
     if (!flowiseResponse.ok) {
       const errorText = await flowiseResponse.text();
-      console.error('❌ Flowise API error:', {
-        status: flowiseResponse.status,
-        statusText: flowiseResponse.statusText,
-        body: errorText,
-        endpoint: flowiseEndpoint
-      });
       throw new Error(`Flowise error: ${flowiseResponse.status}`);
     }
 
     const flowiseResult = await flowiseResponse.json();
     
-    console.log('📄 Flowise response data:', {
-      responseType: typeof flowiseResult,
-      hasText: !!flowiseResult.text,
-      hasResult: !!flowiseResult.result,
-      hasResponse: !!flowiseResult.response,
-      hasAnswer: !!flowiseResult.answer,
-      dataKeys: Object.keys(flowiseResult),
-      textLength: flowiseResult.text?.length || 0
-    });
     
     // Use EXACT same response parsing as flowise-simple.mjs
     let generatedContent = flowiseResult.text || flowiseResult.response || flowiseResult.answer || 'No response from AI';
 
     // POST-PROCESSING: Parse and insert medical history section
     if (payload.patientData?.existingERReport) {
-      console.log('🔍 Parsing medical history from existing ER report...');
-      console.log('📄 ER Report preview:', payload.patientData.existingERReport.substring(0, 200));
 
       const medicalHistory = parseGeorgianMedicalHistory(payload.patientData.existingERReport);
 
       if (medicalHistory) {
-        console.log('✅ Medical history parsed successfully:', {
-          length: medicalHistory.length,
-          preview: medicalHistory.substring(0, 100)
-        });
 
-        console.log('📋 Form 100 BEFORE insertion:', {
-          length: generatedContent.length,
-          hasMarkdown: generatedContent.includes('**'),
-          preview: generatedContent.substring(0, 200)
-        });
 
         // Insert the parsed medical history into Form 100
         generatedContent = insertBriefAnamnesisIntoForm100(generatedContent, medicalHistory);
 
-        console.log('✅ Medical history inserted into Form 100');
-        console.log('📋 Form 100 AFTER insertion:', {
-          length: generatedContent.length,
-          hasMarkdown: generatedContent.includes('**'),
-          preview: generatedContent.substring(0, 200)
-        });
       } else {
-        console.warn('⚠️ Could not parse medical history section from ER report');
       }
     }
 
@@ -366,10 +301,6 @@ ${generatedInitialConsult.trim()}`;
       }
     };
 
-    console.log('🎉 Form 100 generation successful:', {
-      contentLength: generatedContent.length,
-      preview: generatedContent.substring(0, 100) + '...'
-    });
 
     return transformedResponse;
   } catch (error) {
@@ -434,13 +365,6 @@ export class Form100Service {
       // Use unified endpoint for all Form 100 requests
       const endpoint = UNIFIED_FORM100_ENDPOINT;
 
-      console.log('🎯 Form 100 generation started:', {
-        diagnosisCode: request.primaryDiagnosis?.code,
-        sessionId: request.sessionId,
-        endpoint,
-        isFromSTEMI: options?.isFromSTEMI,
-        troponinPositive: options?.troponinPositive
-      });
 
       // Prepare and send request directly to Flowise (same as chat.ts)
       const payload = prepareFlowisePayload(request as Form100Request);

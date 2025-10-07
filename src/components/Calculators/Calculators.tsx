@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, Suspense, useCallback } from 'react';
 import { Calculator, Heart, Activity, Zap, Wrench, HeartHandshake, Dna, Shield, TestTube, Calendar, Sparkles, Award, ArrowRight, ChevronRight, Target, CheckCircle, Rocket, Play, Crown, Diamond } from 'lucide-react';
 
 // Custom CSS animations for ultra-modern effects
@@ -153,7 +153,7 @@ interface CalculatorCategory {
   }[];
 }
 
-export const Calculators: React.FC = () => {
+const CalculatorsComponent: React.FC = () => {
   const { specialty } = useSpecialty();
   const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState<string>('');
@@ -594,11 +594,13 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
 
   const activeCategory_data = calculatorCategories.find(cat => cat.id === activeCategory);
 
-  // Filter calculators based on search
-  const filteredCalculators = activeCategory_data?.calculators.filter(calc =>
-    calc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    calc.description.toLowerCase().includes(searchQuery.toLowerCase())
-  ) || [];
+  // Filter calculators based on search - memoized to prevent recalculation on every render
+  const filteredCalculators = useMemo(() => {
+    return activeCategory_data?.calculators.filter(calc =>
+      calc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      calc.description.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
+  }, [activeCategory_data, searchQuery]);
 
   // Individual calculator view with mobile optimization
   if (activeCalculator) {
@@ -1161,4 +1163,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
         </div>
       </div>
     );
-}; 
+};
+
+// Memoize component to prevent unnecessary re-renders
+export const Calculators = React.memo(CalculatorsComponent); 

@@ -19,6 +19,7 @@ if (import.meta.env.DEV) {
 // Initialize performance monitoring
 // The performanceMonitor singleton automatically starts tracking Web Vitals (LCP, FID, CLS, TTFB)
 // and resource metrics (memory) upon import. No explicit initialization required.
+console.log('[Performance] Monitoring initialized');
 
 // Stagewise toolbar removed
 

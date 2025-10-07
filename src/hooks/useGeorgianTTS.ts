@@ -207,9 +207,19 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
 
       // Set flag to prevent duplicate calls
       pendingAutoRestartRef.current = true;
-      
-      // Stop current recording - onstop handler will process and restart immediately
-      mediaRecorderRef.current.stop();
+
+      // CRITICAL FIX: Request final buffered data before stopping in auto-segmentation
+      // This ensures no audio is lost between segments
+      if (mediaRecorderRef.current.state === 'recording') {
+        mediaRecorderRef.current.requestData();
+      }
+
+      // Small delay before stop to ensure data is flushed
+      setTimeout(() => {
+        if (mediaRecorderRef.current) {
+          mediaRecorderRef.current.stop();
+        }
+      }, 50); // 50ms is sufficient for auto-segmentation
       
     } catch (error) {
 
@@ -743,9 +753,20 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         // Add successful transcriptions to combined transcript
         successfulResults.forEach(result => {
           if (result.text && result.text.trim()) {
-            const separator = combinedTranscriptRef.current.trim() ? ' ' : '';
+            // Smart text concatenation for natural flow
+            const prevText = combinedTranscriptRef.current.trim();
+            const newText = result.text.trim();
+            let separator = '';
+
+            if (prevText) {
+              // Check if previous text ends with sentence-ending punctuation
+              // Including Georgian punctuation marks
+              const endsWithPunctuation = /[.!?။។៕។၊။।॥।।৷।।।።።።፨።።።።።។]$/.test(prevText);
+              separator = endsWithPunctuation ? ' ' : ' '; // Single space always for now
+            }
+
             const previousLength = combinedTranscriptRef.current.length;
-            combinedTranscriptRef.current += separator + result.text.trim();
+            combinedTranscriptRef.current = prevText + separator + newText;
             
             // Call live transcript callback with new text
             if (onLiveTranscriptUpdate) {
@@ -863,11 +884,21 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         } else {
           finalText = typeof result === 'string' ? result : result.text;
         }
-        
+
         if (finalText && finalText.trim()) {
-          const separator = combinedTranscriptRef.current.trim() ? ' ' : '';
+          // Smart text concatenation for natural flow
+          const prevText = combinedTranscriptRef.current.trim();
+          const newText = finalText.trim();
+          let separator = '';
+
+          if (prevText) {
+            // Check if previous text ends with sentence-ending punctuation
+            const endsWithPunctuation = /[.!?។។៕។၊။।॥।।৷।।।።።።፨።።።።።።]$/.test(prevText);
+            separator = endsWithPunctuation ? ' ' : ' '; // Single space
+          }
+
           const previousLength = combinedTranscriptRef.current.length;
-          combinedTranscriptRef.current += separator + finalText.trim();
+          combinedTranscriptRef.current = prevText + separator + newText;
           
           // Call live transcript callback with final new text
           if (onLiveTranscriptUpdate) {
@@ -953,11 +984,21 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               } else {
                 segmentText = typeof result === 'string' ? result : result.text;
               }
-              
+
               if (segmentText?.trim()) {
-                const separator = combinedTranscriptRef.current.trim() ? ' ' : '';
+                // Smart text concatenation for natural flow
+                const prevText = combinedTranscriptRef.current.trim();
+                const newText = segmentText.trim();
+                let separator = '';
+
+                if (prevText) {
+                  // Check if previous text ends with sentence-ending punctuation
+                  const endsWithPunctuation = /[.!?។។៕។၊။।॥।।৷।।।።።።፨።።።።።។]$/.test(prevText);
+                  separator = endsWithPunctuation ? ' ' : ' '; // Single space
+                }
+
                 const previousLength = combinedTranscriptRef.current.length;
-                combinedTranscriptRef.current += separator + segmentText.trim();
+                combinedTranscriptRef.current = prevText + separator + newText;
                 
                 // DON'T update processed chunk count for auto-segments to prevent race condition
                 // The auto-restart will handle chunk counter reset properly
@@ -1012,11 +1053,20 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             } else {
               segmentText = typeof result === 'string' ? result : result.text;
             }
-            
             if (segmentText?.trim()) {
-              const separator = combinedTranscriptRef.current.trim() ? ' ' : '';
+              // Smart text concatenation for natural flow
+              const prevText = combinedTranscriptRef.current.trim();
+              const newText = segmentText.trim();
+              let separator = '';
+
+              if (prevText) {
+                // Check if previous text ends with sentence-ending punctuation
+                const endsWithPunctuation = /[.!?។។៕។၊។।॥।।৷।।।።።።፨።።።።።។]$/.test(prevText);
+                separator = endsWithPunctuation ? ' ' : ' '; // Single space
+              }
+
               const previousLength = combinedTranscriptRef.current.length;
-              combinedTranscriptRef.current += separator + segmentText.trim();
+              combinedTranscriptRef.current = prevText + separator + newText;
               
               // Update processed chunk count to the total chunks processed (including current unprocessed ones)
               const totalProcessedChunks = processedSegmentsRef.current + unprocessedChunks.length;
@@ -1318,17 +1368,28 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       // Set manual stop flag BEFORE stopping to prevent restart
       manualStopRef.current = true;
       pendingAutoRestartRef.current = false; // Clear any pending auto-restart
-      
+
       // INSTANT UI FEEDBACK: Update UI state immediately for better UX
       setRecordingState(prev => ({ ...prev, isRecording: false }));
-      
-      mediaRecorderRef.current.stop();
-      mediaRecorderRef.current = null;
-      
+
+      // CRITICAL FIX: Request final buffered data before stopping
+      // This forces MediaRecorder to flush any buffered audio immediately
+      if (mediaRecorderRef.current.state === 'recording') {
+        mediaRecorderRef.current.requestData();
+      }
+
+      // Small delay to ensure data is collected before stop
+      setTimeout(() => {
+        if (mediaRecorderRef.current) {
+          mediaRecorderRef.current.stop();
+          mediaRecorderRef.current = null;
+        }
+      }, 100); // 100ms delay to ensure ondataavailable fires
+
       // Reset manual stop flag after a delay (cleanup)
       setTimeout(() => {
         manualStopRef.current = false;
-      }, 1000);
+      }, 1100);
     }
   }, [recordingState.isRecording]);
 

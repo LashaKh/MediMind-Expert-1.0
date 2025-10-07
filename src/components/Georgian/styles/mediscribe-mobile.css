@@ -210,7 +210,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding-bottom: 127px; /* Increased by 30% from 98px - more space for content area */
+    padding-bottom: 0; /* Removed excessive padding that was creating unusable white space */
   }
 
   .mediscribe-mobile-textarea-container {
@@ -740,5 +740,5 @@
 }
 
 .mediscribe-mobile-transcript {
-  padding-bottom: 127px; /* Increased by 30% from 98px - adjusted to match footer height */
+  padding-bottom: 0; /* Removed to eliminate unusable white space in textarea */
 }

@@ -8,8 +8,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Plus,
-  Search,
-  Filter,
   Clock,
   TrendingUp,
   FileText,
@@ -22,7 +20,6 @@ import { templateService } from '../../../services/templateService';
 import { generateTemplateBasedReport } from '../../../services/diagnosisFlowiseService';
 import { TemplateCreationModal } from './TemplateCreationModal';
 import { TemplateManagementCard } from './TemplateManagementCard';
-import { TemplateSearchBar } from './TemplateSearchBar';
 import { TemplateDeleteConfirmation } from './TemplateDeleteConfirmation';
 
 // Skeleton component for loading state - Premium card style
@@ -48,7 +45,6 @@ const TemplateSkeletonCard: React.FC = () => (
 import type { 
   MyTemplatesSectionProps, 
   UserReportTemplate,
-  TemplateSearchFilters,
 } from '../../../types/templates';
 
 export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
@@ -56,18 +52,16 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
   disabled = false,
   hasTranscript,
   transcript,
-  onAddToHistory
+  onAddToHistory,
+  onSwitchToHistory,
+  onTemplateSelect
 }) => {
   // State management
   const [templates, setTemplates] = useState<UserReportTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [searchFilters, setSearchFilters] = useState<TemplateSearchFilters>({
-    search: '',
-    order_by: 'created_at',
-    order_direction: 'desc',
-  });
+  const [editingTemplate, setEditingTemplate] = useState<UserReportTemplate | null>(null);
   const [totalCount, setTotalCount] = useState(0);
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
     isOpen: boolean;
@@ -85,16 +79,15 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
       setLoading(true);
       setError(null);
       
-      const response = await templateService.getUserTemplates(searchFilters);
+      const response = await templateService.getUserTemplates();
       setTemplates(response.templates);
       setTotalCount(response.total_count);
     } catch (err) {
-      console.error('Failed to load templates:', err);
       setError('Failed to load templates. Please try again.');
     } finally {
       setLoading(false);
     }
-  }, [searchFilters]);
+  }, []);
 
   // Initial load - always load templates to show them in the UI
   useEffect(() => {
@@ -108,65 +101,50 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
     setIsCreateModalOpen(false);
   }, []);
 
-  // Handle template selection - Send directly to Flowise endpoint
+  // Handle template update
+  const handleTemplateUpdated = useCallback((updatedTemplate: UserReportTemplate) => {
+    setTemplates(prev => 
+      prev.map(t => t.id === updatedTemplate.id ? updatedTemplate : t)
+    );
+    setEditingTemplate(null);
+  }, []);
+
+  // Handle template selection - Let parent handle generation with processing modal
   const handleTemplateSelect = useCallback(async (template: UserReportTemplate) => {
     if (disabled || !hasTranscript) return; // Prevent usage without transcript content
 
     try {
       // Record usage
       await templateService.recordTemplateUsage(template.id);
-      
+
       // Update local state
-      setTemplates(prev => 
-        prev.map(t => 
-          t.id === template.id 
+      setTemplates(prev =>
+        prev.map(t =>
+          t.id === template.id
             ? { ...t, usage_count: t.usage_count + 1, last_used_at: new Date().toISOString() }
             : t
         )
       );
 
-      console.log('🚀 Custom template: Sending directly to Flowise endpoint');
-      console.log('📋 Template:', template.name);
-      console.log('📄 Transcript length:', transcript.length);
-      
-      // Send directly to Flowise using the same pattern as diagnosis cards
-      const result = await generateTemplateBasedReport(transcript, template);
-      
-      if (result.success) {
-        console.log('✅ Template processing successful');
-        
-        // Add the result to processing history for UI display with same structure as premium reports
-        if (onAddToHistory) {
-          const instruction = `Template: ${template.name}\n${template.example_structure.substring(0, 150)}...`;
-          onAddToHistory(
-            instruction,
-            result.report,
-            'flowise-diagnosis-agent', // Use same model name as premium cards for consistent display
-            undefined, // tokens used - not available
-            45 // Estimated processing time like premium cards
-          );
-          console.log('📈 Added template result to history with premium report structure');
-        }
-        
-        console.log('📄 Generated report:', result.report.substring(0, 200) + '...');
-      } else {
-        console.error('❌ Template processing failed:', result.error);
-        // Fallback to original behavior if Flowise fails
-        const enhancedPrompt = `${template.example_structure}${template.notes ? `\n\nAdditional guidance: ${template.notes}` : ''}`;
-        onSelectTemplate(enhancedPrompt);
+      // Set the selected template so parent knows to use template generation
+      if (onTemplateSelect) {
+        onTemplateSelect(template);
       }
+
+      // Create instruction that triggers template processing in parent
+      const instruction = `CUSTOM_TEMPLATE:${template.name}`;
+
+      // Call parent's onSelectTemplate to trigger processing with modal
+      onSelectTemplate(instruction);
+
     } catch (err) {
-      console.error('Failed to process custom template:', err);
-      // Fallback to original behavior on error
-      const enhancedPrompt = `${template.example_structure}${template.notes ? `\n\nAdditional guidance: ${template.notes}` : ''}`;
-      onSelectTemplate(enhancedPrompt);
+      console.error('Template selection failed:', err);
     }
-  }, [disabled, hasTranscript, transcript, onSelectTemplate]);
+  }, [disabled, hasTranscript, onSelectTemplate, onTemplateSelect]);
 
   // Handle template edit
   const handleTemplateEdit = useCallback((template: UserReportTemplate) => {
-    // TODO: Implement edit modal (will be added in integration phase)
-    console.log('Edit template:', template.id);
+    setEditingTemplate(template);
   }, []);
 
   // Handle template delete - open confirmation modal
@@ -190,7 +168,6 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
       setTotalCount(prev => prev - 1);
       setDeleteConfirmation({ isOpen: false, template: null, isDeleting: false });
     } catch (err) {
-      console.error('Failed to delete template:', err);
       setError('Failed to delete template. Please try again.');
       setDeleteConfirmation(prev => ({ ...prev, isDeleting: false }));
     }
@@ -240,33 +217,7 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
         </button>
       </div>
 
-      {/* Empty Content Message */}
-      {showEmptyTemplateMessage && (
-        <div className="bg-gradient-to-br from-[#90cdf4]/10 to-[#63b3ed]/5 dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/10 rounded-xl border border-[#63b3ed]/20 dark:border-[#2b6cb0]/30 p-4">
-          <div className="flex items-start space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-lg flex items-center justify-center flex-shrink-0">
-              <FileText className="w-4 h-4 text-white" />
-            </div>
-            <div className="flex-1">
-              <h4 className="text-sm font-semibold text-[#1a365d] dark:text-[#90cdf4] mb-1">
-                Custom Templates
-              </h4>
-              <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed] leading-relaxed">
-                Create and manage your own report templates. Templates can be created anytime, but require transcript content or medical documents to generate reports.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
-      {/* Search and Filters */}
-      <TemplateSearchBar
-        searchQuery={searchFilters.search}
-        onSearchChange={(search) => setSearchFilters(prev => ({ ...prev, search }))}
-        filters={searchFilters}
-        onFiltersChange={setSearchFilters}
-        isLoading={loading}
-      />
 
       {/* Loading State with Skeleton Cards */}
       {loading && (
@@ -321,38 +272,54 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
               ))}
             </div>
           ) : (
-            // Empty State
-            <div className="text-center py-12">
-              <div className="w-16 h-16 bg-blue-100 dark:bg-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <FileText className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            // Empty State - Beautiful Production-Ready Design
+            <div className="text-center py-16 px-4">
+              {/* Gradient Icon Container */}
+              <div className="relative mx-auto mb-6 w-24 h-24">
+                {/* Gradient background glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-3xl blur-xl opacity-30"></div>
+                {/* Icon container */}
+                <div className="relative w-full h-full bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                  <FileText className="w-12 h-12 text-white" strokeWidth={1.5} />
+                </div>
               </div>
-              <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                No templates found
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                {searchFilters.search 
-                  ? 'Try adjusting your search terms or filters' 
-                  : 'Create your first template to get started'}
+
+              {/* Main CTA Button with Gradient */}
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="group relative inline-flex items-center justify-center space-x-3 px-8 py-4 rounded-2xl font-semibold text-white transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl transform hover:scale-105"
+                style={{ minHeight: '56px' }}
+              >
+                {/* Gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] transition-all duration-300"></div>
+
+                {/* Hover effect overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#63b3ed] via-[#2b6cb0] to-[#1a365d] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                {/* Button content */}
+                <Plus className="relative w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                <span className="relative text-base">Create Your First Template</span>
+              </button>
+
+              {/* Subtle hint text */}
+              <p className="mt-6 text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                Get started by creating a custom report template for your medical consultations
               </p>
-              {!searchFilters.search && (
-                <button
-                  onClick={() => setIsCreateModalOpen(true)}
-                  disabled={false} // Template creation is always enabled
-                  className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
-                >
-                  Create your first template
-                </button>
-              )}
             </div>
           )}
         </>
       )}
 
-      {/* Template Creation Modal */}
+      {/* Template Creation/Edit Modal */}
       <TemplateCreationModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        isOpen={isCreateModalOpen || !!editingTemplate}
+        onClose={() => {
+          setIsCreateModalOpen(false);
+          setEditingTemplate(null);
+        }}
         onTemplateCreated={handleTemplateCreated}
+        editTemplate={editingTemplate}
+        onTemplateUpdated={handleTemplateUpdated}
       />
 
       {/* Delete Confirmation Modal */}

@@ -34,6 +34,7 @@ const OnboardingFlow = React.lazy(() => import('./components/Onboarding/Onboardi
 const SimpleDiseasesIndex = React.lazy(() => import('./components/Diseases/SimpleDiseasesIndex'));
 const SimpleDiseasePage = React.lazy(() => import('./components/Diseases/SimpleDiseasePage'));
 const AnalyticsPage = React.lazy(() => import('./pages/AnalyticsPage').then(module => ({ default: module.AnalyticsPage })));
+const PerformanceDashboard = React.lazy(() => import('./components/Performance/PerformanceDashboard').then(module => ({ default: module.PerformanceDashboard })));
 
 // Components that need to stay eagerly loaded for core functionality
 import MarkdownFileLoader from './components/Diseases/MarkdownFileLoader';
@@ -176,6 +177,11 @@ function App() {
               <Route path="/analytics" element={
                 <Suspense fallback={<RouteLoader pageName="Analytics" />}>
                   <AnalyticsPage />
+                </Suspense>
+              } />
+              <Route path="/performance" element={
+                <Suspense fallback={<RouteLoader pageName="Performance Dashboard" />}>
+                  <PerformanceDashboard />
                 </Suspense>
               } />
               

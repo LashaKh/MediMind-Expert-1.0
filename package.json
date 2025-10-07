@@ -88,6 +88,7 @@
     "tesseract.js": "^6.0.1",
     "unist-util-visit": "^5.0.0",
     "uuid": "^11.1.0",
+    "web-vitals": "^5.1.0",
     "zod": "^3.25.31",
     "zustand": "^4.5.1"
   },

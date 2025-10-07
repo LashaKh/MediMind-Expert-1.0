@@ -348,6 +348,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
 
       return count;
     } catch (error) {
+      console.error('Error counting Form 100 reports:', error);
       return 0;
     }
   };

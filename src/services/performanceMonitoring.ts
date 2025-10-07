@@ -1,0 +1,219 @@
+import { onLCP, onINP, onCLS, onTTFB, type Metric } from 'web-vitals';
+
+export interface PerformanceMetric {
+  metric_id: string;
+  metric_type: 'lcp' | 'inp' | 'cls' | 'ttfb' | 'cpu' | 'memory';
+  value: number;
+  rating: 'good' | 'needs-improvement' | 'poor';
+  timestamp: number;
+  context: {
+    route: string;
+    deviceCapabilities?: any;
+  };
+}
+
+export interface AggregatedMetrics {
+  lcp: { p95: number; avg: number };
+  inp: { p95: number; avg: number };
+  cls: { median: number; avg: number };
+  ttfb: { p95: number; avg: number };
+  cpu: { avg: number };
+  memory: { avg: number; max: number };
+  deviceProfile: any;
+}
+
+class PerformanceMonitor {
+  private metrics: PerformanceMetric[] = [];
+  private readonly MAX_STORED_METRICS = 100;
+  private readonly STORAGE_KEY = 'performanceMetrics';
+  private resourceMonitoringInterval: number | null = null;
+
+  constructor() {
+    this.initWebVitals();
+    this.initResourceMonitoring();
+    this.loadMetricsFromStorage();
+  }
+
+  private initWebVitals() {
+    onLCP((metric) => this.handleWebVital('lcp', metric));
+    onINP((metric) => this.handleWebVital('inp', metric));
+    onCLS((metric) => this.handleWebVital('cls', metric));
+    onTTFB((metric) => this.handleWebVital('ttfb', metric));
+  }
+
+  private handleWebVital(name: 'lcp' | 'inp' | 'cls' | 'ttfb', metric: Metric) {
+    const rating = this.rateMetric(name, metric.value);
+    this.recordMetric(name, metric.value, rating);
+  }
+
+  private initResourceMonitoring() {
+    // Monitor CPU/Memory every 10 seconds (low overhead)
+    this.resourceMonitoringInterval = window.setInterval(() => {
+      if ('memory' in performance) {
+        const memory = (performance as any).memory;
+        const memoryMB = memory.usedJSHeapSize / 1024 / 1024;
+        this.recordMetric('memory', memoryMB, this.rateMemory(memoryMB));
+      }
+    }, 10000);
+  }
+
+  private recordMetric(
+    name: PerformanceMetric['metric_type'],
+    value: number,
+    rating: PerformanceMetric['rating']
+  ) {
+    const metric: PerformanceMetric = {
+      metric_id: `${name}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      metric_type: name,
+      value,
+      rating,
+      timestamp: Date.now(),
+      context: {
+        route: window.location.pathname,
+        deviceCapabilities: this.getStoredDeviceCapabilities()
+      }
+    };
+
+    this.metrics.push(metric);
+
+    // Trim to max stored metrics
+    if (this.metrics.length > this.MAX_STORED_METRICS) {
+      this.metrics.shift();
+    }
+
+    // Store locally
+    this.saveMetricsToStorage();
+  }
+
+  private rateMetric(
+    name: string,
+    value: number
+  ): 'good' | 'needs-improvement' | 'poor' {
+    // Web Vitals thresholds from https://web.dev/vitals/
+    const thresholds: Record<string, { good: number; poor: number }> = {
+      lcp: { good: 2500, poor: 4000 },
+      inp: { good: 200, poor: 500 },
+      cls: { good: 0.1, poor: 0.25 },
+      ttfb: { good: 800, poor: 1800 }
+    };
+
+    const threshold = thresholds[name];
+    if (!threshold) return 'good';
+
+    if (value <= threshold.good) return 'good';
+    if (value <= threshold.poor) return 'needs-improvement';
+    return 'poor';
+  }
+
+  private rateMemory(memoryMB: number): 'good' | 'needs-improvement' | 'poor' {
+    if (memoryMB <= 100) return 'good';
+    if (memoryMB <= 150) return 'needs-improvement';
+    return 'poor';
+  }
+
+  private getStoredDeviceCapabilities(): any {
+    try {
+      const stored = localStorage.getItem('deviceCapabilities');
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  private saveMetricsToStorage() {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.metrics));
+    } catch (error) {
+    }
+  }
+
+  private loadMetricsFromStorage() {
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY);
+      if (stored) {
+        this.metrics = JSON.parse(stored);
+      }
+    } catch (error) {
+      this.metrics = [];
+    }
+  }
+
+  // Public API
+  getMetrics(): PerformanceMetric[] {
+    return [...this.metrics];
+  }
+
+  getAggregatedMetrics(): AggregatedMetrics {
+    const lcpValues = this.metrics
+      .filter((m) => m.metric_type === 'lcp')
+      .map((m) => m.value);
+    const inpValues = this.metrics
+      .filter((m) => m.metric_type === 'inp')
+      .map((m) => m.value);
+    const clsValues = this.metrics
+      .filter((m) => m.metric_type === 'cls')
+      .map((m) => m.value);
+    const ttfbValues = this.metrics
+      .filter((m) => m.metric_type === 'ttfb')
+      .map((m) => m.value);
+    const memoryValues = this.metrics
+      .filter((m) => m.metric_type === 'memory')
+      .map((m) => m.value);
+
+    return {
+      lcp: {
+        p95: this.percentile(lcpValues, 95),
+        avg: this.average(lcpValues)
+      },
+      inp: {
+        p95: this.percentile(inpValues, 95),
+        avg: this.average(inpValues)
+      },
+      cls: {
+        median: this.percentile(clsValues, 50),
+        avg: this.average(clsValues)
+      },
+      ttfb: {
+        p95: this.percentile(ttfbValues, 95),
+        avg: this.average(ttfbValues)
+      },
+      cpu: { avg: 0 }, // Placeholder for CPU monitoring
+      memory: {
+        avg: this.average(memoryValues),
+        max: memoryValues.length > 0 ? Math.max(...memoryValues) : 0
+      },
+      deviceProfile: this.getStoredDeviceCapabilities()
+    };
+  }
+
+  clearMetrics() {
+    this.metrics = [];
+    try {
+      localStorage.removeItem(this.STORAGE_KEY);
+    } catch (error) {
+    }
+  }
+
+  destroy() {
+    if (this.resourceMonitoringInterval !== null) {
+      clearInterval(this.resourceMonitoringInterval);
+      this.resourceMonitoringInterval = null;
+    }
+  }
+
+  // Statistical utility functions
+  private percentile(values: number[], percentile: number): number {
+    if (values.length === 0) return 0;
+    const sorted = [...values].sort((a, b) => a - b);
+    const index = Math.ceil((percentile / 100) * sorted.length) - 1;
+    return sorted[Math.max(0, index)] || 0;
+  }
+
+  private average(values: number[]): number {
+    if (values.length === 0) return 0;
+    return values.reduce((sum, val) => sum + val, 0) / values.length;
+  }
+}
+
+// Export singleton instance
+export const performanceMonitor = new PerformanceMonitor();

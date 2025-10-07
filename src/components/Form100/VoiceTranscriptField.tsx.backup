@@ -66,6 +66,7 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
         setLocalTranscript(combinedContent);
         onChange(combinedContent);
 
+        console.log('🎯 Live update - Base:', baseContent.length, 'New recording:', fullText.length, 'Total:', combinedContent.length);
       }
     }, [sessionId, onChange])
   });
@@ -133,6 +134,7 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
       // CRITICAL: Capture current transcript content BEFORE starting recording
       // This preserves any manually typed text or previous recordings
       transcriptAtRecordingStartRef.current = localTranscript;
+      console.log('🎯 Starting recording, preserving existing content:', localTranscript.length, 'characters');
       await startRecording();
     }
   };
@@ -141,6 +143,7 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
   const handleStopRecording = async () => {
     await stopRecording();
     // Reset the ref after stopping so next recording starts fresh
+    console.log('🎯 Stopped recording, final content:', localTranscript.length, 'characters');
   };
 
   // Handle clear transcript
@@ -150,6 +153,7 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
     onChange('');
     // Also reset the recording start ref
     transcriptAtRecordingStartRef.current = '';
+    console.log('🎯 Cleared transcript and reset recording ref');
   };
 
   // Format recording duration

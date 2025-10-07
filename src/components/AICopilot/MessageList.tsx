@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Message } from '../../types/chat';
 import { useScrollToBottom } from '../../hooks/chat/useScrollToBottom';
 import { MessageItem } from './MessageItem';
@@ -13,7 +13,7 @@ interface MessageListProps {
   typingMessage?: string;
 }
 
-export const MessageList: React.FC<MessageListProps> = ({
+const MessageListComponent: React.FC<MessageListProps> = ({
   messages,
   isTyping = false,
   className = '',
@@ -26,12 +26,12 @@ export const MessageList: React.FC<MessageListProps> = ({
   const [showScrollButton, setShowScrollButton] = React.useState(false);
 
   // Handle scroll events to detect if user is at bottom
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
-    
+
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
     const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
-    
+
     setIsAtBottom(isNearBottom);
     setShowScrollButton(!isNearBottom && messages.length > 0);
 
@@ -39,7 +39,7 @@ export const MessageList: React.FC<MessageListProps> = ({
     if (scrollTop === 0 && onScrollToTop) {
       onScrollToTop();
     }
-  };
+  }, [messages.length, onScrollToTop]);
 
   // Auto-scroll to bottom when new messages arrive (only if user was already at bottom)
   useEffect(() => {
@@ -55,11 +55,11 @@ export const MessageList: React.FC<MessageListProps> = ({
     }
   }, [isTyping, isAtBottom, messagesEndRef]);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     setIsAtBottom(true);
     setShowScrollButton(false);
-  };
+  }, [messagesEndRef]);
 
   return (
     <div className={`relative flex-1 flex flex-col min-h-0 ${className}`}>
@@ -106,5 +106,8 @@ export const MessageList: React.FC<MessageListProps> = ({
     </div>
   );
 };
+
+// Memoize component to prevent unnecessary re-renders
+export const MessageList = React.memo(MessageListComponent);
 
 export default MessageList; 

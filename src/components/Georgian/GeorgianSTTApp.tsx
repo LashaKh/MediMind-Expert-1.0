@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { 
+import {
   Stethoscope,
   Activity,
   Shield,
@@ -13,7 +13,11 @@ import {
   Search,
   Mic,
   Square,
-  Brain
+  Brain,
+  MoreVertical,
+  Trash2,
+  Copy,
+  ClipboardList
 } from 'lucide-react';
 import { MedicalButton, MedicalCard, MedicalInput, MedicalLoading, MedicalBadge } from '../ui/MedicalDesignSystem';
 import { MedicalDrawer } from '../ui/MedicalDrawer';
@@ -89,6 +93,9 @@ export const GeorgianSTTApp: React.FC = () => {
   // Mobile session editing states
   const [editingSessionId, setEditingSessionId] = useState<string>('');
   const [editingTitle, setEditingTitle] = useState('');
+
+  // Mobile action menu state
+  const [mobileActionMenuId, setMobileActionMenuId] = useState<string>('');
 
   // Store the expand chat function from AIProcessingContent
   const [expandChatFunction, setExpandChatFunction] = useState<(() => void) | null>(null);
@@ -170,7 +177,8 @@ export const GeorgianSTTApp: React.FC = () => {
 
       // Update local transcript immediately (optimistic UI)
       setLocalTranscript(prev => {
-        const separator = prev ? '\n\n' : '';
+        // Use single space for natural text flow (no automatic paragraph breaks)
+        const separator = prev ? ' ' : '';
         return prev + separator + newText.trim();
       });
       
@@ -720,6 +728,9 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Handle transcript update (for editing existing transcript)
   const handleTranscriptUpdate = useCallback(async (transcript: string, duration?: number) => {
+    // CRITICAL: Clear local transcript when user makes manual edits to prevent interference
+    setLocalTranscript('');
+
     if (currentSession) {
       updateTranscript(currentSession.id, transcript, duration);
     } else if (transcript.trim()) {
@@ -1025,6 +1036,16 @@ export const GeorgianSTTApp: React.FC = () => {
                                 >
                                   <Edit3 className="w-3 h-3" />
                                 </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setMobileActionMenuId(mobileActionMenuId === session.id ? '' : session.id);
+                                  }}
+                                  className="opacity-0 group-hover/mobile-title:opacity-100 flex-shrink-0 w-5 h-5 flex items-center justify-center text-[#2b6cb0] hover:text-[#1a365d] transition-all duration-200"
+                                  title="More actions"
+                                >
+                                  <MoreVertical className="w-3 h-3" />
+                                </button>
                               </div>
                             )}
                             
@@ -1045,12 +1066,36 @@ export const GeorgianSTTApp: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                        
-                        {hasTranscript && (
-                          <span className="bg-[#90cdf4]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium">
-                            Transcribed
-                          </span>
-                        )}
+
+                        <div className="flex flex-col items-end space-y-1">
+                          {hasTranscript && (
+                            <span className="bg-[#90cdf4]/20 text-[#1a365d] px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
+                              <Stethoscope className="w-3 h-3" />
+                              <span>Transcribed</span>
+                            </span>
+                          )}
+                          {session.processingResults && session.processingResults.length > 0 && (
+                            <span className="bg-[#dbeafe] text-[#1e40af] px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
+                              <Brain className="w-3 h-3" />
+                              <span>AI: {session.processingResults.length}</span>
+                            </span>
+                          )}
+                          {/* Form 100 count indicator */}
+                          {(() => {
+                            const form100Count = session.processingResults?.filter(result =>
+                              result.userInstruction?.toLowerCase().includes('form 100') ||
+                              result.userInstruction?.toLowerCase().includes('emergency report') ||
+                              result.model?.includes('form100')
+                            ).length || 0;
+
+                            return form100Count > 0 ? (
+                              <span className="bg-[#1e40af] text-white px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
+                                <ClipboardList className="w-3 h-3" />
+                                <span>Form 100: {form100Count}</span>
+                              </span>
+                            ) : null;
+                          })()}
+                        </div>
                       </div>
                       
                       {session.transcript && (
@@ -1079,6 +1124,45 @@ export const GeorgianSTTApp: React.FC = () => {
             </div>
           </div>
         </MedicalDrawer>
+
+        {/* Mobile Action Menu Dropdown */}
+        {mobileActionMenuId && (
+          <div
+            className="fixed inset-0 bg-black/20 z-50 lg:hidden"
+            onClick={() => setMobileActionMenuId('')}
+          >
+            <div
+              className="fixed bottom-20 left-4 right-4 bg-white rounded-xl shadow-2xl border border-gray-200 p-2"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="space-y-1">
+                <button
+                  onClick={() => {
+                    duplicateSession(mobileActionMenuId);
+                    setMobileActionMenuId('');
+                  }}
+                  className="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors flex items-center space-x-3"
+                >
+                  <Copy className="w-4 h-4 text-[#2b6cb0]" />
+                  <span>Duplicate Session</span>
+                </button>
+                <button
+                  onClick={() => {
+                    const sessionToDelete = sessions.find(s => s.id === mobileActionMenuId);
+                    if (sessionToDelete && confirm(`Delete "${sessionToDelete.title}"?`)) {
+                      handleDeleteSession(mobileActionMenuId);
+                    }
+                    setMobileActionMenuId('');
+                  }}
+                  className="w-full px-4 py-3 text-left text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center space-x-3"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span>Delete Session</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Desktop: Side Panel Layout */}
         <div className="hidden lg:flex lg:flex-row h-full">
@@ -1317,3 +1401,7 @@ export const GeorgianSTTApp: React.FC = () => {
     </div>
   );
 };
+
+// Memoized export to prevent unnecessary re-renders
+// No props comparison needed as component has no props
+export default React.memo(GeorgianSTTApp);
