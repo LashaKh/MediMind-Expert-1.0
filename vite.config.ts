@@ -116,63 +116,17 @@ export default defineConfig(({ mode }) => {
           hoistTransitiveImports: true,
           // Make React external to all chunks except vendor-react
           preserveModules: false,
-          // CRITICAL FIX: Optimized manualChunks - React stays in MAIN bundle
+          // CRITICAL FIX: Minimal chunking - only split truly heavy lazy-loaded features
           manualChunks: (id) => {
-            // FIRST: Ensure React NEVER goes into ANY chunk - stays in main only
-            if (id.includes('node_modules')) {
-              if (id.includes('/react/') || id.includes('react-dom') || id.includes('react-is') || id.includes('scheduler') || id.includes('react-router')) {
-                return undefined; // Force into main bundle
-              }
-            }
-
-            // SECOND: Heavy features - lazy loaded (React already excluded)
+            // Only split heavy lazy-loaded libraries
             if (id.includes('jspdf') || id.includes('html2canvas')) {
               return 'feature-pdf';
             }
             if (id.includes('tesseract') || id.includes('pdfjs-dist')) {
               return 'feature-ocr';
             }
-            // DO NOT split recharts - it causes circular deps with React
-            // if (id.includes('recharts')) {
-            //   return 'feature-analytics';
-            // }
-
-            // Vendor splitting by update frequency
-            if (id.includes('node_modules')) {
-
-              // UI vendors - occasionally updated
-              if (id.includes('framer-motion') || id.includes('lucide-react') || id.includes('radix-ui')) {
-                return 'vendor-ui';
-              }
-
-              // Form vendors - occasionally updated
-              if (id.includes('react-hook-form') || id.includes('@hookform') || id.includes('/zod')) {
-                return 'vendor-forms';
-              }
-
-              // Database vendor - critical, keep separate
-              if (id.includes('@supabase')) {
-                return 'vendor-supabase';
-              }
-
-              // Markdown vendor
-              if (id.includes('marked')) {
-                return 'vendor-markdown';
-              }
-
-              // i18n vendors
-              if (id.includes('i18next')) {
-                return 'vendor-i18n';
-              }
-
-              // Utility libraries
-              if (id.includes('lodash') || id.includes('date-fns') || id.includes('uuid') || id.includes('clsx')) {
-                return 'vendor-utils';
-              }
-
-              // All other node_modules go to vendor-misc
-              return 'vendor-misc';
-            }
+            // Everything else (including React, recharts, all vendors) stays in main bundle
+            return undefined;
           },
           assetFileNames: (assetInfo) => {
             const info = assetInfo.name.split('.');
