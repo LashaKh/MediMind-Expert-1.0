@@ -113,26 +113,59 @@ export default defineConfig(({ mode }) => {
           compact: true,
           format: 'es',
           hoistTransitiveImports: false,
-          // CRITICAL FIX: Simplified manualChunks that guarantees React stays in main bundle
-          manualChunks: {
-            // Heavy libraries - separate chunks for lazy loading
-            'vendor-pdf': ['jspdf', 'html2canvas'],
-            'vendor-ocr': ['tesseract.js', 'pdfjs-dist'],
-            'vendor-markdown': ['marked'],
-            'vendor-i18n': ['i18next', 'react-i18next'],
-            'vendor-database': ['@supabase/supabase-js'],
-            'vendor-forms': ['react-hook-form', '@hookform/resolvers/zod', 'zod'],
-            // Keep other utilities together
-            'vendor-utils': [
-              'lodash',
-              'date-fns',
-              'uuid',
-              'classnames',
-              'clsx'
-            ]
-            // IMPORTANT: React, React-DOM, React-Router, Framer-Motion, and other core UI libraries
-            // are intentionally NOT listed here, so they remain in the main bundle (index.js)
-            // This prevents the SECRET_INTERNALS error by ensuring React's internals are available
+          // CRITICAL FIX: Optimized manualChunks that guarantees React stays in main bundle
+          manualChunks: (id) => {
+            // Heavy features - lazy loaded
+            if (id.includes('jspdf') || id.includes('html2canvas')) {
+              return 'feature-pdf';
+            }
+            if (id.includes('tesseract') || id.includes('pdfjs-dist')) {
+              return 'feature-ocr';
+            }
+            if (id.includes('recharts')) {
+              return 'feature-analytics';
+            }
+
+            // Vendor splitting by update frequency
+            if (id.includes('node_modules')) {
+              // Stable vendors - rarely updated
+              if (id.includes('react-dom') || id.includes('react-router') || id.includes('/react/')) {
+                return 'vendor-react'; // React core stays together
+              }
+
+              // UI vendors - occasionally updated
+              if (id.includes('framer-motion') || id.includes('lucide-react') || id.includes('radix-ui')) {
+                return 'vendor-ui';
+              }
+
+              // Form vendors - occasionally updated
+              if (id.includes('react-hook-form') || id.includes('@hookform') || id.includes('/zod')) {
+                return 'vendor-forms';
+              }
+
+              // Database vendor - critical, keep separate
+              if (id.includes('@supabase')) {
+                return 'vendor-supabase';
+              }
+
+              // Markdown vendor
+              if (id.includes('marked')) {
+                return 'vendor-markdown';
+              }
+
+              // i18n vendors
+              if (id.includes('i18next')) {
+                return 'vendor-i18n';
+              }
+
+              // Utility libraries
+              if (id.includes('lodash') || id.includes('date-fns') || id.includes('uuid') || id.includes('clsx')) {
+                return 'vendor-utils';
+              }
+
+              // All other node_modules go to vendor-misc
+              return 'vendor-misc';
+            }
           },
           assetFileNames: (assetInfo) => {
             const info = assetInfo.name.split('.');

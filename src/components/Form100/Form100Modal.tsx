@@ -77,7 +77,6 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
         localStorage.setItem(STEP_KEY, currentStep.toString());
         setHasUnsavedChanges(true);
       } catch (error) {
-        console.warn('Failed to save form data to localStorage:', error);
       }
     }
   }, [formData, currentStep, isOpen, STORAGE_KEY, STEP_KEY]);
@@ -97,11 +96,9 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
             if (savedStep) {
               setCurrentStep(parseInt(savedStep, 10));
             }
-            console.log('✅ Recovered Form 100 draft from localStorage');
           }
         }
       } catch (error) {
-        console.warn('Failed to recover form data from localStorage:', error);
       }
     }
   }, [isOpen, sessionId, STORAGE_KEY, STEP_KEY, initialData]);
@@ -112,9 +109,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(STEP_KEY);
       setHasUnsavedChanges(false);
-      console.log('✅ Cleared Form 100 draft from localStorage');
     } catch (error) {
-      console.warn('Failed to clear saved data:', error);
     }
   }, [STORAGE_KEY, STEP_KEY]);
 
@@ -202,7 +197,6 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
         }
       }
     } catch (error) {
-      console.error('Form generation failed:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       setGenerationError(errorMessage);
       setGeneratedForm(null);

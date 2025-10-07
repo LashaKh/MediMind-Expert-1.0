@@ -259,6 +259,12 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       console.log('🚫 User is typing, skipping transcript update to prevent interference');
       return;
     }
+
+    // Don't update if user just made changes in the last 2 seconds to prevent overriding deletions
+    if (typingTimeoutRef.current) {
+      console.log('🚫 User recently made changes, skipping transcript update to prevent overriding deletions');
+      return;
+    }
     
     // Get current state
     const sessionTranscript = currentSession?.transcript || '';
@@ -301,39 +307,35 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       transcript = sessionTranscript;
       console.log('🔄 Session changed - loading new session transcript');
     } else {
-      // Same session - check for user edits
-      // During live recording, localTranscript grows with new segments, but that's not a "user edit"
-      // Only consider it a user edit if the editable content differs from the START of local transcript
-      const localStart = (localTranscript || '').substring(0, currentEditableLength);
-      const userHasEdits = currentEditableLength > 0 && 
-                          editableTranscript.trim() !== sessionTranscript.trim() &&
-                          editableTranscript.trim() !== localStart.trim() &&
-                          !(localTranscript || '').startsWith(editableTranscript.trim()); // Not just a prefix of live recording
-      
-      if (userHasEdits) {
-        // User has made manual edits within the same session - preserve them
+      // Same session - check for user edits INCLUDING DELETIONS
+      // Key insight: If editableTranscript differs from sessionTranscript, the user made changes
+      // This includes both additions AND deletions
+      const userHasEdits = editableTranscript !== sessionTranscript;
+
+      // Check if this looks like a user deletion (editable is shorter than session)
+      const userDeletedText = currentEditableLength < sessionLength &&
+                             editableTranscript !== sessionTranscript;
+
+      if (userHasEdits || userDeletedText) {
+        // User has made manual edits (including deletions) - ALWAYS preserve them
         transcript = editableTranscript;
-        console.log('✏️ Preserving user edits (manual changes detected within same session)');
-      } else if (sessionLength > currentEditableLength) {
-        // Session has more content (new transcription arrived) - use it
-        transcript = sessionTranscript;
-        console.log('📄 Using session transcript (new content available)');
-      } else if (localLength > currentEditableLength) {
-        // Local has more content - use local
+        console.log('✏️ Preserving user edits/deletions (manual changes detected)');
+      } else if (localLength > sessionLength && recordingState.isRecording) {
+        // Local has MORE content than session AND we're actively recording (live recording added new content)
         transcript = localTranscript || '';
-        console.log('📝 Using local transcript (fresh recording)');
-      } else if (sessionLength > 0) {
-        // Session has content - use it
-        transcript = sessionTranscript;
-        console.log('📄 Using session transcript (most complete)');
-      } else if (localLength > 0) {
-        // No session but we have local content - use local
-        transcript = localTranscript || '';
-        console.log('📝 Using local transcript (available)');
+        console.log('📝 Using local transcript (fresh recording added)');
       } else if (currentEditableLength > 0) {
         // Preserve any existing editable content
         transcript = editableTranscript || '';
         console.log('💾 Preserving current editable content');
+      } else if (sessionLength > 0) {
+        // Session has content - use it only as fallback
+        transcript = sessionTranscript;
+        console.log('📄 Using session transcript (fallback)');
+      } else if (localLength > 0) {
+        // No session but we have local content - use local
+        transcript = localTranscript || '';
+        console.log('📝 Using local transcript (available)');
       } else {
         // Nothing available - start fresh
         transcript = '';
@@ -349,7 +351,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       console.log('⏭️ Transcript unchanged, skipping update');
     }
 
-  }, [currentSession?.id, localTranscript, currentSession?.transcript]); // Remove editableTranscript to prevent infinite loop
+  }, [currentSession?.id, localTranscript, currentSession?.transcript, recordingState.isRecording]); // Remove editableTranscript to prevent infinite loop
   
   // File processing handlers - using simple case study approach
   const handleFileUploadFromContent = useCallback(async (files: File[]) => {
@@ -655,26 +657,26 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   const handleTranscriptChange = (newTranscript: string) => {
     // Mark that user is typing to prevent useEffect interference
     isUserTypingRef.current = true;
-    
+
     // Clear any existing timeout
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
     }
-    
+
+    // IMMEDIATELY update local state to prevent any interference
+    setEditableTranscript(newTranscript);
+
     // Set timeout to mark typing as finished after user stops typing for 1 second
     typingTimeoutRef.current = setTimeout(() => {
       isUserTypingRef.current = false;
-      
+
       // When user finishes typing, save their changes to the database
-      // This ensures manually typed text becomes part of the permanent transcript
-      if (onUpdateTranscript && newTranscript.trim()) {
-        console.log('💾 Saving user typed text to database:', newTranscript.substring(0, 50) + '...');
+      // This ensures manually typed text (including deletions) becomes part of the permanent transcript
+      if (onUpdateTranscript) {
+        console.log('💾 Saving user changes to database:', newTranscript ? newTranscript.substring(0, 50) + '...' : '[EMPTY - User deleted all content]');
         onUpdateTranscript(newTranscript);
       }
     }, 1000);
-    
-    // Update local editable state immediately for responsive UI
-    setEditableTranscript(newTranscript);
   };
 
   // File upload transcription handling only (live updates are handled by parent component)

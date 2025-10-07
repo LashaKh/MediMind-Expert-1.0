@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { User, Activity, Thermometer, Droplets, AlertCircle, ChevronRight } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { GRACEFormData } from '../../../utils/grace2Validator';
@@ -10,7 +10,7 @@ interface GraceFormStep1Props {
   onNext: () => void;
 }
 
-export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
+const GraceFormStep1Component: React.FC<GraceFormStep1Props> = ({
   formData,
   setFormData,
   errors,
@@ -18,7 +18,38 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
 }) => {
   const { t } = useTranslation();
 
-  const isStepComplete = formData.age && formData.heartRate && formData.systolicBP && formData.creatinine;
+  const isStepComplete = useMemo(
+    () => formData.age && formData.heartRate && formData.systolicBP && formData.creatinine,
+    [formData.age, formData.heartRate, formData.systolicBP, formData.creatinine]
+  );
+
+  const handleAgeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({ ...formData, age: e.target.value });
+    },
+    [formData, setFormData]
+  );
+
+  const handleHeartRateChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({ ...formData, heartRate: e.target.value });
+    },
+    [formData, setFormData]
+  );
+
+  const handleSystolicBPChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({ ...formData, systolicBP: e.target.value });
+    },
+    [formData, setFormData]
+  );
+
+  const handleCreatinineChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({ ...formData, creatinine: e.target.value });
+    },
+    [formData, setFormData]
+  );
 
   return (
     <div className="space-y-8">
@@ -49,7 +80,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
               min={18}
               max={120}
               value={formData.age}
-              onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+              onChange={handleAgeChange}
               className="w-full px-6 py-4 text-lg font-semibold bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-white/80 dark:hover:bg-gray-800/80 group-hover:shadow-lg"
               placeholder={t('calculators.cardiology.grace.age_placeholder')}
             />
@@ -77,7 +108,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
               min={30}
               max={300}
               value={formData.heartRate}
-              onChange={(e) => setFormData({ ...formData, heartRate: e.target.value })}
+              onChange={handleHeartRateChange}
               className="w-full px-6 py-4 text-lg font-semibold bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-white/80 dark:hover:bg-gray-800/80 group-hover:shadow-lg"
               placeholder={t('calculators.cardiology.grace.heart_rate_placeholder')}
             />
@@ -105,7 +136,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
               min={60}
               max={300}
               value={formData.systolicBP}
-              onChange={(e) => setFormData({ ...formData, systolicBP: e.target.value })}
+              onChange={handleSystolicBPChange}
               className="w-full px-6 py-4 text-lg font-semibold bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-white/80 dark:hover:bg-gray-800/80 group-hover:shadow-lg"
               placeholder={t('calculators.cardiology.grace.systolic_bp_placeholder')}
             />
@@ -134,7 +165,7 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
               min={0.3}
               max={15.0}
               value={formData.creatinine}
-              onChange={(e) => setFormData({ ...formData, creatinine: e.target.value })}
+              onChange={handleCreatinineChange}
               className="w-full px-6 py-4 text-lg font-semibold bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border-2 border-gray-200/50 dark:border-gray-700/50 rounded-2xl focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/20 transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500 hover:bg-white/80 dark:hover:bg-gray-800/80 group-hover:shadow-lg"
               placeholder={t('calculators.cardiology.grace.creatinine_placeholder')}
             />
@@ -168,3 +199,15 @@ export const GraceFormStep1: React.FC<GraceFormStep1Props> = ({
     </div>
   );
 };
+
+// Memoized export to prevent unnecessary re-renders
+export const GraceFormStep1 = React.memo(GraceFormStep1Component, (prevProps, nextProps) => {
+  // Custom comparison for medical data precision
+  return (
+    prevProps.formData.age === nextProps.formData.age &&
+    prevProps.formData.heartRate === nextProps.formData.heartRate &&
+    prevProps.formData.systolicBP === nextProps.formData.systolicBP &&
+    prevProps.formData.creatinine === nextProps.formData.creatinine &&
+    JSON.stringify(prevProps.errors) === JSON.stringify(nextProps.errors)
+  );
+});

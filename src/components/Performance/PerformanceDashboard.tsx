@@ -1,391 +1,299 @@
-/**
- * Performance Dashboard Component for Medical News Monitoring
- * Displays real-time performance metrics and alerts
- */
+import React, { useState, useEffect } from 'react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card';
+import { performanceMonitor } from '../../services/performanceMonitoring';
+import { usePerformanceMode } from '../../contexts/PerformanceModeContext';
+import { Activity, Cpu, HardDrive, Gauge, Monitor, Zap, RefreshCw, CheckCircle, AlertTriangle } from 'lucide-react';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { performanceMonitor, PerformanceReport, WebVital } from '../../utils/performanceMonitoring';
-
-interface PerformanceStats {
-  sessionId: string;
-  metricsCount: number;
-  vitalsCount: number;
-  errorsCount: number;
-  isMonitoring: boolean;
-  medicalContentMetrics: number;
-}
-
-interface AlertThresholds {
-  pageLoadTime: number;
-  apiResponseTime: number;
-  errorRate: number;
-  clsScore: number;
-  lcpTime: number;
-}
-
-interface PerformanceAlert {
-  id: string;
-  type: 'warning' | 'error' | 'critical';
-  message: string;
-  timestamp: number;  
-  metric?: string;
-  value?: number;
-  medicalContent?: boolean;
+interface PerformanceMetrics {
+  lcp?: number;
+  inp?: number;
+  cls?: number;
+  ttfb?: number;
+  memoryUsage?: number;
+  timestamp: number;
 }
 
 export const PerformanceDashboard: React.FC = () => {
-  const [stats, setStats] = useState<PerformanceStats | null>(null);
-  const [report, setReport] = useState<PerformanceReport | null>(null);
-  const [alerts, setAlerts] = useState<PerformanceAlert[]>([]);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [refreshInterval, setRefreshInterval] = useState<NodeJS.Timeout | null>(null);
+  const { capabilities, performanceMode, setPerformanceMode } = usePerformanceMode();
+  const [metrics, setMetrics] = useState<PerformanceMetrics>({ timestamp: Date.now() });
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const thresholds: AlertThresholds = {
-    pageLoadTime: 2000, // 2 seconds
-    apiResponseTime: 200, // 200ms
-    errorRate: 0.05, // 5%
-    clsScore: 0.25, // Poor CLS threshold
-    lcpTime: 4000 // Poor LCP threshold
-  };
-
-  /**
-   * Refresh performance data
-   */
-  const refreshData = useCallback(() => {
-    try {
-      const currentStats = performanceMonitor.getStats();
-      setStats(currentStats);
-
-      const currentReport = performanceMonitor.generateReport();
-      setReport(currentReport);
-      
-      // Check for new alerts
-      checkForAlerts(currentReport);
-    } catch (error) {
-
-    }
-  }, []);
-
-  /**
-   * Check for performance alerts
-   */
-  const checkForAlerts = (report: PerformanceReport) => {
-    const newAlerts: PerformanceAlert[] = [];
-
-    // Check page load times
-    const avgPageLoad = report.pageLoadMetrics
-      .filter(m => m.name === 'full_page_load')
-      .reduce((sum, m, _, arr) => sum + m.value / arr.length, 0);
-
-    if (avgPageLoad > thresholds.pageLoadTime) {
-      newAlerts.push({
-        id: `page-load-${Date.now()}`,
-        type: avgPageLoad > thresholds.pageLoadTime * 2 ? 'critical' : 'warning',
-        message: `Slow page load detected: ${Math.round(avgPageLoad)}ms`,
-        timestamp: Date.now(),
-        metric: 'page_load',
-        value: avgPageLoad
-      });
-    }
-
-    // Check API response times
-    const avgApiResponse = report.apiMetrics
-      .reduce((sum, m, _, arr) => sum + m.value / arr.length, 0);
-
-    if (avgApiResponse > thresholds.apiResponseTime) {
-      newAlerts.push({
-        id: `api-response-${Date.now()}`,
-        type: avgApiResponse > thresholds.apiResponseTime * 5 ? 'error' : 'warning',
-        message: `Slow API responses: ${Math.round(avgApiResponse)}ms average`,
-        timestamp: Date.now(),
-        metric: 'api_response',
-        value: avgApiResponse
-      });
-    }
-
-    // Check Web Vitals
-    report.webVitals.forEach(vital => {
-      if (vital.rating === 'poor') {
-        newAlerts.push({
-          id: `vital-${vital.name}-${Date.now()}`,
-          type: 'error',
-          message: `Poor ${vital.name}: ${Math.round(vital.value)}${vital.name === 'CLS' ? '' : 'ms'}`,
-          timestamp: Date.now(),
-          metric: vital.name.toLowerCase(),
-          value: vital.value
-        });
-      }
-    });
-
-    // Check medical content performance
-    const medicalMetrics = report.pageLoadMetrics.filter(m => m.medicalContent);
-    if (medicalMetrics.length > 0) {
-      const avgMedicalLoad = medicalMetrics
-        .reduce((sum, m, _, arr) => sum + m.value / arr.length, 0);
-
-      if (avgMedicalLoad > thresholds.pageLoadTime * 1.5) {
-        newAlerts.push({
-          id: `medical-content-${Date.now()}`,
-          type: 'warning',
-          message: `Slow medical content loading: ${Math.round(avgMedicalLoad)}ms`,
-          timestamp: Date.now(),
-          metric: 'medical_content',
-          value: avgMedicalLoad,
-          medicalContent: true
-        });
-      }
-    }
-
-    // Update alerts (keep only recent alerts)
-    const recentAlerts = alerts.filter(alert => Date.now() - alert.timestamp < 300000); // 5 minutes
-    setAlerts([...recentAlerts, ...newAlerts]);
-  };
-
-  /**
-   * Get alert color class
-   */
-  const getAlertColorClass = (type: PerformanceAlert['type']) => {
-    switch (type) {
-      case 'critical': return 'bg-red-100 border-red-500 text-red-800';
-      case 'error': return 'bg-orange-100 border-orange-500 text-orange-800';
-      case 'warning': return 'bg-yellow-100 border-yellow-500 text-yellow-800';
-      default: return 'bg-blue-100 border-blue-500 text-blue-800';
-    }
-  };
-
-  /**
-   * Get Web Vital rating color
-   */
-  const getVitalRatingColor = (rating: WebVital['rating']) => {
-    switch (rating) {
-      case 'good': return 'text-green-600';
-      case 'needs-improvement': return 'text-yellow-600';
-      case 'poor': return 'text-red-600';
-      default: return 'text-gray-600';
-    }
-  };
-
-  /**
-   * Format time duration
-   */
-  const formatDuration = (ms: number) => {
-    if (ms < 1000) return `${Math.round(ms)}ms`;
-    return `${(ms / 1000).toFixed(1)}s`;
-  };
-
-  /**
-   * Format percentage
-   */
-  const formatPercent = (value: number) => {
-    return `${(value * 100).toFixed(1)}%`;
-  };
-
-  // Setup auto-refresh
+  // Fetch latest metrics
   useEffect(() => {
-    refreshData();
-    
-    const interval = setInterval(refreshData, 5000); // Refresh every 5 seconds
-    setRefreshInterval(interval);
-
-    return () => {
-      if (interval) clearInterval(interval);
+    const fetchMetrics = async () => {
+      const aggregated = performanceMonitor.getAggregatedMetrics();
+      setMetrics({
+        lcp: aggregated.lcp.p95,
+        inp: aggregated.inp.p95,
+        cls: aggregated.cls.median,
+        ttfb: aggregated.ttfb.p95,
+        memoryUsage: aggregated.memory.avg,
+        timestamp: Date.now()
+      });
     };
-  }, [refreshData]);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (refreshInterval) clearInterval(refreshInterval);
-    };
-  }, [refreshInterval]);
+    fetchMetrics();
+    const interval = setInterval(fetchMetrics, 3000);
 
-  if (!stats || !report) {
-    return (
-      <div className="fixed bottom-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4">
-        <div className="flex items-center space-x-2">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-          <span className="text-sm text-gray-600">Loading performance data...</span>
-        </div>
-      </div>
-    );
-  }
+    return () => clearInterval(interval);
+  }, [refreshKey]);
+
+  // Clear metrics
+  const handleClearMetrics = () => {
+    performanceMonitor.clearMetrics();
+    setRefreshKey(prev => prev + 1);
+  };
+
+  // Format metric value
+  const formatMetric = (value: number | undefined, unit: string = 'ms'): string => {
+    if (value === undefined) return 'N/A';
+    if (unit === 'MB') return `${value.toFixed(2)} ${unit}`;
+    return `${value.toFixed(0)} ${unit}`;
+  };
+
+  // Get metric status
+  const getMetricStatus = (value: number | undefined, threshold: number): 'good' | 'needs-improvement' | 'poor' => {
+    if (value === undefined) return 'needs-improvement';
+    if (value <= threshold) return 'good';
+    if (value <= threshold * 1.5) return 'needs-improvement';
+    return 'poor';
+  };
+
+  // Get status color
+  const getStatusColor = (status: 'good' | 'needs-improvement' | 'poor'): string => {
+    switch (status) {
+      case 'good':
+        return 'text-emerald-600 bg-emerald-50 border-emerald-200';
+      case 'needs-improvement':
+        return 'text-amber-600 bg-amber-50 border-amber-200';
+      case 'poor':
+        return 'text-red-600 bg-red-50 border-red-200';
+    }
+  };
+
+  // Web Vitals thresholds
+  const LCP_THRESHOLD = 2500; // ms
+  const INP_THRESHOLD = 200; // ms
+  const CLS_THRESHOLD = 0.1;
+  const TTFB_THRESHOLD = 800; // ms
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
-      {/* Alerts */}
-      {alerts.length > 0 && (
-        <div className="mb-4 space-y-2">
-          {alerts.slice(0, 3).map(alert => (
-            <div
-              key={alert.id}
-              className={`p-3 rounded-lg border-l-4 ${getAlertColorClass(alert.type)} shadow-lg max-w-sm`}
-            >
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-medium text-sm">{alert.message}</p>
-                  {alert.medicalContent && (
-                    <p className="text-xs mt-1 opacity-75">Medical Content</p>
-                  )}
-                </div>
-                <button
-                  onClick={() => setAlerts(alerts.filter(a => a.id !== alert.id))}
-                  className="ml-2 text-gray-400 hover:text-gray-600"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Main Dashboard */}
-      <div className="bg-white border border-gray-200 rounded-lg shadow-lg">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900 p-4 sm:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <div 
-          className="p-4 cursor-pointer flex items-center justify-between"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <div className="flex items-center space-x-3">
-            <div className={`w-3 h-3 rounded-full ${stats.isMonitoring ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-            <div>
-              <h3 className="font-medium text-gray-900">Performance</h3>
-              <p className="text-xs text-gray-500">
-                {stats.medicalContentMetrics} medical metrics tracked
-              </p>
-            </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Performance Dashboard
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              Real-time performance monitoring and device capabilities
+            </p>
           </div>
-          <div className="flex items-center space-x-2">
-            {alerts.length > 0 && (
-              <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
-                {alerts.length}
-              </span>
-            )}
-            <svg 
-              className={`w-4 h-4 text-gray-400 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+          <button
+            onClick={handleClearMetrics}
+            className="inline-flex items-center space-x-2 px-4 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" />
+            <span>Clear Metrics</span>
+          </button>
+        </div>
+
+        {/* Web Vitals Section */}
+        <div>
+          <h2 className="text-xl font-semibold mb-4 flex items-center space-x-2">
+            <Activity className="w-5 h-5 text-blue-600" />
+            <span>Core Web Vitals</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* LCP Card */}
+            <Card className={`\${getStatusColor(getMetricStatus(metrics.lcp, LCP_THRESHOLD))} border-2`}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium flex items-center justify-between">
+                  <span>LCP</span>
+                  <Gauge className="w-4 h-4" />
+                </CardTitle>
+                <CardDescription className="text-xs">Largest Contentful Paint</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{formatMetric(metrics.lcp)}</div>
+                <div className="text-xs mt-1">Target: &lt;{LCP_THRESHOLD}ms</div>
+              </CardContent>
+            </Card>
+
+            {/* INP Card */}
+            <Card className={`\${getStatusColor(getMetricStatus(metrics.inp, INP_THRESHOLD))} border-2`}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium flex items-center justify-between">
+                  <span>INP</span>
+                  <Zap className="w-4 h-4" />
+                </CardTitle>
+                <CardDescription className="text-xs">Interaction to Next Paint</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{formatMetric(metrics.inp)}</div>
+                <div className="text-xs mt-1">Target: &lt;{INP_THRESHOLD}ms</div>
+              </CardContent>
+            </Card>
+
+            {/* CLS Card */}
+            <Card className={`\${getStatusColor(getMetricStatus(metrics.cls, CLS_THRESHOLD))} border-2`}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium flex items-center justify-between">
+                  <span>CLS</span>
+                  <Monitor className="w-4 h-4" />
+                </CardTitle>
+                <CardDescription className="text-xs">Cumulative Layout Shift</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{formatMetric(metrics.cls, '')}</div>
+                <div className="text-xs mt-1">Target: &lt;{CLS_THRESHOLD}</div>
+              </CardContent>
+            </Card>
+
+            {/* TTFB Card */}
+            <Card className={`\${getStatusColor(getMetricStatus(metrics.ttfb, TTFB_THRESHOLD))} border-2`}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium flex items-center justify-between">
+                  <span>TTFB</span>
+                  <Activity className="w-4 h-4" />
+                </CardTitle>
+                <CardDescription className="text-xs">Time to First Byte</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{formatMetric(metrics.ttfb)}</div>
+                <div className="text-xs mt-1">Target: &lt;{TTFB_THRESHOLD}ms</div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-        {/* Expanded Content */}
-        {isExpanded && (
-          <div className="border-t border-gray-200 p-4 max-w-md">
-            {/* Session Info */}
-            <div className="mb-4">
-              <h4 className="font-medium text-gray-900 mb-2">Session</h4>
-              <div className="text-sm text-gray-600 space-y-1">
-                <p>ID: {stats.sessionId.split('_')[2]}</p>
-                <p>Total Metrics: {stats.metricsCount}</p>
-                <p>Medical Content: {stats.medicalContentMetrics}</p>
-                <p>Errors: {stats.errorsCount}</p>
-              </div>
-            </div>
+        {/* Resource Usage Section */}
+        <div>
+          <h2 className="text-xl font-semibold mb-4 flex items-center space-x-2">
+            <Cpu className="w-5 h-5 text-blue-600" />
+            <span>Resource Usage</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Memory Usage */}
+            <Card className="bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Memory Usage</span>
+                  <HardDrive className="w-5 h-5 text-blue-600" />
+                </CardTitle>
+                <CardDescription>Current JS heap size</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{formatMetric(metrics.memoryUsage, 'MB')}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                  Target: &lt;150MB
+                </div>
+                <div className="mt-4 h-2 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full transition-all ${
+                      (metrics.memoryUsage || 0) < 150 ? 'bg-emerald-500' : 'bg-red-500'
+                    }`}
+                    style={{ width: `${Math.min(((metrics.memoryUsage || 0) / 200) * 100, 100)}%` }}
+                  />
+                </div>
+              </CardContent>
+            </Card>
 
-            {/* Web Vitals */}
-            {report.webVitals.length > 0 && (
-              <div className="mb-4">
-                <h4 className="font-medium text-gray-900 mb-2">Web Vitals</h4>
-                <div className="space-y-2">
-                  {report.webVitals.map(vital => (
-                    <div key={vital.id} className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">{vital.name}</span>
-                      <div className="text-right">
-                        <span className={`text-sm font-medium ${getVitalRatingColor(vital.rating)}`}>
-                          {vital.name === 'CLS' ? vital.value.toFixed(3) : formatDuration(vital.value)}
-                        </span>
-                        <p className={`text-xs ${getVitalRatingColor(vital.rating)}`}>
-                          {vital.rating}
-                        </p>
-                      </div>
-                    </div>
+            {/* Performance Mode */}
+            <Card className="bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Performance Mode</span>
+                  <Zap className="w-5 h-5 text-blue-600" />
+                </CardTitle>
+                <CardDescription>Current optimization level</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center space-x-3">
+                  <div className={`text-3xl font-bold \${
+                    performanceMode === 'full' ? 'text-emerald-600' :
+                    performanceMode === 'balanced' ? 'text-amber-600' :
+                    'text-blue-600'
+                  }`}>
+                    {performanceMode.charAt(0).toUpperCase() + performanceMode.slice(1)}
+                  </div>
+                  {performanceMode === 'full' && <CheckCircle className="w-6 h-6 text-emerald-600" />}
+                  {performanceMode === 'lite' && <AlertTriangle className="w-6 h-6 text-blue-600" />}
+                </div>
+                <div className="mt-4 space-y-2">
+                  {['full', 'balanced', 'lite'].map((mode) => (
+                    <button
+                      key={mode}
+                      onClick={() => setPerformanceMode(mode as any)}
+                      className={`w-full px-4 py-2 rounded-lg text-sm font-medium transition-colors \${
+                        performanceMode === mode
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'
+                      }`}
+                    >
+                      {mode.charAt(0).toUpperCase() + mode.slice(1)} Mode
+                    </button>
                   ))}
                 </div>
-              </div>
-            )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
-            {/* Medical Content Performance */}
-            <div className="mb-4">
-              <h4 className="font-medium text-gray-900 mb-2">Medical Content</h4>
-              <div className="space-y-2 text-sm">
-                {report.medicalContentPerformance.newsLoadTime > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">News Load</span>
-                    <span className="font-medium">
-                      {formatDuration(report.medicalContentPerformance.newsLoadTime)}
-                    </span>
+        {/* Device Capabilities Section */}
+        {capabilities && (
+          <div>
+            <h2 className="text-xl font-semibold mb-4 flex items-center space-x-2">
+              <Monitor className="w-5 h-5 text-blue-600" />
+              <span>Device Capabilities</span>
+            </h2>
+            <Card className="bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-slate-700">
+              <CardContent className="pt-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">CPU Cores</div>
+                    <div className="text-2xl font-bold">{capabilities.cpuCores}</div>
                   </div>
-                )}
-                {report.medicalContentPerformance.calculatorResponseTime > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Calculator</span>
-                    <span className="font-medium">
-                      {formatDuration(report.medicalContentPerformance.calculatorResponseTime)}
-                    </span>
+                  <div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Memory</div>
+                    <div className="text-2xl font-bold">{capabilities.deviceMemory} GB</div>
                   </div>
-                )}
-                {report.medicalContentPerformance.searchResultsTime > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Search</span>
-                    <span className="font-medium">
-                      {formatDuration(report.medicalContentPerformance.searchResultsTime)}
-                    </span>
+                  <div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">GPU Tier</div>
+                    <div className={`text-2xl font-bold \${
+                      capabilities.gpuTier === 'high' ? 'text-emerald-600' :
+                      capabilities.gpuTier === 'medium' ? 'text-amber-600' :
+                      'text-blue-600'
+                    }`}>
+                      {capabilities.gpuTier.charAt(0).toUpperCase() + capabilities.gpuTier.slice(1)}
+                    </div>
                   </div>
-                )}
-                {report.medicalContentPerformance.imageLoadTime > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Images</span>
-                    <span className="font-medium">
-                      {formatDuration(report.medicalContentPerformance.imageLoadTime)}
-                    </span>
+                  <div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Connection</div>
+                    <div className="text-2xl font-bold uppercase">{capabilities.connectionType}</div>
                   </div>
-                )}
-              </div>
-            </div>
-
-            {/* Network & Device Info */}
-            <div className="mb-4">
-              <h4 className="font-medium text-gray-900 mb-2">Environment</h4>
-              <div className="text-sm text-gray-600 space-y-1">
-                <p>Connection: {report.networkInfo.effectiveType}</p>
-                <p>RTT: {report.networkInfo.rtt}ms</p>
-                {report.deviceInfo.memory && (
-                  <p>Memory: {report.deviceInfo.memory}GB</p>
-                )}
-                {report.deviceInfo.cores && (
-                  <p>Cores: {report.deviceInfo.cores}</p>
-                )}
-                <p>Device: {report.deviceInfo.isMobile ? 'Mobile' : report.deviceInfo.isTablet ? 'Tablet' : 'Desktop'}</p>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex space-x-2">
-              <button
-                onClick={refreshData}
-                className="flex-1 bg-blue-600 text-white text-sm py-2 px-3 rounded hover:bg-blue-700 transition-colors"
-              >
-                Refresh
-              </button>
-              <button
-                onClick={() => {
-                  performanceMonitor.reportMetrics();
-                  setAlerts([]);
-                }}
-                className="flex-1 bg-gray-600 text-white text-sm py-2 px-3 rounded hover:bg-gray-700 transition-colors"
-              >
-                Report
-              </button>
-            </div>
+                </div>
+                <div className="mt-6 flex items-center space-x-4 text-sm">
+                  <div className={`flex items-center space-x-2 \${capabilities.supportsWebGL ? 'text-emerald-600' : 'text-gray-400'}`}>
+                    {capabilities.supportsWebGL ? <CheckCircle className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
+                    <span>WebGL</span>
+                  </div>
+                  <div className={`flex items-center space-x-2 \${capabilities.prefersReducedMotion ? 'text-blue-600' : 'text-gray-400'}`}>
+                    {capabilities.prefersReducedMotion ? <CheckCircle className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
+                    <span>Reduced Motion</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         )}
+
+        {/* Last Updated */}
+        <div className="text-center text-sm text-gray-500 dark:text-gray-400">
+          Last updated: {new Date(metrics.timestamp).toLocaleTimeString()}
+        </div>
       </div>
     </div>
   );
 };
-
-export default PerformanceDashboard;

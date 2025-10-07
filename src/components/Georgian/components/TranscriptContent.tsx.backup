@@ -30,9 +30,6 @@ import { EnhancedAttachment } from '../../../utils/chatFileProcessor';
 import type { ProgressInfo } from '../../../utils/pdfTextExtractor';
 import { countEmptyFields, hasEmptyFields } from '../../../utils/markdownFormatter';
 
-// Import text formatting utilities
-import { formatForTextareaDisplay } from '../../../utils/textFormatting';
-
 interface RecordingState {
   isRecording: boolean;
   isPaused: boolean;
@@ -164,11 +161,6 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
       setTitleError(true);
     }
   }, [showTitleError]);
-
-  // Format transcript for display
-  const formattedTranscript = useMemo(() => {
-    return formatForTextareaDisplay(transcript);
-  }, [transcript]);
 
   // Calculate empty fields in transcript
   const emptyFieldsCount = countEmptyFields(transcript);
@@ -475,8 +467,10 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                 className="relative h-full p-0"
                 style={{ pointerEvents: isTitleEmpty ? 'auto' : undefined }}
                 onClick={(e) => {
+                  console.log('Textarea container clicked', { isTitleEmpty, target: e.target });
                   // Show title error if trying to type without title (handles disabled textarea clicks)
                   if (isTitleEmpty) {
+                    console.log('Triggering title error');
                     setTitleError(true);
                     setTitleTouched(true);
                     // Trigger parent error state
@@ -500,7 +494,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
 
                   <textarea
                     ref={textareaRef}
-                    value={formattedTranscript}
+                    value={transcript}
                     onChange={(e) => onEditChange(e.target.value)}
                     className={`transcription-textarea w-full resize-none border-0 px-5 py-5 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed mediscribe-mobile-textarea ${isKeyboardAdjusted ? 'keyboard-adjusted' : ''}`}
                     placeholder={isTitleEmpty ? "Please enter a session title above to start..." : ""}
@@ -511,7 +505,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                       fontSize: '16px', // Prevents zoom on iOS
                       WebkitTextSizeAdjust: '100%', // Prevent text size adjustment
                       textSizeAdjust: '100%',
-                      height: '100%', // Always use full height - removed 60px subtraction
+                      height: isKeyboardAdjusted ? 'calc(100% - 60px)' : '100%',
                       minHeight: isKeyboardAdjusted ? '200px' : 'auto',
                       cursor: isTitleEmpty ? 'not-allowed' : 'text',
                       pointerEvents: isTitleEmpty ? 'none' : 'auto',

@@ -138,7 +138,6 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
       onSelectTemplate(instruction);
 
     } catch (err) {
-      console.error('Template selection failed:', err);
     }
   }, [disabled, hasTranscript, onSelectTemplate, onTemplateSelect]);
 
@@ -216,8 +215,6 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
           <span className="hidden sm:inline">Add Template</span>
         </button>
       </div>
-
-
 
       {/* Loading State with Skeleton Cards */}
       {loading && (

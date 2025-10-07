@@ -280,10 +280,8 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
         const reportData = JSON.parse(savedReport);
         setGeneratedForm100Content(reportData.generatedForm);
         setForm100GeneratedAt(new Date(reportData.generatedAt));
-        console.log('✅ Recovered Form 100 report from localStorage for this analysis');
       }
     } catch (error) {
-      console.warn('Error loading Form 100 from localStorage:', error);
     }
 
     if (sessionId && analysisType.supportsForm100) {
@@ -305,12 +303,10 @@ export const MedicalAnalysisCard: React.FC<MedicalAnalysisCardProps> = ({
             if (relatedReport && !generatedForm100Content) {
               setGeneratedForm100Content(relatedReport.generatedForm);
               setForm100GeneratedAt(relatedReport.generatedAt || relatedReport.createdAt);
-              console.log('✅ Found existing Form 100 report for this analysis in database:', relatedReport.id);
             }
           }
         })
         .catch(error => {
-          console.error('Error loading recent reports count:', error);
         });
     }
   }, [sessionId, analysisType.supportsForm100, analysis.aiResponse, analysisType.type, analysisStorageKey, generatedForm100Content]);
@@ -404,9 +400,7 @@ Medical AI Processing System`;
       // Remove from localStorage
       try {
         localStorage.removeItem(analysisStorageKey);
-        console.log('✅ Form 100 report deleted from localStorage');
       } catch (error) {
-        console.warn('Failed to remove Form 100 from localStorage:', error);
       }
 
       // Update reports count
@@ -451,7 +445,6 @@ Medical AI Processing System`;
 
   const handleForm100EditError = (error: any) => {
     setIsForm100EditMode(false);
-    console.error('Form 100 edit error:', error);
   };
 
   const handleCancelEdit = () => {
@@ -614,9 +607,7 @@ Medical AI Processing System`;
                   timestamp: analysis.timestamp
                 };
                 localStorage.setItem(analysisStorageKey, JSON.stringify(reportData));
-                console.log('✅ Form 100 report saved to localStorage for persistence');
               } catch (error) {
-                console.warn('Failed to save Form 100 to localStorage:', error);
               }
               
               // Update the reports count to reflect the new report
@@ -627,7 +618,6 @@ Medical AI Processing System`;
                 form100Modal.closeModal();
               }, 2000); // Give user time to see success message
               
-              console.log('✅ Form 100 report generated and stored locally');
               
               // Return the generated form to the modal
               return result.data.generatedForm;
@@ -637,7 +627,6 @@ Medical AI Processing System`;
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
             setForm100Error(errorMessage);
-            console.error('Form 100 generation error:', error);
             throw error;
           } finally {
             setIsGeneratingForm100(false);

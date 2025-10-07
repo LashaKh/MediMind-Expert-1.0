@@ -240,6 +240,11 @@ export const useForm100Generation = (
       // Update generation status
       setFormDataCallback({ generationStatus: 'processing' });
       
+      console.log('🎯 Form 100 generation started with options:', {
+        diagnosisCode: formData.primaryDiagnosis?.code,
+        isFromSTEMI: options?.isFromSTEMI,
+        troponinPositive: options?.troponinPositive
+      });
       
       // Generate form using Flowise integration with diagnosis-specific endpoint
       const result = await Form100Service.generateForm100(formData, options);
@@ -264,6 +269,7 @@ export const useForm100Generation = (
               'completed',
               result.data.generatedForm
             );
+            console.log('✅ Form 100 report updated in database:', formData.id);
           } else {
             // Create new record
             const completeFormData = {
@@ -274,11 +280,14 @@ export const useForm100Generation = (
             const saveResult = await Form100Service.saveForm100Request(completeFormData);
             if (saveResult.success && saveResult.data?.id) {
               setFormDataCallback({ id: saveResult.data.id });
+              console.log('✅ Form 100 report saved to database:', saveResult.data.id);
             } else {
+              console.error('❌ Failed to save Form 100 report:', saveResult.error);
               // Don't throw error - generation was successful, just saving failed
             }
           }
         } catch (saveError) {
+          console.error('❌ Error saving Form 100 report to database:', saveError);
           // Don't throw error - generation was successful, just saving failed
         }
       } else {

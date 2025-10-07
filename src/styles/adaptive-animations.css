@@ -1,0 +1,309 @@
+/**
+ * Adaptive Animation Stylesheet
+ *
+ * Provides GPU-aware animation fallbacks for optimal performance across devices:
+ * - Default: GPU-accelerated animations (backdrop-filter, 3D transforms)
+ * - .gpu-fallback: CSS-only animations (opacity, 2D transforms)
+ * - .perf-lite: No animations (instant transitions)
+ * - .perf-balanced: Basic animations only
+ */
+
+/* ===================================================================
+   DEFAULT (HIGH PERFORMANCE - GPU ACCELERATED)
+   =================================================================== */
+
+/* Default animations use GPU-accelerated properties */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateZ(0); /* Force GPU */
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0); /* GPU accelerated */
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.95, 0.95, 1); /* GPU accelerated */
+  }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+/* Default backdrop blur for modals */
+.modal-backdrop {
+  backdrop-filter: blur(8px) saturate(180%);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Default card hover effects */
+.card-hover {
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px) scale3d(1.02, 1.02, 1);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* ===================================================================
+   GPU FALLBACK MODE (LOW-END DEVICES - INTEGRATED GRAPHICS)
+   =================================================================== */
+
+html.gpu-fallback .animate-fade-in {
+  animation: fadeInSimple 0.3s ease-out;
+}
+
+html.gpu-fallback .animate-slide-up {
+  animation: slideUpSimple 0.3s ease-out;
+}
+
+html.gpu-fallback .animate-scale-in {
+  animation: scaleInSimple 0.3s ease-out;
+}
+
+/* Simplified animations without 3D transforms */
+@keyframes fadeInSimple {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpSimple {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* 2D only */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleInSimple {
+  from {
+    opacity: 0;
+    transform: scale(0.95); /* 2D only */
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Replace backdrop blur with solid background */
+html.gpu-fallback .modal-backdrop {
+  backdrop-filter: none;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Simplified card hover without 3D transform */
+html.gpu-fallback .card-hover {
+  transition: box-shadow 0.2s ease-out;
+}
+
+html.gpu-fallback .card-hover:hover {
+  transform: none;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* ===================================================================
+   PERFORMANCE LITE MODE (MINIMAL ANIMATIONS)
+   =================================================================== */
+
+html.perf-lite .animate-fade-in,
+html.perf-lite .animate-slide-up,
+html.perf-lite .animate-scale-in {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html.perf-lite .modal-backdrop {
+  backdrop-filter: none;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+html.perf-lite .card-hover {
+  transition: none;
+}
+
+html.perf-lite .card-hover:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Disable all transitions in lite mode */
+html.perf-lite * {
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+}
+
+/* ===================================================================
+   PERFORMANCE BALANCED MODE (BASIC ANIMATIONS ONLY)
+   =================================================================== */
+
+html.perf-balanced .animate-fade-in {
+  animation: fadeInFast 0.15s ease-out;
+}
+
+html.perf-balanced .animate-slide-up {
+  animation: slideUpFast 0.15s ease-out;
+}
+
+html.perf-balanced .animate-scale-in {
+  animation: scaleInFast 0.15s ease-out;
+}
+
+/* Faster, simpler animations */
+@keyframes fadeInFast {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpFast {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleInFast {
+  from {
+    opacity: 0.5;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+html.perf-balanced .modal-backdrop {
+  backdrop-filter: none;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+html.perf-balanced .card-hover {
+  transition: box-shadow 0.15s ease-out;
+}
+
+html.perf-balanced .card-hover:hover {
+  transform: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* ===================================================================
+   REDUCED MOTION (ACCESSIBILITY)
+   =================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .modal-backdrop {
+    backdrop-filter: none;
+    background: rgba(0, 0, 0, 0.75);
+  }
+}
+
+/* ===================================================================
+   WILL-CHANGE OPTIMIZATION (USE SPARINGLY)
+   =================================================================== */
+
+/* Only apply will-change during animation */
+.animate-fade-in {
+  will-change: opacity;
+}
+
+.animate-slide-up {
+  will-change: opacity, transform;
+}
+
+.animate-scale-in {
+  will-change: opacity, transform;
+}
+
+.card-hover:hover {
+  will-change: transform, box-shadow;
+}
+
+/* Remove will-change after animation completes */
+.animate-fade-in:not(:hover):not(:focus):not(:active),
+.animate-slide-up:not(:hover):not(:focus):not(:active),
+.animate-scale-in:not(:hover):not(:focus):not(:active),
+.card-hover:not(:hover):not(:focus):not(:active) {
+  will-change: auto;
+}
+
+/* ===================================================================
+   PERFORMANCE HINTS
+   =================================================================== */
+
+/* Contain layout/paint for better performance */
+.performance-contained {
+  contain: layout paint;
+}
+
+/* Isolate layers for complex animations */
+.performance-isolated {
+  isolation: isolate;
+  contain: layout style paint;
+}
+
+/* Force hardware acceleration when needed */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Remove hardware acceleration in fallback mode */
+html.gpu-fallback .gpu-accelerated {
+  transform: none;
+  will-change: auto;
+}

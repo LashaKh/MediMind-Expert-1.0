@@ -93,6 +93,7 @@ const Form100ReportHistory: React.FC<Form100ReportHistoryProps> = ({
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
+      console.error('Error loading Form 100 reports:', err);
     } finally {
       setLoading(false);
     }
