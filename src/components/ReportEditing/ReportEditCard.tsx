@@ -1,10 +1,18 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import {
-  Edit3, Loader2, Brain, 
-  Activity, AlertCircle, Clock, Shield
+  Edit3, Loader2, Brain,
+  Activity, AlertCircle, Clock, Shield, Save, CheckCircle
 } from 'lucide-react'
 
 import EditInstructionInput from './EditInstructionInput'
+
+interface ReportMetadata {
+  cardTitle: string
+  reportType: string
+  diagnosisCode?: string
+  diagnosisName?: string
+  originalSessionId?: string
+}
 
 interface ReportEditCardProps {
   reportId: string
@@ -14,6 +22,7 @@ interface ReportEditCardProps {
   onEditComplete: (result: any) => void
   onError: (error: Error) => void
   className?: string
+  reportMetadata?: ReportMetadata
 }
 
 const ReportEditCard: React.FC<ReportEditCardProps> = ({
@@ -23,13 +32,19 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
   flowiseEndpoint,
   onEditComplete,
   onError,
-  className = ''
+  className = '',
+  reportMetadata
 }) => {
   const [currentContent, setCurrentContent] = useState(initialContent)
   const [isProcessing, setIsProcessing] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
-  
+
+  // Auto-save state
+  const [isSaving, setIsSaving] = useState(false)
+  const [lastAutoSaved, setLastAutoSaved] = useState<Date | null>(null)
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout>()
+
   // Mobile bedside consultation state
   const [isMobileMode, setIsMobileMode] = useState(false)
   
@@ -61,11 +76,81 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
     notes: string
   }>>([])
 
+  // Unified request formatter for consistent Flowise API calls
+  const formatEditRequest = useCallback((content: string, instruction: string, metadata?: ReportMetadata) => {
+    const cardTitle = metadata?.cardTitle || 'Medical Report';
+    const reportType = metadata?.reportType || 'medical analysis';
+
+    const questionContent = `Card Title: ${cardTitle}
+Type: ${reportType}
+
+Generated Initial Consult:
+${content}
+
+User Edit Instruction:
+${instruction}`;
+
+    return {
+      question: questionContent,
+      overrideConfig: {
+        sessionId: metadata?.originalSessionId || sessionId,
+        returnSourceDocuments: false
+      }
+    };
+  }, [sessionId]);
+
   // Update content when initialContent changes
   useEffect(() => {
     setCurrentContent(initialContent)
     setHasUnsavedChanges(false)
   }, [initialContent])
+
+  // Auto-save functionality
+  useEffect(() => {
+    // Clear existing timeout
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current)
+    }
+
+    // Don't auto-save if content hasn't changed or if processing
+    if (!hasUnsavedChanges || isProcessing || currentContent === initialContent) {
+      return
+    }
+
+    // Set saving state immediately
+    setIsSaving(true)
+
+    // Auto-save after 2 seconds of inactivity
+    autoSaveTimeoutRef.current = setTimeout(async () => {
+      try {
+        // Trigger edit complete callback with the updated content
+        onEditComplete({
+          success: true,
+          content: currentContent,
+          instruction: 'Manual edit auto-saved',
+          timestamp: Date.now(),
+          autoSaved: true
+        })
+
+        // Update save status
+        const now = new Date()
+        setLastAutoSaved(now)
+        setLastSaved(now)
+        setHasUnsavedChanges(false)
+        setIsSaving(false)
+      } catch (error) {
+        setIsSaving(false)
+        onError(error as Error)
+      }
+    }, 2000)
+
+    // Cleanup timeout on unmount or content change
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current)
+      }
+    }
+  }, [currentContent, hasUnsavedChanges, isProcessing, initialContent, onEditComplete, onError])
 
   // Cleanup function for processing
   const cleanupProcessing = useCallback(() => {
@@ -127,18 +212,15 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
       let responseText = ''
 
       if (flowiseEndpoint?.includes('localhost:3000')) {
-        // Direct Flowise API call
+        // Direct Flowise API call with unified format
+        const requestPayload = formatEditRequest(currentContent, instruction, reportMetadata);
+
         const flowiseResponse = await fetch(flowiseEndpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            question: `Current report content:\n${currentContent}\n\nEdit instruction: ${instruction}`,
-            overrideConfig: {
-              returnSourceDocuments: false
-            }
-          }),
+          body: JSON.stringify(requestPayload),
         })
 
         if (!flowiseResponse.ok) {
@@ -164,7 +246,9 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
           }
         }
       } else {
-        // Use proxy endpoint
+        // Use proxy endpoint with unified format
+        const requestPayload = formatEditRequest(currentContent, instruction, reportMetadata);
+
         const proxyResponse = await fetch('/api/flowise-proxy', {
           method: 'POST',
           headers: {
@@ -172,11 +256,9 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
           },
           body: JSON.stringify({
             endpoint: flowiseEndpoint || '/api/v1/prediction/edit-report',
-            question: `Current report content:\n${currentContent}\n\nEdit instruction: ${instruction}`,
-            sessionId: sessionId,
-            overrideConfig: {
-              returnSourceDocuments: false
-            }
+            question: requestPayload.question,
+            sessionId: requestPayload.overrideConfig.sessionId,
+            overrideConfig: requestPayload.overrideConfig
           }),
         })
 
@@ -344,7 +426,23 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
                       <div className="text-xs text-slate-500 dark:text-slate-400 bg-white/80 dark:bg-slate-800/80 px-2 py-1 rounded-lg">
                         {currentContent.length} chars
                       </div>
-                      {hasUnsavedChanges && (
+
+                      {/* Auto-save status indicators */}
+                      {isSaving && (
+                        <div className="flex items-center space-x-1 text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-lg">
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                          <span>Saving...</span>
+                        </div>
+                      )}
+
+                      {!isSaving && lastAutoSaved && !hasUnsavedChanges && (
+                        <div className="flex items-center space-x-1 text-xs text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-lg">
+                          <CheckCircle className="w-3 h-3" />
+                          <span>Saved {lastAutoSaved.toLocaleTimeString()}</span>
+                        </div>
+                      )}
+
+                      {!isSaving && hasUnsavedChanges && (
                         <div className="flex items-center space-x-1 text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-lg">
                           <AlertCircle className="w-3 h-3" />
                           <span>Unsaved</span>

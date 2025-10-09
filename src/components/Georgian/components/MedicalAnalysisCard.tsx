@@ -418,12 +418,20 @@ Medical AI Processing System`;
 
   const handleEditComplete = (editResult: any) => {
     // Handle successful edit
-    setIsEditMode(false);
-    
+
+    // Extract content from either 'content' or 'updatedContent' field
+    const updatedContent = editResult?.content || editResult?.updatedContent;
+
     // Update the local content state with the edited content
-    if (editResult?.updatedContent) {
-      setEditedContent(editResult.updatedContent);
+    if (updatedContent) {
+      setEditedContent(updatedContent);
       setIsExpanded(true); // Keep card expanded to show the changes
+    }
+
+    // Only close edit mode if this is NOT an auto-save
+    // Auto-saves should update content but keep the editor open
+    if (!editResult?.autoSaved) {
+      setIsEditMode(false);
     }
   };
 
@@ -434,12 +442,20 @@ Medical AI Processing System`;
   // Form 100 edit handlers
   const handleForm100EditComplete = (editResult: any) => {
     // Handle successful Form 100 edit
-    setIsForm100EditMode(false);
-    
+
+    // Extract content from either 'content' or 'updatedContent' field
+    const updatedContent = editResult?.content || editResult?.updatedContent;
+
     // Update the local content state with the edited content
-    if (editResult?.updatedContent) {
-      setEditedForm100Content(editResult.updatedContent);
+    if (updatedContent) {
+      setEditedForm100Content(updatedContent);
       setIsForm100Expanded(true); // Keep card expanded to show the changes
+    }
+
+    // Only close edit mode if this is NOT an auto-save
+    // Auto-saves should update content but keep the editor open
+    if (!editResult?.autoSaved) {
+      setIsForm100EditMode(false);
     }
   };
 

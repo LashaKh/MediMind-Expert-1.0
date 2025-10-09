@@ -145,14 +145,25 @@ export interface TranscribeVoiceInstructionResponse {
  * Component Props and State Types
  */
 
+// Report metadata for unified formatting
+export interface ReportMetadata {
+  cardTitle: string
+  reportType: string
+  diagnosisCode?: string
+  diagnosisName?: string
+  originalSessionId?: string
+}
+
 // ReportEditCard component props
 export interface ReportEditCardProps {
   reportId: string
   initialContent: string
   sessionId: string
-  flowiseEndpoint: string
-  onEditComplete?: (updatedContent: string, version: ReportVersion) => void
-  onError?: (error: string) => void
+  flowiseEndpoint?: string
+  onEditComplete: (result: any) => void
+  onError: (error: Error) => void
+  className?: string
+  reportMetadata?: ReportMetadata
 }
 
 // Edit Instruction Input component props

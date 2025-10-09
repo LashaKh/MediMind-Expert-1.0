@@ -200,6 +200,13 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                       onEditComplete={onForm100EditComplete}
                       onError={onForm100EditError}
                       className="border-2 border-[#2b6cb0]/50 dark:border-[#1a365d]/50 shadow-2xl shadow-[#2b6cb0]/10"
+                      reportMetadata={{
+                        cardTitle: `Form 100 - (${icdCode}) ${analysisType.type.replace(/\s*\([^)]*\)\s*/, '')}`,
+                        reportType: 'form 100',
+                        diagnosisCode: icdCode,
+                        diagnosisName: analysisType.type.replace(/\s*\([^)]*\)\s*/, ''),
+                        originalSessionId: sessionId
+                      }}
                     />
                   </div>
                 </div>

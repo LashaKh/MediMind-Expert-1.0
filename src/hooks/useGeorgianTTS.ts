@@ -1524,6 +1524,14 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
 
   }, []);
 
+  const initializeWithExistingTranscript = useCallback((existingText: string) => {
+    if (existingText.trim()) {
+      combinedTranscriptRef.current = existingText.trim();
+      lastSavedTranscriptLengthRef.current = existingText.trim().length;
+      console.log(`🔄 Initialized TTS hook with existing transcript (${existingText.length} chars)`);
+    }
+  }, []);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -1627,6 +1635,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     clearError,
     clearResult,
     resetTranscript,
+    initializeWithExistingTranscript,
     updateAuthStatus,
     updateSelectedSTTModel,
     

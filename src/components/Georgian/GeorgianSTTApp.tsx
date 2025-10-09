@@ -238,6 +238,7 @@ export const GeorgianSTTApp: React.FC = () => {
     clearError: clearTTSError,
     clearResult: clearTTSResult,
     resetTranscript,
+    initializeWithExistingTranscript,
     canRecord,
     canStop,
     canPause,
@@ -770,10 +771,16 @@ export const GeorgianSTTApp: React.FC = () => {
     lastProcessedTimeRef.current = 0;
 
     if (!currentSession) {
-      // Create new session when user starts recording - clear local state for fresh start
+      // Create new session when user starts recording
 
-      setLocalTranscript(''); // Clear local transcript for new session
-      resetTranscript(); // Reset TTS hook state for new session
+      // Only reset if no existing content to preserve user's typed/pasted text
+      if (!localTranscript.trim()) {
+        resetTranscript(); // Fresh start for truly empty sessions
+      } else {
+        // Initialize TTS hook with existing typed/pasted content
+        initializeWithExistingTranscript(localTranscript);
+        console.log(`🔄 Preserving existing content for new session (${localTranscript.length} chars)`);
+      }
       clearTTSResult(); // Clear old transcription result
 
       const sessionTitle = pendingSessionTitle.trim() || 'New Recording';
@@ -795,14 +802,14 @@ export const GeorgianSTTApp: React.FC = () => {
       // CRITICAL: Initialize TTS hook's internal state with existing content
       // The TTS hook needs to know about existing content to properly append new transcriptions
       if (localTranscript.trim()) {
-
-        // TODO: Add a way to initialize TTS hook with existing content
-        // For now, we'll rely on the live update system to handle this
+        // Initialize TTS hook with existing content for proper appending
+        initializeWithExistingTranscript(localTranscript);
+        console.log(`🔄 Initialized recording with existing content (${localTranscript.length} chars)`);
       }
     }
 
     startRecording();
-  }, [currentSession, createSession, selectSession, startRecording, resetTranscript, clearTTSResult, pendingSessionTitle]);
+  }, [currentSession, createSession, selectSession, startRecording, resetTranscript, initializeWithExistingTranscript, clearTTSResult, pendingSessionTitle, localTranscript]);
 
   // Clear all errors
   const clearAllErrors = useCallback(() => {
