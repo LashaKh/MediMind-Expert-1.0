@@ -1069,23 +1069,21 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
                         </Button>
                       </EnhancedTooltip>
 
-                      {/* Mobile-optimized New case button - Only show on larger screens */}
-                      <div className="hidden sm:block">
-                        <NewCaseButton
-                          onClick={() => setShowCaseModal(true)}
-                          disabled={isDisabled || !isConnected}
-                          variant="ghost"
-                          size="sm"
-                          className={`
-                            group relative min-h-[44px] px-4 rounded-lg font-medium text-sm
-                            bg-white/80 hover:bg-[#90cdf4]/20 text-[#2b6cb0]
-                            border border-transparent hover:border-[#63b3ed]/60
-                            hover:shadow-md hover:scale-105 active:scale-95
-                            disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                            transition-all duration-200
-                          `}
-                        />
-                      </div>
+                      {/* Mobile-optimized New case button - Now visible on all screen sizes */}
+                      <NewCaseButton
+                        onClick={() => setShowCaseModal(true)}
+                        disabled={isDisabled || !isConnected}
+                        variant="ghost"
+                        size="sm"
+                        className={`
+                          group relative min-h-[44px] px-2 sm:px-4 rounded-lg font-medium text-sm
+                          bg-white/80 hover:bg-[#90cdf4]/20 text-[#2b6cb0]
+                          border border-transparent hover:border-[#63b3ed]/60
+                          hover:shadow-md hover:scale-105 active:scale-95
+                          disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                          transition-all duration-200
+                        `}
+                      />
                     </div>
                   </>
                 )}

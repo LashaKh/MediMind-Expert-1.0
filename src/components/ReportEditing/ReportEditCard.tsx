@@ -1,10 +1,20 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import {
   Edit3, Loader2, Brain,
-  Activity, AlertCircle, Clock, Shield, Save, CheckCircle
+  Activity, AlertCircle, Clock, Shield, Save, CheckCircle, HeartHandshake
 } from 'lucide-react'
 
 import EditInstructionInput from './EditInstructionInput'
+import {
+  HEART_FAILURE_DIAGNOSIS,
+  ACUTE_ISCHAEMIC_DIAGNOSIS,
+  PULMONARY_EMBOLISM_DIAGNOSIS,
+  STEMI_DIAGNOSIS,
+  ANGINA_PECTORIS_DIAGNOSIS,
+  AV_BLOCK_DIAGNOSIS,
+  type DiagnosisContext
+} from '../../services/diagnosisFlowiseService'
 
 interface ReportMetadata {
   cardTitle: string
@@ -76,11 +86,87 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
     notes: string
   }>>([])
 
-  // Unified request formatter for consistent Flowise API calls
-  const formatEditRequest = useCallback((content: string, instruction: string, metadata?: ReportMetadata) => {
-    const cardTitle = metadata?.cardTitle || 'Medical Report';
-    const reportType = metadata?.reportType || 'medical analysis';
+  // UNIFIED ENDPOINT - Same as Form 100 generation (exact pattern)
+  const UNIFIED_FORM100_ENDPOINT = "https://flowise-2-0.onrender.com/api/v1/prediction/0dfbbc44-76d0-451f-b7ca-92a96f862924";
 
+  // Diagnosis mapping - Convert ICD codes to Georgian diagnosis names
+  const getDiagnosisMapping = useCallback((icdCode: string): DiagnosisContext | null => {
+    const diagnoses = [
+      HEART_FAILURE_DIAGNOSIS,       // I50.0
+      ACUTE_ISCHAEMIC_DIAGNOSIS,     // I24.9
+      PULMONARY_EMBOLISM_DIAGNOSIS,  // I26.0
+      STEMI_DIAGNOSIS,               // I21.0
+      ANGINA_PECTORIS_DIAGNOSIS,     // I20.8
+      AV_BLOCK_DIAGNOSIS             // I44.(-)
+    ];
+
+    return diagnoses.find(d => d.icdCode === icdCode || d.icdCode.startsWith(icdCode.split('.')[0])) || null;
+  }, []);
+
+  // Unified request formatter using EXACT same pattern as original generation
+  const formatEditRequest = useCallback((content: string, instruction: string, metadata?: ReportMetadata) => {
+    // Parse diagnosis info from existing card title if not provided in metadata
+    let diagnosisCode = metadata?.diagnosisCode;
+    let diagnosisName = metadata?.diagnosisName;
+
+    // If diagnosis info not in metadata, try to parse from cardTitle
+    if (!diagnosisCode || !diagnosisName) {
+      const originalTitle = metadata?.cardTitle || '';
+      // Extract ICD code from patterns like "Heart Failure ER Report (I50.0)" or "Initial Diagnosis - (I21.0) ST ელევაციური მიოკარდიუმის ინფარქტი"
+      const codeMatch = originalTitle.match(/\(([^)]+)\)/); // Extract (I50.0)
+
+      if (codeMatch) {
+        diagnosisCode = codeMatch[1]; // I50.0
+
+        // Use Georgian diagnosis mapping to get the correct Georgian name
+        const diagnosisMapping = getDiagnosisMapping(diagnosisCode);
+        if (diagnosisMapping) {
+          diagnosisName = diagnosisMapping.diagnosisGeorgian; // Use Georgian name from mapping
+          console.log('🔍 Mapped ICD code to Georgian:', {
+            code: diagnosisCode,
+            georgian: diagnosisName,
+            english: diagnosisMapping.diagnosisEnglish
+          });
+        } else {
+          // Fallback: extract name from title and clean it up
+          const nameMatch = originalTitle.replace(/\s*\([^)]*\).*$/, '').trim();
+          diagnosisName = nameMatch
+            .replace(/^Form 100 -\s*/, '')
+            .replace(/\s*ER Report$/, '')
+            .replace(/^Initial Diagnosis -\s*/, '')
+            .trim();
+          console.log('⚠️ No mapping found for ICD code, using fallback:', diagnosisCode, diagnosisName);
+        }
+      }
+    }
+
+    // Reconstruct EXACT same card title format as original generation
+    let cardTitle: string;
+    let reportType: string;
+
+    // Determine if this is Form 100 or Initial Consult based on metadata
+    if (metadata?.reportType === 'form 100' || metadata?.cardTitle?.startsWith('Form 100 -')) {
+      // Form 100 format: "Form 100 - (CODE) GEORGIAN_NAME" (from form100Service.ts:232)
+      cardTitle = (diagnosisCode && diagnosisName)
+        ? `Form 100 - (${diagnosisCode}) ${diagnosisName}`
+        : 'Form 100 - Emergency Report';
+      reportType = 'form 100';
+    } else {
+      // Initial Consult format: "Initial Diagnosis - (CODE) NAME" (from GeorgianSTTApp.tsx:478)
+      cardTitle = (diagnosisCode && diagnosisName)
+        ? `Initial Diagnosis - (${diagnosisCode}) ${diagnosisName}`
+        : metadata?.cardTitle || 'Medical Report';
+      reportType = 'Initial Consult';
+    }
+
+    console.log('🔧 Reconstructed card title:', {
+      original: metadata?.cardTitle,
+      parsed: { diagnosisCode, diagnosisName },
+      final: cardTitle,
+      type: reportType
+    });
+
+    // Use EXACT same question format as original generation but with edit instruction
     const questionContent = `Card Title: ${cardTitle}
 Type: ${reportType}
 
@@ -90,11 +176,11 @@ ${content}
 User Edit Instruction:
 ${instruction}`;
 
+    // Use EXACT same request format as form100Service.ts (lines 244-249)
     return {
       question: questionContent,
       overrideConfig: {
-        sessionId: metadata?.originalSessionId || sessionId,
-        returnSourceDocuments: false
+        sessionId: metadata?.originalSessionId || sessionId
       }
     };
   }, [sessionId]);
@@ -198,77 +284,52 @@ ${instruction}`;
   const handleInstructionSubmit = async (instruction: string) => {
     if (!instruction.trim() || isProcessing) return
 
+    console.log('🚀 Starting edit instruction processing...', { instruction });
     setIsProcessing(true)
     const startTime = Date.now()
-    
+
     try {
       setProcessingMetrics(prev => ({
         ...prev,
         responseTime: 0,
-        modelUsed: 'Processing...'
+        modelUsed: 'Processing Medical Report Edit...'
       }))
+
+      console.log('⏳ Processing state set, UI should show loading...');
 
       let response
       let responseText = ''
 
-      if (flowiseEndpoint?.includes('localhost:3000')) {
-        // Direct Flowise API call with unified format
-        const requestPayload = formatEditRequest(currentContent, instruction, reportMetadata);
+      // Use EXACT same direct Flowise call as form100Service.ts (lines 256-262)
+      const requestPayload = formatEditRequest(currentContent, instruction, reportMetadata);
 
-        const flowiseResponse = await fetch(flowiseEndpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestPayload),
-        })
-
-        if (!flowiseResponse.ok) {
-          throw new Error(`Flowise API error: ${flowiseResponse.status}`)
+      console.log('📡 Sending request to Flowise...', {
+        endpoint: UNIFIED_FORM100_ENDPOINT,
+        payloadPreview: {
+          question: requestPayload.question.substring(0, 200) + '...',
+          sessionId: requestPayload.overrideConfig.sessionId
         }
+      });
 
-        response = await flowiseResponse.json()
-        
-        if (response) {
-          // Handle different response formats
-          if (typeof response === 'string') {
-            responseText = response
-          } else if (response.text) {
-            // Direct Flowise calls return { text: "response" } or { answer: "response" }
-            responseText = response.text
-          } else if (response.answer) {
-            // Proxy calls return { data: { message: "response" } }
-            responseText = response.answer
-          } else if (response.data?.message) {
-            responseText = response.data.message
-          } else {
-            responseText = JSON.stringify(response)
-          }
-        }
-      } else {
-        // Use proxy endpoint with unified format
-        const requestPayload = formatEditRequest(currentContent, instruction, reportMetadata);
+      const flowiseResponse = await fetch(UNIFIED_FORM100_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestPayload)
+      });
 
-        const proxyResponse = await fetch('/api/flowise-proxy', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            endpoint: flowiseEndpoint || '/api/v1/prediction/edit-report',
-            question: requestPayload.question,
-            sessionId: requestPayload.overrideConfig.sessionId,
-            overrideConfig: requestPayload.overrideConfig
-          }),
-        })
+      console.log('📨 Flowise response status:', flowiseResponse.status);
 
-        if (!proxyResponse.ok) {
-          throw new Error(`Proxy API error: ${proxyResponse.status}`)
-        }
-
-        response = await proxyResponse.json()
-        responseText = response.data?.message || response.answer || response.text || 'No response received'
+      if (!flowiseResponse.ok) {
+        throw new Error(`Flowise error: ${flowiseResponse.status}`)
       }
+
+      response = await flowiseResponse.json()
+      console.log('📄 Flowise response received, length:', response?.text?.length || 0);
+
+      // Use EXACT same response parsing as form100Service.ts (line 277)
+      responseText = response.text || response.response || response.answer || 'No response from AI'
 
       const endTime = Date.now()
       const responseTime = endTime - startTime
@@ -295,7 +356,13 @@ ${instruction}`;
         timestamp: Date.now()
       })
 
+      console.log('✅ Edit processing completed successfully!', {
+        processingTime: responseTime,
+        contentLength: responseText.length
+      });
+
     } catch (error) {
+      console.error('❌ Edit processing failed:', error);
       onError(error as Error)
       
       // Update metrics with error state
@@ -338,11 +405,52 @@ ${instruction}`;
   }, [])
 
 
+  // Processing Modal Component (rendered via portal)
+  const ProcessingModal = () => {
+    if (!isProcessing) return null
+
+    return createPortal(
+      <div className="fixed inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm z-[9999] flex items-center justify-center animate-in fade-in duration-300">
+        <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-2xl p-8 mx-4 max-w-sm w-full text-center animate-in slide-in-from-bottom-4 duration-500">
+          {/* Animated medical icon */}
+          <div className="w-16 h-16 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg animate-pulse">
+            <HeartHandshake className="w-8 h-8 text-white animate-bounce" />
+          </div>
+
+          {/* Processing text */}
+          <h3 className="text-lg font-bold text-[#1a365d] dark:text-[#90cdf4] mb-2">
+            Editing Medical Report
+          </h3>
+          <p className="text-sm text-[#2b6cb0] dark:text-[#63b3ed] mb-4">
+            Our specialized AI is analyzing your edit instructions and updating the medical report...
+          </p>
+
+          {/* Progress indicator */}
+          <div className="flex items-center justify-center space-x-2 text-xs text-[#2b6cb0]/60 dark:text-[#63b3ed]/60">
+            <div className="flex space-x-1">
+              <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            </div>
+            <span className="ml-2">Processing...</span>
+          </div>
+
+          {/* Estimated time */}
+          <div className="mt-3 text-xs text-[#2b6cb0]/60 dark:text-[#63b3ed]/60">
+            Applying edit instructions...
+          </div>
+        </div>
+      </div>,
+      document.body
+    )
+  }
+
   return (
-    <div className={`relative group overflow-hidden ${className}`}>
-      {/* Premium Background with Advanced Visual Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white via-slate-50/80 to-[#90cdf4]/10 dark:from-slate-900 dark:via-slate-800/90 dark:to-[#1a365d]/40" style={{background: 'linear-gradient(to bottom right, rgba(255,255,255,1) 0%, rgba(248,250,252,0.8) 50%, rgba(99,179,237,0.1) 100%)'}} />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(43,108,176,0.08),transparent_70%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(26,54,93,0.15),transparent_70%)]" />
+    <>
+      <div className={`relative group overflow-hidden ${className}`}>
+        {/* Premium Background with Advanced Visual Effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white via-slate-50/80 to-[#90cdf4]/10 dark:from-slate-900 dark:via-slate-800/90 dark:to-[#1a365d]/40" style={{background: 'linear-gradient(to bottom right, rgba(255,255,255,1) 0%, rgba(248,250,252,0.8) 50%, rgba(99,179,237,0.1) 100%)'}} />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(43,108,176,0.08),transparent_70%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(26,54,93,0.15),transparent_70%)]" />
       
       {/* Animated Border Glow */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-[#2b6cb0]/20 via-[#63b3ed]/10 to-[#1a365d]/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-700 blur-sm animate-pulse" />
@@ -515,7 +623,11 @@ ${instruction}`;
           </div>
         </div>
       </div>
-    )
+
+      {/* Portal-based Processing Modal */}
+      <ProcessingModal />
+    </>
+  )
 }
 
 export default ReportEditCard

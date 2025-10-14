@@ -65,27 +65,37 @@ async function configurePdfWorker(): Promise<PdfjsModule> {
 async function getOcrWorker(): Promise<any> {
   if (!unifiedOcrWorker) {
     try {
+      console.log('🔧 OCR: Initializing Tesseract.js v6 worker...');
+
       // Dynamic import of Tesseract.js for mobile performance
       const { createWorker } = await import('tesseract.js');
-      
+
+      // FIXED: Correct Tesseract.js v6 API - simplified initialization
+      console.log('🔧 OCR: Creating worker with multiple languages...');
+
+      // Tesseract.js v6 simplified API - languages are loaded automatically
       unifiedOcrWorker = await createWorker(['kat', 'eng', 'rus'], 1, {
         logger: (m) => {
-          if (m.status === 'recognizing text') {
-            // Optional: emit progress events
-          }
+          console.log('🔧 OCR Worker:', m);
         }
       });
 
-      // Initialize languages first
-      await unifiedOcrWorker.loadLanguage('kat+eng+rus');
-      await unifiedOcrWorker.initialize('kat+eng+rus', 2); // OEM_LSTM_ONLY
+      console.log('✅ OCR: Worker created and languages loaded automatically (v6 API)');
 
       // Set parameters after initialization
       await unifiedOcrWorker.setParameters({
-        tessedit_pageseg_mode: '1',
+        tessedit_pageseg_mode: '1', // Automatic page segmentation with OSD
         preserve_interword_spaces: '1'
       });
+      console.log('✅ OCR: Parameters set');
+
+      console.log('✅ OCR: Full worker initialization complete');
     } catch (error) {
+      console.error('❌ OCR: Worker initialization failed:', {
+        error: error,
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        errorStack: error instanceof Error ? error.stack : undefined
+      });
       unifiedOcrWorker = null;
       throw error;
     }
@@ -99,19 +109,32 @@ async function getOcrWorker(): Promise<any> {
 async function getTextDetectionWorker(): Promise<any> {
   if (!textDetectionWorker) {
     try {
+      console.log('🔧 OCR: Initializing text detection worker (v6 API)...');
+
       // Dynamic import of Tesseract.js for mobile performance
       const { createWorker } = await import('tesseract.js');
-      
-      textDetectionWorker = await createWorker();
-      await textDetectionWorker.loadLanguage('eng');
-      await textDetectionWorker.initialize('eng');
-      
+
+      // FIXED: Correct Tesseract.js v6 API - simplified initialization
+      textDetectionWorker = await createWorker(['eng'], 1, {
+        logger: (m) => {
+          console.log('🔧 Text Detection Worker:', m);
+        }
+      });
+      console.log('✅ OCR: Text detection worker created and loaded automatically (v6 API)');
+
       await textDetectionWorker.setParameters({
         tessedit_pageseg_mode: '3',
         tessedit_ocr_engine_mode: '2',
         tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!?()-+='
       });
+      console.log('✅ OCR: Text detection parameters set');
+
+      console.log('✅ OCR: Text detection worker fully initialized');
     } catch (error) {
+      console.error('❌ OCR: Text detection worker initialization failed:', {
+        error: error,
+        errorMessage: error instanceof Error ? error.message : 'Unknown error'
+      });
       textDetectionWorker = null;
       throw error;
     }
@@ -146,51 +169,131 @@ export async function extractTextFromImage(
   onProgress?: (progress: ProgressInfo) => void
 ): Promise<OcrResult> {
   const startTime = Date.now();
-  
+
+  // DIAGNOSTIC: Entry point
+  console.log('🤖 OCR: extractTextFromImage() called', {
+    filename: file.name,
+    fileType: file.type,
+    fileSize: file.size,
+    timestamp: new Date().toISOString()
+  });
+
   try {
-    onProgress?.({ current: 0, total: 100, message: 'Initializing OCR...' });
-    
-    const worker = await getOcrWorker();
-    
-    onProgress?.({ current: 25, total: 100, message: 'Processing image...' });
-    
-    const { data } = await worker.recognize(file);
-    
-    onProgress?.({ current: 75, total: 100, message: 'Analyzing results...' });
-    
-    // Check if OCR results are poor and fallback to Gemini Vision if needed
-    const shouldUseGeminiVision = (
-      data.confidence < 60 || // Low confidence
-      data.text.length < 50 || // Very short text
-      isMedicalImage(file.name) // Medical images benefit from Gemini
-    );
-    
-    if (shouldUseGeminiVision && hasGeminiApiKey()) {
+    // ========================================
+    // STRATEGY: Try Gemini Vision API FIRST (5-15 seconds)
+    // Only fallback to Tesseract OCR if Gemini fails
+    // ========================================
+
+    // Step 1: Try Gemini Vision API as PRIMARY method
+    if (hasGeminiApiKey()) {
       try {
-        onProgress?.({ current: 80, total: 100, message: 'Trying Gemini Vision for better accuracy...' });
-        
+        console.log('🚀 Attempting Gemini Vision API (primary method)...', {
+          filename: file.name,
+          fileSize: file.size,
+          strategy: 'Gemini First → Tesseract Fallback'
+        });
+
+        onProgress?.({ current: 0, total: 100, message: 'Processing with AI Vision...' });
+
         const geminiResult = await fallbackToGeminiVision(file);
-        
-        // Use Gemini result if it's significantly better
-        if (geminiResult.success && 
-            (geminiResult.text.length > data.text.length * 1.5 || 
-             geminiResult.confidence > data.confidence + 0.2)) {
-          onProgress?.({ current: 100, total: 100, message: 'Enhanced with Gemini Vision' });
+
+        console.log('✅ Gemini Vision result received:', {
+          filename: file.name,
+          success: geminiResult.success,
+          textLength: geminiResult.text.length,
+          confidence: geminiResult.confidence,
+          textPreview: geminiResult.text.substring(0, 150),
+          processingTime: `${Date.now() - startTime}ms`
+        });
+
+        // Use Gemini result if successful
+        if (geminiResult.success && geminiResult.text.length > 0) {
+          onProgress?.({ current: 100, total: 100, message: 'Complete' });
+
+          console.log('✅ Using Gemini Vision result (primary method succeeded)', {
+            filename: file.name,
+            finalTextLength: geminiResult.text.length,
+            confidence: geminiResult.confidence,
+            processingTime: `${Date.now() - startTime}ms`
+          });
+
           return {
             success: true,
             text: geminiResult.text,
             confidence: geminiResult.confidence,
             processingTime: Date.now() - startTime
           };
+        } else {
+          console.warn('⚠️ Gemini Vision returned empty/failed result, falling back to Tesseract OCR...', {
+            filename: file.name,
+            geminiSuccess: geminiResult.success,
+            geminiTextLength: geminiResult.text.length
+          });
         }
       } catch (geminiError) {
-
-        // Continue with OCR result
+        console.warn('⚠️ Gemini Vision API failed, falling back to Tesseract OCR...', {
+          filename: file.name,
+          error: geminiError,
+          errorMessage: geminiError instanceof Error ? geminiError.message : 'Unknown error',
+          fallbackAction: 'Using Tesseract OCR as backup'
+        });
       }
+    } else {
+      console.log('ℹ️ Gemini API key not configured, using Tesseract OCR directly', {
+        filename: file.name
+      });
     }
-    
+
+    // Step 2: Fallback to Tesseract OCR if Gemini failed or unavailable
+    console.log('🔄 Starting Tesseract OCR fallback...', {
+      filename: file.name,
+      reason: 'Gemini Vision unavailable or failed'
+    });
+
+    onProgress?.({ current: 0, total: 100, message: 'Processing with OCR...' });
+
+    // DIAGNOSTIC: Worker initialization
+    console.log('🔧 OCR: Getting worker instance...', {
+      filename: file.name
+    });
+
+    const worker = await getOcrWorker();
+
+    console.log('✅ OCR: Worker ready', {
+      filename: file.name,
+      workerExists: !!worker
+    });
+
+    onProgress?.({ current: 25, total: 100, message: 'Processing image with Tesseract...' });
+
+    // DIAGNOSTIC: Starting recognition
+    console.log('🔍 OCR: Starting Tesseract recognition...', {
+      filename: file.name,
+      fileSize: file.size
+    });
+
+    const { data } = await worker.recognize(file);
+
+    // DIAGNOSTIC: Recognition complete
+    console.log('✅ OCR: Tesseract recognition complete', {
+      filename: file.name,
+      textLength: data.text.length,
+      confidence: data.confidence,
+      textPreview: data.text.substring(0, 150),
+      processingTime: `${Date.now() - startTime}ms`
+    });
+
     onProgress?.({ current: 100, total: 100, message: 'Complete' });
-    
+
+    // DIAGNOSTIC: Final OCR result
+    console.log('✅ OCR: Returning Tesseract result (fallback method)', {
+      filename: file.name,
+      success: true,
+      textLength: data.text.length,
+      confidence: data.confidence / 100,
+      processingTime: `${Date.now() - startTime}ms`
+    });
+
     return {
       success: true,
       text: data.text,
@@ -198,18 +301,55 @@ export async function extractTextFromImage(
       processingTime: Date.now() - startTime
     };
   } catch (error) {
+    // DIAGNOSTIC: OCR main error handler
+    console.error('❌ OCR: Main extraction failed', {
+      filename: file.name,
+      error: error,
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      errorStack: error instanceof Error ? error.stack : undefined,
+      nextAction: hasGeminiApiKey() ? 'Trying Gemini Vision' : 'Returning failure'
+    });
+
     // Try Gemini Vision as last resort if OCR completely fails
     if (hasGeminiApiKey()) {
       try {
+        console.log('🆘 OCR failed completely, attempting Gemini Vision rescue...', {
+          filename: file.name
+        });
+
         onProgress?.({ current: 50, total: 100, message: 'OCR failed, trying Gemini Vision...' });
         const geminiResult = await fallbackToGeminiVision(file);
+
+        console.log('✅ Recovered with Gemini Vision after OCR failure', {
+          filename: file.name,
+          success: geminiResult.success,
+          textLength: geminiResult.text.length,
+          confidence: geminiResult.confidence
+        });
+
         onProgress?.({ current: 100, total: 100, message: 'Recovered with Gemini Vision' });
         return geminiResult;
       } catch (geminiError) {
-
+        // DIAGNOSTIC: Gemini rescue also failed
+        console.error('❌ Gemini Vision rescue attempt also failed', {
+          filename: file.name,
+          geminiError: geminiError,
+          geminiErrorMessage: geminiError instanceof Error ? geminiError.message : 'Unknown error',
+          originalOcrError: error instanceof Error ? error.message : 'Unknown error'
+        });
       }
+    } else {
+      console.warn('⚠️ OCR failed and Gemini API key not configured - cannot attempt rescue', {
+        filename: file.name
+      });
     }
-    
+
+    // DIAGNOSTIC: Final failure
+    console.error('❌ OCR: All extraction attempts failed, returning failure', {
+      filename: file.name,
+      processingTime: `${Date.now() - startTime}ms`
+    });
+
     return {
       success: false,
       text: '',
@@ -317,7 +457,18 @@ export async function extractTextFromPdf(
  */
 export async function analyzeImageForText(file: File): Promise<ImageTextAnalysis> {
   try {
+    // DIAGNOSTIC: Entry point
+    console.log('🔍 analyzeImageForText() called', {
+      filename: file.name,
+      fileType: file.type,
+      fileSizeKB: (file.size / 1024).toFixed(2)
+    });
+
     if (!file.type.startsWith('image/')) {
+      console.log('⏭️ Not an image file, skipping text analysis', {
+        filename: file.name,
+        fileType: file.type
+      });
       return {
         hasSignificantText: false,
         textConfidence: 0,
@@ -374,6 +525,20 @@ export async function analyzeImageForText(file: File): Promise<ImageTextAnalysis
       recommendedAction = 'extract_and_send';
     }
     
+    // DIAGNOSTIC: Analysis decision
+    console.log('📊 Image text analysis complete:', {
+      filename: file.name,
+      hasSignificantText: hasSignificantText,
+      recommendedAction: recommendedAction,
+      estimatedTextRatio: estimatedTextRatio,
+      textConfidence: hasSignificantText ? 0.7 : 0,
+      matchedPatterns: {
+        hasTextualFilename: hasTextualFilename,
+        isMedicalImage: isMedicalImage
+      },
+      sizeKB: sizeKB.toFixed(2)
+    });
+
     return {
       hasSignificantText,
       textConfidence: hasSignificantText ? 0.7 : 0,
@@ -381,8 +546,16 @@ export async function analyzeImageForText(file: File): Promise<ImageTextAnalysis
       recommendedAction,
       estimatedTextRatio
     };
-    
+
   } catch (error) {
+    // DIAGNOSTIC: Analysis error
+    console.error('❌ Image text analysis failed:', {
+      filename: file.name,
+      error: error,
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      fallbackAction: 'Defaulting to send_image'
+    });
+
     return {
       hasSignificantText: false,
       textConfidence: 0,

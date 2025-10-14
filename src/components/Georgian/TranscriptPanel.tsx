@@ -390,12 +390,26 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
     });
 
     try {
+      // INSTANT UI FEEDBACK: Show attachments immediately with 'processing' status
+      const immediateAttachments: Attachment[] = files.map(file => ({
+        id: `${file.name}-${Date.now()}-${Math.random()}`,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        data: '', // Will be populated during processing
+        textExtractionStatus: 'processing', // Show as processing immediately
+        textExtractionProgress: 0
+      }));
+
+      setAttachedFiles(prev => [...prev, ...immediateAttachments]);
+      console.log('✅ [INSTANT UI] Attachments added to UI immediately:', immediateAttachments.length);
+
       const processedAttachments: Attachment[] = [];
 
       // Step 1: Validate and process files with compression if needed
       const step1StartTime = performance.now();
       console.log('⚡ [PERFORMANCE] Step 1: Starting validation and compression phase');
-      
+
       for (let i = 0; i < files.length; i++) {
         let file = files[i];
         const fileStartTime = performance.now();
@@ -466,24 +480,23 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         const processed = await processFileForUpload(file);
         const base64Time = performance.now() - base64StartTime;
         console.log(`📄 [PERFORMANCE] Base64 conversion took: ${base64Time.toFixed(2)}ms`);
-        
+
         processedAttachments.push({
           ...processed,
           textExtractionStatus: 'pending' // Mark for text extraction
         });
-        
+
+        // UPDATE UI: Change status from 'processing' to 'pending' for this attachment
+        setAttachedFiles(prev => prev.map(att =>
+          att.name === file.name ? { ...att, ...processed, textExtractionStatus: 'pending' } : att
+        ));
+
         const fileProcessingTime = performance.now() - fileStartTime;
         console.log(`✅ [PERFORMANCE] File ${file.name} processed in: ${fileProcessingTime.toFixed(2)}ms`);
       }
-      
+
       const step1Time = performance.now() - step1StartTime;
       console.log(`⚡ [PERFORMANCE] Step 1 completed in: ${step1Time.toFixed(2)}ms`);
-      
-
-      // Add files to UI with pending status
-      const uiUpdateStartTime = performance.now();
-      setAttachedFiles(prev => [...prev, ...processedAttachments]);
-      console.log(`🎨 [PERFORMANCE] UI update took: ${(performance.now() - uiUpdateStartTime).toFixed(2)}ms`);
 
       // Step 2: Immediately extract text from all uploaded files
       const step2StartTime = performance.now();

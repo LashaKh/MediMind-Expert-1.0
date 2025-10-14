@@ -201,10 +201,10 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                       onError={onForm100EditError}
                       className="border-2 border-[#2b6cb0]/50 dark:border-[#1a365d]/50 shadow-2xl shadow-[#2b6cb0]/10"
                       reportMetadata={{
-                        cardTitle: `Form 100 - (${icdCode}) ${analysisType.type.replace(/\s*\([^)]*\)\s*/, '')}`,
+                        cardTitle: `Form 100 - (${icdCode}) ${analysisType.type.replace(/^.*\([^)]*\)\s*/, '')}`,
                         reportType: 'form 100',
                         diagnosisCode: icdCode,
-                        diagnosisName: analysisType.type.replace(/\s*\([^)]*\)\s*/, ''),
+                        diagnosisName: analysisType.type.replace(/^.*\([^)]*\)\s*/, ''),
                         originalSessionId: sessionId
                       }}
                     />

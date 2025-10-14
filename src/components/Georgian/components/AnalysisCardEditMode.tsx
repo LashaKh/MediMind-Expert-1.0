@@ -67,7 +67,7 @@ export const AnalysisCardEditMode: React.FC<AnalysisCardEditModeProps> = ({
             className="border-2 border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-2xl shadow-[#2b6cb0]/10"
             reportMetadata={{
               cardTitle: analysisType.type,
-              reportType: analysisType.isDiagnosis ? 'medical diagnosis' : 'medical analysis',
+              reportType: analysisType.isDiagnosis ? 'Initial Consult' : 'medical analysis',
               originalSessionId: `edit-${analysis.timestamp}`
             }}
           />

@@ -125,40 +125,19 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
   const validateStep = (step: number): boolean => {
     const newErrors: FormErrors = {};
 
+    // All fields are now optional - no validation required
     switch (step) {
       case 1:
-        if (!formData.title.trim()) {
-          newErrors.title = 'Case title is required';
-        }
-        if (!formData.description.trim()) {
-          newErrors.description = 'Brief description is required';
-        }
+        // Title and description are now optional
         break;
-      case 2: {
-        if (!formData.anonymizedInfo.trim()) {
-          newErrors.anonymizedInfo = 'Patient information is required';
-        } else if (formData.anonymizedInfo.length < 50) {
-          newErrors.anonymizedInfo = 'Please provide more detailed information (minimum 50 characters)';
-        }
-        // Privacy validation
-        const sensitivePatterns = [
-          /\b[A-Z][a-z]+ [A-Z][a-z]+\b/,
-          /\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/,
-          /\b\d{3}-?\d{2}-?\d{4}\b/,
-        ];
-        const hasSensitiveInfo = sensitivePatterns.some(pattern => 
-          pattern.test(formData.anonymizedInfo)
-        );
-        // Privacy validation removed as requested
+      case 2:
+        // Patient information is now optional - no minimum character requirement
         break;
-      }
       case 3:
         // File attachments are optional, no validation needed
         break;
       case 4:
-        if (!formData.complexity) {
-          newErrors.complexity = 'Please select complexity level';
-        }
+        // Complexity level is now optional
         break;
     }
 
@@ -477,7 +456,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
               <div className="space-y-6">
                 <div className="relative">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Case Title *
+                    Case Title
                   </label>
                   <input
                     type="text"
@@ -504,9 +483,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
 
                 <div className="relative">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Brief Description *
+                    Brief Description (Optional)
                     <span className="text-gray-500 font-normal ml-2">
-                      ({formData.description.length}/1000 characters)
+                      ({formData.description.length} characters)
                     </span>
                   </label>
                   <textarea
@@ -514,7 +493,6 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                     onChange={handleInputChange('description')}
                     placeholder="Provide a comprehensive overview of the case including: chief complaint, relevant history, examination findings, initial impression, key questions for discussion, and what specific guidance you're seeking..."
                     rows={8}
-                    maxLength={1000}
                     className={`
                       w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200 resize-y min-h-[200px]
                       ${errors.description 
@@ -546,7 +524,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                           <li>• Specify what guidance or discussion you're seeking</li>
                         </ul>
                         <div className="mt-2 text-xs text-[#2b6cb0]">
-                          {formData.description.length}/1000 characters
+                          {formData.description.length} characters
                         </div>
                       </div>
                     </div>
@@ -587,9 +565,9 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
 
               <div className="relative">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Anonymized Patient Information *
+                  Anonymized Patient Information
                   <span className="text-gray-500 font-normal ml-2">
-                    ({formData.anonymizedInfo.length} characters, minimum 50)
+                    ({formData.anonymizedInfo.length} characters)
                   </span>
                 </label>
                 <textarea
@@ -616,10 +594,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                 
                 {/* Character count indicator */}
                 <div className="flex justify-between items-center mt-2">
-                  <div className={`text-sm ${
-                    formData.anonymizedInfo.length >= 50 ? 'text-green-600' : 'text-gray-500'
-                  }`}>
-                    {formData.anonymizedInfo.length >= 50 ? '✓ Minimum length met' : `Need ${50 - formData.anonymizedInfo.length} more characters`}
+                  <div className="text-sm text-gray-500">
+                    Patient information is optional
                   </div>
                   <div className="text-sm text-gray-500">
                     {formData.anonymizedInfo.length} characters
@@ -696,7 +672,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Complexity Level *
+                    Complexity Level
                   </label>
                   <div className="space-y-2">
                     {[

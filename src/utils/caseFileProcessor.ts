@@ -451,14 +451,17 @@ export async function processCaseAttachmentsParallel(
       await ocrSemaphore.acquire();
       
       try {
-        // Add 60 second timeout to prevent infinite hanging
+        console.log(`🔄 Starting parallel processing for: ${attachment.file.name} (timeout: 180s)`);
+
+        // Add 180 second timeout to prevent infinite hanging (large medical images with lots of text can take 2+ minutes)
         const processed = await withTimeout(
           processFileForCaseUpload(attachment, progressCallback),
-          60000, // 60 seconds timeout
-          `Timeout: File processing took longer than 60 seconds for ${attachment.file.name}`
+          180000, // 180 seconds (3 minutes) timeout - allows for large complex medical documents
+          `Timeout: File processing took longer than 180 seconds for ${attachment.file.name}`
         );
-        
+
         const fileTime = performance.now() - fileStartTime;
+        console.log(`✅ Parallel processing complete for: ${attachment.file.name} in ${(fileTime / 1000).toFixed(1)}s`);
         return processed;
       } finally {
         // Always release the semaphore
@@ -466,7 +469,11 @@ export async function processCaseAttachmentsParallel(
       }
     } catch (error) {
       const fileTime = performance.now() - fileStartTime;
-      
+      console.error(`❌ Parallel processing failed for: ${attachment.file.name}`, {
+        error: error instanceof Error ? error.message : 'Processing failed',
+        timeElapsed: `${(fileTime / 1000).toFixed(1)}s`
+      });
+
       // Return a failed attachment instead of throwing
       return {
         ...attachment,
@@ -496,6 +503,20 @@ export async function processCaseAttachmentsParallel(
   
   const successCount = processedAttachments.filter(p => p.status === 'ready').length;
   const failureCount = processedAttachments.filter(p => p.status === 'error').length;
-  
+
+  // Log detailed results
+  console.log(`📊 Parallel processing results:`, {
+    total: processedAttachments.length,
+    successful: successCount,
+    failed: failureCount,
+    totalTime: `${(totalTime / 1000).toFixed(1)}s`,
+    files: processedAttachments.map(p => ({
+      name: p.file.name,
+      status: p.status,
+      hasText: !!p.extractedText,
+      textLength: p.extractedText?.length || 0
+    }))
+  });
+
   return processedAttachments;
 }

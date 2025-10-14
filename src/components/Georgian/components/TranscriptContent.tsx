@@ -164,6 +164,16 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
     }
   }, [showTitleError]);
 
+  // Clear error state when session changes (user selected a session from history)
+  React.useEffect(() => {
+    if (currentSession) {
+      // Session exists, clear all error states
+      setTitleError(false);
+      setTitleHighlight(false);
+      setTitleTouched(false);
+    }
+  }, [currentSession?.id]); // Watch for session ID changes
+
   // Use raw transcript without formatting for textarea to preserve user input
   // Formatting is only applied to AI transcription results, not user edits
   // This ensures spaces and all characters work correctly during manual editing
@@ -358,30 +368,30 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             multiple={true}
           />
 
-          {/* Attached Files Display */}
+          {/* Attached Files Display - Medical Blue Theme */}
           {attachedFiles.length > 0 && (
             <div className="mb-1 md:mb-4 px-2 md:px-3 lg:px-4">
-              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl rounded-xl md:rounded-2xl border border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 p-1 md:p-4 max-h-[80px] md:max-h-none">
+              <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-xl rounded-xl md:rounded-2xl border border-[#63b3ed]/40 dark:border-[#2b6cb0]/40 p-1 md:p-4 max-h-[80px] md:max-h-none shadow-sm">
                 <h4 className="text-xs md:text-sm font-semibold text-[#1a365d] dark:text-[#63b3ed] mb-1 md:mb-3 flex items-center space-x-1 md:space-x-2">
-                  <FileIcon className="w-3 h-3 md:w-4 md:h-4" />
+                  <Paperclip className="w-3 h-3 md:w-4 md:h-4 text-[#2b6cb0]" />
                   <span className="md:hidden">{attachedFiles.length} files</span>
                   <span className="hidden md:inline">Attached Files ({attachedFiles.length})</span>
                   {isProcessingAttachment && (
-                    <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" />
+                    <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin text-[#2b6cb0]" />
                   )}
                 </h4>
-                <div className="flex overflow-x-auto md:flex-row md:flex-wrap gap-2 md:gap-3 pb-2 md:pb-0 scrollbar-thin scrollbar-thumb-[#63b3ed]/40 scrollbar-track-transparent hover:scrollbar-thumb-[#63b3ed]/60">
+                <div className="flex overflow-x-auto md:flex-row md:flex-wrap gap-2 md:gap-3 pb-2 md:pb-0 scrollbar-thin scrollbar-thumb-[#63b3ed]/50 scrollbar-track-transparent hover:scrollbar-thumb-[#63b3ed]/70">
                   {attachedFiles.map((attachment) => (
-                    <div key={attachment.id} className="group relative flex-shrink-0 flex flex-col md:flex-row items-center space-y-1 md:space-y-0 md:space-x-3 bg-gradient-to-br from-white to-[#f8fafc] dark:from-[#1e293b] dark:to-[#334155] border border-[#e2e8f0] dark:border-[#475569] px-2 md:px-4 py-2 md:py-3 rounded-lg md:rounded-xl hover:shadow-lg hover:shadow-[#2b6cb0]/20 hover:border-[#63b3ed]/60 transition-all duration-300 min-w-[80px] max-w-[80px] md:max-w-none md:min-w-fit">
-                      <div className="w-6 h-6 md:w-10 md:h-10 bg-gradient-to-br from-[#3b82f6] to-[#1d4ed8] rounded-lg md:rounded-xl flex items-center justify-center shadow-md hover:shadow-lg transition-shadow duration-200">
+                    <div key={attachment.id} className="group relative flex-shrink-0 flex flex-col md:flex-row items-center space-y-1 md:space-y-0 md:space-x-3 bg-white/90 dark:bg-[#1a365d]/30 border-2 border-[#63b3ed]/30 dark:border-[#2b6cb0]/50 px-2 md:px-4 py-2 md:py-3 rounded-xl md:rounded-2xl hover:shadow-lg hover:shadow-[#63b3ed]/30 hover:border-[#2b6cb0] hover:bg-blue-50/95 dark:hover:bg-[#1a365d]/50 transition-all duration-300 min-w-[80px] max-w-[80px] md:max-w-none md:min-w-fit">
+                      <div className="w-6 h-6 md:w-10 md:h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-lg md:rounded-xl flex items-center justify-center shadow-md hover:shadow-xl hover:scale-105 transition-all duration-200">
                         <FileIcon className="w-3 h-3 md:w-5 md:h-5 text-white" />
                       </div>
                       <div className="flex-1 min-w-0 text-center md:text-left">
-                        <p className="text-[#334155] dark:text-[#94a3b8] font-medium md:font-semibold text-[9px] md:text-sm truncate max-w-[70px] md:max-w-40 leading-tight">
+                        <p className="text-[#1a365d] dark:text-[#93c5fd] font-semibold text-[9px] md:text-sm truncate max-w-[70px] md:max-w-40 leading-tight">
                           {attachment.name.length > 10 ? `${attachment.name.substring(0, 10)}...` : attachment.name}
                         </p>
                         <div className="flex items-center justify-center md:justify-start space-x-1 md:space-x-2 text-[8px] md:text-xs mt-0.5 md:mt-0">
-                          <span className="hidden md:inline text-[#64748b] dark:text-[#94a3b8]">
+                          <span className="hidden md:inline text-[#2b6cb0] dark:text-[#63b3ed] font-medium">
                             {(attachment.size / 1024).toFixed(1)} KB
                           </span>
                           {(() => {
@@ -424,10 +434,10 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                       {onRemoveAttachment && (
                         <button
                           onClick={() => onRemoveAttachment(attachment.id)}
-                          className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-5 h-5 md:w-6 md:h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-80 md:opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-110"
-                          title="Remove attachment"
+                          className="absolute top-1 right-1 md:-top-1.5 md:-right-1.5 w-5 h-5 md:w-6 md:h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 border border-white/50 active:scale-95 z-10"
+                          title="Remove"
                         >
-                          <X className="w-2.5 h-2.5 md:w-4 md:h-4" />
+                          <X className="w-3 h-3 md:w-3.5 md:h-3.5 stroke-[2.5]" />
                         </button>
                       )}
                     </div>
