@@ -69,13 +69,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
     // TIER 1: CORE AI FEATURES - Most Important & Frequently Used
     coreAI: {
       title: t('navigation.sections.coreAI', 'AI Core Features'),
-      subtitle: t('navigation.sections.coreAIDesc', 'Essential AI-powered medical tools'),
       priority: 1,
       items: [
         {
           icon: MessageSquare,
-          label: t('navigation.aiCoPilot', 'AI Co-Pilot'),
-          subtitle: 'Medical consultation AI',
+          label: t('navigation.aiCoPilot', 'AI Assistant'),
           path: '/ai-copilot',
           color: 'theme-core-ai',
           shadowColor: 'shadow-blue-500/30',
@@ -84,7 +82,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         {
           icon: Mic2,
           label: 'MediScribe',
-          subtitle: 'Voice transcription for medical notes',
           path: '/mediscribe',
           color: 'theme-mediscribe',
           shadowColor: 'shadow-blue-500/30',
@@ -96,13 +93,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
     // TIER 2: CLINICAL TOOLS - Medical Analysis & Calculation Tools
     clinicalTools: {
       title: t('navigation.sections.clinicalTools', 'Clinical Tools'),
-      subtitle: t('navigation.sections.clinicalToolsDesc', 'Professional medical analysis tools'),
       priority: 2,
       items: [
         {
           icon: Calculator,
-          label: t('navigation.calculators', 'Medical Calculators'),
-          subtitle: 'Clinical risk assessment tools',
+          label: t('navigation.calculators', 'Calculators'),
           path: '/calculators',
           color: 'theme-clinical',
           shadowColor: 'shadow-blue-500/30',
@@ -111,7 +106,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         {
           icon: TestTube2,
           label: 'Blood Gas Analysis',
-          subtitle: 'ABG interpretation & analysis',
           path: '/abg-analysis',
           color: 'theme-abg',
           shadowColor: 'shadow-blue-500/30',
@@ -119,21 +113,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         },
         {
           icon: Search,
-          label: t('navigation.mediSearch', 'MediSearch'),
-          subtitle: 'Medical literature & news',
+          label: t('navigation.mediSearch', 'Medi Search & News'),
           path: '/search',
           color: 'theme-search',
           shadowColor: 'shadow-blue-500/30',
           importance: 'high'
-        },
-        {
-          icon: Mic,
-          label: t('navigation.podcastStudio', 'Podcast Studio'),
-          subtitle: 'AI-powered medical podcasts',
-          path: '/podcast-studio',
-          color: 'theme-podcast',
-          shadowColor: 'shadow-blue-500/30',
-          importance: 'medium'
         }
       ]
     },
@@ -141,13 +125,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
     // TIER 3: KNOWLEDGE & PROFILE - Information & Personal Management
     knowledge: {
       title: t('navigation.sections.knowledge', 'Knowledge & Profile'),
-      subtitle: t('navigation.sections.knowledgeDesc', 'Learning resources & account management'),
       priority: 3,
       items: [
         {
           icon: BookOpen,
           label: t('navigation.knowledgeBase', 'Knowledge Base'),
-          subtitle: 'Medical reference library',
           path: '/knowledge-base',
           color: 'theme-knowledge',
           shadowColor: 'shadow-blue-500/30',
@@ -156,7 +138,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         {
           icon: Database,
           label: 'Disease Library',
-          subtitle: 'Comprehensive disease database',
           path: '/diseases',
           color: 'theme-knowledge',
           shadowColor: 'shadow-blue-500/30',
@@ -165,7 +146,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         {
           icon: User,
           label: t('navigation.profile', 'Profile & Settings'),
-          subtitle: 'Account preferences',
           path: '/profile',
           color: 'theme-profile-item',
           shadowColor: 'shadow-blue-500/30',
@@ -174,7 +154,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         {
           icon: BarChart3,
           label: 'Analytics Dashboard',
-          subtitle: 'Usage insights & metrics',
           path: '/analytics',
           color: 'theme-knowledge',
           shadowColor: 'shadow-blue-500/30',
@@ -454,7 +433,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                   {(!isCollapsed || isMobile) && (
                     <div className="px-3 py-2">
                       <div className={`
-                        flex items-center space-x-3 mb-2 
+                        flex items-center space-x-3
                         ${section.priority === 1 ? 'border-l-4 border-[#1a365d] pl-3' : ''}
                         ${section.priority === 2 ? 'border-l-4 border-[#2b6cb0] pl-3' : ''}
                         ${section.priority === 3 ? 'border-l-4 border-[#63b3ed] pl-3' : ''}
@@ -475,10 +454,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                           {section.title}
                         </h4>
                       </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed ml-6"
-                         style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 400 }}>
-                        {section.subtitle}
-                      </p>
                     </div>
                   )}
 
@@ -612,14 +587,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                                 `} />
                               </div>
                               
-                              {/* LABEL & SUBTITLE */}
+                              {/* LABEL */}
                               {(!isCollapsed || isMobile) && (
                                 <div className="flex-1 ml-3 min-w-0">
                                   <h3 className={`
                                     font-semibold transition-all duration-200 ease-out truncate tracking-tight
                                     ${section.priority === 1 ? 'text-sm' : section.priority === 2 ? 'text-sm' : 'text-xs'}
-                                    ${active 
-                                      ? 'text-white drop-shadow-sm' 
+                                    ${active
+                                      ? 'text-white drop-shadow-sm'
                                       : isHovered
                                         ? 'text-white drop-shadow-sm'
                                         : 'text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100'
@@ -628,21 +603,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                                   style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 600 }}>
                                     {item.label}
                                   </h3>
-                                  {/* Subtitle only for priority 1 items */}
-                                  {section.priority === 1 && item.subtitle && (
-                                    <p className={`
-                                      text-xs mt-0.5 truncate transition-all duration-200 ease-out
-                                      ${active 
-                                        ? 'text-white/80' 
-                                        : isHovered
-                                          ? 'text-white/80'
-                                          : 'text-gray-500 dark:text-gray-400'
-                                      }
-                                    `}
-                                    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif', fontWeight: 400 }}>
-                                      {item.subtitle}
-                                    </p>
-                                  )}
                                 </div>
                               )}
                             </div>
@@ -664,7 +624,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                             )}
                           </div>
 
-                          {/* ENHANCED TOOLTIP WITH TIER INFO */}
+                          {/* ENHANCED TOOLTIP */}
                           {isCollapsed && !isMobile && (
                             <div className={`
                               absolute left-full ml-4 px-3 py-2 rounded-lg
@@ -675,9 +635,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
                               ${section.priority === 1 ? 'text-sm' : 'text-xs'}
                             `}>
                               <div>{item.label}</div>
-                              {item.subtitle && section.priority === 1 && (
-                                <div className="text-xs text-gray-300 mt-1">{item.subtitle}</div>
-                              )}
                               <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900/95 rotate-45" />
                             </div>
                           )}

@@ -168,7 +168,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'risk-assessment',
       label: t('calculators.categories.risk_assessment'),
     icon: Heart,
-    color: getCategoryIconClass(0),
+    color: 'text-[#1a365d]',
     calculators: [
       {
         id: 'ascvd',
@@ -188,7 +188,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'acute-care',
       label: t('calculators.categories.acute_care'),
     icon: Activity,
-    color: getCategoryIconClass(1),
+    color: 'text-[#2b6cb0]',
     calculators: [
       {
         id: 'timi-risk',
@@ -218,9 +218,9 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
   },
   {
     id: 'therapy-management',
-      label: t('calculators.categories.therapy_management'), 
+      label: t('calculators.categories.therapy_management'),
     icon: Zap,
-    color: getCategoryIconClass(2),
+    color: 'text-[#63b3ed]',
     calculators: [
       {
         id: 'dapt',
@@ -246,7 +246,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'heart-failure',
       label: t('calculators.categories.heart_failure'),
     icon: HeartHandshake,
-    color: getCategoryIconClass(3),
+    color: 'text-[#90cdf4]',
     calculators: [
       {
         id: 'heart-failure-staging',
@@ -279,7 +279,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'surgical-risk',
       label: t('calculators.categories.surgical_risk'),
     icon: Wrench,
-    color: getCategoryIconClass(0),
+    color: 'text-[#1a365d]',
     calculators: [
       {
         id: 'sts',
@@ -299,7 +299,7 @@ const cardiologyCalculatorCategories: CalculatorCategory[] = [
     id: 'cardiomyopathy',
       label: t('calculators.categories.cardiomyopathy'),
     icon: Dna,
-    color: getCategoryIconClass(1),
+    color: 'text-[#2b6cb0]',
     calculators: [
       {
         id: 'hcm-risk-scd',
@@ -323,7 +323,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
     id: 'pregnancy-dating',
       label: t('calculators.categories.pregnancy_dating'),
     icon: Calendar,
-      color: 'text-pink-600',
+      color: 'text-[#1a365d]',
     calculators: [
       {
         id: 'edd-calculator',
@@ -343,7 +343,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
     id: 'antenatal-risk',
       label: t('calculators.categories.antenatal_risk'),
     icon: Shield,
-      color: 'text-blue-600',
+      color: 'text-[#2b6cb0]',
     calculators: [
       {
         id: 'preeclampsia-risk',
@@ -369,7 +369,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
     id: 'labor-management',
       label: t('calculators.categories.labor_management'),
     icon: Activity,
-    color: 'text-purple-600',
+    color: 'text-[#63b3ed]',
     calculators: [
       {
         id: 'bishop-score',
@@ -389,7 +389,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
     id: 'assessment-tools',
       label: t('calculators.categories.assessment_tools'),
     icon: TestTube,
-    color: 'text-green-600',
+    color: 'text-[#90cdf4]',
     calculators: [
       {
         id: 'apgar-score',
@@ -409,7 +409,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
     id: 'gynecologic-oncology',
       label: t('calculators.categories.gynecologic_oncology'),
     icon: Shield,
-      color: 'text-red-600',
+      color: 'text-[#1a365d]',
     calculators: [
       {
         id: 'cervical-cancer-risk',
@@ -435,7 +435,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
     id: 'reproductive-endocrinology',
       label: t('calculators.categories.reproductive_endocrinology'),
       icon: Dna,
-    color: 'text-indigo-600',
+    color: 'text-[#2b6cb0]',
     calculators: [
       {
         id: 'ovarian-reserve',
@@ -614,7 +614,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
           <button
             onClick={() => setActiveCalculator(null)}
             className={`
-              inline-flex items-center space-x-2 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-blue-700 hover:text-blue-800 font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md min-h-[44px] min-w-[44px]
+              inline-flex items-center space-x-2 px-4 py-3 rounded-xl bg-gradient-to-r from-calc-theme-secondary/10 to-calc-theme-accent/10 hover:from-calc-theme-secondary/20 hover:to-calc-theme-accent/20 text-calc-theme-secondary hover:text-calc-theme-primary font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md min-h-[44px] min-w-[44px]
               ${isMobile ? 'px-6 py-4 text-sm' : ''}
             `}
             aria-label="Back to calculators"
@@ -638,8 +638,8 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
             <div className="flex flex-col items-center justify-center py-16 px-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg rounded-2xl border border-white/25 dark:border-gray-700/25 shadow-xl">
               {/* Loading animation */}
               <div className="relative">
-                <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-                <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-violet-600 rounded-full animate-spin animation-delay-150"></div>
+                <div className="w-16 h-16 border-4 border-calc-theme-accent/30 border-t-calc-theme-secondary rounded-full animate-spin"></div>
+                <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-calc-theme-accent rounded-full animate-spin animation-delay-150"></div>
               </div>
               
               {/* Loading text */}
@@ -657,7 +657,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                 {[0, 1, 2].map((i) => (
                   <div
                     key={i}
-                    className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"
+                    className="w-2 h-2 bg-calc-theme-secondary rounded-full animate-bounce"
                     style={{ animationDelay: `${i * 0.2}s` }}
                   />
                 ))}
@@ -673,22 +673,22 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
 
   return (
     <div className="h-full w-full overflow-auto">
-      <div className="min-h-screen bg-calc-bg-main-light dark:bg-calc-bg-main-dark relative">
-          {/* Epic Animated background elements */}
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-[#90cdf4]/5 to-[#63b3ed]/10 dark:from-gray-900 dark:via-[#1a365d]/20 dark:to-[#2b6cb0]/15 relative">
+          {/* Enhanced decorative elements for visual interest */}
           <div className="fixed inset-0 overflow-hidden pointer-events-none">
-            {/* Primary floating orbs */}
-            <div className={`absolute top-1/6 left-1/5 w-[500px] h-[500px] ${getSpecialtyGradientClass(specialty)} opacity-15 rounded-full blur-3xl animate-pulse`}></div>
-            <div className={`absolute bottom-1/5 right-1/4 w-[600px] h-[600px] ${getSpecialtyGradientClass(specialty)} opacity-10 rounded-full blur-3xl animate-pulse`} style={{ animationDelay: '2s' }}></div>
-            <div className={`absolute top-1/3 right-1/6 w-[400px] h-[400px] ${getSpecialtyGradientClass(specialty)} opacity-12 rounded-full blur-3xl animate-pulse`} style={{ animationDelay: '4s' }}></div>
-            
-            {/* Secondary accent orbs */}
-            <div className={`absolute top-2/3 left-1/3 w-[300px] h-[300px] ${getSpecialtyGradientClass(specialty)} opacity-8 rounded-full blur-2xl animate-pulse`} style={{ animationDelay: '1s' }}></div>
-            <div className={`absolute bottom-1/2 left-1/12 w-[250px] h-[250px] ${getSpecialtyGradientClass(specialty)} opacity-10 rounded-full blur-2xl animate-pulse`} style={{ animationDelay: '3s' }}></div>
-            
-            {/* Floating sparkles */}
-            <div className="absolute top-1/4 left-1/2 w-2 h-2 bg-calc-theme-secondary rounded-full blur-sm animate-bounce opacity-60" style={{ animationDelay: '0.5s' }}></div>
-            <div className="absolute top-1/2 left-1/3 w-1.5 h-1.5 bg-calc-theme-accent rounded-full blur-sm animate-bounce opacity-50" style={{ animationDelay: '1.5s' }}></div>
-            <div className="absolute top-2/3 right-1/3 w-2.5 h-2.5 bg-calc-theme-light rounded-full blur-sm animate-bounce opacity-70" style={{ animationDelay: '2.5s' }}></div>
+            {/* Beautiful floating orbs for depth - using exact theme colors */}
+            <div className="absolute top-20 right-20 w-40 h-40 bg-gradient-to-r from-[#63b3ed]/10 to-[#2b6cb0]/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0s' }}></div>
+            <div className="absolute bottom-32 left-16 w-64 h-64 bg-gradient-to-br from-[#90cdf4]/8 to-[#2b6cb0]/12 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute top-1/2 right-1/4 w-32 h-32 bg-gradient-to-tl from-[#90cdf4]/6 to-[#63b3ed]/10 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+
+            {/* Enhanced floating sparkles - using theme colors */}
+            <div className="absolute top-1/4 left-1/2 w-2 h-2 bg-[#2b6cb0]/40 rounded-full blur-sm animate-bounce opacity-60" style={{ animationDelay: '0.5s' }}></div>
+            <div className="absolute top-1/2 left-1/3 w-1.5 h-1.5 bg-[#63b3ed]/35 rounded-full blur-sm animate-bounce opacity-50" style={{ animationDelay: '1.5s' }}></div>
+            <div className="absolute top-2/3 right-1/3 w-2 h-2 bg-[#90cdf4]/45 rounded-full blur-sm animate-bounce opacity-65" style={{ animationDelay: '2.5s' }}></div>
+
+            {/* Additional subtle background elements - using theme colors */}
+            <div className="absolute top-16 left-1/4 w-20 h-20 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/25 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '3s' }}></div>
+            <div className="absolute bottom-20 right-1/3 w-28 h-28 bg-gradient-to-l from-[#63b3ed]/15 to-[#2b6cb0]/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '5s' }}></div>
           </div>
 
           {/* Main content container with perfect centering */}
@@ -696,57 +696,49 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
             {/* Compact Hero Section */}
             <div className="flex-shrink-0 text-center py-8 px-4 sm:py-12 sm:px-6" data-tour="calculator-tabs">
               <div className="max-w-4xl mx-auto space-y-6">
-                {/* Streamlined title */}
+                {/* Beautiful Production-Ready Title */}
                 <div className="relative inline-block">
-                  {/* Background glow */}
-                  <div className={`absolute inset-0 ${getSpecialtyGradientClass(specialty)} opacity-15 rounded-2xl blur-xl scale-105 animate-pulse`}></div>
-                  
+                  {/* Enhanced background glow for depth */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0]/20 via-[#63b3ed]/15 to-[#90cdf4]/20 rounded-2xl blur-xl scale-110 animate-pulse opacity-70"></div>
+
                   <h1 className="relative text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
-                    <span className={`${getSpecialtyGradientClass(specialty)} bg-clip-text text-transparent drop-shadow-sm`}>
+                    {/* Beautiful gradient text with proper fallback */}
+                    <span className="bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] bg-clip-text text-transparent hover:from-[#2b6cb0] hover:via-[#63b3ed] hover:to-[#90cdf4] transition-all duration-500 drop-shadow-lg"
+                          style={{
+                            // Fallback for browsers that don't support bg-clip-text - using exact theme colors
+                            background: 'linear-gradient(to right, #1a365d, #2b6cb0, #63b3ed)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            backgroundClip: 'text',
+                            color: 'transparent'
+                          }}>
+                      {t('tour.calculators.hero.title', 'Medical Calculator Excellence')}
+                    </span>
+
+                    {/* Visible fallback text for accessibility */}
+                    <span className="absolute inset-0 text-gray-900 dark:text-gray-100 font-black opacity-0 hover:opacity-100 transition-opacity duration-300"
+                          style={{
+                            textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+                            zIndex: -1
+                          }}>
                       {t('tour.calculators.hero.title', 'Medical Calculator Excellence')}
                     </span>
                   </h1>
-                  
-                  {/* Smaller floating accent */}
+
+                  {/* Enhanced floating accent with glow */}
                   <div className="absolute -top-2 -right-6 animate-spin-slow">
-                    <Crown className="w-8 h-8 text-amber-400 opacity-70" />
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-[#63b3ed]/30 rounded-full blur-md animate-pulse"></div>
+                      <Crown className="relative w-8 h-8 text-[#2b6cb0] opacity-80 hover:opacity-100 transition-opacity duration-300" />
+                    </div>
+                  </div>
+
+                  {/* Subtle medical cross accent */}
+                  <div className="absolute -top-1 -left-8 opacity-50 animate-bounce">
+                    <div className="w-3 h-3 bg-[#2b6cb0] rounded-full"></div>
                   </div>
                 </div>
 
-                {/* Compact subtitle */}
-                <div className="relative max-w-2xl mx-auto">
-                  <div className="absolute inset-0 bg-white/25 dark:bg-gray-800/25 backdrop-blur-lg rounded-xl border border-white/20 dark:border-gray-700/30"></div>
-                  <p className="relative text-sm sm:text-base text-gray-700 dark:text-gray-300 font-medium px-6 py-4 leading-relaxed">
-                    {t('tour.calculators.hero.subtitle', 'World-class evidence-based calculators with 100% validation and clinical accuracy')}
-                  </p>
-                </div>
-
-                {/* Compact stats row */}
-                <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-                  {[
-                    { icon: Target, labelKey: 'tour.calculators.stats.validated', value: '30+', color: 'from-emerald-500 to-teal-600' },
-                    { icon: Award, labelKey: 'tour.calculators.stats.clinical', value: 'AAA', color: 'from-blue-500 to-indigo-600' },
-                    { icon: Diamond, labelKey: 'tour.calculators.stats.evidence', value: 'A++', color: 'from-violet-500 to-purple-600' },
-                    { icon: Rocket, labelKey: 'tour.calculators.stats.fast', value: '99.9%', color: 'from-rose-500 to-pink-600' }
-                  ].map((stat, index) => (
-                    <div key={stat.labelKey} className="group relative" style={{ animationDelay: `${index * 150}ms` }}>
-                      {/* Glow effect */}
-                      <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-xl blur-lg opacity-15 group-hover:opacity-30 transition-opacity duration-400`}></div>
-                      
-                      <div className="relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg border border-white/25 dark:border-gray-700/25 rounded-xl p-4 text-center hover:scale-105 transition-all duration-300 shadow-lg">
-                        <div className={`inline-flex p-2 bg-gradient-to-r ${stat.color} rounded-lg mb-2 shadow-md`}>
-                          <stat.icon className="w-4 h-4 text-white" />
-                        </div>
-                        <div className={`text-lg font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
-                          {stat.value}
-                        </div>
-                        <div className="text-xs font-bold text-gray-600 dark:text-gray-400">
-                          {t(stat.labelKey)}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
 
@@ -757,20 +749,23 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                 <Tabs value={activeCategory} onValueChange={setActiveCategory} className="w-full max-w-6xl">
                   {/* Compact Category Navigation */}
                   <div className="relative mb-28">
-                    {/* Section background with glassmorphism */}
-                    <div className="absolute inset-0 bg-white/30 dark:bg-gray-800/30 backdrop-blur-xl rounded-2xl border border-white/25 dark:border-gray-700/25 shadow-xl"></div>
+                    {/* Enhanced section background with glassmorphism */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-calc-theme-accent/5 dark:from-gray-800/60 dark:via-gray-800/40 dark:to-calc-theme-primary/10 backdrop-blur-xl rounded-2xl border border-calc-theme-accent/20 dark:border-calc-theme-secondary/25 shadow-xl"></div>
+
+                    {/* Subtle inner glow */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-calc-theme-secondary/5 via-transparent to-calc-theme-accent/5 rounded-2xl"></div>
                     
                     <div className="relative p-6">
                       {/* Compact section title */}
                       <div className="text-center mb-6">
-                        <h2 className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-slate-900 via-blue-800 to-violet-900 dark:from-white dark:via-blue-200 dark:to-violet-300 bg-clip-text text-transparent mb-2">
+                        <h2 className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-calc-theme-primary via-calc-theme-secondary to-calc-theme-accent dark:from-white dark:via-calc-theme-light dark:to-calc-theme-accent bg-clip-text text-transparent mb-2">
                           {t('tour.calculators.categories.title', 'Calculator Categories')}
                         </h2>
                         <div className="max-w-xl mx-auto">
                           <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                             {t('tour.calculators.categories.description', 'Choose your specialty to access clinical tools')}
                           </p>
-                          <div className="mt-2 h-0.5 w-20 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full mx-auto"></div>
+                          <div className="mt-2 h-0.5 w-20 bg-gradient-to-r from-calc-theme-secondary to-calc-theme-accent rounded-full mx-auto"></div>
                   </div>
                       </div>
                       {/* Compact Category Grid */}
@@ -794,17 +789,20 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                             >
                               {/* Compact card with glassmorphism */}
                               <div className={`relative overflow-hidden rounded-xl p-4 transition-all duration-400 ${
-                                activeCategory === category.id 
-                                  ? 'bg-gradient-to-br from-blue-500 via-violet-500 to-purple-600 shadow-xl' 
+                                activeCategory === category.id
+                                  ? 'shadow-xl border-[#63b3ed]/50'
                                   : 'bg-white/50 dark:bg-gray-800/50 hover:bg-white/70 dark:hover:bg-gray-800/70 shadow-lg hover:shadow-xl'
-                              } backdrop-blur-lg border border-white/25 dark:border-gray-700/25`}>
+                              } backdrop-blur-lg border border-white/25 dark:border-gray-700/25`}
+                              style={activeCategory === category.id ? {
+                                background: 'linear-gradient(135deg, #1a365d, #2b6cb0, #63b3ed)'
+                              } : {}}>
                                 
                                 {/* Compact floating background effects */}
                                 <div className={`absolute inset-0 transition-opacity duration-400 pointer-events-none ${
                                   activeCategory === category.id ? 'opacity-15' : 'opacity-0 group-hover:opacity-8'
                                 }`}>
-                                  <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-blue-400 to-violet-500 rounded-full blur-xl"></div>
-                                  <div className="absolute bottom-0 left-0 w-10 h-10 bg-gradient-to-tr from-purple-400 to-pink-500 rounded-full blur-lg"></div>
+                                  <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-[#2b6cb0] to-[#63b3ed] rounded-full blur-xl"></div>
+                                  <div className="absolute bottom-0 left-0 w-10 h-10 bg-gradient-to-tr from-[#63b3ed] to-[#90cdf4] rounded-full blur-lg"></div>
                                 </div>
 
                                 {/* Compact icon layout */}
@@ -814,15 +812,15 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                                   }`}>
                                     {/* Icon glow */}
                                     <div className={`absolute inset-0 rounded-xl blur-md transition-opacity duration-400 ${
-                                      activeCategory === category.id 
-                                        ? 'bg-white/25 opacity-100' 
-                                        : 'bg-gradient-to-r from-blue-400/15 to-violet-500/15 opacity-0 group-hover:opacity-100'
+                                      activeCategory === category.id
+                                        ? 'bg-white/25 opacity-100'
+                                        : 'bg-gradient-to-r from-[#2b6cb0]/15 to-[#63b3ed]/15 opacity-0 group-hover:opacity-100'
                                     }`}></div>
                                     
                                     <div className={`relative p-3 rounded-xl transition-all duration-400 ${
-                          activeCategory === category.id 
-                            ? 'bg-white/20 shadow-lg' 
-                                        : 'bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-900/25 dark:to-violet-900/25 group-hover:from-blue-100 group-hover:to-violet-100 dark:group-hover:from-blue-800/35 dark:group-hover:to-violet-800/35 shadow-md'
+                          activeCategory === category.id
+                            ? 'bg-white/20 shadow-lg backdrop-blur-sm border border-white/30'
+                                        : 'bg-gradient-to-br from-[#2b6cb0]/10 to-[#63b3ed]/10 dark:from-[#2b6cb0]/25 dark:to-[#63b3ed]/25 group-hover:from-[#2b6cb0]/20 group-hover:to-[#63b3ed]/20 dark:group-hover:from-[#2b6cb0]/35 dark:group-hover:to-[#63b3ed]/35 shadow-md'
                         }`}>
                                       <category.icon className={`w-6 h-6 transition-all duration-400 ${
                             activeCategory === category.id 
@@ -835,18 +833,18 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                                   {/* Compact label */}
                                   <div className="text-center space-y-1">
                                     <h3 className={`text-xs font-bold leading-tight transition-all duration-300 ${
-                                      activeCategory === category.id 
-                                        ? 'text-white drop-shadow-sm' 
-                                        : 'text-gray-900 dark:text-gray-100 group-hover:text-blue-700 dark:group-hover:text-blue-300'
+                                      activeCategory === category.id
+                                        ? 'text-white drop-shadow-lg'
+                                        : 'text-gray-900 dark:text-gray-100 group-hover:text-[#2b6cb0] dark:group-hover:text-[#63b3ed]'
                                     }`}>
                           {category.label}
                                     </h3>
                         
                                     {/* Compact count badge */}
                                     <div className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-black transition-all duration-400 ${
-                          activeCategory === category.id 
-                                        ? 'bg-white/20 text-white shadow-md backdrop-blur-sm' 
-                                        : 'bg-gradient-to-r from-blue-100 to-violet-100 dark:from-blue-900/35 dark:to-violet-900/35 text-blue-700 dark:text-blue-300 group-hover:from-blue-200 group-hover:to-violet-200 dark:group-hover:from-blue-800/50 dark:group-hover:to-violet-800/50 shadow-sm'
+                          activeCategory === category.id
+                                        ? 'bg-white/25 text-white shadow-lg backdrop-blur-sm'
+                                        : 'bg-gradient-to-r from-[#2b6cb0]/20 to-[#63b3ed]/20 dark:from-[#2b6cb0]/35 dark:to-[#63b3ed]/35 text-[#1a365d] dark:text-[#63b3ed] group-hover:from-[#2b6cb0]/30 group-hover:to-[#63b3ed]/30 dark:group-hover:from-[#2b6cb0]/50 dark:group-hover:to-[#63b3ed]/50 shadow-sm'
                         }`}>
                           {category.calculators.length}
                                     </div>
@@ -856,7 +854,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                         
                               {/* Compact outer glow for active state */}
                         {activeCategory === category.id && (
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/25 via-violet-500/25 to-purple-600/25 rounded-xl blur-xl -z-10 animate-pulse"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/30 via-[#2b6cb0]/30 to-[#63b3ed]/30 rounded-xl blur-xl -z-10 animate-pulse"></div>
                         )}
                             </div>
                       </TabsTrigger>
@@ -882,14 +880,14 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                             style={{ animationDelay: `${index * 100}ms` }}
                           >
                             {/* Compact outer glow container */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/15 via-violet-500/15 to-purple-600/15 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500 scale-105 group-hover:animate-pulse"></div>
+                            <div className="absolute inset-0 bg-gradient-to-br from-calc-theme-primary/15 via-calc-theme-secondary/15 to-calc-theme-accent/15 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500 scale-105 group-hover:animate-pulse"></div>
                             
                             {/* Compact card with modern glassmorphism */}
                             <Card className="relative overflow-hidden bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl border border-white/25 dark:border-gray-700/25 rounded-2xl shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 hover:scale-102 h-full flex flex-col">
                               {/* Compact floating background orbs */}
                               <div className="absolute inset-0 overflow-hidden">
-                                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-400/8 via-violet-400/8 to-purple-500/8 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-pink-400/8 via-rose-400/8 to-orange-500/8 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ animationDelay: '150ms' }}></div>
+                                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-calc-theme-secondary/8 via-calc-theme-accent/8 to-calc-theme-light/8 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-calc-theme-accent/8 via-calc-theme-light/8 to-calc-theme-secondary/8 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ animationDelay: '150ms' }}></div>
                               </div>
 
                               <CardHeader className="relative p-5 space-y-5 flex-1 flex flex-col">
@@ -898,28 +896,28 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                                   {/* Compact calculator icon */}
                                   <div className="relative group/icon">
                                     {/* Simplified glow effect */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-violet-500 to-purple-600 rounded-xl blur-lg opacity-20 group-hover/icon:opacity-40 transition-opacity duration-400 scale-105"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-calc-theme-primary via-calc-theme-secondary to-calc-theme-accent rounded-xl blur-lg opacity-20 group-hover/icon:opacity-40 transition-opacity duration-400 scale-105"></div>
                                     
-                                    <div className="relative p-3 bg-gradient-to-br from-blue-100 via-violet-50 to-purple-100 dark:from-blue-900/35 dark:via-violet-900/35 dark:to-purple-900/35 rounded-xl shadow-lg group-hover/icon:scale-105 transition-transform duration-400 border border-blue-200/40 dark:border-blue-700/40">
-                                      <Calculator className="w-7 h-7 text-blue-600 dark:text-blue-400 drop-shadow-md" />
+                                    <div className="relative p-3 bg-gradient-to-br from-calc-theme-secondary/20 via-calc-theme-accent/15 to-calc-theme-light/20 dark:from-calc-theme-secondary/35 dark:via-calc-theme-accent/35 dark:to-calc-theme-light/35 rounded-xl shadow-lg group-hover/icon:scale-105 transition-transform duration-400 border border-calc-theme-secondary/40 dark:border-calc-theme-accent/40">
+                                      <Calculator className="w-7 h-7 text-calc-theme-secondary dark:text-calc-theme-accent drop-shadow-md" />
                                   </div>
                                     
                                     {/* Single floating sparkle */}
                                     <div className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                                      <Sparkles className="w-3 h-3 text-amber-400 animate-spin" />
+                                      <Sparkles className="w-3 h-3 text-calc-theme-light animate-spin" />
                                     </div>
                                 </div>
                                 
                                   {/* Compact validation badge */}
-                                  <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-100 to-emerald-50 dark:from-emerald-900/35 dark:to-emerald-900/25 rounded-xl border border-emerald-200/50 dark:border-emerald-700/50 shadow-md backdrop-blur-sm">
-                                    <CheckCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                                    <span className="text-xs font-black text-emerald-700 dark:text-emerald-300">VALIDATED</span>
+                                  <div className="flex items-center space-x-1.5 px-3 py-1.5 bg-gradient-to-r from-calc-theme-accent/20 to-calc-theme-light/15 dark:from-calc-theme-primary/25 dark:to-calc-theme-secondary/20 rounded-xl border border-calc-theme-accent/30 dark:border-calc-theme-secondary/30 shadow-md backdrop-blur-sm">
+                                    <CheckCircle className="w-3.5 h-3.5 text-calc-theme-primary dark:text-calc-theme-accent" />
+                                    <span className="text-xs font-black text-calc-theme-primary dark:text-calc-theme-accent">VALIDATED</span>
                                 </div>
                               </div>
 
                                 {/* Compact title and description */}
                                 <div className="space-y-3 flex-1">
-                                  <CardTitle className="text-lg font-black leading-tight group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:via-violet-600 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-400 text-gray-900 dark:text-gray-100">
+                                  <CardTitle className="text-lg font-black leading-tight group-hover:bg-gradient-to-r group-hover:from-calc-theme-primary group-hover:via-calc-theme-secondary group-hover:to-calc-theme-accent group-hover:bg-clip-text group-hover:text-transparent transition-all duration-400 text-gray-900 dark:text-gray-100">
                                   {calc.name}
                                 </CardTitle>
                                   <CardDescription className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium line-clamp-3">
@@ -930,20 +928,20 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                                 {/* Compact feature indicators */}
                                 <div className="flex items-center justify-between pt-3 border-t border-gray-200/50 dark:border-gray-700/50">
                                   <div className="flex items-center space-x-3">
-                                    <div className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/25 dark:to-indigo-900/25 rounded-lg border border-blue-100/50 dark:border-blue-800/50 shadow-sm">
-                                      <Activity className="w-3.5 h-3.5 text-blue-500 animate-pulse" />
-                                      <span className="text-xs font-bold text-blue-700 dark:text-blue-300">Clinical</span>
+                                    <div className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-gradient-to-r from-calc-theme-secondary/20 to-calc-theme-secondary/10 dark:from-calc-theme-secondary/25 dark:to-calc-theme-secondary/15 rounded-lg border border-calc-theme-secondary/30 dark:border-calc-theme-secondary/40 shadow-sm">
+                                      <Activity className="w-3.5 h-3.5 text-calc-theme-secondary animate-pulse" />
+                                      <span className="text-xs font-bold text-calc-theme-secondary">Clinical</span>
                                   </div>
-                                    <div className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/25 dark:to-purple-900/25 rounded-lg border border-violet-100/50 dark:border-violet-800/50 shadow-sm">
-                                      <Target className="w-3.5 h-3.5 text-violet-500" />
-                                      <span className="text-xs font-bold text-violet-700 dark:text-violet-300">Accurate</span>
+                                    <div className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-gradient-to-r from-calc-theme-accent/20 to-calc-theme-accent/10 dark:from-calc-theme-accent/25 dark:to-calc-theme-accent/15 rounded-lg border border-calc-theme-accent/30 dark:border-calc-theme-accent/40 shadow-sm">
+                                      <Target className="w-3.5 h-3.5 text-calc-theme-accent" />
+                                      <span className="text-xs font-bold text-calc-theme-accent">Accurate</span>
                                   </div>
                                 </div>
                                 
                                   {/* Compact launch indicator */}
-                                  <div className="flex items-center space-x-1.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform duration-300">
+                                  <div className="flex items-center space-x-1.5 text-calc-theme-secondary group-hover:translate-x-1 transition-transform duration-300">
                                   <span className="text-sm font-bold">Launch</span>
-                                    <div className="p-1.5 bg-gradient-to-r from-blue-100 to-violet-100 dark:from-blue-900/30 dark:to-violet-900/30 rounded-lg group-hover:from-blue-200 group-hover:to-violet-200 transition-all duration-300 shadow-sm">
+                                    <div className="p-1.5 bg-gradient-to-r from-calc-theme-secondary/20 to-calc-theme-accent/20 dark:from-calc-theme-secondary/30 dark:to-calc-theme-accent/30 rounded-lg group-hover:from-calc-theme-secondary/30 group-hover:to-calc-theme-accent/30 transition-all duration-300 shadow-sm">
                                     <Play className="w-4 h-4" />
                                   </div>
                                 </div>
@@ -973,7 +971,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                       <div className="absolute inset-0 bg-white/70 dark:bg-gray-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-gray-700/30"></div>
                       
                       {/* Glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-violet-500/10 to-purple-600/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-calc-theme-primary/10 via-calc-theme-secondary/10 to-calc-theme-accent/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       
                       <div className="relative flex items-center justify-between p-6 transition-all duration-300">
                       <div className="flex items-center space-x-4">
@@ -981,13 +979,13 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                           <>
                               <div className="relative">
                                 {/* Icon glow */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-violet-500 to-purple-600 rounded-2xl blur-lg opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
-                                <div className="relative p-3 bg-gradient-to-r from-blue-500 via-violet-500 to-purple-600 rounded-2xl shadow-xl">
+                                <div className="absolute inset-0 bg-gradient-to-r from-calc-theme-primary via-calc-theme-secondary to-calc-theme-accent rounded-2xl blur-lg opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
+                                <div className="relative p-3 bg-gradient-to-r from-calc-theme-primary via-calc-theme-secondary to-calc-theme-accent rounded-2xl shadow-xl">
                                   <activeCategory_data.icon className="w-7 h-7 text-white" />
                                 </div>
                             </div>
                             <div className="text-left">
-                                <div className="text-xl font-black bg-gradient-to-r from-slate-900 via-blue-800 to-violet-900 dark:from-white dark:via-blue-200 dark:to-violet-300 bg-clip-text text-transparent">
+                                <div className="text-xl font-black bg-gradient-to-r from-calc-theme-primary via-calc-theme-secondary to-calc-theme-accent dark:from-white dark:via-calc-theme-light dark:to-calc-theme-accent bg-clip-text text-transparent">
                                   {activeCategory_data.label}
                                 </div>
                                 <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -998,7 +996,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                         )}
                       </div>
                         <div className="flex items-center space-x-2">
-                          <div className="px-3 py-1.5 bg-gradient-to-r from-blue-100 to-violet-100 dark:from-blue-900/40 dark:to-violet-900/40 rounded-xl text-xs font-black text-blue-700 dark:text-blue-300">
+                          <div className="px-3 py-1.5 bg-gradient-to-r from-calc-theme-secondary/20 to-calc-theme-accent/20 dark:from-calc-theme-secondary/40 dark:to-calc-theme-accent/40 rounded-xl text-xs font-black text-calc-theme-secondary dark:text-calc-theme-accent">
                             SELECT
                           </div>
                           <ChevronRight className={`w-6 h-6 text-gray-400 transition-transform duration-500 ${showMobileMenu ? 'rotate-90' : ''}`} />
@@ -1021,17 +1019,17 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                           >
                             {/* Active state background */}
                             {activeCategory === category.id && (
-                              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-violet-500/20 to-purple-600/20"></div>
+                              <div className="absolute inset-0 bg-gradient-to-r from-calc-theme-primary/20 via-calc-theme-secondary/20 to-calc-theme-accent/20"></div>
                             )}
                             
                             {/* Hover effect */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-violet-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-calc-theme-primary/5 via-calc-theme-secondary/5 to-calc-theme-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             
                             <div className="relative flex items-center space-x-4 p-4 transition-all duration-300">
                               <div className={`relative p-3 rounded-2xl transition-all duration-300 ${
                                 activeCategory === category.id 
-                                  ? 'bg-gradient-to-r from-blue-500 via-violet-500 to-purple-600 shadow-xl scale-105' 
-                                  : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 group-hover:from-blue-100 group-hover:to-violet-100 dark:group-hover:from-blue-900/30 dark:group-hover:to-violet-900/30 shadow-lg'
+                                  ? 'bg-gradient-to-r from-calc-theme-primary via-calc-theme-secondary to-calc-theme-accent shadow-xl scale-105'
+                                  : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 group-hover:from-calc-theme-secondary/20 group-hover:to-calc-theme-accent/20 dark:group-hover:from-calc-theme-secondary/30 dark:group-hover:to-calc-theme-accent/30 shadow-lg'
                               }`}>
                                 <category.icon className={`w-6 h-6 transition-all duration-300 ${
                                   activeCategory === category.id 
@@ -1042,8 +1040,8 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                             <div className="flex-1 text-left">
                                 <div className={`font-bold transition-colors duration-300 ${
                                   activeCategory === category.id 
-                                    ? 'text-blue-700 dark:text-blue-300' 
-                                    : 'text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400'
+                                    ? 'text-calc-theme-secondary dark:text-calc-theme-accent'
+                                    : 'text-gray-900 dark:text-gray-100 group-hover:text-calc-theme-secondary dark:group-hover:text-calc-theme-accent'
                                 }`}>
                                   {category.label}
                                 </div>
@@ -1052,7 +1050,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                                 </div>
                               </div>
                               {activeCategory === category.id && (
-                                <div className="px-3 py-1.5 bg-white/30 dark:bg-gray-800/30 rounded-xl text-xs font-black text-blue-700 dark:text-blue-300 backdrop-blur-sm">
+                                <div className="px-3 py-1.5 bg-calc-theme-accent/30 dark:bg-calc-theme-primary/30 rounded-xl text-xs font-black text-calc-theme-primary dark:text-calc-theme-accent backdrop-blur-sm">
                                   ACTIVE
                                 </div>
                               )}
@@ -1074,14 +1072,14 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                           style={{ animationDelay: `${index * 80}ms` }}
                         >
                           {/* Compact outer glow effect */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/15 via-violet-500/15 to-purple-600/15 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500 scale-103 group-hover:animate-pulse"></div>
+                          <div className="absolute inset-0 bg-gradient-to-br from-calc-theme-primary/15 via-calc-theme-secondary/15 to-calc-theme-accent/15 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500 scale-103 group-hover:animate-pulse"></div>
                           
                           {/* Compact mobile card */}
                           <Card className="relative overflow-hidden bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl border border-white/25 dark:border-gray-700/25 rounded-2xl shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 hover:scale-101">
                                                         {/* Compact floating background orbs */}
                             <div className="absolute inset-0 overflow-hidden">
-                              <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-blue-400/8 via-violet-400/8 to-purple-500/8 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                              <div className="absolute bottom-0 left-0 w-12 h-12 bg-gradient-to-tr from-pink-400/8 via-rose-400/8 to-orange-500/8 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ animationDelay: '150ms' }}></div>
+                              <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-calc-theme-secondary/8 via-calc-theme-accent/8 to-calc-theme-light/8 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                              <div className="absolute bottom-0 left-0 w-12 h-12 bg-gradient-to-tr from-calc-theme-accent/8 via-calc-theme-light/8 to-calc-theme-secondary/8 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ animationDelay: '150ms' }}></div>
                             </div>
 
                             <CardHeader className="relative p-4 space-y-4">
@@ -1091,29 +1089,29 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                                   {/* Compact mobile icon */}
                                   <div className="relative group/icon">
                                     {/* Simplified glow effect */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-violet-500 to-purple-600 rounded-xl blur-md opacity-20 group-hover/icon:opacity-40 transition-opacity duration-400 scale-105"></div>
-                                    
-                                    <div className="relative p-2.5 bg-gradient-to-br from-blue-100 via-violet-50 to-purple-100 dark:from-blue-900/35 dark:via-violet-900/35 dark:to-purple-900/35 rounded-xl shadow-lg group-hover/icon:scale-105 transition-transform duration-400 border border-blue-200/40 dark:border-blue-700/40">
-                                      <Calculator className="w-6 h-6 text-blue-600 dark:text-blue-400 drop-shadow-md" />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-calc-theme-primary via-calc-theme-secondary to-calc-theme-accent rounded-xl blur-md opacity-20 group-hover/icon:opacity-40 transition-opacity duration-400 scale-105"></div>
+
+                                    <div className="relative p-2.5 bg-gradient-to-br from-calc-theme-secondary/20 via-calc-theme-accent/15 to-calc-theme-light/20 dark:from-calc-theme-secondary/35 dark:via-calc-theme-accent/35 dark:to-calc-theme-light/35 rounded-xl shadow-lg group-hover/icon:scale-105 transition-transform duration-400 border border-calc-theme-secondary/40 dark:border-calc-theme-accent/40">
+                                      <Calculator className="w-6 h-6 text-calc-theme-secondary dark:text-calc-theme-accent drop-shadow-md" />
                                     </div>
-                                    
+
                                     {/* Small floating sparkle */}
                                     <div className="absolute -top-0.5 -right-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                                      <Sparkles className="w-3 h-3 text-amber-400 animate-spin" />
+                                      <Sparkles className="w-3 h-3 text-calc-theme-light animate-spin" />
                                     </div>
                                   </div>
                                   
                                   {/* Compact validation badge */}
-                                  <div className="flex items-center space-x-1.5 px-2.5 py-1 bg-gradient-to-r from-emerald-100 to-emerald-50 dark:from-emerald-900/35 dark:to-emerald-900/25 rounded-lg border border-emerald-200/50 dark:border-emerald-700/50 shadow-md backdrop-blur-sm">
-                                    <CheckCircle className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                                    <span className="text-xs font-black text-emerald-700 dark:text-emerald-300">VALID</span>
+                                  <div className="flex items-center space-x-1.5 px-2.5 py-1 bg-gradient-to-r from-calc-theme-accent/20 to-calc-theme-light/15 dark:from-calc-theme-primary/25 dark:to-calc-theme-secondary/20 rounded-lg border border-calc-theme-accent/30 dark:border-calc-theme-secondary/30 shadow-md backdrop-blur-sm">
+                                    <CheckCircle className="w-3 h-3 text-calc-theme-primary dark:text-calc-theme-accent" />
+                                    <span className="text-xs font-black text-calc-theme-primary dark:text-calc-theme-accent">VALID</span>
                                   </div>
                                 </div>
                                 
                                 {/* Compact launch indicator */}
-                                <div className="flex items-center space-x-1.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform duration-300">
+                                <div className="flex items-center space-x-1.5 text-calc-theme-secondary group-hover:translate-x-0.5 transition-transform duration-300">
                                   <span className="text-sm font-bold">Launch</span>
-                                  <div className="p-1.5 bg-gradient-to-r from-blue-100 to-violet-100 dark:from-blue-900/30 dark:to-violet-900/30 rounded-lg group-hover:from-blue-200 group-hover:to-violet-200 transition-all duration-300 shadow-md">
+                                  <div className="p-1.5 bg-gradient-to-r from-calc-theme-secondary/20 to-calc-theme-accent/20 dark:from-calc-theme-secondary/30 dark:to-calc-theme-accent/30 rounded-lg group-hover:from-calc-theme-secondary/30 group-hover:to-calc-theme-accent/30 transition-all duration-300 shadow-md">
                                     <ArrowRight className="w-4 h-4" />
                                   </div>
                                 </div>
@@ -1121,7 +1119,7 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                               
                               {/* Compact mobile title and description */}
                               <div className="space-y-2.5">
-                                <CardTitle className="text-lg font-black leading-tight group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:via-violet-600 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-400 text-gray-900 dark:text-gray-100">
+                                <CardTitle className="text-lg font-black leading-tight group-hover:bg-gradient-to-r group-hover:from-calc-theme-primary group-hover:via-calc-theme-secondary group-hover:to-calc-theme-accent group-hover:bg-clip-text group-hover:text-transparent transition-all duration-400 text-gray-900 dark:text-gray-100">
                                   {calc.name}
                                 </CardTitle>
                                 <CardDescription className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium line-clamp-2">
@@ -1132,19 +1130,19 @@ const obgynCalculatorCategories: CalculatorCategory[] = [
                               {/* Compact mobile feature indicators */}
                               <div className="flex items-center justify-between pt-3 border-t border-gray-200/50 dark:border-gray-700/50">
                                 <div className="flex items-center space-x-2">
-                                  <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/25 dark:to-indigo-900/25 rounded-md border border-blue-100/50 dark:border-blue-800/50 shadow-sm">
-                                    <Activity className="w-3 h-3 text-blue-500 animate-pulse" />
-                                    <span className="text-xs font-bold text-blue-700 dark:text-blue-300">Clinical</span>
+                                  <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-calc-theme-secondary/20 to-calc-theme-secondary/10 dark:from-calc-theme-secondary/25 dark:to-calc-theme-secondary/15 rounded-md border border-calc-theme-secondary/30 dark:border-calc-theme-secondary/40 shadow-sm">
+                                    <Activity className="w-3 h-3 text-calc-theme-secondary animate-pulse" />
+                                    <span className="text-xs font-bold text-calc-theme-secondary">Clinical</span>
                                   </div>
-                                  <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/25 dark:to-purple-900/25 rounded-md border border-violet-100/50 dark:border-violet-800/50 shadow-sm">
-                                    <Target className="w-3 h-3 text-violet-500" />
-                                    <span className="text-xs font-bold text-violet-700 dark:text-violet-300">Accurate</span>
+                                  <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-calc-theme-accent/20 to-calc-theme-accent/10 dark:from-calc-theme-accent/25 dark:to-calc-theme-accent/15 rounded-md border border-calc-theme-accent/30 dark:border-calc-theme-accent/40 shadow-sm">
+                                    <Target className="w-3 h-3 text-calc-theme-accent" />
+                                    <span className="text-xs font-bold text-calc-theme-accent">Accurate</span>
                                   </div>
                                 </div>
-                                
+
                                 {/* Compact performance badge */}
-                                <div className="px-2 py-1 bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 rounded-md border border-amber-200/50 dark:border-amber-700/50 shadow-sm">
-                                  <div className="text-xs font-black text-amber-700 dark:text-amber-300">A++</div>
+                                <div className="px-2 py-1 bg-gradient-to-r from-calc-theme-light/30 to-calc-theme-accent/20 dark:from-calc-theme-primary/30 dark:to-calc-theme-secondary/20 rounded-md border border-calc-theme-light/40 dark:border-calc-theme-secondary/40 shadow-sm">
+                                  <div className="text-xs font-black text-calc-theme-primary dark:text-calc-theme-accent">A++</div>
                                 </div>
                               </div>
                             </CardHeader>

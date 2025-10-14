@@ -35,13 +35,15 @@ interface FlowiseChatWindowProps {
   isDisabled?: boolean;
   placeholder?: string;
   allowAttachments?: boolean;
+  openCaseModalOnMount?: boolean;
 }
 
 const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   className = '',
   isDisabled = false,
   placeholder,
-  allowAttachments = true
+  allowAttachments = true,
+  openCaseModalOnMount = false
 }) => {
   const { t } = useTranslation();
   const { profile } = useAuth();
@@ -151,6 +153,13 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
       }
     };
   }, [location, navigate, setKnowledgeBase, createNewConversation, setActiveConversation, profile]);
+
+  // Handle opening case modal on mount
+  useEffect(() => {
+    if (openCaseModalOnMount) {
+      setShowCaseModal(true);
+    }
+  }, [openCaseModalOnMount]);
 
   // Handle knowledge base changes with automatic new chat
   const handleKnowledgeBaseChange = useCallback((newKnowledgeBase: 'personal' | 'curated') => {

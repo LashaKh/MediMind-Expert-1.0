@@ -10,37 +10,61 @@
   animation: shimmer 3s ease-in-out infinite;
 }
 
-/* MOBILE-FIRST APPROACH: Disable GPU-intensive effects on mobile devices */
-@media (max-width: 768px), (prefers-reduced-motion: reduce) {
-  /* Disable all backdrop-filter effects on mobile for GPU performance */
-  *[class*="backdrop-"], 
+/* MOBILE-FIRST APPROACH: Disable ONLY GPU-intensive effects, keep essential animations */
+@media (max-width: 768px) {
+  /* Disable backdrop-filter effects on mobile for GPU performance */
+  *[class*="backdrop-"],
   *[class*="glass-"],
   *[class*="blur"] {
     backdrop-filter: none !important;
-    filter: none !important;
   }
-  
+
   /* Disable 3D transforms that cause GPU overload */
-  *[class*="transform-"] {
-    transform: none !important;
+  *[class*="transform-3d"],
+  *[style*="transform: translate3d"],
+  *[style*="transform: scale3d"] {
+    transform: translateZ(0) !important;
   }
-  
-  /* Disable all complex animations on mobile */
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0s !important;
-    animation-delay: 0s !important;
-    transition-duration: 0s !important;
+
+  /* Disable ONLY complex decorative animations - keep loading animations */
+  .floating-animation,
+  .prismatic-glow,
+  .animate-morphing-border,
+  .animate-breathing-glow {
+    animation: none !important;
   }
-  
+
   /* Replace GPU-intensive effects with simple alternatives */
   .prismatic-glow {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
   }
-  
-  .floating-animation {
-    animation: none !important;
+
+  /* CRITICAL: Keep loading animations working - they're essential UX feedback */
+  .animate-spin,
+  .animate-pulse,
+  [class*="loader"],
+  [class*="loading"],
+  [class*="spinner"] {
+    animation-duration: inherit !important;
+    animation-delay: inherit !important;
+  }
+}
+
+/* ACCESSIBILITY: Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable all animations except loading indicators */
+  *:not(.animate-spin):not([class*="loader"]):not([class*="loading"]):not([class*="spinner"]),
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Disable backdrop effects for reduced motion */
+  *[class*="backdrop-"],
+  *[class*="glass-"] {
+    backdrop-filter: none !important;
   }
 }
 

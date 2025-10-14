@@ -9,6 +9,57 @@
  */
 
 /* ===================================================================
+   UNIVERSAL LOADING ANIMATIONS (WORK ON ALL DEVICES)
+   =================================================================== */
+
+/* Essential loading spinner - ALWAYS animates regardless of device */
+@keyframes spinner-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ensure Tailwind's animate-spin works universally */
+.animate-spin {
+  animation: spinner-spin 1s linear infinite !important;
+}
+
+/* Simple pulse for loading feedback */
+@keyframes simple-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Ensure animate-pulse works on all devices */
+.animate-pulse {
+  animation: simple-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+}
+
+/* Simple bounce for loading indicators */
+@keyframes simple-bounce {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* Ensure animate-bounce works on all devices */
+.animate-bounce {
+  animation: simple-bounce 1s infinite !important;
+}
+
+/* ===================================================================
    DEFAULT (HIGH PERFORMANCE - GPU ACCELERATED)
    =================================================================== */
 

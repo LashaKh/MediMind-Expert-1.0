@@ -761,22 +761,6 @@ export const CuratedKnowledgeBasePage: React.FC = () => {
               </div>
             )}
           </div>
-
-          {/* Quick Stats */}
-          <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
-            <div className="flex items-center space-x-1">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span>Avg {stats.avgRating}/5.0</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <TrendingUp className="w-4 h-4 text-green-500" />
-              <span>{stats.trendingCount} trending</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Bookmark className="w-4 h-4 text-[#2b6cb0]" />
-              <span>{resources.filter(r => r.bookmarked).length} bookmarked</span>
-            </div>
-          </div>
         </div>
 
         {/* Resources Display - 5 per row */}
@@ -924,30 +908,16 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
               </div>
             </div>
             
-            <h3 className="font-semibold text-gray-900 mb-2 text-sm group-hover:text-[#1a365d] transition-colors line-clamp-2">
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm group-hover:text-[#1a365d] transition-colors line-clamp-2">
               {resource.title}
             </h3>
-            
-            <div className="flex items-center space-x-3 text-xs text-gray-600 mb-2">
-              {resource.rating && (
-                <div className="flex items-center space-x-1">
-                  <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                  <span className="font-medium">{resource.rating}</span>
-                </div>
-              )}
-              {resource.citations && (
-                <div className="flex items-center space-x-1">
-                  <BarChart3 className="w-3 h-3 text-[#2b6cb0]" />
-                  <span>{resource.citations.toLocaleString()} citations</span>
-                </div>
-              )}
-              {resource.views && (
-                <div className="flex items-center space-x-1">
-                  <Eye className="w-3 h-3 text-green-500" />
-                  <span>{resource.views.toLocaleString()} views</span>
-                </div>
-              )}
-            </div>
+
+            {resource.organization && (
+              <div className="flex items-center space-x-1 mb-2">
+                <Building className="w-3 h-3 text-gray-400" />
+                <span className="text-xs text-gray-600 font-medium">{resource.organization}</span>
+              </div>
+            )}
 
             {resource.description && (
               <p className="text-gray-600 mb-2 line-clamp-2 text-xs">{resource.description}</p>
@@ -955,14 +925,14 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
 
             {resource.tags && (
               <div className="flex flex-wrap gap-1">
-                {resource.tags.slice(0, 3).map(tag => (
+                {resource.tags.slice(0, 4).map(tag => (
                   <span key={tag} className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs">
                     {tag}
                   </span>
                 ))}
-                {resource.tags.length > 3 && (
+                {resource.tags.length > 4 && (
                   <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs">
-                    +{resource.tags.length - 3} more
+                    +{resource.tags.length - 4}
                   </span>
                 )}
               </div>
@@ -1056,30 +1026,9 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
       {/* Card Content */}
       <div className="p-3">
         <div className="mb-3">
-          <h3 className="font-semibold text-gray-900 text-sm mb-2 group-hover:text-[#1a365d] transition-colors line-clamp-2">
+          <h3 className="font-semibold text-gray-900 text-sm mb-3 group-hover:text-[#1a365d] transition-colors line-clamp-2">
             {resource.title}
           </h3>
-          
-          <div className="flex items-center space-x-3 text-xs text-gray-600 mb-2">
-            {resource.rating && (
-              <div className="flex items-center space-x-1">
-                <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                <span className="font-semibold text-sm">{resource.rating}/5.0</span>
-              </div>
-            )}
-            {resource.citations && (
-              <div className="flex items-center space-x-1">
-                <BarChart3 className="w-3 h-3 text-[#2b6cb0]" />
-                <span className="font-semibold text-sm">{resource.citations.toLocaleString()}</span>
-              </div>
-            )}
-            {resource.views && (
-              <div className="flex items-center space-x-1">
-                <Eye className="w-3 h-3 text-green-500" />
-                <span className="font-semibold text-sm">{resource.views.toLocaleString()}</span>
-              </div>
-            )}
-          </div>
         </div>
 
         {resource.authors && (
@@ -1091,7 +1040,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
         )}
 
         {resource.organization && (
-          <div className="mb-2">
+          <div className="mb-3">
             <div className="flex items-center space-x-1">
               <Building className="w-3 h-3 text-gray-400" />
               <span className="text-xs text-gray-600 font-medium">{resource.organization}</span>
@@ -1103,30 +1052,17 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
           <p className="text-gray-600 text-xs mb-3 line-clamp-2">{resource.description}</p>
         )}
 
-        {/* Difficulty Badge */}
-        {resource.difficulty && (
-          <div className="mb-3">
-            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-              resource.difficulty === 'beginner' ? 'bg-green-100 text-green-800' :
-              resource.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-800' :
-              'bg-red-100 text-red-800'
-            }`}>
-              {resource.difficulty}
-            </span>
-          </div>
-        )}
-
         {/* Tags */}
         {resource.tags && (
           <div className="flex flex-wrap gap-1 mb-3">
-            {resource.tags.slice(0, 2).map(tag => (
+            {resource.tags.slice(0, 3).map(tag => (
               <span key={tag} className="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded text-xs font-medium">
                 {tag}
               </span>
             ))}
-            {resource.tags.length > 2 && (
+            {resource.tags.length > 3 && (
               <span className="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
-                +{resource.tags.length - 2}
+                +{resource.tags.length - 3}
               </span>
             )}
           </div>
@@ -1135,15 +1071,9 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
         {/* Card Footer */}
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
           <div className="flex items-center space-x-2">
-            {resource.readTime && (
-              <div className="flex items-center space-x-1 text-xs text-gray-500">
-                <Clock className="w-3 h-3" />
-                <span>{resource.readTime} min</span>
-              </div>
-            )}
             {resource.lastUpdated && (
-              <div className="text-xs text-gray-400">
-                Updated {new Date(resource.lastUpdated).toLocaleDateString()}
+              <div className="text-xs text-gray-500">
+                {new Date(resource.lastUpdated).toLocaleDateString()}
               </div>
             )}
           </div>
@@ -1324,47 +1254,20 @@ const ResourceDetailModal: React.FC<ResourceDetailModalProps> = ({
 
             {/* Sidebar */}
             <div className="space-y-4">
-              {/* Quick Stats */}
+              {/* Resource Info */}
               <div className="bg-gray-50 rounded-xl p-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Resource Stats</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">Resource Info</h3>
                 <div className="space-y-3">
-                  {resource.rating && (
+                  {resource.year && (
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Rating</span>
-                      <div className="flex items-center space-x-1">
-                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                        <span className="font-semibold text-sm">{resource.rating}/5.0</span>
-                      </div>
+                      <span className="text-gray-600 text-sm">Year</span>
+                      <span className="font-semibold text-sm">{resource.year}</span>
                     </div>
                   )}
-                  {resource.citations && (
+                  {resource.category && (
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Citations</span>
-                      <span className="font-semibold text-sm">{resource.citations.toLocaleString()}</span>
-                    </div>
-                  )}
-                  {resource.views && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Views</span>
-                      <span className="font-semibold text-sm">{resource.views.toLocaleString()}</span>
-                    </div>
-                  )}
-                  {resource.difficulty && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Difficulty</span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        resource.difficulty === 'beginner' ? 'bg-green-100 text-green-800' :
-                        resource.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {resource.difficulty}
-                      </span>
-                    </div>
-                  )}
-                  {resource.readTime && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Read Time</span>
-                      <span className="font-semibold text-sm">{resource.readTime} min</span>
+                      <span className="text-gray-600 text-sm">Type</span>
+                      <span className="font-semibold text-sm capitalize">{resource.category}</span>
                     </div>
                   )}
                 </div>

@@ -1,13 +1,14 @@
 // Loading States and Progress Indicators for Form 100
 // Medical-themed loading animations with progress tracking
 // Optimized for mobile with accessibility support
+// Performance-aware animations with device capability detection
 
 import React from 'react';
-import { 
-  Loader2, 
-  FileText, 
-  Stethoscope, 
-  Heart, 
+import {
+  Loader2,
+  FileText,
+  Stethoscope,
+  Heart,
   Activity,
   CheckCircle,
   AlertCircle,
@@ -17,6 +18,7 @@ import {
   Zap
 } from 'lucide-react';
 import { cn } from '../../../lib/utils';
+import { usePerformanceMode } from '../../../contexts/PerformanceModeContext';
 
 // Loading state types
 interface LoadingStateProps {
@@ -40,28 +42,41 @@ interface FormGenerationProgressProps {
   className?: string;
 }
 
-// Basic loading spinner with medical theme
+// Basic loading spinner with medical theme - Performance aware
 export const MedicalLoadingSpinner: React.FC<LoadingStateProps> = ({
   size = 'md',
   className,
   message = 'Loading...'
 }) => {
+  const { performanceMode } = usePerformanceMode();
+
   const sizeStyles = {
     sm: 'w-4 h-4',
-    md: 'w-6 h-6', 
+    md: 'w-6 h-6',
     lg: 'w-8 h-8'
   };
+
+  // Performance-aware animation classes
+  const shouldShowPingEffect = performanceMode === 'full';
+  const shouldAnimateText = performanceMode !== 'lite';
 
   return (
     <div className={cn('flex flex-col items-center justify-center space-y-2', className)}>
       <div className="relative">
+        {/* Spinner always animates - essential UX feedback */}
         <Loader2 className={cn('animate-spin text-blue-600', sizeStyles[size])} />
-        <div className="absolute inset-0 animate-ping">
-          <div className={cn('rounded-full bg-blue-400/30', sizeStyles[size])} />
-        </div>
+        {/* Ping effect only on high-performance devices */}
+        {shouldShowPingEffect && (
+          <div className="absolute inset-0 animate-ping">
+            <div className={cn('rounded-full bg-blue-400/30', sizeStyles[size])} />
+          </div>
+        )}
       </div>
       {message && (
-        <p className="text-sm text-gray-600 font-medium animate-pulse">
+        <p className={cn(
+          'text-sm text-gray-600 font-medium',
+          shouldAnimateText && 'animate-pulse'
+        )}>
           {message}
         </p>
       )}
@@ -69,43 +84,58 @@ export const MedicalLoadingSpinner: React.FC<LoadingStateProps> = ({
   );
 };
 
-// Form 100 generation specific loader
+// Form 100 generation specific loader - Performance aware
 export const Form100GenerationLoader: React.FC<LoadingStateProps> = ({
   size = 'md',
   className,
   message = 'Generating Form 100...'
 }) => {
+  const { performanceMode } = usePerformanceMode();
+
+  // Performance-aware features
+  const shouldShowIconAnimation = performanceMode !== 'lite';
+  const shouldShowDots = performanceMode !== 'lite';
+  const shouldAnimateSparkles = performanceMode === 'full';
+
   return (
     <div className={cn('flex flex-col items-center justify-center space-y-4 p-6', className)}>
-      {/* Medical icon animation */}
+      {/* Medical icon animation - spinner always works */}
       <div className="relative">
         <div className="absolute inset-0 animate-spin">
           <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full" />
         </div>
         <div className="w-16 h-16 flex items-center justify-center">
-          <FileText className="w-8 h-8 text-blue-600 animate-pulse" />
+          <FileText className={cn(
+            'w-8 h-8 text-blue-600',
+            shouldShowIconAnimation && 'animate-pulse'
+          )} />
         </div>
       </div>
-      
+
       {/* Status message */}
       <div className="text-center space-y-2">
-        <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
-          <Sparkles className="w-5 h-5 text-blue-500 animate-bounce" />
+        <h3 className="text-lg font-semibold text-gray-900 flex items-center justify-center space-x-2">
+          <Sparkles className={cn(
+            'w-5 h-5 text-blue-500',
+            shouldAnimateSparkles && 'animate-bounce'
+          )} />
           <span>AI Processing</span>
         </h3>
         <p className="text-sm text-gray-600">{message}</p>
       </div>
-      
-      {/* Animated dots */}
-      <div className="flex space-x-1">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
-            style={{ animationDelay: `${i * 0.1}s` }}
-          />
-        ))}
-      </div>
+
+      {/* Animated dots - optional on low-end devices */}
+      {shouldShowDots && (
+        <div className="flex space-x-1">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -283,24 +313,36 @@ export const Form100SkeletonLoader: React.FC<{ className?: string }> = ({ classN
   );
 };
 
-// Loading overlay for form interactions
+// Loading overlay for form interactions - Performance aware
 export const Form100LoadingOverlay: React.FC<{
   isVisible: boolean;
   message?: string;
   progress?: number;
   onCancel?: () => void;
 }> = ({ isVisible, message = 'Processing...', progress, onCancel }) => {
+  const { performanceMode } = usePerformanceMode();
+
   if (!isVisible) return null;
 
+  // Performance-aware features
+  const shouldUseBackdropBlur = performanceMode === 'full';
+  const shouldAnimateHeart = performanceMode !== 'lite';
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div className={cn(
+      'fixed inset-0 z-50 flex items-center justify-center',
+      shouldUseBackdropBlur ? 'bg-black/50 backdrop-blur-sm' : 'bg-black/70'
+    )}>
       <div className="bg-white rounded-lg p-8 max-w-sm mx-4 space-y-6 shadow-xl">
-        {/* Medical animation */}
+        {/* Medical animation - spinner always works */}
         <div className="flex justify-center">
           <div className="relative">
             <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <Heart className="w-6 h-6 text-blue-600 animate-pulse" />
+              <Heart className={cn(
+                'w-6 h-6 text-blue-600',
+                shouldAnimateHeart && 'animate-pulse'
+              )} />
             </div>
           </div>
         </div>
@@ -311,7 +353,7 @@ export const Form100LoadingOverlay: React.FC<{
           {progress !== undefined && (
             <div className="space-y-2">
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
+                <div
                   className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                   style={{ width: `${progress}%` }}
                 />
