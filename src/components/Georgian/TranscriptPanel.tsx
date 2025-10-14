@@ -65,11 +65,11 @@ interface TranscriptPanelProps {
   canResume: boolean;
   remainingTime: number;
   isNearMaxDuration: boolean;
-  
+
   // Active tab control from parent
   activeTab: 'transcript' | 'ai';
   onActiveTabChange: (tab: 'transcript' | 'ai') => void;
-  
+
   // Recording actions
   onStartRecording: () => void;
   onStopRecording: () => void;
@@ -78,11 +78,11 @@ interface TranscriptPanelProps {
   onFileUpload: (file: File) => void;
   onClearError: () => void;
   onClearResult: () => void;
-  
+
   // Session actions
   onUpdateTranscript: (transcript: string, duration?: number) => void;
   onAppendTranscript?: (newText: string, duration?: number) => void;
-  
+
   // AI Processing props - modified to pass transcript directly
   processing?: boolean;
   aiError?: string | null;
@@ -93,7 +93,7 @@ interface TranscriptPanelProps {
   onDeleteReport?: (analysis: ProcessingHistory) => void;
   onAddToHistory?: (instruction: string, response: string, model: string, tokensUsed?: number, processingTime?: number) => void;
   onExpandChat?: (expandFunction: () => void) => void;
-  
+
   // Template selection props
   selectedTemplate?: any; // UserReportTemplate
   onTemplateSelect?: (template: any | null) => void;
@@ -111,9 +111,10 @@ interface TranscriptPanelProps {
   onToggleHistory?: () => void;
   sessionCount?: number;
 
-  // STT Model selection props
-  selectedSTTModel?: 'Fast' | 'GoogleChirp';
-  onModelChange?: (model: 'Fast' | 'GoogleChirp') => void;
+  // ADDED: Combined transcript function for AI processing
+  getCombinedTranscriptForSubmission?: () => string;
+
+  // STT Model selection props removed - now using automatic parallel processing
 }
 
 export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
@@ -159,9 +160,9 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   // Mobile optimization props
   textareaRef,
   isKeyboardAdjusted,
-  // STT Model selection props
-  selectedSTTModel = 'Fast',
-  onModelChange
+  // ADDED: Combined transcript function for AI processing
+  getCombinedTranscriptForSubmission,
+  // STT Model selection props removed - now using automatic parallel processing
 }) => {
   // File attachment state - using simple attachment type like case studies
   const [attachedFiles, setAttachedFiles] = useState<Attachment[]>([]);
@@ -231,19 +232,25 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   // + '...'
   // });
   
+  // Track when recording stops to prevent treating post-recording state as "user edits"
+  const recordingStopTimeRef = useRef<number>(0);
+
   // Track recording session changes for cleanup and clear editable state when recording starts
   useEffect(() => {
     if (recordingState.isRecording && !lastRecordingSessionId) {
       const newSessionId = Date.now().toString();
       setLastRecordingSessionId(newSessionId);
       lastRecordingSessionIdRef.current = newSessionId;
-      
+
       // Clear editable transcript when recording starts to ensure live transcript is visible
       if (editableTranscript) {
         console.log('🧹 Clearing editable transcript to show live recording');
         setEditableTranscript('');
       }
     } else if (!recordingState.isRecording && lastRecordingSessionId) {
+      // Recording just stopped - mark the time
+      recordingStopTimeRef.current = Date.now();
+      console.log('⏸️  Recording stopped - marking time to preserve transcript');
       setLastRecordingSessionId('');
       lastRecordingSessionIdRef.current = '';
     }
@@ -320,13 +327,24 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       // Same session - check for user edits INCLUDING DELETIONS
       // Key insight: If editableTranscript differs from sessionTranscript, the user made changes
       // This includes both additions AND deletions
-      const userHasEdits = editableTranscript !== sessionTranscript;
+
+      // CRITICAL FIX: Don't treat post-recording state as "user edits"
+      // Give 5 seconds after recording stops for database to sync
+      const timeSinceRecordingStop = Date.now() - recordingStopTimeRef.current;
+      const justFinishedRecording = timeSinceRecordingStop < 5000;
+
+      const userHasEdits = editableTranscript !== sessionTranscript && !justFinishedRecording;
 
       // Check if this looks like a user deletion (editable is shorter than session)
       const userDeletedText = currentEditableLength < sessionLength &&
-                             editableTranscript !== sessionTranscript;
+                             editableTranscript !== sessionTranscript &&
+                             !justFinishedRecording;
 
-      if (userHasEdits || userDeletedText) {
+      if (justFinishedRecording && localLength > 0) {
+        // Recording just stopped - prioritize localTranscript over editableTranscript
+        transcript = localTranscript || '';
+        console.log(`⏸️  Recording stopped ${timeSinceRecordingStop}ms ago - using localTranscript (${localLength} chars)`);
+      } else if (userHasEdits || userDeletedText) {
         // User has made manual edits (including deletions) - ALWAYS preserve them
         transcript = editableTranscript;
         console.log('✏️ Preserving user edits/deletions (manual changes detected)');
@@ -742,9 +760,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onRemoveAttachment={handleRemoveAttachment}
             isProcessingAttachment={isProcessingAttachment}
             attachmentProgress={attachmentProgress}
-            // STT Model selection props
-            selectedSTTModel={selectedSTTModel}
-            onModelChange={onModelChange}
+            // STT Model selection props removed - now using automatic parallel processing
           />
         );
       
@@ -759,14 +775,32 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             onProcessText={async (instruction) => {
               let combinedText = '';
 
+              // CRITICAL FIX: Get combined dual transcripts for AI processing
+              // This sends BOTH Google + Enagram transcripts to Flowise for better accuracy
+              let transcriptForAI = currentTranscript; // Default to current transcript
+
+              if (getCombinedTranscriptForSubmission) {
+                transcriptForAI = getCombinedTranscriptForSubmission();
+                console.log('🎯 TranscriptPanel AI processing - using combined dual transcripts:', {
+                  displayLength: currentTranscript.length,
+                  combinedLength: transcriptForAI.length,
+                  hasDualTranscripts: transcriptForAI.includes('--- Alternative Transcription ---')
+                });
+              } else {
+                console.log('ℹ️ TranscriptPanel AI processing - using current transcript (combined function not available):', {
+                  length: transcriptForAI.length,
+                  preview: transcriptForAI.substring(0, 50)
+                });
+              }
+
               // Use pre-extracted text from immediately processed attachments
               if (attachedFiles.length > 0) {
                 console.log('📄 Using pre-extracted text from uploaded files...');
-                
+
                 // Build attachment text context from pre-extracted text
                 let attachmentContext = '';
                 let hasExtractedText = false;
-                
+
                 attachedFiles.forEach((file, index) => {
                   if (file.extractedText && file.extractedText.trim()) {
                     attachmentContext += `\n--- Document ${index + 1}: ${file.name} ---\n${file.extractedText}\n`;
@@ -774,32 +808,32 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
                   }
                 });
 
-                if (currentTranscript && hasExtractedText) {
-                  combinedText = `${currentTranscript}\n\n=== Attached Documents ===${attachmentContext}`;
-                } else if (currentTranscript) {
-                  combinedText = currentTranscript;
+                if (transcriptForAI && hasExtractedText) {
+                  combinedText = `${transcriptForAI}\n\n=== Attached Documents ===${attachmentContext}`;
+                } else if (transcriptForAI) {
+                  combinedText = transcriptForAI;
                 } else if (hasExtractedText) {
                   combinedText = `=== Attached Documents ===${attachmentContext}`;
                 } else {
                   // No text extracted - provide context for visual analysis
                   const fileDetails = attachedFiles.map(f => {
                     const status = f.textExtractionStatus;
-                    const statusIndicator = status === 'success' ? '✅' : 
-                                          status === 'failed' ? '❌' : 
+                    const statusIndicator = status === 'success' ? '✅' :
+                                          status === 'failed' ? '❌' :
                                           status === 'processing' ? '⏳' : '⏸️';
                     return `${f.name} (${f.type}) ${statusIndicator}`;
                   }).join(', ');
-                  
-                  if (currentTranscript) {
-                    combinedText = `${currentTranscript}\n\n=== Attached Files ===\nThe following files are available for visual analysis: ${fileDetails}`;
+
+                  if (transcriptForAI) {
+                    combinedText = `${transcriptForAI}\n\n=== Attached Files ===\nThe following files are available for visual analysis: ${fileDetails}`;
                   } else {
                     combinedText = `Please analyze the attached file(s): ${fileDetails}. The files have been processed and are available for visual analysis.`;
                   }
                 }
               } else {
-                combinedText = currentTranscript || 'No content available for processing.';
+                combinedText = transcriptForAI || 'No content available for processing.';
               }
-              
+
               onProcessText?.(instruction, combinedText);
             }}
             onClearAIError={onClearAIError}

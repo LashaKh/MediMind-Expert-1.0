@@ -133,6 +133,11 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   const failedChunksCountRef = useRef<number>(0);
   const totalProcessedChunksRef = useRef<number>(0);
 
+  // Dual transcript refs for parallel processing
+  const googleTranscriptRef = useRef<string>('');
+  const enagramTranscriptRef = useRef<string>('');
+  const combinedForSubmissionRef = useRef<string>('');
+
   // Smart segmentation refs
   const segmentStartTimeRef = useRef<number>(0);
 
@@ -446,7 +451,7 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   // Cleanup audio resources
   const cleanupAudioResources = useCallback(() => {
     stopDurationTracking();
-    
+
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
@@ -457,16 +462,16 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       preInitializedStreamRef.current.getTracks().forEach(track => track.stop());
       preInitializedStreamRef.current = null;
     }
-    
+
     if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
       audioContextRef.current.close();
       audioContextRef.current = null;
     }
-    
+
     analyserRef.current = null;
     dataArrayRef.current = null;
     recordingStartTimeRef.current = null;
-    
+
     // Clean up chunked processing
     if (chunkProcessingIntervalRef.current) {
       clearInterval(chunkProcessingIntervalRef.current);
@@ -474,11 +479,19 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     }
     audioChunksForProcessingRef.current = [];
     combinedTranscriptRef.current = '';
+
+    // CRITICAL FIX: DON'T clear transcript refs immediately after recording stops
+    // These need to be preserved for AI processing (diagnosis generation, etc.)
+    // They will be cleared when a NEW recording starts instead
+    // googleTranscriptRef.current = '';
+    // enagramTranscriptRef.current = '';
+    // combinedForSubmissionRef.current = '';
+
     isProcessingActiveRef.current = false;
     lastSavedTranscriptLengthRef.current = 0;
     failedChunksCountRef.current = 0;
     totalProcessedChunksRef.current = 0;
-    
+
     // Clean up smart segmentation
     if (autoRestartTimeoutRef.current) {
       clearTimeout(autoRestartTimeoutRef.current);
@@ -489,6 +502,52 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     pendingAutoRestartRef.current = false;
   }, [stopDurationTracking]);
 
+  // Helper function to update combined transcript refs from parallel results
+  const updateCombinedTranscriptRefs = useCallback((parallelResults: any) => {
+    if (!parallelResults) return;
+
+    // Store both transcripts from parallel processing
+    const googleText = parallelResults.google || '';
+    const enagramText = typeof parallelResults.enagram === 'string'
+      ? parallelResults.enagram
+      : parallelResults.enagram?.text || '';
+
+    // Update dual transcript refs - ACCUMULATE FULL CONTINUOUS TRANSCRIPTS
+    // Each service builds its own complete transcript separately
+    if (googleText.trim()) {
+      const prevGoogle = googleTranscriptRef.current.trim();
+      const separator = prevGoogle ? ' ' : '';
+      googleTranscriptRef.current = prevGoogle + separator + googleText.trim();
+    }
+
+    if (enagramText.trim()) {
+      const prevEnagram = enagramTranscriptRef.current.trim();
+      const separator = prevEnagram ? ' ' : '';
+      enagramTranscriptRef.current = prevEnagram + separator + enagramText.trim();
+    }
+
+    // CRITICAL FIX: Build combined for Flowise submission as TWO COMPLETE VERSIONS
+    // Format: "FULL GOOGLE TRANSCRIPT\n--- Alternative Transcription ---\nFULL ENAGRAM TRANSCRIPT"
+    const completeGoogleTranscript = googleTranscriptRef.current.trim();
+    const completeEnagramTranscript = enagramTranscriptRef.current.trim();
+
+    if (completeGoogleTranscript || completeEnagramTranscript) {
+      // Build as two complete, continuous transcripts separated by ONE marker
+      const parts = [];
+      if (completeGoogleTranscript) parts.push(completeGoogleTranscript);
+      if (completeEnagramTranscript) parts.push(completeEnagramTranscript);
+
+      const combinedTranscript = parts.join('\n--- Alternative Transcription ---\n');
+
+      combinedForSubmissionRef.current = combinedTranscript;
+      console.log('🔄 Combined transcript updated (full versions):', {
+        googleLength: completeGoogleTranscript.length,
+        enagramLength: completeEnagramTranscript.length,
+        combinedLength: combinedTranscript.length
+      });
+    }
+  }, []);
+
   // Chunked processing functions
   const processAudioChunk = useCallback(async (audioBlob: Blob): Promise<string> => {
     if (!georgianTTSServiceRef.current) {
@@ -496,34 +555,80 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     }
 
     try {
-      console.log('🎯 Processing audio chunk with STT model:', selectedSTTModelRef.current);
+      console.log('🔄 Processing audio chunk with PARALLEL TTS (Google + Enagram)');
 
-      const result = await georgianTTSServiceRef.current.recognizeSpeech(audioBlob, {
+      // Use parallel processing to get both transcripts
+      const parallelResults = await georgianTTSServiceRef.current.recognizeSpeechParallel(audioBlob, {
         language,
         autocorrect,
         punctuation,
         digits,
-        engine: selectedSTTModelRef.current, // Use current STT model from ref
         enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
-        speakers: optionsRef.current.speakers ?? 2, // Use current ref value
-        maxRetries: 2 // Moderate retries for parallel chunks
+        speakers: optionsRef.current.speakers ?? 2,
+        maxRetries: 2
       });
-      
-      // Handle speaker diarization results
-      if (typeof result === 'object' && result.hasSpeakers) {
 
-        setSpeakerSegments(result.speakers || []);
+      // Use centralized function to update all transcript refs
+      updateCombinedTranscriptRefs(parallelResults);
+
+      // Handle speaker diarization results (from Enagram if available)
+      if (typeof parallelResults.enagram === 'object' && parallelResults.enagram.hasSpeakers) {
+        setSpeakerSegments(parallelResults.enagram.speakers || []);
         setHasSpeakerResults(true);
-        totalProcessedChunksRef.current++;
-        return result.text;
-      } else {
-        // Regular text result
-        const text = typeof result === 'string' ? result : result.text;
-        totalProcessedChunksRef.current++;
-        return text || '';
       }
+
+      totalProcessedChunksRef.current++;
+
+      // Return best available transcript for UI display (Google first, fallback to Enagram)
+      const googleText = parallelResults.google || '';
+      const enagramText = typeof parallelResults.enagram === 'string'
+        ? parallelResults.enagram
+        : parallelResults.enagram?.text || '';
+
+      const displayText = googleText.trim() || enagramText.trim() || '';
+      console.log('🎯 UI display text selected:', {
+        googleLength: googleText.length,
+        enagramLength: enagramText.length,
+        selected: googleText.trim() ? 'Google' : (enagramText.trim() ? 'Enagram' : 'None'),
+        displayLength: displayText.length
+      });
+
+      return displayText;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('❌ Parallel TTS processing failed:', errorMessage);
+
+      // Try fallback to single service if parallel processing fails completely
+      try {
+        console.log('🔄 Attempting fallback to Google TTS only...');
+        const fallbackResult = await georgianTTSServiceRef.current.recognizeSpeech(audioBlob, {
+          language,
+          autocorrect,
+          punctuation,
+          digits,
+          engine: 'GoogleChirp', // Use Google as fallback
+          enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
+          speakers: optionsRef.current.speakers ?? 2,
+          maxRetries: 1
+        });
+
+        const fallbackText = typeof fallbackResult === 'string' ? fallbackResult : fallbackResult.text || '';
+
+        if (fallbackText.trim()) {
+          // Update transcripts with fallback result
+          const prevGoogle = googleTranscriptRef.current.trim();
+          const separator = prevGoogle ? ' ' : '';
+          googleTranscriptRef.current = prevGoogle + separator + fallbackText.trim();
+          combinedForSubmissionRef.current = googleTranscriptRef.current;
+
+          console.log('✅ Fallback to Google TTS successful');
+          totalProcessedChunksRef.current++;
+          return fallbackText;
+        }
+      } catch (fallbackError) {
+        console.error('❌ Fallback processing also failed:', fallbackError);
+      }
+
       failedChunksCountRef.current++;
       totalProcessedChunksRef.current++;
 
@@ -689,26 +794,34 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             await freshService.logout(); // Clear any cached tokens
             await freshService.initialize(); // Force fresh login
 
-            const result = await freshService.recognizeSpeech(batchBlob, {
+            const result = await freshService.recognizeSpeechParallel(batchBlob, {
               language,
               autocorrect,
               punctuation,
               digits,
-              engine: selectedSTTModelRef.current, // Use current STT model from ref
               enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
               speakers: optionsRef.current.speakers ?? 2, // Use current props value
               maxRetries: 2 // Moderate retries since this should work as "first request"
             });
-            
-            // Handle speaker diarization results
-            let chunkText = '';
-            if (typeof result === 'object' && result.hasSpeakers) {
 
-              setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
-              setHasSpeakerResults(true);
-              chunkText = result.text;
-            } else {
-              chunkText = typeof result === 'string' ? result : result.text;
+            // Handle parallel processing results
+            let chunkText = '';
+            if (result) {
+              // Use centralized function to update all transcript refs
+              updateCombinedTranscriptRefs(result);
+
+              // Handle speaker diarization from Enagram if available
+              if (typeof result.enagram === 'object' && result.enagram.hasSpeakers) {
+                setSpeakerSegments(prev => [...prev, ...(result.enagram.speakers || [])]);
+                setHasSpeakerResults(true);
+              }
+
+              // Use best available transcript for UI display (Google first, fallback to Enagram)
+              const googleText = result.google || '';
+              const enagramText = typeof result.enagram === 'string'
+                ? result.enagram
+                : result.enagram?.text || '';
+              chunkText = googleText.trim() || enagramText.trim() || '';
             }
             
             // Update statistics for successful processing
@@ -867,26 +980,51 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
         await freshService.logout();
         await freshService.initialize();
 
-        const result = await freshService.recognizeSpeech(combinedBlob, {
+        const result = await freshService.recognizeSpeechParallel(combinedBlob, {
           language,
           autocorrect,
           punctuation,
           digits,
-          engine: selectedSTTModelRef.current, // Use current STT model from ref
           enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
           speakers: optionsRef.current.speakers ?? 2, // Use current props value
           maxRetries: 2
         });
-        
-        // Handle speaker diarization results for final processing
-        let finalText = '';
-        if (typeof result === 'object' && result.hasSpeakers) {
 
-          setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
-          setHasSpeakerResults(true);
-          finalText = result.text;
-        } else {
-          finalText = typeof result === 'string' ? result : result.text;
+        // Handle parallel processing results for final processing
+        let finalText = '';
+        if (result) {
+          // Store both transcripts from parallel processing
+          const googleText = result.google || '';
+          const enagramText = typeof result.enagram === 'string'
+            ? result.enagram
+            : result.enagram?.text || '';
+
+          // Update dual transcript refs
+          if (googleText.trim()) {
+            const prevGoogle = googleTranscriptRef.current.trim();
+            const separator = prevGoogle ? ' ' : '';
+            googleTranscriptRef.current = prevGoogle + separator + googleText.trim();
+          }
+
+          if (enagramText.trim()) {
+            const prevEnagram = enagramTranscriptRef.current.trim();
+            const separator = prevEnagram ? ' ' : '';
+            enagramTranscriptRef.current = prevEnagram + separator + enagramText.trim();
+          }
+
+          // Update combined for submission - accumulate all chunks
+          const prevCombined = combinedForSubmissionRef.current.trim();
+          const combinedSeparator = prevCombined ? ' ' : '';
+          combinedForSubmissionRef.current = prevCombined + combinedSeparator + (result.combined || '').trim();
+
+          // Handle speaker diarization from Enagram if available
+          if (typeof result.enagram === 'object' && result.enagram.hasSpeakers) {
+            setSpeakerSegments(prev => [...prev, ...(result.enagram.speakers || [])]);
+            setHasSpeakerResults(true);
+          }
+
+          // Use best available transcript for UI display (Google first, fallback to Enagram)
+          finalText = googleText.trim() || enagramText.trim() || '';
         }
 
         if (finalText && finalText.trim()) {
@@ -967,26 +1105,51 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
               const freshService = new GeorgianTTSService();
               await freshService.initialize();
 
-              const result = await freshService.recognizeSpeech(currentBlob, {
-                language, 
-                autocorrect, 
-                punctuation, 
-                digits, 
-                engine: selectedSTTModelRef.current, // Use current STT model from ref
+              const result = await freshService.recognizeSpeechParallel(currentBlob, {
+                language,
+                autocorrect,
+                punctuation,
+                digits,
                 enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
                 speakers: optionsRef.current.speakers ?? 2, // Use current props value
                 maxRetries: 2
               });
-              
-              // Handle speaker diarization results for manual stop processing
-              let segmentText = '';
-              if (typeof result === 'object' && result.hasSpeakers) {
 
-                setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
-                setHasSpeakerResults(true);
-                segmentText = result.text;
-              } else {
-                segmentText = typeof result === 'string' ? result : result.text;
+              // Handle parallel processing results for manual stop processing
+              let segmentText = '';
+              if (result) {
+                // Store both transcripts from parallel processing
+                const googleText = result.google || '';
+                const enagramText = typeof result.enagram === 'string'
+                  ? result.enagram
+                  : result.enagram?.text || '';
+
+                // Update dual transcript refs
+                if (googleText.trim()) {
+                  const prevGoogle = googleTranscriptRef.current.trim();
+                  const separator = prevGoogle ? ' ' : '';
+                  googleTranscriptRef.current = prevGoogle + separator + googleText.trim();
+                }
+
+                if (enagramText.trim()) {
+                  const prevEnagram = enagramTranscriptRef.current.trim();
+                  const separator = prevEnagram ? ' ' : '';
+                  enagramTranscriptRef.current = prevEnagram + separator + enagramText.trim();
+                }
+
+                // Update combined for submission - accumulate all chunks
+                const prevCombined = combinedForSubmissionRef.current.trim();
+                const combinedSeparator = prevCombined ? ' ' : '';
+                combinedForSubmissionRef.current = prevCombined + combinedSeparator + (result.combined || '').trim();
+
+                // Handle speaker diarization from Enagram if available
+                if (typeof result.enagram === 'object' && result.enagram.hasSpeakers) {
+                  setSpeakerSegments(prev => [...prev, ...(result.enagram.speakers || [])]);
+                  setHasSpeakerResults(true);
+                }
+
+                // Use best available transcript for UI display (Google first, fallback to Enagram)
+                segmentText = googleText.trim() || enagramText.trim() || '';
               }
 
               if (segmentText?.trim()) {
@@ -1036,26 +1199,34 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
             await freshService.initialize();
 
             console.log('🎯 Making API call with STT model:', selectedSTTModelRef.current);
-            const result = await freshService.recognizeSpeech(currentBlob, {
-              language, 
-              autocorrect, 
-              punctuation, 
-              digits, 
-              engine: selectedSTTModelRef.current, // Use current STT model from ref
+            const result = await freshService.recognizeSpeechParallel(currentBlob, {
+              language,
+              autocorrect,
+              punctuation,
+              digits,
               enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization ?? false,
               speakers: optionsRef.current.speakers ?? 2, // Use current props value
               maxRetries: 2
             });
-            
-            // Handle speaker diarization results for auto-segmentation
-            let segmentText = '';
-            if (typeof result === 'object' && result.hasSpeakers) {
 
-              setSpeakerSegments(prev => [...prev, ...(result.speakers || [])]);
-              setHasSpeakerResults(true);
-              segmentText = result.text;
-            } else {
-              segmentText = typeof result === 'string' ? result : result.text;
+            // Handle parallel processing results for auto-segmentation
+            let segmentText = '';
+            if (result) {
+              // Use centralized function to update all transcript refs
+              updateCombinedTranscriptRefs(result);
+
+              // Handle speaker diarization from Enagram if available
+              if (typeof result.enagram === 'object' && result.enagram.hasSpeakers) {
+                setSpeakerSegments(prev => [...prev, ...(result.enagram.speakers || [])]);
+                setHasSpeakerResults(true);
+              }
+
+              // Use best available transcript for UI display (Google first, fallback to Enagram)
+              const googleText = result.google || '';
+              const enagramText = typeof result.enagram === 'string'
+                ? result.enagram
+                : result.enagram?.text || '';
+              segmentText = googleText.trim() || enagramText.trim() || '';
             }
             if (segmentText?.trim()) {
               // Smart text concatenation for natural flow
@@ -1212,12 +1383,19 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
       setError(null);
       audioChunksRef.current = [];
       audioChunksForProcessingRef.current = [];
-      // DON'T reset combinedTranscriptRef here - let it accumulate across sessions
-      // combinedTranscriptRef.current = '';  // REMOVED: This was causing transcript overwrite
+
+      // CRITICAL FIX: Clear transcript refs at START of new recording
+      // This is the right place to clear them - not in cleanup after recording stops
+      // This ensures they're available for AI processing after recording ends
+      googleTranscriptRef.current = '';
+      enagramTranscriptRef.current = '';
+      combinedForSubmissionRef.current = '';
+      combinedTranscriptRef.current = '';
+
       lastSavedTranscriptLengthRef.current = 0;
       failedChunksCountRef.current = 0;
       totalProcessedChunksRef.current = 0;
-      
+
       // Reset segment tracking for new recording session
       processedSegmentsRef.current = 0;
       lastProcessedTimeRef.current = 0;
@@ -1519,6 +1697,9 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   const resetTranscript = useCallback(() => {
     // Reset transcript for new session
     combinedTranscriptRef.current = '';
+    googleTranscriptRef.current = '';
+    enagramTranscriptRef.current = '';
+    combinedForSubmissionRef.current = '';
     lastSavedTranscriptLengthRef.current = 0;
     setTranscriptionResult(null);
 
@@ -1527,6 +1708,11 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
   const initializeWithExistingTranscript = useCallback((existingText: string) => {
     if (existingText.trim()) {
       combinedTranscriptRef.current = existingText.trim();
+      // Initialize Google transcript with existing text (what user sees)
+      googleTranscriptRef.current = existingText.trim();
+      // Reset Enagram and combined for fresh parallel processing
+      enagramTranscriptRef.current = '';
+      combinedForSubmissionRef.current = existingText.trim();
       lastSavedTranscriptLengthRef.current = existingText.trim().length;
       console.log(`🔄 Initialized TTS hook with existing transcript (${existingText.length} chars)`);
     }
@@ -1610,6 +1796,29 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     };
   }, [isSupported, preInitializeMicrophone]);
 
+  // Methods to get dual transcripts for submission
+  const getDualTranscripts = useCallback(() => {
+    return {
+      google: googleTranscriptRef.current,
+      enagram: enagramTranscriptRef.current,
+      combined: combinedForSubmissionRef.current,
+      primary: googleTranscriptRef.current // For UI display
+    };
+  }, []);
+
+  const getCombinedTranscriptForSubmission = useCallback(() => {
+    // Return the best available transcript combination for Flowise
+    if (combinedForSubmissionRef.current.trim()) {
+      return combinedForSubmissionRef.current;
+    }
+    // Fallback to Google if combined is not available
+    if (googleTranscriptRef.current.trim()) {
+      return googleTranscriptRef.current;
+    }
+    // Final fallback to Enagram
+    return enagramTranscriptRef.current;
+  }, []);
+
   return {
     // State
     recordingState,
@@ -1638,6 +1847,10 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     initializeWithExistingTranscript,
     updateAuthStatus,
     updateSelectedSTTModel,
+
+    // Dual transcript methods
+    getDualTranscripts,
+    getCombinedTranscriptForSubmission,
     
     // Computed values
     canRecord: isSupported && !recordingState.isRecording && !isTranscribing,

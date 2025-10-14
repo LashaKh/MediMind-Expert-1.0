@@ -250,7 +250,10 @@ export const GeorgianSTTApp: React.FC = () => {
     hasSpeakerResults,
     // STT model selection
     selectedSTTModel,
-    updateSelectedSTTModel
+    updateSelectedSTTModel,
+    // Dual transcript methods for parallel processing
+    getDualTranscripts,
+    getCombinedTranscriptForSubmission
     // service // Currently unused
   } = useGeorgianTTS({
     language: 'ka-GE',
@@ -385,10 +388,20 @@ export const GeorgianSTTApp: React.FC = () => {
   const handleProcessText = useCallback(async (instruction: string, directTranscript?: string) => {
     // Debug info (disabled in production)
 
-    // Use directTranscript first (passed from UI), then fallback to other sources
-    const transcript = directTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
-    
-    // Debug transcript source (disabled in production)
+    // PARALLEL TTS: Always prioritize combined transcript for Flowise submission (both Google + Enagram)
+    // Combined transcript includes both Google and Enagram results - this is what we want for AI processing
+    const combinedTranscript = getCombinedTranscriptForSubmission();
+    const transcript = combinedTranscript || directTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
+
+    // Debug transcript source for parallel processing
+    console.log('📝 Transcript source for AI processing:', {
+      hasDirectTranscript: !!directTranscript,
+      hasCombinedTranscript: !!combinedTranscript,
+      hasLocalTranscript: !!localTranscript,
+      hasSessionTranscript: !!currentSession?.transcript,
+      combinedLength: combinedTranscript?.length || 0,
+      finalLength: transcript.length
+    });
     
     if (!transcript.trim()) {
 
@@ -611,7 +624,7 @@ export const GeorgianSTTApp: React.FC = () => {
 
       }
     }
-  }, [currentSession, transcriptionResult, localTranscript, processText, addProcessingResult, createSession, setProcessing]);
+  }, [currentSession, transcriptionResult, localTranscript, processText, addProcessingResult, createSession, setProcessing, getCombinedTranscriptForSubmission]);
 
   // Handle report deletion with database sync
   const handleDeleteReport = useCallback(async (analysis: ProcessingHistory) => {
@@ -681,22 +694,29 @@ export const GeorgianSTTApp: React.FC = () => {
       if (recordingState.isRecording) {
         stopRecording();
       }
-      
+
       // Clear TTS state (cancels background processing)
       resetTranscript();
       clearTTSResult();
-      
+
       // Clear recording session when switching
       setCurrentRecordingSessionId('');
-      
+
       // Load session transcript into local state immediately for instant UI feedback
       const sessionTranscript = selectedSession.transcript || '';
       setLocalTranscript(sessionTranscript);
-      
+
+      // CRITICAL FIX: Initialize TTS hook with existing transcript for AI processing
+      // This ensures getCombinedTranscriptForSubmission() returns the transcript for diagnosis generation
+      if (sessionTranscript.trim()) {
+        initializeWithExistingTranscript(sessionTranscript);
+        console.log(`🔄 Initialized TTS hook with session transcript for AI processing (${sessionTranscript.length} chars)`);
+      }
+
       // Switch session (now async - will refresh with latest data from database)
       await selectSession(sessionId);
     }
-  }, [sessions, resetTranscript, clearTTSResult, selectSession, recordingState.isRecording, stopRecording]);
+  }, [sessions, resetTranscript, clearTTSResult, selectSession, recordingState.isRecording, stopRecording, initializeWithExistingTranscript]);
 
   // Handle file upload
   const handleFileUpload = useCallback(async (file: File) => {
@@ -727,10 +747,30 @@ export const GeorgianSTTApp: React.FC = () => {
     }
   }, [currentSession, createSession, selectSession, resetTranscript, clearTTSResult, canProcess, resetUploadState, processAudioFile]);
 
+  // Track when recording stops to prevent clearing transcript immediately after
+  const recordingStopTimeRef = useRef<number>(0);
+
+  // Update ref when recording stops
+  useEffect(() => {
+    if (!recordingState.isRecording) {
+      recordingStopTimeRef.current = Date.now();
+    }
+  }, [recordingState.isRecording]);
+
   // Handle transcript update (for editing existing transcript)
   const handleTranscriptUpdate = useCallback(async (transcript: string, duration?: number) => {
-    // CRITICAL: Clear local transcript when user makes manual edits to prevent interference
-    setLocalTranscript('');
+    // DON'T clear localTranscript when recording just stopped!
+    // Only clear if user is manually editing (not right after recording)
+    const timeSinceStop = Date.now() - recordingStopTimeRef.current;
+    const justFinishedRecording = recordingState.isRecording || timeSinceStop < 3000; // 3 second grace period
+
+    if (!justFinishedRecording) {
+      // Only clear localTranscript when user is manually editing (not right after recording)
+      setLocalTranscript('');
+      console.log('🧹 Cleared localTranscript for manual edit');
+    } else {
+      console.log(`⏸️  Preserving localTranscript - recording ${recordingState.isRecording ? 'active' : `stopped ${timeSinceStop}ms ago`}`);
+    }
 
     if (currentSession) {
       updateTranscript(currentSession.id, transcript, duration);
@@ -741,7 +781,7 @@ export const GeorgianSTTApp: React.FC = () => {
         await selectSession(newSession.id);
       }
     }
-  }, [currentSession, updateTranscript, createSession, selectSession]);
+  }, [currentSession, updateTranscript, createSession, selectSession, recordingState.isRecording]);
 
   // Handle transcript append (for new recordings)
   const handleTranscriptAppend = useCallback((newText: string, duration?: number) => {

@@ -265,6 +265,87 @@ export class GeorgianTTSService {
   }
 
   /**
+   * Process audio with both Google and Enagram services in parallel
+   * Returns both transcripts for comprehensive analysis
+   */
+  async recognizeSpeechParallel(
+    audioBlob: Blob,
+    options: {
+      language?: string;
+      autocorrect?: boolean;
+      punctuation?: boolean;
+      digits?: boolean;
+      maxRetries?: number;
+      enableSpeakerDiarization?: boolean;
+      speakers?: number;
+    } = {}
+  ): Promise<{
+    google: string;
+    enagram: string | SpeakerDiarizationResult;
+    primary: string; // For UI display (Google)
+    combined: string; // For submission
+  }> {
+    console.log('🔄 Starting parallel TTS processing with Google + Enagram');
+
+    const base64Audio = await this.convertAudioToBase64(audioBlob);
+
+    // Prepare requests for both services
+    const googleOptions = { ...options, engine: 'GoogleChirp' };
+    const enagramOptions = { ...options, engine: 'Fast' };
+
+    // Execute both services in parallel using Promise.allSettled for error resilience
+    const [googleResult, enagramResult] = await Promise.allSettled([
+      this.performSpeechRecognition(base64Audio, googleOptions),
+      this.performSpeechRecognition(base64Audio, enagramOptions)
+    ]);
+
+    // Extract results with comprehensive error handling
+    const googleText = googleResult.status === 'fulfilled' ?
+      (typeof googleResult.value === 'string' ? googleResult.value : '') : '';
+
+    const enagramText = enagramResult.status === 'fulfilled' ?
+      enagramResult.value : '';
+
+    // Log any errors for debugging
+    if (googleResult.status === 'rejected') {
+      console.warn('⚠️ Google TTS failed:', googleResult.reason?.message || googleResult.reason);
+    }
+    if (enagramResult.status === 'rejected') {
+      console.warn('⚠️ Enagram TTS failed:', enagramResult.reason?.message || enagramResult.reason);
+    }
+
+    // Ensure we have at least one successful result
+    const hasGoogleText = googleText.trim().length > 0;
+    const hasEnagramText = typeof enagramText === 'string' ? enagramText.trim().length > 0 : (enagramText?.text?.trim() || '').length > 0;
+
+    if (!hasGoogleText && !hasEnagramText) {
+      throw new Error('Both Google and Enagram TTS services failed to produce results');
+    }
+
+    // Create combined transcript (prioritize non-empty results)
+    const combinedText = [googleText, typeof enagramText === 'string' ? enagramText : enagramText?.text || '']
+      .filter(text => text.trim())
+      .join('\n--- Alternative Transcription ---\n');
+
+    console.log('✅ Parallel TTS results:', {
+      google: googleText.substring(0, 50) + '...',
+      enagram: typeof enagramText === 'string'
+        ? enagramText.substring(0, 50) + '...'
+        : enagramText?.text?.substring(0, 50) + '...',
+      combined: combinedText.substring(0, 100) + '...',
+      googleSuccess: googleResult.status === 'fulfilled',
+      enagramSuccess: enagramResult.status === 'fulfilled'
+    });
+
+    return {
+      google: googleText,
+      enagram: enagramText,
+      primary: googleText, // Google for UI display
+      combined: combinedText || googleText || (typeof enagramText === 'string' ? enagramText : enagramText?.text || '')
+    };
+  }
+
+  /**
    * Check if the service is available (Edge Function should handle authentication)
    */
   get isAuthenticated(): boolean {

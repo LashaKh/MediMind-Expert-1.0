@@ -62,6 +62,9 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
   const [formData, setFormData] = useState<Partial<Form100Request>>(initialData || {});
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
+  // ADDED: Store combined transcript function for Form 100 generation
+  const getCombinedTranscriptRef = useRef<(() => string) | null>(null);
+
   // Form validation
   const { formState: { errors }, trigger } = useForm();
 
@@ -186,7 +189,23 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
 
     try {
       if (onGenerate) {
-        const generatedContent = await onGenerate(formData as Form100Request);
+        // CRITICAL FIX: Use combined transcript for Form 100 generation
+        // This sends BOTH Google + Enagram transcripts to Flowise for better accuracy
+        const formDataForGeneration = { ...formData } as Form100Request;
+
+        if (getCombinedTranscriptRef.current) {
+          const combinedTranscript = getCombinedTranscriptRef.current();
+          console.log('🎯 Using combined transcript for Form 100 generation:', {
+            displayLength: formData.voiceTranscript?.length || 0,
+            combinedLength: combinedTranscript.length,
+            hasDualTranscripts: combinedTranscript.includes('--- Alternative Transcription ---')
+          });
+
+          // Replace UI display text with combined dual transcripts
+          formDataForGeneration.voiceTranscript = combinedTranscript;
+        }
+
+        const generatedContent = await onGenerate(formDataForGeneration);
         if (generatedContent) {
           setGeneratedForm(generatedContent);
           setGenerationError(null);
@@ -203,7 +222,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
     } finally {
       setIsGenerating(false);
     }
-  }, [formData, onGenerate, currentStep]);
+  }, [formData, onGenerate, currentStep, clearSavedData]);
 
   // Handle form submission
   const handleSubmit = useCallback(() => {
@@ -363,6 +382,7 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
                   generationError={generationError}
                   onGenerate={handleGenerate}
                   reportType={reportType}
+                  getCombinedTranscriptRef={getCombinedTranscriptRef} // ADDED: Pass ref to access combined transcripts
                 />
               )}
             </div>
@@ -533,7 +553,7 @@ const ClinicalDataStep: React.FC<any> = ({ formData, updateFormData }) => {
 };
 
 // Step 2: Documentation - Premium Medical Documentation Interface
-const DocumentationStep: React.FC<any> = ({ formData, updateFormData, sessionId }) => {
+const DocumentationStep: React.FC<any> = ({ formData, updateFormData, sessionId, getCombinedTranscriptRef }) => {
   return (
     <div className="space-y-3">
       <div className="space-y-3">
@@ -544,6 +564,12 @@ const DocumentationStep: React.FC<any> = ({ formData, updateFormData, sessionId 
             onChange={(transcript) => updateFormData({ voiceTranscript: transcript })}
             sessionId={sessionId}
             placeholder="Voice transcript will appear here automatically..."
+            onCombinedTranscriptReady={(getCombinedFn) => {
+              // ADDED: Store combined transcript function for later use in Form 100 generation
+              if (getCombinedTranscriptRef) {
+                getCombinedTranscriptRef.current = getCombinedFn;
+              }
+            }}
           />
         </div>
 

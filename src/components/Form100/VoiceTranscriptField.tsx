@@ -30,7 +30,8 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
   disabled = false,
   className,
   showRecordButton = true,
-  maxLength = 5000
+  maxLength = 5000,
+  onCombinedTranscriptReady // ADDED: Callback to pass combined transcript function to parent
 }) => {
   // Local state for voice recording integration
   const [localTranscript, setLocalTranscript] = useState(value);
@@ -50,7 +51,8 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
     resumeRecording,
     clearTranscription,
     error: ttsError,
-    authStatus
+    authStatus,
+    getCombinedTranscriptForSubmission // ADDED: Access dual transcripts for Form 100 generation
   } = useGeorgianTTS({
     sessionId,
     enableStreaming: true,
@@ -78,6 +80,13 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
       transcriptAtRecordingStartRef.current = value;
     }
   }, [value, localTranscript, recordingState.isRecording]);
+
+  // ADDED: Expose combined transcript function to parent for Form 100 generation
+  useEffect(() => {
+    if (onCombinedTranscriptReady && getCombinedTranscriptForSubmission) {
+      onCombinedTranscriptReady(getCombinedTranscriptForSubmission);
+    }
+  }, [onCombinedTranscriptReady, getCombinedTranscriptForSubmission]);
 
   // Mobile keyboard detection
   useEffect(() => {

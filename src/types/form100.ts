@@ -164,6 +164,8 @@ export interface VoiceTranscriptFieldProps {
   className?: string;
   showRecordButton?: boolean;
   maxLength?: number;
+  // ADDED: Callback to expose combined transcript function for Form 100 generation
+  onCombinedTranscriptReady?: (getCombinedFn: () => string) => void;
 }
 
 export interface AngiographyReportFieldProps {

@@ -20,7 +20,7 @@ import {
   FileIcon
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
-import { ProductionControls } from './ProductionControls';
+// import { ProductionControls } from './ProductionControls'; // Removed - using parallel processing
 
 // Import mobile compact attachment styles
 import '../styles/mobile-attachment-compact.css';
@@ -77,9 +77,7 @@ interface TranscriptContentProps {
   onRemoveAttachment?: (attachmentId: string) => void;
   isProcessingAttachment?: boolean;
   attachmentProgress?: ProgressInfo | null;
-  // STT Model selection props
-  selectedSTTModel?: 'Fast' | 'GoogleChirp';
-  onModelChange?: (model: 'Fast' | 'GoogleChirp') => void;
+  // STT Model selection props removed - now using automatic parallel processing
 }
 
 // Add mobile keyboard styles
@@ -144,9 +142,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   isKeyboardAdjusted,
   // Empty field detection
   showEmptyFieldIndicator = true,
-  // STT Model selection props
-  selectedSTTModel = 'Fast',
-  onModelChange,
+  // STT Model selection props removed - now using automatic parallel processing
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const attachmentInputRef = useRef<HTMLInputElement>(null);
@@ -341,14 +337,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
             </div>
           )}
 
-          {/* Compact Production Controls - Below Title */}
-          <div className="relative mb-3 z-10 px-3 sm:px-4 lg:px-4" style={{ width: 'fit-content', maxWidth: '50%' }}>
-            <ProductionControls
-              selectedSTTModel={selectedSTTModel}
-              onModelChange={onModelChange}
-              recordingState={recordingState}
-            />
-          </div>
+          {/* Production Controls removed - now using automatic parallel processing (Google + Enagram) */}
 
           {/* Hidden File Inputs */}
           <input

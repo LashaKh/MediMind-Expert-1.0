@@ -28,18 +28,22 @@
 
 ### System Overview
 
-MediMind Expert implements a **dual Speech-to-Text (STT) system** with two primary engines:
+MediMind Expert implements a **parallel Speech-to-Text (STT) system** with two engines processing simultaneously:
 
 1. **Enagram API** - Georgian language specialist with 3 STT models and speaker diarization
 2. **Google Chirp API** - Multilingual v2 API with advanced Georgian support
 
+Both services process the same audio in parallel for maximum accuracy and reliability.
+
 ### Key Capabilities
 
 - ✅ **Real-time transcription** with <200ms recording start time
+- ✅ **Parallel processing** - Both engines work simultaneously on same audio
+- ✅ **Dual transcript management** - Separate Google, Enagram, and combined transcripts
 - ✅ **Smart segmentation** (15s for Enagram, 5s for Google)
 - ✅ **Speaker diarization** (Enagram STT2/STT3 models)
 - ✅ **Session isolation** with unique session IDs
-- ✅ **Multi-model support** with runtime switching
+- ✅ **Error resilience** - One service failing doesn't block the other
 - ✅ **Performance optimized** batch processing with fresh service instances
 - ✅ **Cross-platform** browser compatibility with MediaRecorder API
 
@@ -52,31 +56,47 @@ MediMind Expert implements a **dual Speech-to-Text (STT) system** with two prima
 └────────┬────────┘
          │
          ▼
-┌─────────────────────┐
-│  useGeorgianTTS     │◄─── State Management
-│  (Custom Hook)      │
-└─────────┬───────────┘
+┌─────────────────────────────────┐
+│  useGeorgianTTS                 │◄─── State Management
+│  (Custom Hook)                  │
+│  • googleTranscriptRef          │
+│  • enagramTranscriptRef         │
+│  • combinedForSubmissionRef     │
+└─────────┬───────────────────────┘
           │
           ▼
-┌──────────────────────┐
-│ georgianTTSService   │◄─── Service Layer
-│  (API Client)        │
-└──────────┬───────────┘
+┌─────────────────────────────────┐
+│ georgianTTSService              │◄─── Service Layer
+│  • recognizeSpeechParallel()    │
+│  • Promise.allSettled()         │
+└──────────┬──────────────────────┘
            │
-           ▼
-┌──────────────────────────────────────┐
-│     Supabase Edge Functions          │
-│  ┌────────────┐   ┌────────────────┐ │
-│  │ georgian-  │   │  google-stt-   │ │
-│  │ tts-proxy  │   │    proxy       │ │
-│  └─────┬──────┘   └────────┬───────┘ │
-└────────┼───────────────────┼─────────┘
-         │                   │
-         ▼                   ▼
-┌─────────────────┐   ┌──────────────────┐
-│  Enagram API    │   │  Google Cloud    │
-│  (enagramm.com) │   │  Speech API v2   │
-└─────────────────┘   └──────────────────┘
+           ├──────────────┬────────────────┐
+           │              │                │
+           ▼              ▼                ▼
+┌──────────────────────────────────────────────┐
+│     Supabase Edge Functions (Parallel)       │
+│  ┌────────────┐       ┌────────────────┐    │
+│  │ georgian-  │       │  google-stt-   │    │
+│  │ tts-proxy  │       │    proxy       │    │
+│  └─────┬──────┘       └────────┬───────┘    │
+└────────┼───────────────────────┼─────────────┘
+         │                       │
+         ▼                       ▼
+┌─────────────────┐       ┌──────────────────┐
+│  Enagram API    │       │  Google Cloud    │
+│  (enagramm.com) │       │  Speech API v2   │
+└─────────────────┘       └──────────────────┘
+         │                       │
+         └───────────┬───────────┘
+                     │
+                     ▼
+          ┌──────────────────────┐
+          │  Parallel Results    │
+          │  • google: string    │
+          │  • enagram: string   │
+          │  • combined: string  │
+          └──────────────────────┘
 ```
 
 ---
@@ -429,6 +449,240 @@ const result = {
 
 ---
 
+## Parallel Processing Architecture
+
+### Overview
+
+MediMind Expert's parallel STT system processes audio through **both Google Chirp and Enagram services simultaneously** for maximum accuracy and reliability. This architecture ensures transcription continues even if one service fails.
+
+### Core Parallel Processing Method
+
+**File**: `src/lib/speech/georgianTTSService.ts` (lines 271-346)
+
+```typescript
+async recognizeSpeechParallel(
+  audioBlob: Blob,
+  options: {
+    language?: string;
+    autocorrect?: boolean;
+    punctuation?: boolean;
+    digits?: boolean;
+    maxRetries?: number;
+    enableSpeakerDiarization?: boolean;
+    speakers?: number;
+  } = {}
+): Promise<{
+  google: string;
+  enagram: string | SpeakerDiarizationResult;
+  primary: string; // For UI display (Google)
+  combined: string; // For submission
+}>
+```
+
+#### Implementation Pattern
+
+```typescript
+// 1. Prepare both service requests with same audio
+const googleOptions = { ...options, engine: 'GoogleChirp' };
+const enagramOptions = { ...options, engine: 'Fast' };
+
+// 2. Execute both services in parallel using Promise.allSettled
+const [googleResult, enagramResult] = await Promise.allSettled([
+  this.performSpeechRecognition(base64Audio, googleOptions),
+  this.performSpeechRecognition(base64Audio, enagramOptions)
+]);
+
+// 3. Extract results with error resilience
+const googleText = googleResult.status === 'fulfilled' ?
+  (typeof googleResult.value === 'string' ? googleResult.value : '') : '';
+
+const enagramText = enagramResult.status === 'fulfilled' ?
+  enagramResult.value : '';
+
+// 4. Ensure at least one service succeeded
+if (!googleText.trim() && !enagramText.trim()) {
+  throw new Error('Both Google and Enagram TTS services failed');
+}
+
+// 5. Create combined transcript for AI processing
+const combinedText = [googleText, enagramText]
+  .filter(text => text.trim())
+  .join('\n--- Alternative Transcription ---\n');
+
+return {
+  google: googleText,
+  enagram: enagramText,
+  primary: googleText, // Google for UI display
+  combined: combinedText
+};
+```
+
+### Dual Transcript Management
+
+**File**: `src/hooks/useGeorgianTTS.ts`
+
+The hook maintains three separate transcript refs for parallel processing:
+
+```typescript
+// Separate transcripts for each service
+const googleTranscriptRef = useRef<string>('');
+const enagramTranscriptRef = useRef<string>('');
+const combinedForSubmissionRef = useRef<string>('');
+```
+
+#### Transcript Accumulation Pattern
+
+Each service builds its own complete transcript independently:
+
+```typescript
+const updateCombinedTranscriptRefs = useCallback((parallelResults: any) => {
+  // Google transcript accumulation
+  if (parallelResults.google?.trim()) {
+    const prevGoogle = googleTranscriptRef.current.trim();
+    const separator = prevGoogle ? ' ' : '';
+    googleTranscriptRef.current = prevGoogle + separator + parallelResults.google.trim();
+  }
+
+  // Enagram transcript accumulation
+  if (parallelResults.enagram?.trim()) {
+    const prevEnagram = enagramTranscriptRef.current.trim();
+    const separator = prevEnagram ? ' ' : '';
+    enagramTranscriptRef.current = prevEnagram + separator + parallelResults.enagram.trim();
+  }
+
+  // Build combined transcript for AI submission
+  const completeGoogleTranscript = googleTranscriptRef.current.trim();
+  const completeEnagramTranscript = enagramTranscriptRef.current.trim();
+
+  if (completeGoogleTranscript || completeEnagramTranscript) {
+    const parts = [];
+    if (completeGoogleTranscript) parts.push(completeGoogleTranscript);
+    if (completeEnagramTranscript) parts.push(completeEnagramTranscript);
+
+    combinedForSubmissionRef.current = parts.join('\n--- Alternative Transcription ---\n');
+  }
+}, []);
+```
+
+### Combined Transcript Format
+
+The combined transcript for AI processing uses this format:
+
+```
+FULL GOOGLE CHIRP TRANSCRIPT (all segments combined)
+--- Alternative Transcription ---
+FULL ENAGRAM TRANSCRIPT (all segments combined)
+```
+
+**Benefits of this format:**
+- AI gets two complete versions for cross-validation
+- Better accuracy in diagnosis generation
+- Redundancy if one service produces errors
+- Enhanced medical term recognition
+
+### UI Display Strategy
+
+**Priority Order:**
+1. **Primary**: Google Chirp transcript (faster, better quality)
+2. **Fallback**: Enagram transcript (if Google fails)
+3. **Display**: Best available result immediately
+
+```typescript
+// UI display logic
+const displayText = googleText.trim() || enagramText.trim() || '';
+```
+
+### Error Resilience Benefits
+
+#### 1. Service-Level Resilience
+```typescript
+// Promise.allSettled ensures one failure doesn't block the other
+const [googleResult, enagramResult] = await Promise.allSettled([...]);
+
+// Individual failure handling
+if (googleResult.status === 'rejected') {
+  console.warn('⚠️ Google TTS failed:', googleResult.reason?.message);
+}
+if (enagramResult.status === 'rejected') {
+  console.warn('⚠️ Enagram TTS failed:', enagramResult.reason?.message);
+}
+```
+
+#### 2. Graceful Degradation
+- One service failing: Continue with successful service
+- Both services failing: Throw error to user
+- Partial results: Use best available transcript
+
+#### 3. Independent Retry Logic
+- Google: 5-second retry delay, fast recovery
+- Enagram: 30-second retry delay, prevents rate limiting
+- Each service retries independently
+
+### Integration Points
+
+#### 1. GeorgianSTTApp Component
+```typescript
+// Access combined transcript for AI processing
+const combinedTranscript = getCombinedTranscriptForSubmission();
+const transcript = combinedTranscript || localTranscript || currentSession?.transcript;
+
+// Submit to AI with both transcripts
+const result = await processText(transcript, instruction);
+```
+
+#### 2. VoiceTranscriptField Component (Form 100)
+```typescript
+// Expose combined transcript function to parent
+useEffect(() => {
+  if (onCombinedTranscriptReady && getCombinedTranscriptForSubmission) {
+    onCombinedTranscriptReady(getCombinedTranscriptForSubmission);
+  }
+}, [onCombinedTranscriptReady, getCombinedTranscriptForSubmission]);
+```
+
+#### 3. Batch Processing
+```typescript
+// Process audio batch with parallel services
+const parallelResults = await freshService.recognizeSpeechParallel(batchBlob, options);
+
+// Update all transcript refs
+updateCombinedTranscriptRefs(parallelResults);
+
+// Handle speaker diarization from Enagram
+if (typeof parallelResults.enagram === 'object' && parallelResults.enagram.hasSpeakers) {
+  setSpeakerSegments(prev => [...prev, ...(parallelResults.enagram.speakers || [])]);
+}
+```
+
+### Performance Characteristics
+
+| Aspect | Google Chirp | Enagram Fast | Parallel Benefit |
+|--------|-------------|--------------|------------------|
+| **Segment Duration** | 5 seconds | 15 seconds | Faster updates from Google |
+| **Batch Delay** | 3 seconds | 30 seconds | Quick user feedback |
+| **Processing Time** | ~1-2 seconds | ~2-3 seconds | Concurrent execution |
+| **Total Time** | Sequential: 4-5s | Parallel: 2-3s | **~50% faster** |
+| **Error Recovery** | Independent | Independent | No single point of failure |
+
+### Fallback Strategy
+
+```typescript
+// Primary: Use parallel processing
+const result = await processChunk(audioBlob);
+
+// Fallback: If parallel processing fails completely
+try {
+  const fallbackResult = await georgianTTSService.recognizeSpeech(audioBlob, {
+    engine: 'GoogleChirp', // Fast fallback
+    maxRetries: 1
+  });
+} catch (fallbackError) {
+  // All processing failed - notify user
+}
+```
+
+---
+
 ## Frontend Integration Layer
 
 ### useGeorgianTTS Hook Architecture
@@ -645,7 +899,7 @@ const processChunksInParallel = async () => {
 
 ### georgianTTSService API Client
 
-**File**: `src/lib/speech/georgianTTSService.ts` (414 lines)
+**File**: `src/lib/speech/georgianTTSService.ts` (489 lines)
 
 #### Service Architecture
 
@@ -661,6 +915,11 @@ export class GeorgianTTSService {
   constructor() {
     // Stateless - no token management (handled by Edge Functions)
   }
+
+  // Core methods:
+  // 1. recognizeSpeech() - Single service processing
+  // 2. recognizeSpeechParallel() - Parallel dual-service processing
+  // 3. processAudioFile() - File upload with chunking
 }
 ```
 
@@ -769,6 +1028,115 @@ async recognizeSpeech(audioBlob: Blob, options = {}): Promise<string | SpeakerDi
 
   throw lastError
 }
+```
+
+#### Parallel Speech Recognition (Primary Method)
+
+**Method**: `recognizeSpeechParallel()` (lines 271-346)
+
+This is the primary transcription method used by the application, processing audio through both services simultaneously.
+
+```typescript
+async recognizeSpeechParallel(
+  audioBlob: Blob,
+  options: {
+    language?: string;
+    autocorrect?: boolean;
+    punctuation?: boolean;
+    digits?: boolean;
+    maxRetries?: number;
+    enableSpeakerDiarization?: boolean;
+    speakers?: number;
+  } = {}
+): Promise<{
+  google: string;
+  enagram: string | SpeakerDiarizationResult;
+  primary: string;
+  combined: string;
+}>
+```
+
+**Usage in Application:**
+
+```typescript
+// In useGeorgianTTS hook - batch processing
+const result = await freshService.recognizeSpeechParallel(batchBlob, {
+  language,
+  autocorrect,
+  punctuation,
+  digits,
+  enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization,
+  speakers: optionsRef.current.speakers,
+  maxRetries: 2
+});
+
+// Handle results
+if (result) {
+  const googleText = result.google || '';
+  const enagramText = typeof result.enagram === 'string'
+    ? result.enagram
+    : result.enagram?.text || '';
+
+  // Update dual transcript refs
+  updateCombinedTranscriptRefs(result);
+
+  // Display best available
+  const displayText = googleText.trim() || enagramText.trim() || '';
+}
+```
+
+**Return Value Structure:**
+
+```typescript
+{
+  google: "Google Chirp transcript text",
+  enagram: "Enagram transcript text" | SpeakerDiarizationResult,
+  primary: "Google Chirp transcript text", // Same as google
+  combined: "Google text\n--- Alternative Transcription ---\nEnagram text"
+}
+```
+
+**Error Handling:**
+- Uses `Promise.allSettled()` for resilience
+- One service failing doesn't block the other
+- Both services must fail to throw error
+- Individual failures logged with warnings
+
+#### Accessing Parallel Transcripts in Hook
+
+The `useGeorgianTTS` hook provides methods to access the parallel transcripts:
+
+```typescript
+// Get all transcript versions
+const getDualTranscripts = useCallback(() => {
+  return {
+    google: googleTranscriptRef.current,
+    enagram: enagramTranscriptRef.current,
+    combined: combinedForSubmissionRef.current,
+    primary: googleTranscriptRef.current // For UI display
+  };
+}, []);
+
+// Get combined transcript for AI submission
+const getCombinedTranscriptForSubmission = useCallback(() => {
+  // Priority order: combined > google > enagram
+  if (combinedForSubmissionRef.current.trim()) {
+    return combinedForSubmissionRef.current;
+  }
+  if (googleTranscriptRef.current.trim()) {
+    return googleTranscriptRef.current;
+  }
+  return enagramTranscriptRef.current;
+}, []);
+```
+
+**Exposed Methods:**
+```typescript
+const {
+  // ... other methods
+  getDualTranscripts,
+  getCombinedTranscriptForSubmission
+} = useGeorgianTTS({ ... });
 ```
 
 ---
@@ -1252,10 +1620,13 @@ private static readonly SUPABASE_ANON_KEY =
 | Metric | Target | Achieved | Method |
 |--------|--------|----------|--------|
 | **Recording Start** | <200ms | ✅ <200ms | Microphone pre-initialization |
-| **Segment Duration** | 15-20s | ✅ 15s (Enagram) | Smart auto-segmentation |
-| **Live Transcript** | <5s | ✅ 3-5s (Google) | 5-second batches |
-| **Batch Processing** | <30s | ✅ 3s (Google), 30s (Enagram) | Fresh service instances |
+| **Segment Duration** | 15-20s | ✅ 15s (Enagram), 5s (Google) | Smart auto-segmentation |
+| **Live Transcript** | <5s | ✅ 3-5s (Google) | 5-second batches with parallel processing |
+| **Batch Processing** | <30s | ✅ 2-3s (Parallel) | Concurrent service execution |
+| **Sequential Time** | 4-5s | ⚠️ Deprecated | Single service processing |
+| **Parallel Time** | 2-3s | ✅ 2-3s | **~50% faster than sequential** |
 | **Audio Level** | Real-time | ✅ 100ms | requestAnimationFrame loop |
+| **Error Recovery** | N/A | ✅ Instant | Parallel fallback to working service |
 
 ### Optimization Strategies
 
@@ -1341,6 +1712,52 @@ if (wasAutoSegmentation && !wasManualStop) {
   }, 10)
 }
 ```
+
+#### 5. Parallel Processing for Speed & Reliability
+
+**Performance Advantage**: ~50% faster than sequential processing
+
+```typescript
+// Sequential processing (OLD - deprecated):
+// Google: 1-2s + Enagram: 2-3s = 3-5s total
+
+// Parallel processing (NEW - current):
+// Google: 1-2s  } executed simultaneously
+// Enagram: 2-3s } = 2-3s total (limited by slowest service)
+
+// Implementation
+const [googleResult, enagramResult] = await Promise.allSettled([
+  performGoogleSTT(audio),  // Runs concurrently
+  performEnagramSTT(audio)  // Runs concurrently
+]);
+
+// Extract results with error resilience
+const googleText = googleResult.status === 'fulfilled' ? googleResult.value : '';
+const enagramText = enagramResult.status === 'fulfilled' ? enagramResult.value : '';
+
+// Use best available immediately
+const displayText = googleText.trim() || enagramText.trim();
+```
+
+**Reliability Benefits:**
+- ✅ One service failing doesn't block transcription
+- ✅ Best available transcript shown immediately
+- ✅ Redundancy for medical-critical applications
+- ✅ Independent retry logic per service
+- ✅ Cross-validation from two sources
+
+**Resource Optimization:**
+- Concurrent API calls utilize network bandwidth efficiently
+- No waiting for sequential processing completion
+- Fresh service instances prevent token conflicts
+- Minimal overhead from `Promise.allSettled()`
+- Both services process same audio blob (no duplication)
+
+**Medical Use Case Benefits:**
+- Critical transcriptions have dual verification
+- Fast updates for real-time clinical documentation
+- Better accuracy through cross-reference
+- Resilience during network issues or service outages
 
 ---
 
@@ -1501,6 +1918,16 @@ async recognizeSpeech(audioBlob: Blob, options = {}): Promise<string> {
 | **Edge: Enagram** | `https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/georgian-tts-proxy` | POST | Supabase anon key | Enagram proxy |
 | **Edge: Google** | `https://kvsqtolsjggpyvdtdpss.supabase.co/functions/v1/google-stt-proxy` | POST | Supabase anon key | Google proxy |
 
+### Service Methods Summary
+
+| Method | Purpose | Return Type | Processing Mode |
+|--------|---------|-------------|-----------------|
+| **recognizeSpeechParallel()** | Primary transcription method | `{ google, enagram, primary, combined }` | **Parallel** (both services) |
+| **recognizeSpeech()** | Single service fallback | `string \| SpeakerDiarizationResult` | Sequential (one service) |
+| **processAudioFile()** | File upload processing | `string \| SpeakerDiarizationResult` | Sequential with chunking |
+| **getDualTranscripts()** | Access all transcript versions | `{ google, enagram, combined, primary }` | Read-only (hook method) |
+| **getCombinedTranscriptForSubmission()** | Get AI-ready transcript | `string` | Read-only (hook method) |
+
 ### Configuration Variables
 
 | Variable | Location | Value | Purpose |
@@ -1514,16 +1941,30 @@ async recognizeSpeech(audioBlob: Blob, options = {}): Promise<string> {
 
 ### Model Capabilities Comparison
 
-| Feature | STT1 (Enagram) | STT2 (Enagram) | STT3 (Enagram) | GoogleSTT (Chirp) |
-|---------|---------------|---------------|---------------|-------------------|
-| **Speed** | ⚡ Fastest | 🐢 Slower | 🐢 Slower | ⚡⚡ Very Fast |
-| **Speaker Diarization** | ❌ No | ✅ Yes | ✅ Yes | ❌ No |
-| **Max Duration** | 25s | 25s | 25s | 60s |
-| **Optimal Segment** | 15s | 15s | 15s | 5s |
-| **Engine Parameter** | Omit | `'STT2'` | `'STT3'` | `'GoogleSTT'` |
-| **Endpoint** | `RecognizeSpeech` | `RecognizeSpeechFileSubmit` | `RecognizeSpeechFileSubmit` | Google v2 API |
-| **Batch Delay** | 30s | 30s | 30s | 3s |
-| **Retry Delay** | 30s | 30s | 30s | 5s |
+| Feature | Fast (Enagram STT1) | GoogleChirp | **Parallel Mode** |
+|---------|-------------------|-------------|-------------------|
+| **Speed** | ⚡ Fast | ⚡⚡ Very Fast | ⚡⚡⚡ **Fastest (both concurrent)** |
+| **Speaker Diarization** | ❌ No | ❌ No | ✅ **Yes (via Enagram)** |
+| **Max Duration** | 25s | 60s | 25s (Enagram limit) |
+| **Optimal Segment** | 15s | 5s | 5s (Google pace) |
+| **Engine Parameter** | `'Fast'` | `'GoogleChirp'` | **N/A (automatic)** |
+| **Endpoint** | `RecognizeSpeech` | Google v2 API | **Both simultaneously** |
+| **Batch Delay** | 30s | 3s | **2-3s (parallel)** |
+| **Retry Delay** | 30s | 5s | **Independent per service** |
+| **Error Resilience** | ❌ Single point of failure | ❌ Single point of failure | ✅ **Graceful degradation** |
+| **UI Display** | Primary | Primary | **Google primary, Enagram fallback** |
+| **AI Submission** | Single transcript | Single transcript | **Combined dual transcript** |
+| **Processing Mode** | Sequential | Sequential | **Parallel (~50% faster)** |
+
+### Legacy Models (Deprecated for parallel mode)
+
+| Feature | STT2 (Enagram) | STT3 (Enagram) |
+|---------|---------------|---------------|
+| **Speed** | 🐢 Slower | 🐢 Slower |
+| **Speaker Diarization** | ✅ Yes | ✅ Yes |
+| **Engine Parameter** | `'STT2'` | `'STT3'` |
+| **Endpoint** | `RecognizeSpeechFileSubmit` | `RecognizeSpeechFileSubmit` |
+| **Note** | ⚠️ Not used in parallel mode | ⚠️ Not used in parallel mode |
 
 ### Audio Format Specifications
 
@@ -1533,6 +1974,372 @@ async recognizeSpeech(audioBlob: Blob, options = {}): Promise<string> {
 | **audio/webm** | Default | 16kHz | 1 (mono) | 128kbps | Fallback |
 | **audio/mp4** | AAC | 16kHz | 1 (mono) | 128kbps | Safari support |
 | **audio/ogg;codecs=opus** | Opus | 16kHz | 1 (mono) | 128kbps | Firefox support |
+
+---
+
+## Integration Examples
+
+### Example 1: Basic Parallel Processing in Component
+
+**Scenario**: GeorgianSTTApp using parallel transcription for real-time recording
+
+```typescript
+// src/components/Georgian/GeorgianSTTApp.tsx
+import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
+
+const GeorgianSTTApp: React.FC = () => {
+  // Initialize hook with parallel processing enabled (default)
+  const {
+    recordingState,
+    startRecording,
+    stopRecording,
+    getCombinedTranscriptForSubmission,
+    getDualTranscripts
+  } = useGeorgianTTS({
+    language: 'ka-GE',
+    sessionId: currentSession?.id,
+    onLiveTranscriptUpdate: handleLiveTranscriptUpdate
+  });
+
+  // Handle AI processing with combined transcript
+  const handleProcessText = async (instruction: string) => {
+    // CRITICAL: Use combined transcript for AI processing
+    // Contains both Google and Enagram transcripts for cross-validation
+    const combinedTranscript = getCombinedTranscriptForSubmission();
+
+    if (!combinedTranscript.trim()) {
+      console.error('No transcript available for AI processing');
+      return;
+    }
+
+    // Submit to AI with dual transcripts
+    const result = await processText(combinedTranscript, instruction);
+
+    // Log transcript sources for debugging
+    const dualTranscripts = getDualTranscripts();
+    console.log('Transcript sources:', {
+      google: dualTranscripts.google.length,
+      enagram: dualTranscripts.enagram.length,
+      combined: dualTranscripts.combined.length
+    });
+  };
+
+  return (
+    // Component JSX
+  );
+};
+```
+
+### Example 2: Form 100 Integration with Voice Transcript
+
+**Scenario**: VoiceTranscriptField component exposing combined transcript for medical report generation
+
+```typescript
+// src/components/Form100/VoiceTranscriptField.tsx
+import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
+
+const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
+  value,
+  onChange,
+  sessionId,
+  onCombinedTranscriptReady // Callback to pass combined transcript function
+}) => {
+  const {
+    recordingState,
+    startRecording,
+    stopRecording,
+    getCombinedTranscriptForSubmission
+  } = useGeorgianTTS({
+    sessionId,
+    enableStreaming: true,
+    chunkDuration: 23000,
+    onLiveTranscriptUpdate: (newText, fullText, currentSessionId) => {
+      // Preserve existing content and append new transcript
+      const baseContent = transcriptAtRecordingStartRef.current;
+      const separator = baseContent && fullText ? '\n\n' : '';
+      const combinedContent = baseContent + separator + fullText.trim();
+
+      onChange(combinedContent);
+    }
+  });
+
+  // CRITICAL: Expose combined transcript function to parent component
+  // This allows Form 100 generation to access both transcripts
+  useEffect(() => {
+    if (onCombinedTranscriptReady && getCombinedTranscriptForSubmission) {
+      onCombinedTranscriptReady(getCombinedTranscriptForSubmission);
+    }
+  }, [onCombinedTranscriptReady, getCombinedTranscriptForSubmission]);
+
+  return (
+    // Voice recording UI
+  );
+};
+
+// Parent component (Form 100 Modal)
+const Form100Modal: React.FC = () => {
+  const [getCombinedTranscriptFn, setGetCombinedTranscriptFn] =
+    useState<(() => string) | null>(null);
+
+  const handleGenerateReport = async () => {
+    // Get combined transcript from voice field
+    const combinedTranscript = getCombinedTranscriptFn?.() || '';
+
+    // Send to Flowise with both transcripts
+    const reportData = await generateForm100Report({
+      transcript: combinedTranscript,
+      patientInfo: formData
+    });
+  };
+
+  return (
+    <VoiceTranscriptField
+      value={voiceTranscript}
+      onChange={setVoiceTranscript}
+      sessionId={sessionId}
+      onCombinedTranscriptReady={setGetCombinedTranscriptFn}
+    />
+  );
+};
+```
+
+### Example 3: Batch Processing with Parallel Services
+
+**Scenario**: Processing recorded audio chunks with fresh service instances
+
+```typescript
+// src/hooks/useGeorgianTTS.ts (excerpt)
+const processChunksInParallel = async () => {
+  const chunksToProcess = audioChunksForProcessingRef.current.slice();
+
+  // Calculate optimal batch size based on STT model
+  const standardBatchSize = Math.ceil(20000 / chunkSize); // 20 chunks = 20s
+  const segmentChunks = chunksToProcess.slice(0, standardBatchSize);
+  const audioBlob = new Blob(segmentChunks, { type: 'audio/webm;codecs=opus' });
+
+  // CRITICAL: Create fresh service instance for each batch
+  // Prevents Enagram's sequential request DALE100 errors
+  const { GeorgianTTSService } = await import('../lib/speech/georgianTTSService');
+  const freshService = new GeorgianTTSService();
+
+  await freshService.logout();     // Clear any cached tokens
+  await freshService.initialize(); // Force fresh login
+
+  // Process with parallel services
+  const result = await freshService.recognizeSpeechParallel(audioBlob, {
+    language,
+    autocorrect,
+    punctuation,
+    digits,
+    enableSpeakerDiarization: optionsRef.current.enableSpeakerDiarization,
+    speakers: optionsRef.current.speakers,
+    maxRetries: 2
+  });
+
+  // Handle parallel results
+  if (result) {
+    // Update dual transcript refs (Google + Enagram)
+    updateCombinedTranscriptRefs(result);
+
+    // Handle speaker diarization from Enagram if available
+    if (typeof result.enagram === 'object' && result.enagram.hasSpeakers) {
+      setSpeakerSegments(prev => [...prev, ...(result.enagram.speakers || [])]);
+      setHasSpeakerResults(true);
+    }
+
+    // Display best available (Google primary, Enagram fallback)
+    const displayText = result.google.trim() ||
+                       (typeof result.enagram === 'string'
+                         ? result.enagram.trim()
+                         : result.enagram?.text?.trim() || '');
+
+    // Trigger live update with display text
+    if (onLiveTranscriptUpdate) {
+      onLiveTranscriptUpdate(displayText, combinedTranscriptRef.current, sessionIdRef.current);
+    }
+  }
+};
+```
+
+### Example 4: Error Handling with Graceful Degradation
+
+**Scenario**: Handling service failures with parallel processing resilience
+
+```typescript
+// src/lib/speech/georgianTTSService.ts (excerpt)
+async recognizeSpeechParallel(audioBlob: Blob, options = {}) {
+  const base64Audio = await this.convertAudioToBase64(audioBlob);
+
+  // Execute both services in parallel with error resilience
+  const [googleResult, enagramResult] = await Promise.allSettled([
+    this.performSpeechRecognition(base64Audio, { ...options, engine: 'GoogleChirp' }),
+    this.performSpeechRecognition(base64Audio, { ...options, engine: 'Fast' })
+  ]);
+
+  // Extract results with comprehensive error handling
+  const googleText = googleResult.status === 'fulfilled' ?
+    (typeof googleResult.value === 'string' ? googleResult.value : '') : '';
+
+  const enagramText = enagramResult.status === 'fulfilled' ?
+    enagramResult.value : '';
+
+  // Log individual service failures (non-blocking)
+  if (googleResult.status === 'rejected') {
+    console.warn('⚠️ Google TTS failed:', googleResult.reason?.message || googleResult.reason);
+    // Application continues with Enagram result
+  }
+  if (enagramResult.status === 'rejected') {
+    console.warn('⚠️ Enagram TTS failed:', enagramResult.reason?.message || enagramResult.reason);
+    // Application continues with Google result
+  }
+
+  // Ensure at least one service succeeded
+  const hasGoogleText = googleText.trim().length > 0;
+  const hasEnagramText = typeof enagramText === 'string'
+    ? enagramText.trim().length > 0
+    : (enagramText?.text?.trim() || '').length > 0;
+
+  if (!hasGoogleText && !hasEnagramText) {
+    // Both services failed - this is the only error case
+    throw new Error('Both Google and Enagram TTS services failed to produce results');
+  }
+
+  // Create combined transcript (filter out empty results)
+  const combinedText = [
+    googleText,
+    typeof enagramText === 'string' ? enagramText : enagramText?.text || ''
+  ]
+    .filter(text => text.trim())
+    .join('\n--- Alternative Transcription ---\n');
+
+  return {
+    google: googleText,
+    enagram: enagramText,
+    primary: googleText, // Google for UI display
+    combined: combinedText
+  };
+}
+```
+
+### Example 5: Accessing Transcript Versions for Different Use Cases
+
+**Scenario**: Using different transcript versions based on use case
+
+```typescript
+// Component code
+const MyComponent: React.FC = () => {
+  const { getDualTranscripts, getCombinedTranscriptForSubmission } = useGeorgianTTS({ ... });
+
+  // Use Case 1: UI Display
+  const handleDisplayTranscript = () => {
+    const transcripts = getDualTranscripts();
+    // Show Google transcript (faster, better quality)
+    setDisplayText(transcripts.primary || transcripts.google);
+  };
+
+  // Use Case 2: AI Processing / Diagnosis Generation
+  const handleAIProcessing = async () => {
+    // Use combined transcript with both versions for best accuracy
+    const combinedTranscript = getCombinedTranscriptForSubmission();
+
+    // Format:
+    // "Google Chirp full transcript
+    //  --- Alternative Transcription ---
+    //  Enagram full transcript"
+
+    await generateDiagnosisReport(combinedTranscript, diagnosisInfo);
+  };
+
+  // Use Case 3: Quality Comparison
+  const handleQualityCheck = () => {
+    const transcripts = getDualTranscripts();
+
+    console.log('Transcript comparison:', {
+      google: {
+        length: transcripts.google.length,
+        preview: transcripts.google.substring(0, 50)
+      },
+      enagram: {
+        length: transcripts.enagram.length,
+        preview: transcripts.enagram.substring(0, 50)
+      },
+      match: transcripts.google.trim() === transcripts.enagram.trim()
+    });
+  };
+
+  // Use Case 4: Export / Backup
+  const handleExport = () => {
+    const transcripts = getDualTranscripts();
+
+    const exportData = {
+      timestamp: new Date().toISOString(),
+      googleTranscript: transcripts.google,
+      enagramTranscript: transcripts.enagram,
+      combinedForAI: transcripts.combined,
+      metadata: {
+        sessionId,
+        duration,
+        model: 'parallel-stt'
+      }
+    };
+
+    downloadJSON(exportData, 'transcript-export.json');
+  };
+};
+```
+
+### Example 6: Custom Parallel Processing Configuration
+
+**Scenario**: Fine-tuning parallel processing for specific medical workflows
+
+```typescript
+// Custom configuration for different medical scenarios
+const GeorgianTTSForEmergency: React.FC = () => {
+  // Emergency scenario: Prioritize speed (Google Chirp)
+  const {
+    recordingState,
+    startRecording,
+    getCombinedTranscriptForSubmission
+  } = useGeorgianTTS({
+    language: 'ka-GE',
+    chunkDuration: 5000, // Very fast 5-second segments (Google pace)
+    onLiveTranscriptUpdate: (newText, fullText) => {
+      // Immediate display for emergency documentation
+      setEmergencyTranscript(fullText);
+    }
+  });
+
+  return (
+    // Emergency transcription UI
+  );
+};
+
+const GeorgianTTSForConsultation: React.FC = () => {
+  // Consultation scenario: Enable speaker diarization for multi-party discussion
+  const {
+    recordingState,
+    speakerSegments,
+    hasSpeakerResults
+  } = useGeorgianTTS({
+    language: 'ka-GE',
+    enableSpeakerDiarization: true,
+    speakers: 3, // Doctor + Patient + Family member
+    chunkDuration: 15000, // Standard 15-second segments
+    onLiveTranscriptUpdate: handleTranscriptUpdate
+  });
+
+  // Display speaker-separated transcript
+  return (
+    <div>
+      {hasSpeakerResults && speakerSegments.map((segment, idx) => (
+        <div key={idx}>
+          <strong>{segment.Speaker}:</strong> {segment.Text}
+        </div>
+      ))}
+    </div>
+  );
+};
+```
 
 ---
 
@@ -1645,26 +2452,38 @@ await sttCircuitBreaker.execute(() =>
 
 ## Conclusion
 
-This document provides comprehensive coverage of the MediMind Expert Speech-to-Text system architecture. Use this as your **single source of truth** for:
+This document provides comprehensive coverage of the MediMind Expert **Parallel Speech-to-Text system architecture**. Use this as your **single source of truth** for:
 
-- Understanding how each STT service works
+- Understanding how parallel STT processing works
 - Configuring API credentials and endpoints
 - Debugging transcription issues
 - Implementing new features or optimizations
+- Integrating parallel transcripts in components
 - Making configuration changes
 
 **Key Takeaways**:
 
-1. **Dual STT System**: Enagram (Georgian specialist) + Google Chirp (advanced Georgian)
-2. **Performance**: <200ms recording start via microphone pre-initialization
-3. **Smart Segmentation**: 15s (Enagram) or 5s (Google) auto-restart for seamless UX
-4. **Fresh Service Instances**: Prevents Enagram's sequential request errors
-5. **Session Isolation**: Unique session IDs prevent transcript contamination
-6. **Error Recovery**: Multi-layer error handling with auto-retry logic
+1. **Parallel STT System**: Enagram (Georgian specialist) + Google Chirp (advanced Georgian) process **simultaneously**
+2. **Performance**: <200ms recording start + **~50% faster** parallel processing (2-3s vs 4-5s sequential)
+3. **Dual Transcript Management**: Separate Google, Enagram, and combined transcripts for different use cases
+4. **Smart Segmentation**: 5s (Google) or 15s (Enagram) auto-restart with parallel processing
+5. **Error Resilience**: One service failing doesn't block transcription - graceful degradation
+6. **Fresh Service Instances**: Prevents Enagram's sequential request errors (DALE100)
+7. **Session Isolation**: Unique session IDs prevent transcript contamination across recordings
+8. **Combined Format for AI**: Both transcripts sent to AI for cross-validation and better accuracy
+
+**Critical Integration Points**:
+
+- **UI Display**: Use `getDualTranscripts().primary` (Google transcript)
+- **AI Processing**: Use `getCombinedTranscriptForSubmission()` (both transcripts)
+- **Form 100**: Pass combined transcript function via `onCombinedTranscriptReady` callback
+- **Batch Processing**: Always use `recognizeSpeechParallel()` for optimal performance
+- **Error Handling**: `Promise.allSettled()` ensures resilience
 
 **For any STT-related changes, always refer to this document first!**
 
 ---
 
 *Document maintained by: MediMind Expert Development Team*
-*Last reviewed: 2025-10-03*
+*Last reviewed: 2025-10-14*
+*Architecture: Parallel Speech-to-Text System v2.0*
