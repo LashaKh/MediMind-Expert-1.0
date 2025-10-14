@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Activity, Sparkles, Zap, Mic, Square, Stethoscope, FileText, Clock, Settings, Plus } from 'lucide-react';
 
+import { useTranslation } from '../../../hooks/useTranslation';
+
 interface AuthStatus {
   isAuthenticated: boolean;
 }
@@ -39,6 +41,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
   onStopRecording,
   onCreateSession
 }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <div className="relative overflow-hidden">
@@ -57,7 +60,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
               <button
                 onClick={onOpenMobileSessions}
                 className="lg:hidden transcription-btn-secondary flex items-center justify-center w-10 h-10 flex-shrink-0"
-                aria-label={`Open sessions (${sessionsCount})`}
+                aria-label={t('mediscribe.header.openSessions', { sessionsCount })}
                 style={{ minWidth: 'var(--medical-mobile-touch-md)', minHeight: 'var(--medical-mobile-touch-md)' }}
               >
                 <div className="flex flex-col items-center justify-center">
@@ -78,7 +81,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                 className="relative flex-shrink-0 cursor-pointer"
                 onClick={() => navigate('/')}
                 role="button"
-                aria-label="Navigate to home"
+                aria-label={t('mediscribe.header.navigateToHome')}
               >
                 <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 transcription-primary-gradient rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 active:scale-95">
                   <FileText className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
@@ -92,17 +95,16 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
               {/* Mobile-Optimized Typography */}
               <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1">
                 <div className="flex items-center space-x-2 sm:space-x-3">
-                  <h1 
-                    className="text-lg sm:text-xl lg:text-3xl font-bold text-[#1a365d] tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity duration-200"
-                    onClick={() => navigate('/')}
-                    role="button"
-                    aria-label="Navigate to home"
-                  >
-                    MediScribe
-                  </h1>
-                </div>
+                                                      <h1 
+                                                        className="text-lg sm:text-xl lg:text-3xl font-bold text-[#1a365d] tracking-tight truncate cursor-pointer hover:opacity-80 transition-opacity duration-200"
+                                                        onClick={() => navigate('/')}
+                                                        role="button"
+                                    aria-label={t('mediscribe.header.navigateToHome')}
+                                                                        >
+                                                                          {t('mediscribe.header.title')}
+                                                                        </h1>                </div>
                 <p className="text-xs sm:text-sm text-[#2b6cb0] font-medium tracking-wide truncate">
-                  AI Medical Transcription
+                  {t('mediscribe.header.subtitle')}
                 </p>
               </div>
             </div>
@@ -123,7 +125,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                     : 'bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d] text-white shadow-[#2b6cb0]/30'
                   }
                 `}
-                title={recordingState.isRecording ? "Cannot create new session during recording" : processing ? "Please wait for current process to complete" : "Create new recording session"}
+                title={recordingState.isRecording ? t('mediscribe.header.newSessionDisabledRecording') : processing ? t('mediscribe.header.newSessionDisabledProcessing') : t('mediscribe.header.createNewRecordingSession')}
                 style={{ minWidth: '44px', minHeight: '44px' }}
               >
                 <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
@@ -137,10 +139,10 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
                 {/* Desktop label */}
                 <div className="hidden lg:flex flex-col items-start">
                   <span className="font-bold text-sm leading-tight">
-                    {processing ? 'Processing' : 'New'}
+                    {processing ? t('mediscribe.header.processing') : t('mediscribe.header.new')}
                   </span>
                   <span className="text-xs opacity-90 leading-tight">
-                    {processing ? 'Please wait' : 'Session'}
+                    {processing ? t('mediscribe.header.pleaseWait') : t('mediscribe.header.session')}
                   </span>
                 </div>
 
@@ -160,7 +162,7 @@ export const HeaderControls: React.FC<HeaderControlsProps> = ({
             {!authStatus.isAuthenticated && (
               <div className="relative flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 border border-[#90cdf4]/50">
                 <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-[#90cdf4] to-[#63b3ed]" />
-                <span className="hidden sm:inline text-xs sm:text-sm font-semibold text-[#2b6cb0]">Connecting</span>
+                <span className="hidden sm:inline text-xs sm:text-sm font-semibold text-[#2b6cb0]">{t('mediscribe.header.connecting')}</span>
                 <Activity className="sm:hidden w-3 h-3 text-[#2b6cb0]" />
               </div>
             )}

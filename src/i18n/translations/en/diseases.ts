@@ -20,6 +20,7 @@ export const diseases = {
     proContent: 'Professional medical content',
     contentNotAvailable: 'Content Not Available',
     contentNotAvailableMessage: 'The clinical content for this disease is not yet available. Please check back later or contact support.',
+    medicalDocument: 'Medical Document',
     severity: {
       critical: 'Critical Condition',
       criticalDesc: 'Requires immediate medical attention',
@@ -30,6 +31,10 @@ export const diseases = {
       unknown: 'Unknown',
       unknownDesc: 'Severity not specified'
     }
+  },
+  specialties: {
+    cardiology: 'Cardiology',
+    obgyn: 'Obstetrics and Gynecology',
   },
   indexPage: {
     hero: {
@@ -81,31 +86,45 @@ export const diseases = {
       title: 'Evidence-Based Medicine Guide',
       category: 'Reference',
       description: 'Comprehensive guide to levels of evidence and grades of recommendation for evidence-based clinical practice.',
-      tags: ['Evidence', 'Guidelines', 'Research', 'Clinical Practice']
+      tags: ['Evidence', 'Guidelines', 'Research', 'Clinical Practice'],
+      readTime: '15 min',
+      lastUpdated: 'July 21, 2025'
     },
     'hypertrophic-cardiomyopathy': {
       title: 'Hypertrophic Cardiomyopathy',
       category: 'Cardiomyopathy',
       description: 'A genetic disorder characterized by left ventricular hypertrophy and preserved ejection fraction. Associated with sudden cardiac death risk.',
-      tags: ['Cardiomyopathy', 'Genetic', 'Sudden Death', 'Family Screening']
+      tags: ['Cardiomyopathy', 'Genetic', 'Sudden Death', 'Family Screening'],
+      readTime: '25 min',
+      lastUpdated: 'May 31, 2025',
+      prevalence: '200 per 100,000'
     },
     'atrial-fibrillation': {
       title: 'Atrial Fibrillation',
       category: 'Electrophysiology',
       description: 'The most common sustained cardiac arrhythmia. Increases stroke risk 5-fold and requires comprehensive management.',
-      tags: ['Arrhythmia', 'Stroke Prevention', 'Anticoagulation', 'Rate Control']
+      tags: ['Arrhythmia', 'Stroke Prevention', 'Anticoagulation', 'Rate Control'],
+      readTime: '20 min',
+      lastUpdated: 'June 19, 2025',
+      prevalence: '700-775 per 100,000'
     },
     'heart-failure': {
       title: 'Heart Failure',
       category: 'Heart Failure',
       description: 'A clinical syndrome resulting from structural or functional cardiac abnormalities that impair ventricular function.',
-      tags: ['Heart Failure', 'HFrEF', 'HFpEF', 'Medical Management']
+      tags: ['Heart Failure', 'HFrEF', 'HFpEF', 'Medical Management'],
+      readTime: '30 min',
+      lastUpdated: 'May 31, 2025',
+      prevalence: '1,000 per 100,000'
     },
     'aortic-stenosis': {
       title: 'Aortic Stenosis',
       category: 'Valvular Heart Disease',
       description: 'A chronic fibrocalcific disease resulting in aortic valve narrowing. Severe AS has 3-year survival without intervention.',
-      tags: ['Valvular Disease', 'TAVR', 'SAVR', 'Stenosis']
+      tags: ['Valvular Disease', 'TAVR', 'SAVR', 'Stenosis'],
+      readTime: '30 min',
+      lastUpdated: 'June 13, 2025',
+      prevalence: '400 per 100,000'
     },
     'cardiac-arrest': {
       title: 'Cardiac Arrest',

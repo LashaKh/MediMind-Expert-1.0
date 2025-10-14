@@ -92,4 +92,25 @@ export default {
   sts: stsAdultCardiacTranslations,
 
   // Ensure other calculator IDs referenced in Calculators.tsx for cardiology also have title/subtitle
+  chads_vasc: {
+    title: 'CHA2DS2-VASc Score for Atrial Fibrillation Stroke Risk',
+    subtitle: 'Estimates stroke risk in patients with non-valvular atrial fibrillation',
+    description: 'The CHA2DS2-VASc score is a clinical prediction rule for estimating the risk of stroke in patients with non-rheumatic atrial fibrillation (AF).',
+    age: 'Age',
+    sex: 'Sex',
+    female: 'Female',
+    male: 'Male',
+    hypertension: 'Hypertension',
+    diabetes: 'Diabetes Mellitus',
+    chf: 'Congestive Heart Failure',
+    stroke_tia: 'Prior Stroke, TIA, or Thromboembolism',
+    vascular_disease: 'Vascular Disease (prior MI, PAD, or aortic plaque)',
+    calculate_button: 'Calculate CHA2DS2-VASc Score',
+    result_title: 'CHA2DS2-VASc Score',
+    result_interpretation: 'Interpretation',
+    thromb_prophylaxis_rec: 'Recommendations for Thromboprophylaxis',
+    score_0_rec: 'Aspirin or no therapy may be considered',
+    score_1_rec: 'Oral anticoagulant or aspirin may be considered',
+    score_2_rec: 'Oral anticoagulant is recommended',
+  },
 }; 

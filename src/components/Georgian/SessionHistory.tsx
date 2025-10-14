@@ -50,6 +50,8 @@ import {
 import { GeorgianSession } from '../../hooks/useSessionManagement';
 import { MedicalButton, MedicalCard, MedicalInput, MedicalLoading, MedicalBadge } from '../ui/MedicalDesignSystem';
 
+import { useTranslation } from '../../hooks/useTranslation';
+
 interface SessionHistoryProps {
   sessions: GeorgianSession[];
   currentSession: GeorgianSession | null;
@@ -96,6 +98,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   onSearchChange,
   onCollapseChange
 }) => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(false);
@@ -229,9 +232,9 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
     
-    if (diffInMinutes < 1) return 'Just now';
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
+    if (diffInMinutes < 1) return t('mediscribe.sessionHistory.justNow');
+    if (diffInMinutes < 60) return t('mediscribe.sessionHistory.minutesAgo', { count: diffInMinutes });
+    if (diffInMinutes < 1440) return t('mediscribe.sessionHistory.hoursAgo', { count: Math.floor(diffInMinutes / 60) });
     
     return date.toLocaleDateString('en-US', { 
       month: 'short', 
@@ -250,7 +253,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   };
 
   const getSessionPreview = (session: GeorgianSession) => {
-    if (!session.transcript) return 'No content yet';
+    if (!session.transcript) return t('mediscribe.sessionHistory.noContentYet');
     // Get first 4-5 words only
     const words = session.transcript.split(' ').slice(0, 5);
     return words.join(' ') + (session.transcript.split(' ').length > 5 ? '...' : '');
@@ -432,14 +435,14 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   <button
                     onClick={handleSaveTitle}
                     className="p-2 bg-[#2b6cb0] text-white rounded-lg hover:bg-[#1a365d] transition-colors"
-                    title="Save"
+                    title={t('mediscribe.sessionHistory.save')}
                   >
                     <Check className="w-4 h-4" />
                   </button>
                   <button
                     onClick={handleCancelEditTitle}
                     className="p-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-colors"
-                    title="Cancel"
+                    title={t('mediscribe.sessionHistory.cancel')}
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -456,7 +459,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                         handleStartEditingTitle(session);
                       }}
                       className="opacity-0 group-hover/title:opacity-100 p-1 text-[#2b6cb0] hover:text-[#1a365d] transition-opacity"
-                      title="Edit"
+                      title={t('mediscribe.sessionHistory.edit')}
                     >
                       <Edit3 className="w-4 h-4" />
                     </button>
@@ -473,7 +476,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   toggleFavorite(session.id);
                 }}
                 className={`p-2 rounded-lg transition-colors ${isFavorite ? 'text-[#90cdf4]' : 'text-gray-400 hover:text-[#90cdf4]'}`}
-                title={isFavorite ? "Unfavorite" : "Favorite"}
+                title={isFavorite ? t('mediscribe.sessionHistory.unfavorite') : t('mediscribe.sessionHistory.favorite')}
               >
                 <Star className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
               </button>
@@ -493,7 +496,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                     }
                   }}
                   className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-                  title="More options"
+                  title={t('mediscribe.sessionHistory.moreOptions')}
                 >
                   <MoreVertical className="w-4 h-4" />
                 </button>
@@ -507,7 +510,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             {metrics.wordCount > 0 && (
               <>
                 <span>•</span>
-                <span>{metrics.wordCount} words</span>
+                <span>{t('mediscribe.sessionHistory.words', { count: metrics.wordCount })}</span>
               </>
             )}
             {session.durationMs > 0 && (
@@ -523,19 +526,19 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             {session.transcript && (
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-[#e0f2fe] text-[#0369a1] rounded-full">
                 <Stethoscope className="w-3 h-3" />
-                Transcribed
+                {t('mediscribe.sessionHistory.badgeTranscribed')}
               </span>
             )}
             {session.processingResults && session.processingResults.length > 0 && (
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-[#dbeafe] text-[#1e40af] rounded-full">
                 <Brain className="w-3 h-3" />
-                AI: {session.processingResults.length}
+                {t('mediscribe.sessionHistory.badgeAI', { count: session.processingResults.length })}
               </span>
             )}
             {form100Count > 0 && (
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-[#1e40af] text-white rounded-full">
                 <ClipboardList className="w-3 h-3" />
-                Form 100: {form100Count}
+                {t('mediscribe.sessionHistory.badgeForm100', { count: form100Count })}
               </span>
             )}
           </div>
@@ -563,7 +566,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 w-10 h-10 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md
                 history-toggle-btn ${isHistoryCollapsed ? 'collapsed' : ''}
               `}
-              title={isHistoryCollapsed ? "Expand sessions" : "Collapse sessions"}
+              title={isHistoryCollapsed ? t('mediscribe.sessionHistory.expandSessions') : t('mediscribe.sessionHistory.collapseSessions')}
             >
               {isHistoryCollapsed ? (
                 <ChevronRight className="w-5 h-5" />
@@ -574,10 +577,10 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             
             <div>
               <h2 className="text-lg font-bold text-[#1a365d]">
-                History
+                {t('mediscribe.sessionHistory.history')}
               </h2>
               <p className="text-sm text-[#2b6cb0]">
-                {sessions.length} recordings
+                {t('mediscribe.sessionHistory.recordings', { count: sessions.length })}
               </p>
             </div>
           </div>
@@ -588,7 +591,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             className="transcription-btn-primary flex items-center space-x-2 px-4 py-2 shadow-sm hover:shadow-md transition-all duration-200"
           >
             <Plus className="w-4 h-4 text-white" />
-            <span className="text-white font-semibold">New</span>
+            <span className="text-white font-semibold">{t('mediscribe.sessionHistory.new')}</span>
           </button>
         </div>
         
@@ -604,7 +607,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 <MedicalInput
                   ref={searchInputRef}
                   type="text"
-                  placeholder="Search sessions..."
+                  placeholder={t('mediscribe.sessionHistory.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
                   className="pl-10 pr-10 h-10 bg-white/80 dark:bg-medical-gray-700/80 border-medical-gray-200 dark:border-medical-gray-600 rounded-xl text-sm"
@@ -634,7 +637,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                       }
                     `}
                   >
-                    {filter}
+                    {t('mediscribe.sessionHistory.' + filter)}
                   </button>
                 ))}
               </div>
@@ -654,8 +657,8 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   <div className="absolute inset-0 w-16 h-16 border-2 border-[#63b3ed]/30 rounded-full animate-ping" />
                 </div>
                 <div className="space-y-2">
-                  <p className="text-lg font-semibold text-[#1a365d]">Loading Sessions</p>
-                  <p className="text-sm text-[#2b6cb0]">Retrieving your medical transcriptions...</p>
+                  <p className="text-lg font-semibold text-[#1a365d]">{t('mediscribe.sessionHistory.loadingSessions')}</p>
+                  <p className="text-sm text-[#2b6cb0]">{t('mediscribe.sessionHistory.retrievingTranscriptions')}</p>
                 </div>
               </div>
             </div>
@@ -671,12 +674,12 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
               </div>
               
               <h3 className="text-2xl font-bold text-[#1a365d] mb-3">
-                {searchQuery || filterBy !== 'all' ? 'No Sessions Found' : 'Ready to Begin'}
+                {searchQuery || filterBy !== 'all' ? t('mediscribe.sessionHistory.noSessionsFound') : t('mediscribe.sessionHistory.readyToBegin')}
               </h3>
               <p className="text-[#2b6cb0] text-center mb-8 max-w-md leading-relaxed">
                 {searchQuery || filterBy !== 'all' 
-                  ? 'Try adjusting your search terms or filters to find what you\'re looking for.'
-                  : 'Create your first medical transcription session to begin capturing patient consultations with AI-powered analysis.'
+                  ? t('mediscribe.sessionHistory.adjustSearch')
+                  : t('mediscribe.sessionHistory.createFirstSessionDescription')
                 }
               </p>
               
@@ -686,7 +689,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   className="transcription-btn-primary flex items-center space-x-3 px-6 py-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-lg font-semibold"
                 >
                   <Plus className="w-5 h-5 text-white" />
-                  <span className="text-white">Create Your First Session</span>
+                  <span className="text-white">{t('mediscribe.sessionHistory.createFirstSession')}</span>
                 </button>
               )}
             </div>
@@ -697,11 +700,11 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                   {/* Compact Group Header */}
                   <div className="flex items-center space-x-3 mb-3">
                     <h4 className="text-sm font-bold text-[#1a365d]">
-                      {groupName}
+                      {t('mediscribe.sessionHistory.' + groupName.toLowerCase().replace(/ /g, ''))}
                     </h4>
                     <div className="h-px flex-1 bg-gradient-to-r from-[#90cdf4]/50 via-[#90cdf4]/30 to-transparent" />
                     <span className="text-xs text-[#2b6cb0] font-medium">
-                      {groupSessions.length}
+                      {t('mediscribe.sessionHistory.recordings', { count: groupSessions.length })}
                     </span>
                   </div>
 
@@ -725,9 +728,9 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
       {!isHistoryCollapsed && (
         <div className="relative px-4 py-2 bg-white border-t border-[#90cdf4]/30">
           <div className="flex items-center justify-center text-xs text-[#2b6cb0]">
-            <span>{sessions.length} sessions • </span>
+            <span>{t('mediscribe.sessionHistory.sessionsCount', { count: sessions.length })}</span>
             <Shield className="w-3 h-3 mx-1 text-[#2b6cb0]" />
-            <span>Secure</span>
+            <span>{t('mediscribe.sessionHistory.secure')}</span>
           </div>
         </div>
       )}
@@ -761,7 +764,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 className="w-full px-3 py-2 text-left text-sm font-medium text-[#1a365d] hover:bg-[#90cdf4]/10 rounded-lg transition-all duration-200 flex items-center space-x-2"
               >
                 <Copy className="w-3 h-3 text-[#2b6cb0]" />
-                <span>Duplicate</span>
+                <span>{t('mediscribe.sessionHistory.duplicate')}</span>
               </button>
               <button
                 onClick={(e) => {
@@ -776,7 +779,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
                 className="w-full px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 flex items-center space-x-2"
               >
                 <Trash2 className="w-3 h-3" />
-                <span>Delete</span>
+                <span>{t('mediscribe.sessionHistory.delete')}</span>
               </button>
             </div>
           </div>

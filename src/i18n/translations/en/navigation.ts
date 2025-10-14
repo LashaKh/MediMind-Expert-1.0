@@ -15,4 +15,7 @@ export default {
   knowledgeBase: 'Knowledge Base',
   profile: 'Profile & Settings',
   toggleMenu: 'Toggle menu',
+  bloodGasAnalysis: 'Blood Gas Analysis',
+  diseaseLibrary: 'Disease Library',
+  diseaseLibrarySubtitle: 'Comprehensive disease database',
 };

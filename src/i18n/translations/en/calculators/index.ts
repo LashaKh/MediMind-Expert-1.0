@@ -39,7 +39,6 @@ export default {
     menopause_assessment: menopauseAssessmentCalculator,
     ovarian_cancer_risk: ovarianCancerRiskCalculator,
     ovarian_reserve: ovarianReserveCalculator,
-    ovarian_reserve_calculator: ovarianReserveCalculator,
     pph_risk: pphRiskCalculator,
     preeclampsia_risk: preeclampsiaRiskCalculator,
     preterm_birth_risk: pretermBirthRiskCalculator,
@@ -178,39 +177,7 @@ export default {
   back_to: 'Back to',
   view_grid: 'Grid',
   view_list: 'List',
-  
-  // OB/GYN Calculator entries - Fixed to match working Russian structure
-  pph_risk: pphRiskCalculator,
-  
-  cervical_cancer_risk: cervicalCancerRiskCalculator,
-  
-  ovarian_cancer_risk: ovarianCancerRiskCalculator,
-  
-  endometrial_cancer_risk: endometrialCancerRiskCalculator,
-  
-  ovarian_reserve_calculator: ovarianReserveCalculator,
-  
-  menopause_assessment: menopauseAssessmentCalculator,
-  
-  edd: eddCalculator,
-  
-  gestational_age: gestationalAgeCalculator,
-  
-  preeclampsia_risk: preeclampsiaRiskCalculator,
-  
-  preterm_birth_risk: pretermBirthRiskCalculator,
-  
-  gdm_screening: gdmScreeningCalculator,
-  
-  bishop_score: bishopScoreCalculator,
-  
-  vbac_success: vbacSuccessCalculator,
-  
-  ovarian_reserve: ovarianReserveCalculator,
-  
-  // Individual OB/GYN calculators with direct access (for backward compatibility) 
-  apgar_score: apgarScoreCalculator,
-  
+
   // Heart Failure Staging Calculator - top-level access
   heartFailureStaging: heartFailureStagingTranslations,
   

@@ -22,6 +22,8 @@ import { TemplateCreationModal } from './TemplateCreationModal';
 import { TemplateManagementCard } from './TemplateManagementCard';
 import { TemplateDeleteConfirmation } from './TemplateDeleteConfirmation';
 
+import { useTranslation } from '../../../hooks/useTranslation';
+
 // Skeleton component for loading state - Premium card style
 const TemplateSkeletonCard: React.FC = () => (
   <div className="relative bg-gradient-to-br from-gray-300 to-gray-400 dark:from-gray-700 dark:to-gray-800 rounded-2xl p-6 shadow-lg min-h-[180px] flex flex-col justify-between animate-pulse">
@@ -56,6 +58,7 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
   onSwitchToHistory,
   onTemplateSelect
 }) => {
+  const { t } = useTranslation();
   // State management
   const [templates, setTemplates] = useState<UserReportTemplate[]>([]);
   const [loading, setLoading] = useState(true);
@@ -197,10 +200,10 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
           </div>
           <div>
             <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200">
-              My Templates
+              {t('mediscribe.templates.myTemplates')}
             </h3>
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              {totalCount} custom template{totalCount !== 1 ? 's' : ''}
+              {t('mediscribe.templates.customTemplates', { count: totalCount })}
             </p>
           </div>
         </div>
@@ -212,7 +215,7 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
           style={{ minHeight: '44px', minWidth: '44px' }} // Ensure 44px touch target
         >
           <Plus className="w-4 h-4" />
-          <span className="hidden sm:inline">Add Template</span>
+          <span className="hidden sm:inline">{t('mediscribe.templates.addTemplate')}</span>
         </button>
       </div>
 
@@ -223,7 +226,7 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
           <div className="flex items-center justify-center py-6">
             <div className="flex items-center space-x-3">
               <RefreshCw className="w-5 h-5 text-[#2b6cb0] animate-spin" />
-              <p className="text-sm text-slate-600 dark:text-slate-400">Loading templates...</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{t('mediscribe.templates.loading')}</p>
             </div>
           </div>
           
@@ -241,12 +244,12 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
           <div className="flex items-center space-x-2">
             <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
-            <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+            <p className="text-sm text-red-700 dark:text-red-300">{t('mediscribe.templates.loadError')}</p>
             <button
               onClick={loadTemplates}
               className="ml-auto text-sm text-red-600 dark:text-red-400 hover:underline"
             >
-              Retry
+              {t('mediscribe.templates.retry')}
             </button>
           </div>
         </div>
@@ -295,12 +298,12 @@ export const MyTemplatesSection: React.FC<MyTemplatesSectionProps> = ({
 
                 {/* Button content */}
                 <Plus className="relative w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-                <span className="relative text-base">Create Your First Template</span>
+                <span className="relative text-base">{t('mediscribe.templates.createFirstTemplate')}</span>
               </button>
 
               {/* Subtle hint text */}
               <p className="mt-6 text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-                Get started by creating a custom report template for your medical consultations
+                {t('mediscribe.templates.getStarted')}
               </p>
             </div>
           )}

@@ -186,7 +186,7 @@ export const CaseIndicator: React.FC<CaseIndicatorProps> = ({
       {/* Case metadata footer */}
       <div className="relative z-10 mt-3 pt-3 border-t border-blue-200/30 text-xs text-blue-600/80">
         <div className="flex items-center justify-between">
-          <span className="font-medium">{t('case.activeCase')}</span>
+          <span class="font-medium">{t('case-creation.activeCase')}</span>
           <span>Created {activeCase.createdAt.toLocaleDateString()}</span>
         </div>
       </div>

@@ -12,6 +12,7 @@ import {
   Zap,
   FileText
 } from 'lucide-react';
+import { useTranslation } from '../../../hooks/useTranslation';
 import { MyTemplatesSection } from './MyTemplatesSection';
 
 // Import template data from existing component
@@ -146,6 +147,7 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
   onSwitchToHistory,
   onTemplateSelect
 }) => {
+  const { t } = useTranslation();
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(['Cardiologist Consults']) // Cardiology consults expanded by default
   );
@@ -228,12 +230,12 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
               <HeartHandshake className="w-4 h-4 text-white" />
             </div>
             <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200">
-              Cardiologist Consults
+              {t('mediscribe.templates.cardiologistConsults')}
             </h3>
           </div>
           <div className="flex items-center space-x-1 px-2 py-1 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg">
             <Star className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-            <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">FEATURED</span>
+            <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">{t('mediscribe.templates.featured')}</span>
           </div>
         </div>
 
@@ -263,7 +265,7 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                           {template.isSpecialDiagnosis && (
                             <div className="flex items-center space-x-1 text-xs font-semibold bg-white/25 backdrop-blur-sm rounded-md px-2 py-0.5">
                               <Sparkles className="w-3 h-3" />
-                              <span>AI DIAGNOSIS</span>
+                              <span>{t('mediscribe.templates.aiDiagnosis')}</span>
                             </div>
                           )}
                           <div className="flex items-center space-x-1 text-xs font-medium bg-white/15 backdrop-blur-sm rounded-md px-2 py-0.5">
@@ -290,7 +292,7 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                         <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
                           <FileText className="w-4 h-4 text-white/70" />
                         </div>
-                        <span className="text-xs text-white/80 font-medium">Needs Content</span>
+                        <span className="text-xs text-white/80 font-medium">{t('mediscribe.templates.needsContent')}</span>
                       </div>
                     </div>
                   )}
@@ -300,7 +302,7 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                     <div className="absolute inset-0 bg-black/20 rounded-2xl flex items-center justify-center">
                       <div className="flex flex-col items-center space-y-2">
                         <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span className="text-xs text-white/90 font-medium">Initiating...</span>
+                        <span className="text-xs text-white/90 font-medium">{t('mediscribe.templates.initiating')}</span>
                       </div>
                     </div>
                   )}
@@ -345,7 +347,7 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
                       {category}
                     </h4>
                     <p className="text-xs text-slate-600 dark:text-slate-400">
-                      {templates.length} template{templates.length !== 1 ? 's' : ''}
+                      {t('mediscribe.templates.templateCount', { count: templates.length })}
                     </p>
                   </div>
                 </div>

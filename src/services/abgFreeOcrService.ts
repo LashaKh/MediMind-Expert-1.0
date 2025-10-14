@@ -35,7 +35,7 @@ function validateABGText(text: string): {
 
   // Check for minimum text length
   if (text.trim().length < 20) {
-    issues.push('Text too short for analysis');
+    issues.push(t('abg.ocr.textTooShort'));
     qualityScore -= 0.4;
   }
 
@@ -58,10 +58,10 @@ function validateABGText(text: string): {
   const parameterScore = Math.min(foundParameters / 4, 1); // Expect at least 4 parameters for good quality
   
   if (foundParameters === 0) {
-    issues.push('No blood gas parameters detected');
+    issues.push(t('abg.ocr.noBloodGasParametersDetected'));
     qualityScore -= 0.5;
   } else if (foundParameters < 3) {
-    issues.push('Few blood gas parameters detected');
+    issues.push(t('abg.ocr.fewBloodGasParametersDetected'));
     qualityScore -= 0.3;
   }
 
@@ -70,7 +70,7 @@ function validateABGText(text: string): {
   const hasNumbers = numericMatches && numericMatches.length >= 3;
   
   if (!hasNumbers) {
-    issues.push('Insufficient numeric values');
+    issues.push(t('abg.ocr.insufficientNumericValues'));
     qualityScore -= 0.3;
   }
 
@@ -92,14 +92,14 @@ function validateABGText(text: string): {
   // Check for potential OCR errors (excessive special characters, garbled text)
   const specialCharRatio = (text.match(/[^a-zA-Z0-9\s\u10A0-\u10FF:\-.,=+%]/g) || []).length / text.length;
   if (specialCharRatio > 0.3) {
-    issues.push('High ratio of special characters (possible OCR errors)');
+    issues.push(t('abg.ocr.highSpecialCharRatio'));
     qualityScore -= 0.2;
   }
 
   // Check for very long words (OCR artifacts)
   const longWords = text.match(/\S{25,}/g);
   if (longWords && longWords.length > 0) {
-    issues.push('Detected very long words (possible OCR artifacts)');
+    issues.push(t('abg.ocr.veryLongWordsDetected'));
     qualityScore -= 0.2;
   }
 
@@ -228,12 +228,12 @@ function formatBloodGasData(text: string): string {
   const output: string[] = [];
 
   // Add header
-  output.push('Blood Gas Analysis Report');
+  output.push(t('abg.ocr.reportHeader'));
   output.push('');
 
   // Add arterial blood gas parameters
   if (bgParams.arterial.length > 0) {
-    output.push('Arterial Blood Gas Parameters:');
+    output.push(t('abg.ocr.arterialBloodGasParameters'));
     bgParams.arterial.forEach(param => {
       output.push(`- ${param}`);
     });
@@ -242,7 +242,7 @@ function formatBloodGasData(text: string): string {
 
   // Add oxygenation parameters
   if (bgParams.oxygenation.length > 0) {
-    output.push('Oxygenation Status:');
+    output.push(t('abg.ocr.oxygenationStatus'));
     bgParams.oxygenation.forEach(param => {
       output.push(`- ${param}`);
     });
@@ -251,7 +251,7 @@ function formatBloodGasData(text: string): string {
 
   // Add electrolyte values
   if (bgParams.electrolytes.length > 0) {
-    output.push('Electrolyte Values:');
+    output.push(t('abg.ocr.electrolyteValues'));
     bgParams.electrolytes.forEach(param => {
       output.push(`- ${param}`);
     });
@@ -260,7 +260,7 @@ function formatBloodGasData(text: string): string {
 
   // Add other metabolites
   if (bgParams.other.length > 0) {
-    output.push('Additional Parameters:');
+    output.push(t('abg.ocr.additionalParameters'));
     bgParams.other.forEach(param => {
       output.push(`- ${param}`);
     });
@@ -291,10 +291,10 @@ export async function extractABGTextWithFreeOCR(
   try {
     onProgress?.({
       stage: 'preparing',
-      stageDescription: 'Initializing free OCR for blood gas analysis...',
+      stageDescription: t('abg.ocr.initializingFreeOcr'),
       percentage: 0,
       method: 'free-ocr',
-      currentTask: 'Preparing OCR engine'
+      currentTask: t('abg.ocr.preparingOcrEngine')
     });
 
     let ocrResult: OcrResult;
@@ -304,10 +304,10 @@ export async function extractABGTextWithFreeOCR(
     if (file.type === 'application/pdf') {
       onProgress?.({
         stage: 'processing',
-        stageDescription: 'Extracting text from PDF using PDF.js...',
+        stageDescription: t('abg.ocr.extractingTextFromPdf'),
         percentage: 25,
         method: 'free-ocr',
-        currentTask: 'Processing PDF document'
+        currentTask: t('abg.ocr.processingPdfDocument')
       });
 
       ocrResult = await extractTextFromPdf(file, (pdfProgress) => {
@@ -316,7 +316,7 @@ export async function extractABGTextWithFreeOCR(
           stageDescription: pdfProgress.message,
           percentage: 25 + (pdfProgress.current / pdfProgress.total) * 50,
           method: 'free-ocr',
-          currentTask: 'Extracting PDF text'
+          currentTask: t('abg.ocr.extractingPdfText')
         });
       });
       method = ocrResult.success ? 'pdfjs' : 'failed';
@@ -340,19 +340,19 @@ export async function extractABGTextWithFreeOCR(
       });
       method = ocrResult.success ? 'tesseract' : 'failed';
     } else {
-      throw new Error(`Unsupported file type for OCR: ${file.type}`);
+      throw new Error(`${t('abg.ocr.unsupportedFileType')} ${file.type}`);
     }
 
     if (!ocrResult.success || !ocrResult.text) {
-      const errorMessage = ocrResult.error || 'Free OCR extraction failed';
+      const errorMessage = ocrResult.error || t('abg.ocr.freeOcrExtractionFailed');
       const processingTime = Math.round(performance.now() - startTime);
 
       onProgress?.({
         stage: 'complete',
-        stageDescription: 'Free OCR failed - ready for Gemini fallback',
+        stageDescription: t('abg.ocr.freeOcrFailedFallback'),
         percentage: 100,
         method: 'free-ocr',
-        currentTask: 'OCR failed'
+        currentTask: t('abg.ocr.ocrFailed')
       });
 
       return {
@@ -370,10 +370,10 @@ export async function extractABGTextWithFreeOCR(
 
     onProgress?.({
       stage: 'validating',
-      stageDescription: 'Validating extracted text quality...',
+      stageDescription: t('abg.ocr.validatingExtractedTextQuality'),
       percentage: 75,
       method: 'free-ocr',
-      currentTask: 'Analyzing text quality'
+      currentTask: t('abg.ocr.analyzingTextQuality')
     });
 
     // Post-process the extracted text
@@ -385,11 +385,11 @@ export async function extractABGTextWithFreeOCR(
     onProgress?.({
       stage: 'complete',
       stageDescription: validation.shouldFallbackToGemini 
-        ? 'Low quality detected - recommending Gemini fallback'
-        : 'Free OCR extraction completed successfully',
+        ? t('abg.ocr.lowQualityDetected')
+        : t('abg.ocr.freeOcrExtractionCompletedSuccessfully'),
       percentage: 100,
       method: 'free-ocr',
-      currentTask: 'Quality assessment complete'
+      currentTask: t('abg.ocr.qualityAssessmentComplete')
     });
 
     const processingTime = Math.round(performance.now() - startTime);
@@ -410,14 +410,14 @@ export async function extractABGTextWithFreeOCR(
 
   } catch (error) {
     const processingTime = Math.round(performance.now() - startTime);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown OCR error';
+    const errorMessage = error instanceof Error ? error.message : t('abg.ocr.unknownOcrError');
 
     onProgress?.({
       stage: 'complete',
-      stageDescription: 'Free OCR error - ready for Gemini fallback',
+      stageDescription: t('abg.ocr.freeOcrErrorFallback'),
       percentage: 100,
       method: 'free-ocr',
-      currentTask: 'Error occurred'
+      currentTask: t('abg.ocr.errorOccurred')
     });
 
     return {

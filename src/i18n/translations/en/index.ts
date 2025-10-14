@@ -33,7 +33,7 @@ export default {
   documents,
   medical,
   validation,
-  knowledgeBase,
+  'knowledge-base': knowledgeBase,
   podcast,
   search,
   news,
@@ -199,14 +199,14 @@ export default {
         },
         'ai-complete': {
           title: '🎉 AI Co-Pilot Mastery Complete!',
-          content: '<p>Excellent! You\'ve mastered the AI Medical Co-Pilot. You now know how to:</p><ul><li>Communicate with AI using medical terminology</li><li>Upload and analyze medical files</li><li>Create and manage patient case studies</li><li>Get AI-powered medical insights with case context</li><li>Leverage evidence-based recommendations</li></ul><p>🚀 <em>Ready to revolutionize your medical practice with comprehensive case management!</em></p>'
+          content: `<p>Excellent! You've mastered the AI Medical Co-Pilot. You now know how to:</p><ul><li>Communicate with AI using medical terminology</li><li>Upload and analyze medical files</li><li>Create and manage patient case studies</li><li>Get AI-powered medical insights with case context</li><li>Leverage evidence-based recommendations</li></ul><p>🚀 <em>Ready to revolutionize your medical practice with comprehensive case management!</em></p>`
         }
       }
     }
   },
   
   // Case management
-  case: {
+  'case-creation': {
     createNewCase: 'Create New Case',
     newCase: 'New Case',
     caseTitle: 'Case Title',
@@ -222,13 +222,11 @@ export default {
     creatingCase: 'Creating Case...',
     cancel: 'Cancel',
     save: 'Save',
-    
     // Privacy and validation
     privacyNotice: 'Privacy Notice',
     privacyMessage: 'Please ensure all patient information is completely anonymized. Remove names, dates, specific locations, and any other identifying details.',
     privacyNoticeDetailed: 'Include relevant medical history, symptoms, test results, and other clinical information. Ensure all identifying details are removed.',
     anonymizationHelp: 'Include relevant medical history, symptoms, test results, and other clinical information. Ensure all identifying details are removed.',
-    
     // Form placeholders
     titlePlaceholder: 'Brief descriptive title for this case',
     descriptionPlaceholder: 'Brief overview of the case and what you\'d like to discuss',
@@ -236,44 +234,36 @@ export default {
     tagsPlaceholder: 'e.g., hypertension, diabetes, follow-up',
     tagsHint: 'Separate multiple tags with commas',
     categoryHint: 'Optional - helps organize your cases',
-    
     // Validation errors
     titleRequired: 'Case title is required',
     descriptionRequired: 'Case description is required',
     patientInfoRequired: 'Patient information is required',
     patientInfoTooShort: 'Please provide more detailed patient information (minimum 50 characters)',
     sensitiveInfoDetected: 'Please remove any names, dates, or identifying numbers from the patient information',
-    
     // Categories
     selectCategory: 'Select category (optional)',
     diagnosis: 'Diagnosis',
     treatment: 'Treatment',
     consultation: 'Consultation',
-    
     // Cardiology specific
     interventionalCardiology: 'Interventional Cardiology',
     electrophysiology: 'Electrophysiology',
     heartFailure: 'Heart Failure',
     preventiveCardiology: 'Preventive Cardiology',
-    
     // OB/GYN specific
     obstetrics: 'Obstetrics',
     gynecology: 'Gynecology',
     reproductiveHealth: 'Reproductive Health',
     maternalFetalMedicine: 'Maternal-Fetal Medicine',
-    
     // Complexity levels
     lowComplexity: 'Low complexity',
     mediumComplexity: 'Medium complexity',
     highComplexity: 'High complexity',
-    
     // Specialty titles
     cardiologySpecialty: 'Cardiology Specialty',
     obgynSpecialty: 'Obstetrics & Gynecology Specialty',
-    
     // Character count
-    charactersMinimum: '{count}/50 characters minimum',
-    
+    charactersMinimum: '{{count}}/50 characters minimum',
     // Existing case management
     activeCase: 'Active Case',
     caseDiscussion: 'Case Discussion',
@@ -283,7 +273,6 @@ export default {
     caseCreated: 'Case created successfully',
     caseSaved: 'Case saved',
     caseDeleted: 'Case deleted',
-    
     // Case list and filters
     selectExistingCase: 'Select Existing Case',
     all: 'All',
@@ -296,7 +285,6 @@ export default {
     noCasesYet: 'No cases yet',
     adjustFilters: 'Try adjusting your search or filters.',
     createFirstCase: 'Create your first case to get started with case discussions.',
-    
     // Knowledge base additional
     curated: 'Curated',
     personal: 'Personal'
@@ -306,7 +294,7 @@ export default {
   conversations: {
     title: 'Conversations',
     newChat: 'New Chat',
-    searchPlaceholder: 'Search conversations...',
+    searchPlaceholder: 'Search conversations...', 
     allSpecialties: 'All Specialties',
     cardiology: 'Cardiology',
     obgyn: 'OB/GYN',
@@ -348,14 +336,14 @@ export default {
     editProfile: 'Edit Profile',
     saveChanges: 'Save Changes',
     cancel: 'Cancel',
-    saving: 'Saving...',
+    saving: 'Saving...', 
     noNameSet: 'No name set',
     notSet: 'Not set',
     unknown: 'Unknown',
     memberSince: 'Member since',
     enterFullName: 'Enter your full name',
     aboutMeDesc: 'This information helps the AI provide more personalized assistance based on your background and experience.',
-    aboutMePlaceholder: 'Tell us about your medical background, experience, areas of interest, or any other context that would help the AI assist you better...',
+    aboutMePlaceholder: 'Tell us about your medical background, experience, areas of interest, or any other context that would help the AI assist you better...', 
     selectSpecialty: 'Select a specialty',
     cardiology: 'Cardiology',
     obgyn: 'Obstetrics & Gynecology',
@@ -416,7 +404,7 @@ export default {
     confirmNewPasswordPlaceholder: 'Confirm your new password',
     passwordRequirements: 'Password must be at least 8 characters with uppercase, lowercase, and number',
     updatePassword: 'Update Password',
-    updating: 'Updating...',
+    updating: 'Updating...', 
     
     // Password validation messages
     currentPasswordRequired: 'Current password is required',
@@ -489,7 +477,7 @@ export default {
   // Notes functionality
   notes: {
     newNote: 'New Note',
-    searchNotes: 'Search notes...',
+    searchNotes: 'Search notes...', 
     save: 'Save',
     delete: 'Delete',
     untitledNote: 'Untitled Note',
@@ -611,7 +599,7 @@ export default {
       
       // Example section
       exampleTitle: "Example professional profile",
-      exampleText: "\"I am a board-certified cardiologist with 10 years of experience practicing at a large academic medical center. I specialize in interventional cardiology with a focus on complex coronary interventions and structural heart disease. I completed my fellowship at Johns Hopkins and have particular expertise in TAVR procedures. I see a high volume of acute coronary syndrome patients and enjoy teaching medical students and residents.\"",
+      exampleText: `"I am a board-certified cardiologist with 10 years of experience practicing at a large academic medical center. I specialize in interventional cardiology with a focus on complex coronary interventions and structural heart disease. I completed my fellowship at Johns Hopkins and have particular expertise in TAVR procedures. I see a high volume of acute coronary syndrome patients and enjoy teaching medical students and residents."`,
       
       // Buttons and actions
       back: "Back",
@@ -650,7 +638,7 @@ export default {
   
   // Access control
   access: {
-    access_denied: "Access denied. This section is restricted to {specialties} specialists.",
+    access_denied: "Access denied. This section is restricted to {{specialties}} specialists.",
     unauthorized: "You are not authorized to access this section.",
     invalid_specialty: "Invalid specialty access.",
     redirect_message: "Redirecting to your workspace..."
@@ -696,7 +684,7 @@ export default {
     docs: 'Docs',
     support: 'Support',
     contactSupport: 'Contact Support',
-    professionalAssistant: 'AI assistant for {specialty} professionals',
+    professionalAssistant: 'AI assistant for {{specialty}} professionals',
     medicalAssistant: 'AI assistant for medical professionals'
   },
 
@@ -720,4 +708,4 @@ export default {
     urology: 'Urology',
     other: 'Other'
   }
-}; 
+};

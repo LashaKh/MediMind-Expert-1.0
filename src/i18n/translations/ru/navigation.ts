@@ -25,6 +25,8 @@ export const navigation = {
   aiCoPilot: 'ИИ Ассистент',
   mediSearch: 'Меди Поиск и Новости',
   podcastStudio: 'Подкаст студия',
+  bloodGasAnalysis: 'Анализ газов крови',
+  diseaseLibrary: 'Библиотека заболеваний',
   
   // Navigation descriptions
   aiCoPilotDesc: 'ИИ медицинский ассистент и интеллектуальная консультация',
@@ -33,6 +35,7 @@ export const navigation = {
   calculatorsDesc: 'Профессиональные медицинские калькуляторы и оценка рисков',
   knowledgeBaseDesc: 'База знаний и медицинская литература',
   settingsDesc: 'Настройки профиля и конфигурация платформы',
+  diseaseLibrarySubtitle: 'Обширная база данных заболеваний',
   
   // Additional missing keys
   helpCenter: 'Центр помощи',

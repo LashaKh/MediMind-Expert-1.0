@@ -4,8 +4,8 @@ export default {
   dragDropText: 'Drag and drop files here, or click to select',
   browseFiles: 'Browse Files',
   supportedFormats: 'Supported formats: PDF, Word, Text, Markdown, CSV',
-  maxFileSize: 'Maximum file size: {size}MB',
-  maxFiles: 'Maximum {count} files',
+  maxFileSize: 'Maximum file size: {{size}}MB',
+  maxFiles: 'Maximum {{count}} files',
   selectFiles: 'Select Files',
   uploading: 'Uploading...',
   processing: 'Processing...',
@@ -30,8 +30,8 @@ export default {
   initializingKnowledgeBase: 'Initializing personal knowledge base...',
   uploadSuccess: 'Documents uploaded successfully!',
   uploadError: 'Failed to upload documents. Please try again.',
-  fileTypeError: 'Unsupported file type: {type}. Please upload PDF, Word, text, or CSV files.',
-  fileSizeError: 'File size exceeds {size}MB limit. Please choose a smaller file.',
+  fileTypeError: 'Unsupported file type: {{type}}. Please upload PDF, Word, text, or CSV files.',
+  fileSizeError: 'File size exceeds {{size}}MB limit. Please choose a smaller file.',
   emptyFileError: 'File appears to be empty. Please select a valid file.',
   largeFileWarning: 'Large file detected. Processing may take longer.',
   imageFileWarning: 'Large image file. Consider compressing for faster processing.',
@@ -58,13 +58,13 @@ export default {
       selectFiles: 'Select Files',
       dropFiles: 'Drop files here',
       supportedTypes: 'Supported file types',
-      maxSizeNote: 'Maximum file size: {size}MB • Maximum files: {maxFiles}'
+      maxSizeNote: 'Maximum file size: {{size}}MB • Maximum files: {{maxFiles}}'
     },
     
     // Configure step
     configure: {
       title: 'Configure Documents',
-      filesSelected: '{count} file selected|{count} files selected',
+      filesSelected: '{{count}} file selected|{{count}} files selected',
       documentTitle: 'Document Title',
       documentTitleRequired: 'Document Title *',
       titlePlaceholder: 'Enter document title...',
@@ -96,7 +96,7 @@ export default {
     // Error handling
     errors: {
       vectorStoreInit: 'Failed to initialize knowledge base. Please try again.',
-      uploadFailed: '{count} upload failed|{count} uploads failed'
+      uploadFailed: '{{count}} upload failed|{{count}} uploads failed'
     }
   },
 
@@ -148,7 +148,7 @@ export default {
     of: 'of',
     documents: 'documents',
     moreResultsAvailable: 'More results available',
-    showingFirst: 'Showing first {count} documents. Use filters to narrow down results.'
+    showingFirst: 'Showing first {{count}} documents. Use filters to narrow down results.'
   },
   
   // DocumentItem translations
@@ -157,7 +157,7 @@ export default {
     downloadDocument: 'Download Document',
     deleteDocument: 'Delete Document',
     processingError: 'Processing Error',
-    moreTagsIndicator: '+{count} more',
+    moreTagsIndicator: '+{{count}} more',
     statusLabels: {
       completed: 'Ready',
       processing: 'Processing',
@@ -177,12 +177,12 @@ export default {
   },
   
   // Action messages
-  selectedFiles: '{count} file selected|{count} files selected',
-  filesUploaded: '{count} uploaded',
-  filesFailed: '{count} failed',
-  filesSelected: '{count} file selected|{count} files selected',
-  uploadButton: 'Upload {count} Document|Upload {count} Documents',
-  retryCount: 'Retry #{count}',
+  selectedFiles: '{{count}} file selected|{{count}} files selected',
+  filesUploaded: '{{count}} uploaded',
+  filesFailed: '{{count}} failed',
+  filesSelected: '{{count}} file selected|{{count}} files selected',
+  uploadButton: 'Upload {{count}} Document|Upload {{count}} Documents',
+  retryCount: 'Retry #{{count}}',
   retryInstruction: 'Click the retry button or try uploading again.',
   uploadSuccessMessage: 'Upload successful! Processing in background...',
   clearAll: 'Clear All',

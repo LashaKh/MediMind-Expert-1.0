@@ -83,35 +83,35 @@ export const KnowledgeBase: React.FC = () => {
                 <div>
                   <div className="flex items-center space-x-2 mb-1">
                     <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
-                      {t('knowledgeBase.title')}
+                      {t('knowledge-base.title')}
                     </h1>
                     <Sparkles className={`w-5 h-5 sm:w-6 sm:h-6 ${theme.primary} animate-pulse`} />
                   </div>
                   <div className="flex items-center space-x-2 text-base sm:text-lg text-gray-600">
                     {theme.icon}
-                    <span className="font-medium break-words">{theme.specialtyName} {t('knowledgeBase.subtitle')}</span>
+                    <span className="font-medium break-words">{theme.specialtyName} {t('knowledge-base.subtitle')}</span>
                   </div>
                 </div>
               </div>
 
               {/* Description - Responsive Typography */}
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed max-w-2xl">
-                {t('knowledgeBase.description')}
+                {t('knowledge-base.description')}
               </p>
 
               {/* Feature Highlights - Mobile Optimized */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-6">
                 <div className="flex items-center space-x-3 p-4 min-h-[44px] rounded-xl bg-white/60 border border-gray-200 hover:bg-white/80 transition-colors">
                   <GraduationCap className={`w-5 h-5 flex-shrink-0 ${theme.primary}`} />
-                  <span className="text-sm font-medium text-gray-700 break-words">{t('knowledgeBase.evidenceBased')}</span>
+                  <span className="text-sm font-medium text-gray-700 break-words">{t('knowledge-base.evidenceBased')}</span>
                 </div>
                 <div className="flex items-center space-x-3 p-4 min-h-[44px] rounded-xl bg-white/60 border border-gray-200 hover:bg-white/80 transition-colors">
                   <Search className={`w-5 h-5 flex-shrink-0 ${theme.primary}`} />
-                  <span className="text-sm font-medium text-gray-700 break-words">{t('knowledgeBase.aiPoweredSearch')}</span>
+                  <span className="text-sm font-medium text-gray-700 break-words">{t('knowledge-base.aiPoweredSearch')}</span>
                 </div>
                 <div className="flex items-center space-x-3 p-4 min-h-[44px] rounded-xl bg-white/60 border border-gray-200 hover:bg-white/80 transition-colors sm:col-span-2 lg:col-span-1">
                   <Shield className={`w-5 h-5 flex-shrink-0 ${theme.primary}`} />
-                  <span className="text-sm font-medium text-gray-700 break-words">{t('knowledgeBase.securePrivate')}</span>
+                  <span className="text-sm font-medium text-gray-700 break-words">{t('knowledge-base.securePrivate')}</span>
                 </div>
               </div>
             </div>
@@ -120,20 +120,20 @@ export const KnowledgeBase: React.FC = () => {
             <div className="lg:flex-shrink-0">
               <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 lg:w-80">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900">{t('knowledgeBase.quickStats')}</h3>
+                  <h3 className="font-semibold text-gray-900">{t('knowledge-base.quickStats')}</h3>
                   <TrendingUp className={`w-5 h-5 ${theme.primary}`} />
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">{t('knowledgeBase.medicalGuidelines')}</span>
+                    <span className="text-gray-600">{t('knowledge-base.medicalGuidelines')}</span>
                     <span className="font-semibold text-gray-900">500+</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">{t('knowledgeBase.researchPapers')}</span>
+                    <span className="text-gray-600">{t('knowledge-base.researchPapers')}</span>
                     <span className="font-semibold text-gray-900">2,000+</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">{t('knowledgeBase.clinicalProtocols')}</span>
+                    <span className="text-gray-600">{t('knowledge-base.clinicalProtocols')}</span>
                     <span className="font-semibold text-gray-900">150+</span>
                   </div>
                 </div>
@@ -156,16 +156,16 @@ export const KnowledgeBase: React.FC = () => {
                 >
                   <BookOpen className="w-5 h-5 flex-shrink-0" />
                   <div className="text-left min-w-0 flex-1">
-                    <div className="font-semibold text-sm sm:text-base truncate">{t('knowledgeBase.curatedKnowledge')}</div>
+                    <div className="font-semibold text-sm sm:text-base truncate">{t('knowledge-base.curatedKnowledge')}</div>
                     <div className={`text-xs hidden sm:block ${activeTab === 'curated' ? 'text-white/80' : 'text-gray-500'}`}>
-                      {t('knowledgeBase.curatedKnowledgeDesc')}
+                      {t('knowledge-base.curatedKnowledgeDesc')}
                     </div>
                   </div>
                 </button>
                  <button
                   onClick={() => setActiveTab('personal')}
                   className={`flex-1 flex items-center justify-center space-x-3 px-4 py-4 sm:px-6 min-h-[60px] rounded-xl transition-all duration-300 ${
-                    activeTab === 'personal'
+                    active.tab === 'personal'
                       ? 'bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white shadow-lg transform scale-[1.02]'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                   }`}
@@ -173,9 +173,9 @@ export const KnowledgeBase: React.FC = () => {
                 >
                   <Database className="w-5 h-5 flex-shrink-0" />
                   <div className="text-left min-w-0 flex-1">
-                    <div className="font-semibold text-sm sm:text-base truncate">{t('knowledgeBase.personalLibrary')}</div>
+                    <div className="font-semibold text-sm sm:text-base truncate">{t('knowledge-base.personalLibrary')}</div>
                     <div className={`text-xs hidden sm:block ${activeTab === 'personal' ? 'text-white/80' : 'text-gray-500'}`}>
-                      {t('knowledgeBase.personalLibraryDesc')}
+                      {t('knowledge-base.personalLibraryDesc')}
                     </div>
                   </div>
                 </button>

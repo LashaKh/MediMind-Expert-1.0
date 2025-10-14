@@ -92,7 +92,7 @@ export const SimpleDiseasePage: React.FC = () => {
   const handleShare = async () => {
     if (navigator.share) {
       await navigator.share({
-        title: disease?.title || 'Medical Document',
+        title: disease?.title || t('diseases.detailPage.medicalDocument', 'Medical Document'),
         url: window.location.href
       });
     } else {
@@ -266,7 +266,7 @@ export const SimpleDiseasePage: React.FC = () => {
                       {t(`diseases.registry.${disease.id}.category`)}
                     </span>
                     <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-medium text-sm">
-                      {disease.specialty.charAt(0).toUpperCase() + disease.specialty.slice(1)}
+                      {t(`diseases.specialties.${disease.specialty}`, disease.specialty)}
                     </span>
                   </div>
                 </div>
@@ -307,7 +307,7 @@ export const SimpleDiseasePage: React.FC = () => {
                   <Clock className="w-5 h-5 text-[#2b6cb0]" />
                   <span className="text-sm font-semibold text-[#1a365d]">{t('diseases.detailPage.readTime')}</span>
                 </div>
-                <p className="text-xl font-bold text-[#1a365d]">{disease.readTime}</p>
+                <p className="text-xl font-bold text-[#1a365d]">{t(`diseases.registry.${disease.id}.readTime`, disease.readTime)}</p>
               </div>
               
               <div className="bg-gradient-to-br from-[#63b3ed]/10 to-[#90cdf4]/10 p-4 rounded-xl border border-[#63b3ed]/30">
@@ -315,7 +315,7 @@ export const SimpleDiseasePage: React.FC = () => {
                   <Calendar className="w-5 h-5 text-[#2b6cb0]" />
                   <span className="text-sm font-semibold text-[#1a365d]">{t('diseases.detailPage.lastUpdated')}</span>
                 </div>
-                <p className="text-xl font-bold text-[#1a365d]">{disease.lastUpdated}</p>
+                <p className="text-xl font-bold text-[#1a365d]">{t(`diseases.registry.${disease.id}.lastUpdated`, disease.lastUpdated)}</p>
               </div>
               
               {disease.prevalence && (
@@ -324,7 +324,7 @@ export const SimpleDiseasePage: React.FC = () => {
                     <TrendingUp className="w-5 h-5 text-[#2b6cb0]" />
                     <span className="text-sm font-semibold text-[#1a365d]">{t('diseases.detailPage.prevalence')}</span>
                   </div>
-                  <p className="text-xl font-bold text-[#1a365d]">{disease.prevalence}</p>
+                  <p className="text-xl font-bold text-[#1a365d]">{t(`diseases.registry.${disease.id}.prevalence`, disease.prevalence)}</p>
                 </div>
               )}
               

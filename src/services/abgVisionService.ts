@@ -23,8 +23,8 @@ export const validateABGImage = (file: File): { isValid: boolean; error?: ABGAna
       isValid: false,
       error: {
         code: 'UNSUPPORTED_FORMAT',
-        message: 'Please upload a JPEG, PNG, or WEBP image file',
-        details: `Received: ${file.type}`
+        message: t('abg.vision.unsupportedFormat'),
+        details: `${t('abg.vision.received')} ${file.type}`
       }
     };
   }
@@ -36,8 +36,8 @@ export const validateABGImage = (file: File): { isValid: boolean; error?: ABGAna
       isValid: false,
       error: {
         code: 'INVALID_FILE',
-        message: 'Image file is too large. Please upload a file smaller than 10MB',
-        details: `File size: ${Math.round(file.size / 1024 / 1024)}MB`
+        message: t('abg.vision.imageTooLarge'),
+        details: `${t('abg.vision.fileSize')} ${Math.round(file.size / 1024 / 1024)}MB`
       }
     };
   }
@@ -49,8 +49,8 @@ export const validateABGImage = (file: File): { isValid: boolean; error?: ABGAna
       isValid: false,
       error: {
         code: 'INVALID_FILE',
-        message: 'Image file appears to be corrupted or empty',
-        details: `File size: ${file.size} bytes`
+        message: t('abg.vision.imageCorruptedOrEmpty'),
+        details: `${t('abg.vision.fileSize')} ${file.size} bytes`
       }
     };
   }
@@ -73,37 +73,7 @@ export const analyzeABGImage = async (file: File): Promise<ABGAnalysisResult> =>
     }
 
     // Enhanced prompt specifically for blood gas analysis
-    const medicalPrompt = `Analyze this blood gas analysis report image and extract all relevant medical data. Focus on:
-
-1. Patient Information (if visible):
-   - Patient ID, name, age, gender
-   - Date and time of test
-   - Sample type (arterial, venous, capillary)
-
-2. Blood Gas Values:
-   - pH level
-   - pCO2 (partial pressure of CO2)
-   - pO2 (partial pressure of O2)
-   - HCO3- (bicarbonate)
-   - Base Excess (BE)
-   - O2 Saturation (SaO2)
-
-3. Electrolytes and Other Parameters:
-   - Sodium (Na+)
-   - Potassium (K+)
-   - Chloride (Cl-)
-   - Glucose
-   - Lactate
-   - Hemoglobin
-   - Any other visible parameters
-
-4. Clinical Context:
-   - Temperature correction
-   - FiO2 settings
-   - Any additional notes or flags
-   - Quality indicators or alerts
-
-Please extract ALL visible text and numerical values exactly as shown, maintaining medical accuracy. If any values are unclear or partially obscured, note this in your response. Format your response in a clear, structured manner that a healthcare professional can easily review.`;
+    const medicalPrompt = t('abg.vision.aiPrompt');
 
     // Create a custom Gemini API call with medical-specific configuration
     const base64Image = await convertImageToBase64(file);
@@ -166,7 +136,7 @@ Please extract ALL visible text and numerical values exactly as shown, maintaini
 
     if (!apiResponse.ok) {
       const errorData = await apiResponse.json();
-      throw new Error(`Gemini API Error: ${errorData.error?.message || 'Unknown error'}`);
+      throw new Error(`${t('abg.vision.geminiApiError')} ${errorData.error?.message || t('abg.vision.unknownError')}`);
     }
 
     const data = await apiResponse.json();
@@ -176,7 +146,7 @@ Please extract ALL visible text and numerical values exactly as shown, maintaini
 
     if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
 
-      throw new Error('No analysis result returned from Gemini Vision API');
+      throw new Error(t('abg.vision.noAnalysisResult'));
     }
 
     const processingTime = Math.round(performance.now() - startTime);
@@ -200,12 +170,12 @@ Please extract ALL visible text and numerical values exactly as shown, maintaini
     // Re-throw with appropriate error type
     if (error instanceof Error) {
       if (error.message.includes('overloaded') || error.message.includes('capacity')) {
-        throw new Error('The analysis service is currently busy. Please try again in a few moments.');
+        throw new Error(t('abg.vision.serviceBusy'));
       }
       throw error;
     }
 
-    throw new Error('Failed to analyze blood gas image. Please try again.');
+    throw new Error(t('abg.vision.failedToAnalyze'));
   }
 };
 
@@ -223,12 +193,12 @@ const convertImageToBase64 = (file: File): Promise<string> => {
         const base64 = result.split(',')[1];
         resolve(base64);
       } catch (error) {
-        reject(new Error(`Failed to convert image: ${error}`));
+        reject(new Error(`${t('abg.vision.failedToConvertImage')} ${error}`));
       }
     };
     
     reader.onerror = () => {
-      reject(new Error(`Failed to read file: ${file.name}`));
+      reject(new Error(`${t('abg.vision.failedToReadFile')} ${file.name}`));
     };
     
     reader.readAsDataURL(file);

@@ -87,8 +87,7 @@ export default {
       completedCount: 'Вы завершили {{count}} туров.',
       youAreExpert: 'Вы — эксперт MediMind!',
       moreToGo: 'Осталось {{remaining}}!'
-    }
-    ,
+    },
     cards: {
       'ai-copilot': {
         title: 'ИИ‑медицинский помощник',
@@ -671,17 +670,7 @@ export default {
     logout: 'Выйти'
   },
 
-  // Help
-  help: {
-    title: 'Помощь',
-    gettingStarted: 'Начало работы',
-    features: 'Возможности',
-    troubleshooting: 'Устранение неполадок',
-    contact: 'Связаться с нами',
-    documentation: 'Документация',
-    tutorials: 'Учебные материалы',
-    faq: 'Часто задаваемые вопросы'
-  },
+
 
   // UI elements
   ui: {

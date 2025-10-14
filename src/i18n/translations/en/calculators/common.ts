@@ -70,6 +70,7 @@ export default {
   printResult: 'Print Result',
   enterValue: 'Enter value',
   selectOption: 'Select option',
+  select_option: 'Select option',
   required: 'Required',
   optional: 'Optional',
   invalidValue: 'Invalid value',

@@ -215,17 +215,17 @@ export const SimpleDiseasesIndex: React.FC = () => {
             <div className="flex items-center space-x-4 text-gray-500">
               <div className="flex items-center space-x-1">
                 <Clock className="w-4 h-4" />
-                <span className="font-medium">{disease.readTime}</span>
+                <span className="font-medium">{t(`diseases.registry.${disease.id}.readTime`, disease.readTime)}</span>
               </div>
               {disease.prevalence && (
                 <div className="flex items-center space-x-1">
                   <TrendingUp className="w-4 h-4" />
-                  <span className="font-medium text-xs">{disease.prevalence}</span>
+                  <span className="font-medium text-xs">{t(`diseases.registry.${disease.id}.prevalence`, disease.prevalence)}</span>
                 </div>
               )}
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-xs text-gray-500 font-medium">{disease.lastUpdated}</span>
+              <span className="text-xs text-gray-500 font-medium">{t(`diseases.registry.${disease.id}.lastUpdated`, disease.lastUpdated)}</span>
               <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#2b6cb0] group-hover:translate-x-1 transition-all" />
             </div>
           </div>
@@ -275,11 +275,11 @@ export const SimpleDiseasesIndex: React.FC = () => {
           <div className="flex items-center space-x-6 text-sm text-gray-500 ml-6">
             <div className="flex items-center space-x-1">
               <Clock className="w-4 h-4" />
-              <span className="font-medium">{disease.readTime}</span>
+              <span className="font-medium">{t(`diseases.registry.${disease.id}.readTime`, disease.readTime)}</span>
             </div>
             <div className="flex items-center space-x-1">
               <Calendar className="w-4 h-4" />
-              <span className="font-medium">{disease.lastUpdated}</span>
+              <span className="font-medium">{t(`diseases.registry.${disease.id}.lastUpdated`, disease.lastUpdated)}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#2b6cb0] group-hover:translate-x-1 transition-all" />
           </div>

@@ -73,7 +73,7 @@ export const knowledgeBase = {
     dragDropText: 'Drop files here or click to select',
     selectFiles: 'Select Files',
     uploadButton: 'Upload',
-    maxFileSize: 'Max file size: {size}MB',
+    maxFileSize: 'Max file size: {{size}}MB',
     supportedFormats: 'Supported formats',
     
     // File actions
@@ -122,7 +122,7 @@ export const knowledgeBase = {
     downloadPDF: 'Download PDF',
     
     // Results summary
-    resourcesFound: 'Found {count} cardiology resources'
+    resourcesFound: 'Found {{count}} cardiology resources'
   },
   
   // Vector Store Management
