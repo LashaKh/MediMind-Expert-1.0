@@ -4,14 +4,14 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { 
-  X, 
-  FileText, 
-  Stethoscope, 
-  User, 
-  Heart, 
-  CheckCircle, 
-  ArrowLeft, 
+import {
+  X,
+  FileText,
+  Stethoscope,
+  User,
+  Heart,
+  CheckCircle,
+  ArrowLeft,
   ArrowRight,
   AlertCircle,
   Loader2,
@@ -25,7 +25,8 @@ import {
   Shield,
   Award,
   Mic,
-  Activity
+  Activity,
+  Brain
 } from 'lucide-react';
 import { Dialog, DialogContent } from '../ui/Dialog';
 import { Button } from '../ui/button';
@@ -605,81 +606,138 @@ const GenerationStep: React.FC<GenerationStepProps> = ({
   // Show progress UI while generating
   if (isGenerating) {
     return (
-      <div className="space-y-8">
-        {/* Diagnosis Summary Card */}
+      <div className="space-y-8 py-4">
+        {/* Diagnosis Summary Card - Compact & Elegant */}
         {formData.primaryDiagnosis && (
           <div className="relative group">
-            <div className="absolute -inset-2 bg-gradient-to-r from-[#2b6cb0]/15 to-[#63b3ed]/10 rounded-xl blur-lg opacity-50" />
-            <div className="relative bg-white/90 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-gradient-to-r from-[#2b6cb0] to-[#1a365d] p-2 rounded-lg">
-                    <Heart className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-[#1a365d]">{formData.primaryDiagnosis.name}</h3>
-                    <p className="text-[#2b6cb0]/70 text-sm">{formData.primaryDiagnosis.nameEn}</p>
-                  </div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#2b6cb0]/10 to-[#63b3ed]/5 rounded-xl blur-md opacity-60" />
+            <div className="relative bg-white/95 backdrop-blur-sm border border-[#e2e8f0] rounded-xl p-4 shadow-sm">
+              <div className="flex items-center space-x-3">
+                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-lg flex items-center justify-center shadow-md">
+                  <Heart className="w-5 h-5 text-white" />
                 </div>
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#2b6cb0]/10 border border-[#2b6cb0]/20">
-                  <span className="text-sm font-bold text-[#2b6cb0]">{formData.primaryDiagnosis.code}</span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-bold text-[#1a365d] truncate">{formData.primaryDiagnosis.name}</h3>
+                  <p className="text-xs text-[#64748b] truncate">{formData.primaryDiagnosis.nameEn}</p>
+                </div>
+                <span className="flex-shrink-0 px-2.5 py-1 rounded-lg bg-gradient-to-br from-[#2b6cb0]/10 to-[#63b3ed]/10 border border-[#2b6cb0]/20">
+                  <span className="text-xs font-bold text-[#2b6cb0]">{formData.primaryDiagnosis.code}</span>
                 </span>
               </div>
             </div>
           </div>
         )}
 
-        {/* Progress Animation */}
-        <div className="text-center space-y-6">
-          <div className="relative inline-flex items-center justify-center w-24 h-24">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] rounded-full animate-pulse" />
-            <div className="relative w-20 h-20 bg-white rounded-full flex items-center justify-center">
-              <Loader2 className="w-12 h-12 text-[#2b6cb0] animate-spin" />
+        {/* Premium Progress Animation */}
+        <div className="text-center space-y-6 py-6">
+          {/* Sophisticated Spinner */}
+          <div className="relative inline-flex items-center justify-center w-28 h-28">
+            {/* Outer rotating ring */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#2b6cb0]/20 via-[#63b3ed]/30 to-[#90cdf4]/20 animate-spin"
+                 style={{ animationDuration: '3s' }} />
+            {/* Middle pulsing glow */}
+            <div className="absolute inset-2 rounded-full bg-gradient-to-r from-[#2b6cb0]/10 to-[#63b3ed]/10 animate-pulse" />
+            {/* Inner white circle */}
+            <div className="relative w-20 h-20 bg-white rounded-full shadow-xl flex items-center justify-center">
+              <div className="relative">
+                <Loader2 className="w-10 h-10 text-[#2b6cb0] animate-spin" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-[#63b3ed] animate-pulse" />
+                </div>
+              </div>
             </div>
           </div>
 
-          <div>
-            <h2 className="text-2xl font-bold text-[#1a365d] mb-2">Generating Form 100</h2>
-            <p className="text-[#2b6cb0] font-medium">AI is creating your professional medical report...</p>
+          {/* Enhanced Typography */}
+          <div className="space-y-2">
+            <h2 className="text-3xl font-extrabold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] bg-clip-text text-transparent">
+              Generating Form 100
+            </h2>
+            <p className="text-base text-[#475569] font-medium max-w-md mx-auto leading-relaxed">
+              Our AI is crafting your professional medical consultation report with clinical precision
+            </p>
           </div>
 
-          {/* Progress Bar */}
-          <div className="max-w-md mx-auto space-y-3">
-            <div className="relative h-3 bg-slate-200 rounded-full overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4] animate-pulse"
+          {/* Modern Progress Bar */}
+          <div className="max-w-xl mx-auto space-y-4 px-4">
+            {/* Enhanced progress bar with shimmer */}
+            <div className="relative h-2.5 bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 rounded-full overflow-hidden shadow-inner">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#2b6cb0] via-[#63b3ed] to-[#90cdf4] rounded-full"
                    style={{
-                     animation: 'progressPulse 2s ease-in-out infinite'
+                     animation: 'progressPulse 2.5s ease-in-out infinite'
+                   }} />
+              {/* Shimmer overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"
+                   style={{
+                     animation: 'shimmerMove 2s linear infinite'
                    }} />
             </div>
 
-            {/* Processing Stages */}
-            <div className="flex justify-between text-xs text-[#64748b]">
-              <span className="flex items-center space-x-1">
-                <div className="w-1.5 h-1.5 bg-[#2b6cb0] rounded-full animate-pulse" />
-                <span>Analyzing data</span>
-              </span>
-              <span className="flex items-center space-x-1">
-                <div className="w-1.5 h-1.5 bg-[#63b3ed] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
-                <span>Generating report</span>
-              </span>
-              <span className="flex items-center space-x-1">
-                <div className="w-1.5 h-1.5 bg-[#90cdf4] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
-                <span>Finalizing</span>
-              </span>
+            {/* Processing Stages - Card Style */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="relative group">
+                <div className="bg-gradient-to-br from-white to-[#f8fafc] rounded-lg p-3 border border-[#e2e8f0] shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="flex flex-col items-center space-y-2">
+                    <div className="relative">
+                      <div className="w-8 h-8 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-lg flex items-center justify-center shadow-md">
+                        <Brain className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#2b6cb0] rounded-full animate-pulse" />
+                    </div>
+                    <span className="text-xs font-semibold text-[#1a365d]">Analyzing</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative group">
+                <div className="bg-gradient-to-br from-white to-[#f8fafc] rounded-lg p-3 border border-[#e2e8f0] shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="flex flex-col items-center space-y-2">
+                    <div className="relative">
+                      <div className="w-8 h-8 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-lg flex items-center justify-center shadow-md">
+                        <Zap className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#63b3ed] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
+                    </div>
+                    <span className="text-xs font-semibold text-[#1a365d]">Generating</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative group">
+                <div className="bg-gradient-to-br from-white to-[#f8fafc] rounded-lg p-3 border border-[#e2e8f0] shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="flex flex-col items-center space-y-2">
+                    <div className="relative">
+                      <div className="w-8 h-8 bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] rounded-lg flex items-center justify-center shadow-md">
+                        <Star className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#90cdf4] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
+                    </div>
+                    <span className="text-xs font-semibold text-[#1a365d]">Finalizing</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Add keyframe animation for progress bar */}
+        {/* Enhanced keyframe animations */}
         <style>{`
           @keyframes progressPulse {
             0%, 100% {
               transform: translateX(-100%);
-              opacity: 0.5;
+              opacity: 0.6;
             }
             50% {
               transform: translateX(100%);
               opacity: 1;
+            }
+          }
+          @keyframes shimmerMove {
+            0% {
+              transform: translateX(-100%) skewX(-15deg);
+            }
+            100% {
+              transform: translateX(200%) skewX(-15deg);
             }
           }
         `}</style>

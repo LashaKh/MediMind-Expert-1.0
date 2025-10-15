@@ -235,18 +235,17 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   // Track when recording stops to prevent treating post-recording state as "user edits"
   const recordingStopTimeRef = useRef<number>(0);
 
-  // Track recording session changes for cleanup and clear editable state when recording starts
+  // Track recording session changes for cleanup - DO NOT clear editable transcript!
   useEffect(() => {
     if (recordingState.isRecording && !lastRecordingSessionId) {
       const newSessionId = Date.now().toString();
       setLastRecordingSessionId(newSessionId);
       lastRecordingSessionIdRef.current = newSessionId;
 
-      // Clear editable transcript when recording starts to ensure live transcript is visible
-      if (editableTranscript) {
-        console.log('🧹 Clearing editable transcript to show live recording');
-        setEditableTranscript('');
-      }
+      // CRITICAL FIX: DO NOT clear editableTranscript here!
+      // User may have typed text before starting recording - we must preserve it
+      // The typed text will be saved to database by GeorgianSTTApp before recording starts
+      // and will be combined with live transcription properly
     } else if (!recordingState.isRecording && lastRecordingSessionId) {
       // Recording just stopped - mark the time
       recordingStopTimeRef.current = Date.now();
@@ -254,7 +253,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       setLastRecordingSessionId('');
       lastRecordingSessionIdRef.current = '';
     }
-  }, [recordingState.isRecording, lastRecordingSessionId, editableTranscript]);
+  }, [recordingState.isRecording, lastRecordingSessionId]);
 
   // Track previous session ID to detect session changes
   const previousSessionIdRef = useRef<string>('');
@@ -281,12 +280,8 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
       return;
     }
 
-    // Don't update if user just made changes in the last 2 seconds to prevent overriding deletions
-    // BUT always allow updates during session changes
-    if (!isSessionChange && typingTimeoutRef.current) {
-      console.log('🚫 User recently made changes, skipping transcript update to prevent overriding deletions');
-      return;
-    }
+    // REMOVED: Don't block updates based on typingTimeoutRef - this was causing text loss
+    // The typing timeout is used for debouncing saves, not for blocking updates
 
     // Get remaining state
     const sessionTranscript = currentSession?.transcript || '';

@@ -3,7 +3,8 @@ import {
   Mic,
   CheckCircle,
   Volume2,
-  FileText
+  FileText,
+  Square
 } from 'lucide-react'
 import { useGeorgianTTS } from '../../hooks/useGeorgianTTS'
 
@@ -29,10 +30,15 @@ const VoiceInstructionTextArea: React.FC<VoiceInstructionTextAreaProps> = ({
     isSupported,
     startRecording,
     stopRecording,
+    pauseRecording,
+    resumeRecording,
     canRecord,
     canStop,
+    canPause,
+    canResume,
     clearError,
-    clearResult
+    clearResult,
+    initializeWithExistingTranscript
   } = useGeorgianTTS({
     language,
     enableStreaming: true,
@@ -42,8 +48,11 @@ const VoiceInstructionTextArea: React.FC<VoiceInstructionTextAreaProps> = ({
     punctuation: true,
     digits: true,
     onLiveTranscriptUpdate: (newText, fullText) => {
-      if (fullText && fullText !== lastTranscript) {
-        setLastTranscript(fullText)
+      // CRITICAL FIX: Use fullText (already combined by useGeorgianTTS)
+      // Don't accumulate newText manually - causes duplicates
+      // fullText already includes all segments combined properly
+      if (fullText && fullText.trim()) {
+        setLastTranscript(fullText.trim());
       }
     }
   })
@@ -58,20 +67,33 @@ const VoiceInstructionTextArea: React.FC<VoiceInstructionTextAreaProps> = ({
     }
   }, [transcriptionResult, lastTranscript, clearResult])
 
-  // Handle recording toggle
+  // Handle recording toggle with pause/resume support
   const handleRecordingToggle = useCallback(async () => {
     if (disabled || !isSupported) return
-    
+
     try {
       if (recordingState.isRecording) {
-        await stopRecording()
+        if (recordingState.isPaused) {
+          // CRITICAL FIX: Initialize with existing content before resume
+          if (lastTranscript.trim()) {
+            initializeWithExistingTranscript(lastTranscript);
+          }
+          await resumeRecording();
+        } else {
+          await pauseRecording();
+        }
       } else {
-        clearError()
-        await startRecording()
+        clearError();
+        // CRITICAL FIX: Initialize with existing content before start
+        if (lastTranscript.trim()) {
+          initializeWithExistingTranscript(lastTranscript);
+        }
+        // Pass false to preserve transcript refs
+        await startRecording(false);
       }
     } catch (error) {
     }
-  }, [disabled, isSupported, recordingState.isRecording, startRecording, stopRecording, clearError])
+  }, [disabled, isSupported, recordingState.isRecording, recordingState.isPaused, lastTranscript, startRecording, stopRecording, pauseRecording, resumeRecording, clearError, initializeWithExistingTranscript])
 
   // Handle submit
   const handleSubmit = useCallback(() => {
@@ -99,18 +121,33 @@ const VoiceInstructionTextArea: React.FC<VoiceInstructionTextAreaProps> = ({
             </div>
           </div>
           
-          {/* Recording Button - Mobile Optimized */}
-          <button
-            onClick={handleRecordingToggle}
-            disabled={disabled || !isSupported || isTranscribing}
-            className={`min-w-[48px] min-h-[48px] w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center transition-all duration-200 ${
-              recordingState.isRecording 
-                ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
-                : 'bg-[#2b6cb0] hover:bg-[#1a365d]'
-            } text-white disabled:opacity-50 disabled:cursor-not-allowed`}
-          >
-            <Mic className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
+          {/* Recording Button - Mobile Optimized with Pause/Resume */}
+          <div className="flex items-center space-x-2">
+            {recordingState.isRecording && !recordingState.isPaused && (
+              <button
+                onClick={() => stopRecording()}
+                disabled={disabled || !isSupported}
+                className="min-w-[48px] min-h-[48px] w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center transition-all duration-200 bg-red-500 hover:bg-red-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Stop recording"
+              >
+                <Square className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+            )}
+            <button
+              onClick={handleRecordingToggle}
+              disabled={disabled || !isSupported || isTranscribing}
+              className={`min-w-[48px] min-h-[48px] w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                recordingState.isRecording && !recordingState.isPaused
+                  ? 'bg-yellow-500 hover:bg-yellow-600'
+                  : recordingState.isPaused
+                  ? 'bg-green-500 hover:bg-green-600 animate-pulse'
+                  : 'bg-[#2b6cb0] hover:bg-[#1a365d]'
+              } text-white disabled:opacity-50 disabled:cursor-not-allowed`}
+              title={recordingState.isPaused ? 'Resume recording' : recordingState.isRecording ? 'Pause recording' : 'Start recording'}
+            >
+              <Mic className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+          </div>
         </div>
         
         {/* Status */}

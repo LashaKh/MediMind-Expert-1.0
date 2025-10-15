@@ -5,10 +5,9 @@ import {
   ChevronUp,
   Edit3,
   X,
-  Clock,
   CheckCircle,
   Trash2,
-  // Crown removed - no longer used
+  Copy
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { formatMarkdown, hasMarkdownFormatting } from '../../../utils/markdownFormatter';
@@ -47,7 +46,7 @@ interface Form100DisplayCardProps {
   onForm100EditComplete: (editResult: any) => void;
   onForm100EditError: (error: any) => void;
   onForm100Delete: () => void;
-  // onCopy, onDownload, onShare removed per user request
+  onForm100Copy?: () => void;
 }
 
 export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
@@ -64,8 +63,8 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
   onForm100EditToggle,
   onForm100EditComplete,
   onForm100EditError,
-  onForm100Delete
-  // onCopy, onDownload, onShare removed
+  onForm100Delete,
+  onForm100Copy
 }) => {
   if (!generatedForm100Content) {
     return null;
@@ -128,6 +127,19 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                 <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-3 sm:space-y-0 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                   {/* Mobile: Action Buttons Row */}
                   <div className="flex items-center space-x-2 sm:space-x-3">
+                    {/* Copy Button */}
+                    {onForm100Copy && (
+                      <MedicalButton
+                        variant="secondary"
+                        size="sm"
+                        leftIcon={Copy}
+                        onClick={onForm100Copy}
+                        className="bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/40 text-white hover:text-white backdrop-blur-sm min-h-[44px] sm:min-h-[36px]"
+                      >
+                        <span className="text-xs sm:text-sm font-medium">Copy</span>
+                      </MedicalButton>
+                    )}
+
                     {/* Edit Button */}
                     <MedicalButton
                       variant="secondary"
@@ -162,18 +174,6 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                     >
                       <span className="text-xs sm:text-sm">{isForm100Expanded ? 'Minimize' : 'Expand'}</span>
                     </MedicalButton>
-                  </div>
-                  
-                  {/* Timestamp */}
-                  <div className="flex items-center space-x-2 sm:space-x-3">
-                    {form100GeneratedAt && (
-                      <div className="flex items-center space-x-1 sm:space-x-2 px-2 py-1 sm:px-3 sm:py-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-                        <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-white/80" />
-                        <span className="text-xs sm:text-sm font-medium text-white/90">
-                          {form100GeneratedAt.toLocaleTimeString()}
-                        </span>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

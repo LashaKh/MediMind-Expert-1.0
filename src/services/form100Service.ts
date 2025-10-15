@@ -22,8 +22,8 @@ const UNIFIED_FORM100_ENDPOINT = "https://flowise-2-0.onrender.com/api/v1/predic
 // Service configuration
 const FORM100_CONFIG: Form100Config = {
   flowiseEndpoint: UNIFIED_FORM100_ENDPOINT, // Unified Flowise endpoint
-  maxGenerationTime: FORM100_DEFAULTS.maxGenerationTime || 15000, // 15 seconds to test faster
-  retryAttempts: FORM100_DEFAULTS.retryAttempts || 1, // Single retry to avoid multiple long waits
+  maxGenerationTime: FORM100_DEFAULTS.maxGenerationTime || 60000, // 60 seconds for Georgian medical report generation
+  retryAttempts: FORM100_DEFAULTS.retryAttempts || 2, // 2 retries for reliability with slow responses
   validationRules: [],
   supportedDepartments: FORM100_DEFAULTS.supportedDepartments || [],
   defaultPriority: FORM100_DEFAULTS.defaultPriority || 'normal'
@@ -271,23 +271,62 @@ ${generatedInitialConsult.trim()}`;
     }
 
     const flowiseResult = await flowiseResponse.json();
-    
-    
-    // Use EXACT same response parsing as flowise-simple.mjs
-    let generatedContent = flowiseResult.text || flowiseResult.response || flowiseResult.answer || 'No response from AI';
+
+    // COMPREHENSIVE LOGGING: Log full response structure for debugging
+    console.log('🔍 Flowise Response Structure:', {
+      hasText: !!flowiseResult.text,
+      hasResponse: !!flowiseResult.response,
+      hasAnswer: !!flowiseResult.answer,
+      responseKeys: Object.keys(flowiseResult),
+      duration: requestDuration
+    });
+
+    // IMPROVED RESPONSE PARSING: Check all possible fields from Flowise
+    let generatedContent = flowiseResult.text ||
+                          flowiseResult.response ||
+                          flowiseResult.answer ||
+                          flowiseResult.output ||
+                          flowiseResult.result ||
+                          flowiseResult.data?.text ||
+                          flowiseResult.data?.response ||
+                          '';
+
+    // VALIDATION: Ensure we have valid content, not fallback data
+    if (!generatedContent || generatedContent.trim().length === 0) {
+      console.error('❌ Empty response from Flowise:', flowiseResult);
+      throw new Error('Flowise returned empty response. Please check Flowise service status and try again.');
+    }
+
+    // VALIDATION: Check minimum content length (Georgian medical reports should be substantial)
+    const MIN_CONTENT_LENGTH = 100; // Minimum 100 characters for a valid medical report
+    if (generatedContent.trim().length < MIN_CONTENT_LENGTH) {
+      console.error('❌ Response too short:', {
+        length: generatedContent.length,
+        content: generatedContent.substring(0, 100)
+      });
+      throw new Error(`Flowise response too short (${generatedContent.length} chars). Expected medical report with at least ${MIN_CONTENT_LENGTH} characters.`);
+    }
+
+    // VALIDATION: Check for Georgian characters (medical reports should contain Georgian text)
+    const georgianRegex = /[\u10A0-\u10FF]/; // Georgian Unicode range
+    if (!georgianRegex.test(generatedContent)) {
+      console.warn('⚠️ No Georgian characters detected in response');
+      // Don't throw error - some reports might be in English, but log warning
+    }
+
+    console.log('✅ Valid Flowise response received:', {
+      length: generatedContent.length,
+      hasGeorgian: georgianRegex.test(generatedContent),
+      preview: generatedContent.substring(0, 150) + '...'
+    });
 
     // POST-PROCESSING: Parse and insert medical history section
     if (payload.patientData?.existingERReport) {
-
       const medicalHistory = parseGeorgianMedicalHistory(payload.patientData.existingERReport);
 
       if (medicalHistory) {
-
-
         // Insert the parsed medical history into Form 100
         generatedContent = insertBriefAnamnesisIntoForm100(generatedContent, medicalHistory);
-
-      } else {
       }
     }
 
@@ -301,15 +340,21 @@ ${generatedInitialConsult.trim()}`;
       }
     };
 
+    console.log('✅ Form 100 generation completed successfully:', {
+      finalLength: generatedContent.length,
+      processingTime: requestDuration
+    });
 
     return transformedResponse;
   } catch (error) {
     clearTimeout(timeoutId);
-    
+
     if (error.name === 'AbortError') {
-      throw new Error('Form 100 generation timed out');
+      console.error('❌ Form 100 generation timed out after', FORM100_CONFIG.maxGenerationTime / 1000, 'seconds');
+      throw new Error(`Form 100 generation timed out after ${FORM100_CONFIG.maxGenerationTime / 1000} seconds. The medical report generation is taking longer than expected. Please try again.`);
     }
-    
+
+    console.error('❌ Form 100 generation error:', error);
     throw error;
   }
 };

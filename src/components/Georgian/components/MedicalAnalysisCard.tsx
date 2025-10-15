@@ -408,6 +408,13 @@ Medical AI Processing System`;
     }
   };
 
+  const handleForm100Copy = async () => {
+    const content = editedForm100Content || generatedForm100Content;
+    if (content) {
+      await copyToClipboard(content);
+    }
+  };
+
   const handleEdit = () => {
     if (enableEditing) {
       setIsEditMode(true);
@@ -520,7 +527,7 @@ Medical AI Processing System`;
           enableEditing={enableEditing}
           hasEmptyFieldsPresent={hasEmptyFieldsPresent}
           emptyFieldsCount={emptyFieldsCount}
-          // onCopy, onDownload, onShare removed per user request
+          onCopy={handleCopy}
           onDelete={onDelete ? handleDelete : undefined}
           onEdit={handleEdit}
           onCancelEdit={handleCancelEdit}
@@ -575,7 +582,7 @@ Medical AI Processing System`;
         onForm100EditComplete={handleForm100EditComplete}
         onForm100EditError={handleForm100EditError}
         onForm100Delete={handleForm100Delete}
-        // onCopy, onDownload, onShare removed per user request
+        onForm100Copy={handleForm100Copy}
       />
 
       {/* Form 100 Modal Integration */}

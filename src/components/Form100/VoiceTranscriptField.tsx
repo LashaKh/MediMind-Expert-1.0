@@ -60,10 +60,12 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
     onLiveTranscriptUpdate: useCallback((newText: string, fullText: string, currentSessionId?: string) => {
       // Only update if session matches or no session filtering
       if (!sessionId || currentSessionId === sessionId) {
-        // PRESERVE existing content: combine base content with full transcript from current recording
+        // CRITICAL FIX: Use ONLY newText (current segment), not fullText (all segments)
+        // This prevents duplication when pause → type → resume
+        // fullText includes ALL previous segments, newText is ONLY the new segment
         const baseContent = transcriptAtRecordingStartRef.current;
-        const separator = baseContent && fullText ? '\n\n' : '';
-        const combinedContent = baseContent + separator + fullText.trim();
+        const separator = baseContent && newText ? '\n\n' : '';
+        const combinedContent = baseContent + separator + newText.trim();
 
         setLocalTranscript(combinedContent);
         onChange(combinedContent);
@@ -134,6 +136,9 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
   const handleRecordingToggle = async () => {
     if (recordingState.isRecording) {
       if (recordingState.isPaused) {
+        // CRITICAL FIX: Capture current transcript before resuming
+        // This ensures pause → edit → resume preserves the edited content
+        transcriptAtRecordingStartRef.current = localTranscript;
         await resumeRecording();
       } else {
         await pauseRecording();
@@ -142,7 +147,8 @@ const VoiceTranscriptField: React.FC<VoiceTranscriptFieldProps> = ({
       // CRITICAL: Capture current transcript content BEFORE starting recording
       // This preserves any manually typed text or previous recordings
       transcriptAtRecordingStartRef.current = localTranscript;
-      await startRecording();
+      // Pass false to preserve existing transcript refs in TTS hook
+      await startRecording(false);
     }
   };
 

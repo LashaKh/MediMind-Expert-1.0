@@ -1367,30 +1367,35 @@ export const useGeorgianTTS = (options: UseGeorgianTTSOptions = {}) => {
     };
   }, [language, autocorrect, punctuation, digits, onLiveTranscriptUpdate, chunkSize, monitorAudioLevel, stopChunkedProcessing, cleanupAudioResources]);
 
-  const startRecording = useCallback(async () => {
+  const startRecording = useCallback(async (clearRefs = true) => {
     // 🚀 Performance timing to ensure <200ms recording start
     const startTime = performance.now();
     console.time('🚀 Recording start performance');
-    
+
     try {
       // Prevent multiple recordings
       if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
         console.log('🚀 Recording already active - 0ms');
         return;
       }
-      
+
       // Fast state reset without blocking operations
       setError(null);
       audioChunksRef.current = [];
       audioChunksForProcessingRef.current = [];
 
-      // CRITICAL FIX: Clear transcript refs at START of new recording
-      // This is the right place to clear them - not in cleanup after recording stops
-      // This ensures they're available for AI processing after recording ends
-      googleTranscriptRef.current = '';
-      enagramTranscriptRef.current = '';
-      combinedForSubmissionRef.current = '';
-      combinedTranscriptRef.current = '';
+      // OPTIMIZED FIX: Only clear transcript refs when explicitly requested
+      // This allows components to preserve existing content when resuming or continuing
+      // Default true for backward compatibility with components that need fresh start
+      if (clearRefs) {
+        console.log('🧹 Clearing transcript refs for fresh recording');
+        googleTranscriptRef.current = '';
+        enagramTranscriptRef.current = '';
+        combinedForSubmissionRef.current = '';
+        combinedTranscriptRef.current = '';
+      } else {
+        console.log('🔄 Preserving transcript refs for continuous recording');
+      }
 
       lastSavedTranscriptLengthRef.current = 0;
       failedChunksCountRef.current = 0;

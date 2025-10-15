@@ -9,7 +9,8 @@ import {
   Hash,
   Trash2,
   Wand2,
-  History
+  History,
+  Copy
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import Form100Button from '../../Form100/Form100Button';
@@ -44,8 +45,9 @@ interface AnalysisCardHeaderProps {
   enableEditing?: boolean;
   hasEmptyFieldsPresent: boolean;
   emptyFieldsCount: number;
-  
-  // Handlers (Copy, Download, Share removed)
+
+  // Handlers
+  onCopy?: () => void;
   onDelete?: () => void;
   onEdit: () => void;
   onCancelEdit: () => void;
@@ -67,6 +69,7 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
   enableEditing = false,
   hasEmptyFieldsPresent,
   emptyFieldsCount,
+  onCopy,
   onDelete,
   onEdit,
   onCancelEdit,
@@ -232,9 +235,24 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
                 {/* Actions removed per user request */}
               </div>
               
-              {/* Second Row: Edit, Form 100, and Expand Actions */}
+              {/* Second Row: Copy, Edit, Form 100, and Expand Actions */}
               <div className="flex items-center justify-between gap-1.5">
                 <div className="flex items-center gap-1.5">
+                  {/* Copy Button */}
+                  {onCopy && (
+                    <div className="relative group flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+                      <MedicalButton
+                        variant="ghost"
+                        size="sm"
+                        leftIcon={Copy}
+                        onClick={onCopy}
+                        className="relative text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg min-h-[30px] px-2"
+                      >
+                        <span className="text-xs font-medium">Copy</span>
+                      </MedicalButton>
+                    </div>
+                  )}
+
                   {/* Premium Edit Button */}
                   {enableEditing && analysisType.isDiagnosis && (
                     <div className="relative group flex-shrink-0" onClick={(e) => e.stopPropagation()}>
@@ -344,8 +362,21 @@ export const AnalysisCardHeader: React.FC<AnalysisCardHeaderProps> = ({
             {/* Desktop Layout - Single Row */}
             <div className="hidden md:flex md:items-center md:justify-between">
               <div className="flex items-center space-x-3">
-                {/* Copy, Export, and Share buttons removed per user request */}
-                
+                {/* Copy Button */}
+                {onCopy && (
+                  <div className="relative group" onClick={(e) => e.stopPropagation()}>
+                    <MedicalButton
+                      variant="ghost"
+                      size="sm"
+                      leftIcon={Copy}
+                      onClick={onCopy}
+                      className="text-slate-600 dark:text-slate-400 hover:text-[#2b6cb0] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 hover:shadow-lg"
+                    >
+                      Copy Report
+                    </MedicalButton>
+                  </div>
+                )}
+
                 {/* Premium Edit Button */}
                 {enableEditing && analysisType.isDiagnosis && (
                   <div className="relative group" onClick={(e) => e.stopPropagation()}>

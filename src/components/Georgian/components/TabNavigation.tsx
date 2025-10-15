@@ -211,7 +211,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
 
                   {/* Enhanced Notification Badge */}
                   {sessionCount > 0 && !isHistoryOpen && (
-                    <div className="absolute -top-2 -right-2 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-full min-w-[22px] h-[22px] px-1.5 flex items-center justify-center text-[10px] font-bold shadow-lg shadow-red-500/40 ring-2 ring-white animate-pulse z-10">
+                    <div className="absolute top-0.5 right-0.5 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[9px] font-bold shadow-md shadow-red-500/30 ring-1 ring-white animate-pulse z-10">
                       {sessionCount > 99 ? '99+' : sessionCount}
                     </div>
                   )}

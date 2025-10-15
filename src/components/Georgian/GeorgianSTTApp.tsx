@@ -117,6 +117,9 @@ export const GeorgianSTTApp: React.FC = () => {
   
   // Local transcript state - single source of truth for UI display
   const [localTranscript, setLocalTranscript] = useState('');
+  // CRITICAL FIX: Ref to always have synchronous access to current transcript value
+  // Prevents stale closure issues in async callbacks
+  const localTranscriptRef = useRef<string>('');
   // Recording session tracking
   const [currentRecordingSessionId, setCurrentRecordingSessionId] = useState<string>('');
   
@@ -157,29 +160,36 @@ export const GeorgianSTTApp: React.FC = () => {
   // Session-aware transcript updates - prevents cross-session contamination
   const lastProcessedContentRef = useRef<string>('');
   const lastProcessedTimeRef = useRef<number>(0);
-  
+  // Track if we're in the middle of a recording that started with existing content
+  const recordingWithExistingContentRef = useRef<boolean>(false);
+
   const handleLiveTranscriptUpdate = useCallback(async (newText: string, fullText: string, sessionId?: string) => {
     // OPTIMISTIC UI: Update local state immediately for instant feedback
     if (newText.trim()) {
       const now = Date.now();
-      
+
       // Prevent duplicate processing of the same content within a short time window
       if (lastProcessedContentRef.current === newText.trim() && (now - lastProcessedTimeRef.current) < 1000) {
         console.log(`🚫 Duplicate live update detected (within 1s), skipping: "${newText.substring(0, 50)}..."`);
         return;
       }
-      
+
       lastProcessedContentRef.current = newText.trim();
       lastProcessedTimeRef.current = now;
-      
+
       // Only append NEW text, not full text - this prevents duplicates
       console.log(`📤 Live update received: "${newText.substring(0, 50)}..." (session: ${sessionId || 'no session'})`);
 
       // Update local transcript immediately (optimistic UI)
+      // CRITICAL FIX: Properly append to existing content (typed/pasted text)
       setLocalTranscript(prev => {
         // Use single space for natural text flow (no automatic paragraph breaks)
         const separator = prev ? ' ' : '';
-        return prev + separator + newText.trim();
+        const updatedTranscript = prev + separator + newText.trim();
+        // CRITICAL FIX: Sync ref with state update for synchronous access
+        localTranscriptRef.current = updatedTranscript;
+        console.log(`🔄 Local transcript updated: prev=${prev.length}, new=${newText.length}, total=${updatedTranscript.length}`);
+        return updatedTranscript;
       });
       
       // Save to database in background - prioritize current recording session
@@ -189,8 +199,10 @@ export const GeorgianSTTApp: React.FC = () => {
       if (targetSessionId) {
         // Use the session ID from the recording or current selection
         console.log(`💾 Saving to session: ${targetSessionId} (from ${sessionId ? 'recording' : 'current'})`);
-        
-        appendToTranscript(targetSessionId, newText.trim()).catch(error => {
+
+        // CRITICAL FIX: Use ref for current transcript value (prevents stale closure)
+        // localTranscriptRef is always up-to-date, unlike localTranscript in async callbacks
+        appendToTranscript(targetSessionId, newText.trim(), localTranscriptRef.current).catch(error => {
           // Keep local state - user still sees the transcript
           console.error(`❌ Failed to append to session ${targetSessionId}:`, error);
         });
@@ -208,14 +220,16 @@ export const GeorgianSTTApp: React.FC = () => {
 
           // Use a small delay to ensure the session selection has propagated
           setTimeout(() => {
-            appendToTranscript(newSession.id, newText.trim());
+            // For new session, pass empty string (session is fresh)
+            appendToTranscript(newSession.id, newText.trim(), '');
           }, 100);
         } catch (error) {
           console.error(`❌ Failed to select new session ${newSession.id}:`, error);
-          
+
           // Fallback: still try to append
           setTimeout(() => {
-            appendToTranscript(newSession.id, newText.trim());
+            // For new session, pass empty string (session is fresh)
+            appendToTranscript(newSession.id, newText.trim(), '');
           }, 100);
         }
       }
@@ -362,11 +376,13 @@ export const GeorgianSTTApp: React.FC = () => {
     if (recordingState.isRecording) {
       stopRecording();
     }
-    
+
     // Clear ALL TTS state and local transcript for fresh start
     resetTranscript();
     clearTTSResult();
     setLocalTranscript('');
+    // CRITICAL FIX: Sync ref when clearing transcript for new session
+    localTranscriptRef.current = '';
     setCurrentRecordingSessionId(''); // Clear recording session
     
     // Create new session
@@ -388,21 +404,37 @@ export const GeorgianSTTApp: React.FC = () => {
   const handleProcessText = useCallback(async (instruction: string, directTranscript?: string) => {
     // Debug info (disabled in production)
 
-    // PARALLEL TTS: Always prioritize combined transcript for Flowise submission (both Google + Enagram)
-    // Combined transcript includes both Google and Enagram results - this is what we want for AI processing
+    // CRITICAL FIX: Build comprehensive transcript for AI processing
+    // Priority order: directTranscript (explicit) > localTranscript (UI state with typed + dictated)
+    // Then ADD dual parallel transcripts (Google + Enagram) as alternative versions
     const combinedTranscript = getCombinedTranscriptForSubmission();
-    const transcript = combinedTranscript || directTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
+    const baseTranscript = directTranscript || localTranscript || currentSession?.transcript || transcriptionResult?.text || '';
+
+    // CRITICAL: If we have both typed/pasted text AND parallel transcripts, combine them properly
+    // This ensures typed text is ALWAYS included in AI processing
+    let transcript = baseTranscript;
+    if (baseTranscript.trim() && combinedTranscript && combinedTranscript !== baseTranscript) {
+      // We have manually typed/pasted content PLUS parallel transcripts
+      // Format: "TYPED/PASTED CONTENT\n--- Transcription ---\nPARALLEL TRANSCRIPTS"
+      transcript = `${baseTranscript.trim()}\n--- Transcription ---\n${combinedTranscript.trim()}`;
+      console.log('🔄 Combined typed + parallel transcripts for AI processing');
+    } else if (!baseTranscript.trim() && combinedTranscript) {
+      // Only parallel transcripts, no typed content
+      transcript = combinedTranscript;
+    }
 
     // Debug transcript source for parallel processing
     console.log('📝 Transcript source for AI processing:', {
       hasDirectTranscript: !!directTranscript,
-      hasCombinedTranscript: !!combinedTranscript,
       hasLocalTranscript: !!localTranscript,
       hasSessionTranscript: !!currentSession?.transcript,
+      hasCombinedTranscript: !!combinedTranscript,
+      baseLength: baseTranscript?.length || 0,
       combinedLength: combinedTranscript?.length || 0,
-      finalLength: transcript.length
+      finalLength: transcript.length,
+      includesTypedContent: baseTranscript.trim() && combinedTranscript && combinedTranscript !== baseTranscript
     });
-    
+
     if (!transcript.trim()) {
 
       return;
@@ -705,6 +737,8 @@ export const GeorgianSTTApp: React.FC = () => {
       // Load session transcript into local state immediately for instant UI feedback
       const sessionTranscript = selectedSession.transcript || '';
       setLocalTranscript(sessionTranscript);
+      // CRITICAL FIX: Sync ref when loading session transcript
+      localTranscriptRef.current = sessionTranscript;
 
       // CRITICAL FIX: Initialize TTS hook with existing transcript for AI processing
       // This ensures getCombinedTranscriptForSubmission() returns the transcript for diagnosis generation
@@ -759,36 +793,54 @@ export const GeorgianSTTApp: React.FC = () => {
 
   // Handle transcript update (for editing existing transcript)
   const handleTranscriptUpdate = useCallback(async (transcript: string, duration?: number) => {
-    // DON'T clear localTranscript when recording just stopped!
-    // Only clear if user is manually editing (not right after recording)
-    const timeSinceStop = Date.now() - recordingStopTimeRef.current;
-    const justFinishedRecording = recordingState.isRecording || timeSinceStop < 3000; // 3 second grace period
+    // CRITICAL FIX: NEVER clear localTranscript here!
+    // This function is called when user types/pastes text OR when component saves to database
+    // Clearing localTranscript would lose the user's work
+    // The only time we clear localTranscript is when:
+    // 1. Creating a new session (handleCreateSession)
+    // 2. Switching to a different session (handleSelectSession)
 
-    if (!justFinishedRecording) {
-      // Only clear localTranscript when user is manually editing (not right after recording)
-      setLocalTranscript('');
-      console.log('🧹 Cleared localTranscript for manual edit');
-    } else {
-      console.log(`⏸️  Preserving localTranscript - recording ${recordingState.isRecording ? 'active' : `stopped ${timeSinceStop}ms ago`}`);
-    }
-
+    // Simply save the transcript to the database without touching localTranscript
     if (currentSession) {
+      // CRITICAL FIX: Also update localTranscript so it stays in sync with user edits
+      // When user types/edits after pausing recording, we need localTranscript updated
+      // so that resuming recording continues from the edited version
+      setLocalTranscript(transcript);
+      // CRITICAL FIX: Sync ref when user edits transcript
+      localTranscriptRef.current = transcript;
+      console.log(`📝 Updated localTranscript from edit (${transcript.length} chars)`);
       updateTranscript(currentSession.id, transcript, duration);
     } else if (transcript.trim()) {
-      // Create a new session when user starts typing and no session exists
-      const newSession = await createSession('Manual Entry', transcript);
+      // CRITICAL FIX: Use pendingSessionTitle if user already typed a title, otherwise use 'Manual Entry'
+      // This prevents creating duplicate sessions when user types title first, then types in transcript
+      const sessionTitle = pendingSessionTitle.trim() || 'Manual Entry';
+      console.log(`📝 Creating session with title: "${sessionTitle}" (from ${pendingSessionTitle ? 'pending title' : 'default'})`);
+
+      const newSession = await createSession(sessionTitle, transcript);
       if (newSession) {
+        // Clear pending title since we just used it to create the session
+        setPendingSessionTitle('');
+        console.log('🧹 Cleared pending title after using it for session creation');
+
+        // CRITICAL FIX: Set localTranscript to the transcript we just saved
+        // handleSelectSession will load from local session state which might not have the transcript yet
+        setLocalTranscript(transcript);
+        // CRITICAL FIX: Sync ref with new transcript
+        localTranscriptRef.current = transcript;
+        console.log(`📝 Set localTranscript to saved content (${transcript.length} chars)`);
+
         await selectSession(newSession.id);
       }
     }
-  }, [currentSession, updateTranscript, createSession, selectSession, recordingState.isRecording]);
+  }, [currentSession, updateTranscript, createSession, selectSession, pendingSessionTitle, setPendingSessionTitle]);
 
   // Handle transcript append (for new recordings)
   const handleTranscriptAppend = useCallback((newText: string, duration?: number) => {
     if (currentSession) {
-      appendToTranscript(currentSession.id, newText, duration);
+      // Pass localTranscript to ensure append uses current UI state
+      appendToTranscript(currentSession.id, newText, localTranscript, duration);
     }
-  }, [currentSession, appendToTranscript]);
+  }, [currentSession, appendToTranscript, localTranscript]);
 
   // Handle recording start - create temporary session if needed
   const handleStartRecording = useCallback(async () => {
@@ -824,7 +876,10 @@ export const GeorgianSTTApp: React.FC = () => {
       clearTTSResult(); // Clear old transcription result
 
       const sessionTitle = pendingSessionTitle.trim() || 'New Recording';
-      const newSession = await createSession(sessionTitle);
+      // CRITICAL FIX: Create session WITH existing typed/pasted content
+      // This ensures typed text is saved to database immediately
+      const initialContent = localTranscript.trim() || undefined;
+      const newSession = await createSession(sessionTitle, initialContent);
 
       // Clear the pending title after creating the session
       setPendingSessionTitle('');
@@ -839,6 +894,13 @@ export const GeorgianSTTApp: React.FC = () => {
 
       clearTTSResult(); // Just clear pending results, keep existing transcript state
 
+      // CRITICAL FIX: Save typed/pasted text to database BEFORE starting recording
+      // This ensures it persists across session switches
+      if (localTranscript.trim() && localTranscript !== currentSession.transcript) {
+        console.log(`💾 Saving typed content to database before recording (${localTranscript.length} chars)`);
+        await updateTranscript(currentSession.id, localTranscript);
+      }
+
       // CRITICAL: Initialize TTS hook's internal state with existing content
       // The TTS hook needs to know about existing content to properly append new transcriptions
       if (localTranscript.trim()) {
@@ -848,7 +910,8 @@ export const GeorgianSTTApp: React.FC = () => {
       }
     }
 
-    startRecording();
+    // CRITICAL FIX: Pass false to preserve transcript refs when continuing existing session
+    startRecording(false);
   }, [currentSession, createSession, selectSession, startRecording, resetTranscript, initializeWithExistingTranscript, clearTTSResult, pendingSessionTitle, localTranscript]);
 
   // Clear all errors

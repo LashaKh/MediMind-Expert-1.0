@@ -38,7 +38,7 @@ interface UseSessionManagementReturn {
   
   // Session content operations
   updateTranscript: (sessionId: string, transcript: string, duration?: number) => Promise<boolean>;
-  appendToTranscript: (sessionId: string, newText: string, duration?: number) => Promise<boolean>;
+  appendToTranscript: (sessionId: string, newText: string, currentTranscript?: string, duration?: number) => Promise<boolean>;
   addProcessingResult: (sessionId: string, result: {
     userInstruction: string;
     aiResponse: string;
@@ -390,20 +390,21 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
   }, [updateSession]);
 
   // Append to transcript (adds new content to existing transcript)
-  const appendToTranscript = useCallback(async (sessionId: string, newText: string, duration = 0): Promise<boolean> => {
+  // CRITICAL FIX: Accept currentTranscript parameter to avoid race conditions with stale database reads
+  const appendToTranscript = useCallback(async (sessionId: string, newText: string, currentTranscript?: string, duration = 0): Promise<boolean> => {
     // First try to find in sessions array
     let session = sessions.find(s => s.id === sessionId);
-    
+
     // If not found in sessions array, check if it's the current session
     if (!session && currentSession?.id === sessionId) {
       session = currentSession;
       console.log('🔧 Using currentSession for appendToTranscript:', sessionId);
     }
-    
+
     // If still not found, try to fetch directly from database (session might be newly created)
     if (!session && user) {
       console.log('🔍 Session not in local state, fetching from database:', sessionId);
-      
+
       const [dbSession, dbError] = await safeAsync(
         () => (supabase as any)
           .from('georgian_sessions')
@@ -431,7 +432,7 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
         console.log('✅ Found session in database:', sessionId);
       }
     }
-    
+
     if (!session) {
       console.log('❌ Session not found anywhere for appendToTranscript:', sessionId);
       console.log('🔍 Available sessions:', sessions.map(s => s.id));
@@ -439,27 +440,34 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
       return false;
     }
 
-    // Fetch fresh session data from database to ensure we have the latest transcript
-    const [freshData, fetchError] = await safeAsync(
-      () => (supabase as any)
-        .from('georgian_sessions')
-        .select('transcript, duration_ms')
-        .eq('id', sessionId)
-        .eq('user_id', user?.id)
-        .single()
-    );
-
-    let existingTranscript = session.transcript || '';
+    let existingTranscript = '';
     let currentDuration = session.durationMs || 0;
-    
-    // Use fresh data if available (handles recent updates)
-    if (!fetchError && freshData) {
-      const freshSessionData = (freshData?.data ? freshData.data : freshData) as any;
-      existingTranscript = freshSessionData.transcript || '';
-      currentDuration = freshSessionData.duration_ms || 0;
-      console.log('🔄 Using fresh database transcript:', existingTranscript.length, 'chars');
+
+    // CRITICAL FIX: Use provided currentTranscript if available (active session with UI state)
+    // This prevents race condition: user types → saves to DB → recording adds text → append reads stale DB
+    if (currentTranscript !== undefined) {
+      existingTranscript = currentTranscript;
+      console.log('✅ Using provided current transcript (avoiding race condition):', existingTranscript.length, 'chars');
     } else {
-      console.log('⚠️ Using cached session transcript:', existingTranscript.length, 'chars');
+      // For inactive sessions or when not provided, fetch from database
+      const [freshData, fetchError] = await safeAsync(
+        () => (supabase as any)
+          .from('georgian_sessions')
+          .select('transcript, duration_ms')
+          .eq('id', sessionId)
+          .eq('user_id', user?.id)
+          .single()
+      );
+
+      if (!fetchError && freshData) {
+        const freshSessionData = (freshData?.data ? freshData.data : freshData) as any;
+        existingTranscript = freshSessionData.transcript || '';
+        currentDuration = freshSessionData.duration_ms || 0;
+        console.log('🔄 Using fresh database transcript:', existingTranscript.length, 'chars');
+      } else {
+        existingTranscript = session.transcript || '';
+        console.log('⚠️ Using cached session transcript:', existingTranscript.length, 'chars');
+      }
     }
 
     // Get existing transcript and append new text
@@ -476,9 +484,9 @@ export const useSessionManagement = (): UseSessionManagementReturn => {
 
     // Always update the database session directly
     console.log('📝 Updating database session with appended content');
-    return await updateSession(sessionId, { 
-      transcript: combinedTranscript, 
-      durationMs: totalDuration 
+    return await updateSession(sessionId, {
+      transcript: combinedTranscript,
+      durationMs: totalDuration
     });
   }, [sessions, updateSession, currentSession, user]);
 
