@@ -340,9 +340,8 @@ export async function generateTemplateBasedReport(
 
     // Flowise backend requires "question" field format
     // Include the full template structure so AI knows how to format the report
-    const questionContent = `Card Title: Template
+    const questionContent = `Card Title: ${template.name}
 Type: Template
-Template Name: ${template.name}
 
 TEMPLATE STRUCTURE (Follow this format exactly):
 ${template.example_structure}

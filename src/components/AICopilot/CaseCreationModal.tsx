@@ -125,19 +125,22 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
   const validateStep = (step: number): boolean => {
     const newErrors: FormErrors = {};
 
-    // All fields are now optional - no validation required
     switch (step) {
       case 1:
-        // Title and description are now optional
+        // Title is required (database constraint: minimum 5-10 characters)
+        if (!formData.title || formData.title.trim().length < 5) {
+          newErrors.title = 'Title must be at least 5 characters long';
+        }
+        // Description is optional
         break;
       case 2:
-        // Patient information is now optional - no minimum character requirement
+        // Patient information is optional - no minimum character requirement
         break;
       case 3:
         // File attachments are optional, no validation needed
         break;
       case 4:
-        // Complexity level is now optional
+        // Complexity level is optional (has default value 'medium')
         break;
     }
 
@@ -456,7 +459,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
               <div className="space-y-6">
                 <div className="relative">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Case Title
+                    Case Title <span className="text-red-500">*</span>
+                    <span className="text-gray-500 font-normal ml-2">(minimum 5 characters)</span>
                   </label>
                   <input
                     type="text"
@@ -465,8 +469,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                     placeholder="Brief descriptive title for this case"
                     className={`
                       w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200
-                      ${errors.title 
-                        ? 'border-red-300 focus:border-red-500' 
+                      ${errors.title
+                        ? 'border-red-300 focus:border-red-500'
                         : 'border-gray-200 focus:border-[#63b3ed]'
                       }
                       focus:outline-none focus:ring-4 focus:ring-[#90cdf4]/30

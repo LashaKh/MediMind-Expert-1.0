@@ -33,6 +33,7 @@ interface ReportEditCardProps {
   onError: (error: Error) => void
   className?: string
   reportMetadata?: ReportMetadata
+  transcriptData?: string  // Combined transcript with dual versions (optional)
 }
 
 const ReportEditCard: React.FC<ReportEditCardProps> = ({
@@ -43,7 +44,8 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
   onEditComplete,
   onError,
   className = '',
-  reportMetadata
+  reportMetadata,
+  transcriptData
 }) => {
   const [currentContent, setCurrentContent] = useState(initialContent)
   const [isProcessing, setIsProcessing] = useState(false)
@@ -142,7 +144,6 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
 
     // Reconstruct EXACT same card title format as original generation
     let cardTitle: string;
-    let reportType: string;
 
     // Determine if this is Form 100 or Initial Consult based on metadata
     if (metadata?.reportType === 'form 100' || metadata?.cardTitle?.startsWith('Form 100 -')) {
@@ -150,31 +151,36 @@ const ReportEditCard: React.FC<ReportEditCardProps> = ({
       cardTitle = (diagnosisCode && diagnosisName)
         ? `Form 100 - (${diagnosisCode}) ${diagnosisName}`
         : 'Form 100 - Emergency Report';
-      reportType = 'form 100';
     } else {
       // Initial Consult format: "Initial Diagnosis - (CODE) NAME" (from GeorgianSTTApp.tsx:478)
+      // OR Template format: just the template name
       cardTitle = (diagnosisCode && diagnosisName)
         ? `Initial Diagnosis - (${diagnosisCode}) ${diagnosisName}`
         : metadata?.cardTitle || 'Medical Report';
-      reportType = 'Initial Consult';
     }
 
     console.log('🔧 Reconstructed card title:', {
       original: metadata?.cardTitle,
       parsed: { diagnosisCode, diagnosisName },
-      final: cardTitle,
-      type: reportType
+      final: cardTitle
     });
 
-    // Use EXACT same question format as original generation but with edit instruction
-    const questionContent = `Card Title: ${cardTitle}
-Type: ${reportType}
+    // Build User Edit Instruction with transcript data (mirror initial generation format)
+    let userEditInstruction = instruction.trim();
 
-Generated Initial Consult:
+    if (transcriptData && transcriptData.trim()) {
+      userEditInstruction = `${instruction.trim()}\n--- Transcription ---\n${transcriptData.trim()}`;
+    }
+
+    // Unified format for ALL edit requests
+    const questionContent = `Card Title: ${cardTitle}
+Type: Edit
+
+Generated Report:
 ${content}
 
 User Edit Instruction:
-${instruction}`;
+${userEditInstruction}`;
 
     // Use EXACT same request format as form100Service.ts (lines 244-249)
     return {
@@ -183,7 +189,7 @@ ${instruction}`;
         sessionId: metadata?.originalSessionId || sessionId
       }
     };
-  }, [sessionId]);
+  }, [sessionId, transcriptData]);
 
   // Update content when initialContent changes
   useEffect(() => {

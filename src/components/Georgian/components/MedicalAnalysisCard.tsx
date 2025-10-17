@@ -167,9 +167,9 @@ const getAnalysisType = (instruction: string, model?: string): { type: string; i
     if (lower.includes('template:')) {
       // Extract template name from instruction like "Template: Test Template"
       const templateMatch = instruction.match(/Template:\s*([^\n]+)/i);
-      const templateName = templateMatch?.[1]?.trim() || 'Custom Template';
+      const templateName = templateMatch?.[1]?.trim() || 'Template Report';
       return {
-        type: `Custom Template: ${templateName}`,
+        type: templateName,  // Just the template name (e.g., "AFIB")
         icon: FileText,
         color: 'from-[#2b6cb0] via-[#1a365d] to-[#2b6cb0]', // Match cardiac consult premium styling
         isDiagnosis: true,

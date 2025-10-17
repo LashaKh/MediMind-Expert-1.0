@@ -30,6 +30,7 @@ interface AnalysisCardEditModeProps {
   flowiseEndpoint?: string;
   onEditComplete: (editResult: any) => void;
   onEditError: (error: Error) => void;
+  transcriptData?: string;  // Combined transcript with dual versions (optional)
 }
 
 export const AnalysisCardEditMode: React.FC<AnalysisCardEditModeProps> = ({
@@ -39,7 +40,8 @@ export const AnalysisCardEditMode: React.FC<AnalysisCardEditModeProps> = ({
   enableEditing = false,
   flowiseEndpoint,
   onEditComplete,
-  onEditError
+  onEditError,
+  transcriptData
 }) => {
   if (!isEditMode || !enableEditing || !analysisType.isDiagnosis || !flowiseEndpoint) {
     return null;
@@ -67,9 +69,10 @@ export const AnalysisCardEditMode: React.FC<AnalysisCardEditModeProps> = ({
             className="border-2 border-[#63b3ed]/50 dark:border-[#2b6cb0]/50 shadow-2xl shadow-[#2b6cb0]/10"
             reportMetadata={{
               cardTitle: analysisType.type,
-              reportType: analysisType.isDiagnosis ? 'Initial Consult' : 'medical analysis',
+              reportType: 'Edit',  // All edits use "Edit" type
               originalSessionId: `edit-${analysis.timestamp}`
             }}
+            transcriptData={transcriptData}
           />
         </div>
       </div>

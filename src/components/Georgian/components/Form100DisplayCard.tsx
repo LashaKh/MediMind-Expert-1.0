@@ -39,6 +39,7 @@ interface Form100DisplayCardProps {
   };
   sessionId?: string;
   flowiseEndpoint?: string;
+  transcriptData?: string;  // Combined transcript with dual versions (optional)
 
   // Handlers
   onForm100ExpandToggle: () => void;
@@ -59,6 +60,7 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
   analysisType,
   sessionId,
   flowiseEndpoint,
+  transcriptData,
   onForm100ExpandToggle,
   onForm100EditToggle,
   onForm100EditComplete,
@@ -202,11 +204,12 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                       className="border-2 border-[#2b6cb0]/50 dark:border-[#1a365d]/50 shadow-2xl shadow-[#2b6cb0]/10"
                       reportMetadata={{
                         cardTitle: `Form 100 - (${icdCode}) ${analysisType.type.replace(/^.*\([^)]*\)\s*/, '')}`,
-                        reportType: 'form 100',
+                        reportType: 'Edit',  // All edits use "Edit" type
                         diagnosisCode: icdCode,
                         diagnosisName: analysisType.type.replace(/^.*\([^)]*\)\s*/, ''),
                         originalSessionId: sessionId
                       }}
+                      transcriptData={transcriptData}
                     />
                   </div>
                 </div>
