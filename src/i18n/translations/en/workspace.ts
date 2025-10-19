@@ -88,6 +88,16 @@ export const workspace = {
         badge: 'AI-Driven',
         features: ['Predictive Analytics', 'Team Workflows', 'Smart Documentation'],
         launch: 'Launch Case Intelligence'
+      },
+      mediscribe: {
+        title: 'MediScribe',
+        subtitle: 'Georgian Medical Transcription',
+        description: 'Real-time Georgian medical transcription system with AI-powered speech recognition, automated session management, and seamless clinical documentation workflow.',
+        statsValue: '<200ms',
+        statsLabel: 'Response',
+        badge: 'Real-Time',
+        features: ['Voice Recognition', 'Auto-Segmentation', 'Session Management'],
+        launch: 'Launch MediScribe'
       }
     },
     metrics: {

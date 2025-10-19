@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, FileText, Activity, Zap, Plus } from 'lucide-react';
 
 interface AuthStatus {
@@ -28,6 +29,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
   onCreateSession,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="lg:hidden bg-white border-b border-[#90cdf4]/30 relative z-10">
@@ -51,10 +53,10 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
           </div>
           <div className="text-center">
             <h1 className="text-xl font-bold text-[#1a365d] leading-tight">
-              MediScribe
+              {t('mediscribe.title', 'MediScribe')}
             </h1>
             <p className="text-sm text-[#2b6cb0] font-medium leading-tight">
-              AI Transcription
+              {t('mediscribe.subtitle', 'AI Transcription')}
             </p>
           </div>
         </div>

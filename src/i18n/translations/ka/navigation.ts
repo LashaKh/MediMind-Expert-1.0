@@ -14,6 +14,7 @@ export default {
   knowledgeBase: 'ცოდნის ბაზა',
   profile: 'პროფილი და პარამეტრები',
   toggleMenu: 'მენიუს გადართვა',
+  menu: 'მენიუ',
   bloodGasAnalysis: 'სისხლის აირების ანალიზი',
   diseaseLibrary: 'დაავადებების ბიბლიოთეკა',
   diseaseLibrarySubtitle: 'დაავადებების სრული მონაცემთა ბაზა',
@@ -27,6 +28,7 @@ export default {
 
   // Sidebar additional items
   mediscribe: 'მედი-სკრაიბი',
+  analytics: 'ანალიტიკის დაფა',
   analyticsDashboard: 'ანალიტიკის დაფა',
 
   // Sidebar subtitles

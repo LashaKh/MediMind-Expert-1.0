@@ -94,17 +94,17 @@ export const ObGynWorkspace: React.FC = () => {
     },
     {
       id: 'abg-analysis',
-      title: 'Blood Gas Analysis',
-      subtitle: 'AI-Powered ABG Intelligence',
-      description: 'Advanced blood gas analysis with AI-powered interpretation and automated action plans',
+      title: t('workspace.cardiology.featureCards.abgAnalysis.title', 'Blood Gas Analysis'),
+      subtitle: t('workspace.cardiology.featureCards.abgAnalysis.subtitle', 'AI-Powered ABG Intelligence'),
+      description: t('workspace.cardiology.featureCards.abgAnalysis.description', 'Advanced blood gas analysis with AI-powered interpretation and automated action plans'),
       icon: TestTube2,
       gradient: 'from-red-500 via-rose-500 to-pink-600',
       bgGradient: 'from-red-50/80 via-rose-50/60 to-pink-50/80',
       glowColor: 'shadow-red-500/25',
-      buttonText: 'Analyze Blood Gas',
+      buttonText: t('workspace.cardiology.featureCards.abgAnalysis.launch', 'Analyze Blood Gas'),
       onClick: goToABGAnalysis,
-      stats: 'AI Enhanced',
-      badge: 'Smart'
+      stats: t('workspace.cardiology.featureCards.abgAnalysis.statsValue', 'AI'),
+      badge: t('workspace.cardiology.featureCards.abgAnalysis.badge', 'Smart Analysis')
     },
     {
       id: 'case-management',

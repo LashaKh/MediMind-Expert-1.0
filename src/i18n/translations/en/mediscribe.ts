@@ -1,4 +1,7 @@
 export default {
+  title: 'MediScribe',
+  subtitle: 'AI Transcription',
+
   unsupported: {
     title: 'Browser Not Supported',
     description: 'Your browser doesn\'t support audio recording. Please use a modern browser like Chrome, Firefox, or Safari.',
@@ -221,8 +224,11 @@ export default {
     today: 'Today',
     yesterday: 'Yesterday',
     thisWeek: 'This Week',
+    thisweek: 'This Week', // lowercase alias
     thisMonth: 'This Month',
+    thismonth: 'This Month', // lowercase alias
     older: 'Older',
+    words: 'words',
     justNow: 'Just now',
     minutesAgo: '{count}m ago',
     hoursAgo: '{count}h ago',

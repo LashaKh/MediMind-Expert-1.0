@@ -49,7 +49,7 @@ export const HelpCenter: React.FC = () => {
           title: t('help.articles.accountSetup.title', 'Account Setup & First Login'),
           difficulty: 'beginner',
           tags: ['setup', 'account', 'onboarding'],
-          content: t('help.articles.accountSetup.content', `
+          content: `
 # Account Setup & First Login
 
 Get started with your MediMind Expert account and complete the essential setup steps.
@@ -160,11 +160,11 @@ After completing your account setup:
 4. Upload your first medical document
 
 *Estimated setup time: 5-10 minutes*
-          `)
+          `
         },
         {
           id: 'platform-tour',
-          title: 'Complete Platform Tour',
+          title: t('help.articles.platform-tour.title', 'Complete Platform Tour'),
           difficulty: 'beginner',
           tags: ['tour', 'navigation', 'features'],
           content: `
@@ -409,7 +409,7 @@ Now that you understand the platform:
         },
         {
           id: 'first-steps',
-          title: 'Your First Steps in MediMind Expert',
+          title: t('help.articles.first-steps.title', 'Your First Steps in MediMind Expert'),
           difficulty: 'beginner',
           tags: ['onboarding', 'basics', 'quickstart'],
           content: `
@@ -574,7 +574,7 @@ ${profile?.medical_specialty === 'cardiology' ? `   - Try the **ASCVD Risk Calcu
         },
         {
           id: 'workspace-overview',
-          title: 'Understanding Your Workspace',
+          title: t('help.articles.workspace-overview.title', 'Understanding Your Workspace'),
           difficulty: 'beginner',
           tags: ['workspace', 'navigation'],
           content: `

@@ -36,22 +36,8 @@ export default {
   documents,
   medical,
   validation,
-  'knowledge-base': {
-    ...knowledgeBase,
-    // Additional kebab-case aliases for backwards compatibility
-    totalLibrary: knowledgeBase.totalLibrary,
-    documentsCount: knowledgeBase.documentsCount,
-    ready: knowledgeBase.ready,
-    processed: knowledgeBase.processed,
-    processing: knowledgeBase.processing,
-    inQueue: knowledgeBase.inQueue,
-    storage: knowledgeBase.storage,
-    totalUsed: knowledgeBase.totalUsed,
-    uploadDocuments: knowledgeBase.uploadDocuments,
-    refresh: knowledgeBase.refresh,
-    monitor: knowledgeBase.monitor,
-    searchYourKnowledgeBase: knowledgeBase.searchYourKnowledgeBase
-  },
+  knowledgeBase,
+  'knowledge-base': knowledgeBase, // Alias for kebab-case access
   podcast,
   search,
   news,

@@ -20,6 +20,7 @@ import {
   FileIcon
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
+import { useTranslation } from 'react-i18next';
 // import { ProductionControls } from './ProductionControls'; // Removed - using parallel processing
 
 // Import mobile compact attachment styles
@@ -144,6 +145,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   showEmptyFieldIndicator = true,
   // STT Model selection props removed - now using automatic parallel processing
 }) => {
+  const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const attachmentInputRef = useRef<HTMLInputElement>(null);
 
@@ -239,9 +241,9 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                     <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#2b6cb0] to-[#63b3ed] flex items-center justify-center shadow-sm">
                       <FileText className="w-3.5 h-3.5 text-white" />
                     </div>
-                    <span>Session Title</span>
+                    <span>{t('mediscribe.sessionTitle.label', 'Session Title')}</span>
                     {!currentSession && (
-                      <span className="text-red-600 text-base font-bold" title="Required field">*</span>
+                      <span className="text-red-600 text-base font-bold" title={t('mediscribe.form.requiredField', 'Required field')}>*</span>
                     )}
                   </label>
 
@@ -257,7 +259,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                       <input
                         ref={titleInputRef}
                         type="text"
-                        placeholder={currentSession ? "Edit session title..." : "Enter a descriptive title for this medical session..."}
+                        placeholder={currentSession ? t('mediscribe.sessionTitle.editPlaceholder', 'Edit session title...') : t('mediscribe.sessionTitle.newPlaceholder', 'Enter a descriptive title for this medical session...')}
                         value={currentSession ? currentSession.title : pendingSessionTitle}
                         onChange={(e) => {
                           // Mark as touched when user types
@@ -320,7 +322,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                     <div className="mt-2.5 flex items-center space-x-2 text-sm text-red-600 font-semibold bg-red-50 border-l-4 border-red-600 px-3 py-2.5 rounded-r-lg animate-in slide-in-from-left-2 duration-300">
                       <div className="flex items-center space-x-1.5">
                         <span className="inline-block w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-                        <span>⚠️ Session title is required before recording</span>
+                        <span>⚠️ {t('mediscribe.sessionTitle.requiredWarning', 'Session title is required before recording')}</span>
                       </div>
                     </div>
                   )}
@@ -329,7 +331,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                   {!isTitleEmpty && !titleError && pendingSessionTitle.length >= 3 && (
                     <div className="mt-2 flex items-center space-x-1.5 text-xs text-[#2b6cb0] font-medium">
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#2b6cb0]"></span>
-                      <span>✓ Title looks good!</span>
+                      <span>✓ {t('mediscribe.sessionTitle.looksGood', 'Title looks good!')}</span>
                     </div>
                   )}
                 </div>
@@ -501,7 +503,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                     value={displayTranscript}
                     onChange={(e) => onEditChange(e.target.value)}
                     className={`transcription-textarea w-full resize-none border-0 px-5 py-5 sm:px-6 sm:py-4 lg:px-6 lg:py-4 text-base sm:text-base lg:text-base leading-relaxed mediscribe-mobile-textarea ${isKeyboardAdjusted ? 'keyboard-adjusted' : ''}`}
-                    placeholder={isTitleEmpty ? "Please enter a session title above to start..." : ""}
+                    placeholder={isTitleEmpty ? t('mediscribe.transcriptPlaceholder.titleRequired', 'Please enter a session title above to start...') : ""}
                     disabled={isTitleEmpty}
                     dir="auto"
                     style={{
@@ -583,7 +585,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
               <button
                 onClick={handleFileUploadClick}
                 disabled={recordingState.isRecording}
-                title={recordingState.isRecording ? "Cannot upload files during recording" : "Upload an audio file for transcription"}
+                title={recordingState.isRecording ? t('mediscribe.uploadButton.disabledTitle', 'Cannot upload during recording') : t('mediscribe.uploadButton.title', 'Upload audio file')}
                 className={`
                   mediscribe-mobile-footer-button
                   flex items-center justify-center
@@ -599,7 +601,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
               <button
                 onClick={handleAttachmentUploadClick}
                 disabled={recordingState.isRecording}
-                title={recordingState.isRecording ? "Cannot attach files during recording" : "Attach documents, images, or files"}
+                title={recordingState.isRecording ? t('mediscribe.attachButton.disabledTitle', 'Cannot attach during recording') : t('mediscribe.attachButton.title', 'Attach files & documents')}
                 className={`
                   mediscribe-mobile-footer-button
                   flex items-center justify-center bg-gradient-to-r from-[#63b3ed] to-[#90cdf4] hover:from-[#2b6cb0] hover:to-[#63b3ed]
@@ -637,10 +639,10 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
               } ${isTitleEmpty && !recordingState.isRecording ? 'opacity-50 cursor-not-allowed' : ''}`}
               title={
                 isTitleEmpty && !recordingState.isRecording
-                  ? "Please enter a session title first"
+                  ? t('mediscribe.recordButton.titleRequired', 'Please enter a session title first')
                   : recordingState.isRecording
-                  ? "Stop recording"
-                  : "Start recording"
+                  ? t('mediscribe.recordButton.endRecording', 'Stop recording')
+                  : t('mediscribe.recordButton.startRecording', 'Start recording')
               }
             >
               {recordingState.isProcessingChunks ? (

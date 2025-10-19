@@ -504,6 +504,7 @@ Perfect for users who want to get up and running quickly with the essential feat
           `
     },
     'workspace-overview': {
+      title: 'Understanding Your Workspace',
       content: `
 # Understanding Your Workspace
 

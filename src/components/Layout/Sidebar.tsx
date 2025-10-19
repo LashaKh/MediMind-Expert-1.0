@@ -81,7 +81,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         },
         {
           icon: Mic2,
-          label: 'MediScribe',
+          label: t('navigation.mediscribe', 'MediScribe'),
           path: '/mediscribe',
           color: 'theme-mediscribe',
           shadowColor: 'shadow-blue-500/30',
@@ -105,7 +105,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         },
         {
           icon: TestTube2,
-          label: 'Blood Gas Analysis',
+          label: t('navigation.bloodGasAnalysis', 'Blood Gas Analysis'),
           path: '/abg-analysis',
           color: 'theme-abg',
           shadowColor: 'shadow-blue-500/30',
@@ -137,7 +137,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         },
         {
           icon: Database,
-          label: 'Disease Library',
+          label: t('navigation.diseaseLibrary', 'Disease Library'),
           path: '/diseases',
           color: 'theme-knowledge',
           shadowColor: 'shadow-blue-500/30',
@@ -153,7 +153,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMobile = fa
         },
         {
           icon: BarChart3,
-          label: 'Analytics Dashboard',
+          label: t('navigation.analytics', 'Analytics Dashboard'),
           path: '/analytics',
           color: 'theme-knowledge',
           shadowColor: 'shadow-blue-500/30',
