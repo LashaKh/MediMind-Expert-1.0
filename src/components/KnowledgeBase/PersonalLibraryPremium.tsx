@@ -46,6 +46,7 @@ import {
 } from './PremiumAnimations';
 import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
 import { useAuth, useSpecialty, MedicalSpecialty, useAppStore } from '../../stores/useAppStore';
+import { useTranslation } from '../../hooks/useTranslation';
 import { DocumentUpload } from './DocumentUpload';
 import { DocumentDetails } from './DocumentDetails';
 import { CommandPalette, useCommandPalette } from './CommandPalette';
@@ -983,6 +984,7 @@ const DocumentCard: React.FC<{
 
 // Main Component
 export const PersonalLibraryPremium: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { specialty } = useSpecialty();
   const { setPersonalDocumentCount } = useAppStore();
@@ -1452,21 +1454,21 @@ export const PersonalLibraryPremium: React.FC = () => {
 
   // Available categories for advanced search
   const availableCategories = useMemo(() => [
-    { value: 'research-papers', label: 'Research Papers', count: documentStats.categories['research-papers'] || 0 },
-    { value: 'clinical-guidelines', label: 'Clinical Guidelines', count: documentStats.categories['clinical-guidelines'] || 0 },
-    { value: 'case-studies', label: 'Case Studies', count: documentStats.categories['case-studies'] || 0 },
-    { value: 'protocols', label: 'Protocols', count: documentStats.categories['protocols'] || 0 },
-    { value: 'reference-materials', label: 'Reference Materials', count: documentStats.categories['reference-materials'] || 0 },
-    { value: 'personal-notes', label: 'Personal Notes', count: documentStats.categories['personal-notes'] || 0 },
-    { value: 'other', label: 'Other', count: documentStats.categories['other'] || 0 }
-  ], [documentStats.categories]);
+    { value: 'research-papers', label: t('knowledgeBase.researchPapers'), count: documentStats.categories['research-papers'] || 0 },
+    { value: 'clinical-guidelines', label: t('knowledgeBase.clinicalGuidelines'), count: documentStats.categories['clinical-guidelines'] || 0 },
+    { value: 'case-studies', label: t('knowledgeBase.caseStudies'), count: documentStats.categories['case-studies'] || 0 },
+    { value: 'protocols', label: t('knowledgeBase.protocols'), count: documentStats.categories['protocols'] || 0 },
+    { value: 'reference-materials', label: t('knowledgeBase.referenceMaterials'), count: documentStats.categories['reference-materials'] || 0 },
+    { value: 'personal-notes', label: t('knowledgeBase.personalNotes'), count: documentStats.categories['personal-notes'] || 0 },
+    { value: 'other', label: t('knowledgeBase.other'), count: documentStats.categories['other'] || 0 }
+  ], [documentStats.categories, t]);
 
   const availableFileTypes = useMemo(() => [
-    { value: 'pdf', label: 'PDF', count: processedDocuments.filter(d => d.file_type.includes('pdf')).length },
-    { value: 'image', label: 'Images', count: processedDocuments.filter(d => d.file_type.includes('image')).length },
-    { value: 'doc', label: 'Documents', count: processedDocuments.filter(d => d.file_type.includes('doc')).length },
-    { value: 'spreadsheet', label: 'Spreadsheets', count: processedDocuments.filter(d => d.file_type.includes('sheet')).length }
-  ], [processedDocuments]);
+    { value: 'pdf', label: t('knowledgeBase.pdf'), count: processedDocuments.filter(d => d.file_type.includes('pdf')).length },
+    { value: 'image', label: t('knowledgeBase.images'), count: processedDocuments.filter(d => d.file_type.includes('image')).length },
+    { value: 'doc', label: t('knowledgeBase.documentsType'), count: processedDocuments.filter(d => d.file_type.includes('doc')).length },
+    { value: 'spreadsheet', label: t('knowledgeBase.spreadsheets'), count: processedDocuments.filter(d => d.file_type.includes('sheet')).length }
+  ], [processedDocuments, t]);
 
   const availableTags = useMemo(() => {
     const allTags = new Set<string>();
@@ -1523,9 +1525,9 @@ export const PersonalLibraryPremium: React.FC = () => {
             <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 shadow-lg backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total Library</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{t('knowledge-base.totalLibrary')}</p>
                   <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{documentStats.total}</p>
-                  <p className="text-xs text-gray-500 mt-1">documents</p>
+                  <p className="text-xs text-gray-500 mt-1">{t('knowledge-base.documentsCount')}</p>
                 </div>
                 <div className={`p-3 rounded-xl bg-gradient-to-br ${theme.primaryGradient} shadow-lg`}>
                   <Archive className="w-6 h-6 text-white" />
@@ -1537,9 +1539,9 @@ export const PersonalLibraryPremium: React.FC = () => {
             <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 shadow-lg backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Ready</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{t('knowledge-base.ready')}</p>
                   <p className="text-3xl font-bold text-[#2b6cb0]">{documentStats.completed}</p>
-                  <p className="text-xs text-[#2b6cb0] mt-1">processed</p>
+                  <p className="text-xs text-[#2b6cb0] mt-1">{t('knowledge-base.processed')}</p>
                 </div>
                 <div className="p-3 rounded-xl bg-gradient-to-br from-[#2b6cb0] to-[#63b3ed] shadow-lg">
                   <CheckCircle className="w-6 h-6 text-white" />
@@ -1551,9 +1553,9 @@ export const PersonalLibraryPremium: React.FC = () => {
             <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 shadow-lg backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Processing</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{t('knowledge-base.processing')}</p>
                   <p className="text-3xl font-bold text-[#63b3ed]">{documentStats.pending}</p>
-                  <p className="text-xs text-[#63b3ed] mt-1">in queue</p>
+                  <p className="text-xs text-[#63b3ed] mt-1">{t('knowledge-base.inQueue')}</p>
                 </div>
                 <div className="p-3 rounded-xl bg-gradient-to-br from-[#63b3ed] to-[#90cdf4] shadow-lg">
                   <Activity className="w-6 h-6 text-white animate-pulse" />
@@ -1565,9 +1567,9 @@ export const PersonalLibraryPremium: React.FC = () => {
             <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 shadow-lg backdrop-blur-sm col-span-2 lg:col-span-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Storage</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{t('knowledge-base.storage')}</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{formatFileSize(documentStats.totalSize)}</p>
-                  <p className="text-xs text-gray-500 mt-1">total used</p>
+                  <p className="text-xs text-gray-500 mt-1">{t('knowledge-base.totalUsed')}</p>
                 </div>
                 <div className="p-3 rounded-xl bg-gradient-to-br from-[#90cdf4] to-[#63b3ed] shadow-lg">
                   <Cloud className="w-6 h-6 text-white" />
@@ -1599,7 +1601,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                 >
                   <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <Upload className="w-5 h-5 relative z-10" />
-                  <span className="relative z-10">Upload Documents</span>
+                  <span className="relative z-10">{t('knowledge-base.uploadDocuments')}</span>
                 </button>
                 
                 <button
@@ -1615,7 +1617,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                   `}
                 >
                   <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
-                  <span className="font-medium">Refresh</span>
+                  <span className="font-medium">{t('knowledge-base.refresh')}</span>
                 </button>
 
                 <button
@@ -1632,7 +1634,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                   title="Check OpenAI processing status for uploaded files"
                 >
                   <Activity className={`w-5 h-5 ${isMonitoring ? 'animate-pulse' : ''}`} />
-                  <span className="font-medium">{isMonitoring ? 'Checking...' : 'Monitor'}</span>
+                  <span className="font-medium">{isMonitoring ? 'Checking...' : t('knowledge-base.monitor')}</span>
                 </button>
               </div>
 
@@ -1642,7 +1644,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                   <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" />
                   <input
                     type="text"
-                    placeholder="Search your knowledge base..."
+                    placeholder={t('knowledge-base.searchYourKnowledgeBase')}
                     value={filters.searchTerm}
                     onChange={(e) => setFilters(prev => ({ ...prev, searchTerm: e.target.value }))}
                     className={`
@@ -1708,7 +1710,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                       className="absolute top-full mt-2 right-0 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-50"
                     >
                       <div className="p-2">
-                        <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sort By</p>
+                        <p className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('knowledgeBase.sortBy')}</p>
                         {['name', 'date', 'size', 'type', 'category'].map((sortOption) => (
                           <button
                             key={sortOption}
@@ -1726,7 +1728,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                               ${state.sortBy === sortOption ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600' : ''}
                             `}
                           >
-                            <span className="capitalize">{sortOption}</span>
+                            <span className="capitalize">{t(`knowledgeBase.${sortOption}`)}</span>
                             {state.sortBy === sortOption && (
                               <div className="flex items-center">
                                 {state.sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
@@ -1857,7 +1859,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="w-5 h-5 text-blue-600" />
                     <span className="text-sm font-medium text-blue-900 dark:text-blue-100">
-                      {state.selectedDocuments.size} document{state.selectedDocuments.size !== 1 ? 's' : ''} selected
+                      {state.selectedDocuments.size} {t('knowledgeBase.documentsSelected')}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -1865,13 +1867,13 @@ export const PersonalLibraryPremium: React.FC = () => {
                       onClick={handleSelectAll}
                       className="px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg transition-colors"
                     >
-                      {state.selectedDocuments.size === processedDocuments.length ? 'Deselect All' : 'Select All'}
+                      {state.selectedDocuments.size === processedDocuments.length ? t('knowledgeBase.deselectAll') : t('knowledgeBase.selectAll')}
                     </button>
                     <button
                       onClick={() => setState(prev => ({ ...prev, selectedDocuments: new Set() }))}
                       className="px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded-lg transition-colors"
                     >
-                      Clear Selection
+                      {t('knowledgeBase.clearSelection')}
                     </button>
                   </div>
                 </div>
@@ -1953,14 +1955,14 @@ export const PersonalLibraryPremium: React.FC = () => {
             </div>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               {filters.searchTerm || filters.category !== 'all' || filters.tags.length > 0
-                ? 'No documents match your search'
-                : 'Your knowledge base awaits'
+                ? t('knowledgeBase.noDocumentsMatchSearch')
+                : t('knowledgeBase.yourKnowledgeBaseAwaits')
               }
             </h3>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
               {filters.searchTerm || filters.category !== 'all' || filters.tags.length > 0
-                ? 'Try adjusting your search criteria or filters to find what you\'re looking for.'
-                : 'Start building your personal medical knowledge library by uploading your first document.'
+                ? t('knowledgeBase.tryAdjustingCriteria')
+                : t('knowledgeBase.startBuildingLibrary')
               }
             </p>
             {(!filters.searchTerm && filters.category === 'all' && filters.tags.length === 0) && (
@@ -1974,7 +1976,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                 `}
               >
                 <Upload className="w-5 h-5" />
-                <span>Upload Your First Document</span>
+                <span>{t('knowledgeBase.uploadYourFirstDocument')}</span>
               </button>
             )}
           </motion.div>
@@ -1995,7 +1997,7 @@ export const PersonalLibraryPremium: React.FC = () => {
                 </h2>
                 {total > processedDocuments.length && (
                   <span className="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 text-sm rounded-full">
-                    Showing first {processedDocuments.length} of {total} documents
+                    {t('knowledgeBase.showingFirst')} {processedDocuments.length} {t('knowledgeBase.of')} {total} {t('knowledgeBase.documentsText')}
                   </span>
                 )}
               </div>
@@ -2101,7 +2103,7 @@ export const PersonalLibraryPremium: React.FC = () => {
             >
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Upload Documents</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('knowledge-base.uploadDocuments')}</h2>
                   <button
                     onClick={() => setShowUpload(false)}
                     className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"

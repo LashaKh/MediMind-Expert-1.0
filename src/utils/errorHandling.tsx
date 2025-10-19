@@ -447,14 +447,16 @@ class ErrorHandlingManager {
    */
   private async sendToMonitoring(errorData: any): Promise<void> {
     try {
-      // In production, send to monitoring service
-      await fetch('/api/errors', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(errorData)
-      });
+      // Only send to monitoring in production
+      if (import.meta.env.PROD) {
+        await fetch('/api/errors', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(errorData)
+        });
+      }
     } catch (monitoringError) {
-
+      // Silently fail - don't log monitoring errors in development
     }
   }
 

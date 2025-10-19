@@ -22,6 +22,36 @@ export const search = {
   // Filters
   filters: {
     title: 'Фильтры поиска',
+
+    // Modal
+    modal: {
+      title: 'Расширенные медицинские фильтры',
+      subtitle: 'Уточните поиск с помощью точной фильтрации'
+    },
+
+    // Filter Categories
+    categories: {
+      quickFilters: 'Быстрые фильтры',
+      quickFiltersDesc: 'Популярные комбинации фильтров для общих поисков',
+      contentFormat: 'Контент и формат',
+      contentFormatDesc: 'Фильтрация по типу контента, формату файла и структуре документа',
+      authorityQuality: 'Авторитетность и качество',
+      authorityQualityDesc: 'Надёжность источника, статус рецензирования и качество доказательств',
+      medicalDomain: 'Медицинская область',
+      medicalDomainDesc: 'Медицинские специальности, подспециальности и клинические темы',
+      publicationAccess: 'Публикация и доступ',
+      publicationAccessDesc: 'Дата публикации, тип доступа и доступность',
+      geographicContext: 'География и контекст',
+      geographicContextDesc: 'Географическая релевантность, условия практики и популяции пациентов',
+      advancedOptions: 'Расширенные опции',
+      advancedOptionsDesc: 'Клинические испытания, параметры исследований и специализированные фильтры'
+    },
+
+    // Quick Filters
+    quickFilters: {
+      title: 'Быстрые фильтры',
+      subtitle: 'Популярные комбинации фильтров для общих медицинских поисков'
+    },
     specialty: {
       label: 'Медицинская специальность',
       all: 'Все специальности',
@@ -349,13 +379,19 @@ export const search = {
     gender: 'Пол',
     minAge: 'Мин. возраст',
     maxAge: 'Макс. возраст',
+    ageRange: 'Возрастной диапазон',
     acceptsHealthy: 'Принимает здоровых добровольцев',
     patientsOnly: 'Только пациенты',
     nearestLocation: 'Ближайшее место',
     miles: 'миль',
     checkEligibility: 'Проверить соответствие критериям',
     viewDetails: 'Подробнее',
-    lastUpdated: 'Последнее обновление'
+    lastUpdated: 'Последнее обновление',
+    filters: 'Фильтры клинических исследований',
+    clearFilters: 'Очистить фильтры',
+    recruitmentStatus: 'Статус набора',
+    locationFilter: 'Местоположение',
+    locationPlaceholder: 'Введите город или страну...'
   }
 };
 

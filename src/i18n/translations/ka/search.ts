@@ -22,6 +22,36 @@ export const search = {
   // Filters
   filters: {
     title: 'ძიების ფილტრები',
+
+    // Modal
+    modal: {
+      title: 'გაფართოებული სამედიცინო ფილტრები',
+      subtitle: 'დააზუსტეთ ძიება ზუსტი ფილტრაციით'
+    },
+
+    // Filter Categories
+    categories: {
+      quickFilters: 'სწრაფი ფილტრები',
+      quickFiltersDesc: 'პოპულარული ფილტრების კომბინაციები ზოგადი ძიებებისთვის',
+      contentFormat: 'კონტენტი და ფორმატი',
+      contentFormatDesc: 'ფილტრაცია კონტენტის ტიპის, ფაილის ფორმატისა და დოკუმენტის სტრუქტურის მიხედვით',
+      authorityQuality: 'ავტორიტეტულობა და ხარისხი',
+      authorityQualityDesc: 'წყაროს სანდოობა, რეცენზირების სტატუსი და მტკიცებულების ხარისხი',
+      medicalDomain: 'სამედიცინო სფერო',
+      medicalDomainDesc: 'სამედიცინო სპეციალობები, ქვესპეციალობები და კლინიკური თემები',
+      publicationAccess: 'პუბლიკაცია და ხელმისაწვდომობა',
+      publicationAccessDesc: 'გამოქვეყნების თარიღი, წვდომის ტიპი და ხელმისაწვდომობა',
+      geographicContext: 'გეოგრაფია და კონტექსტი',
+      geographicContextDesc: 'გეოგრაფიული რელევანტურობა, პრაქტიკის პირობები და პაციენტების პოპულაციები',
+      advancedOptions: 'დამატებითი ვარიანტები',
+      advancedOptionsDesc: 'კლინიკური კვლევები, კვლევის პარამეტრები და სპეციალიზებული ფილტრები'
+    },
+
+    // Quick Filters
+    quickFilters: {
+      title: 'სწრაფი ფილტრები',
+      subtitle: 'პოპულარული ფილტრების კომბინაციები ზოგადი სამედიცინო ძიებებისთვის'
+    },
     specialty: {
       label: 'სამედიცინო სპეციალობა',
       all: 'ყველა სპეციალობა',
@@ -349,13 +379,19 @@ export const search = {
     gender: 'სქესი',
     minAge: 'მინ. ასაკი',
     maxAge: 'მაქს. ასაკი',
+    ageRange: 'ასაკობრივი დიაპაზონი',
     acceptsHealthy: 'იღებს ჯანმრთელ მოხალისეებს',
     patientsOnly: 'მხოლოდ პაციენტები',
     nearestLocation: 'უახლოესი ადგილმდებარეობა',
     miles: 'მილი',
     checkEligibility: 'კრიტერიუმების შემოწმება',
     viewDetails: 'დეტალების ნახვა',
-    lastUpdated: 'ბოლო განახლება'
+    lastUpdated: 'ბოლო განახლება',
+    filters: 'კლინიკური კვლევების ფილტრები',
+    clearFilters: 'ფილტრების გასუფთავება',
+    recruitmentStatus: 'მონაწილეების მიღების სტატუსი',
+    locationFilter: 'ადგილმდებარეობა',
+    locationPlaceholder: 'შეიყვანეთ ქალაქი ან ქვეყანა...'
   }
 };
 

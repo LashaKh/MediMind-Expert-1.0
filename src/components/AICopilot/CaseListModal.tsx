@@ -203,13 +203,13 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'active':
-        return { color: '[#2b6cb0]', icon: Activity, label: 'Active' };
+        return { color: '[#2b6cb0]', icon: Activity, labelKey: 'statusActive' };
       case 'archived':
-        return { color: 'gray', icon: Archive, label: 'Archived' };
+        return { color: 'gray', icon: Archive, labelKey: 'statusArchived' };
       case 'review':
-        return { color: '[#63b3ed]', icon: Eye, label: 'In Review' };
+        return { color: '[#63b3ed]', icon: Eye, labelKey: 'statusInReview' };
       default:
-        return { color: 'gray', icon: Clock, label: status };
+        return { color: 'gray', icon: Clock, labelKey: null };
     }
   };
 
@@ -269,20 +269,23 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                 </div>
                 <div>
                   <h1 className="text-4xl font-bold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] bg-clip-text text-transparent mb-2">
-                    Case Study Library
+                    {t('caseLibrary.title')}
                   </h1>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4 text-gray-600">
                       <span className="text-lg font-medium">
-                        {filteredAndSortedCases.length} of {cases.length} cases
+                        {t('caseLibrary.subtitle', {
+                          filteredCount: filteredAndSortedCases.length,
+                          totalCount: cases.length
+                        })}
                       </span>
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-[#63b3ed] rounded-full animate-pulse" />
-                        <span className="text-sm">Real-time sync</span>
+                        <span className="text-sm">{t('caseLibrary.realTimeSync')}</span>
                       </div>
                     </div>
                     <div className="text-sm text-[#2b6cb0] bg-[#90cdf4]/20 px-3 py-1 rounded-full border border-[#63b3ed]/30">
-                      💡 Click card to edit • Use "Start Chat" to discuss with AI
+                      {t('caseLibrary.helpText')}
                     </div>
                   </div>
                 </div>
@@ -308,7 +311,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                   <input
                     ref={searchInputRef}
                     type="text"
-                    placeholder="Search cases by title, patient, diagnosis, tags..."
+                    placeholder={t('caseLibrary.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-14 pr-6 py-4 text-lg border-0 rounded-2xl
@@ -338,10 +341,10 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.02), 0 6px 20px rgba(0, 0, 0, 0.08)'
                       }}
                     >
-                      <option value="all">All Status</option>
-                      <option value="active">Active Cases</option>
-                      <option value="archived">Archived</option>
-                      <option value="review">In Review</option>
+                      <option value="all">{t('caseLibrary.allStatus')}</option>
+                      <option value="active">{t('caseLibrary.activeCases')}</option>
+                      <option value="archived">{t('caseLibrary.archived')}</option>
+                      <option value="review">{t('caseLibrary.inReview')}</option>
                     </select>
                     <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
                   </div>
@@ -358,11 +361,11 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.02), 0 6px 20px rgba(0, 0, 0, 0.08)'
                       }}
                     >
-                      <option value="newest">Newest First</option>
-                      <option value="oldest">Oldest First</option>
-                      <option value="title">Alphabetical</option>
-                      <option value="complexity">By Complexity</option>
-                      <option value="status">By Status</option>
+                      <option value="newest">{t('caseLibrary.newestFirst')}</option>
+                      <option value="oldest">{t('caseLibrary.oldestFirst')}</option>
+                      <option value="title">{t('caseLibrary.alphabetical')}</option>
+                      <option value="complexity">{t('caseLibrary.byComplexity')}</option>
+                      <option value="status">{t('caseLibrary.byStatus')}</option>
                     </select>
                     <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
                   </div>
@@ -374,9 +377,10 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     onClick={() => setViewMode('grid')}
                     variant={viewMode === 'grid' ? 'default' : 'ghost'}
                     size="sm"
+                    title={t('caseLibrary.gridView')}
                     className={`p-2 rounded-lg transition-all duration-300 ${
-                      viewMode === 'grid' 
-                        ? 'bg-[#2b6cb0] text-white shadow-lg' 
+                      viewMode === 'grid'
+                        ? 'bg-[#2b6cb0] text-white shadow-lg'
                         : 'hover:bg-white/80'
                     }`}
                   >
@@ -386,9 +390,10 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     onClick={() => setViewMode('list')}
                     variant={viewMode === 'list' ? 'default' : 'ghost'}
                     size="sm"
+                    title={t('caseLibrary.listView')}
                     className={`p-2 rounded-lg transition-all duration-300 ${
-                      viewMode === 'list' 
-                        ? 'bg-[#2b6cb0] text-white shadow-lg' 
+                      viewMode === 'list'
+                        ? 'bg-[#2b6cb0] text-white shadow-lg'
                         : 'hover:bg-white/80'
                     }`}
                   >
@@ -410,12 +415,12 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                   </div>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  {searchTerm || filter !== 'all' ? 'No Cases Found' : 'No Cases Yet'}
+                  {searchTerm || filter !== 'all' ? t('caseLibrary.noCasesFound') : t('caseLibrary.noCasesYet')}
                 </h3>
                 <p className="text-gray-600 text-lg max-w-md mx-auto">
-                  {searchTerm || filter !== 'all' 
-                    ? 'Try adjusting your filters or search terms to find what you\'re looking for.'
-                    : 'Start building your case library by creating your first medical case study.'
+                  {searchTerm || filter !== 'all'
+                    ? t('caseLibrary.adjustFilters')
+                    : t('caseLibrary.startBuilding')
                   }
                 </p>
               </div>
@@ -487,7 +492,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                               <complexityConfig.icon className="w-4 h-4 text-white" />
                             </div>
                                                          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${complexityConfig.bg} ${complexityConfig.text} border`}>
-                               {(caseItem.metadata?.complexity || 'medium').toUpperCase()}
+                               {t(`caseLibrary.${caseItem.metadata?.complexity || 'medium'}`)}
                              </div>
                           </div>
                           
@@ -498,7 +503,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                               className="px-4 py-2 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white hover:from-[#1a365d] hover:to-[#2b6cb0] transition-all duration-200 rounded-lg shadow-md hover:shadow-lg font-medium text-sm"
                             >
                               <MessageSquare className="w-4 h-4 mr-2" />
-                              Start Chat
+                              {t('caseLibrary.startChat')}
                             </Button>
                             
                             {/* Secondary Actions */}
@@ -509,7 +514,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                                   variant="ghost"
                                   size="sm"
                                   className="p-2 rounded-lg opacity-60 hover:opacity-100 transition-all duration-200 hover:bg-[#90cdf4]/20 hover:text-[#2b6cb0]"
-                                  title="Edit case details"
+                                  title={t('caseLibrary.editCase')}
                                 >
                                   <Edit3 className="w-4 h-4" />
                                 </Button>
@@ -519,7 +524,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                                 variant="ghost"
                                 size="sm"
                                 className="p-2 rounded-lg opacity-60 hover:opacity-100 transition-all duration-200 hover:bg-red-50 hover:text-red-600"
-                                title="Delete case"
+                                title={t('caseLibrary.deleteCase')}
                               >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
@@ -570,7 +575,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                               ))}
                               {caseItem.metadata.tags.length > 3 && (
                                 <span className="px-3 py-1 text-xs font-medium bg-gray-100 text-gray-500 rounded-full">
-                                  +{caseItem.metadata.tags.length - 3} more
+                                  +{caseItem.metadata.tags.length - 3} {t('caseLibrary.more')}
                                 </span>
                               )}
                             </div>
@@ -582,7 +587,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                           <div className="flex items-center space-x-3">
                             <div className={`flex items-center space-x-1 text-xs font-medium text-${statusConfig.color}-600`}>
                               <statusConfig.icon className="w-3 h-3" />
-                              <span>{statusConfig.label}</span>
+                              <span>{statusConfig.labelKey ? t(`caseLibrary.${statusConfig.labelKey}`) : caseItem.status}</span>
                             </div>
                             <div className="flex items-center space-x-1 text-xs text-gray-500">
                               <Calendar className="w-3 h-3" />
@@ -597,7 +602,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         {isActive && (
                           <div className="absolute top-4 left-4 flex items-center space-x-2 px-3 py-1 bg-[#2b6cb0] text-white text-xs font-semibold rounded-full shadow-lg">
                             <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                            <span>ACTIVE</span>
+                            <span>{t('caseLibrary.active')}</span>
                           </div>
                         )}
                       </div>
@@ -636,24 +641,24 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-1">
-                      Delete Case Study
+                      {t('caseLibrary.deleteTitle')}
                     </h3>
                     <p className="text-gray-600">
-                      This action cannot be undone
+                      {t('caseLibrary.deleteSubtitle')}
                     </p>
                   </div>
                 </div>
               </div>
-              
+
               {/* Content */}
               <div className="p-8 space-y-6">
                 <div className="p-6 bg-red-50/80 border border-red-200/60 rounded-2xl backdrop-blur-sm">
                   <p className="text-gray-700 leading-relaxed">
-                    You're about to permanently delete{' '}
+                    {t('caseLibrary.deleteMessage')}{' '}
                     <span className="font-bold text-red-700">
                       "{showDeleteConfirm.case.title}"
                     </span>
-                    . All case data, conversations, and associated files will be removed from your library.
+                    . {t('caseLibrary.deleteWarning')}
                   </p>
                 </div>
                 
@@ -665,7 +670,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     disabled={isDeleting === showDeleteConfirm.case.id}
                     className="flex-1 sm:flex-none py-3 px-6 rounded-xl bg-white/80 hover:bg-white border-gray-300 font-medium transition-all duration-300"
                   >
-                    Keep Case
+                    {t('caseLibrary.keepCase')}
                   </Button>
                   <Button
                     onClick={handleConfirmDelete}
@@ -675,12 +680,12 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     {isDeleting === showDeleteConfirm.case.id ? (
                       <span className="flex items-center justify-center">
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                        Deleting...
+                        {t('caseLibrary.deleting')}
                       </span>
                     ) : (
                       <span className="flex items-center justify-center">
                         <Trash2 className="w-4 h-4 mr-2" />
-                        Delete Permanently
+                        {t('caseLibrary.deletePermanently')}
                       </span>
                     )}
                   </Button>

@@ -19,27 +19,27 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ className = 
   const navigationItems = [
     {
       icon: MessageSquare,
-      label: 'AI Chat',
+      label: t('navigation.aiChat', 'AI Chat'),
       path: '/ai-copilot',
-      shortLabel: 'Chat'
+      shortLabel: t('navigation.aiChat', 'Chat')
     },
     {
       icon: Search,
-      label: 'Search',
+      label: t('navigation.search', 'Search'),
       path: '/search',
-      shortLabel: 'Search'
+      shortLabel: t('navigation.search', 'Search')
     },
     {
       icon: Calculator,
-      label: 'Calculators',
+      label: t('navigation.calculators', 'Calculators'),
       path: '/calculators',
-      shortLabel: 'Calc'
+      shortLabel: t('navigation.calc', 'Calc')
     },
     {
       icon: User,
-      label: 'Profile',
+      label: t('navigation.profile', 'Profile'),
       path: '/profile',
-      shortLabel: 'Profile'
+      shortLabel: t('navigation.profile', 'Profile')
     }
   ];
 

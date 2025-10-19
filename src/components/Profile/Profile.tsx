@@ -63,7 +63,7 @@ export const Profile: React.FC = () => {
     setIsLoading(true);
     
     if (!user?.id) {
-      setError('User not authenticated');
+      setError(t('profile.userNotAuthenticated'));
       setIsLoading(false);
       return;
     }
@@ -87,7 +87,7 @@ export const Profile: React.FC = () => {
     );
 
     if (error) {
-      setError('Failed to load profile information');
+      setError(t('profile.failedToLoadProfile'));
     } else {
       setProfile(data);
       setFormData({
@@ -119,7 +119,7 @@ export const Profile: React.FC = () => {
     }
 
     if (!user?.id) {
-      setError('User not authenticated');
+      setError(t('profile.userNotAuthenticated'));
       setIsSaving(false);
       return;
     }
@@ -329,8 +329,8 @@ export const Profile: React.FC = () => {
               <div className="p-8 space-y-8">
                 {/* Enhanced Personal Information Section */}
                 <MedicalFormSection
-                  title="Personal Information"
-                  subtitle="Your basic information and professional identity"
+                  title={t('profile.personalInformationTitle')}
+                  subtitle={t('profile.personalInformationSubtitle')}
                   icon={<User className="w-6 h-6" />}
                   delay={0}
                 >
@@ -364,8 +364,8 @@ export const Profile: React.FC = () => {
 
                 {/* Enhanced Professional Details Section */}
                 <MedicalFormSection
-                  title="Professional Details"
-                  subtitle="Your medical specialty and professional background"
+                  title={t('profile.professionalDetailsTitle')}
+                  subtitle={t('profile.professionalDetailsSubtitle')}
                   icon={<Stethoscope className="w-6 h-6" />}
                   delay={200}
                 >
@@ -383,7 +383,7 @@ export const Profile: React.FC = () => {
                                 specialty.value === 'psychiatry' ? <Brain className="w-4 h-4" /> :
                                 <Stethoscope className="w-4 h-4" />
                         }))}
-                        placeholder="Select your medical specialty"
+                        placeholder={t('profile.selectSpecialty')}
                         required
                         delay={300}
                       />
@@ -406,8 +406,8 @@ export const Profile: React.FC = () => {
 
                 {/* Enhanced About Me Section */}
                 <MedicalFormSection
-                  title="About Me / Professional Context"
-                  subtitle="Share your professional context to help AI provide better assistance"
+                  title={t('profile.aboutMeTitle')}
+                  subtitle={t('profile.aboutMeSubtitle')}
                   icon={<BookOpen className="w-6 h-6" />}
                   delay={400}
                 >
@@ -427,14 +427,14 @@ export const Profile: React.FC = () => {
                         <div className="flex items-center space-x-3 mb-4">
                           <BookOpen className="w-5 h-5 text-[#2b6cb0] dark:text-[#63b3ed]" />
                           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Professional Context
+                            {t('profile.professionalContext')}
                           </label>
                         </div>
                         <div className="prose prose-gray dark:prose-invert max-w-none">
                           <p className="text-gray-900 dark:text-gray-100 leading-relaxed whitespace-pre-wrap">
                             {profile?.about_me_context || (
                               <span className="text-gray-500 dark:text-gray-400 italic">
-                                {t('profile.notSet')} - Add your professional context to help our AI provide more personalized assistance.
+                                {t('profile.notSetAboutMe')}
                               </span>
                             )}
                           </p>
@@ -478,7 +478,7 @@ export const Profile: React.FC = () => {
               <div className="p-8">
                 <MedicalFormSection
                   title={t('profile.preferences')}
-                  subtitle="Advanced settings including notifications, themes, and AI customization"
+                  subtitle={t('profile.preferencesDesc')}
                   icon={<Settings className="w-6 h-6" />}
                   delay={0}
                 >
@@ -556,4 +556,4 @@ export const Profile: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};

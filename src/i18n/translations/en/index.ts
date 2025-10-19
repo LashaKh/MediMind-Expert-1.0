@@ -17,6 +17,9 @@ import workspace from './workspace';
 import diseases from './diseases';
 import help from './help';
 import mediscribe from './mediscribe';
+import profile from './profile';
+import caseManagement from './caseManagement';
+import caseLibrary from './caseLibrary';
 
 export default {
   common: {
@@ -33,7 +36,22 @@ export default {
   documents,
   medical,
   validation,
-  'knowledge-base': knowledgeBase,
+  'knowledge-base': {
+    ...knowledgeBase,
+    // Additional kebab-case aliases for backwards compatibility
+    totalLibrary: knowledgeBase.totalLibrary,
+    documentsCount: knowledgeBase.documentsCount,
+    ready: knowledgeBase.ready,
+    processed: knowledgeBase.processed,
+    processing: knowledgeBase.processing,
+    inQueue: knowledgeBase.inQueue,
+    storage: knowledgeBase.storage,
+    totalUsed: knowledgeBase.totalUsed,
+    uploadDocuments: knowledgeBase.uploadDocuments,
+    refresh: knowledgeBase.refresh,
+    monitor: knowledgeBase.monitor,
+    searchYourKnowledgeBase: knowledgeBase.searchYourKnowledgeBase
+  },
   podcast,
   search,
   news,
@@ -44,7 +62,10 @@ export default {
   diseases,
   help,
   mediscribe,
-  
+  profile,
+  caseManagement,
+  caseLibrary,
+
   // Tour/i18n for tour tooltips and selector
   tour: {
     common: {
@@ -177,6 +198,10 @@ export default {
     },
     steps: {
       'ai-copilot': {
+        'ai-welcome': {
+          title: '🤖 Welcome to AI Medical Co-Pilot',
+          content: '<p>Meet your intelligent medical assistant powered by advanced AI. This tour will show you how to use AI for <strong>evidence-based clinical decision support</strong> and case management.</p><p>✨ <em>Get ready to revolutionize your medical workflow!</em></p>'
+        },
         'ai-interface': {
           title: '💬 Chat Interface Overview',
           content: '<p>This is your main communication hub with the AI. The interface is designed for <strong>medical professionals</strong> with intuitive controls and clinical-focused features.</p><p>🎯 <em>Notice the medical-specific UI elements and professional styling</em></p>'
@@ -200,6 +225,99 @@ export default {
         'ai-complete': {
           title: '🎉 AI Co-Pilot Mastery Complete!',
           content: `<p>Excellent! You've mastered the AI Medical Co-Pilot. You now know how to:</p><ul><li>Communicate with AI using medical terminology</li><li>Upload and analyze medical files</li><li>Create and manage patient case studies</li><li>Get AI-powered medical insights with case context</li><li>Leverage evidence-based recommendations</li></ul><p>🚀 <em>Ready to revolutionize your medical practice with comprehensive case management!</em></p>`
+        }
+      },
+      'medical-news': {
+        'news-welcome': {
+          title: '📰 Medical News & Literature Search',
+          content: "<p>Discover our comprehensive <strong>medical search platform</strong> that combines AI-curated news, literature search, and clinical trials. Multiple trusted sources provide the latest medical developments.</p><p>🔔 <em>Your complete medical intelligence hub</em></p>"
+        }
+      },
+      'knowledge-base': {
+        'kb-welcome': {
+          title: '📚 Knowledge Base System Overview',
+          content: "<p>Welcome to MediMind's comprehensive <strong>dual knowledge system</strong>! We provide both expertly curated medical literature and your personal document library, all powered by AI.</p><p>🎓 <em>Two powerful sources of knowledge in one unified system</em></p>"
+        },
+        'kb-curated-overview': {
+          title: '🌟 Curated Medical Literature',
+          content: "<p>This is our <strong>curated knowledge base</strong>, featuring professionally selected medical literature, clinical guidelines, and evidence-based protocols from trusted professional sources.</p><p>📖 <em>Professional-grade medical knowledge at your fingertips</em></p>"
+        },
+        'kb-curated-features': {
+          title: '🔍 Curated Content Features',
+          content: "<p>The curated knowledge base offers:</p><ul><li><strong>Evidence-based filtering</strong> and source credibility</li><li><strong>Categorization by medical specialty</strong></li><li><strong>Clinical guidelines</strong> and protocols</li><li><strong>Professional recommendations</strong></li></ul><p>⚡ <em>Trusted medical information, instantly accessible</em></p>"
+        },
+        'kb-personal-transition': {
+          title: '🗃️ Now Let\'s Explore Personal Knowledge Base',
+          content: "<p>Now let's explore the <strong>Personal Library</strong> section, where you can upload and manage your own medical documents, research papers, and protocols for AI-powered search and reference.</p><p>🧠 <em>Your personalized medical intelligence system</em></p>"
+        },
+        'kb-personal-overview': {
+          title: '⚡ Personal Document Processing',
+          content: "<p>Your personal knowledge base uses <strong>advanced semantic analysis</strong> that transforms your documents into AI-understandable knowledge through vector embeddings and intelligent processing.</p><p>📚 <em>Making your personal documents accessible to AI</em></p>"
+        },
+        'kb-personal-features': {
+          title: '📁 Personal Knowledge Base Features',
+          content: "<p>Your personal knowledge system provides:</p><ul><li><strong>Multi-format document upload</strong> (PDF, Word, PowerPoint)</li><li><strong>OCR processing</strong> for scanned documents</li><li><strong>Semantic search</strong> and AI integration</li><li><strong>Smart organization</strong> and management tools</li></ul><p>⚡ <em>Your personal medical library, supercharged with AI</em></p>"
+        },
+        'kb-ai-integration': {
+          title: '🤖 Unified AI Integration',
+          content: "<p>Both knowledge bases integrate seamlessly with our AI system:</p><ul><li><strong>Smart citations</strong> from both curated and personal sources</li><li><strong>Cross-referencing capabilities</strong> between systems</li><li><strong>Contextual recommendations</strong> from all sources</li><li><strong>Unified search</strong> across your entire knowledge base</li></ul><p>🧠 <em>AI understands and references all your medical knowledge</em></p>"
+        },
+        'kb-complete': {
+          title: '🎉 Knowledge Base Mastery Achieved!',
+          content: "<p>Excellent! You've fully mastered the Knowledge Base system. You can now:</p><ul><li><strong>Access curated medical literature</strong> and professional guidelines</li><li><strong>Upload and manage</strong> your personal documents</li><li><strong>Search both systems</strong> with AI assistance</li><li><strong>Get unified citations</strong> from all sources</li></ul><p>🚀 <em>Complete medical knowledge at your command!</em></p>"
+        }
+      },
+      'disease-guidelines': {
+        'disease-welcome': { title: '🩺 Disease Guidelines', content: 'Knowledge base with evidence-based clinical pathways and protocols.' },
+        'disease-header': { title: '🌟 Knowledge Hub', content: 'Categories, protocols, and professional resources.' },
+        'disease-search': { title: '🔍 Search', content: 'Find diseases by name, symptoms, and treatment.' },
+        'disease-filters': { title: '⚙️ Filters', content: 'Filter by categories and severity levels.' },
+        'disease-evidence': { title: '📈 Evidence Levels', content: 'Understand research quality for decision-making.' },
+        'disease-cards': { title: '📋 Cards', content: 'Quick access to essential clinical details.' },
+        'disease-complete': { title: '🎉 Complete', content: 'Full knowledge base ready to use.' }
+      },
+      calculators: {
+        'calc-welcome': {
+          title: '🧮 Medical Calculators Hub',
+          content: '<p>Welcome to our comprehensive collection of <strong>16+ validated medical calculators</strong>. Every calculator has been rigorously tested for clinical accuracy and follows current guidelines.</p><p>✅ <em>100% validation success rate across all calculators</em></p>'
+        },
+        'calc-categories': {
+          title: '📊 Calculator Categories & Interface',
+          content: '<p>The calculator interface is organized by clinical use:</p><ul><li><strong>Risk Assessment</strong> - ASCVD, GRACE, CHA2DS2-VASc</li><li><strong>Heart Failure</strong> - Staging, MAGGIC, SHFM</li><li><strong>Surgical Risk</strong> - STS, EuroSCORE II</li><li><strong>Specialized</strong> - HCM Risk, DAPT</li></ul><p>🎯 <em>Each category is designed for specific clinical scenarios and provides validated medical calculations</em></p>'
+        },
+        'calc-features': {
+          title: '⚡ Advanced Calculator Features',
+          content: '<p>All calculators include <strong>professional medical features</strong>:</p><ul><li><strong>Intelligent input validation</strong> with range checking</li><li><strong>Unit conversion</strong> (metric/imperial)</li><li><strong>Clinical context warnings</strong> and alerts</li><li><strong>Comprehensive results</strong> with interpretations</li><li><strong>Evidence-based recommendations</strong></li></ul><p>🛡️ <em>Designed for accuracy and clinical safety</em></p>'
+        },
+        'calc-complete': {
+          title: '🎯 Calculator Mastery Complete!',
+          content: '<p>Excellent! You\'ve learned about our medical calculator system. You now understand:</p><ul><li>How to navigate calculator categories</li><li>The advanced validation and safety features</li><li>How to apply evidence-based medicine</li><li>The clinical accuracy and guideline compliance</li></ul><p>🏆 <em>Ready to use validated medical calculators in your practice!</em></p>'
+        }
+      },
+      'abg-analysis': {
+        'abg-welcome': {
+          title: '🩸 Blood Gas Analysis Engine',
+          content: '<p>Master our <strong>AI-powered ABG analysis system</strong>. Get instant interpretations, comprehensive assessments, and treatment recommendations for arterial blood gas results.</p><p>⚕️ <em>Advanced clinical decision support for critical care medicine</em></p>'
+        },
+        'abg-header': {
+          title: '🎯 ABG Analysis Header',
+          content: '<p>Your comprehensive blood gas analysis workspace, featuring:</p><ul><li><strong>Medical-grade AI badge</strong> - Professional certification</li><li><strong>Quick access to history</strong> - View previous analyses</li><li><strong>AI-powered intelligence</strong> - Clinical decision support</li><li><strong>Professional workflow design</strong> - Optimized for healthcare professionals</li></ul><p>👩‍⚕️ <em>Built for rapid clinical decision-making</em></p>'
+        },
+        'abg-workflow': {
+          title: '📊 Workflow Progress System',
+          content: '<p>Track your analysis progress through our <strong>4-step workflow</strong>:</p><ul><li><strong>Upload</strong> - Select blood gas report</li><li><strong>Analysis</strong> - AI vision processing</li><li><strong>Interpretation</strong> - Clinical analysis</li><li><strong>Action Plan</strong> - Treatment recommendations</li></ul><p>⚡ <em>Visual progress tracking with real-time updates</em></p>'
+        },
+        'abg-type-selection': {
+          title: '🧪 Blood Gas Type Selection',
+          content: '<p>Choose the appropriate analysis type:</p><ul><li><strong>Arterial Blood Gas</strong> - Standard ABG analysis</li><li><strong>Venous Blood Gas</strong> - Venous sample analysis</li><li><strong>Smart selection</strong> - Optimizes AI processing</li><li><strong>Type-specific interpretation</strong> - Tailored clinical insights</li></ul><p>🎯 <em>Accurate type selection ensures optimal AI analysis</em></p>'
+        },
+        'abg-image-upload': {
+          title: '📁 Image Upload Interface',
+          content: '<p>Upload your blood gas report using <strong>multiple methods</strong>:</p><ul><li><strong>Drag and drop</strong> - Simply drag files to the upload zone</li><li><strong>File selection</strong> - Click to select from your device</li><li><strong>Camera capture</strong> - Take a photo directly</li><li><strong>Multiple formats</strong> - Supports JPEG, PNG, WebP</li></ul><p>🧠 <em>AI automatically extracts data from uploaded images</em></p>'
+        },
+        'abg-complete': {
+          title: '🎯 ABG Analysis Mastery Complete!',
+          content: '<p>Excellent! You\'ve mastered ABG analysis. You can now:</p><ul><li><strong>Upload blood gas reports</strong> via image or camera</li><li><strong>Select appropriate analysis types</strong> for optimal processing</li><li><strong>Track workflow progress</strong> through our 4-step system</li><li><strong>Access complete history</strong> and professional features</li></ul><p>🏆 <em>Ready for expert-level blood gas analysis workflows!</em></p>'
         }
       }
     }
@@ -322,99 +440,6 @@ export default {
     startNewConversationHint: 'Start a new conversation to begin your chat history',
     createFirstConversation: 'Create your first conversation',
     caseStudy: 'Case Study'
-  },
-  
-  // Profile management
-  profile: {
-    language: 'Language',
-    profileInfo: 'Profile Information',
-    security: 'Security',
-    preferences: 'Preferences',
-    fullName: 'Full Name',
-    medicalSpecialty: 'Medical Specialty',
-    aboutMe: 'About Me / Professional Context',
-    editProfile: 'Edit Profile',
-    saveChanges: 'Save Changes',
-    cancel: 'Cancel',
-    saving: 'Saving...', 
-    noNameSet: 'No name set',
-    notSet: 'Not set',
-    unknown: 'Unknown',
-    memberSince: 'Member since',
-    enterFullName: 'Enter your full name',
-    aboutMeDesc: 'This information helps the AI provide more personalized assistance based on your background and experience.',
-    aboutMePlaceholder: 'Tell us about your medical background, experience, areas of interest, or any other context that would help the AI assist you better...', 
-    selectSpecialty: 'Select a specialty',
-    cardiology: 'Cardiology',
-    obgyn: 'Obstetrics & Gynecology',
-    internalMedicine: 'Internal Medicine',
-    emergencyMedicine: 'Emergency Medicine',
-    pediatrics: 'Pediatrics',
-    surgery: 'Surgery',
-    familyMedicine: 'Family Medicine',
-    psychiatry: 'Psychiatry',
-    radiology: 'Radiology',
-    anesthesiology: 'Anesthesiology',
-    other: 'Other',
-    nameMinLength: 'Full name must be at least 2 characters long',
-    updateSuccess: 'Profile updated successfully!',
-    updateError: 'Failed to update profile. Please try again.',
-    passwordUpdateSuccess: 'Password updated successfully!',
-    comingSoon: 'Coming Soon',
-    preferencesDesc: 'Advanced preferences including notifications, themes, language settings, and AI assistant customization will be available soon.',
-    
-    // Enhanced profile page elements
-    personalInformation: 'Personal Information',
-    professionalDetails: 'Professional Details',
-    quickActions: 'Quick Actions',
-    viewAnalytics: 'View Analytics',
-    achievements: 'Achievements',
-    securitySettings: 'Security Settings',
-    keepAccountSecure: 'Keep your account secure with strong authentication',
-    profileStats: 'Profile Stats',
-    profileComplete: 'Profile Complete',
-    securityScore: 'Security Score',
-    lastActive: 'Last Active',
-    now: 'Now',
-    uploadNewPhoto: 'Upload New Photo',
-    changePhoto: 'Change Photo',
-    photoGuidelines: 'Photo Guidelines',
-    squareImageRecommended: 'Square image, minimum 200×200 pixels recommended',
-    maxFileSize: 'Maximum file size: 5MB',
-    supportedFormats: 'Supported formats: JPG, PNG, GIF',
-    settings: 'Settings',
-    systemStatus: 'System Status',
-    online: 'Online',
-    mediMindExpert: 'MediMind Expert v2.0',
-    medicalAiAssistant: 'Medical AI Assistant',
-    display: 'Display',
-    themeLayout: 'Theme & Layout',
-    notifications: 'Notifications',
-    alertsUpdates: 'Alerts & Updates',
-    aiAssistant: 'AI Assistant',
-    personalization: 'Personalization',
-    
-    // Password change form
-    changePassword: 'Change Password',
-    currentPassword: 'Current Password',
-    newPassword: 'New Password',
-    confirmNewPassword: 'Confirm New Password',
-    enterCurrentPassword: 'Enter your current password',
-    enterNewPassword: 'Enter your new password',
-    confirmNewPasswordPlaceholder: 'Confirm your new password',
-    passwordRequirements: 'Password must be at least 8 characters with uppercase, lowercase, and number',
-    updatePassword: 'Update Password',
-    updating: 'Updating...', 
-    
-    // Password validation messages
-    currentPasswordRequired: 'Current password is required',
-    newPasswordRequired: 'New password is required',
-    newPasswordMinLength: 'New password must be at least 8 characters long',
-    newPasswordDifferent: 'New password must be different from current password',
-    passwordsDoNotMatch: 'New password and confirmation do not match',
-    passwordComplexity: 'New password must contain at least one uppercase letter, one lowercase letter, and one number',
-    noAuthenticatedUser: 'No authenticated user found',
-    passwordUpdateFailed: 'Failed to update password. Please try again.'
   },
   
   // Landing page
@@ -690,8 +715,8 @@ export default {
 
   // Medical specialties
   specialties: {
-    cardiology: 'Cardiology',
-    obgyn: 'Obstetrics & Gynecology',
+    cardiology: 'cardiology',
+    obgyn: 'OB/GYN',
     internalMedicine: 'Internal Medicine',
     emergencyMedicine: 'Emergency Medicine',
     familyMedicine: 'Family Medicine',

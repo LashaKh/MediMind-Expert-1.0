@@ -1,4 +1,9 @@
 export default {
+  unsupported: {
+    title: 'ბრაუზერი მხარდაჭერილი არ არის',
+    description: 'თქვენი ბრაუზერი არ უჭერს მხარს აუდიო ჩაწერას. გთხოვთ, გამოიყენოთ თანამედროვე ბრაუზერი, როგორიცაა Chrome, Firefox ან Safari.',
+  },
+  emptyFields: 'თქვენ გაქვთ {count} ცარიელი ველი',
   transcriptPlaceholder: {
     default: 'თქვენი ტრანსკრიპტი აქ გამოჩნდება...',
     titleRequired: 'გთხოვთ, შეიყვანეთ სესიის სათაური დასაწყებად...',
@@ -6,16 +11,19 @@ export default {
   },
   uploadButton: {
     title: 'აუდიო ფაილის ატვირთვა',
+    disabledTitle: 'ჩაწერის დროს ატვირთვა შეუძლებელია',
     label: 'ატვირთვა',
     sublabel: 'აუდიო ფაილი',
   },
   attachButton: {
     title: 'ფაილების და დოკუმენტების მიმაგრება',
+    disabledTitle: 'ჩაწერის დროს მიმაგრება შეუძლებელია',
     label: 'მიმაგრება',
     sublabel: 'ფაილები და დოკუმენტები',
   },
   recordButton: {
     startRecording: 'ჩაწერის დაწყება',
+    endRecording: 'ჩაწერის დასრულება',
     record: 'ჩაწერა',
     titleRequired: 'გთხოვთ, ჯერ შეიყვანეთ სესიის სათაური',
     stop: 'გაჩერება',
@@ -37,6 +45,7 @@ export default {
     minutesAgo: '{{count}} წუთის წინ',
     hoursAgo: '{{count}} საათის წინ',
     noContentYet: 'ჯერ არ არის კონტენტი',
+    ellipsis: '...',
     save: 'შენახვა',
     cancel: 'გაუქმება',
     edit: 'რედაქტირება',
@@ -134,6 +143,13 @@ export default {
   form: {
     requiredField: 'სავალდებულო ველი',
     charCounter: '{length}/100',
+  },
+  attachedFiles: {
+    title: {
+      mobile: 'მიმაგრებული ფაილები ({count})',
+      desktop: 'მიმაგრებული ფაილები ({count})',
+    },
+    readyForAnalysis: 'მზადაა ანალიზისთვის',
   },
   attachments: {
     processing: 'მუშავდება...', 

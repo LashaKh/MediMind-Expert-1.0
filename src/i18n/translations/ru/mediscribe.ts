@@ -1,4 +1,9 @@
 export default {
+  unsupported: {
+    title: 'Браузер не поддерживается',
+    description: 'Ваш браузер не поддерживает запись звука. Пожалуйста, используйте современный браузер, такой как Chrome, Firefox или Safari.',
+  },
+  emptyFields: 'У вас {count} пустых полей',
   transcriptPlaceholder: {
     default: 'Ваша расшифровка появится здесь...', 
     titleRequired: 'Пожалуйста, введите название сессии, чтобы начать...', 
@@ -6,16 +11,19 @@ export default {
   },
   uploadButton: {
     title: 'Загрузить аудиофайл',
+    disabledTitle: 'Невозможно загрузить во время записи',
     label: 'Загрузить',
     sublabel: 'Аудиофайл',
   },
   attachButton: {
     title: 'Прикрепить файлы и документы',
+    disabledTitle: 'Невозможно прикрепить во время записи',
     label: 'Прикрепить',
     sublabel: 'Файлы и документы',
   },
   recordButton: {
     startRecording: 'Начать запись',
+    endRecording: 'Закончить запись',
     record: 'Запись',
     titleRequired: 'Пожалуйста, сначала введите название сессии',
     stop: 'Стоп',
@@ -37,6 +45,7 @@ export default {
     minutesAgo: '{{count}} минуту назад',
     hoursAgo: '{{count}} час назад',
     noContentYet: 'Контента пока нет',
+    ellipsis: '...',
     save: 'Сохранить',
     cancel: 'Отмена',
     edit: 'Редактировать',
@@ -134,6 +143,13 @@ export default {
   form: {
     requiredField: 'Обязательное поле',
     charCounter: '{length}/100',
+  },
+  attachedFiles: {
+    title: {
+      mobile: 'Прикрепленные файлы ({count})',
+      desktop: 'Прикрепленные файлы ({count})',
+    },
+    readyForAnalysis: 'Готово к анализу',
   },
   attachments: {
     processing: 'Обработка...', 

@@ -9,4 +9,9 @@ export default {
   nameMinLength: 'სახელი უნდა შეიცავდეს მინიმუმ 2 სიმბოლოს',
   confirmPasswordRequired: 'გთხოვთ დაადასტუროთ თქვენი პაროლი',
   passwordRequired: 'პაროლი სავალდებულოა',
+  invalidNumber: 'გთხოვთ შეიყვანოთ სწორი რიცხვი',
+  minValue: 'მნიშვნელობა უნდა იყოს მინიმუმ {min}',
+  maxValue: 'მნიშვნელობა უნდა იყოს მაქსიმუმ {max}',
+  invalidDate: 'გთხოვთ შეიყვანოთ სწორი თარიღი',
+  invalidPhone: 'გთხოვთ შეიყვანოთ სწორი ტელეფონის ნომერი',
 };

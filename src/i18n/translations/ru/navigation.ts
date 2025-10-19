@@ -83,7 +83,30 @@ export const navigation = {
     clinicalToolsDesc: 'Профессиональные медицинские инструменты анализа',
     knowledge: 'Знания и профиль',
     knowledgeDesc: 'Образовательные ресурсы и управление аккаунтом'
-  }
+  },
+
+  // Bottom navigation labels
+  aiChat: 'ИИ Чат',
+  search: 'Поиск',
+  calc: 'Калькулятор',
+
+  // Sidebar additional items
+  mediscribe: 'Меди-Скрайб',
+  analyticsDashboard: 'Панель аналитики',
+
+  // Sidebar subtitles
+  medicalConsultationAI: 'ИИ медицинских консультаций',
+  voiceTranscription: 'Голосовая транскрипция для медицинских записей',
+  clinicalRiskAssessment: 'Инструменты оценки клинических рисков',
+  abgInterpretation: 'Интерпретация и анализ газов крови',
+  medicalLiterature: 'Медицинская литература и новости',
+  aiPoweredPodcasts: 'Медицинские подкасты на основе ИИ',
+  medicalReferenceLibrary: 'Справочная медицинская библиотека',
+  accountPreferences: 'Настройки аккаунта',
+  usageInsights: 'Аналитика использования и метрики',
+
+  // Header
+  aiMedicalCoPilot: 'ИИ медицинский ассистент'
 };
 
 export default navigation; 

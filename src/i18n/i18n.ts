@@ -16,13 +16,21 @@ const getInitialLanguage = (): LanguageCode => {
 const loadLanguage = async (language: LanguageCode) => {
   try {
     const translations = await loadLanguageResources(language);
-    
+
+    // Debug: Log what we're loading
+    if (import.meta.env.DEV) {
+      console.log(`🌍 Loading ${language} translations:`, {
+        hasProfile: !!translations.profile,
+        profileKeys: translations.profile ? Object.keys(translations.profile).slice(0, 10) : []
+      });
+    }
+
     // Add the translations to i18next
     i18n.addResourceBundle(language, 'translation', translations, true, true);
-    
+
     return translations;
   } catch (error) {
-
+    console.error(`❌ Failed to load ${language}:`, error);
     throw error;
   }
 };

@@ -16,6 +16,11 @@ import workspace from './workspace';
 import diseases from './diseases';
 import help from './help';
 import mediscribe from './mediscribe';
+import profile from './profile';
+import caseManagement from './caseManagement';
+import caseLibrary from './caseLibrary';
+import caseCreation from './case-creation';
+import onboardingTranslations from './onboarding';
 
 export default {
   common: {
@@ -33,6 +38,7 @@ export default {
   medical,
   validation,
   knowledgeBase,
+  'knowledge-base': knowledgeBase, // Alias for kebab-case access
   filters,
   search,
   news,
@@ -42,7 +48,10 @@ export default {
   diseases,
   help,
   mediscribe,
-  
+  profile,
+  caseManagement,
+  caseLibrary,
+
   tour: {
     common: {
       beginner: 'დამწყები',
@@ -302,100 +311,6 @@ export default {
       }
     }
   },
-  
-  // Additional sections
-  profile: {
-    language: 'ენა',
-    profileInfo: 'პროფილის ინფორმაცია',
-    security: 'უსაფრთხოება',
-    preferences: 'პარამეტრები',
-    fullName: 'სრული სახელი',
-    medicalSpecialty: 'სამედიცინო სპეციალობა',
-    aboutMe: 'ჩემს შესახებ / პროფესიული კონტექსტი',
-    editProfile: 'პროფილის რედაქტირება',
-    saveChanges: 'ცვლილებების შენახვა',
-    cancel: 'გაუქმება',
-    saving: 'ინახება...',
-    noNameSet: 'სახელი არ არის მითითებული',
-    notSet: 'არ არის მითითებული',
-    unknown: 'უცნობი',
-    memberSince: 'წევრი',
-    enterFullName: 'შეიყვანეთ თქვენი სრული სახელი',
-    aboutMeDesc: 'ეს ინფორმაცია დაეხმარება AI-ს უზრუნველყოს უფრო პერსონალიზებული დახმარება თქვენი გამოცდილებისა და ცოდნის საფუძველზე.',
-    aboutMePlaceholder: 'მოგვითხარით თქვენი სამედიცინო განათლების, გამოცდილების, ინტერესების სფეროების ან ნებისმიერი სხვა კონტექსტის შესახებ, რაც დაეხმარება AI-ს უკეთ დაგეხმაროთ...',
-    selectSpecialty: 'აირჩიეთ სპეციალობა',
-    cardiology: 'კარდიოლოგია',
-    obgyn: 'მეან-გინეკოლოგია',
-    internalMedicine: 'შინაგანი მედიცინა',
-    emergencyMedicine: 'გადაუდებელი მედიცინა',
-    pediatrics: 'პედიატრია',
-    surgery: 'ქირურგია',
-    familyMedicine: 'საოჯახო მედიცინა',
-    psychiatry: 'ფსიქიატრია',
-    radiology: 'რადიოლოგია',
-    anesthesiology: 'ანესთეზიოლოგია',
-    other: 'სხვა',
-    nameMinLength: 'სრული სახელი უნდა შეიცავდეს მინიმუმ 2 სიმბოლოს',
-    updateSuccess: 'პროფილი წარმატებით განახლდა!',
-    updateError: 'პროფილის განახლება ვერ მოხერხდა. სცადეთ თავიდან.',
-    passwordUpdateSuccess: 'პაროლი წარმატებით განახლდა!',
-    comingSoon: 'მალე',
-    preferencesDesc: 'გახანგრძლივებული პარამეტრები, მათ შორის შეტყობინებები, თემები, ენის პარამეტრები და AI ასისტენტის მორგება მალე იქნება ხელმისაწვდომი.',
-    closeMenu: 'მენიუს დახურვა',
-    
-    // Enhanced profile page elements
-    personalInformation: 'პირადი ინფორმაცია',
-    professionalDetails: 'პროფესიული დეტალები',
-    quickActions: 'სწრაფი მოქმედებები',
-    viewAnalytics: 'ანალიტიკის ნახვა',
-    achievements: 'მიღწევები',
-    securitySettings: 'უსაფრთხოების პარამეტრები',
-    keepAccountSecure: 'უზრუნველყავით თქვენი ანგარიშის უსაფრთხოება ძლიერი ავთენტიფიკაციით',
-    profileStats: 'პროფილის სტატისტიკა',
-    profileComplete: 'პროფილის სისრულე',
-    securityScore: 'უსაფრთხოების ქულა',
-    lastActive: 'ბოლო აქტივობა',
-    now: 'ახლა',
-    uploadNewPhoto: 'ახალი ფოტოს ატვირთვა',
-    changePhoto: 'ფოტოს შეცვლა',
-    photoGuidelines: 'ფოტოს სახელმძღვანელო',
-    squareImageRecommended: 'რეკომენდირებულია კვადრატული სურათი, მინიმუმ 200×200 პიქსელი',
-    maxFileSize: 'ფაილის მაქსიმალური ზომა: 5მბ',
-    supportedFormats: 'მხარდაჭერილი ფორმატები: JPG, PNG, GIF',
-    settings: 'პარამეტრები',
-    systemStatus: 'სისტემის სტატუსი',
-    online: 'ონლაინ',
-    mediMindExpert: 'MediMind Expert v2.0',
-    medicalAiAssistant: 'სამედიცინო AI ასისტენტი',
-    display: 'ჩვენება',
-    themeLayout: 'თემა და განლაგება',
-    notifications: 'შეტყობინებები',
-    alertsUpdates: 'გაფრთხილებები და განახლებები',
-    aiAssistant: 'AI ასისტენტი',
-    personalization: 'პერსონალიზაცია',
-    
-    // Password change form
-    changePassword: 'პაროლის შეცვლა',
-    currentPassword: 'მიმდინარე პაროლი',
-    newPassword: 'ახალი პაროლი',
-    confirmNewPassword: 'დაადასტურეთ ახალი პაროლი',
-    enterCurrentPassword: 'შეიყვანეთ თქვენი მიმდინარე პაროლი',
-    enterNewPassword: 'შეიყვანეთ თქვენი ახალი პაროლი',
-    confirmNewPasswordPlaceholder: 'დაადასტურეთ თქვენი ახალი პაროლი',
-    passwordRequirements: 'პაროლი უნდა შეიცავდეს მინიმუმ 8 სიმბოლოს დიდი, პატარა ასოებითა და ციფრით',
-    updatePassword: 'პაროლის განახლება',
-    updating: 'განახლება...',
-    
-    // Password validation messages
-    currentPasswordRequired: 'მიმდინარე პაროლი აუცილებელია',
-    newPasswordRequired: 'ახალი პაროლი აუცილებელია',
-    newPasswordMinLength: 'ახალი პაროლი უნდა შეიცავდეს მინიმუმ 8 სიმბოლოს',
-    newPasswordDifferent: 'ახალი პაროლი უნდა განსხვავდებოდეს მიმდინარე პაროლისგან',
-    passwordsDoNotMatch: 'ახალი პაროლი და დადასტურება არ ემთხვევა',
-    passwordComplexity: 'ახალი პაროლი უნდა შეიცავდეს მინიმუმ ერთ დიდ ასოს, ერთ პატარა ასოს და ერთ ციფრს',
-    noAuthenticatedUser: 'ავთენტიფიცირებული მომხმარებელი ვერ მოიძებნა',
-    passwordUpdateFailed: 'პაროლის განახლება ვერ მოხერხდა. სცადეთ თავიდან.'
-  },
   ui: {
     save: 'შენახვა',
     cancel: 'გაუქმება',
@@ -495,6 +410,7 @@ export default {
     delete: 'წაშლა',
     
     // Case list and filters
+    selectExistingCase: 'არსებული შემთხვევის არჩევა',
     all: 'ყველა',
     active: 'აქტიური',
     archived: 'არქივირებული',
@@ -511,6 +427,18 @@ export default {
     personal: 'პირადი'
   },
   
+  // Specialties
+  specialties: {
+    cardiology: 'კარდიოლოგიურ',
+    obgyn: 'მეანობა-გინეკოლოგიურ'
+  },
+
+  // Case creation
+  'case-creation': {
+    ...caseCreation,
+    createNewCase: 'ახალი შემთხვევის შექმნა',
+  },
+
   // Conversation management
   conversations: {
     title: 'საუბრები',
@@ -546,109 +474,5 @@ export default {
   },
   
   // Onboarding process
-  onboarding: {
-    welcome: 'მოგესალმებით MediMind Expert-ში',
-    setupMessage: 'მოდით შევქმნათ თქვენი პერსონალიზებული სამედიცინო სამუშაო სივრცე',
-    settingUpWorkspace: 'სამუშაო სივრცის დაყენება...',
-    steps: {
-      selectSpecialty: 'სპეციალობის არჩევა',
-      aboutYou: 'თქვენ შესახებ'
-    },
-    specialty: {
-      title: 'აირჩიეთ თქვენი სამედიცინო სპეციალობა',
-      subtitle: 'აირჩიეთ თქვენი ძირითადი პრაქტიკის სფერო პერსონალიზებული AI დახმარებისა და რესურსებისთვის',
-      featuresTitle: 'რას მიიღებთ:',
-      note: 'თქვენ შეგიძლიათ წვდომა მიიღოთ ორივე სპეციალობის რესურსებზე, მაგრამ თქვენი სამუშაო სივრცე ოპტიმიზებული იქნება თქვენი ძირითადი არჩევისთვის',
-      cardiology: {
-        name: 'კარდიოლოგია',
-        description: 'გულისა და გულ-სისხლძარღვთა სისტემის მოვლა',
-        features: {
-          cardiac: 'გულის შეფასების ინსტრუმენტები',
-          ecg: 'EKG ინტერპრეტაციის სახელმძღვანელოები',
-          heartFailure: 'გულის უკმარისობის პროტოკოლები',
-          interventional: 'ინტერვენციული კარდიოლოგიის რესურსები'
-        }
-      },
-      obgyn: {
-        name: 'მეანობა-გინეკოლოგია',
-        description: 'მეანობა და გინეკოლოგია',
-        features: {
-          prenatal: 'ღვიძლისშობამდელი მოვლის რეკომენდაციები',
-          gynecological: 'გინეკოლოგიური პროცედურები',
-          obstetric: 'მეანობის კალკულატორები',
-          reproductive: 'რეპროდუქციული ჯანმრთელობის რესურსები'
-        }
-      }
-    },
-    aboutMe: {
-      title: 'მოგვიყევით თქვენ შესახებ',
-      subtitle: 'დაგვეხმარეთ ჩვენი AI ასისტენტის პერსონალიზებაში, გაუზიარეთ კონტექსტი თქვენი პრაქტიკისა და გამოცდილების შესახებ',
-      label: 'გაუზიარეთ თქვენი პროფესიული ისტორია',
-      placeholder: 'მე ვარ კარდიოლოგი 8 წლიანი გამოცდილებით, რომელიც მუშაობს სამედიცინო ცენტრში. ვსპეციალიზირებულვარ ინტერვენციულ კარდიოლოგიაში და განსაკუთრებით ვინტერესდები კომპლექსური კორონარული ინტერვენციებით. ჩავატარე სტაჟირება...',
-      
-      // პროგრესის ინდიკატორები
-      wordCount: '{{count}} სიტყვა',
-      progressMessages: {
-        gettingStarted: 'ვიწყებთ...',
-        goodProgress: 'კარგი პროგრესი!',
-        lookingGreat: 'შესანიშნავად გამოიყურება!',
-        perfectDetail: 'დეტალების იდეალური დონე!'
-      },
-      charactersCount: '{{count}} სიმბოლო',
-      recommended: 'რეკომენდებული: 50-200 სიტყვა',
-      keepConcise: 'განიხილეთ მოკლედ დატოვება საუკეთესო შედეგებისთვის',
-      
-      // წინადადებების სექცია
-      suggestionsTitle: 'სწრაფი მინიშნებები დასაწყებად',
-      suggestionsSubtitle: 'დააჭირეთ ქვემოთ მოცემულ ნებისმიერ თემას თქვენს პროფილში დასამატებლად. ეს ეხმარება ჩვენს AI-ს უფრო რელევანტური დახმარების მიწოდებაში.',
-      
-      // წინადადების ბარათები
-      suggestions: {
-        experience: {
-          title: 'თქვენი გამოცდილება',
-          description: 'პრაქტიკის წლები, სპეციალიზაციები, სერთიფიკატები',
-          prompt: 'გაუზიარეთ თქვენი სამედიცინო გამოცდილება და მომზადება'
-        },
-        practiceSetting: {
-          title: 'პრაქტიკის გარემო',
-          description: 'საავადმყოფო, კლინიკა, კერძო პრაქტიკა, აკადემიური',
-          prompt: 'აღწერეთ თქვენი ამჟამინდელი სამუშაო გარემო'
-        },
-        clinicalInterests: {
-          title: 'კლინიკური ინტერესები',
-          description: 'ექსპერტიზის სფეროები, კვლევითი ინტერესები, ქვესპეციალობები',
-          prompt: 'რა არის თქვენი ძირითადი კლინიკური ფოკუსის სფეროები?'
-        },
-        patientPopulation: {
-          title: 'პაციენტთა პოპულაცია',
-          description: 'დემოგრაფია, შემთხვევის სირთულე, პაციენტთა ტიპები',
-          prompt: 'მოგვიყევით იმ პაციენტების შესახებ, რომლებსაც ჩვეულებრივ მკურნალობთ'
-        },
-        clinicalApproach: {
-          title: 'კლინიკური მიდგომა',
-          description: 'მკურნალობის ფილოსოფია, გადაწყვეტილების მიღების სტილი',
-          prompt: 'აღწერეთ თქვენი მიდგომა პაციენტთა მოვლისადმი'
-        },
-        education: {
-          title: 'განათლება და ტრენინგი',
-          description: 'სამედიცინო სკოლა, რეზიდენტურა, სტაჟირებები, განგრძობადი განათლება',
-          prompt: 'გაუზიარეთ თქვენი საგანმანათლებლო გამოცდილება'
-        }
-      },
-      
-      // მაგალითის სექცია
-      exampleTitle: 'პროფესიული პროფილის მაგალითი',
-      exampleText: '"მე ვარ სერთიფიცირებული კარდიოლოგი 10 წლიანი გამოცდილებით დიდ აკადემიურ სამედიცინო ცენტრში. ვსპეციალიზირებულვარ ინტერვენციულ კარდიოლოგიაში კომპლექსური კორონარული ინტერვენციებისა და სტრუქტურული გულის დაავადებების ფოკუსით. ჩავატარე სტაჟირება ჯონს ჰოპკინსში და მაქვს განსაკუთრებული ექსპერტიზა TAVR პროცედურებში. ვნახულობ დიდ მოცულობას მწვავე კორონარული სინდრომის პაციენტებს და მიყვარს სტუდენტებისა და რეზიდენტების სწავლება."',
-      
-      // ღილაკები და მოქმედებები
-      back: 'უკან',
-      skipForNow: 'ჯერჯერობით გამოტოვება',
-      completeSetup: 'დაყენების დასრულება',
-      creatingWorkspace: 'სამუშაო სივრცის შექმნა...',
-      
-      // წარმატების ანიმაცია
-      profileCreated: 'პროფილი შეიქმნა!',
-      settingUpPersonalized: 'თქვენი პერსონალიზებული სამუშაო სივრცის დაყენება...'
-    }
-  }
+  onboarding: onboardingTranslations
 }; 

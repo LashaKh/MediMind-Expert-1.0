@@ -135,8 +135,10 @@ export const ClinicalDashboard: React.FC<ClinicalDashboardProps> = ({
           {t('chat.dashboard.welcomeBack', { name: profile?.full_name?.split(' ')[0] || t('chat.dashboard.doctor', 'Doctor') })}
         </h2>
         <p className="text-slate-600">
-          {`${t('chat.dashboard.subtitle')} ${profile?.medical_specialty === 'cardiology' ? t('specialties.cardiology', 'cardiology') : 
-                       profile?.medical_specialty === 'obgyn' ? t('specialties.obgyn', 'OB/GYN') : t('chat.medical', 'medical')} practice today?`}
+          {t('chat.dashboard.subtitle', {
+            specialty: profile?.medical_specialty === 'cardiology' ? t('specialties.cardiology', 'cardiology') :
+                      profile?.medical_specialty === 'obgyn' ? t('specialties.obgyn', 'OB/GYN') : t('chat.medical', 'medical')
+          })}
         </p>
       </div>
 

@@ -42,6 +42,20 @@ import { GlobalDocumentProgressTracker } from './components/ui/DocumentProgressT
 import { RouteLoader } from './components/ui/RouteLoader';
 
 import { MedicalSpecialty } from './stores/useAppStore';
+import { useTranslation } from 'react-i18next';
+
+// Podcast Studio Coming Soon wrapper component
+const PodcastComingSoonWrapper: React.FC = () => {
+  const { t } = useTranslation();
+
+  return (
+    <ComingSoon
+      title={t('podcast.title')}
+      description={t('podcast.subtitle')}
+      usePodcastTranslations={true}
+    />
+  );
+};
 
 function App() {
   // Dynamically detect base path based on actual URL structure
@@ -150,17 +164,7 @@ function App() {
               <Route path="/tts-test" element={<Navigate to="/mediscribe" replace />} />
               
               <Route path="/podcast-studio" element={
-                <ComingSoon 
-                  title="AI Podcast Studio"
-                  description="Transform your medical documents into captivating, professional podcasts with revolutionary AI technology and studio-quality natural voices."
-                  features={[
-                    "Intelligent medical content analysis",
-                    "Natural voice synthesis with expert intonation",
-                    "Multiple language support",
-                    "Professional audio quality",
-                    "Quick generation in minutes"
-                  ]}
-                />
+                <PodcastComingSoonWrapper />
               } />
               
               {/* Secondary features - KEEP lazy loading */}

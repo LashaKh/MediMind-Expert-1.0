@@ -34,6 +34,10 @@ const abg = {
     },
     progressComplete: '{{percent}}% выполнено',
     steps: {
+      upload: {
+        label: 'Загрузка',
+        description: 'Выберите отчёт газов крови'
+      },
       uploadStep: {
         label: 'Загрузка',
         description: 'Выберите отчёт газов крови'
@@ -56,7 +60,8 @@ const abg = {
       interpretation: 'Клинический анализ'
     },
     completeTitle: 'Анализ завершён!',
-    error: 'Ошибка обработки'
+    error: 'Ошибка обработки',
+    nextSteps: 'Следующие шаги'
   },
   delete: {
     titleOne: 'Удалить результат ABG?',
@@ -416,7 +421,9 @@ const abg = {
       dropzone: 'Загрузить отчёт газов крови',
       removeFile: 'Удалить файл'
     },
-    
+
+    removeAria: 'Удалить файл',
+
     // Errors
     errors: {
       invalidType: 'Пожалуйста, выберите корректный файл изображения ({{types}})',

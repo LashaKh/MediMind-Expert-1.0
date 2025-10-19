@@ -82,7 +82,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
               backgroundClip: 'text',
               color: 'transparent'
             }}>
-              Tell Us About Yourself
+              {t('onboarding.aboutMe.title', 'Tell Us About Yourself')}
             </h1>
             
             {/* Premium underline animation */}
@@ -97,7 +97,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
           </div>
           
           <p className="text-base sm:text-lg leading-relaxed max-w-lg mx-auto" style={{ color: '#2b6cb0' }}>
-            Help our AI assistant provide personalized medical insights by sharing your background and expertise.
+            {t('onboarding.aboutMe.subtitle', 'Help our AI assistant provide personalized medical insights by sharing your background and expertise.')}
           </p>
           
           {/* Skip indicator */}
@@ -113,7 +113,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
               <span className="text-sm font-medium" style={{ color: '#1a365d' }}>
-                Optional - You can skip this step if you prefer
+                {t('onboarding.aboutMe.optional', 'Optional - You can skip this step if you prefer')}
               </span>
             </div>
           </div>
@@ -148,7 +148,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                 onChange={(e) => setAboutMe(e.target.value)}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                placeholder="Share your medical specialty, years of experience, practice setting, or areas of clinical interest that would help personalize your AI assistant..."
+                placeholder={t('onboarding.aboutMe.placeholder', 'Share your medical specialty, years of experience, practice setting, or areas of clinical interest that would help personalize your AI assistant...')}
                 rows={6}
                 className="relative w-full px-6 py-6 text-base leading-relaxed resize-none bg-transparent border-0 outline-none placeholder-opacity-60 transition-all duration-300"
                 style={{
@@ -168,7 +168,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                   color: '#1a365d',
                   backdropFilter: 'blur(10px)'
                 }}>
-                  {aboutMe.length} characters
+                  {aboutMe.length} {t('onboarding.aboutMe.characters', 'characters')}
                 </div>
               </div>
             </div>
@@ -207,7 +207,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                 <svg className="w-4 h-4 transform transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                <span>Back</span>
+                <span>{t('onboarding.aboutMe.backButton', 'Back')}</span>
               </button>
               
               <div className="flex flex-col sm:flex-row gap-3">
@@ -236,7 +236,7 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                     e.currentTarget.style.boxShadow = 'none';
                   }}
                 >
-                  Skip for now
+                  {t('onboarding.aboutMe.skipButton', 'Skip for now')}
                 </button>
 
                 {/* Continue Button */}
@@ -269,11 +269,11 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                   {isAnimatingSubmit ? (
                     <div className="flex items-center justify-center space-x-3">
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Setting up...</span>
+                      <span>{t('onboarding.aboutMe.settingUp', 'Setting up...')}</span>
                     </div>
                   ) : (
                     <div className="flex items-center justify-center space-x-2">
-                      <span>Continue</span>
+                      <span>{t('onboarding.aboutMe.continueButton', 'Continue')}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
@@ -312,8 +312,8 @@ export const AboutMeForm: React.FC<AboutMeFormProps> = ({
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold" style={{ color: '#1a365d' }}>Setting up your workspace</h3>
-                  <p className="text-sm" style={{ color: '#64748b' }}>Personalizing your MediMind experience...</p>
+                  <h3 className="text-xl font-bold" style={{ color: '#1a365d' }}>{t('onboarding.aboutMe.workspaceSetup', 'Setting up your workspace')}</h3>
+                  <p className="text-sm" style={{ color: '#64748b' }}>{t('onboarding.aboutMe.personalizing', 'Personalizing your MediMind experience...')}</p>
                 </div>
               </div>
             </div>

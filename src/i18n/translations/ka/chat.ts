@@ -56,6 +56,19 @@ export const chat = {
   // Welcome screen content
   welcomeToMediMind: 'კეთილი იყოს თქვენი მობრძანება MediMind Expert-ში',
   welcomeDescription: 'თქვენი AI-ით აღჭურვილი სამედიცინო თანაპილოტი მზადაა დაგეხმაროთ კლინიკურ გადაწყვეტილებებში, სახელმძღვანელოებში, შემთხვევების ანალიზში და მტკიცებულებებზე დაფუძნებულ რეკომენდაციებში.',
+
+  // Missing keys
+  sources: 'წყაროები',
+  showMore: 'მეტის ჩვენება',
+  showLess: 'ნაკლების ჩვენება',
+  uploadFile: 'ფაილის ატვირთვა',
+  fileUploaded: 'ფაილი ატვირთულია',
+  fileError: 'ფაილის შეცდომა',
+  maxFileSize: 'მაქსიმალური ფაილის ზომა',
+  supportedFormats: 'მხარდაჭერილი ფორმატები',
+  removeAttachment: 'მიმაგრების წაშლა',
+  caseReadyTitle: 'შემთხვევა მზადაა განსახილველად',
+  caseReadyDescription: 'მზად ვარ განვიხილოთ ეს შემთხვევა თქვენთან. მკითხეთ ყველაფერი დიაგნოზის, მკურნალობის ვარიანტების, დიფერენციალური დიაგნოზის ან ამ შემთხვევის ნებისმიერი კონკრეტული ასპექტის შესახებ.',
   
   // Feature cards
   clinicalGuidelines: 'კლინიკური სახელმძღვანელოები',
@@ -94,16 +107,6 @@ export const chat = {
   personalDocsAvailable: '{count} პირადი დოკუმენტი ხელმისაწვდომია',
   noPersonalDocs: 'პირადი დოკუმენტები არ არის ატვირთული',
   maxFilesError: 'მაქსიმუმ {maxFiles} ფაილი არის ნებადართული',
-  
-  sources: {
-    title: 'წყაროები',
-    showSources: 'წყაროების ჩვენება',
-    hideSources: 'წყაროების დამალვა',
-    viewSource: 'წყაროს ნახვა',
-    citation: 'ციტირება {index}',
-    documentSource: 'დოკუმენტის წყარო',
-    webSource: 'ვებ წყარო'
-  },
   suggestions: {
     title: 'შემოთავაზებები',
     quickActions: 'სწრაფი ქმედებები',
@@ -233,7 +236,7 @@ export const chat = {
   createCaseStudy: 'კეისის შექმნა',
   dashboard: {
     welcomeBack: 'კეთილი იყოს თქვენი დაბრუნება, {{name}}',
-    subtitle: 'რით შემიძლია დაგეხმაროთ თქვენს კარდიოლოიურ საქმიანობაში დღეს',
+    subtitle: 'რით შემიძლია დაგეხმაროთ თქვენს {{specialty}} საქმიანობაში დღეს?',
     quickConsult: 'სწრაფი კონსულტაცია',
     quickConsultDesc: 'ჰკითხეთ AI-ს სიმპტომების ან მკურნალობის შესახებ',
     newCase: 'ახალი შემთხვევა',
@@ -265,6 +268,55 @@ export const chat = {
     myCasesTitle: 'ჩემი შემთხვევები',
     myCasesDescription: 'ნახეთ და გადაერთეთ თქვენს შენახულ კლინიკურ შემთხვევებს შორის.',
     switchCases: 'შემთხვევების გადართვა'
+  },
+
+  // Patient Cases
+  patientCases: 'პაციენტის შემთხვევები',
+
+  // Conversations List
+  conversations: {
+    title: 'საუბრები',
+    subtitle: 'ნახეთ, მოძებნეთ და მოაწყვეთ თქვენი საუბრების ისტორია',
+    newChat: 'ახალი ჩათი',
+    refresh: 'განახლება',
+    searchPlaceholder: 'საუბრების ძებნა...',
+    all: 'ყველა',
+    chats: 'ჩათები',
+    cases: 'შემთხვევები',
+    allSpecialties: 'ყველა სპეციალობა',
+    cardiology: 'კარდიოლოგია',
+    obgyn: 'მეანობა-გინეკოლოგია',
+    recent: 'ბოლოდროინდელი',
+    byName: 'სახელით',
+    byMessages: 'შეტყობინებებით',
+    message: 'შეტყობინება',
+    messages: 'შეტყობინება',
+    conversation: 'საუბარი',
+    conversations: 'საუბრები',
+    caseStudy: 'შემთხვევა',
+    totalMessages: 'სულ შეტყობინება',
+    noConversationsFound: 'საუბრები ვერ მოიძებნა',
+    noMatchesFound: 'შედეგები ვერ მოიძებნა',
+    tryAdjustingSearchOrFilters: 'სცადეთ ძიების ან ფილტრების შეცვლა',
+    startNewConversationHint: 'დაიწყეთ თქვენი პირველი AI საუბარი',
+    createFirstConversation: 'პირველი საუბრის შექმნა',
+    deleteConversation: 'საუბრის წაშლა',
+    deleteConfirmation: 'დარწმუნებული ხართ რომ გსურთ ამ საუბრის წაშლა? ეს მოქმედება შეუქცევადია.',
+    save: 'შენახვა',
+    cancel: 'გაუქმება',
+    delete: 'წაშლა'
+  },
+
+  tooltip: {
+    chatHistoryTitle: 'ჩატის ისტორია',
+    chatHistoryDescription: 'იხილეთ და მართეთ თქვენი ყველა AI საუბარი.',
+    browse: 'დათვალიერება',
+    myCasesTitle: 'ჩემი შემთხვევები',
+    myCasesDescription: 'იხილეთ და შეცვალეთ თქვენი შენახული კლინიკური შემთხვევები.',
+    switchCases: 'შემთხვევების გადართვა',
+    createNewCaseTitle: 'ახალი შემთხვევის შექმნა',
+    createNewCaseDescription: 'შექმენით კლინიკური შემთხვევები, რომლებიც შეიძლება დაერთოს ჩატს AI შემთხვევის განხილვისა და კოლაბორაციული ანალიზისთვის.',
+    aiDiscussion: 'AI განხილვა'
   }
 };
 

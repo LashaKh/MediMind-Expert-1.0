@@ -237,7 +237,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                       <span className="text-white font-medium text-sm uppercase tracking-wide">
                         {medicalSpecialties.find(s => s.value === profile.medical_specialty)?.label}
                       </span>
-                      <div className="text-white/80 text-xs">Medical Specialist</div>
+                      <div className="text-white/80 text-xs">{t('profile.medicalSpecialistSubtitle')}</div>
                     </div>
                     <div className="w-2 h-2 bg-white/60 rounded-full animate-live-pulse" />
                   </div>
@@ -276,8 +276,8 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">Profile Complete</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Professional Setup</div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{t('profile.profileCompleteStat')}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{t('profile.professionalSetup')}</div>
                     </div>
                   </div>
 
@@ -285,8 +285,8 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 bg-[#63b3ed] rounded-full animate-live-pulse" />
                     <div>
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">Verified</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Professional Account</div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{t('profile.verified')}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{t('profile.professionalAccount')}</div>
                     </div>
                   </div>
 
@@ -297,7 +297,7 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
                     </div>
                     <div>
                       <div className="text-sm font-medium text-gray-900 dark:text-gray-100">8</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Achievements</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{t('profile.achievements')}</div>
                     </div>
                   </div>
                 </div>
@@ -382,4 +382,4 @@ export const ProfileHero: React.FC<ProfileHeroProps> = ({
       </div>
     </div>
   );
-}; 
+};

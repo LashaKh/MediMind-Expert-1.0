@@ -161,6 +161,60 @@ export default {
     title: 'SHFM Calculator',
     subtitle: 'Seattle Heart Failure Model • Survival Prediction'
   },
+
+  // OB/GYN Calculators
+  edd: {
+    title: 'EDD Calculator',
+    subtitle: 'Estimated Date of Delivery Calculator'
+  },
+  gestational_age: {
+    title: 'Gestational Age Calculator',
+    subtitle: 'Accurate Gestational Age Assessment'
+  },
+  preeclampsia_risk: {
+    title: 'Preeclampsia Risk Calculator',
+    subtitle: 'Early Pregnancy Risk Assessment for Preeclampsia'
+  },
+  preterm_birth_risk: {
+    title: 'Preterm Birth Risk Calculator',
+    subtitle: 'Evidence-Based Risk Stratification • ACOG Guidelines • Cervical Length Assessment • Clinical Decision Support'
+  },
+  gdm_screening: {
+    title: 'Gestational Diabetes Mellitus (GDM) Screening',
+    subtitle: 'Evidence-Based Risk Assessment • ACOG Guidelines • Personalized Screening Protocol • Clinical Decision Support'
+  },
+  bishop_score: {
+    title: 'Bishop Score Calculator',
+    subtitle: 'Cervical Readiness Assessment for Labor Induction'
+  },
+  vbac_success: {
+    title: 'VBAC Success Calculator',
+    subtitle: 'Vaginal Birth After Cesarean Success Prediction'
+  },
+  pph_risk: {
+    title: 'Postpartum Hemorrhage Risk Assessment',
+    subtitle: 'Evidence-based risk stratification for maternal hemorrhage prevention'
+  },
+  cervical_cancer_risk: {
+    title: 'Cervical Cancer Risk Assessment',
+    subtitle: 'ASCCP guideline-based cervical cancer risk assessment and management recommendations'
+  },
+  ovarian_cancer_risk: {
+    title: 'Ovarian Cancer Risk Assessment',
+    subtitle: 'Evidence-based ovarian cancer risk evaluation with genetic and reproductive factor analysis'
+  },
+  endometrial_cancer_risk: {
+    title: 'Endometrial Cancer Risk Calculator',
+    subtitle: 'Lifetime Risk Assessment for Endometrial Cancer'
+  },
+  ovarian_reserve: {
+    title: 'Ovarian Reserve Assessment',
+    description: 'Comprehensive fertility evaluation and treatment planning tool'
+  },
+  menopause_assessment: {
+    title: 'Menopause Assessment Tool',
+    subtitle: 'Comprehensive menopause status assessment using clinical symptoms and biomarkers'
+  },
   
   sts: {
     title: 'STS Calculator',

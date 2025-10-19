@@ -56,6 +56,42 @@ export const chat = {
   // Welcome screen content
   welcomeToMediMind: 'Добро пожаловать в MediMind Expert',
   welcomeDescription: 'Ваш медицинский ИИ ко-пилот готов помочь с клиническими решениями, руководствами, анализом случаев и основанными на доказательствах рекомендациями.',
+
+  // Missing keys
+  sources: 'Источники',
+  showMore: 'Показать больше',
+  showLess: 'Показать меньше',
+  uploadFile: 'Загрузить файл',
+  fileUploaded: 'Файл загружен',
+  fileError: 'Ошибка файла',
+  maxFileSize: 'Максимальный размер файла',
+  supportedFormats: 'Поддерживаемые форматы',
+  removeAttachment: 'Удалить вложение',
+  specialtySubtitles: {
+    cardiology: 'Передовая помощь в сердечно-сосудистой области',
+    obgyn: 'Женское здоровье и репродуктивная медицина',
+    medical: 'Комплексная медицинская помощь'
+  },
+  quickActions: {
+    caseDesc: 'Начните анализ случая пациента с помощью ИИ',
+    calculatorsDesc: 'Доступ к клиническим калькуляторам и оценке рисков',
+    guidelinesDesc: 'Поиск медицинских протоколов, основанных на доказательствах',
+    discussionDesc: 'Начните медицинскую консультацию с ИИ'
+  },
+  features: {
+    aiPoweredAnalysis: 'Продвинутое медицинское рассуждение и поддержка принятия решений',
+    evidenceBasedDesc: 'Отобрано из более чем 2,5 млн медицинских источников и руководств',
+    realTimeDesc: 'Мгновенные ответы для принятия клинических решений',
+    specialtyFocusedDesc: 'Индивидуальная экспертиза для вашей медицинской специальности'
+  },
+  welcomeTo: 'Добро пожаловать в',
+  liveAt: 'В эфире',
+  aiReady: 'ИИ готов',
+  recentCases: 'Недавние случаи',
+  startTypingOrSelectAction: 'Начните с ввода сообщения ниже или выберите действие выше',
+  aiAssistantReady: 'ИИ-ассистент готов',
+  caseReadyTitle: 'Случай готов к обсуждению',
+  caseReadyDescription: 'Я готов обсудить этот случай с вами. Спросите меня о диагнозе, вариантах лечения, дифференциальной диагностике или любом конкретном аспекте этого случая.',
   
   // Feature cards
   clinicalGuidelines: 'Клинические руководства',
@@ -94,14 +130,6 @@ export const chat = {
   personalDocsAvailable: '{count} личных документов доступно',
   noPersonalDocs: 'Личные документы не загружены',
   maxFilesError: 'Максимум {maxFiles} файлов разрешено',
-  
-  sources: {
-    title: 'Источники',
-    viewAll: 'Посмотреть все',
-    hide: 'Скрыть',
-    citation: 'Цитата',
-    reference: 'Ссылка'
-  },
   suggestions: {
     title: 'Предложения',
     calculators: 'Рекомендуемые калькуляторы',
@@ -167,7 +195,7 @@ export const chat = {
   createCaseStudy: 'Создать клинический случай',
   dashboard: {
     welcomeBack: 'С возвращением, {{name}}',
-    subtitle: 'Чем я могу помочь вам в вашей',
+    subtitle: 'Чем я могу помочь вам в вашей {{specialty}} практике сегодня?',
     quickConsult: 'Быстрая консультация',
     quickConsultDesc: 'Спросите ИИ о симптомах или лечении',
     newCase: 'Новый случай',
@@ -199,6 +227,47 @@ export const chat = {
     myCasesTitle: 'Мои случаи',
     myCasesDescription: 'Просмотр и переключение между вашими сохраненными клиническими случаями.',
     switchCases: 'Переключить случаи'
+  },
+
+  // Patient Cases
+  patientCases: 'Случаи пациентов',
+
+  // Conversations List
+  conversations: {
+    allSpecialties: 'Все специальности',
+    cardiology: 'Кардиология',
+    obgyn: 'Акушерство-гинекология',
+    recent: 'Недавние',
+    byName: 'По названию',
+    byMessages: 'По сообщениям',
+    message: 'сообщение',
+    messages: 'сообщения',
+    conversation: 'разговор',
+    conversations: 'разговоры',
+    caseStudy: 'случай',
+    totalMessages: 'всего сообщений',
+    noConversationsFound: 'Разговоры не найдены',
+    noMatchesFound: 'Результаты не найдены',
+    tryAdjustingSearchOrFilters: 'Попробуйте изменить поиск или фильтры',
+    startNewConversationHint: 'Начните ваш первый ИИ разговор',
+    createFirstConversation: 'Создать первый разговор',
+    deleteConversation: 'Удалить разговор',
+    deleteConfirmation: 'Вы уверены, что хотите удалить этот разговор? Это действие необратимо.',
+    save: 'Сохранить',
+    cancel: 'Отмена',
+    delete: 'Удалить'
+  },
+
+  tooltip: {
+    chatHistoryTitle: 'История чатов',
+    chatHistoryDescription: 'Просматривайте и управляйте всеми вашими предыдущими разговорами с ИИ.',
+    browse: 'Обзор',
+    myCasesTitle: 'Мои кейсы',
+    myCasesDescription: 'Просматривайте и переключайтесь между вашими сохраненными клиническими кейсами.',
+    switchCases: 'Переключение кейсов',
+    createNewCaseTitle: 'Создать новый кейс',
+    createNewCaseDescription: 'Создавайте клинические кейсы, которые можно прикрепить к чату для обсуждения с ИИ и совместного анализа.',
+    aiDiscussion: 'Обсуждение с ИИ'
   }
 };
 

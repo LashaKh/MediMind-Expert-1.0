@@ -165,7 +165,7 @@ export const KnowledgeBase: React.FC = () => {
                  <button
                   onClick={() => setActiveTab('personal')}
                   className={`flex-1 flex items-center justify-center space-x-3 px-4 py-4 sm:px-6 min-h-[60px] rounded-xl transition-all duration-300 ${
-                    active.tab === 'personal'
+                    activeTab === 'personal'
                       ? 'bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white shadow-lg transform scale-[1.02]'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                   }`}

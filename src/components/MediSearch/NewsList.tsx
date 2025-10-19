@@ -281,10 +281,9 @@ const NewsListComponent: React.FC<NewsListProps> = ({
             {t('news.empty.suggestions.title', 'Search Tips')}
           </h4>
           <div className="space-y-2 text-left text-sm text-gray-600">
-            <p>• Try different medical specialties</p>
-            <p>• Adjust date range filters</p>
-            <p>• Remove category restrictions</p>
-            <p>• Check back for breaking news</p>
+            {t('news.empty.suggestions.items', { returnObjects: true }).map((item, index) => (
+              <p key={index}>• {item}</p>
+            ))}
           </div>
         </div>
       </div>

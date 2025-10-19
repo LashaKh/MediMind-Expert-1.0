@@ -1,0 +1,273 @@
+{
+  "abg": {
+    "total": 362,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "auth": {
+    "total": 69,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "case-creation": {
+    "total": 101,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "chat": {
+    "total": 144,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "common": {
+    "total": 311,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "diseases": {
+    "total": 519,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "documents": {
+    "total": 141,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "filters": {
+    "total": 141,
+    "kaMissing": 14,
+    "ruMissing": 14,
+    "kaMissingKeys": [
+      "button.label",
+      "clearAll",
+      "preview.results",
+      "preview.previewShort",
+      "changesNotApplied",
+      "save",
+      "filterCategories.all",
+      "filterCategories.specialty",
+      "filterCategories.content",
+      "filterCategories.quality",
+      "filterCategories.audience",
+      "filterCategories.recent",
+      "filterCategories.access",
+      "active"
+    ],
+    "ruMissingKeys": [
+      "button.label",
+      "clearAll",
+      "preview.results",
+      "preview.previewShort",
+      "changesNotApplied",
+      "save",
+      "filterCategories.all",
+      "filterCategories.specialty",
+      "filterCategories.content",
+      "filterCategories.quality",
+      "filterCategories.audience",
+      "filterCategories.recent",
+      "filterCategories.access",
+      "active"
+    ]
+  },
+  "help": {
+    "total": 50,
+    "kaMissing": 1,
+    "ruMissing": 3,
+    "kaMissingKeys": [
+      "articles.knowledge-base-guide.title"
+    ],
+    "ruMissingKeys": [
+      "articles.accountSetup.title",
+      "articles.platform-tour.title",
+      "articles.first-steps.title"
+    ]
+  },
+  "knowledgeBase": {
+    "total": 112,
+    "kaMissing": 0,
+    "ruMissing": 4,
+    "kaMissingKeys": [],
+    "ruMissingKeys": [
+      "curatedTooltipTitle",
+      "curatedTooltipDesc",
+      "personalTooltipTitle",
+      "personalTooltipDesc"
+    ]
+  },
+  "medical": {
+    "total": 207,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "mediscribe": {
+    "total": 203,
+    "kaMissing": 10,
+    "ruMissing": 10,
+    "kaMissingKeys": [
+      "unsupported.title",
+      "unsupported.description",
+      "emptyFields",
+      "uploadButton.disabledTitle",
+      "attachButton.disabledTitle",
+      "recordButton.endRecording",
+      "attachedFiles.title.mobile",
+      "attachedFiles.title.desktop",
+      "attachedFiles.readyForAnalysis",
+      "sessionHistory.ellipsis"
+    ],
+    "ruMissingKeys": [
+      "unsupported.title",
+      "unsupported.description",
+      "emptyFields",
+      "uploadButton.disabledTitle",
+      "attachButton.disabledTitle",
+      "recordButton.endRecording",
+      "attachedFiles.title.mobile",
+      "attachedFiles.title.desktop",
+      "attachedFiles.readyForAnalysis",
+      "sessionHistory.ellipsis"
+    ]
+  },
+  "navigation": {
+    "total": 30,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "news": {
+    "total": 76,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "onboarding": {
+    "total": 34,
+    "kaMissing": 1,
+    "ruMissing": 1,
+    "kaMissingKeys": [
+      "specialty.keyFeatures"
+    ],
+    "ruMissingKeys": [
+      "specialty.keyFeatures"
+    ]
+  },
+  "profile": {
+    "total": 110,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "search": {
+    "total": 250,
+    "kaMissing": 18,
+    "ruMissing": 18,
+    "kaMissingKeys": [
+      "filters.modal.title",
+      "filters.modal.subtitle",
+      "filters.categories.quickFilters",
+      "filters.categories.quickFiltersDesc",
+      "filters.categories.contentFormat",
+      "filters.categories.contentFormatDesc",
+      "filters.categories.authorityQuality",
+      "filters.categories.authorityQualityDesc",
+      "filters.categories.medicalDomain",
+      "filters.categories.medicalDomainDesc",
+      "filters.categories.publicationAccess",
+      "filters.categories.publicationAccessDesc",
+      "filters.categories.geographicContext",
+      "filters.categories.geographicContextDesc",
+      "filters.categories.advancedOptions",
+      "filters.categories.advancedOptionsDesc",
+      "filters.quickFilters.title",
+      "filters.quickFilters.subtitle"
+    ],
+    "ruMissingKeys": [
+      "filters.modal.title",
+      "filters.modal.subtitle",
+      "filters.categories.quickFilters",
+      "filters.categories.quickFiltersDesc",
+      "filters.categories.contentFormat",
+      "filters.categories.contentFormatDesc",
+      "filters.categories.authorityQuality",
+      "filters.categories.authorityQualityDesc",
+      "filters.categories.medicalDomain",
+      "filters.categories.medicalDomainDesc",
+      "filters.categories.publicationAccess",
+      "filters.categories.publicationAccessDesc",
+      "filters.categories.geographicContext",
+      "filters.categories.geographicContextDesc",
+      "filters.categories.advancedOptions",
+      "filters.categories.advancedOptionsDesc",
+      "filters.quickFilters.title",
+      "filters.quickFilters.subtitle"
+    ]
+  },
+  "tour": {
+    "total": 18,
+    "kaMissing": 0,
+    "ruMissing": 18,
+    "kaMissingKeys": [],
+    "ruMissingKeys": [
+      "steps.knowledge-base.kb-welcome.title",
+      "steps.knowledge-base.kb-welcome.content",
+      "steps.knowledge-base.kb-curated-overview.title",
+      "steps.knowledge-base.kb-curated-overview.content",
+      "steps.knowledge-base.kb-curated-features.title",
+      "steps.knowledge-base.kb-curated-features.content",
+      "steps.knowledge-base.kb-personal-transition.title",
+      "steps.knowledge-base.kb-personal-transition.content",
+      "steps.knowledge-base.kb-personal-overview.title",
+      "steps.knowledge-base.kb-personal-overview.content",
+      "steps.knowledge-base.kb-personal-features.title",
+      "steps.knowledge-base.kb-personal-features.content",
+      "steps.knowledge-base.kb-ai-integration.title",
+      "steps.knowledge-base.kb-ai-integration.content",
+      "steps.knowledge-base.kb-complete.title",
+      "steps.knowledge-base.kb-complete.content",
+      "steps.medical-news.news-welcome.title",
+      "steps.medical-news.news-welcome.content"
+    ]
+  },
+  "tts": {
+    "total": 38,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "validation": {
+    "total": 15,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  },
+  "workspace": {
+    "total": 107,
+    "kaMissing": 0,
+    "ruMissing": 0,
+    "kaMissingKeys": [],
+    "ruMissingKeys": []
+  }
+}

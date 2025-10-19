@@ -23,11 +23,11 @@ export const NewCaseButton: React.FC<NewCaseButtonProps> = ({
 
   return (
     <EnhancedTooltip
-      title="Create New Case"
-      description="Create clinical cases that can be attached to chat for AI case study discussions and collaborative analysis."
+      title={t('chat.tooltip.createNewCaseTitle', 'Create New Case')}
+      description={t('chat.tooltip.createNewCaseDescription', 'Create clinical cases that can be attached to chat for AI case study discussions and collaborative analysis.')}
       icon={Stethoscope}
       gradient="from-[#2b6cb0] to-[#63b3ed]"
-      badge="AI Discussion"
+      badge={t('chat.tooltip.aiDiscussion', 'AI Discussion')}
       disabled={disabled}
     >
       <Button

@@ -2,7 +2,7 @@ export const knowledgeBase = {
   // Main page headers
   title: 'ცოდნის ბაზა',
   subtitle: 'კარდიოლოგიის რესურსები',
-  description: 'მიაწვდოთ კომპლექსური სამედიცინო ლიტერატურა, მტკიცებულებაზე დაფუძნებული წესები და თქვენი პირადი დოკუმენტების კოლექცია AI-ზე დაფუძნებული ინსაიტებით.',
+  description: 'მიიღეთ წვდომა ყოვლისმომცველ სამედიცინო ლიტერატურაზე, მტკიცებულებებზე დაფუძნებულ სახელმძღვანელოებზე და თქვენს პირად დოკუმენტების კოლექციაზე AI-ის მიერ გაძლიერებული ინსაიტებით.',
   
   // Root level keys for KnowledgeBaseSelector
   personal: 'პირადი',
@@ -83,7 +83,7 @@ export const knowledgeBase = {
     
     // File metadata
     fileName: 'ფაილის სახელი',
-    description: 'აღწერა',
+    description: 'დოკუმენტის აღწერა',
     category: 'კატეგორია',
     
     // List view
@@ -96,9 +96,29 @@ export const knowledgeBase = {
     }
   },
   
+  // Filters and sorting
+  filters: {
+    all: 'ყველა',
+    featured: 'გამორჩეული',
+    trending: 'ტრენდული',
+    bookmarked: 'ნიშნული',
+    recent: 'ბოლოდროინდელი',
+  },
+
+  sorting: {
+    relevance: 'მნიშვნელობა',
+    rating: 'უმაღლესი რეიტინგი',
+    citations: 'ყველაზე ციტირებული',
+    views: 'ყველაზე ნანახი',
+    year: 'უახლესი',
+    trending: 'ტრენდული',
+  },
+
+  resourcesFound: 'რესურსი ნაპოვნია',
+
   // Curated Knowledge Base Settings
   curatedSettings: {
-    searchPlaceholder: 'ძიება რესურსებში, ავტორებში, ორგანიზაციებში...',
+    searchPlaceholder: 'მოძებნეთ რესურსები, ავტორები, ორგანიზაციები...',
     sortByTitle: 'დალაგება სათაურით',
     sortByYear: 'დალაგება წლით',
     sortByCategory: 'დალაგება კატეგორიით',
@@ -139,7 +159,7 @@ export const knowledgeBase = {
     // Creation form
     vectorStoreName: 'ვექტორული მეხსიერების სახელი',
     vectorStoreNamePlaceholder: 'ჩემი სამედიცინო ცოდნის ბაზა',
-    description: 'აღწერა',
+    description: 'ვექტორული მეხსიერების აღწერა',
     descriptionPlaceholder: 'სამედიცინო დოკუმენტებისა და კვლევითი ნაშრომების პირადი კოლექცია',
     cancel: 'გაუქმება',
     create: 'შექმნა',
@@ -160,18 +180,105 @@ export const knowledgeBase = {
     uploadedOn: 'ატვირთვის თარიღი',
     fileSize: 'ფაილის ზომა',
     processingStatus: 'მუშავების სტატუსი',
-    
+
     // Processing status
     statusReady: 'მზად არის',
     statusProcessing: 'მუშავდება',
     statusPending: 'მოლოდინში',
     statusFailed: 'ვერ მოხერხდა',
-    
+
     // Actions
     reprocess: 'ხელახლა მუშავება',
     downloadOriginal: 'ორიგინალის ჩამოტვირთვა',
     deleteDocument: 'დოკუმენტის წაშლა'
-  }
+  },
+
+  // Curated page texts
+  book: 'წიგნი',
+  guideline: 'სახელმძღვანელო',
+  featured: 'გამორჩეული',
+  trending: 'ტრენდული',
+  medicalBook: 'სამედიცინო წიგნი',
+  clinicalGuideline: 'კლინიკური სახელმძღვანელო',
+  authors: 'ავტორები',
+  citations: 'ციტირებები',
+  views: 'ნახვები',
+  more: 'მეტი',
+  min: 'წთ',
+  updated: 'განახლებულია',
+  loadingKnowledgeBase: 'ცოდნის ბაზა იტვირთება',
+  preparingResources: 'თქვენი სამედიცინო რესურსები მზადდება...',
+  avg: 'საშუალო',
+  noResourcesFound: 'რესურსები ვერ მოიძებნა',
+  couldntFindResources: 'ვერ მოვიძიეთ რესურსები რომლებიც შეესაბამება',
+  clearSearchBrowseAll: 'ძიების გასუფთავება და ყველა რესურსის დათვალიერება',
+  trySearchingFor: 'სცადეთ ძიება',
+  noResourcesMatchFilters: 'არცერთი რესურსი არ შეესაბამება თქვენს ფილტრებს. სცადეთ ძიების კრიტერიუმების შეცვლა.',
+  topics: 'თემები',
+  resourceStats: 'რესურსის სტატისტიკა',
+  rating: 'რეიტინგი',
+  difficulty: 'სირთულე',
+  readTime: 'წაკითხვის დრო',
+  openResource: 'რესურსის გახსნა',
+  save: 'შენახვა',
+  share: 'გაზიარება',
+  lastUpdated: 'ბოლოს განახლებულია',
+  beginner: 'დამწყები',
+  intermediate: 'საშუალო',
+  advanced: 'მაღალი',
+
+  // Personal Library Premium texts
+  totalLibrary: 'სულ ბიბლიოთეკაში',
+  documentsCount: 'დოკუმენტი',
+  ready: 'მზადაა',
+  processed: 'დამუშავებული',
+  processing: 'მუშავდება',
+  inQueue: 'რიგში',
+  storage: 'მეხსიერება',
+  totalUsed: 'გამოყენებული',
+  uploadDocuments: 'დოკუმენტების ატვირთვა',
+  refresh: 'განახლება',
+  monitor: 'მონიტორინგი',
+  searchYourKnowledgeBase: 'მოძებნეთ თქვენს ცოდნის ბაზაში...',
+  sortBy: 'დალაგება',
+  name: 'სახელი',
+  date: 'თარიღი',
+  size: 'ზომა',
+  type: 'ტიპი',
+  advancedFilters: 'დამატებითი ფილტრები',
+  quickFilters: 'სწრაფი ფილტრები',
+  favorites: 'რჩეულები',
+  recent: 'ბოლოდროინდელი',
+  completed: 'დასრულებული',
+  researchPapers: 'კვლევითი ნაშრომები',
+  clinicalGuidelines: 'კლინიკური სახელმძღვანელოები',
+  caseStudies: 'კლინიკური შემთხვევები',
+  protocols: 'პროტოკოლები',
+  referenceMaterials: 'სამითითო მასალები',
+  personalNotes: 'პირადი ჩანაწერები',
+  other: 'სხვა',
+  pdf: 'PDF',
+  images: 'სურათები',
+  documentsType: 'დოკუმენტები',
+  spreadsheets: 'ცხრილები',
+  yourKnowledgeBaseAwaits: 'თქვენი ცოდნის ბაზა გელოდებათ',
+  startBuildingLibrary: 'დაიწყეთ თქვენი პირადი სამედიცინო ცოდნის ბიბლიოთეკის შექმნა პირველი დოკუმენტის ატვირთვით',
+  uploadYourFirstDocument: 'ატვირთეთ პირველი დოკუმენტი',
+  of: '-დან',
+  documentsText: 'დოკუმენტები',
+  showingFirst: 'ნაჩვენებია პირველი',
+  tags: 'თეგები',
+  addTagsToFilter: 'დაამატეთ თეგები ფილტრაციისთვის...',
+  dateRange: 'თარიღის დიაპაზონი',
+  from: 'დან',
+  to: 'მდე',
+  fileSize: 'ფაილის ზომა',
+  selectAll: 'ყველას არჩევა',
+  deselectAll: 'ყველას მოხსნა',
+  clearSelection: 'არჩევანის გასუფთავება',
+  documentsSelected: 'დოკუმენტი არჩეულია',
+  noDocumentsMatchSearch: 'არცერთი დოკუმენტი არ შეესაბამება თქვენს ძიებას',
+  tryAdjustingCriteria: 'სცადეთ ძიების კრიტერიუმების ან ფილტრების შეცვლა იმისთვის, რომ იპოვოთ რასაც ეძებთ.'
 };
 
 export default knowledgeBase; 

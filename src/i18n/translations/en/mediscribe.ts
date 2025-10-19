@@ -1,4 +1,9 @@
 export default {
+  unsupported: {
+    title: 'Browser Not Supported',
+    description: 'Your browser doesn\'t support audio recording. Please use a modern browser like Chrome, Firefox, or Safari.',
+  },
+  emptyFields: 'You have {count} empty fields',
   transcriptPlaceholder: {
     default: 'Your transcript will appear here...',
     titleRequired: 'Please enter a session title above to start...',
@@ -6,16 +11,19 @@ export default {
   },
   uploadButton: {
     title: 'Upload audio file',
+    disabledTitle: 'Cannot upload during recording',
     label: 'Upload',
     sublabel: 'Audio file',
   },
   attachButton: {
     title: 'Attach files & documents',
+    disabledTitle: 'Cannot attach during recording',
     label: 'Attach',
     sublabel: 'Files & docs',
   },
   recordButton: {
     startRecording: 'Start recording',
+    endRecording: 'End recording',
     record: 'Record',
     titleRequired: 'Please enter a session title first',
     stop: 'Stop',
@@ -93,6 +101,13 @@ export default {
   form: {
     requiredField: 'Required field',
     charCounter: '{length}/100',
+  },
+  attachedFiles: {
+    title: {
+      mobile: 'Attached files ({count})',
+      desktop: 'Attached files ({count})',
+    },
+    readyForAnalysis: 'Ready for analysis',
   },
   attachments: {
     processing: 'Processing...', 

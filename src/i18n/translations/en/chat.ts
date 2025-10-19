@@ -1,4 +1,5 @@
 export default {
+  title: 'MediMind AI',
   newChat: 'New Chat',
   searchPlaceholder: 'Search conversations...',
   noConversations: 'No conversations yet',
@@ -133,7 +134,7 @@ export default {
   // Clinical Dashboard translations
   dashboard: {
     welcomeBack: 'Welcome back, {{name}}',
-    subtitle: 'How can I assist with your',
+    subtitle: 'How can I assist with your {{specialty}} practice today?',
     quickConsult: 'Quick Consult',
     quickConsultDesc: 'Ask AI about symptoms or treatments',
     newCase: 'New Case Study',
@@ -162,6 +163,9 @@ export default {
     browse: 'Browse',
     myCasesTitle: 'My Cases',
     myCasesDescription: 'View and switch between your saved clinical cases.',
-    switchCases: 'Switch Cases'
+    switchCases: 'Switch Cases',
+    createNewCaseTitle: 'Create New Case',
+    createNewCaseDescription: 'Create clinical cases that can be attached to chat for AI case study discussions and collaborative analysis.',
+    aiDiscussion: 'AI Discussion'
   }
 }; 

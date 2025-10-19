@@ -376,13 +376,19 @@ export const search = {
     gender: 'Gender',
     minAge: 'Min Age',
     maxAge: 'Max Age',
+    ageRange: 'Age Range',
     acceptsHealthy: 'Accepts Healthy Volunteers',
     patientsOnly: 'Patients Only',
     nearestLocation: 'Nearest Location',
     miles: 'miles',
     checkEligibility: 'Check Eligibility',
     viewDetails: 'View Details',
-    lastUpdated: 'Last updated'
+    lastUpdated: 'Last updated',
+    filters: 'Clinical Trial Filters',
+    clearFilters: 'Clear Filters',
+    recruitmentStatus: 'Recruitment Status',
+    locationFilter: 'Location',
+    locationPlaceholder: 'Enter city or country...'
   },
 
   // News Filters

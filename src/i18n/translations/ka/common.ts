@@ -24,6 +24,7 @@ export const common = {
   info: 'ინფორმაცია',
   yes: 'კი',
   no: 'არა',
+  or: 'ან',
   ok: 'კარგი',
   confirm: 'დადასტურება',
   next: 'შემდეგი',
@@ -298,6 +299,13 @@ export const common = {
   results: 'შედეგები',
   clinical_purpose: 'კლინიკური დანიშნულება',
   about_calculator: 'კალკულატორის შესახებ',
+
+  // Additional common translations
+  evidenceBased: 'მტკიცებულებებზე დაფუძნებული',
+  clinicallyValidated: 'კლინიკურად დამტკიცებული',
+  hipaaCompliant: 'HIPAA შესაბამისი',
+  signedIn: 'სისტემაში შესული',
+  unsavedChanges: 'შეუნახავი ცვლილებები',
   
   // Filters
   filters: {

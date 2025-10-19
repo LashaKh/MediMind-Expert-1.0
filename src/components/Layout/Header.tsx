@@ -152,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false, onMenu
                     text-gray-500 dark:text-gray-400 font-medium tracking-wide transition-all duration-200
                     ${isCondensed ? 'hidden' : isMobile ? 'hidden' : 'text-xs hidden xs:block'}
                   `}>
-                    AI Medical Co-Pilot
+                    {t('navigation.aiMedicalCoPilot', 'AI Medical Co-Pilot')}
                   </span>
                 </div>
               </div>

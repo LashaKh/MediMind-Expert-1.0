@@ -172,20 +172,20 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
               </motion.div>
               
               <div>
-                <motion.h1 
+                <motion.h1
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   className="text-4xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight"
                 >
-                  AI Podcast Studio
+                  {t('podcast.title')}
                 </motion.h1>
-                <motion.p 
+                <motion.p
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
                   className="text-sm text-white/80 font-medium tracking-wide"
                 >
-                  Transform your {specialty} knowledge into engaging audio experiences
+                  {t('podcast.navigation.headerDesc')}
                 </motion.p>
               </div>
             </div>
@@ -443,11 +443,11 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                     className="text-6xl lg:text-7xl font-black mb-8 tracking-tight"
                   >
                     <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                      Create Stunning
+                      {t('podcast.hero.createStunning')}
                     </span>
                     <br />
                     <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
-                      AI Podcasts
+                      {t('podcast.hero.aiPodcasts')}
                     </span>
                   </motion.h2>
                   
@@ -457,8 +457,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                     transition={{ delay: 0.7, duration: 0.6 }}
                     className="text-xl text-white/80 leading-relaxed max-w-3xl mx-auto mb-10 font-medium"
                   >
-                    Transform your medical documents into captivating, professional podcasts 
-                    with revolutionary AI technology and studio-quality natural voices.
+                    {t('podcast.subtitle')}
                   </motion.p>
 
                   {/* Revolutionary Feature Pills */}
@@ -469,9 +468,9 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                     className="flex flex-wrap justify-center gap-4 mb-12"
                   >
                     {[
-                      { icon: Brain, label: "Neural Analysis", gradient: "from-cyan-500 to-purple-600" },
-                      { icon: AudioWaveform, label: "Studio Quality", gradient: "from-purple-500 to-pink-600" },
-                      { icon: Zap, label: "Lightning Fast", gradient: "from-pink-500 to-orange-500" }
+                      { icon: Brain, labelKey: "podcast.pills.neuralAnalysis", gradient: "from-cyan-500 to-purple-600" },
+                      { icon: AudioWaveform, labelKey: "podcast.pills.studioQuality", gradient: "from-purple-500 to-pink-600" },
+                      { icon: Zap, labelKey: "podcast.pills.lightningFast", gradient: "from-pink-500 to-orange-500" }
                     ].map((feature, index) => {
                       const Icon = feature.icon;
                       return (
@@ -486,7 +485,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                           <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-opacity duration-300`} />
                           <div className="relative flex items-center space-x-3 px-6 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl">
                             <Icon className="w-5 h-5 text-white" />
-                            <span className="text-white font-semibold">{feature.label}</span>
+                            <span className="text-white font-semibold">{t(feature.labelKey)}</span>
                           </div>
                         </motion.div>
                       );
@@ -505,7 +504,7 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                       className="flex flex-col items-center space-y-2"
                     >
-                      <span className="text-white/60 text-sm font-medium">Get Started</span>
+                      <span className="text-white/60 text-sm font-medium">{t('podcast.hero.getStarted')}</span>
                       <ChevronRight className="w-6 h-6 text-white/60 rotate-90" />
                     </motion.div>
                   </motion.div>
@@ -847,11 +846,11 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
             >
               <h3 className="text-4xl font-bold mb-4">
                 <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  Why Choose AI Podcast Studio?
+                  {t('podcast.featuresSection.title')}
                 </span>
               </h3>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Experience the future of medical content creation with our advanced AI technology
+                {t('podcast.featuresSection.subtitle')}
               </p>
             </motion.div>
 
@@ -859,22 +858,22 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
               {[
                 {
                   icon: Brain,
-                  title: 'Intelligent Content Analysis',
-                  description: 'Advanced AI comprehends complex medical documents and creates coherent narratives',
+                  titleKey: 'podcast.featuresSection.intelligentAnalysis.title',
+                  descriptionKey: 'podcast.featuresSection.intelligentAnalysis.description',
                   gradient: 'from-purple-500 to-pink-500',
                   delay: 0.8
                 },
                 {
                   icon: Headphones,
-                  title: 'Natural Voice Synthesis',
-                  description: 'Professional medical experts voices with natural intonation and clarity',
+                  titleKey: 'podcast.featuresSection.naturalVoices.title',
+                  descriptionKey: 'podcast.featuresSection.naturalVoices.description',
                   gradient: 'from-blue-500 to-cyan-500',
                   delay: 0.9
                 },
                 {
                   icon: Zap,
-                  title: 'Lightning Fast Generation',
-                  description: 'Get your podcast ready in minutes, not hours or days',
+                  titleKey: 'podcast.featuresSection.fastGeneration.title',
+                  descriptionKey: 'podcast.featuresSection.fastGeneration.description',
                   gradient: 'from-green-500 to-emerald-500',
                   delay: 1.0
                 }
@@ -910,10 +909,10 @@ const PodcastStudio: React.FC<PodcastStudioProps> = () => {
                       
                       {/* Text */}
                       <h4 className="text-xl font-bold text-gray-900 mb-3">
-                        {feature.title}
+                        {t(feature.titleKey)}
                       </h4>
                       <p className="text-gray-600 leading-relaxed">
-                        {feature.description}
+                        {t(feature.descriptionKey)}
                       </p>
                     </div>
                   </motion.div>

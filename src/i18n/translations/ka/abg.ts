@@ -34,6 +34,10 @@ const abg = {
     },
     progressComplete: '{{percent}}% დასრულებულია',
     steps: {
+      upload: {
+        label: 'ატვირთვა',
+        description: 'აირჩიეთ სისხლის აირების ანგარიში'
+      },
       uploadStep: {
         label: 'ატვირთვა',
         description: 'აირჩიეთ აერგაზების ანგარიში'
@@ -417,6 +421,8 @@ const abg = {
       dropzone: 'არტერიული სისხლის აირების ანგარიშის ატვირთვა',
       removeFile: 'ფაილის ამოღება'
     },
+
+    removeAria: 'ფაილის ამოღება',
     
     // Errors
     errors: {
