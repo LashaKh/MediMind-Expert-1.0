@@ -111,7 +111,8 @@ interface ChatState {
   activeCase: PatientCase | null;
   caseHistory: PatientCase[];
   isCaseDiscussion: boolean;
-  
+  caseContextSentForConversation: Record<string, boolean>; // Track which conversations have received case context
+
   // Knowledge Base
   knowledgeBase: KnowledgeBaseType;
   personalDocumentCount: number;
@@ -139,7 +140,9 @@ interface ChatState {
   loadMessagesForConversation: (conversationId: string) => Promise<void>;
   saveFlowiseMessage: (sessionId: string, message: Message) => Promise<void>;
   loadFlowiseMessages: (sessionId: string) => Promise<Message[]>;
-  
+  getConversationsForCase: (caseId: string) => Promise<Conversation[]>;
+  deleteConversationFromCase: (conversationId: string, caseId: string) => Promise<void>;
+
   // Actions - Cases
   setActiveCase: (case_: PatientCase | null) => void;
   addCase: (case_: PatientCase) => void;
@@ -149,6 +152,9 @@ interface ChatState {
   setCaseDiscussion: (discussion: boolean) => void;
   createCase: (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>) => Promise<PatientCase>;
   resetCaseContext: () => void;
+  markCaseContextSent: (conversationId: string) => void;
+  hasCaseContextBeenSent: (conversationId: string) => boolean;
+  resetCaseContextTracking: () => void;
   
   // Actions - Knowledge Base
   setKnowledgeBase: (type: KnowledgeBaseType) => void;
@@ -470,7 +476,8 @@ export const useAppStore = create<AppStore>()(
         activeCase: null,
         caseHistory: [],
         isCaseDiscussion: false,
-        
+        caseContextSentForConversation: {},
+
         // Knowledge Base
         knowledgeBase: 'curated',
         personalDocumentCount: 0,
@@ -855,7 +862,118 @@ export const useAppStore = create<AppStore>()(
             return [];
           }
         },
-        
+
+        getConversationsForCase: async (caseId: string): Promise<Conversation[]> => {
+          try {
+            const { user } = get();
+            if (!user) {
+              return [];
+            }
+
+            // Query flowise_conversations table for conversations linked to this case
+            const { data, error } = await supabase
+              .from('flowise_conversations')
+              .select('*')
+              .eq('user_id', user.id)
+              .eq('case_id', caseId)
+              .order('updated_at', { ascending: false });
+
+            if (error) {
+              console.error('Error fetching conversations for case:', error);
+              return [];
+            }
+
+            // Map database rows to Conversation objects and fetch first user message for title
+            const conversations: Conversation[] = await Promise.all(
+              (data || []).map(async (row: any) => {
+                // Fetch the first user message for this conversation
+                const { data: firstMessage } = await supabase
+                  .from('flowise_messages')
+                  .select('content')
+                  .eq('session_id', row.session_id)
+                  .eq('message_type', 'user')
+                  .order('timestamp', { ascending: true })
+                  .limit(1)
+                  .maybeSingle();
+
+                // Use first user message as title, truncate if too long
+                const firstUserMessage = firstMessage?.content || '';
+                const title = firstUserMessage
+                  ? (firstUserMessage.length > 60
+                      ? firstUserMessage.substring(0, 60) + '...'
+                      : firstUserMessage)
+                  : (row.title || 'Untitled Conversation');
+
+                return {
+                  id: row.session_id, // Use session_id for Flowise conversations
+                  title: title,
+                  messages: [], // Messages are loaded separately when needed
+                  createdAt: new Date(row.created_at),
+                  updatedAt: new Date(row.updated_at),
+                  specialty: row.specialty,
+                  caseId: row.case_id,
+                  type: 'case-study' as ConversationType,
+                  metadata: {
+                    messageCount: row.message_count || 0,
+                    lastActivity: new Date(row.updated_at)
+                  }
+                };
+              })
+            );
+
+            return conversations;
+
+          } catch (error) {
+            console.error('Error in getConversationsForCase:', error);
+            return [];
+          }
+        },
+
+        deleteConversationFromCase: async (conversationId: string, caseId: string) => {
+          try {
+            const { user } = get();
+            if (!user) {
+              return;
+            }
+
+            // Delete the conversation from flowise_conversations table
+            const { error: convError } = await supabase
+              .from('flowise_conversations')
+              .delete()
+              .eq('session_id', conversationId)
+              .eq('user_id', user.id);
+
+            if (convError) {
+              console.error('Error deleting conversation:', convError);
+              throw convError;
+            }
+
+            // Delete all messages associated with this conversation
+            const { error: msgError } = await supabase
+              .from('flowise_messages')
+              .delete()
+              .eq('session_id', conversationId)
+              .eq('user_id', user.id);
+
+            if (msgError) {
+              console.error('Error deleting conversation messages:', msgError);
+              // Continue even if message deletion fails
+            }
+
+            // Update local state - remove from conversations list
+            set((state) => ({
+              conversations: state.conversations.filter(conv => conv.id !== conversationId),
+              // Clear active conversation if it was the one deleted
+              activeConversationId: state.activeConversationId === conversationId ? null : state.activeConversationId,
+              messages: state.activeConversationId === conversationId ? [] : state.messages
+            }));
+
+          } catch (error) {
+            console.error('Error in deleteConversationFromCase:', error);
+            throw error;
+          }
+        },
+
         // ===============================
         // CHAT ACTIONS - CASES
         // ===============================
@@ -892,8 +1010,24 @@ export const useAppStore = create<AppStore>()(
           set((state) => ({ caseHistory: [...state.caseHistory, newCase] }));
           return newCase;
         },
-        resetCaseContext: () => set({ activeCase: null, caseHistory: [] }),
-        
+        resetCaseContext: () => set({ activeCase: null, caseHistory: [], caseContextSentForConversation: {} }),
+
+        // Case context tracking actions
+        markCaseContextSent: (conversationId: string) =>
+          set((state) => ({
+            caseContextSentForConversation: {
+              ...state.caseContextSentForConversation,
+              [conversationId]: true
+            }
+          })),
+
+        hasCaseContextBeenSent: (conversationId: string) => {
+          const state = get();
+          return state.caseContextSentForConversation[conversationId] === true;
+        },
+
+        resetCaseContextTracking: () => set({ caseContextSentForConversation: {} }),
+
         // ===============================
         // CHAT ACTIONS - KNOWLEDGE BASE
         // ===============================
@@ -1022,7 +1156,9 @@ export const useChat = () => useAppStore((state) => ({
   loadMessagesForConversation: state.loadMessagesForConversation,
   saveFlowiseMessage: state.saveFlowiseMessage,
   loadFlowiseMessages: state.loadFlowiseMessages,
-  
+  getConversationsForCase: state.getConversationsForCase,
+  deleteConversationFromCase: state.deleteConversationFromCase,
+
   // Cases
   activeCase: state.activeCase,
   caseHistory: state.caseHistory,

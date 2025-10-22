@@ -20,6 +20,7 @@ import mediscribe from './mediscribe';
 import profile from './profile';
 import caseManagement from './caseManagement';
 import caseLibrary from './caseLibrary';
+import caseCreation from './case-creation';
 
 export default {
   common: {
@@ -308,9 +309,10 @@ export default {
       }
     }
   },
-  
+
   // Case management
   'case-creation': {
+    ...caseCreation,
     createNewCase: 'Create New Case',
     newCase: 'New Case',
     caseTitle: 'Case Title',

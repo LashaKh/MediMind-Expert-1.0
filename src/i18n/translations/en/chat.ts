@@ -153,6 +153,7 @@ export default {
   },
   caseReadyTitle: 'Case Ready for Discussion',
   caseReadyDescription: 'I\'m ready to discuss this case with you. Ask me anything about diagnosis, treatment options, differential diagnosis, or any specific aspect of this case.',
+  caseReadyMessage: 'Case "{{title}}" is ready for discussion. Ask me about diagnosis, treatment options, differential diagnosis, or any specific aspect of this case.',
   doctor: 'Doctor',
   medical: 'medical',
   waitForProcessing: 'Please wait for {{count}} file(s) to finish processing before sending.',
@@ -167,5 +168,39 @@ export default {
     createNewCaseTitle: 'Create New Case',
     createNewCaseDescription: 'Create clinical cases that can be attached to chat for AI case study discussions and collaborative analysis.',
     aiDiscussion: 'AI Discussion'
+  },
+
+  // Conversations List
+  conversations: {
+    title: 'Chat Conversations',
+    subtitle: 'View, search and organize your conversation history',
+    newChat: 'New Chat',
+    refresh: 'Refresh',
+    searchPlaceholder: 'Search conversations...',
+    all: 'All',
+    chats: 'Chats',
+    cases: 'Cases',
+    allSpecialties: 'All Specialties',
+    cardiology: 'Cardiology',
+    obgyn: 'OB/GYN',
+    recent: 'Recent',
+    byName: 'By Name',
+    byMessages: 'By Messages',
+    message: 'message',
+    messages: 'messages',
+    conversation: 'conversation',
+    conversations: 'conversations',
+    caseStudy: 'case',
+    totalMessages: 'total messages',
+    noConversationsFound: 'No conversations found',
+    noMatchesFound: 'No matches found',
+    tryAdjustingSearchOrFilters: 'Try adjusting your search or filters',
+    startNewConversationHint: 'Start your first AI conversation',
+    createFirstConversation: 'Create First Conversation',
+    deleteConversation: 'Delete Conversation',
+    deleteConfirmation: 'Are you sure you want to delete this conversation? This action cannot be undone.',
+    save: 'Save',
+    cancel: 'Cancel',
+    delete: 'Delete'
   }
 }; 

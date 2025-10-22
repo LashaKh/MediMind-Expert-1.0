@@ -9,10 +9,11 @@ import {
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { PatientCase } from '../../types/chat';
+import { PatientCase, Conversation } from '../../types/chat';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useChat } from '../../stores/useAppStore';
 import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
+import { ConversationHistorySection } from './ConversationHistorySection';
 
 interface CaseListModalProps {
   isOpen: boolean;
@@ -38,11 +39,11 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
   className = ''
 }) => {
   const { t } = useTranslation();
-  const { deleteCase } = useChat();
+  const { deleteCase, getConversationsForCase, setActiveConversation, loadMessagesForConversation, deleteConversationFromCase } = useChat();
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<FilterStatus>('all');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
-  
+
   // Debug: Track when cases prop changes
   useEffect(() => {
   }, [cases]);
@@ -54,6 +55,45 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
   const [showFilters, setShowFilters] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // Conversation history state
+  const [expandedCaseId, setExpandedCaseId] = useState<string | null>(null);
+  const [caseConversations, setCaseConversations] = useState<Record<string, Conversation[]>>({});
+  const [loadingConversations, setLoadingConversations] = useState<Record<string, boolean>>({});
+  const [conversationCounts, setConversationCounts] = useState<Record<string, number>>({});
+
+  // Load conversation counts for all cases when modal opens
+  useEffect(() => {
+    if (isOpen && cases.length > 0) {
+      const loadAllConversationCounts = async () => {
+        const counts: Record<string, number> = {};
+        const allConversations: Record<string, Conversation[]> = {};
+
+        await Promise.all(
+          cases.map(async (caseItem) => {
+            const [conversations] = await safeAsync(
+              async () => await getConversationsForCase(caseItem.id),
+              {
+                context: 'load conversation count',
+                showToast: false,
+                severity: ErrorSeverity.LOW
+              }
+            );
+
+            if (conversations) {
+              counts[caseItem.id] = conversations.length;
+              allConversations[caseItem.id] = conversations;
+            }
+          })
+        );
+
+        setConversationCounts(counts);
+        setCaseConversations(allConversations);
+      };
+
+      loadAllConversationCounts();
+    }
+  }, [isOpen, cases, getConversationsForCase]);
 
   // Focus search on open
   useEffect(() => {
@@ -140,10 +180,10 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
 
   const handleConfirmDelete = async () => {
     if (!showDeleteConfirm) return;
-    
+
     const caseToDelete = showDeleteConfirm.case;
     setIsDeleting(caseToDelete.id);
-    
+
     const [, error] = await safeAsync(
       async () => await deleteCase(caseToDelete.id),
       {
@@ -159,8 +199,81 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
     } else {
       setShowDeleteConfirm(null);
     }
-    
+
     setIsDeleting(null);
+  };
+
+  // Conversation history handlers
+  const handleToggleConversationHistory = async (caseId: string) => {
+    const isCurrentlyExpanded = expandedCaseId === caseId;
+
+    if (isCurrentlyExpanded) {
+      // Collapse
+      setExpandedCaseId(null);
+    } else {
+      // Expand and load conversations if not already loaded
+      setExpandedCaseId(caseId);
+
+      if (!caseConversations[caseId]) {
+        setLoadingConversations(prev => ({ ...prev, [caseId]: true }));
+
+        const [conversations, error] = await safeAsync(
+          async () => await getConversationsForCase(caseId),
+          {
+            context: 'load case conversations',
+            showToast: false,
+            severity: ErrorSeverity.MEDIUM
+          }
+        );
+
+        if (conversations) {
+          setCaseConversations(prev => ({ ...prev, [caseId]: conversations }));
+        }
+
+        setLoadingConversations(prev => ({ ...prev, [caseId]: false }));
+      }
+    }
+  };
+
+  const handleLoadConversation = async (conversationId: string) => {
+    try {
+      // Set the active conversation first
+      setActiveConversation(conversationId);
+
+      // Load messages for this conversation
+      await loadMessagesForConversation(conversationId);
+
+      // Small delay to ensure state updates properly
+      setTimeout(() => {
+        // Close the modal
+        onClose();
+      }, 100);
+    } catch (error) {
+      console.error('Error loading conversation:', error);
+      onClose();
+    }
+  };
+
+  const handleDeleteConversation = async (conversationId: string, caseId: string) => {
+    try {
+      // Delete the conversation from the database
+      await deleteConversationFromCase(conversationId, caseId);
+
+      // Update local state to remove the conversation from the list
+      setCaseConversations(prev => ({
+        ...prev,
+        [caseId]: (prev[caseId] || []).filter(conv => conv.id !== conversationId)
+      }));
+
+      // Update the conversation count
+      setConversationCounts(prev => ({
+        ...prev,
+        [caseId]: (prev[caseId] || 1) - 1
+      }));
+    } catch (error) {
+      console.error('Error in handleDeleteConversation:', error);
+      throw error;
+    }
   };
 
   const getComplexityConfig = (complexity: 'low' | 'medium' | 'high') => {
@@ -446,11 +559,13 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                       className={`
                         group relative cursor-pointer transition-all duration-500 ease-out
                         ${viewMode === 'grid' ? 'aspect-[4/3]' : 'h-auto'}
-                        ${isActive 
-                          ? 'scale-105 z-10' 
-                          : isHovered 
-                            ? 'scale-102 z-5' 
-                            : 'scale-100'
+                        ${expandedCaseId === caseItem.id
+                          ? 'z-50'
+                          : isActive
+                            ? 'scale-105 z-10'
+                            : isHovered
+                              ? 'scale-102 z-5'
+                              : 'scale-100'
                         }
                       `}
                       style={{
@@ -464,10 +579,11 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     >
                       {/* Premium Card Container */}
                       <div className={`
-                        relative h-full p-6 rounded-3xl overflow-hidden
+                        relative h-full p-6 rounded-3xl
                         transition-all duration-500 ease-out
-                        ${isActive 
-                          ? 'ring-4 ring-[#2b6cb0]/40 shadow-2xl shadow-[#2b6cb0]/25' 
+                        ${expandedCaseId === caseItem.id ? 'overflow-visible' : 'overflow-hidden'}
+                        ${isActive
+                          ? 'ring-4 ring-[#2b6cb0]/40 shadow-2xl shadow-[#2b6cb0]/25'
                           : 'shadow-lg hover:shadow-2xl'
                         }
                       `}
@@ -580,6 +696,18 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                               )}
                             </div>
                           )}
+
+                          {/* Conversation History Section */}
+                          <ConversationHistorySection
+                            caseId={caseItem.id}
+                            conversations={caseConversations[caseItem.id] || []}
+                            conversationCount={conversationCounts[caseItem.id] || 0}
+                            isLoading={loadingConversations[caseItem.id] || false}
+                            isExpanded={expandedCaseId === caseItem.id}
+                            onToggleExpand={() => handleToggleConversationHistory(caseItem.id)}
+                            onLoadConversation={handleLoadConversation}
+                            onDeleteConversation={handleDeleteConversation}
+                          />
                         </div>
 
                         {/* Card Footer */}

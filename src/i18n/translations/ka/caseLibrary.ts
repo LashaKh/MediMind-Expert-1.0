@@ -48,6 +48,20 @@ export const caseLibrary = {
   medium: 'საშუალო',
   high: 'მაღალი',
 
+  // Conversation History
+  conversationHistory: 'საუბრების ისტორია',
+  conversation: 'საუბარი',
+  conversations: 'საუბრები',
+  noConversations: 'ჯერ არ არის საუბრები',
+  startChatToCreate: 'დააწკაპუნეთ "ჩატის დაწყება" პირველი საუბრის დასაწყებად ამ შემთხვევის შესახებ',
+  loadConversation: 'ჩატვირთვა',
+  viewConversations: 'საუბრების ნახვა',
+  hideConversations: 'საუბრების დამალვა',
+  deleteConversationTitle: 'საუბრის წაშლა',
+  deleteConversationMessage: 'ეს სამუდამოდ წაშლის ამ საუბარს და მის ყველა შეტყობინებას. ეს მოქმედება შეუქცევადია.',
+  cancel: 'გაუქმება',
+  delete: 'წაშლა',
+
   // Delete Confirmation Modal
   deleteTitle: 'შემთხვევის წაშლა',
   deleteSubtitle: 'ეს მოქმედება შეუქცევადია',

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { fetchAIResponse } from '../../lib/api/chat';
 import { APIError } from '../../lib/api/errors';
 import { Message, SourceReference, PatientCase, Attachment, KnowledgeBaseType } from '../../types/chat';
@@ -39,10 +39,12 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isRateLimited, setIsRateLimited] = useState(false);
-  
+
   // Use providedSessionId directly, fallback to generated UUID only if none provided
-  // This ensures we always use the latest sessionId from ChatContext
-  const sessionId = providedSessionId || uuidv4();
+  // Memoize to prevent regeneration on every render
+  const sessionId = useMemo(() => {
+    return providedSessionId || uuidv4();
+  }, [providedSessionId]);
 
   const sendMessage = useCallback(async (content: string, attachments?: Attachment[], caseContext?: PatientCase | null, knowledgeBaseType?: KnowledgeBaseType, personalDocumentIds?: string[], enhancedMessage?: string) => {
     if (!content.trim() && (!attachments || attachments.length === 0)) return;

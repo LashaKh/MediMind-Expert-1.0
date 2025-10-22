@@ -57,7 +57,16 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   const [abgContextType, setAbgContextType] = useState<string | null>(null);
   
   // Generate and maintain sessionId for Flowise conversations - allow regeneration on case reset
-  const [sessionId, setSessionId] = useState(() => uuidv4());
+  const [sessionId, setSessionId] = useState(() => {
+    const id = uuidv4();
+    console.log('🆔 Initial sessionId created:', id);
+    return id;
+  });
+
+  // Debug: Log whenever sessionId changes
+  React.useEffect(() => {
+    console.log('📝 SessionId state changed to:', sessionId);
+  }, [sessionId]);
   
   // Debug the profile object
 
@@ -90,7 +99,10 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
     selectedDocuments,
     setSelectedDocuments,
     saveFlowiseMessage,
-    loadFlowiseMessages
+    loadFlowiseMessages,
+    markCaseContextSent,
+    hasCaseContextBeenSent,
+    resetCaseContextTracking
   } = useAppStore();
 
   // Get Flowise metadata functions and case management from ChatContext
@@ -153,6 +165,26 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
       }
     };
   }, [location, navigate, setKnowledgeBase, createNewConversation, setActiveConversation, profile]);
+
+  // Regenerate sessionId ONLY when switching between conversations (not when creating first)
+  // Use useRef to track the previous conversationId
+  const prevConversationIdRef = React.useRef<string | null>(null);
+
+  useEffect(() => {
+    // Only regenerate if:
+    // 1. We have an activeConversationId
+    // 2. We had a previous conversationId (not first-time creation)
+    // 3. The IDs are different (actual switch)
+    if (activeConversationId &&
+        prevConversationIdRef.current !== null &&
+        activeConversationId !== prevConversationIdRef.current) {
+      console.log('🔄 Switching conversations - regenerating sessionId');
+      setSessionId(uuidv4());
+    }
+
+    // Always update the ref to track the current conversation
+    prevConversationIdRef.current = activeConversationId;
+  }, [activeConversationId]);
 
   // Handle opening case modal on mount
   useEffect(() => {
@@ -446,14 +478,17 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
 
   // Handle sending a new message with enhanced case context including attachments
   const handleSendMessageWithEnhancedContext = useCallback(async (
-    content: string, 
-    messageAttachments?: Attachment[], 
+    content: string,
+    messageAttachments?: Attachment[],
     enhancedCaseContext?: string,
     caseAttachmentUploads?: any[],
     enhancedMessage?: string
   ) => {
     const conversationId = ensureConversationExists();
-    
+
+    // Check if case context has already been sent for this conversation
+    const shouldSendCaseContext = activeCase && !hasCaseContextBeenSent(conversationId);
+
     const userMessage: Message = {
       id: `msg-${Date.now()}`,
       content,
@@ -468,73 +503,100 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
     };
 
     addMessage(userMessage);
-    
+
     // Save user message to database for Flowise conversations
     if (sessionId && knowledgeBase === 'curated') {
       saveFlowiseMessage(sessionId, userMessage);
     }
-    
+
     setChatLoading(true);
 
     const [, error] = await safeAsync(
       async () => {
-        // Create enhanced case object with enriched context
-        const enhancedCase = activeCase ? {
-          ...activeCase,
-          // Add enhancedContext field that includes attachment content
-          enhancedContext: enhancedCaseContext
-        } : null;
+        // Determine what case context to send:
+        // - First message: Full case context with enhanced context
+        // - Subsequent messages: Marker-only case for Flowise routing
+        let enhancedCase: any = null;
 
-        // Combine message attachments with case attachment uploads
-        // Convert case attachment uploads to proper Attachment format
-        const caseAttachments: Attachment[] = (caseAttachmentUploads || []).map(upload => {
-          if (upload.type === 'url') {
-            // Image URL attachments
-            return {
-              id: uuidv4(),
-              name: upload.name,
-              type: upload.mime,
-              url: upload.data,
-              uploadType: 'url',
-              size: 0
+        if (activeCase) {
+          if (shouldSendCaseContext) {
+            // First message: Include full case context
+            enhancedCase = {
+              ...activeCase,
+              enhancedContext: enhancedCaseContext
             };
           } else {
-            // Text content from documents - create a proper base64 text file
-            const textContent = upload.data;
-            const base64Text = btoa(unescape(encodeURIComponent(textContent)));
-            const dataUrl = `data:text/plain;base64,${base64Text}`;
-            
-            return {
-              id: uuidv4(),
-              name: upload.name,
-              type: 'text/plain',
-              base64Data: dataUrl,
-              uploadType: 'file',
-              size: textContent.length
+            // Subsequent messages: Include marker-only flag for routing
+            // This ensures ACTIVE CASE CONTEXT marker is included without full context
+            enhancedCase = {
+              id: activeCase.id,
+              markerOnly: true // Special flag for Flowise routing
             };
           }
-        });
-        
-        const allAttachments = [
-          ...(messageAttachments || []),
-          ...caseAttachments
-        ];
+        }
 
-        // Pass the enhanced case context and combined attachments to the API
+        // ONLY include case attachments on first message
+        // For subsequent messages, only send new message-specific attachments
+        let allAttachments: Attachment[] = messageAttachments || [];
+
+        if (shouldSendCaseContext && caseAttachmentUploads) {
+          // First message: Convert and include case attachment uploads
+          const caseAttachments: Attachment[] = caseAttachmentUploads.map(upload => {
+            if (upload.type === 'url') {
+              // Image URL attachments
+              return {
+                id: uuidv4(),
+                name: upload.name,
+                type: upload.mime,
+                url: upload.data,
+                uploadType: 'url',
+                size: 0
+              };
+            } else {
+              // Text content from documents - create a proper base64 text file
+              const textContent = upload.data;
+              const base64Text = btoa(unescape(encodeURIComponent(textContent)));
+              const dataUrl = `data:text/plain;base64,${base64Text}`;
+
+              return {
+                id: uuidv4(),
+                name: upload.name,
+                type: 'text/plain',
+                base64Data: dataUrl,
+                uploadType: 'file',
+                size: textContent.length
+              };
+            }
+          });
+
+          allAttachments = [
+            ...(messageAttachments || []),
+            ...caseAttachments
+          ];
+        }
+
+        // Pass the case context and attachments to the API
+        // First message: enhancedCase contains full context
+        // Subsequent messages: enhancedCase contains markerOnly flag for Flowise routing
         await sendToFlowise(
-          content, 
-          allAttachments, 
-          enhancedCase as any, // Cast to PatientCase for compatibility
-          knowledgeBase, 
+          content,
+          allAttachments,
+          enhancedCase as any,
+          knowledgeBase,
           undefined, // personalDocumentIds - handled automatically by backend
           enhancedMessage // Pass the enhanced message with extracted text
         );
+
+        // Mark case context as sent for this conversation (only on first message)
+        if (shouldSendCaseContext) {
+          markCaseContextSent(conversationId);
+        }
 
         // Save Flowise conversation metadata for curated knowledge base conversations
         if (knowledgeBase === 'curated') {
           // Determine conversation type based on whether there's an active case
           const conversationType = activeCase ? 'case-study' : 'general';
-          
+
           await saveFlowiseConversationMetadata(
             sessionId, // Use the generated sessionId instead of activeConversationId
             content, // Save original content
@@ -543,7 +605,7 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
             activeCase?.id,
             conversationType
           );
-          
+
           // Increment message count (user message + AI response = 2)
           await incrementFlowiseMessageCount(sessionId);
         }
@@ -558,9 +620,9 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
     if (error) {
       setChatError(t('chat.messageSendFailed', 'Failed to send message. Please try again.'));
     }
-    
+
     setChatLoading(false);
-  }, [addMessage, sendToFlowise, activeConversationId, knowledgeBase, activeCase, setChatLoading, setChatError, ensureConversationExists, abgContext]);
+  }, [addMessage, sendToFlowise, activeConversationId, knowledgeBase, activeCase, setChatLoading, setChatError, ensureConversationExists, abgContext, hasCaseContextBeenSent, markCaseContextSent, sessionId, saveFlowiseMessage, saveFlowiseConversationMetadata, incrementFlowiseMessageCount, t]);
 
   // Handle case creation
   const handleCaseCreate = async (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>): Promise<PatientCase> => {
@@ -752,19 +814,22 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   const handleNewConversation = () => {
     // Clear current messages
     clearMessages();
-    
+
     // Reset any active case context
     resetCaseContext();
-    
+
+    // Generate a new sessionId to ensure completely separate conversation in Flowise
+    setSessionId(uuidv4());
+
     // Create a completely fresh conversation
     const newConversationId = createNewConversation(
-      undefined, 
+      undefined,
       profile?.medical_specialty as 'cardiology' | 'obgyn'
     );
-    
+
     // Set the new conversation as active
     setActiveConversation(newConversationId);
-    
+
     // Optional: Show success feedback
   };
 

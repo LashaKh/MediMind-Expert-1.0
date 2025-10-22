@@ -48,6 +48,20 @@ export const caseLibrary = {
   medium: 'СРЕДНЯЯ',
   high: 'ВЫСОКАЯ',
 
+  // Conversation History
+  conversationHistory: 'История разговоров',
+  conversation: 'разговор',
+  conversations: 'разговоры',
+  noConversations: 'Пока нет разговоров',
+  startChatToCreate: 'Нажмите "Начать чат", чтобы начать первый разговор об этом случае',
+  loadConversation: 'Загрузить',
+  viewConversations: 'Просмотр разговоров',
+  hideConversations: 'Скрыть разговоры',
+  deleteConversationTitle: 'Удалить разговор',
+  deleteConversationMessage: 'Это навсегда удалит этот разговор и все его сообщения. Это действие нельзя отменить.',
+  cancel: 'Отмена',
+  delete: 'Удалить',
+
   // Delete Confirmation Modal
   deleteTitle: 'Удалить кейс',
   deleteSubtitle: 'Это действие нельзя отменить',

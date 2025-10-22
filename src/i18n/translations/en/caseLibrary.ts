@@ -48,6 +48,20 @@ export const caseLibrary = {
   medium: 'MEDIUM',
   high: 'HIGH',
 
+  // Conversation History
+  conversationHistory: 'Conversation History',
+  conversation: 'conversation',
+  conversations: 'conversations',
+  noConversations: 'No conversations yet',
+  startChatToCreate: 'Click "Start Chat" to begin your first conversation about this case',
+  loadConversation: 'Load',
+  viewConversations: 'View Conversations',
+  hideConversations: 'Hide Conversations',
+  deleteConversationTitle: 'Delete Conversation',
+  deleteConversationMessage: 'This will permanently delete this conversation and all its messages. This action cannot be undone.',
+  cancel: 'Cancel',
+  delete: 'Delete',
+
   // Delete Confirmation Modal
   deleteTitle: 'Delete Case Study',
   deleteSubtitle: 'This action cannot be undone',

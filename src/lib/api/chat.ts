@@ -118,21 +118,30 @@ async function fetchAIResponseDirect(
     // Add case context if provided AND the message is a meaningful question
     if (caseContext && message && message.trim().length > 0) {
       let caseString: string;
-      
-      // Check if enhanced context is available (includes attachment content)
-      if ((caseContext as any).enhancedContext) {
-        caseString = `Patient Case Context:
+
+      // Check if this is a marker-only case (subsequent message in case discussion)
+      if ((caseContext as any).markerOnly === true) {
+        // Subsequent message: Only include marker for Flowise routing
+        caseString = `**ACTIVE CASE CONTEXT:**
+[Context previously provided in this conversation - continuing case discussion]
+
+**USER QUESTION:**`;
+      } else if ((caseContext as any).enhancedContext) {
+        // First message: Include full enhanced context
+        caseString = `**ACTIVE CASE CONTEXT:**
 ${(caseContext as any).enhancedContext}
-- Current Question Context: This question relates to the above patient case.`;
+
+**USER QUESTION:**`;
       } else {
-        // Generate enhanced context using buildEnhancedCaseContext
+        // First message: Generate and include full enhanced context
         const enhancedContext = buildEnhancedCaseContext(caseContext);
-        caseString = `Patient Case Context:
+        caseString = `**ACTIVE CASE CONTEXT:**
 ${enhancedContext}
-- Current Question Context: This question relates to the above patient case.`;
+
+**USER QUESTION:**`;
       }
-      
-      requestPayload.question = `${caseString}\n\nQuestion: ${message}`;
+
+      requestPayload.question = `${caseString}\n${message}`;
     }
 
     logger.debug('Making direct Flowise request...', undefined, { component: 'chat-api', action: 'directFlowiseCall' });
@@ -253,9 +262,18 @@ export async function fetchAIResponse(
     // If we have case context, prepend it to the message
     if (caseContext) {
       let caseContextText: string;
-      
-      // Check if enhanced context is available (includes attachment content)
-      if ((caseContext as any).enhancedContext) {
+
+      // Check if this is a marker-only case (subsequent message in case discussion)
+      if ((caseContext as any).markerOnly === true) {
+        // Subsequent message: Only include marker for Flowise routing, no full context
+        caseContextText = `
+**ACTIVE CASE CONTEXT:**
+[Context previously provided in this conversation - continuing case discussion]
+
+**USER QUESTION:**
+${messageText}`;
+      } else if ((caseContext as any).enhancedContext) {
+        // First message: Include full enhanced context with marker
         caseContextText = `
 **ACTIVE CASE CONTEXT:**
 ${(caseContext as any).enhancedContext}
@@ -263,7 +281,7 @@ ${(caseContext as any).enhancedContext}
 **USER QUESTION:**
 ${messageText}`;
       } else {
-        // Generate enhanced context using buildEnhancedCaseContext
+        // First message: Generate and include full enhanced context
         const enhancedContext = buildEnhancedCaseContext(caseContext);
         caseContextText = `
 **ACTIVE CASE CONTEXT:**
@@ -272,7 +290,7 @@ ${enhancedContext}
 **USER QUESTION:**
 ${messageText}`;
       }
-      
+
       messageText = caseContextText;
     }
 

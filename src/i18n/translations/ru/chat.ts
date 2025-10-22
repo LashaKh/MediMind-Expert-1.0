@@ -234,6 +234,14 @@ export const chat = {
 
   // Conversations List
   conversations: {
+    title: 'Чат беседы',
+    subtitle: 'Просмотр, поиск и организация истории разговоров',
+    newChat: 'Новый чат',
+    refresh: 'Обновить',
+    searchPlaceholder: 'Поиск разговоров...',
+    all: 'Все',
+    chats: 'Чаты',
+    cases: 'Случаи',
     allSpecialties: 'Все специальности',
     cardiology: 'Кардиология',
     obgyn: 'Акушерство-гинекология',
