@@ -12,16 +12,16 @@ export const formatABGForAIContext = (result: ABGResult): string => {
   const sections: string[] = [];
 
   // Header
-  sections.push(`=== Blood Gas Analysis Report ===`);
-  sections.push(`Date: ${new Date(result.created_at).toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
+  sections.push(t('abg.context.reportHeader'));
+  sections.push(`Date: ${new Date(result.created_at).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
   })}`);
   sections.push(`Type: ${result.type}`);
-  
+
   if (result.patient) {
     sections.push(`Patient: ${result.patient.first_name} ${result.patient.last_name}`);
     if (result.patient.medical_record_number) {
@@ -36,30 +36,30 @@ export const formatABGForAIContext = (result: ABGResult): string => {
   sections.push(''); // Empty line
 
   // Raw Analysis
-  sections.push(`=== Laboratory Values and Analysis ===`);
+  sections.push(t('abg.context.laboratoryValuesHeader'));
   sections.push(result.raw_analysis);
   sections.push('');
 
   // Interpretation (if available)
   if (result.interpretation) {
-    sections.push(`=== Clinical Interpretation ===`);
+    sections.push(t('abg.context.clinicalInterpretationHeader'));
     sections.push(result.interpretation);
     sections.push('');
   }
 
   // Action Plan (if available)
   if (result.action_plan) {
-    sections.push(`=== Recommended Action Plan ===`);
+    sections.push(t('abg.context.recommendedActionPlanHeader'));
     sections.push(result.action_plan);
     sections.push('');
   }
 
   // Processing metadata
   if (result.processing_time_ms) {
-    sections.push(`Processing Time: ${(result.processing_time_ms / 1000).toFixed(1)} seconds`);
+    sections.push(`${t('abg.context.processingTime')} ${(result.processing_time_ms / 1000).toFixed(1)} seconds`);
   }
 
-  sections.push(`Report ID: ${result.id}`);
+  sections.push(`${t('abg.context.reportId')} ${result.id}`);
 
   return sections.join('\n');
 };
@@ -70,40 +70,40 @@ export const formatABGForAIContext = (result: ABGResult): string => {
 export const createPatientCaseFromABG = (result: ABGResult): PatientCase => {
   const patientName = result.patient 
     ? `${result.patient.first_name} ${result.patient.last_name}`
-    : 'Unknown Patient';
+    : t('abg.context.unknownPatient');
 
   const patientAge = result.patient?.date_of_birth 
     ? calculateAge(new Date(result.patient.date_of_birth))
     : undefined;
 
-  const caseDescription = `Blood Gas Analysis Case - ${result.type}\n\n${formatABGForAIContext(result)}`;
+  const caseDescription = `${t('abg.context.casePrefix')}${result.type}\n\n${formatABGForAIContext(result)}`;
 
   return {
     id: `abg-${result.id}`,
-    title: `ABG Analysis - ${patientName}`,
+    title: `${t('abg.context.abgAnalysisPrefix')}${patientName}`,
     description: result.interpretation 
-      ? `${result.type} analysis with interpretation and action plan` 
-      : `${result.type} analysis`,
+      ? `${result.type}${t('abg.context.analysisWithInterpretationAndActionPlan')}` 
+      : `${result.type}${t('abg.context.analysis')}`,
     patient: {
       name: patientName,
       age: patientAge,
       mrn: result.patient?.medical_record_number,
       dateOfBirth: result.patient?.date_of_birth
     },
-    chiefComplaint: `Blood gas analysis interpretation for ${result.type.toLowerCase()}`,
+    chiefComplaint: `${t('abg.context.interpretationFor')}${result.type.toLowerCase()}`,
     currentIllness: caseDescription,
     status: 'active',
     createdAt: result.created_at,
     updatedAt: result.updated_at,
-    medicalSpecialty: 'cardiology', // ABG can be relevant to both specialties
+    medicalSpecialty: t('abg.context.medicalSpecialtyCardiology'), // ABG can be relevant to both specialties
     priority: result.interpretation?.includes('critical') || result.interpretation?.includes('urgent') 
-      ? 'high' 
-      : 'medium',
+      ? t('abg.context.priorityHigh') 
+      : t('abg.context.priorityMedium'),
     tags: [
-      'blood-gas-analysis',
+      t('abg.context.tagBloodGasAnalysis'),
       result.type.toLowerCase().replace(/\s+/g, '-'),
-      ...(result.interpretation ? ['interpreted'] : []),
-      ...(result.action_plan ? ['action-plan'] : [])
+      ...(result.interpretation ? [t('abg.context.tagInterpreted')] : []),
+      ...(result.action_plan ? [t('abg.context.tagActionPlan')] : [])
     ]
   };
 };
@@ -120,18 +120,18 @@ export const createPatientCasesFromABGs = (results: ABGResult[]): PatientCase[] 
  */
 export const formatMultipleABGsForAIContext = (results: ABGResult[]): string => {
   if (results.length === 0) {
-    return 'No ABG results available.';
+    return t('abg.context.noResultsAvailable');
   }
 
   const sections: string[] = [];
 
-  sections.push(`=== Blood Gas Analysis Summary ===`);
-  sections.push(`Total Results: ${results.length}`);
-  sections.push(`Date Range: ${new Date(results[results.length - 1]?.created_at).toLocaleDateString()} to ${new Date(results[0]?.created_at).toLocaleDateString()}`);
+  sections.push(t('abg.context.summaryHeader'));
+  sections.push(`${t('abg.context.totalResults')} ${results.length}`);
+  sections.push(`${t('abg.context.dateRange')} ${new Date(results[results.length - 1]?.created_at).toLocaleDateString()} ${t('abg.context.to')} ${new Date(results[0]?.created_at).toLocaleDateString()}`);
   sections.push('');
 
   results.forEach((result, index) => {
-    sections.push(`--- Result ${index + 1} of ${results.length} ---`);
+    sections.push(`${t('abg.context.resultOf')} ${index + 1} ${t('abg.context.of')} ${results.length} ---`);
     sections.push(formatABGForAIContext(result));
     sections.push('');
   });
@@ -155,13 +155,13 @@ export const enhancePromptWithABGContext = (
     ? formatABGForAIContext(results[0])
     : formatMultipleABGsForAIContext(results);
 
-  return `CLINICAL CONTEXT:
+  return `${t('abg.context.clinicalContext')}
 ${abgContext}
 
-USER QUESTION:
+${t('abg.context.userQuestion')}
 ${originalPrompt}
 
-Please consider the blood gas analysis results provided above when answering this medical question. If the question is related to the ABG results, provide specific clinical insights based on the laboratory values, interpretation, and recommended actions.`;
+${t('abg.context.considerResultsPrompt')}`;
 };
 
 /**
@@ -220,13 +220,13 @@ export const getABGSummary = (result: ABGResult): string => {
     const paramStr = Object.entries(parameters)
       .map(([key, value]) => `${key}: ${value}`)
       .join(', ');
-    sections.push(`Key values: ${paramStr}`);
+    sections.push(`${t('abg.context.keyValues')} ${paramStr}`);
   }
 
   if (result.interpretation) {
     // Extract first sentence of interpretation for summary
     const firstSentence = result.interpretation.split('.')[0];
-    sections.push(`Interpretation: ${firstSentence}...`);
+    sections.push(`${t('abg.context.interpretation')} ${firstSentence}...`);
   }
 
   return sections.join(' | ');
@@ -246,12 +246,11 @@ export const createPreActionPlanConsultationPrompt = (
 ${abgContext}
 
 CONSULTATION STAGE: POST-INTERPRETATION (Pre-Action Plan)
-Available Information:
-- Laboratory Values: ✓
-- Clinical Interpretation: ✓
-- Action Plan: ❌ (Not yet generated)
+${t('abg.context.availableInformation')}
+${t('abg.context.clinicalInterpretationCheck')}
+${t('abg.context.actionPlanNotGenerated')}
 
-CLINICIAN REQUEST:
+${t('abg.context.clinicianRequest')}
 ${userMessage}`;
 };
 
@@ -268,13 +267,13 @@ export const createPostActionPlanConsultationPrompt = (
 
 ${abgContext}
 
-CONSULTATION STAGE: COMPLETE ANALYSIS
-Available Information:
-- Laboratory Values: ✓
-- Clinical Interpretation: ✓
-- Action Plan: ✓
+${t('abg.context.consultationStageCompleteAnalysis')}
+${t('abg.context.availableInformation')}
+${t('abg.context.laboratoryValuesCheck')}
+${t('abg.context.clinicalInterpretationCheck')}
+${t('abg.context.actionPlanCheck')}
 
-CLINICIAN REQUEST:
+${t('abg.context.clinicianRequest')}
 ${userMessage}`;
 };
 
@@ -318,7 +317,7 @@ export const formatInterpretationOnlyContext = (result: ABGResult): string => {
   const sections: string[] = [];
 
   // Header
-  sections.push(`=== Blood Gas Analysis Report (Interpretation Stage) ===`);
+  sections.push(t('abg.context.reportInterpretationStage'));
   sections.push(`Date: ${new Date(result.created_at).toLocaleDateString('en-US', { 
     year: 'numeric', 
     month: 'long', 
@@ -355,14 +354,14 @@ export const formatInterpretationOnlyContext = (result: ABGResult): string => {
 
   // Note about stage
   sections.push(`=== Consultation Stage ===`);
-  sections.push(`Current Stage: INTERPRETATION COMPLETE`);
-  sections.push(`Action Plan Status: Not yet generated`);
-  sections.push(`Available for AI consultation: Laboratory values + Clinical interpretation`);
+  sections.push(t('abg.context.currentStageInterpretationComplete'));
+  sections.push(t('abg.context.actionPlanStatusNotGenerated'));
+  sections.push(t('abg.context.availableForAIConsultation'));
 
   // Processing metadata
   if (result.processing_time_ms) {
     sections.push('');
-    sections.push(`Processing Time: ${(result.processing_time_ms / 1000).toFixed(1)} seconds`);
+    sections.push(`${t('abg.context.processingTime')} ${(result.processing_time_ms / 1000).toFixed(1)} seconds`);
   }
 
   sections.push(`Report ID: ${result.id}`);
@@ -385,19 +384,19 @@ export const createSelectiveActionPlanContext = (
 
   // For now, we'll return the original result with a note about selection
   // In a more sophisticated implementation, we could parse and filter the action plan
-  const selectionNote = `\n\n=== SELECTED CONTENT FOR AI CONSULTATION ===\n`;
+  const selectionNote = `\n\n${t('abg.context.selectedContentHeader')}\n`;
   const selectedNote = selectedIssues.length > 0 
-    ? `Selected Issues: ${selectedIssues.join(', ')}\n`
-    : `Selected Action Plans: ${selectedActionPlans.join(', ')}\n`;
+    ? `${t('abg.context.selectedIssues')} ${selectedIssues.join(', ')}\n`
+    : `${t('abg.context.selectedActionPlans')} ${selectedActionPlans.join(', ')}\n`;
   
   return {
     ...result,
-    action_plan: result.action_plan + selectionNote + selectedNote + `\n(Full action plan available, showing selected content only for AI consultation)`
+    action_plan: result.action_plan + selectionNote + selectedNote + `\n${t('abg.context.fullActionPlanNote')}`
   };
 };
 
 /**
- * Enhanced buildContextAwarePrompt with new consultation types
+ * Enhanced prompt builder with context awareness
  */
 export const buildEnhancedContextAwarePrompt = (
   originalMessage: string,
@@ -415,22 +414,21 @@ export const buildEnhancedContextAwarePrompt = (
         ...result,
         action_plan: undefined
       };
-      stageDescription = 'INTERPRETATION STAGE - Clinical interpretation available, action plan not yet generated';
+      stageDescription = t('abg.context.interpretationStageDescription');
       break;
       
     case 'selective-action-plan':
       if (selectedItems && selectedItems.length > 0) {
         contextualResult = createSelectiveActionPlanContext(result, selectedItems);
-        stageDescription = `SELECTIVE ACTION PLAN CONSULTATION - ${selectedItems.length} selected item(s)`;
+        stageDescription = `${t('abg.context.selectiveActionPlanConsultation')}${selectedItems.length} ${t('abg.context.selectedItems')}`;
       } else {
-        stageDescription = 'COMPLETE ACTION PLAN CONSULTATION - All action plan content included';
+        stageDescription = t('abg.context.completeActionPlanConsultation');
       }
       break;
       
-    case 'complete':
-      stageDescription = 'COMPLETE ANALYSIS CONSULTATION - All available information included';
-      break;
-      
+          case 'complete':
+          stageDescription = t('abg.context.completeAnalysisConsultation');
+          break;      
     case 'auto':
     default:
       if (!result.action_plan) {
@@ -440,16 +438,14 @@ export const buildEnhancedContextAwarePrompt = (
       }
   }
 
-  const contextFormat = consultationType === 'interpretation-only' 
-    ? formatInterpretationOnlyContext(contextualResult)
-    : formatABGForAIContext(contextualResult);
+  const contextFormat = formatABGForAIContext(contextualResult);
 
-  return `CLINICAL CONSULTATION REQUEST:
+  return `${t('abg.context.clinicalConsultationRequest')}
 
 ${contextFormat}
 
-CONSULTATION TYPE: ${stageDescription}
+${t('abg.context.consultationType')} ${stageDescription}
 
-CLINICIAN REQUEST:
+${t('abg.context.clinicianRequest')}
 ${originalMessage}`;
 };

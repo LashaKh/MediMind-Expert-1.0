@@ -84,9 +84,9 @@ export const ProfileStatsDashboard: React.FC = () => {
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
     
-    if (diffInHours < 1) return 'Just now';
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}d ago`;
+    if (diffInHours < 1) return t('profile.justNow');
+    if (diffInHours < 24) return t('profile.hoursAgo', { count: diffInHours });
+    if (diffInHours < 168) return t('profile.daysAgo', { count: Math.floor(diffInHours / 24) });
     return date.toLocaleDateString();
   };
 
@@ -250,10 +250,10 @@ export const ProfileStatsDashboard: React.FC = () => {
               <div className="p-2 bg-white/20 backdrop-blur-sm rounded-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
                 <BarChart3 className="w-5 h-5 text-white" />
               </div>
-              <span className="group-hover:text-[#90cdf4] transition-colors duration-300">Weekly Activity</span>
+              <span className="group-hover:text-[#90cdf4] transition-colors duration-300">{t('profile.weeklyActivity')}</span>
           </h3>
             <div className="flex items-center space-x-3">
-          <div className="text-white/70 text-sm">Last 7 days</div>
+          <div className="text-white/70 text-sm">{t('profile.last7Days')}</div>
               <div className="w-2 h-2 bg-green-400 rounded-full animate-live-pulse" />
             </div>
         </div>
@@ -282,7 +282,7 @@ export const ProfileStatsDashboard: React.FC = () => {
                     {/* Value Tooltip */}
                     <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900/90 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl border border-white/10">
                       <span className="font-semibold">{value}</span>
-                      <div className="text-xs text-gray-300">sessions</div>
+                      <div className="text-xs text-gray-300">{t('profile.sessions')}</div>
                       <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900/90" />
                     </div>
 
@@ -297,7 +297,7 @@ export const ProfileStatsDashboard: React.FC = () => {
                 
                 {/* Day Labels */}
                 <span className="text-white/60 text-xs font-medium group-hover:text-white/80 transition-colors duration-300">
-                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][index]}
+                {t('profile.days', { returnObjects: true })[index]}
               </span>
             </div>
           ))}
@@ -308,15 +308,15 @@ export const ProfileStatsDashboard: React.FC = () => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-[#63b3ed] rounded-full" />
-                <span className="text-white/70">Avg: {Math.round(stats.weeklyActivity.reduce((a, b) => a + b, 0) / 7)} sessions</span>
+                <span className="text-white/70">{t('profile.avgSessions', { avg: Math.round(stats.weeklyActivity.reduce((a, b) => a + b, 0) / 7) })}</span>
       </div>
               <div className="flex items-center space-x-2">
                 <TrendingUp className="w-3 h-3 text-green-400" />
-                <span className="text-green-400 font-medium">+15% vs last week</span>
+                <span className="text-green-400 font-medium">{t('profile.vsLastWeek')}</span>
               </div>
             </div>
             <div className="text-white/50">
-              Total: {stats.weeklyActivity.reduce((a, b) => a + b, 0)} sessions
+              {t('profile.totalSessions', { total: stats.weeklyActivity.reduce((a, b) => a + b, 0) })}
             </div>
           </div>
         </div>
@@ -426,15 +426,15 @@ export const ProfileStatsDashboard: React.FC = () => {
               <h3 className="text-white text-xl font-bold group-hover:text-yellow-200 transition-colors duration-300">
                 {stats.professionalLevel}
               </h3>
-              <p className="text-white/70 text-sm font-medium">Medical Professional</p>
+              <p className="text-white/70 text-sm font-medium">{t('profile.medicalProfessional')}</p>
             </div>
             
             {/* Enhanced Score Display */}
             <div className="space-y-3">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/20">
-                <div className="text-white text-sm font-semibold mb-1">Specialty Score</div>
+                <div className="text-white text-sm font-semibold mb-1">{t('profile.specialtyScore')}</div>
                 <div className="flex items-center justify-between">
-                  <div className="text-white/80 text-xs">Professional Rating</div>
+                  <div className="text-white/80 text-xs">{t('profile.professionalRating')}</div>
                   <div className="flex items-center space-x-2">
                     <div className="text-white text-lg font-bold">{stats.specialtyScore}%</div>
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-live-pulse" />
@@ -446,11 +446,11 @@ export const ProfileStatsDashboard: React.FC = () => {
               <div className="flex items-center justify-center space-x-2">
                 <div className="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-lg text-white text-xs font-medium border border-white/10">
                   <ShieldCheck className="w-3 h-3 inline mr-1" />
-                  Verified
+                  {t('profile.verified')}
                 </div>
                 <div className="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-lg text-white text-xs font-medium border border-white/10">
                   <Award className="w-3 h-3 inline mr-1" />
-                  Expert
+                  {t('profile.expert')}
                 </div>
             </div>
           </div>
@@ -466,9 +466,9 @@ export const ProfileStatsDashboard: React.FC = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
         <StatCard
           icon={<Target className="w-5 h-5 text-white animate-live-pulse" />}
-          title="Profile Complete"
+          title={t('profile.profileCompleteStatTitle')}
           value={`${stats.profileCompletion}%`}
-          subtitle="Almost there! Add more details"
+          subtitle={t('profile.profileCompleteStatSubtitle')}
           trend="up"
           trendValue="+5%"
           gradient="from-[#2b6cb0] to-[#63b3ed]"
@@ -479,9 +479,9 @@ export const ProfileStatsDashboard: React.FC = () => {
         
         <StatCard
           icon={<Calendar className="w-5 h-5 text-white animate-pulse" />}
-          title="Member Since"
+          title={t('profile.memberSinceStatTitle')}
           value={`${stats.accountAge} days`}
-          subtitle={`Last active ${formatLastActive(stats.lastActiveDate)}`}
+          subtitle={t('profile.memberSinceStatSubtitle', { date: formatLastActive(stats.lastActiveDate) })}
           gradient="from-green-600 to-emerald-600"
           delay={100}
           statKey="member"
@@ -490,9 +490,9 @@ export const ProfileStatsDashboard: React.FC = () => {
         
         <StatCard
           icon={<Zap className="w-5 h-5 text-white animate-bounce" />}
-          title="Calculations Used"
+          title={t('profile.calculationsUsedStatTitle')}
           value={stats.calculationsUsed}
-          subtitle="Medical calculators accessed"
+          subtitle={t('profile.calculationsUsedStatSubtitle')}
           trend="up"
           trendValue="+12"
           gradient="from-[#1a365d] to-[#2b6cb0]"
@@ -503,9 +503,9 @@ export const ProfileStatsDashboard: React.FC = () => {
         
         <StatCard
           icon={<Brain className="w-5 h-5 text-white animate-pulse" />}
-          title="AI Consultations"
+          title={t('profile.aiConsultationsStatTitle')}
           value={stats.aiConsultations}
-          subtitle="Expert AI conversations"
+          subtitle={t('profile.aiConsultationsStatSubtitle')}
           trend="up"
           trendValue="+8"
           gradient="from-orange-600 to-red-600"
@@ -519,9 +519,9 @@ export const ProfileStatsDashboard: React.FC = () => {
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 lg:gap-6">
         <StatCard
           icon={<BookOpen className="w-5 h-5 text-white animate-float" />}
-          title="Documents"
+          title={t('profile.documentsStatTitle')}
           value={stats.documentsProcessed}
-          subtitle="Files processed"
+          subtitle={t('profile.documentsStatSubtitle')}
           gradient="from-teal-600 to-cyan-600"
           delay={400}
           statKey="documents"
@@ -530,9 +530,9 @@ export const ProfileStatsDashboard: React.FC = () => {
         
         <StatCard
           icon={<Award className="w-5 h-5 text-white animate-medical-badge-glow" />}
-          title="Achievements"
+          title={t('profile.achievementsStatTitle')}
           value={stats.achievements}
-          subtitle="Professional badges"
+          subtitle={t('profile.achievementsStatSubtitle')}
           gradient="from-yellow-600 to-amber-600"
           delay={500}
           statKey="achievements"

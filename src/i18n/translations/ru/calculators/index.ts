@@ -65,16 +65,11 @@ export default {
     menopauseAssessmentCalculator: menopauseAssessmentCalculator
   },
   
-  // Individual OB/GYN calculators with direct access (for backward compatibility)
-  gestational_age: gestationalAgeCalculator,
-  edd: eddCalculator,
-  preeclampsia_risk: preeclampsiaRiskCalculator,
-  preterm_birth_risk: pretermBirthRiskCalculator,
-  gdm_screening: gdmScreeningCalculator,
-  bishop_score: bishopScoreCalculator,
-  vbac_success: vbacSuccessCalculator,
-  apgar_score: apgarScoreCalculator,
-  pph_risk_calculator: pphRiskCalculator,
+  // HCM Risk calculators
+  hcm_risk_scd: hcmRiskSCD,
+  
+  hcmAFRisk,
+  hcm_af_risk: hcmAFRisk,
   
   // Top-level keys for Calculator landing page
   specialty: {
@@ -178,53 +173,79 @@ export default {
     title: 'Калькулятор EuroSCORE II',
     subtitle: 'Европейская Система Оценки Операционного Риска на Сердце'
   },
-  
-  hcm_risk_scd: hcmRiskSCD,
-  
-  hcmAFRisk,
-  hcm_af_risk: hcmAFRisk,
+
+  // OB/GYN Calculators
+  edd: {
+    // TODO: Translate
+    title: 'EDD Calculator',
+    subtitle: 'Estimated Date of Delivery Calculator'
+  },
+  gestational_age: {
+    // TODO: Translate
+    title: 'Gestational Age Calculator',
+    subtitle: 'Accurate Gestational Age Assessment'
+  },
+  preeclampsia_risk: {
+    // TODO: Translate
+    title: 'Preeclampsia Risk Calculator',
+    subtitle: 'Early Pregnancy Risk Assessment for Preeclampsia'
+  },
+  preterm_birth_risk: {
+    // TODO: Translate
+    title: 'Preterm Birth Risk Calculator',
+    subtitle: 'Evidence-Based Risk Stratification • ACOG Guidelines • Cervical Length Assessment • Clinical Decision Support'
+  },
+  gdm_screening: {
+    // TODO: Translate
+    title: 'Gestational Diabetes Mellitus (GDM) Screening',
+    subtitle: 'Evidence-Based Risk Assessment • ACOG Guidelines • Personalized Screening Protocol • Clinical Decision Support'
+  },
+  bishop_score: {
+    // TODO: Translate
+    title: 'Bishop Score Calculator',
+    subtitle: 'Cervical Readiness Assessment for Labor Induction'
+  },
+  vbac_success: {
+    // TODO: Translate
+    title: 'VBAC Success Calculator',
+    subtitle: 'Vaginal Birth After Cesarean Success Prediction'
+  },
+  pph_risk: {
+    title: 'Калькулятор риска ПРК',
+    subtitle: 'Оценка риска послеродового кровотечения'
+  },
+  cervical_cancer_risk: {
+    title: 'Калькулятор риска рака шейки матки',
+    subtitle: 'Оценка риска рака шейки матки на основе ВПЧ'
+  },
+  ovarian_cancer_risk: {
+    title: 'Калькулятор риска рака яичников',
+    subtitle: 'Оценка наследственного риска рака яичников'
+  },
+  endometrial_cancer_risk: {
+    title: 'Калькулятор риска рака эндометрия',
+    subtitle: 'Оценка пожизненного риска рака эндометрия'
+  },
+  ovarian_reserve: {
+    title: 'Калькулятор овариального резерва',
+    subtitle: 'Оценка фертильности на основе АМГ',
+    description: 'Оценка овариального резерва на основе уровня АМГ'
+  },
+  menopause_assessment: {
+      // TODO: Translate
+      title: 'Menopause Assessment Tool',
+      subtitle: 'Comprehensive menopause status assessment using clinical symptoms and biomarkers'
+  },
   
   categories_label: 'Категории',
   calculator_categories: 'Категории Калькуляторов',
   back_to: 'Назад к',
   view_grid: 'Сетка',
   view_list: 'Список',
-  
-  // OB/GYN Calculator entries
-  pph_risk: {
-    title: 'Калькулятор риска ПРК',
-    subtitle: 'Оценка риска послеродового кровотечения'
-  },
-  
-  cervical_cancer_risk: {
-    title: 'Калькулятор риска рака шейки матки',
-    subtitle: 'Оценка риска рака шейки матки на основе ВПЧ'
-  },
-  
-  ovarian_cancer_risk: {
-    title: 'Калькулятор риска рака яичников',
-    subtitle: 'Оценка наследственного риска рака яичников'
-  },
-  
-  endometrial_cancer_risk: {
-    title: 'Калькулятор риска рака эндометрия',
-    subtitle: 'Оценка пожизненного риска рака эндометрия'
-  },
-  
-  ovarian_reserve: {
-    title: 'Калькулятор овариального резерва',
-    subtitle: 'Оценка фертильности на основе АМГ'
-  },
-  
-  menopause_assessment: menopauseAssessmentCalculator,
-  
+
   // Heart Failure Staging Calculator - top-level access
   heartFailureStaging: heartFailureStagingTranslations,
   
   // GWTG-HF Risk Calculator - top-level access
   gwtgHfRisk: gwtgHfRiskTranslations
 };
-
-export {
-  eurscoreII
-}; 

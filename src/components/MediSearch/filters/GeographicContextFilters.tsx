@@ -35,40 +35,40 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
   const geographicRegions = [
     {
       id: 'north-america',
-      label: 'North America',
-      description: 'United States, Canada, Mexico',
+      label: t('filters.geographicContext.geographicRegions.northAmerica.label', 'North America'),
+      description: t('filters.geographicContext.geographicRegions.northAmerica.description', 'United States, Canada, Mexico'),
       icon: GlobeAmericasIcon,
       color: 'text-blue-600',
       countries: ['US', 'CA', 'MX']
     },
     {
       id: 'europe',
-      label: 'Europe',
-      description: 'European Union and associated countries',
+      label: t('filters.geographicContext.geographicRegions.europe.label', 'Europe'),
+      description: t('filters.geographicContext.geographicRegions.europe.description', 'European Union and associated countries'),
       icon: GlobeAmericasIcon,
       color: 'text-green-600',
       countries: ['GB', 'DE', 'FR', 'IT', 'ES', 'NL', 'SE', 'NO', 'DK']
     },
     {
       id: 'asia-pacific',
-      label: 'Asia-Pacific',
-      description: 'East Asia, Southeast Asia, Oceania',
+      label: t('filters.geographicContext.geographicRegions.asiaPacific.label', 'Asia-Pacific'),
+      description: t('filters.geographicContext.geographicRegions.asiaPacific.description', 'East Asia, Southeast Asia, Oceania'),
       icon: GlobeAmericasIcon,
       color: 'text-red-600',
       countries: ['JP', 'CN', 'KR', 'AU', 'NZ', 'SG', 'TH', 'IN']
     },
     {
       id: 'latin-america',
-      label: 'Latin America',
-      description: 'South and Central America',
+      label: t('filters.geographicContext.geographicRegions.latinAmerica.label', 'Latin America'),
+      description: t('filters.geographicContext.geographicRegions.latinAmerica.description', 'South and Central America'),
       icon: GlobeAmericasIcon,
       color: 'text-yellow-600',
       countries: ['BR', 'AR', 'CL', 'CO', 'PE', 'VE']
     },
     {
       id: 'middle-east-africa',
-      label: 'Middle East & Africa',
-      description: 'MENA region and Sub-Saharan Africa',
+      label: t('filters.geographicContext.geographicRegions.middleEastAfrica.label', 'Middle East & Africa'),
+      description: t('filters.geographicContext.geographicRegions.middleEastAfrica.description', 'MENA region and Sub-Saharan Africa'),
       icon: GlobeAmericasIcon,
       color: 'text-purple-600',
       countries: ['AE', 'SA', 'EG', 'ZA', 'NG', 'KE']
@@ -79,48 +79,48 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
   const practiceSettings = [
     {
       id: 'hospital-inpatient',
-      label: 'Hospital Inpatient',
-      description: 'Acute care, emergency departments, intensive care',
+      label: t('filters.geographicContext.practiceSettings.hospitalInpatient.label', 'Hospital Inpatient'),
+      description: t('filters.geographicContext.practiceSettings.hospitalInpatient.description', 'Acute care, emergency departments, intensive care'),
       icon: BuildingOffice2Icon,
       color: 'text-red-600',
       category: 'acute-care'
     },
     {
       id: 'hospital-outpatient',
-      label: 'Hospital Outpatient',
-      description: 'Ambulatory surgery, specialty clinics',
+      label: t('filters.geographicContext.practiceSettings.hospitalOutpatient.label', 'Hospital Outpatient'),
+      description: t('filters.geographicContext.practiceSettings.hospitalOutpatient.description', 'Ambulatory surgery, specialty clinics'),
       icon: BuildingOffice2Icon,
       color: 'text-blue-600',
       category: 'ambulatory'
     },
     {
       id: 'primary-care',
-      label: 'Primary Care',
-      description: 'Family medicine, internal medicine, pediatrics',
+      label: t('filters.geographicContext.practiceSettings.primaryCare.label', 'Primary Care'),
+      description: t('filters.geographicContext.practiceSettings.primaryCare.description', 'Family medicine, internal medicine, pediatrics'),
       icon: HeartIcon,
       color: 'text-green-600',
       category: 'primary'
     },
     {
       id: 'specialty-clinic',
-      label: 'Specialty Clinic',
-      description: 'Specialized outpatient practices',
+      label: t('filters.geographicContext.practiceSettings.specialtyClinic.label', 'Specialty Clinic'),
+      description: t('filters.geographicContext.practiceSettings.specialtyClinic.description', 'Specialized outpatient practices'),
       icon: AcademicCapIcon,
       color: 'text-indigo-600',
       category: 'specialty'
     },
     {
       id: 'home-care',
-      label: 'Home Care',
-      description: 'Telemedicine, home visits, remote monitoring',
+      label: t('filters.geographicContext.practiceSettings.homeCare.label', 'Home Care'),
+      description: t('filters.geographicContext.practiceSettings.homeCare.description', 'Telemedicine, home visits, remote monitoring'),
       icon: HomeIcon,
       color: 'text-teal-600',
       category: 'home'
     },
     {
       id: 'long-term-care',
-      label: 'Long-term Care',
-      description: 'Nursing homes, assisted living, rehabilitation',
+      label: t('filters.geographicContext.practiceSettings.longTermCare.label', 'Long-term Care'),
+      description: t('filters.geographicContext.practiceSettings.longTermCare.description', 'Nursing homes, assisted living, rehabilitation'),
       icon: UserGroupIcon,
       color: 'text-orange-600',
       category: 'long-term'
@@ -131,44 +131,44 @@ export const GeographicContextFilters: React.FC<GeographicContextFiltersProps> =
   const patientPopulations = [
     {
       id: 'pediatric',
-      label: 'Pediatric',
-      description: 'Children and adolescents (0-18 years)',
-      ageRange: '0-18',
+      label: t('filters.geographicContext.patientPopulations.pediatric.label', 'Pediatric'),
+      description: t('filters.geographicContext.patientPopulations.pediatric.description', 'Children and adolescents (0-18 years)'),
+      ageRange: t('filters.geographicContext.patientPopulations.pediatric.ageRange', '0-18'),
       color: 'text-blue-600'
     },
     {
       id: 'adult',
-      label: 'Adult',
-      description: 'Adults (18-65 years)',
-      ageRange: '18-65',
+      label: t('filters.geographicContext.patientPopulations.adult.label', 'Adult'),
+      description: t('filters.geographicContext.patientPopulations.adult.description', 'Adults (18-65 years)'),
+      ageRange: t('filters.geographicContext.patientPopulations.adult.ageRange', '18-65'),
       color: 'text-green-600'
     },
     {
       id: 'geriatric',
-      label: 'Geriatric',
-      description: 'Elderly patients (65+ years)',
-      ageRange: '65+',
+      label: t('filters.geographicContext.patientPopulations.geriatric.label', 'Geriatric'),
+      description: t('filters.geographicContext.patientPopulations.geriatric.description', 'Elderly patients (65+ years)'),
+      ageRange: t('filters.geographicContext.patientPopulations.geriatric.ageRange', '65+'),
       color: 'text-purple-600'
     },
     {
       id: 'pregnant-women',
-      label: 'Pregnant Women',
-      description: 'Prenatal, perinatal, and postnatal care',
-      ageRange: 'reproductive',
+      label: t('filters.geographicContext.patientPopulations.pregnantWomen.label', 'Pregnant Women'),
+      description: t('filters.geographicContext.patientPopulations.pregnantWomen.description', 'Prenatal, perinatal, and postnatal care'),
+      ageRange: t('filters.geographicContext.patientPopulations.pregnantWomen.ageRange', 'reproductive'),
       color: 'text-pink-600'
     },
     {
       id: 'immunocompromised',
-      label: 'Immunocompromised',
-      description: 'Patients with weakened immune systems',
-      ageRange: 'all',
+      label: t('filters.geographicContext.patientPopulations.immunocompromised.label', 'Immunocompromised'),
+      description: t('filters.geographicContext.patientPopulations.immunocompromised.description', 'Patients with weakened immune systems'),
+      ageRange: t('filters.geographicContext.patientPopulations.immunocompromised.ageRange', 'all'),
       color: 'text-red-600'
     },
     {
       id: 'chronic-conditions',
-      label: 'Chronic Conditions',
-      description: 'Diabetes, hypertension, COPD, etc.',
-      ageRange: 'all',
+      label: t('filters.geographicContext.patientPopulations.chronicConditions.label', 'Chronic Conditions'),
+      description: t('filters.geographicContext.patientPopulations.chronicConditions.description', 'Diabetes, hypertension, COPD, etc.'),
+      ageRange: t('filters.geographicContext.patientPopulations.chronicConditions.ageRange', 'all'),
       color: 'text-orange-600'
     }
   ];

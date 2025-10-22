@@ -89,8 +89,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     // Medical Specialty Filters
     {
       id: 'cardiology-guidelines',
-      name: 'Cardiology Guidelines',
-      description: 'Latest cardiology treatment guidelines and protocols',
+      name: t('filters.quickFilters.presets.cardiologyGuidelines.name', 'Cardiology Guidelines'),
+      description: t('filters.quickFilters.presets.cardiologyGuidelines.description', 'Latest cardiology treatment guidelines and protocols'),
       icon: HeartIcon,
       iconActive: HeartSolid,
       color: 'text-[#2b6cb0]',
@@ -113,8 +113,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     },
     {
       id: 'oncology-research',
-      name: 'Cancer Research',
-      description: 'Latest oncology research papers and clinical trials',
+      name: t('filters.quickFilters.presets.cancerResearch.name', 'Cancer Research'),
+      description: t('filters.quickFilters.presets.cancerResearch.description', 'Latest oncology research papers and clinical trials'),
       icon: BeakerIcon,
       iconActive: BeakerIcon,
       color: 'text-[#2b6cb0]',
@@ -137,8 +137,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     },
     {
       id: 'neurology-textbooks',
-      name: 'Neurology References',
-      description: 'Comprehensive neurology textbooks and handbooks',
+      name: t('filters.quickFilters.presets.neurologyReferences.name', 'Neurology References'),
+      description: t('filters.quickFilters.presets.neurologyReferences.description', 'Comprehensive neurology textbooks and handbooks'),
       icon: CpuChipIcon,
       iconActive: CpuChipIcon,
       color: 'text-[#2b6cb0]',
@@ -159,8 +159,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     // Content Type Filters
     {
       id: 'systematic-reviews',
-      name: 'Systematic Reviews',
-      description: 'High-quality systematic reviews and meta-analyses',
+      name: t('filters.quickFilters.presets.systematicReviews.name', 'Systematic Reviews'),
+      description: t('filters.quickFilters.presets.systematicReviews.description', 'High-quality systematic reviews and meta-analyses'),
       icon: DocumentTextIcon,
       iconActive: DocumentTextIcon,
       color: 'text-[#2b6cb0]',
@@ -180,8 +180,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     },
     {
       id: 'clinical-guidelines',
-      name: 'Clinical Guidelines',
-      description: 'Evidence-based clinical practice guidelines',
+      name: t('filters.quickFilters.presets.clinicalGuidelines.name', 'Clinical Guidelines'),
+      description: t('filters.quickFilters.presets.clinicalGuidelines.description', 'Evidence-based clinical practice guidelines'),
       icon: ClipboardDocumentCheckIcon,
       iconActive: ClipboardDocumentCheckIcon,
       color: 'text-[#2b6cb0]',
@@ -201,8 +201,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     },
     {
       id: 'medical-education',
-      name: 'Medical Education',
-      description: 'CME materials, case studies, and learning resources',
+      name: t('filters.quickFilters.presets.medicalEducation.name', 'Medical Education'),
+      description: t('filters.quickFilters.presets.medicalEducation.description', 'CME materials, case studies, and learning resources'),
       icon: AcademicCapIcon,
       iconActive: AcademicCapIcon,
       color: 'text-[#2b6cb0]',
@@ -220,8 +220,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     // Quality & Authority Filters
     {
       id: 'high-impact',
-      name: 'High Impact Studies',
-      description: 'Highly cited research from top journals',
+      name: t('filters.quickFilters.presets.highImpactStudies.name', 'High Impact Studies'),
+      description: t('filters.quickFilters.presets.highImpactStudies.description', 'Highly cited research from top journals'),
       icon: StarIcon,
       iconActive: StarSolid,
       color: 'text-[#2b6cb0]',
@@ -239,8 +239,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     },
     {
       id: 'government-sources',
-      name: 'Government Sources',
-      description: 'Official government health information',
+      name: t('filters.quickFilters.presets.governmentSources.name', 'Government Sources'),
+      description: t('filters.quickFilters.presets.governmentSources.description', 'Official government health information'),
       icon: ShieldCheckIcon,
       iconActive: ShieldCheckSolid,
       color: 'text-[#2b6cb0]',
@@ -258,8 +258,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     // Audience-Specific Filters
     {
       id: 'patient-education',
-      name: 'Patient Education',
-      description: 'Patient-friendly health information and resources',
+      name: t('filters.quickFilters.presets.patientEducation.name', 'Patient Education'),
+      description: t('filters.quickFilters.presets.patientEducation.description', 'Patient-friendly health information and resources'),
       icon: UserIcon,
       iconActive: UserIcon,
       color: 'text-[#2b6cb0]',
@@ -276,8 +276,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     },
     {
       id: 'medical-students',
-      name: 'Medical Students',
-      description: 'Educational content for medical students',
+      name: t('filters.quickFilters.presets.medicalStudents.name', 'Medical Students'),
+      description: t('filters.quickFilters.presets.medicalStudents.description', 'Educational content for medical students'),
       icon: UsersIcon,
       iconActive: UsersIcon,
       color: 'text-[#2b6cb0]',
@@ -296,8 +296,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     // Recent & Access Filters
     {
       id: 'latest-research',
-      name: 'Latest Research',
-      description: 'Most recent medical research and discoveries',
+      name: t('filters.quickFilters.presets.latestResearch.name', 'Latest Research'),
+      description: t('filters.quickFilters.presets.latestResearch.description', 'Most recent medical research and discoveries'),
       icon: ClockIcon,
       iconActive: ClockIcon,
       color: 'text-[#2b6cb0]',
@@ -314,8 +314,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     },
     {
       id: 'open-access',
-      name: 'Open Access',
-      description: 'Freely available medical literature',
+      name: t('filters.quickFilters.presets.openAccess.name', 'Open Access'),
+      description: t('filters.quickFilters.presets.openAccess.description', 'Freely available medical literature'),
       icon: LockClosedIcon,
       iconActive: LockClosedIcon,
       color: 'text-[#2b6cb0]',
@@ -331,8 +331,8 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     // Advanced Combinations
     {
       id: 'breakthrough-research',
-      name: 'Breakthrough Research',
-      description: 'Revolutionary medical discoveries and innovations',
+      name: t('filters.quickFilters.presets.breakthroughResearch.name', 'Breakthrough Research'),
+      description: t('filters.quickFilters.presets.breakthroughResearch.description', 'Revolutionary medical discoveries and innovations'),
       icon: SparklesIcon,
       iconActive: SparklesSolid,
       color: 'text-[#2b6cb0]',
@@ -362,13 +362,13 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     : allFilters.filter(filter => filter.category === selectedCategory);
 
   const categories = [
-    { id: 'all', name: t('filters.categories.all', 'All Filters'), count: allFilters.length },
-    { id: 'specialty', name: t('filters.categories.specialty', 'Medical Specialties'), count: allFilters.filter(f => f.category === 'specialty').length },
-    { id: 'content', name: t('filters.categories.content', 'Content Types'), count: allFilters.filter(f => f.category === 'content').length },
-    { id: 'quality', name: t('filters.categories.quality', 'Quality & Authority'), count: allFilters.filter(f => f.category === 'quality').length },
-    { id: 'audience', name: t('filters.categories.audience', 'Audience'), count: allFilters.filter(f => f.category === 'audience').length },
-    { id: 'recent', name: t('filters.categories.recent', 'Recent'), count: allFilters.filter(f => f.category === 'recent').length },
-    { id: 'access', name: t('filters.categories.access', 'Access'), count: allFilters.filter(f => f.category === 'access').length }
+    { id: 'all', name: t('filters.filterCategories.all', 'All Filters'), count: allFilters.length },
+    { id: 'specialty', name: t('filters.filterCategories.specialty', 'Medical Specialties'), count: allFilters.filter(f => f.category === 'specialty').length },
+    { id: 'content', name: t('filters.filterCategories.content', 'Content Types'), count: allFilters.filter(f => f.category === 'content').length },
+    { id: 'quality', name: t('filters.filterCategories.quality', 'Quality & Authority'), count: allFilters.filter(f => f.category === 'quality').length },
+    { id: 'audience', name: t('filters.filterCategories.audience', 'Audience'), count: allFilters.filter(f => f.category === 'audience').length },
+    { id: 'recent', name: t('filters.filterCategories.recent', 'Recent'), count: allFilters.filter(f => f.category === 'recent').length },
+    { id: 'access', name: t('filters.filterCategories.access', 'Access'), count: allFilters.filter(f => f.category === 'access').length }
   ];
 
   const handleSaveCurrentFilters = () => {
@@ -453,14 +453,14 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
               {/* Premium badge */}
               {filter.isPremium && (
                 <div className="absolute top-2 right-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full">
-                  Premium
+                  {t('filters.quickFilters.badges.premium', 'Premium')}
                 </div>
               )}
 
               {/* Popular badge */}
               {filter.isPopular && !filter.isPremium && (
                 <div className="absolute top-2 right-2 px-2 py-1 bg-gradient-to-r from-green-400 to-emerald-500 text-white text-xs font-bold rounded-full">
-                  Popular
+                  {t('filters.quickFilters.badges.popular', 'Popular')}
                 </div>
               )}
 

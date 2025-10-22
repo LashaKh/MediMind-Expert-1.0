@@ -25,6 +25,8 @@ export const navigation = {
   aiCoPilot: 'ИИ Ассистент',
   mediSearch: 'Меди Поиск и Новости',
   podcastStudio: 'Подкаст студия',
+  bloodGasAnalysis: 'Анализ газов крови',
+  diseaseLibrary: 'Библиотека заболеваний',
   
   // Navigation descriptions
   aiCoPilotDesc: 'ИИ медицинский ассистент и интеллектуальная консультация',
@@ -33,6 +35,7 @@ export const navigation = {
   calculatorsDesc: 'Профессиональные медицинские калькуляторы и оценка рисков',
   knowledgeBaseDesc: 'База знаний и медицинская литература',
   settingsDesc: 'Настройки профиля и конфигурация платформы',
+  diseaseLibrarySubtitle: 'Обширная база данных заболеваний',
   
   // Additional missing keys
   helpCenter: 'Центр помощи',
@@ -80,7 +83,30 @@ export const navigation = {
     clinicalToolsDesc: 'Профессиональные медицинские инструменты анализа',
     knowledge: 'Знания и профиль',
     knowledgeDesc: 'Образовательные ресурсы и управление аккаунтом'
-  }
+  },
+
+  // Bottom navigation labels
+  aiChat: 'ИИ Чат',
+  search: 'Поиск',
+  calc: 'Калькулятор',
+
+  // Sidebar additional items
+  mediscribe: 'Меди-Скрайб',
+  analyticsDashboard: 'Панель аналитики',
+
+  // Sidebar subtitles
+  medicalConsultationAI: 'ИИ медицинских консультаций',
+  voiceTranscription: 'Голосовая транскрипция для медицинских записей',
+  clinicalRiskAssessment: 'Инструменты оценки клинических рисков',
+  abgInterpretation: 'Интерпретация и анализ газов крови',
+  medicalLiterature: 'Медицинская литература и новости',
+  aiPoweredPodcasts: 'Медицинские подкасты на основе ИИ',
+  medicalReferenceLibrary: 'Справочная медицинская библиотека',
+  accountPreferences: 'Настройки аккаунта',
+  usageInsights: 'Аналитика использования и метрики',
+
+  // Header
+  aiMedicalCoPilot: 'ИИ медицинский ассистент'
 };
 
 export default navigation; 

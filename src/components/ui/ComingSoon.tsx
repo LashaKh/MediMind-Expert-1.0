@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Construction, Clock, Star } from 'lucide-react';
 
@@ -6,13 +7,26 @@ interface ComingSoonProps {
   title: string;
   description: string;
   features?: string[];
+  usePodcastTranslations?: boolean;
 }
 
-export const ComingSoon: React.FC<ComingSoonProps> = ({ 
-  title, 
-  description, 
-  features = [] 
+export const ComingSoon: React.FC<ComingSoonProps> = ({
+  title,
+  description,
+  features = [],
+  usePodcastTranslations = false
 }) => {
+  const { t } = useTranslation();
+
+  // If using podcast translations, get features from translation keys
+  const displayFeatures = usePodcastTranslations ? [
+    t('podcast.comingSoon.features.analysis'),
+    t('podcast.comingSoon.features.voices'),
+    t('podcast.comingSoon.features.languages'),
+    t('podcast.comingSoon.features.quality'),
+    t('podcast.comingSoon.features.speed')
+  ] : features;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-900 relative overflow-hidden">
       {/* Background Effects */}
@@ -95,20 +109,20 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({
             className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-full font-semibold text-lg shadow-lg mb-12"
           >
             <Clock className="w-5 h-5" />
-            <span>Coming Soon</span>
+            <span>{t('podcast.comingSoon.title', 'Coming Soon')}</span>
           </motion.div>
 
           {/* Features Preview */}
-          {features.length > 0 && (
+          {displayFeatures.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.6 }}
               className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-3xl p-8 max-w-2xl mx-auto"
             >
-              <h3 className="text-2xl font-bold text-white mb-6">What's Coming:</h3>
+              <h3 className="text-2xl font-bold text-white mb-6">{t('podcast.comingSoon.subtitle', "What's Coming:")}</h3>
               <div className="space-y-4">
-                {features.map((feature, index) => (
+                {displayFeatures.map((feature, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -20 }}

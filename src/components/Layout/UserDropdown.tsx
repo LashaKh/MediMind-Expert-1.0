@@ -146,7 +146,7 @@ export const UserDropdown: React.FC = () => {
         
         {/* Menu text */}
         <span className="text-sm font-medium">
-          Menu
+          {t('navigation.menu', 'Menu')}
         </span>
       </button>
 

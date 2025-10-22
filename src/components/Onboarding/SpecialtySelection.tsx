@@ -28,13 +28,24 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  const cardiologyFeaturesRaw = t('onboarding.specialty.cardiology.features', { returnObjects: true });
+  const obgynFeaturesRaw = t('onboarding.specialty.obgyn.features', { returnObjects: true });
+
+  const cardiologyFeatures = Array.isArray(cardiologyFeaturesRaw) 
+    ? cardiologyFeaturesRaw 
+    : ['AI Diagnostics', 'Risk Assessment', 'Clinical Guidelines', 'Treatment Plans'];
+    
+  const obgynFeatures = Array.isArray(obgynFeaturesRaw)
+    ? obgynFeaturesRaw
+    : ['Prenatal Care', 'Risk Monitoring', 'Specialized Tools', 'Care Plans'];
+
   const specialties = [
     {
       id: 'cardiology',
-      name: 'Cardiology',
-      subtitle: 'Cardiovascular Excellence',
-      description: 'Advanced AI-powered cardiovascular medicine platform with clinical intelligence and evidence-based diagnostics',
-      keyFeatures: ['AI Diagnostics', 'Risk Assessment', 'Clinical Guidelines', 'Treatment Plans'],
+      name: t('onboarding.specialty.cardiology.name', 'Cardiology'),
+      subtitle: t('onboarding.specialty.cardiology.subtitle', 'Cardiovascular Excellence'),
+      description: t('onboarding.specialty.cardiology.description', 'Advanced AI-powered cardiovascular medicine platform with clinical intelligence and evidence-based diagnostics'),
+      keyFeatures: cardiologyFeatures,
       available: true,
       gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
       accentColor: '#63b3ed',
@@ -56,10 +67,10 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
     },
     {
       id: 'ob-gyn',
-      name: 'OB/GYN',
-      subtitle: 'Women\'s Health Innovation',
-      description: 'Comprehensive obstetrics and gynecology platform with specialized tools for maternal and reproductive care',
-      keyFeatures: ['Prenatal Care', 'Risk Monitoring', 'Specialized Tools', 'Care Plans'],
+      name: t('onboarding.specialty.obgyn.name', 'OB/GYN'),
+      subtitle: t('onboarding.specialty.obgyn.subtitle', "Women's Health Innovation"),
+      description: t('onboarding.specialty.obgyn.description', 'Comprehensive obstetrics and gynecology platform with specialized tools for maternal and reproductive care'),
+      keyFeatures: obgynFeatures,
       available: false,
       gradient: 'from-slate-400 via-slate-500 to-slate-600',
       accentColor: '#94a3b8',
@@ -90,9 +101,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Premium Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
-        {/* Animated Geometric Patterns */}
         <div className="absolute inset-0 opacity-40">
           <div 
             className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-blue-400/10 to-indigo-400/10 blur-3xl"
@@ -112,56 +121,44 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
           />
         </div>
         
-        {/* Subtle Grid Pattern */}
         <div className="absolute inset-0 opacity-20" style={{
           backgroundImage: `radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.15) 1px, transparent 0)`,
           backgroundSize: '32px 32px'
         }} />
       </div>
 
-      {/* Main Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
-        {/* Hero Section */}
         <div className={`text-center mb-20 transition-all duration-1200 ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
         }`}>
           <div className="relative inline-block mb-8">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-none">
               <span className="bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] bg-clip-text text-transparent">
-                Choose Your
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-[#63b3ed] via-[#2b6cb0] to-[#1a365d] bg-clip-text text-transparent">
-                Specialty
+                {t('onboarding.specialtySelection.title', 'Choose Your Specialty')}
               </span>
             </h1>
-            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#1a365d] to-[#63b3ed] rounded-full" />
           </div>
           
           <p className="text-xl md:text-2xl text-slate-600 font-light max-w-3xl mx-auto leading-relaxed">
-            Select your medical specialty to unlock 
-            <span className="font-medium text-[#2b6cb0]"> personalized AI tools</span> and 
-            <span className="font-medium text-[#2b6cb0]"> evidence-based resources</span>
+            {t('onboarding.specialtySelection.subtitle', 'Select your medical specialty to unlock personalized AI tools and evidence-based resources')}
           </p>
           
-          {/* Trust Indicators */}
           <div className="flex flex-wrap justify-center items-center gap-8 mt-12 text-sm text-slate-500">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-              <span>Evidence-Based Medicine</span>
+              <span>{t('onboarding.specialtySelection.evidenceBased', 'Evidence-Based Medicine')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
-              <span>Clinically Validated</span>
+              <span>{t('onboarding.specialtySelection.clinicallyValidated', 'Clinically Validated')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-              <span>HIPAA Compliant</span>
+              <span>{t('onboarding.specialtySelection.hipaaCompliant', 'HIPAA Compliant')}</span>
             </div>
           </div>
         </div>
 
-        {/* Specialty Cards */}
         <div className={`max-w-6xl mx-auto transition-all duration-1200 delay-300 ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
         }`}>
@@ -186,9 +183,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                   animationDelay: `${index * 200}ms`
                 }}
               >
-                {/* Premium Card Container */}
                 <div className="relative group/card">
-                  {/* Glassmorphism Background */}
                   <div className={`
                     relative overflow-hidden rounded-3xl backdrop-blur-xl border transition-all duration-700
                     ${specialty.available
@@ -201,9 +196,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                     }
                   `}>
                     
-                    {/* Premium Background Elements */}
                     <div className="absolute inset-0 overflow-hidden">
-                      {/* Animated Gradient Orb */}
                       <div className={`
                         absolute -top-24 -right-24 w-48 h-48 rounded-full opacity-20 blur-3xl transition-all duration-1000 bg-gradient-to-br
                         ${specialty.available 
@@ -213,7 +206,6 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                         ${hoveredCard === specialty.id ? 'scale-150 opacity-30' : 'scale-100'}
                       `} />
                       
-                      {/* Subtle Mesh Pattern */}
                       <div className="absolute inset-0 opacity-30" style={{
                         backgroundImage: specialty.available 
                           ? `radial-gradient(circle at 20px 20px, ${specialty.accentColor}15 1px, transparent 1px)`
@@ -222,9 +214,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                       }} />
                     </div>
 
-                    {/* Card Content */}
                     <div className="relative p-8 h-auto min-h-[480px] flex flex-col">
-                      {/* Status Badge */}
                       <div className="absolute top-6 right-6 z-10">
                         {specialty.available ? (
                           selectedSpecialty === specialty.id ? (
@@ -232,22 +222,21 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                               </svg>
-                              <span className="text-xs font-bold">Selected</span>
+                              <span className="text-xs font-bold">{t('onboarding.specialtySelection.status.selected', 'Selected')}</span>
                             </div>
                           ) : (
                             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
                               <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                              <span className="text-xs font-bold">Available</span>
+                              <span className="text-xs font-bold">{t('onboarding.specialtySelection.status.available', 'Available')}</span>
                             </div>
                           )
                         ) : (
                           <div className="px-3 py-1.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 shadow-sm">
-                            <span className="text-xs font-bold">Coming Soon</span>
+                            <span className="text-xs font-bold">{t('onboarding.specialtySelection.status.comingSoon', 'Coming Soon')}</span>
                           </div>
                         )}
                       </div>
 
-                      {/* Icon Section */}
                       <div className="mb-8">
                         <div className={`
                           inline-flex p-4 rounded-2xl transition-all duration-500
@@ -262,7 +251,6 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                         </div>
                       </div>
 
-                      {/* Content Section */}
                       <div className="flex-1 space-y-6">
                         <div>
                           <h3 className="text-3xl font-bold text-slate-900 mb-2 leading-tight">
@@ -276,10 +264,9 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                           </p>
                         </div>
 
-                        {/* Key Features */}
                         {specialty.available && (
                           <div className="space-y-3">
-                            <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Key Features</h4>
+                            <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wide">{t('onboarding.specialty.keyFeatures', 'Key Features')}</h4>
                             <div className="grid grid-cols-2 gap-2">
                               {specialty.keyFeatures.map((feature, idx) => (
                                 <div key={idx} className="flex items-center gap-2 text-sm text-slate-600">
@@ -292,7 +279,6 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                         )}
                       </div>
 
-                      {/* Action Button */}
                       <div className="mt-8">
                         {specialty.available ? (
                           <button className={`
@@ -304,11 +290,10 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                                 : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-blue-300 shadow-lg hover:shadow-xl'
                             }
                           `}>
-                            {/* Button Background Animation */}
                             <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
                             
                             <div className="relative flex items-center justify-between">
-                              <span>Launch Workspace</span>
+                              <span>{t('onboarding.specialtySelection.launchButton', 'Launch Workspace')}</span>
                               <svg className={`
                                 w-6 h-6 transition-all duration-300
                                 ${hoveredCard === specialty.id ? 'translate-x-2 scale-110' : ''}
@@ -319,7 +304,7 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
                           </button>
                         ) : (
                           <button className="w-full py-4 px-6 rounded-2xl font-bold text-lg bg-slate-200 text-slate-500 cursor-not-allowed border-2 border-slate-300">
-                            Coming Soon
+                            {t('onboarding.specialtySelection.status.comingSoon', 'Coming Soon')}
                           </button>
                         )}
                       </div>
@@ -333,7 +318,6 @@ export const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
 
       </div>
 
-      {/* Advanced CSS Animations */}
       <style jsx>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px) rotate(0deg); }

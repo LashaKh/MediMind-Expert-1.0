@@ -38,7 +38,11 @@
     "migrate:prod:dry": "node scripts/migrate-production.js --dry-run",
     "rollback:prod": "node scripts/rollback-production.js",
     "rollback:prod:dry": "node scripts/rollback-production.js --dry-run",
-    "health:check": "curl -f https://medimindexpert.netlify.app/api/system/health || echo 'Health check failed'"
+    "health:check": "curl -f https://medimindexpert.netlify.app/api/system/health || echo 'Health check failed'",
+    "i18n:check": "node scripts/check-translations.mjs",
+    "i18n:report": "node scripts/check-translations.mjs && cat translation-report.json",
+    "i18n:find-missing": "node scripts/find-missing-translations.mjs",
+    "i18n:missing-report": "node scripts/find-missing-translations.mjs && cat translation-missing-keys-report.json"
   },
   "dependencies": {
     "@elevenlabs/elevenlabs-js": "^2.0.0",

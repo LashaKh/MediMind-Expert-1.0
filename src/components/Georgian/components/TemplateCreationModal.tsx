@@ -44,6 +44,7 @@ import {
 import { templateService } from '../../../services/templateService';
 import { templateFormSchema, type TemplateFormData } from '../../../lib/validations/template-schemas';
 import type { TemplateCreationModalProps } from '../../../types/templates';
+import { useTranslation } from '../../../hooks/useTranslation';
 import '../../../styles/template-modal.css';
 
 // Enhanced form data with wizard steps
@@ -290,6 +291,7 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
   editTemplate,
   onTemplateUpdated,
 }) => {
+  const { t } = useTranslation();
   // State management
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -298,6 +300,7 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
   const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+  const [showStructurePlaceholder, setShowStructurePlaceholder] = useState(true);
   
   // Mobile gesture support
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -339,24 +342,24 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
   const wizardSteps: WizardStep[] = useMemo(() => [
     {
       id: 1,
-      title: 'Template Setup',
-      subtitle: 'Name and design your template',
+      title: t('mediscribe.templates.templateCreation.templateSetup'),
+      subtitle: t('mediscribe.templates.templateCreation.nameAndDesign'),
       icon: FileText,
       isCompleted: currentStep > 1,
       isActive: currentStep === 1,
     },
     {
       id: 2,
-      title: 'AI Instructions',
-      subtitle: 'Customize AI behavior',
+      title: t('mediscribe.templates.templateCreation.aiInstructions'),
+      subtitle: t('mediscribe.templates.templateCreation.customizeAI'),
       icon: Brain,
       isCompleted: currentStep > 2,
       isActive: currentStep === 2,
     },
     {
       id: 3,
-      title: 'Review & Save',
-      subtitle: 'Preview and finalize your template',
+      title: t('mediscribe.templates.templateCreation.reviewAndSave'),
+      subtitle: t('mediscribe.templates.templateCreation.previewAndFinalize'),
       icon: CheckCircle,
       isCompleted: currentStep > 3,
       isActive: currentStep === 3,
@@ -517,15 +520,15 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
     } catch (error: any) {
       // Handle specific error types
       if (error.code === 'DUPLICATE_NAME') {
-        setSubmitError('A template with this name already exists. Please choose a different name.');
+        setSubmitError(t('mediscribe.templates.templateCreation.duplicateNameError'));
       } else if (error.code === 'TEMPLATE_LIMIT_EXCEEDED') {
-        setSubmitError('You have reached the maximum limit of 50 templates. Please delete some templates before creating new ones.');
+        setSubmitError(t('mediscribe.templates.templateCreation.limitExceededError'));
       } else if (error.code === 'INVALID_MEDICAL_CONTENT') {
-        setSubmitError('Template structure must contain medical content with appropriate keywords or formatting.');
+        setSubmitError(t('mediscribe.templates.templateCreation.invalidContentError'));
       } else if (error.code === 'AUTH_REQUIRED') {
-        setSubmitError('Please sign in to create templates.');
+        setSubmitError(t('mediscribe.templates.templateCreation.authRequiredError'));
       } else {
-        setSubmitError(`Failed to ${isEditMode ? 'update' : 'create'} template. Please try again.`);
+        setSubmitError(t(isEditMode ? 'mediscribe.templates.templateCreation.failedToUpdateError' : 'mediscribe.templates.templateCreation.failedToCreateError'));
       }
     } finally {
       setIsSubmitting(false);
@@ -655,10 +658,10 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
                 </div>
                 <div>
                   <h2 id="modal-title" className="text-lg lg:text-xl font-bold text-white">
-                    {isEditMode ? 'Edit Template' : 'Create Template'}
+                    {isEditMode ? t('mediscribe.templates.templateCreation.editTemplate') : t('mediscribe.templates.templateCreation.createTemplate')}
                   </h2>
                   <p id="modal-description" className="text-white/80 text-xs lg:text-sm hidden lg:block">
-                    Design with AI Excellence
+                    {t('mediscribe.templates.templateCreation.designWithAI')}
                   </p>
                 </div>
               </div>
@@ -671,7 +674,7 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
                 />
               </div>
               <p className="text-xs text-white/70">
-                Step {currentStep} of 3 • {Math.round((currentStep / 3) * 100)}% Complete
+                {t('mediscribe.templates.templateCreation.stepProgress', { current: currentStep, total: 3, percent: Math.round((currentStep / 3) * 100) })}
               </p>
             </div>
 
@@ -741,10 +744,10 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
                 <button
                   onClick={() => setShowTemplatePreview(!showTemplatePreview)}
                   className="preview-toggle hidden lg:flex items-center space-x-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg"
-                  title="Toggle Preview (Cmd+P)"
+                  title={t('mediscribe.templates.templateCreation.togglePreview')}
                 >
                   <Eye className="w-4 h-4" />
-                  <span className="text-sm">Preview</span>
+                  <span className="text-sm">{t('mediscribe.templates.templateCreation.preview')}</span>
                 </button>
 
                 <button
@@ -774,7 +777,7 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
                           {/* Template Name */}
                           <div className="space-y-3">
                             <label htmlFor="template-name" className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                              Template Name *
+                              {t('mediscribe.templates.templateCreation.templateName')}
                             </label>
                             <div className="relative">
                               <input
@@ -786,13 +789,13 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
                                     ? 'border-red-300 bg-red-50/50 dark:border-red-600 dark:bg-red-900/20' 
                                     : 'border-gray-200 dark:border-gray-600 hover:border-[#63b3ed]'
                                 } text-gray-900 dark:text-white placeholder-gray-500`}
-                                placeholder="e.g., Emergency Cardiology Assessment"
+                                placeholder={t('mediscribe.templates.templateCreation.templateNamePlaceholder')}
                                 style={{ fontSize: '16px' }}
                                 autoFocus={currentStep === 1}
                                 aria-describedby={errors.name ? 'name-error' : undefined}
                               />
                               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-500">
-                                {nameLength}/100
+                                {t('mediscribe.templates.templateCreation.charCounter', { current: nameLength, max: 100 })}
                               </div>
                             </div>
                             {errors.name && (
@@ -808,10 +811,10 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
                           <div className="space-y-4">
                             <div className="flex items-center justify-between">
                               <label htmlFor="example-structure" className="block text-lg font-bold text-gray-800 dark:text-white">
-                                Template Structure *
+                                {t('mediscribe.templates.templateCreation.templateStructure')}
                               </label>
                               <span className="text-sm text-gray-500 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
-                                {structureLength}/50,000
+                                {t('mediscribe.templates.templateCreation.charCounter', { current: structureLength, max: 50000 })}
                               </span>
                             </div>
                             
@@ -820,7 +823,7 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
                                 id="example-structure"
                                 {...register('example_structure')}
                                 rows={16}
-                                className={`template-textarea w-full px-5 py-5 border-3 rounded-2xl focus:ring-4 focus:ring-[#2b6cb0]/30 focus:border-[#2b6cb0] transition-all duration-300 resize-none text-base font-mono shadow-lg ${
+                                className={`template-textarea w-full px-5 py-5 border-3 rounded-2xl focus:ring-4 focus:ring-[#2b6cb0]/30 focus:focus:border-[#2b6cb0] transition-all duration-300 resize-none text-base font-mono shadow-lg ${
                                   errors.example_structure 
                                     ? 'border-red-400 bg-red-50/50 dark:border-red-500 dark:bg-red-900/20' 
                                     : 'border-gray-300 dark:border-gray-600 hover:border-[#63b3ed] bg-white/80 dark:bg-gray-900/80'
@@ -832,33 +835,17 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
                                   maxHeight: '600px'
                                 }}
                                 aria-describedby={errors.example_structure ? 'structure-error' : undefined}
-                                placeholder="# Medical Report Template
-
-## Patient Information
-- Name: [Patient Name]
-- Date: [Current Date]
-- DOB: [Date of Birth]
-
-## Chief Complaint
-[Primary reason for visit]
-
-## History of Present Illness
-[Detailed description of current symptoms]
-
-## Physical Examination
-[Examination findings]
-
-## Assessment
-[Clinical findings and impressions]
-
-## Plan
-[Treatment plan and follow-up]
-
-## Notes
-[Additional notes or instructions]
-
----
-*Create your custom medical template structure here*"
+                                value={showStructurePlaceholder && !watchedValues.example_structure ? t('mediscribe.templates.templateCreation.structurePlaceholder') : watchedValues.example_structure}
+                                onChange={(e) => {
+                                  setShowStructurePlaceholder(false);
+                                  setValue('example_structure', e.target.value);
+                                }}
+                                onFocus={() => setShowStructurePlaceholder(false)}
+                                onBlur={() => {
+                                  if (!watchedValues.example_structure) {
+                                    setShowStructurePlaceholder(true);
+                                  }
+                                }}
                               />
                               
                               {/* Enhanced visual indicator */}
@@ -890,15 +877,15 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
                                   <Brain className="w-5 h-5 text-white" />
                                 </div>
                                 <div>
-                                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">AI Configuration</h3>
-                                  <p className="text-sm text-gray-600 dark:text-gray-400">Customize how AI processes your template</p>
+                                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t('mediscribe.templates.templateCreation.aiConfiguration')}</h3>
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('mediscribe.templates.templateCreation.customizeAIProcess')}</p>
                                 </div>
                               </div>
                               
                               <div className="space-y-4">
                                 <div>
                                   <label htmlFor="notes" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                                    Additional Instructions to AI
+                                    {t('mediscribe.templates.templateCreation.additionalInstructions')}
                                   </label>
                                   <textarea
                                     id="notes"
@@ -909,18 +896,7 @@ export const TemplateCreationModal: React.FC<TemplateCreationModalProps> = ({
                                         ? 'border-red-300 bg-red-50/50 dark:border-red-600 dark:bg-red-900/20' 
                                         : 'border-gray-200 dark:border-gray-600 hover:border-[#63b3ed]'
                                     } text-gray-900 dark:text-white`}
-                                    placeholder="Provide specific guidance for AI generation:
-
-• Focus areas or specialty considerations
-• Time-sensitive protocols to emphasize
-• Specific formatting preferences
-• Special instructions for this template type
-• Preferred medical terminology or style
-• Patient population considerations
-• Regulatory or compliance requirements
-
-Example:
-'Focus on pediatric cardiology protocols. Use family-friendly language for parent communication sections. Include growth chart references and developmental milestones.'"
+                                    placeholder={t('mediscribe.templates.templateCreation.aiInstructionsPlaceholder')}
                                     style={{ fontSize: '14px', lineHeight: '1.5' }}
                                     autoFocus={currentStep === 2}
                                   />
@@ -941,12 +917,12 @@ Example:
                                   <div className="flex items-start space-x-3">
                                     <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                                     <div>
-                                      <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-1">AI Enhancement Tips</h4>
+                                      <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-1">{t('mediscribe.templates.templateCreation.aiTips')}</h4>
                                       <ul className="text-xs text-blue-800 dark:text-blue-200 space-y-1">
-                                        <li>• Be specific about medical specialties or patient populations</li>
-                                        <li>• Mention any required medical coding systems (ICD-10, CPT)</li>
-                                        <li>• Specify preferred documentation style or institutional guidelines</li>
-                                        <li>• Include any regulatory requirements or quality measures</li>
+                                        <li>{t('mediscribe.templates.templateCreation.tip1')}</li>
+                                        <li>{t('mediscribe.templates.templateCreation.tip2')}</li>
+                                        <li>{t('mediscribe.templates.templateCreation.tip3')}</li>
+                                        <li>{t('mediscribe.templates.templateCreation.tip4')}</li>
                                       </ul>
                                     </div>
                                   </div>
@@ -963,49 +939,49 @@ Example:
                           <div className="bg-gradient-to-br from-[#1a365d]/5 via-[#2b6cb0]/5 to-[#63b3ed]/5 rounded-xl p-6 border border-[#63b3ed]/20">
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
                               <Sparkles className="w-5 h-5 text-[#2b6cb0]" />
-                              <span>Template Summary</span>
+                              <span>{t('mediscribe.templates.templateCreation.templateSummary')}</span>
                             </h3>
                             
                             <div className="grid grid-cols-2 gap-6">
                               <div className="space-y-3">
                                 <div>
-                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Template Name</label>
-                                  <p className="text-sm font-medium text-gray-900 dark:text-white">{watchedValues.name || 'Untitled Template'}</p>
+                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">{t('mediscribe.templates.templateCreation.templateNameLabel')}</label>
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white">{watchedValues.name || t('mediscribe.templates.templateCreation.untitledTemplate')}</p>
                                 </div>
                                 
                                 <div>
-                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Category</label>
-                                  <p className="text-sm font-medium text-gray-900 dark:text-white capitalize">{watchedValues.category || 'routine'}</p>
+                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">{t('mediscribe.templates.templateCreation.categoryLabel')}</label>
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white capitalize">{watchedValues.category || t('mediscribe.templates.templateCreation.routine')}</p>
                                 </div>
                                 
                                 <div>
-                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">AI Tone</label>
-                                  <p className="text-sm font-medium text-gray-900 dark:text-white capitalize">{watchedValues.aiTone || 'professional'}</p>
+                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">{t('mediscribe.templates.templateCreation.aiToneLabel')}</label>
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white capitalize">{watchedValues.aiTone || t('mediscribe.templates.templateCreation.professional')}</p>
                                 </div>
                               </div>
                               
                               <div className="space-y-3">
                                 <div>
-                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Structure Length</label>
-                                  <p className="text-sm font-medium text-gray-900 dark:text-white">{structureLength.toLocaleString()} characters</p>
+                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">{t('mediscribe.templates.templateCreation.structureLengthLabel')}</label>
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white">{t('mediscribe.templates.templateCreation.characters', { count: structureLength.toLocaleString() })}</p>
                                 </div>
                                 
                                 <div>
-                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Additional Notes</label>
-                                  <p className="text-sm font-medium text-gray-900 dark:text-white">{notesLength > 0 ? `${notesLength} characters` : 'None'}</p>
+                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">{t('mediscribe.templates.templateCreation.additionalNotesLabel')}</label>
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white">{notesLength > 0 ? t('mediscribe.templates.templateCreation.characters', { count: notesLength }) : t('mediscribe.templates.templateCreation.none')}</p>
                                 </div>
                                 
                                 <div>
-                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Features</label>
+                                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">{t('mediscribe.templates.templateCreation.featuresLabel')}</label>
                                   <div className="flex flex-wrap gap-1">
                                     {watchedValues.includeTimestamps && (
-                                      <span className="px-2 py-1 bg-[#2b6cb0]/10 text-[#2b6cb0] text-xs rounded-md">Timestamps</span>
+                                      <span className="px-2 py-1 bg-[#2b6cb0]/10 text-[#2b6cb0] text-xs rounded-md">{t('mediscribe.templates.templateCreation.timestamps')}</span>
                                     )}
                                     {watchedValues.includeDiagnosticCodes && (
-                                      <span className="px-2 py-1 bg-[#2b6cb0]/10 text-[#2b6cb0] text-xs rounded-md">ICD Codes</span>
+                                      <span className="px-2 py-1 bg-[#2b6cb0]/10 text-[#2b6cb0] text-xs rounded-md">{t('mediscribe.templates.templateCreation.icdCodes')}</span>
                                     )}
                                     {!watchedValues.includeTimestamps && !watchedValues.includeDiagnosticCodes && (
-                                      <span className="text-xs text-gray-500">Standard</span>
+                                      <span className="text-xs text-gray-500">{t('mediscribe.templates.templateCreation.standard')}</span>
                                     )}
                                   </div>
                                 </div>
@@ -1030,10 +1006,10 @@ Example:
                                 <div className="w-12 h-12 border-4 border-[#2b6cb0]/30 border-t-[#2b6cb0] rounded-full animate-spin" />
                                 <div>
                                   <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {isEditMode ? 'Updating Template...' : 'Creating Template...'}
+                                    {isEditMode ? t('mediscribe.templates.templateCreation.updatingTemplate') : t('mediscribe.templates.templateCreation.creatingTemplate')}
                                   </p>
                                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    Optimizing for AI integration and medical accuracy
+                                    {t('mediscribe.templates.templateCreation.optimizingAI')}
                                   </p>
                                 </div>
                               </div>
@@ -1055,7 +1031,7 @@ Example:
                           className="flex items-center space-x-2 px-3 lg:px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors disabled:opacity-50 text-sm lg:text-base"
                         >
                           <ArrowLeft className="w-4 h-4" />
-                          <span>Previous</span>
+                          <span>{t('mediscribe.templates.templateCreation.previous')}</span>
                         </button>
                       )}
                     </div>
@@ -1068,7 +1044,7 @@ Example:
                           disabled={isSubmitting}
                           className="primary-button flex items-center space-x-2 px-4 lg:px-6 py-2 lg:py-3 text-white rounded-lg lg:rounded-xl disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm lg:text-base"
                         >
-                          <span>Continue</span>
+                          <span>{t('mediscribe.templates.templateCreation.continue')}</span>
                           <ArrowRight className="w-4 h-4" />
                         </button>
                       ) : (
@@ -1085,7 +1061,7 @@ Example:
                           ) : (
                             <>
                               <Save className="w-5 h-5" />
-                              <span>{isEditMode ? 'Update Template' : 'Create Template'}</span>
+                              <span>{isEditMode ? t('mediscribe.templates.templateCreation.updateTemplate') : t('mediscribe.templates.templateCreation.createTemplate')}</span>
                             </>
                           )}
                         </button>
@@ -1102,7 +1078,7 @@ Example:
                     <div className="flex-shrink-0 p-4 border-b border-gray-200/50 dark:border-gray-700/50">
                       <h3 className="font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
                         <Eye className="w-4 h-4" />
-                        <span>Live Preview</span>
+                        <span>{t('mediscribe.templates.templateCreation.livePreview')}</span>
                       </h3>
                     </div>
                     <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
@@ -1115,8 +1091,8 @@ Example:
                           ) : (
                             <div className="text-center text-gray-500 dark:text-gray-400 py-12">
                               <FileText className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                              <p>Template structure will appear here</p>
-                              <p className="text-xs">Start typing to see a live preview</p>
+                              <p>{t('mediscribe.templates.templateCreation.structureWillAppear')}</p>
+                              <p className="text-xs">{t('mediscribe.templates.templateCreation.startTypingPreview')}</p>
                             </div>
                           )}
                         </div>

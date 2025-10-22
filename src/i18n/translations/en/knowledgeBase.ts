@@ -73,7 +73,7 @@ export const knowledgeBase = {
     dragDropText: 'Drop files here or click to select',
     selectFiles: 'Select Files',
     uploadButton: 'Upload',
-    maxFileSize: 'Max file size: {size}MB',
+    maxFileSize: 'Max file size: {{size}}MB',
     supportedFormats: 'Supported formats',
     
     // File actions
@@ -96,9 +96,48 @@ export const knowledgeBase = {
     }
   },
   
+  // Filters
+  filters: {
+    all: 'All',
+    featured: 'Featured',
+    trending: 'Trending',
+    bookmarked: 'Bookmarked',
+    recent: 'Recent'
+  },
+
+  // Sorting
+  sorting: {
+    relevance: 'Relevance',
+    rating: 'Rating',
+    citations: 'Citations',
+    views: 'Views',
+    year: 'Year',
+    trending: 'Trending'
+  },
+
+  // Resource metadata
+  resourcesFound: '{{count}} resources found',
+  avg: 'avg',
+  min: 'min',
+  updated: 'Updated',
+
+  // Difficulty levels
+  beginner: 'Beginner',
+  intermediate: 'Intermediate',
+  advanced: 'Advanced',
+
+  // Resource types
+  clinicalGuideline: 'Clinical Guideline',
+  medicalBook: 'Medical Book',
+  authors: 'Authors',
+
+  // Loading states
+  loadingKnowledgeBase: 'Loading Knowledge Base',
+  preparingResources: 'Preparing Resources',
+
   // Curated Knowledge Base Settings
   curatedSettings: {
-    searchPlaceholder: 'Search resources, authors, organizations...',
+    searchPlaceholder: 'Search {{specialty}} resources, authors, organizations...',
     sortByTitle: 'Sort by Title',
     sortByYear: 'Sort by Year',
     sortByCategory: 'Sort by Category',
@@ -122,7 +161,7 @@ export const knowledgeBase = {
     downloadPDF: 'Download PDF',
     
     // Results summary
-    resourcesFound: 'Found {count} cardiology resources'
+    resourcesFound: 'Found {{count}} cardiology resources'
   },
   
   // Vector Store Management
@@ -160,18 +199,105 @@ export const knowledgeBase = {
     uploadedOn: 'Uploaded On',
     fileSize: 'File Size',
     processingStatus: 'Processing Status',
-    
+
     // Processing status
     statusReady: 'Ready',
     statusProcessing: 'Processing',
     statusPending: 'Pending',
     statusFailed: 'Failed',
-    
+
     // Actions
     reprocess: 'Reprocess',
     downloadOriginal: 'Download Original',
     deleteDocument: 'Delete Document'
-  }
+  },
+
+  // Curated page texts
+  book: 'Book',
+  guideline: 'Guideline',
+  featured: 'Featured',
+  trending: 'Trending',
+  medicalBook: 'Medical Book',
+  clinicalGuideline: 'Clinical Guideline',
+  authors: 'Authors',
+  citations: 'Citations',
+  views: 'Views',
+  more: 'More',
+  min: 'min',
+  updated: 'Updated',
+  loadingKnowledgeBase: 'Loading Knowledge Base',
+  preparingResources: 'Preparing your medical resources...',
+  avg: 'avg',
+  noResourcesFound: 'No resources found',
+  couldntFindResources: 'Couldn\'t find resources matching',
+  clearSearchBrowseAll: 'Clear search and browse all resources',
+  trySearchingFor: 'Try searching for',
+  noResourcesMatchFilters: 'No resources match your filters. Try adjusting your search criteria.',
+  topics: 'Topics',
+  resourceStats: 'Resource Stats',
+  rating: 'Rating',
+  difficulty: 'Difficulty',
+  readTime: 'Read Time',
+  openResource: 'Open Resource',
+  save: 'Save',
+  share: 'Share',
+  lastUpdated: 'Last Updated',
+  beginner: 'Beginner',
+  intermediate: 'Intermediate',
+  advanced: 'Advanced',
+
+  // Personal Library Premium texts
+  totalLibrary: 'Total Library',
+  documentsCount: 'documents',
+  ready: 'Ready',
+  processed: 'Processed',
+  processing: 'Processing',
+  inQueue: 'In Queue',
+  storage: 'Storage',
+  totalUsed: 'Total Used',
+  uploadDocuments: 'Upload Documents',
+  refresh: 'Refresh',
+  monitor: 'Monitor',
+  searchYourKnowledgeBase: 'Search your knowledge base...',
+  sortBy: 'Sort by',
+  name: 'Name',
+  date: 'Date',
+  size: 'Size',
+  type: 'Type',
+  advancedFilters: 'Advanced Filters',
+  quickFilters: 'Quick Filters',
+  favorites: 'Favorites',
+  recent: 'Recent',
+  completed: 'Completed',
+  researchPapers: 'Research Papers',
+  clinicalGuidelines: 'Clinical Guidelines',
+  caseStudies: 'Case Studies',
+  protocols: 'Protocols',
+  referenceMaterials: 'Reference Materials',
+  personalNotes: 'Personal Notes',
+  other: 'Other',
+  pdf: 'PDF',
+  images: 'Images',
+  documentsType: 'Documents',
+  spreadsheets: 'Spreadsheets',
+  yourKnowledgeBaseAwaits: 'Your Knowledge Base Awaits',
+  startBuildingLibrary: 'Start building your personal medical knowledge library by uploading your first document',
+  uploadYourFirstDocument: 'Upload Your First Document',
+  of: 'of',
+  documentsText: 'documents',
+  showingFirst: 'Showing first',
+  tags: 'Tags',
+  addTagsToFilter: 'Add tags to filter...',
+  dateRange: 'Date Range',
+  from: 'From',
+  to: 'To',
+  fileSize: 'File Size',
+  selectAll: 'Select All',
+  deselectAll: 'Deselect All',
+  clearSelection: 'Clear Selection',
+  documentsSelected: 'documents selected',
+  noDocumentsMatchSearch: 'No documents match your search',
+  tryAdjustingCriteria: 'Try adjusting your search criteria or filters to find what you\'re looking for.'
 };
 
 export default knowledgeBase; 

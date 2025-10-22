@@ -25,13 +25,8 @@ if (import.meta.env.DEV) {
 // Force light theme and clear any dark mode setting
 localStorage.setItem('theme', 'light');
 
-// Force reset language to English to fix Georgian language issue
-localStorage.removeItem('selectedLanguage'); // Clear old language setting
-localStorage.removeItem('language'); // Clear the other key too
-localStorage.removeItem('i18nextLng'); // Clear i18next's own language cache
-localStorage.setItem('selectedLanguage', 'en'); // Use the correct key that i18next expects
-localStorage.setItem('language', 'en'); // Keep both for compatibility
-const language = localStorage.getItem('language') || 'en';
+// Get the saved language (defaults to 'en' if not set)
+const language = localStorage.getItem('selectedLanguage') || 'en';
 
 // Ensure dark class is removed and light theme is applied
 document.documentElement.classList.remove('dark');

@@ -35,48 +35,48 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
   const dateRangeOptions = [
     {
       id: 'last-month',
-      label: 'Last Month',
-      description: 'Published within the last 30 days',
+      label: t('filters.publicationAccess.dateRanges.lastMonth.label', 'Last Month'),
+      description: t('filters.publicationAccess.dateRanges.lastMonth.description', 'Published within the last 30 days'),
       icon: ClockIcon,
       color: 'text-green-600',
       value: { from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), to: new Date() }
     },
     {
       id: 'last-3-months',
-      label: 'Last 3 Months',
-      description: 'Published within the last 90 days',
+      label: t('filters.publicationAccess.dateRanges.last3Months.label', 'Last 3 Months'),
+      description: t('filters.publicationAccess.dateRanges.last3Months.description', 'Published within the last 90 days'),
       icon: ClockIcon,
       color: 'text-blue-600',
       value: { from: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), to: new Date() }
     },
     {
       id: 'last-6-months',
-      label: 'Last 6 Months',
-      description: 'Published within the last 6 months',
+      label: t('filters.publicationAccess.dateRanges.last6Months.label', 'Last 6 Months'),
+      description: t('filters.publicationAccess.dateRanges.last6Months.description', 'Published within the last 6 months'),
       icon: ClockIcon,
       color: 'text-indigo-600',
       value: { from: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), to: new Date() }
     },
     {
       id: 'last-year',
-      label: 'Last Year',
-      description: 'Published within the last 12 months',
+      label: t('filters.publicationAccess.dateRanges.lastYear.label', 'Last Year'),
+      description: t('filters.publicationAccess.dateRanges.lastYear.description', 'Published within the last 12 months'),
       icon: ClockIcon,
       color: 'text-purple-600',
       value: { from: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), to: new Date() }
     },
     {
       id: 'last-2-years',
-      label: 'Last 2 Years',
-      description: 'Published within the last 2 years',
+      label: t('filters.publicationAccess.dateRanges.last2Years.label', 'Last 2 Years'),
+      description: t('filters.publicationAccess.dateRanges.last2Years.description', 'Published within the last 2 years'),
       icon: ClockIcon,
       color: 'text-orange-600',
       value: { from: new Date(Date.now() - 2 * 365 * 24 * 60 * 60 * 1000), to: new Date() }
     },
     {
       id: 'last-5-years',
-      label: 'Last 5 Years',
-      description: 'Published within the last 5 years',
+      label: t('filters.publicationAccess.dateRanges.last5Years.label', 'Last 5 Years'),
+      description: t('filters.publicationAccess.dateRanges.last5Years.description', 'Published within the last 5 years'),
       icon: ClockIcon,
       color: 'text-red-600',
       value: { from: new Date(Date.now() - 5 * 365 * 24 * 60 * 60 * 1000), to: new Date() }
@@ -87,54 +87,54 @@ export const PublicationAccessFilters: React.FC<PublicationAccessFiltersProps> =
   const accessTypeOptions = [
     {
       id: 'open-access',
-      label: 'Open Access',
-      description: 'Freely available to everyone',
+      label: t('filters.publicationAccess.accessTypes.openAccess.label', 'Open Access'),
+      description: t('filters.publicationAccess.accessTypes.openAccess.description', 'Freely available to everyone'),
       icon: GlobeAltIcon,
       color: 'text-green-600',
-      badge: 'Free',
+      badge: t('filters.publicationAccess.accessTypes.openAccess.badge', 'Free'),
       badgeColor: 'bg-green-100 text-green-800'
     },
     {
       id: 'subscription',
-      label: 'Subscription Required',
-      description: 'Requires institutional or personal subscription',
+      label: t('filters.publicationAccess.accessTypes.subscription.label', 'Subscription Required'),
+      description: t('filters.publicationAccess.accessTypes.subscription.description', 'Requires institutional or personal subscription'),
       icon: LockClosedIcon,
       color: 'text-blue-600',
-      badge: 'Subscription',
+      badge: t('filters.publicationAccess.accessTypes.subscription.badge', 'Subscription'),
       badgeColor: 'bg-blue-100 text-blue-800'
     },
     {
       id: 'pay-per-view',
-      label: 'Pay-per-View',
-      description: 'Available for individual purchase',
+      label: t('filters.publicationAccess.accessTypes.payPerView.label', 'Pay-per-View'),
+      description: t('filters.publicationAccess.accessTypes.payPerView.description', 'Available for individual purchase'),
       icon: CurrencyDollarIcon,
       color: 'text-yellow-600',
-      badge: 'Paid',
+      badge: t('filters.publicationAccess.accessTypes.payPerView.badge', 'Paid'),
       badgeColor: 'bg-yellow-100 text-yellow-800'
     },
     {
       id: 'free-with-registration',
-      label: 'Free with Registration',
-      description: 'Free access after user registration',
+      label: t('filters.publicationAccess.accessTypes.freeWithRegistration.label', 'Free with Registration'),
+      description: t('filters.publicationAccess.accessTypes.freeWithRegistration.description', 'Free access after user registration'),
       icon: CheckCircleIcon,
       color: 'text-teal-600',
-      badge: 'Registration',
+      badge: t('filters.publicationAccess.accessTypes.freeWithRegistration.badge', 'Registration'),
       badgeColor: 'bg-teal-100 text-teal-800'
     }
   ];
 
   // Language options
   const languageOptions = [
-    { id: 'en', label: 'English', flag: '🇺🇸' },
-    { id: 'es', label: 'Spanish', flag: '🇪🇸' },
-    { id: 'fr', label: 'French', flag: '🇫🇷' },
-    { id: 'de', label: 'German', flag: '🇩🇪' },
-    { id: 'it', label: 'Italian', flag: '🇮🇹' },
-    { id: 'pt', label: 'Portuguese', flag: '🇵🇹' },
-    { id: 'ja', label: 'Japanese', flag: '🇯🇵' },
-    { id: 'zh', label: 'Chinese', flag: '🇨🇳' },
-    { id: 'ru', label: 'Russian', flag: '🇷🇺' },
-    { id: 'ar', label: 'Arabic', flag: '🇸🇦' }
+    { id: 'en', label: t('filters.publicationAccess.languages.en', 'English'), flag: '🇺🇸' },
+    { id: 'es', label: t('filters.publicationAccess.languages.es', 'Spanish'), flag: '🇪🇸' },
+    { id: 'fr', label: t('filters.publicationAccess.languages.fr', 'French'), flag: '🇫🇷' },
+    { id: 'de', label: t('filters.publicationAccess.languages.de', 'German'), flag: '🇩🇪' },
+    { id: 'it', label: t('filters.publicationAccess.languages.it', 'Italian'), flag: '🇮🇹' },
+    { id: 'pt', label: t('filters.publicationAccess.languages.pt', 'Portuguese'), flag: '🇵🇹' },
+    { id: 'ja', label: t('filters.publicationAccess.languages.ja', 'Japanese'), flag: '🇯🇵' },
+    { id: 'zh', label: t('filters.publicationAccess.languages.zh', 'Chinese'), flag: '🇨🇳' },
+    { id: 'ru', label: t('filters.publicationAccess.languages.ru', 'Russian'), flag: '🇷🇺' },
+    { id: 'ar', label: t('filters.publicationAccess.languages.ar', 'Arabic'), flag: '🇸🇦' }
   ];
 
   const handleDateRangeChange = (rangeId: string, checked: boolean) => {

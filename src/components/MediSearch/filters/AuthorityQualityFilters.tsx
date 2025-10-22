@@ -49,36 +49,36 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
     government: [
       {
         id: 'cdc',
-        label: 'CDC',
-        description: 'Centers for Disease Control and Prevention',
-        examples: ['Disease surveillance', 'Public health guidelines'],
+        label: t('filters.authorityQuality.authorities.government.cdc.name', 'CDC'),
+        description: t('filters.authorityQuality.authorities.government.cdc.description', 'Centers for Disease Control and Prevention'),
+        examples: t('filters.authorityQuality.authorities.government.cdc.examples', { returnObjects: true, defaultValue: ['Disease surveillance', 'Public health guidelines'] }) as string[],
         icon: ShieldCheckIcon,
         color: 'text-blue-700',
         trustLevel: 'high'
       },
       {
         id: 'fda',
-        label: 'FDA',
-        description: 'Food and Drug Administration',
-        examples: ['Drug approvals', 'Safety communications'],
+        label: t('filters.authorityQuality.authorities.government.fda.name', 'FDA'),
+        description: t('filters.authorityQuality.authorities.government.fda.description', 'Food and Drug Administration'),
+        examples: t('filters.authorityQuality.authorities.government.fda.examples', { returnObjects: true, defaultValue: ['Drug approvals', 'Safety communications'] }) as string[],
         icon: ShieldCheckIcon,
         color: 'text-blue-700',
         trustLevel: 'high'
       },
       {
         id: 'nih',
-        label: 'NIH',
-        description: 'National Institutes of Health',
-        examples: ['Research funding', 'Clinical guidelines'],
+        label: t('filters.authorityQuality.authorities.government.nih.name', 'NIH'),
+        description: t('filters.authorityQuality.authorities.government.nih.description', 'National Institutes of Health'),
+        examples: t('filters.authorityQuality.authorities.government.nih.examples', { returnObjects: true, defaultValue: ['Research funding', 'Clinical guidelines'] }) as string[],
         icon: ShieldCheckIcon,
         color: 'text-blue-700',
         trustLevel: 'high'
       },
       {
         id: 'who',
-        label: 'WHO',
-        description: 'World Health Organization',
-        examples: ['Global health guidelines', 'Disease classification'],
+        label: t('filters.authorityQuality.authorities.government.who.name', 'WHO'),
+        description: t('filters.authorityQuality.authorities.government.who.description', 'World Health Organization'),
+        examples: t('filters.authorityQuality.authorities.government.who.examples', { returnObjects: true, defaultValue: ['Global health guidelines', 'Disease classification'] }) as string[],
         icon: GlobeAltIcon,
         color: 'text-blue-600',
         trustLevel: 'high'
@@ -87,36 +87,36 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
     professionalSocieties: [
       {
         id: 'aha',
-        label: 'AHA',
-        description: 'American Heart Association',
-        examples: ['Cardiology guidelines', 'CPR protocols'],
+        label: t('filters.authorityQuality.authorities.professionalSocieties.aha.name', 'AHA'),
+        description: t('filters.authorityQuality.authorities.professionalSocieties.aha.description', 'American Heart Association'),
+        examples: t('filters.authorityQuality.authorities.professionalSocieties.aha.examples', { returnObjects: true, defaultValue: ['Cardiology guidelines', 'CPR protocols'] }) as string[],
         icon: BuildingOfficeIcon,
         color: 'text-red-600',
         trustLevel: 'high'
       },
       {
         id: 'acs',
-        label: 'ACS',
-        description: 'American Cancer Society',
-        examples: ['Cancer screening', 'Treatment guidelines'],
+        label: t('filters.authorityQuality.authorities.professionalSocieties.acs.name', 'ACS'),
+        description: t('filters.authorityQuality.authorities.professionalSocieties.acs.description', 'American Cancer Society'),
+        examples: t('filters.authorityQuality.authorities.professionalSocieties.acs.examples', { returnObjects: true, defaultValue: ['Cancer screening', 'Treatment guidelines'] }) as string[],
         icon: BuildingOfficeIcon,
         color: 'text-purple-600',
         trustLevel: 'high'
       },
       {
         id: 'asco',
-        label: 'ASCO',
-        description: 'American Society of Clinical Oncology',
-        examples: ['Oncology guidelines', 'Treatment recommendations'],
+        label: t('filters.authorityQuality.authorities.professionalSocieties.asco.name', 'ASCO'),
+        description: t('filters.authorityQuality.authorities.professionalSocieties.asco.description', 'American Society of Clinical Oncology'),
+        examples: t('filters.authorityQuality.authorities.professionalSocieties.asco.examples', { returnObjects: true, defaultValue: ['Oncology guidelines', 'Treatment recommendations'] }) as string[],
         icon: BuildingOfficeIcon,
         color: 'text-indigo-600',
         trustLevel: 'high'
       },
       {
         id: 'acp',
-        label: 'ACP',
-        description: 'American College of Physicians',
-        examples: ['Internal medicine guidelines', 'Best practices'],
+        label: t('filters.authorityQuality.authorities.professionalSocieties.acp.name', 'ACP'),
+        description: t('filters.authorityQuality.authorities.professionalSocieties.acp.description', 'American College of Physicians'),
+        examples: t('filters.authorityQuality.authorities.professionalSocieties.acp.examples', { returnObjects: true, defaultValue: ['Internal medicine guidelines', 'Best practices'] }) as string[],
         icon: BuildingOfficeIcon,
         color: 'text-green-600',
         trustLevel: 'high'
@@ -125,27 +125,27 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
     academicInstitutions: [
       {
         id: 'harvard',
-        label: 'Harvard Medical School',
-        description: 'Leading medical education and research',
-        examples: ['Medical research', 'Clinical studies'],
+        label: t('filters.authorityQuality.authorities.academicInstitutions.harvard.name', 'Harvard Medical School'),
+        description: t('filters.authorityQuality.authorities.academicInstitutions.harvard.description', 'Leading medical education and research'),
+        examples: t('filters.authorityQuality.authorities.academicInstitutions.harvard.examples', { returnObjects: true, defaultValue: ['Medical research', 'Clinical studies'] }) as string[],
         icon: AcademicCapIcon,
         color: 'text-red-700',
         trustLevel: 'high'
       },
       {
         id: 'mayo-clinic',
-        label: 'Mayo Clinic',
-        description: 'Integrated clinical practice and research',
-        examples: ['Clinical guidelines', 'Patient care protocols'],
+        label: t('filters.authorityQuality.authorities.academicInstitutions.mayo.name', 'Mayo Clinic'),
+        description: t('filters.authorityQuality.authorities.academicInstitutions.mayo.description', 'Integrated clinical practice and research'),
+        examples: t('filters.authorityQuality.authorities.academicInstitutions.mayo.examples', { returnObjects: true, defaultValue: ['Clinical guidelines', 'Patient care protocols'] }) as string[],
         icon: AcademicCapIcon,
         color: 'text-blue-600',
         trustLevel: 'high'
       },
       {
         id: 'johns-hopkins',
-        label: 'Johns Hopkins',
-        description: 'Medical research and education leader',
-        examples: ['Research publications', 'Clinical protocols'],
+        label: t('filters.authorityQuality.authorities.academicInstitutions.hopkins.name', 'Johns Hopkins'),
+        description: t('filters.authorityQuality.authorities.academicInstitutions.hopkins.description', 'Medical research and education leader'),
+        examples: t('filters.authorityQuality.authorities.academicInstitutions.hopkins.examples', { returnObjects: true, defaultValue: ['Research publications', 'Clinical protocols'] }) as string[],
         icon: AcademicCapIcon,
         color: 'text-blue-700',
         trustLevel: 'high'
@@ -154,36 +154,36 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
     publishers: [
       {
         id: 'nejm',
-        label: 'New England Journal of Medicine',
-        description: 'Premier medical journal',
-        examples: ['High-impact research', 'Clinical trials'],
+        label: t('filters.authorityQuality.authorities.publishers.nejm.name', 'New England Journal of Medicine'),
+        description: t('filters.authorityQuality.authorities.publishers.nejm.description', 'Premier medical journal'),
+        examples: t('filters.authorityQuality.authorities.publishers.nejm.examples', { returnObjects: true, defaultValue: ['High-impact research', 'Clinical trials'] }) as string[],
         icon: BookOpenIcon,
         color: 'text-indigo-700',
         trustLevel: 'high'
       },
       {
         id: 'lancet',
-        label: 'The Lancet',
-        description: 'Leading international medical journal',
-        examples: ['Global health research', 'Clinical studies'],
+        label: t('filters.authorityQuality.authorities.publishers.lancet.name', 'The Lancet'),
+        description: t('filters.authorityQuality.authorities.publishers.lancet.description', 'Leading international medical journal'),
+        examples: t('filters.authorityQuality.authorities.publishers.lancet.examples', { returnObjects: true, defaultValue: ['Global health research', 'Clinical studies'] }) as string[],
         icon: BookOpenIcon,
         color: 'text-red-600',
         trustLevel: 'high'
       },
       {
         id: 'bmj',
-        label: 'BMJ',
-        description: 'British Medical Journal',
-        examples: ['Evidence-based medicine', 'Clinical research'],
+        label: t('filters.authorityQuality.authorities.publishers.bmj.name', 'BMJ'),
+        description: t('filters.authorityQuality.authorities.publishers.bmj.description', 'British Medical Journal'),
+        examples: t('filters.authorityQuality.authorities.publishers.bmj.examples', { returnObjects: true, defaultValue: ['Evidence-based medicine', 'Clinical research'] }) as string[],
         icon: BookOpenIcon,
         color: 'text-blue-600',
         trustLevel: 'high'
       },
       {
         id: 'jama',
-        label: 'JAMA',
-        description: 'Journal of the American Medical Association',
-        examples: ['Clinical research', 'Medical guidelines'],
+        label: t('filters.authorityQuality.authorities.publishers.jama.name', 'JAMA'),
+        description: t('filters.authorityQuality.authorities.publishers.jama.description', 'Journal of the American Medical Association'),
+        examples: t('filters.authorityQuality.authorities.publishers.jama.examples', { returnObjects: true, defaultValue: ['Clinical research', 'Medical guidelines'] }) as string[],
         icon: BookOpenIcon,
         color: 'text-green-600',
         trustLevel: 'high'
@@ -192,27 +192,27 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
     medicalOrganizations: [
       {
         id: 'uptodate',
-        label: 'UpToDate',
-        description: 'Clinical decision support resource',
-        examples: ['Clinical guidelines', 'Point-of-care information'],
+        label: t('filters.authorityQuality.authorities.medicalOrganizations.uptodate.name', 'UpToDate'),
+        description: t('filters.authorityQuality.authorities.medicalOrganizations.uptodate.description', 'Clinical decision support resource'),
+        examples: t('filters.authorityQuality.authorities.medicalOrganizations.uptodate.examples', { returnObjects: true, defaultValue: ['Clinical guidelines', 'Point-of-care information'] }) as string[],
         icon: GlobeAltIcon,
         color: 'text-teal-600',
         trustLevel: 'high'
       },
       {
         id: 'cochrane',
-        label: 'Cochrane Library',
-        description: 'Systematic reviews and evidence synthesis',
-        examples: ['Systematic reviews', 'Meta-analyses'],
+        label: t('filters.authorityQuality.authorities.medicalOrganizations.cochrane.name', 'Cochrane Library'),
+        description: t('filters.authorityQuality.authorities.medicalOrganizations.cochrane.description', 'Systematic reviews and evidence synthesis'),
+        examples: t('filters.authorityQuality.authorities.medicalOrganizations.cochrane.examples', { returnObjects: true, defaultValue: ['Systematic reviews', 'Meta-analyses'] }) as string[],
         icon: GlobeAltIcon,
         color: 'text-green-600',
         trustLevel: 'high'
       },
       {
         id: 'medscape',
-        label: 'Medscape',
-        description: 'Medical information and education',
-        examples: ['Medical news', 'Continuing education'],
+        label: t('filters.authorityQuality.authorities.medicalOrganizations.medscape.name', 'Medscape'),
+        description: t('filters.authorityQuality.authorities.medicalOrganizations.medscape.description', 'Medical information and education'),
+        examples: t('filters.authorityQuality.authorities.medicalOrganizations.medscape.examples', { returnObjects: true, defaultValue: ['Medical news', 'Continuing education'] }) as string[],
         icon: GlobeAltIcon,
         color: 'text-blue-500',
         trustLevel: 'medium'
@@ -224,24 +224,24 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
   const peerReviewOptions = [
     {
       id: 'peer-reviewed',
-      label: 'Peer-Reviewed',
-      description: 'Reviewed by independent experts in the field',
+      label: t('filters.authorityQuality.peerReviewOptions.peerReviewed.label', 'Peer-Reviewed'),
+      description: t('filters.authorityQuality.peerReviewOptions.peerReviewed.description', 'Reviewed by independent experts in the field'),
       icon: CheckBadgeIcon,
       color: 'text-green-600',
       trustLevel: 'high' as const
     },
     {
       id: 'editorial-review',
-      label: 'Editorial Review',
-      description: 'Reviewed by editorial staff',
+      label: t('filters.authorityQuality.peerReviewOptions.editorialReview.label', 'Editorial Review'),
+      description: t('filters.authorityQuality.peerReviewOptions.editorialReview.description', 'Reviewed by editorial staff'),
       icon: CheckBadgeIcon,
       color: 'text-blue-600',
       trustLevel: 'medium' as const
     },
     {
       id: 'expert-consensus',
-      label: 'Expert Consensus',
-      description: 'Based on expert panel agreement',
+      label: t('filters.authorityQuality.peerReviewOptions.expertConsensus.label', 'Expert Consensus'),
+      description: t('filters.authorityQuality.peerReviewOptions.expertConsensus.description', 'Based on expert panel agreement'),
       icon: CheckBadgeIcon,
       color: 'text-purple-600',
       trustLevel: 'high' as const
@@ -252,27 +252,19 @@ export const AuthorityQualityFilters: React.FC<AuthorityQualityFiltersProps> = (
   const citationTierOptions = [
     {
       id: 'highly-cited',
-      label: 'Highly Cited',
-      description: 'Articles with high citation counts (>100 citations)',
+      label: t('filters.authorityQuality.citationTiers.highlyCited.label', 'Highly Cited'),
+      description: t('filters.authorityQuality.citationTiers.highlyCited.description', 'Articles with high citation counts (>100 citations)'),
       icon: StarIcon,
       color: 'text-yellow-600',
-      badge: 'High Impact'
+      badge: t('filters.authorityQuality.citationTiers.highlyCited.impact', 'High Impact')
     },
     {
       id: 'moderately-cited',
-      label: 'Moderately Cited',
-      description: 'Articles with moderate citation counts (10-100 citations)',
+      label: t('filters.authorityQuality.citationTiers.moderatelyCited.label', 'Moderately Cited'),
+      description: t('filters.authorityQuality.citationTiers.moderatelyCited.description', 'Articles with moderate citation counts (10-100 citations)'),
       icon: StarIcon,
       color: 'text-blue-600',
-      badge: 'Good Impact'
-    },
-    {
-      id: 'new-content',
-      label: 'Recent Publications',
-      description: 'Newly published content with emerging impact',
-      icon: StarIcon,
-      color: 'text-green-600',
-      badge: 'Emerging'
+      badge: t('filters.authorityQuality.citationTiers.moderatelyCited.impact', 'Good Impact')
     }
   ];
 

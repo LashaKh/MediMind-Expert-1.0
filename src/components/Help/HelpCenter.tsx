@@ -12,6 +12,7 @@ import {
   Users
 } from 'lucide-react';
 import { useAuth } from '../../stores/useAppStore';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface HelpSection {
   id: string;
@@ -30,6 +31,7 @@ interface HelpArticle {
 }
 
 export const HelpCenter: React.FC = () => {
+  const { t } = useTranslation();
   const { profile } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
@@ -38,13 +40,13 @@ export const HelpCenter: React.FC = () => {
   const helpSections: HelpSection[] = [
     {
       id: 'getting-started',
-      title: 'Getting Started',
+      title: t('help.sections.gettingStarted.title', 'Getting Started'),
       icon: <Stethoscope className="w-6 h-6" />,
-      description: 'Learn the basics of using MediMind Expert',
+      description: t('help.sections.gettingStarted.description', 'Learn the basics of using MediMind Expert'),
       articles: [
         {
           id: 'account-setup',
-          title: 'Account Setup & First Login',
+          title: t('help.articles.accountSetup.title', 'Account Setup & First Login'),
           difficulty: 'beginner',
           tags: ['setup', 'account', 'onboarding'],
           content: `
@@ -162,7 +164,7 @@ After completing your account setup:
         },
         {
           id: 'platform-tour',
-          title: 'Complete Platform Tour',
+          title: t('help.articles.platform-tour.title', 'Complete Platform Tour'),
           difficulty: 'beginner',
           tags: ['tour', 'navigation', 'features'],
           content: `
@@ -407,7 +409,7 @@ Now that you understand the platform:
         },
         {
           id: 'first-steps',
-          title: 'Your First Steps in MediMind Expert',
+          title: t('help.articles.first-steps.title', 'Your First Steps in MediMind Expert'),
           difficulty: 'beginner',
           tags: ['onboarding', 'basics', 'quickstart'],
           content: `
@@ -572,7 +574,7 @@ ${profile?.medical_specialty === 'cardiology' ? `   - Try the **ASCVD Risk Calcu
         },
         {
           id: 'workspace-overview',
-          title: 'Understanding Your Workspace',
+          title: t('help.articles.workspace-overview.title', 'Understanding Your Workspace'),
           difficulty: 'beginner',
           tags: ['workspace', 'navigation'],
           content: `
@@ -635,9 +637,9 @@ ${profile?.medical_specialty === 'cardiology' ? `
     },
     {
       id: 'ai-copilot',
-      title: 'AI Co-Pilot',
+      title: t('help.sections.aiCoPilot.title', 'AI Co-Pilot'),
       icon: <Bot className="w-6 h-6" />,
-      description: 'Master your intelligent medical assistant',
+      description: t('help.sections.aiCoPilot.description', 'Master your intelligent medical assistant'),
       articles: [
         {
           id: 'ai-copilot-mastery',
@@ -975,8 +977,7 @@ Build and leverage your personal medical library for enhanced AI interactions.
 - Custom treatment algorithms
 
 **Use Curated KB for:**
-- General medical questions and guidelines
-- Standard clinical decision support
+                  {t('help.faq.tabs.general', 'General')}- Standard clinical decision support
 - Evidence-based treatment recommendations
 - Broad medical knowledge queries
 - When you don't have specific literature
@@ -2234,9 +2235,9 @@ alternative approaches, and factors that would change the decision"
     },
     {
       id: 'calculators',
-      title: 'Medical Calculators',
+      title: t('help.sections.calculators.title', 'Calculators'),
       icon: <Calculator className="w-6 h-6" />,
-      description: 'Master the clinical calculation tools',
+      description: t('help.sections.calculators.description', 'Access clinical decision support tools'),
       articles: [
         {
           id: 'calculator-basics',
@@ -2378,9 +2379,9 @@ Specialty-specific clinical calculators for:
     },
     {
       id: 'knowledge-base',
-      title: 'Knowledge Base',
+      title: t('help.sections.knowledgeBase.title', 'Knowledge Base'),
       icon: <Upload className="w-6 h-6" />,
-      description: 'Manage your medical documents and literature',
+      description: t('help.sections.knowledgeBase.description', 'Manage your personal and curated medical literature'),
       articles: [
         {
           id: 'document-upload',
@@ -2679,13 +2680,8 @@ If issues persist:
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                <BookOpen className="w-8 h-8 text-primary mr-3" />
-                Help Center
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Learn how to make the most of MediMind Expert
-              </p>
+          <h1 className="text-4xl font-bold text-gray-900">{t('help.title', 'Help & Support Center')}</h1>
+          <p className="mt-4 text-lg text-gray-600">{t('help.subtitle', 'Your comprehensive guide to mastering MediMind Expert. Find tutorials, FAQs, and contact information.')}</p>
             </div>
           </div>
         </div>
@@ -2701,7 +2697,7 @@ If issues persist:
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   type="text"
-                  placeholder="Search help articles..."
+            placeholder={t('help.searchPlaceholder', 'Search for topics...')}
                   value={searchTerm}
                   onChange={(E) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -2724,7 +2720,7 @@ If issues persist:
               >
                 <div className="flex items-center">
                   <BookOpen className="w-5 h-5 mr-3" />
-                  All Topics
+                  {t('help.allTopics', 'All Topics')}
                 </div>
               </button>
 
@@ -2871,24 +2867,24 @@ If issues persist:
               <div>
                 <div className="bg-white rounded-lg shadow-sm border p-8 mb-8">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    Welcome to MediMind Expert Help Center
+                    {t('help.welcomeTitle', 'Welcome to MediMind Expert Help Center')}
                   </h2>
                   <p className="text-gray-600 text-lg mb-6">
-                    Find comprehensive guides, tutorials, and answers to help you make the most of your medical AI co-pilot.
+                    {t('help.welcomeSubtitle', 'Find comprehensive guides, tutorials, and answers to help you make the most of your medical AI co-pilot.')}
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center p-4 bg-blue-50 rounded-lg">
                       <MessageCircle className="w-8 h-8 text-blue-600 mr-3" />
                       <div>
-                        <h3 className="font-semibold text-blue-900">Need Quick Help?</h3>
-                        <p className="text-blue-700 text-sm">Search above or browse topics on the left</p>
+                        <h3 className="font-semibold text-blue-900">{t('help.quickHelp.title', 'Need Quick Help?')}</h3>
+                        <p className="text-blue-700 text-sm">{t('help.quickHelp.subtitle', 'Search above or browse topics on the left')}</p>
                       </div>
                     </div>
                     <div className="flex items-center p-4 bg-green-50 rounded-lg">
                       <Users className="w-8 h-8 text-green-600 mr-3" />
                       <div>
-                        <h3 className="font-semibold text-green-900">New to MediMind?</h3>
-                        <p className="text-green-700 text-sm">Start with "Getting Started" guide</p>
+                        <h3 className="font-semibold text-green-900">{t('help.newToMediMind.title', 'New to MediMind?')}</h3>
+                        <p className="text-green-700 text-sm">{t('help.newToMediMind.subtitle', 'Start with "Getting Started" guide')}</p>
                       </div>
                     </div>
                   </div>
@@ -2916,7 +2912,7 @@ If issues persist:
                         {section.description}
                       </p>
                       <div className="text-sm text-gray-500">
-                        {section.articles.length} article{section.articles.length !== 1 ? 's' : ''}
+                                                {t('help.articleCount', { count: section.articles.length })}
                       </div>
                     </div>
                   ))}

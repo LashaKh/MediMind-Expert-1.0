@@ -1,11 +1,57 @@
 export const podcast = {
   title: 'AI Podcast Studio',
-  subtitle: 'Transform your medical documents into engaging audio conversations',
+  subtitle: 'Transform your medical documents into captivating, professional podcasts with revolutionary AI technology and studio-quality natural voices.',
+
+  // Coming Soon
+  comingSoon: {
+    title: 'Coming Soon',
+    subtitle: "What's Coming:",
+    features: {
+      analysis: 'Intelligent medical content analysis',
+      voices: 'Natural voice synthesis with expert intonation',
+      languages: 'Multiple language support',
+      quality: 'Professional audio quality',
+      speed: 'Quick generation in minutes'
+    }
+  },
+
+  // Hero Section
+  hero: {
+    createStunning: 'Create Stunning',
+    aiPodcasts: 'AI Podcasts',
+    getStarted: 'Get Started'
+  },
+
+  // Feature Pills
+  pills: {
+    neuralAnalysis: 'Neural Analysis',
+    studioQuality: 'Studio Quality',
+    lightningFast: 'Lightning Fast'
+  },
+
+  // Features Section
+  featuresSection: {
+    title: 'Why Choose AI Podcast Studio?',
+    subtitle: 'Experience the future of medical content creation with our advanced AI technology',
+    intelligentAnalysis: {
+      title: 'Intelligent Content Analysis',
+      description: 'Advanced AI comprehends complex medical documents and creates coherent narratives'
+    },
+    naturalVoices: {
+      title: 'Natural Voice Synthesis',
+      description: 'Professional medical experts voices with natural intonation and clarity'
+    },
+    fastGeneration: {
+      title: 'Lightning Fast Generation',
+      description: 'Get your podcast ready in minutes, not hours or days'
+    }
+  },
   
   // Navigation
   navigation: {
     podcastStudio: 'Podcast Studio',
-    podcastStudioDesc: 'Create AI-generated medical podcasts from your documents'
+    podcastStudioDesc: 'Create AI-generated medical podcasts from your documents',
+    headerDesc: 'Transform your medical knowledge into engaging audio experiences'
   },
   
   // Tabs

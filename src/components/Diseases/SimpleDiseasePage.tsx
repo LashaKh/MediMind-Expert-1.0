@@ -26,10 +26,12 @@ import {
 import { getDiseaseById, MarkdownDiseaseItem } from './MarkdownDiseaseRegistry';
 import { InteractiveMarkdownViewer } from './InteractiveMarkdownViewer';
 import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export const SimpleDiseasePage: React.FC = () => {
   const { diseaseId } = useParams<{ diseaseId: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [disease, setDisease] = useState<MarkdownDiseaseItem | null>(null);
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -39,7 +41,7 @@ export const SimpleDiseasePage: React.FC = () => {
   useEffect(() => {
     const loadDisease = async () => {
       if (!diseaseId) {
-        setError('Disease ID not provided');
+        setError(t('diseases.detailPage.idNotProvided'));
         setLoading(false);
         return;
       }
@@ -47,7 +49,7 @@ export const SimpleDiseasePage: React.FC = () => {
       // Get disease metadata from registry
       const diseaseData = getDiseaseById(diseaseId);
       if (!diseaseData) {
-        setError('Disease not found');
+        setError(t('diseases.detailPage.notFound'));
         setLoading(false);
         return;
       }
@@ -56,7 +58,9 @@ export const SimpleDiseasePage: React.FC = () => {
 
       const [content, markdownError] = await safeAsync(
         async () => {
-          const response = await fetch(diseaseData.markdownFile);
+          const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+          const filePath = `${baseUrl}${diseaseData.markdownFile}`;
+          const response = await fetch(filePath);
           if (!response.ok) {
             throw new Error(`Failed to load markdown file: ${response.statusText}`);
           }
@@ -70,7 +74,7 @@ export const SimpleDiseasePage: React.FC = () => {
       );
 
       if (markdownError) {
-        setError(`Failed to load disease content: ${markdownError.userMessage}`);
+        setError(t('diseases.detailPage.loadError', { errorMessage: markdownError.userMessage }));
       } else {
         setMarkdownContent(content);
       }
@@ -79,7 +83,7 @@ export const SimpleDiseasePage: React.FC = () => {
     };
 
     loadDisease();
-  }, [diseaseId]);
+  }, [diseaseId, t]);
 
   const handleBackClick = () => {
     navigate('/diseases');
@@ -88,7 +92,7 @@ export const SimpleDiseasePage: React.FC = () => {
   const handleShare = async () => {
     if (navigator.share) {
       await navigator.share({
-        title: disease?.title || 'Medical Document',
+        title: disease?.title || t('diseases.detailPage.medicalDocument', 'Medical Document'),
         url: window.location.href
       });
     } else {
@@ -105,8 +109,8 @@ export const SimpleDiseasePage: React.FC = () => {
           bgColor: 'bg-[#90cdf4]/20',
           borderColor: 'border-[#2b6cb0]/40',
           icon: AlertTriangle, 
-          label: 'Critical Condition',
-          description: 'Requires immediate medical attention',
+          label: t('diseases.detailPage.severity.critical'),
+          description: t('diseases.detailPage.severity.criticalDesc'),
           pulse: 'animate-pulse'
         };
       case 'medium': 
@@ -116,8 +120,8 @@ export const SimpleDiseasePage: React.FC = () => {
           bgColor: 'bg-[#90cdf4]/20',
           borderColor: 'border-[#63b3ed]/30',
           icon: Activity, 
-          label: 'Moderate Severity',
-          description: 'Requires careful monitoring',
+          label: t('diseases.detailPage.severity.moderate'),
+          description: t('diseases.detailPage.severity.moderateDesc'),
           pulse: ''
         };
       case 'low': 
@@ -127,8 +131,8 @@ export const SimpleDiseasePage: React.FC = () => {
           bgColor: 'bg-[#90cdf4]/10',
           borderColor: 'border-[#63b3ed]/20',
           icon: Shield, 
-          label: 'Stable Condition',
-          description: 'Generally manageable',
+          label: t('diseases.detailPage.severity.stable'),
+          description: t('diseases.detailPage.severity.stableDesc'),
           pulse: ''
         };
       default: 
@@ -138,8 +142,8 @@ export const SimpleDiseasePage: React.FC = () => {
           bgColor: 'bg-gray-50',
           borderColor: 'border-gray-200',
           icon: BookOpen, 
-          label: 'Unknown',
-          description: 'Severity not specified',
+          label: t('diseases.detailPage.severity.unknown'),
+          description: t('diseases.detailPage.severity.unknownDesc'),
           pulse: ''
         };
     }
@@ -172,8 +176,8 @@ export const SimpleDiseasePage: React.FC = () => {
                 <div className="animate-spin rounded-full h-20 w-20 border-4 border-blue-200 border-t-blue-600 mx-auto"></div>
                 <Stethoscope className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Loading Medical Document</h3>
-              <p className="text-gray-600 mb-2">Preparing clinical content...</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">{t('diseases.detailPage.loadingTitle')}</h3>
+              <p className="text-gray-600 mb-2">{t('diseases.detailPage.loadingSubtext')}</p>
               <div className="w-64 bg-gray-200 rounded-full h-2 mx-auto">
                 <div className="bg-blue-600 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
               </div>
@@ -194,22 +198,22 @@ export const SimpleDiseasePage: React.FC = () => {
             className="mb-6 flex items-center space-x-2 text-[#2b6cb0] hover:text-[#1a365d] transition-colors group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Back to Diseases</span>
+            <span className="font-medium">{t('diseases.detailPage.backButton')}</span>
           </button>
 
           <div className="bg-white rounded-3xl shadow-2xl border border-[#63b3ed]/30 p-12 text-center max-w-md mx-auto">
             <div className="bg-[#90cdf4]/20 p-6 rounded-full w-fit mx-auto mb-8">
               <AlertCircle className="w-12 h-12 text-[#2b6cb0]" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Disease Not Found</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('diseases.detailPage.errorTitle')}</h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              {error || 'The requested disease could not be found in our medical database.'}
+              {error || t('diseases.detailPage.errorMessage')}
             </p>
             <button
               onClick={handleBackClick}
               className="px-8 py-3 bg-[#1a365d] text-white rounded-xl hover:bg-[#2b6cb0] transition-colors font-medium shadow-lg"
             >
-              Return to Disease List
+              {t('diseases.detailPage.returnButton')}
             </button>
           </div>
         </div>
@@ -219,7 +223,7 @@ export const SimpleDiseasePage: React.FC = () => {
 
   const severityConfig = getSeverityConfig(disease.severity);
   const SeverityIcon = severityConfig.icon;
-  const CategoryIcon = getCategoryIcon(disease.category);
+  const CategoryIcon = getCategoryIcon(t(`diseases.registry.${disease.id}.category`));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-[#90cdf4]/10 to-[#63b3ed]/10">
@@ -230,7 +234,7 @@ export const SimpleDiseasePage: React.FC = () => {
           className="mb-8 flex items-center space-x-2 text-[#2b6cb0] hover:text-[#1a365d] transition-all group bg-white px-4 py-2 rounded-xl shadow-sm border border-[#63b3ed]/30 hover:shadow-md"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span className="font-medium">Back to Diseases</span>
+          <span className="font-medium">{t('diseases.detailPage.backButton')}</span>
         </button>
 
         {/* Enhanced Disease Header */}
@@ -255,14 +259,14 @@ export const SimpleDiseasePage: React.FC = () => {
                 {/* Title and Category */}
                 <div className="flex-1 min-w-0">
                   <h1 className="text-3xl font-bold text-gray-900 mb-3 leading-tight">
-                    {disease.title}
+                    {t(`diseases.registry.${disease.id}.title`)}
                   </h1>
                   <div className="flex items-center space-x-4 mb-4">
                     <span className="px-4 py-2 bg-gradient-to-r from-[#90cdf4]/30 to-[#63b3ed]/20 text-[#1a365d] rounded-xl font-semibold text-sm border border-[#2b6cb0]/30">
-                      {disease.category}
+                      {t(`diseases.registry.${disease.id}.category`)}
                     </span>
                     <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-medium text-sm">
-                      {disease.specialty.charAt(0).toUpperCase() + disease.specialty.slice(1)}
+                      {t(`diseases.specialties.${disease.specialty}`, disease.specialty)}
                     </span>
                   </div>
                 </div>
@@ -280,12 +284,12 @@ export const SimpleDiseasePage: React.FC = () => {
 
             {/* Description */}
             <p className="text-gray-700 text-lg leading-relaxed mb-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
-              {disease.description}
+              {t(`diseases.registry.${disease.id}.description`)}
             </p>
 
             {/* Tags */}
             <div className="flex flex-wrap gap-3 mb-8">
-              {disease.tags.map((tag) => (
+              {Array.isArray(t(`diseases.registry.${disease.id}.tags`, { returnObjects: true })) && (t(`diseases.registry.${disease.id}.tags`, { returnObjects: true }) as string[]).map((tag) => (
                 <span
                   key={tag}
                   className="px-4 py-2 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/10 text-[#1a365d] text-sm rounded-xl flex items-center space-x-2 border border-[#2b6cb0]/30 font-medium hover:shadow-md transition-shadow"
@@ -301,35 +305,35 @@ export const SimpleDiseasePage: React.FC = () => {
               <div className="bg-gradient-to-br from-[#1a365d]/10 to-[#2b6cb0]/10 p-4 rounded-xl border border-[#2b6cb0]/30">
                 <div className="flex items-center space-x-3 mb-2">
                   <Clock className="w-5 h-5 text-[#2b6cb0]" />
-                  <span className="text-sm font-semibold text-[#1a365d]">Read Time</span>
+                  <span className="text-sm font-semibold text-[#1a365d]">{t('diseases.detailPage.readTime')}</span>
                 </div>
-                <p className="text-xl font-bold text-[#1a365d]">{disease.readTime}</p>
+                <p className="text-xl font-bold text-[#1a365d]">{t(`diseases.registry.${disease.id}.readTime`, disease.readTime)}</p>
               </div>
               
               <div className="bg-gradient-to-br from-[#63b3ed]/10 to-[#90cdf4]/10 p-4 rounded-xl border border-[#63b3ed]/30">
                 <div className="flex items-center space-x-3 mb-2">
                   <Calendar className="w-5 h-5 text-[#2b6cb0]" />
-                  <span className="text-sm font-semibold text-[#1a365d]">Last Updated</span>
+                  <span className="text-sm font-semibold text-[#1a365d]">{t('diseases.detailPage.lastUpdated')}</span>
                 </div>
-                <p className="text-xl font-bold text-[#1a365d]">{disease.lastUpdated}</p>
+                <p className="text-xl font-bold text-[#1a365d]">{t(`diseases.registry.${disease.id}.lastUpdated`, disease.lastUpdated)}</p>
               </div>
               
               {disease.prevalence && (
                 <div className="bg-gradient-to-br from-[#2b6cb0]/10 to-[#63b3ed]/10 p-4 rounded-xl border border-[#63b3ed]/30">
                   <div className="flex items-center space-x-3 mb-2">
                     <TrendingUp className="w-5 h-5 text-[#2b6cb0]" />
-                    <span className="text-sm font-semibold text-[#1a365d]">Prevalence</span>
+                    <span className="text-sm font-semibold text-[#1a365d]">{t('diseases.detailPage.prevalence')}</span>
                   </div>
-                  <p className="text-xl font-bold text-[#1a365d]">{disease.prevalence}</p>
+                  <p className="text-xl font-bold text-[#1a365d]">{t(`diseases.registry.${disease.id}.prevalence`, disease.prevalence)}</p>
                 </div>
               )}
               
               <div className="bg-gradient-to-br from-[#63b3ed]/10 to-[#90cdf4]/10 p-4 rounded-xl border border-[#63b3ed]/30">
                 <div className="flex items-center space-x-3 mb-2">
                   <Award className="w-5 h-5 text-[#2b6cb0]" />
-                  <span className="text-sm font-semibold text-[#1a365d]">Evidence Level</span>
+                  <span className="text-sm font-semibold text-[#1a365d]">{t('diseases.detailPage.evidenceLevel')}</span>
                 </div>
-                <p className="text-xl font-bold text-[#1a365d]">Grade A</p>
+                <p className="text-xl font-bold text-[#1a365d]">{t('diseases.detailPage.gradeA')}</p>
               </div>
             </div>
 
@@ -344,7 +348,7 @@ export const SimpleDiseasePage: React.FC = () => {
                 }`}
               >
                 <Bookmark className={`w-5 h-5 ${bookmarked ? 'fill-current' : ''}`} />
-                <span>{bookmarked ? 'Bookmarked' : 'Bookmark'}</span>
+                <span>{bookmarked ? t('diseases.detailPage.bookmarked') : t('diseases.detailPage.bookmark')}</span>
               </button>
               
               <button
@@ -352,12 +356,12 @@ export const SimpleDiseasePage: React.FC = () => {
                 className="px-6 py-3 bg-[#1a365d] text-white rounded-xl hover:bg-[#2b6cb0] transition-colors flex items-center space-x-2 font-medium shadow-lg"
               >
                 <Share2 className="w-5 h-5" />
-                <span>Share</span>
+                <span>{t('diseases.detailPage.share')}</span>
               </button>
               
               <div className="flex items-center space-x-2 text-sm text-gray-500">
                 <Eye className="w-4 h-4" />
-                <span>Professional medical content</span>
+                <span>{t('diseases.detailPage.proContent')}</span>
               </div>
             </div>
           </div>
@@ -367,16 +371,16 @@ export const SimpleDiseasePage: React.FC = () => {
         {markdownContent ? (
           <InteractiveMarkdownViewer 
             markdownContent={markdownContent}
-            title={disease.title}
+            title={t(`diseases.registry.${disease.id}.title`)}
           />
         ) : (
           <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-12 text-center">
             <div className="bg-gray-100 p-6 rounded-full w-fit mx-auto mb-6">
               <AlertCircle className="w-12 h-12 text-gray-400" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Content Not Available</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-4">{t('diseases.detailPage.contentNotAvailable')}</h3>
             <p className="text-gray-600 leading-relaxed">
-              The clinical content for this disease is not yet available. Please check back later or contact support.
+              {t('diseases.detailPage.contentNotAvailableMessage')}
             </p>
           </div>
         )}

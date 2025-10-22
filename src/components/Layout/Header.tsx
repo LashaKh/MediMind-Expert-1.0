@@ -152,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false, onMenu
                     text-gray-500 dark:text-gray-400 font-medium tracking-wide transition-all duration-200
                     ${isCondensed ? 'hidden' : isMobile ? 'hidden' : 'text-xs hidden xs:block'}
                   `}>
-                    AI Medical Co-Pilot
+                    {t('navigation.aiMedicalCoPilot', 'AI Medical Co-Pilot')}
                   </span>
                 </div>
               </div>
@@ -166,7 +166,7 @@ export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false, onMenu
               <button
                 onClick={() => openTour('selector')}
                 className="hidden md:inline-flex items-center px-4 py-2 h-10 rounded-lg text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 focus-enhanced hover:scale-105 bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] hover:from-[#1a365d]/90 hover:via-[#2b6cb0]/90 hover:to-[#63b3ed]/90"
-                aria-label="Start Tour"
+                aria-label={t('tour.selector.startTour')}
               >
                 <svg 
                   className="w-4 h-4 mr-2" 
@@ -177,7 +177,7 @@ export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false, onMenu
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Start Tour
+                {t('tour.selector.startTour')}
               </button>
             )}
 
@@ -186,7 +186,7 @@ export const Header: React.FC<HeaderProps> = ({ isOnboardingPage = false, onMenu
               <button
                 onClick={() => openTour('selector')}
                 className="md:hidden inline-flex items-center justify-center p-2 h-10 w-10 rounded-lg text-white shadow-lg active:scale-95 transition-all duration-300 touch-target bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] hover:from-[#1a365d]/90 hover:via-[#2b6cb0]/90 hover:to-[#63b3ed]/90"
-                aria-label="Start Tour"
+                aria-label={t('tour.selector.startTour')}
               >
                 <svg 
                   className="w-5 h-5" 

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { AlertTriangle, ArrowUp, FileText, X } from 'lucide-react';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface TitleRequiredModalProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ export const TitleRequiredModal: React.FC<TitleRequiredModalProps> = ({
   onClose,
   onFocusTitle
 }) => {
+  const { t } = useTranslation();
   // Close on Escape key
   useEffect(() => {
     if (!isOpen) return;
@@ -86,12 +88,12 @@ export const TitleRequiredModal: React.FC<TitleRequiredModalProps> = ({
 
             {/* Title */}
             <h3 className="text-2xl font-bold text-[#1a365d] text-center mb-3">
-              Session Title Required
+              {t('mediscribe.sessionTitle.requiredModalTitle')}
             </h3>
 
             {/* Message */}
             <p className="text-[#2b6cb0] text-center leading-relaxed mb-8">
-              Please enter a session title before starting the recording. This helps you organize and find your medical transcriptions later.
+              {t('mediscribe.sessionTitle.requiredModalDescription')}
             </p>
 
             {/* Alert info box */}

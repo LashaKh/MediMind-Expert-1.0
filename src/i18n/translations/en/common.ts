@@ -108,9 +108,9 @@ export const common = {
   breadcrumb: 'Breadcrumb',
   // Pagination
   page: 'Page',
-  pageOf: 'Page {current} of {total}',
+  pageOf: 'Page {{current}} of {{total}}',
   itemsPerPage: 'Items per page',
-  showingItems: 'Showing {start}-{end} of {total}',
+  showingItems: 'Showing {{start}}-{{end}} of {{total}}',
   // Time and dates
   today: 'Today',
   yesterday: 'Yesterday',

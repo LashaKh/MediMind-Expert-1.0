@@ -16,6 +16,8 @@ import {
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { isDiagnosisTemplate, extractDiagnosisFromInstruction } from '../../../services/diagnosisFlowiseService';
 
+import { useTranslation } from '../../../hooks/useTranslation';
+
 // Import new components
 import { MedicalAnalysisCard } from './MedicalAnalysisCard';
 import { PremiumTemplatesSection } from './PremiumTemplatesSection';
@@ -76,6 +78,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   sessionTitle = '',
   sessionId
 }) => {
+  const { t } = useTranslation();
   const [viewMode, setViewMode] = useState<ViewMode>('templates');
   const [customInstruction, setCustomInstruction] = useState('');
   const [isChatExpanded, setIsChatExpanded] = useState(false);
@@ -222,7 +225,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                 }`}
               >
                 <Stethoscope className={`${viewMode === 'templates' ? 'w-6 h-6' : 'w-5 h-5'} transition-all duration-300`} />
-                <span className="text-lg">Templates</span>
+                <span className="text-lg">{t('mediscribe.templates.title')}</span>
               </button>
               <button
                 onClick={() => setViewMode('history')}
@@ -233,7 +236,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                 }`}
               >
                 <FileText className={`${viewMode === 'history' ? 'w-6 h-6' : 'w-5 h-5'} transition-all duration-300`} />
-                <span className="text-lg">Generated Reports</span>
+                <span className="text-lg">{t('mediscribe.templates.generatedReports')}</span>
                 <span className={`px-3 py-1 rounded-full text-sm font-extrabold transition-all duration-300 ${
                   viewMode === 'history'
                     ? 'bg-white/20 text-white'
@@ -255,7 +258,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <h4 className="text-sm font-semibold text-red-800 dark:text-red-200">
-                  AI Processing Error
+                  {t('mediscribe.templates.aiProcessingError')}
                 </h4>
                 {onClearAIError && (
                   <MedicalButton
@@ -337,12 +340,12 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                     <FileText className="w-12 h-12 text-[#63b3ed] dark:text-[#90cdf4]" />
                   </div>
                   <h3 className="text-2xl font-bold text-[#1a365d] dark:text-[#90cdf4] mb-4">
-                    No reports generated yet
+                    {t('mediscribe.templates.noReports')}
                   </h3>
                   <p className="text-[#2b6cb0] dark:text-[#63b3ed] max-w-md text-lg leading-relaxed">
                     {hasTranscript 
-                      ? 'Switch to Templates to generate your first medical analysis report.'
-                      : 'Record a transcript or attach medical documents, then use Templates to generate AI analysis reports.'
+                      ? t('mediscribe.templates.switchToTemplates')
+                      : t('mediscribe.templates.recordOrAttach')
                     }
                   </p>
                   {hasTranscript && (
@@ -353,7 +356,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       className="mt-6 text-lg px-8 py-3"
                     >
                       <Stethoscope className="w-5 h-5 mr-2" />
-                      View Templates
+                      {t('mediscribe.templates.viewTemplates')}
                     </MedicalButton>
                   )}
                 </div>
@@ -412,8 +415,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                     <Brain className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1a365d] dark:text-[#90cdf4]">AI Medical Assistant</h3>
-                    <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed]">Ask me anything about your transcript</p>
+                    <h3 className="font-semibold text-[#1a365d] dark:text-[#90cdf4]">{t('mediscribe.templates.aiAssistant')}</h3>
+                    <p className="text-xs text-[#2b6cb0] dark:text-[#63b3ed]">{t('mediscribe.templates.askAnything')}</p>
                   </div>
                 </div>
                 
@@ -434,7 +437,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                       value={customInstruction}
                       onChange={(e) => setCustomInstruction(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder="✨ What would you like to know about this medical case?"
+                      placeholder={t('mediscribe.templates.askPlaceholder')}
                       disabled={processing}
                       rows={4}
                       className="w-full resize-none bg-transparent px-4 py-3 pr-20 text-sm text-[#1a365d] dark:text-[#90cdf4] placeholder-[#2b6cb0]/60 dark:placeholder-[#63b3ed]/60 focus:outline-none disabled:opacity-60 font-medium leading-relaxed"
@@ -470,8 +473,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                   
                   {/* Keyboard Shortcut */}
                   <div className="flex items-center justify-between mt-3 text-xs text-[#2b6cb0]/60 dark:text-[#63b3ed]/60">
-                    <div>Press <kbd className="px-1.5 py-0.5 bg-[#90cdf4]/30 dark:bg-[#1a365d]/60 rounded text-xs">Esc</kbd> to close</div>
-                    <div><kbd className="px-1.5 py-0.5 bg-[#90cdf4]/30 dark:bg-[#1a365d]/60 rounded text-xs">⌘ Enter</kbd> to send</div>
+                    <div>{t('mediscribe.templates.escToClose')}</div>
+                    <div>{t('mediscribe.templates.cmdEnterToSend')}</div>
                   </div>
                 </div>
               </form>
@@ -494,10 +497,10 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
               
               {/* Processing text */}
               <h3 className="text-lg font-bold text-[#1a365d] dark:text-[#90cdf4] mb-2">
-                Generating Medical Report
+                {t('mediscribe.templates.generatingReport')}
               </h3>
               <p className="text-sm text-[#2b6cb0] dark:text-[#63b3ed] mb-4">
-                Our specialized AI is analyzing your transcript and preparing a comprehensive medical report...
+                {t('mediscribe.templates.generatingReportDesc')}
               </p>
               
               {/* Progress indicator */}
@@ -507,12 +510,12 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                   <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                   <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                 </div>
-                <span className="ml-2">Processing...</span>
+                <span className="ml-2">{t('mediscribe.templates.processing')}</span>
               </div>
               
               {/* Estimated time */}
               <div className="mt-3 text-xs text-[#2b6cb0]/60 dark:text-[#63b3ed]/60">
-                Estimated time: 30-45 seconds
+                {t('mediscribe.templates.estimatedTime')}
               </div>
             </div>
           </div>

@@ -19,11 +19,37 @@ export default {
   signIn: 'Sign in',
   signUp: 'Sign up',
   signingIn: 'Signing in...',
-  signingUp: 'Signing up...',
+  signingUp: 'Signing up...', 
   noAccount: "Don't have an account? Sign up",
   haveAccount: 'Already have an account? Sign in',
   forgotPassword: 'Forgot your password?',
-  resetPassword: 'Reset Password',
+  resetPasswordTitle: 'Reset Password',
+  resetPassword: {
+    title: 'Set New Password',
+    passwordLabel: 'New Password',
+    passwordPlaceholder: 'Enter your new password',
+    confirmPasswordLabel: 'Confirm New Password',
+    confirmPasswordPlaceholder: 'Confirm your new password',
+    submitButton: 'Update Password',
+    successTitle: 'Password Updated',
+    successMessage: 'Your password has been successfully updated. You will be redirected to your dashboard shortly.',
+    goToDashboard: 'Go to Dashboard',
+    genericError: 'An error occurred while updating your password',
+    invalidLink: 'Invalid or expired reset link. Please request a new one.',
+    linkProcessError: 'Failed to process reset link. Please try again.'
+  },
+  signInWelcome: 'Welcome back! Please sign in to continue.',
+  newHere: 'New here?',
+  passwordRecovery: {
+    title: 'Reset your password',
+    emailLabel: 'Email address',
+    emailPlaceholder: 'Enter your email address',
+    submitButton: 'Send recovery link',
+    successTitle: 'Check your email',
+    successMessage: 'If an account exists for the email address you entered, you will receive a password reset link shortly.',
+    backToSignIn: 'Back to Sign In',
+    genericError: 'An error occurred while sending the recovery email'
+  },
   errors: {
     invalidCredentials: 'Invalid email or password',
     emailNotConfirmed: 'Please check your email and confirm your account',
@@ -36,7 +62,7 @@ export default {
   rememberMe: 'Remember Me',
   createAccount: 'Create Account',
   alreadyHaveAccount: 'Already have an account?',
-  dontHaveAccount: 'Don\'t have an account?',
+  dontHaveAccount: "Don't have an account?",
   invalidCredentials: 'Invalid credentials',
   emailRequired: 'Email is required',
   passwordRequired: 'Password is required',
@@ -48,4 +74,4 @@ export default {
   passwordResetSuccess: 'Password reset link sent! Please check your email.',
   invalidEmail: 'Please enter a valid email address',
   invalidPassword: 'Please enter a valid password'
-}; 
+};

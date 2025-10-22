@@ -218,10 +218,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                 </div>
                 <div className="min-w-0 flex-1">
                   <h2 className="text-lg md:text-xl font-bold text-slate-800 tracking-tight truncate">
-                    Conversations
+                    {t('chat.conversations.title')}
                   </h2>
                   <p className="text-sm text-slate-500 font-medium hidden md:block">
-                    View, search, and organize all your conversation history
+                    {t('chat.conversations.subtitle')}
                   </p>
                 </div>
               </div>
@@ -240,9 +240,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   "
                 >
                   <Plus className="w-4 h-4 md:mr-2" />
-                  <span className="hidden md:inline">New Chat</span>
+                  <span className="hidden md:inline">{t('chat.conversations.newChat')}</span>
                 </Button>
-                
+
                 {/* Mobile-Optimized Refresh Button */}
                 <Button
                   onClick={loadConversationsFromDatabase}
@@ -256,7 +256,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     focus:outline-none focus:ring-2 focus:ring-[#63b3ed]/20
                   "
                 >
-                  <span className="hidden md:inline">Refresh</span>
+                  <span className="hidden md:inline">{t('chat.conversations.refresh')}</span>
                   <span className="md:hidden">↻</span>
                 </Button>
                 
@@ -285,7 +285,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5 z-10" />
                 <input
                   type="text"
-                  placeholder="Search conversations..."
+                  placeholder={t('chat.conversations.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="
@@ -324,9 +324,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   `}
                 >
                   <Users className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-center">All ({conversationSummaries.length})</span>
+                  <span className="text-center">{t('chat.conversations.all')} ({conversationSummaries.length})</span>
                 </button>
-                
+
                 <button
                   onClick={() => setSelectedType('general')}
                   className={`
@@ -338,9 +338,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   `}
                 >
                   <MessageCircle className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-center">Chats ({generalConversations.length})</span>
+                  <span className="text-center">{t('chat.conversations.chats')} ({generalConversations.length})</span>
                 </button>
-                
+
                 <button
                   onClick={() => setSelectedType('case-study')}
                   className={`
@@ -352,7 +352,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   `}
                 >
                   <Stethoscope className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-center">Cases ({caseStudyConversations.length})</span>
+                  <span className="text-center">{t('chat.conversations.cases')} ({caseStudyConversations.length})</span>
                 </button>
               </div>
             </div>
@@ -374,9 +374,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     transition-all duration-300 ease-out appearance-none cursor-pointer
                   "
                 >
-                  <option value="all">{t('conversations.allSpecialties')}</option>
-                  <option value="cardiology">{t('conversations.cardiology')}</option>
-                  <option value="obgyn">{t('conversations.obgyn')}</option>
+                  <option value="all">{t('chat.conversations.allSpecialties')}</option>
+                  <option value="cardiology">{t('chat.conversations.cardiology')}</option>
+                  <option value="obgyn">{t('chat.conversations.obgyn')}</option>
                 </select>
               </div>
               
@@ -395,9 +395,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     transition-all duration-300 ease-out appearance-none cursor-pointer
                   "
                 >
-                  <option value="date">{t('conversations.recent')}</option>
-                  <option value="name">{t('conversations.byName')}</option>
-                  <option value="messages">{t('conversations.byMessages')}</option>
+                  <option value="date">{t('chat.conversations.recent')}</option>
+                  <option value="name">{t('chat.conversations.byName')}</option>
+                  <option value="messages">{t('chat.conversations.byMessages')}</option>
                 </select>
               </div>
             </div>
@@ -418,13 +418,13 @@ export const ConversationList: React.FC<ConversationListProps> = ({
               </div>
               
               <h3 className="text-lg font-bold text-slate-800 mb-2">
-                {searchTerm ? t('conversations.noMatchesFound') : t('conversations.noConversationsFound')}
+                {searchTerm ? t('chat.conversations.noMatchesFound') : t('chat.conversations.noConversationsFound')}
               </h3>
               
               <p className="text-sm text-slate-500 mb-4 max-w-sm leading-relaxed">
                 {searchTerm 
-                  ? t('conversations.tryAdjustingSearchOrFilters')
-                  : t('conversations.startNewConversationHint')
+                  ? t('chat.conversations.tryAdjustingSearchOrFilters')
+                  : t('chat.conversations.startNewConversationHint')
                 }
               </p>
               
@@ -440,7 +440,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   "
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  {t('conversations.createFirstConversation')}
+                  {t('chat.conversations.createFirstConversation')}
                 </Button>
               )}
             </div>
@@ -486,7 +486,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                             onClick={handleSaveEdit}
                             className="px-4 py-2 bg-[#2b6cb0] hover:bg-[#1a365d] text-white rounded-lg font-semibold"
                           >
-                            {t('conversations.save')}
+                            {t('chat.conversations.save')}
                           </Button>
                           <Button 
                             size="sm" 
@@ -494,7 +494,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                             onClick={handleCancelEdit}
                             className="px-4 py-2 border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg font-semibold"
                           >
-                            {t('conversations.cancel')}
+                            {t('chat.conversations.cancel')}
                           </Button>
                         </div>
                       </div>
@@ -613,7 +613,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                             <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-slate-100 to-slate-50 border border-slate-200/50">
                               <MessageCircle className="w-3 h-3 text-slate-500" />
                               <span className="text-xs font-bold text-slate-700">
-                                {conv.messageCount} {conv.messageCount !== 1 ? t('conversations.messages') : t('conversations.message')}
+                                {conv.messageCount} {conv.messageCount !== 1 ? t('chat.conversations.messages') : t('chat.conversations.message')}
                               </span>
                             </div>
                             
@@ -623,7 +623,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                               ${getConversationTypeColor(conv.type)}
                             `}>
                               {getConversationTypeIcon(conv.type)}
-                              <span>{conv.type === 'case-study' ? t('conversations.caseStudy') : t('conversations.conversation')}</span>
+                              <span>{conv.type === 'case-study' ? t('chat.conversations.caseStudy') : t('chat.conversations.conversation')}</span>
                             </div>
                             
                             {/* Specialty Badge */}
@@ -665,8 +665,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
         {/* Footer Stats */}
         <div className="p-4 border-t border-gray-200 bg-gray-50">
           <div className="text-xs text-gray-600 text-center">
-            {conversationSummaries.length} {conversationSummaries.length !== 1 ? t('conversations.conversations') : t('conversations.conversation')} • {' '}
-            {conversationSummaries.reduce((total, conv) => total + conv.messageCount, 0)} {t('conversations.totalMessages')}
+            {conversationSummaries.length} {conversationSummaries.length !== 1 ? t('chat.conversations.conversations') : t('chat.conversations.conversation')} • {' '}
+            {conversationSummaries.reduce((total, conv) => total + conv.messageCount, 0)} {t('chat.conversations.totalMessages')}
           </div>
         </div>
       </div>
@@ -675,17 +675,17 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       {deleteConfirmId && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div className="bg-white rounded-lg p-6 max-w-md mx-4 z-50 shadow-2xl">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('conversations.deleteConversation')}</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('chat.conversations.deleteConversation')}</h3>
             <p className="text-gray-600 mb-4">
-              {t('conversations.deleteConfirmation')}
+              {t('chat.conversations.deleteConfirmation')}
             </p>
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>{t('conversations.cancel')}</Button>
+              <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>{t('chat.conversations.cancel')}</Button>
               <Button 
                 onClick={handleConfirmDelete}
                 className="bg-red-600 hover:bg-red-700 text-white"
               >
-                {t('conversations.delete')}
+                {t('chat.conversations.delete')}
               </Button>
             </div>
           </div>

@@ -49,14 +49,26 @@ export const chat = {
   cardiologyAICoPilot: 'კარდიოლოგიის AI თანაპილოტი',
   obgynAICoPilot: 'მეანობა-გინეკოლოგიის AI თანაპილოტი',
   medicalAICoPilot: 'სამედიცინო AI თანაპილოტი',
-  
-  // Personal knowledge base guidance
+  medicalAI: 'სამედიცინო AI',
   usingPersonalDocs: 'იყენებს თქვენს {count} პირად დოკუმენტს',
   uploadDocsForKB: 'ატვირთეთ დოკუმენტები პირადი ცოდნის ბაზის შესაქმნელად',
   
   // Welcome screen content
   welcomeToMediMind: 'კეთილი იყოს თქვენი მობრძანება MediMind Expert-ში',
   welcomeDescription: 'თქვენი AI-ით აღჭურვილი სამედიცინო თანაპილოტი მზადაა დაგეხმაროთ კლინიკურ გადაწყვეტილებებში, სახელმძღვანელოებში, შემთხვევების ანალიზში და მტკიცებულებებზე დაფუძნებულ რეკომენდაციებში.',
+
+  // Missing keys
+  sources: 'წყაროები',
+  showMore: 'მეტის ჩვენება',
+  showLess: 'ნაკლების ჩვენება',
+  uploadFile: 'ფაილის ატვირთვა',
+  fileUploaded: 'ფაილი ატვირთულია',
+  fileError: 'ფაილის შეცდომა',
+  maxFileSize: 'მაქსიმალური ფაილის ზომა',
+  supportedFormats: 'მხარდაჭერილი ფორმატები',
+  removeAttachment: 'მიმაგრების წაშლა',
+  caseReadyTitle: 'შემთხვევა მზადაა განსახილველად',
+  caseReadyDescription: 'მზად ვარ განვიხილოთ ეს შემთხვევა თქვენთან. მკითხეთ ყველაფერი დიაგნოზის, მკურნალობის ვარიანტების, დიფერენციალური დიაგნოზის ან ამ შემთხვევის ნებისმიერი კონკრეტული ასპექტის შესახებ.',
   
   // Feature cards
   clinicalGuidelines: 'კლინიკური სახელმძღვანელოები',
@@ -95,16 +107,6 @@ export const chat = {
   personalDocsAvailable: '{count} პირადი დოკუმენტი ხელმისაწვდომია',
   noPersonalDocs: 'პირადი დოკუმენტები არ არის ატვირთული',
   maxFilesError: 'მაქსიმუმ {maxFiles} ფაილი არის ნებადართული',
-  
-  sources: {
-    title: 'წყაროები',
-    showSources: 'წყაროების ჩვენება',
-    hideSources: 'წყაროების დამალვა',
-    viewSource: 'წყაროს ნახვა',
-    citation: 'ციტირება {index}',
-    documentSource: 'დოკუმენტის წყარო',
-    webSource: 'ვებ წყარო'
-  },
   suggestions: {
     title: 'შემოთავაზებები',
     quickActions: 'სწრაფი ქმედებები',
@@ -231,7 +233,91 @@ export const chat = {
   patient: 'პაციენტი',
   connectionIssue: 'კავშირის პრობლემა',
   conversationHistory: 'საუბრის ისტორია',
-  createCaseStudy: 'კეისის შექმნა'
+  createCaseStudy: 'კეისის შექმნა',
+  dashboard: {
+    welcomeBack: 'კეთილი იყოს თქვენი დაბრუნება, {{name}}',
+    subtitle: 'რით შემიძლია დაგეხმაროთ თქვენს {{specialty}} საქმიანობაში დღეს?',
+    quickConsult: 'სწრაფი კონსულტაცია',
+    quickConsultDesc: 'ჰკითხეთ AI-ს სიმპტომების ან მკურნალობის შესახებ',
+    newCase: 'ახალი შემთხვევა',
+    newCaseDesc: 'პაციენტის შემთხვევის დოკუმენტირება და ანალიზი',
+    bgConsult: 'სისხლის აირების ანალიზი',
+    bgConsultDesc: 'სისხლის გაზების ატვირთვა და ანალიზი',
+    ecgConsult: 'ეკგ ანალიზი',
+    ecgConsultDesc: 'ეკგ სურათების ატვირთვა და ანალიზი',
+    popularCalculators: 'პოპულარული კალკულატორები',
+    viewAll: 'ყველას ნახვა',
+    recentCases: 'ბოლო შემთხვევები',
+    gettingStarted: 'დაწყება',
+    createFirstCase: 'შექმენით თქვენი პირველი შემთხვევა',
+    createFirstCaseDesc: 'პაციენტის შემთხვევების დოკუმენტირება AI-ზე დაფუძნებული შეხედულებების მისაღებად და თქვენი კლინიკური ცოდნის ბაზის შესაქმნელად.',
+    createCase: 'შემთხვევის შექმნა'
+  },
+  caseReadyMessage: 'შემთხვევა "{{title}}" მზად არის განსახილველად. მკითხეთ ყველაფერი დიაგნოზის, მკურნალობის ვარიანტების, დიფერენციალური დიაგნოზის ან ამ შემთხვევის ნებისმიერი კონკრეტული ასპექტის შესახებ.',
+  caseCreateFailed: 'შემთხვევის შექმნა ვერ მოხერხდა. გთხოვთ სცადოთ ხელახლა.',
+  freshConversation: 'ახალი საუბარი',
+  caseResetFailed: 'შემთხვევის განულება ვერ მოხერხდა. გთხოვთ სცადოთ ხელახლა.',
+  doctor: 'ექიმო',
+  medical: 'სამედიცინო',
+  waitForProcessing: 'გთხოვთ, დაელოდოთ {{count}} ფაილ(ებ)ის დამუშავების დასრულებას გაგზავნამდე.',
+  processingFailed: 'დამუშავება ვერ მოხერხდა',
+  tooltip: {
+    chatHistoryTitle: 'ჩატის ისტორია',
+    chatHistoryDescription: 'ნახეთ და მართეთ ყველა თქვენი წინა AI საუბარი.',
+    browse: 'დათვალიერება',
+    myCasesTitle: 'ჩემი შემთხვევები',
+    myCasesDescription: 'ნახეთ და გადაერთეთ თქვენს შენახულ კლინიკურ შემთხვევებს შორის.',
+    switchCases: 'შემთხვევების გადართვა'
+  },
+
+  // Patient Cases
+  patientCases: 'პაციენტის შემთხვევები',
+
+  // Conversations List
+  conversations: {
+    title: 'საუბრები',
+    subtitle: 'ნახეთ, მოძებნეთ და მოაწყვეთ თქვენი საუბრების ისტორია',
+    newChat: 'ახალი ჩათი',
+    refresh: 'განახლება',
+    searchPlaceholder: 'საუბრების ძებნა...',
+    all: 'ყველა',
+    chats: 'ჩათები',
+    cases: 'შემთხვევები',
+    allSpecialties: 'ყველა სპეციალობა',
+    cardiology: 'კარდიოლოგია',
+    obgyn: 'მეანობა-გინეკოლოგია',
+    recent: 'ბოლოდროინდელი',
+    byName: 'სახელით',
+    byMessages: 'შეტყობინებებით',
+    message: 'შეტყობინება',
+    messages: 'შეტყობინება',
+    conversation: 'საუბარი',
+    conversations: 'საუბრები',
+    caseStudy: 'შემთხვევა',
+    totalMessages: 'სულ შეტყობინება',
+    noConversationsFound: 'საუბრები ვერ მოიძებნა',
+    noMatchesFound: 'შედეგები ვერ მოიძებნა',
+    tryAdjustingSearchOrFilters: 'სცადეთ ძიების ან ფილტრების შეცვლა',
+    startNewConversationHint: 'დაიწყეთ თქვენი პირველი AI საუბარი',
+    createFirstConversation: 'პირველი საუბრის შექმნა',
+    deleteConversation: 'საუბრის წაშლა',
+    deleteConfirmation: 'დარწმუნებული ხართ რომ გსურთ ამ საუბრის წაშლა? ეს მოქმედება შეუქცევადია.',
+    save: 'შენახვა',
+    cancel: 'გაუქმება',
+    delete: 'წაშლა'
+  },
+
+  tooltip: {
+    chatHistoryTitle: 'ჩატის ისტორია',
+    chatHistoryDescription: 'იხილეთ და მართეთ თქვენი ყველა AI საუბარი.',
+    browse: 'დათვალიერება',
+    myCasesTitle: 'ჩემი შემთხვევები',
+    myCasesDescription: 'იხილეთ და შეცვალეთ თქვენი შენახული კლინიკური შემთხვევები.',
+    switchCases: 'შემთხვევების გადართვა',
+    createNewCaseTitle: 'ახალი შემთხვევის შექმნა',
+    createNewCaseDescription: 'შექმენით კლინიკური შემთხვევები, რომლებიც შეიძლება დაერთოს ჩატს AI შემთხვევის განხილვისა და კოლაბორაციული ანალიზისთვის.',
+    aiDiscussion: 'AI განხილვა'
+  }
 };
 
-export default chat; 
+export default chat;

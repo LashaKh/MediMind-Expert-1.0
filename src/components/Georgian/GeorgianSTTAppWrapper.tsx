@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { useGeorgianTTS } from '../../hooks/useGeorgianTTS';
+import { useTranslation } from '../../hooks/useTranslation';
 import { GeorgianSTTApp } from './GeorgianSTTApp';
 
 /**
@@ -8,6 +9,7 @@ import { GeorgianSTTApp } from './GeorgianSTTApp';
  * This prevents hook order issues by doing the support check separately
  */
 export const GeorgianSTTAppWrapper: React.FC = () => {
+  const { t } = useTranslation();
   // Only check browser support here
   const { isSupported } = useGeorgianTTS({
     language: 'ka-GE',
@@ -25,10 +27,10 @@ export const GeorgianSTTAppWrapper: React.FC = () => {
         <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center">
           <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Browser Not Supported
+            {t('mediscribe.unsupported.title', 'Browser Not Supported')}
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Your browser doesn't support audio recording. Please use a modern browser like Chrome, Firefox, or Safari.
+            {t('mediscribe.unsupported.description', 'Your browser doesn\'t support audio recording. Please use a modern browser like Chrome, Firefox, or Safari.')}
           </p>
         </div>
       </div>

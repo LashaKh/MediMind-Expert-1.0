@@ -49,14 +49,49 @@ export const chat = {
   cardiologyAICoPilot: 'ИИ Ко-пилот по кардиологии',
   obgynAICoPilot: 'ИИ Ко-пилот по акушерству-гинекологии',
   medicalAICoPilot: 'Медицинский ИИ Ко-пилот',
-  
-  // Personal knowledge base guidance
+  medicalAI: 'Медицинский ИИ',
   usingPersonalDocs: 'Используются ваши {count} личных документов',
   uploadDocsForKB: 'Загрузите документы для создания личной базы знаний',
   
   // Welcome screen content
   welcomeToMediMind: 'Добро пожаловать в MediMind Expert',
   welcomeDescription: 'Ваш медицинский ИИ ко-пилот готов помочь с клиническими решениями, руководствами, анализом случаев и основанными на доказательствах рекомендациями.',
+
+  // Missing keys
+  sources: 'Источники',
+  showMore: 'Показать больше',
+  showLess: 'Показать меньше',
+  uploadFile: 'Загрузить файл',
+  fileUploaded: 'Файл загружен',
+  fileError: 'Ошибка файла',
+  maxFileSize: 'Максимальный размер файла',
+  supportedFormats: 'Поддерживаемые форматы',
+  removeAttachment: 'Удалить вложение',
+  specialtySubtitles: {
+    cardiology: 'Передовая помощь в сердечно-сосудистой области',
+    obgyn: 'Женское здоровье и репродуктивная медицина',
+    medical: 'Комплексная медицинская помощь'
+  },
+  quickActions: {
+    caseDesc: 'Начните анализ случая пациента с помощью ИИ',
+    calculatorsDesc: 'Доступ к клиническим калькуляторам и оценке рисков',
+    guidelinesDesc: 'Поиск медицинских протоколов, основанных на доказательствах',
+    discussionDesc: 'Начните медицинскую консультацию с ИИ'
+  },
+  features: {
+    aiPoweredAnalysis: 'Продвинутое медицинское рассуждение и поддержка принятия решений',
+    evidenceBasedDesc: 'Отобрано из более чем 2,5 млн медицинских источников и руководств',
+    realTimeDesc: 'Мгновенные ответы для принятия клинических решений',
+    specialtyFocusedDesc: 'Индивидуальная экспертиза для вашей медицинской специальности'
+  },
+  welcomeTo: 'Добро пожаловать в',
+  liveAt: 'В эфире',
+  aiReady: 'ИИ готов',
+  recentCases: 'Недавние случаи',
+  startTypingOrSelectAction: 'Начните с ввода сообщения ниже или выберите действие выше',
+  aiAssistantReady: 'ИИ-ассистент готов',
+  caseReadyTitle: 'Случай готов к обсуждению',
+  caseReadyDescription: 'Я готов обсудить этот случай с вами. Спросите меня о диагнозе, вариантах лечения, дифференциальной диагностике или любом конкретном аспекте этого случая.',
   
   // Feature cards
   clinicalGuidelines: 'Клинические руководства',
@@ -95,14 +130,6 @@ export const chat = {
   personalDocsAvailable: '{count} личных документов доступно',
   noPersonalDocs: 'Личные документы не загружены',
   maxFilesError: 'Максимум {maxFiles} файлов разрешено',
-  
-  sources: {
-    title: 'Источники',
-    viewAll: 'Посмотреть все',
-    hide: 'Скрыть',
-    citation: 'Цитата',
-    reference: 'Ссылка'
-  },
   suggestions: {
     title: 'Предложения',
     calculators: 'Рекомендуемые калькуляторы',
@@ -150,6 +177,11 @@ export const chat = {
     issueAddressed: 'Проблема решена',
     clickToViewDetails: 'Нажмите, чтобы посмотреть детали лечения'
   },
+  specialtyTitles: {
+    cardiologyExpert: 'Эксперт по кардиологии с ИИ',
+    obgynExpert: 'Эксперт по акушерству и гинекологии с ИИ',
+    medicalExpert: 'Медицинский эксперт с ИИ'
+  },
   abg: {
     active: 'Анализ газов крови активен',
     contextActive: 'Контекст анализа газов крови активен',
@@ -161,34 +193,82 @@ export const chat = {
   connectionIssue: 'Проблема соединения',
   conversationHistory: 'История разговоров',
   createCaseStudy: 'Создать клинический случай',
-  specialtyTitles: {
-    cardiologyExpert: 'Эксперт ИИ по кардиологии',
-    obgynExpert: 'Эксперт ИИ по акушерству и гинекологии',
-    medicalExpert: 'Медицинский эксперт ИИ'
+  dashboard: {
+    welcomeBack: 'С возвращением, {{name}}',
+    subtitle: 'Чем я могу помочь вам в вашей {{specialty}} практике сегодня?',
+    quickConsult: 'Быстрая консультация',
+    quickConsultDesc: 'Спросите ИИ о симптомах или лечении',
+    newCase: 'Новый случай',
+    newCaseDesc: 'Документируйте и анализируйте случай пациента',
+    bgConsult: 'Анализ газов крови',
+    bgConsultDesc: 'Загрузите и проанализируйте газы крови',
+    ecgConsult: 'Анализ ЭКГ',
+    ecgConsultDesc: 'Загрузите и проанализируйте изображения ЭКГ',
+    popularCalculators: 'Популярные калькуляторы',
+    viewAll: 'Посмотреть все',
+    recentCases: 'Недавние случаи',
+    gettingStarted: 'Начало работы',
+    createFirstCase: 'Создайте свой первый случай',
+    createFirstCaseDesc: 'Документируйте случаи пациентов, чтобы получать информацию на основе ИИ и создавать свою базу клинических знаний.',
+    createCase: 'Создать клинический случай'
   },
-  specialtySubtitles: {
-    cardiology: 'Расширенная помощь в области сердечно-сосудистой системы',
-    obgyn: 'Здоровье женщин и репродуктивная медицина',
-    medical: 'Комплексная медицинская помощь'
+  caseReadyMessage: 'Кейс "{{title}}" готов к обсуждению. Спрашивайте меня о диагнозе, вариантах лечения, дифференциальном диагнозе или любом конкретном аспекте этого случая.',
+  caseCreateFailed: 'Не удалось создать кейс. Пожалуйста, попробуйте еще раз.',
+  freshConversation: 'Новый разговор',
+  caseResetFailed: 'Не удалось сбросить кейс. Пожалуйста, попробуйте еще раз.',
+  doctor: 'Доктор',
+  medical: 'медицинской',
+  waitForProcessing: 'Пожалуйста, подождите, пока {{count}} файл(ов) закончат обработку перед отправкой.',
+  processingFailed: 'Ошибка обработки',
+  tooltip: {
+    chatHistoryTitle: 'История чата',
+    chatHistoryDescription: 'Просмотр и управление всеми вашими предыдущими разговорами с ИИ.',
+    browse: 'Обзор',
+    myCasesTitle: 'Мои случаи',
+    myCasesDescription: 'Просмотр и переключение между вашими сохраненными клиническими случаями.',
+    switchCases: 'Переключить случаи'
   },
-  quickActions: {
-    caseDesc: 'Начните анализ клинического случая с помощью ИИ',
-    calculatorsDesc: 'Доступ к клиническим калькуляторам и оценке рисков',
-    guidelinesDesc: 'Поиск медицинских протоколов, основанных на доказательствах',
-    discussionDesc: 'Начните медицинскую консультацию с ИИ'
+
+  // Patient Cases
+  patientCases: 'Случаи пациентов',
+
+  // Conversations List
+  conversations: {
+    allSpecialties: 'Все специальности',
+    cardiology: 'Кардиология',
+    obgyn: 'Акушерство-гинекология',
+    recent: 'Недавние',
+    byName: 'По названию',
+    byMessages: 'По сообщениям',
+    message: 'сообщение',
+    messages: 'сообщения',
+    conversation: 'разговор',
+    conversations: 'разговоры',
+    caseStudy: 'случай',
+    totalMessages: 'всего сообщений',
+    noConversationsFound: 'Разговоры не найдены',
+    noMatchesFound: 'Результаты не найдены',
+    tryAdjustingSearchOrFilters: 'Попробуйте изменить поиск или фильтры',
+    startNewConversationHint: 'Начните ваш первый ИИ разговор',
+    createFirstConversation: 'Создать первый разговор',
+    deleteConversation: 'Удалить разговор',
+    deleteConfirmation: 'Вы уверены, что хотите удалить этот разговор? Это действие необратимо.',
+    save: 'Сохранить',
+    cancel: 'Отмена',
+    delete: 'Удалить'
   },
-  features: {
-    aiPoweredAnalysis: 'Продвинутая медицинская логика и поддержка принятия решений',
-    evidenceBasedDesc: 'Курируется из 2,5 млн+ медицинских источников и руководств',
-    realTimeDesc: 'Мгновенные ответы для клинического принятия решений',
-    specialtyFocusedDesc: 'Экспертиза, адаптированная под вашу специальность'
-  },
-  welcomeTo: 'Добро пожаловать в',
-  liveAt: 'Время',
-  aiReady: 'ИИ готов',
-  recentCases: 'Недавние случаи',
-  startTypingOrSelectAction: 'Начните с ввода сообщения ниже или выберите действие выше',
-  aiAssistantReady: 'ИИ-помощник готов'
+
+  tooltip: {
+    chatHistoryTitle: 'История чатов',
+    chatHistoryDescription: 'Просматривайте и управляйте всеми вашими предыдущими разговорами с ИИ.',
+    browse: 'Обзор',
+    myCasesTitle: 'Мои кейсы',
+    myCasesDescription: 'Просматривайте и переключайтесь между вашими сохраненными клиническими кейсами.',
+    switchCases: 'Переключение кейсов',
+    createNewCaseTitle: 'Создать новый кейс',
+    createNewCaseDescription: 'Создавайте клинические кейсы, которые можно прикрепить к чату для обсуждения с ИИ и совместного анализа.',
+    aiDiscussion: 'Обсуждение с ИИ'
+  }
 };
 
-export default chat; 
+export default chat;

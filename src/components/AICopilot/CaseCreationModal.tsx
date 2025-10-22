@@ -7,6 +7,7 @@ import { processCaseAttachments, ProcessedAttachment } from '../../utils/caseFil
 import { uploadCaseAttachments } from '../../utils/caseAttachmentIntegration';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../stores/useAppStore';
+import { useTranslation } from '../../hooks/useTranslation';
 import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
 
 interface CaseCreationModalProps {
@@ -47,6 +48,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
   className = ''
 }) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
@@ -129,7 +131,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
       case 1:
         // Title is required (database constraint: minimum 5-10 characters)
         if (!formData.title || formData.title.trim().length < 5) {
-          newErrors.title = 'Title must be at least 5 characters long';
+          newErrors.title = t('case-creation.validation.title_length', 'Title must be at least 5 characters long');
         }
         // Description is optional
         break;
@@ -274,46 +276,46 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
     if (specialty === 'cardiology') {
       return {
         icon: Heart,
-        title: 'Cardiology Case',
+        title: t('case-creation.specialty.cardiology_case', 'Cardiology Case'),
         gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
         bgGradient: 'from-[#90cdf4]/10 via-[#63b3ed]/5 to-[#2b6cb0]/5',
         accentColor: 'blue',
         categories: [
-          { value: 'diagnosis', label: 'Diagnosis & Assessment' },
-          { value: 'interventional', label: 'Interventional Cardiology' },
-          { value: 'electrophysiology', label: 'Electrophysiology' },
-          { value: 'heart-failure', label: 'Heart Failure' },
-          { value: 'preventive', label: 'Preventive Cardiology' },
-          { value: 'acute-care', label: 'Acute Cardiac Care' }
+          { value: 'diagnosis', label: t('case-creation.specialty.cardiology.diagnosis', 'Diagnosis & Assessment') },
+          { value: 'interventional', label: t('case-creation.specialty.cardiology.interventional', 'Interventional Cardiology') },
+          { value: 'electrophysiology', label: t('case-creation.specialty.cardiology.electrophysiology', 'Electrophysiology') },
+          { value: 'heart-failure', label: t('case-creation.specialty.cardiology.heart_failure', 'Heart Failure') },
+          { value: 'preventive', label: t('case-creation.specialty.cardiology.preventive', 'Preventive Cardiology') },
+          { value: 'acute-care', label: t('case-creation.specialty.cardiology.acute_care', 'Acute Cardiac Care') }
         ]
       };
     } else if (specialty === 'obgyn') {
       return {
         icon: Stethoscope,
-        title: 'OB/GYN Case',
+        title: t('case-creation.specialty.obgyn_case', 'OB/GYN Case'),
         gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
         bgGradient: 'from-[#90cdf4]/10 via-[#63b3ed]/5 to-[#2b6cb0]/5',
         accentColor: 'blue',
         categories: [
-          { value: 'obstetrics', label: 'Obstetrics' },
-          { value: 'gynecology', label: 'Gynecology' },
-          { value: 'reproductive', label: 'Reproductive Health' },
-          { value: 'maternal-fetal', label: 'Maternal-Fetal Medicine' },
-          { value: 'oncology', label: 'Gynecologic Oncology' },
-          { value: 'fertility', label: 'Fertility & Reproductive Endocrinology' }
+          { value: 'obstetrics', label: t('case-creation.specialty.obgyn.obstetrics', 'Obstetrics') },
+          { value: 'gynecology', label: t('case-creation.specialty.obgyn.gynecology', 'Gynecology') },
+          { value: 'reproductive', label: t('case-creation.specialty.obgyn.reproductive', 'Reproductive Health') },
+          { value: 'maternal-fetal', label: t('case-creation.specialty.obgyn.maternal_fetal', 'Maternal-Fetal Medicine') },
+          { value: 'oncology', label: t('case-creation.specialty.obgyn.oncology', 'Gynecologic Oncology') },
+          { value: 'fertility', label: t('case-creation.specialty.obgyn.fertility', 'Fertility & Reproductive Endocrinology') }
         ]
       };
     }
     return {
       icon: Brain,
-      title: 'Medical Case',
+      title: t('case-creation.specialty.medical_case', 'Medical Case'),
       gradient: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]',
       bgGradient: 'from-[#90cdf4]/10 via-[#63b3ed]/5 to-[#2b6cb0]/5',
       accentColor: 'blue',
       categories: [
-        { value: 'diagnosis', label: 'Diagnosis' },
-        { value: 'treatment', label: 'Treatment' },
-        { value: 'consultation', label: 'Consultation' }
+        { value: 'diagnosis', label: t('case-creation.specialty.general.diagnosis', 'Diagnosis') },
+        { value: 'treatment', label: t('case-creation.specialty.general.treatment', 'Treatment') },
+        { value: 'consultation', label: t('case-creation.specialty.general.consultation', 'Consultation') }
       ]
     };
   };
@@ -323,26 +325,26 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
   const steps = [
     {
       number: 1,
-      title: 'Case Overview',
-      description: 'Basic case information',
+      title: t('case-creation.steps.overview.title', 'Case Overview'),
+      description: t('case-creation.steps.overview.description', 'Basic case information'),
       icon: FileText
     },
     {
       number: 2,
-      title: 'Patient Details',
-      description: 'Anonymized patient data',
+      title: t('case-creation.steps.patient_details.title', 'Patient Details'),
+      description: t('case-creation.steps.patient_details.description', 'Anonymized patient data'),
       icon: User
     },
     {
       number: 3,
-      title: 'Attachments',
-      description: 'Medical files and images',
+      title: t('case-creation.steps.attachments.title', 'Attachments'),
+      description: t('case-creation.steps.attachments.description', 'Medical files and images'),
       icon: Paperclip
     },
     {
       number: 4,
-      title: 'Classification',
-      description: 'Category and complexity',
+      title: t('case-creation.steps.classification.title', 'Classification'),
+      description: t('case-creation.steps.classification.description', 'Category and complexity'),
       icon: Activity
     }
   ];
@@ -384,7 +386,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-1">
-                  {editingCase ? 'Edit Case Study' : 'Create New Case'}
+                  {editingCase ? t('case-creation.header.edit_case', 'Edit Case Study') : t('case-creation.header.create_case', 'Create New Case')}
                 </h1>
                 <p className={`text-lg text-gray-600 bg-gradient-to-r ${specialtyConfig.gradient} bg-clip-text text-transparent font-medium`}>
                   {specialtyConfig.title}
@@ -452,21 +454,21 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
                 <Sparkles className="w-16 h-16 mx-auto text-[#2b6cb0] mb-4" />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Let's start with the basics</h2>
-                <p className="text-gray-600">Provide a clear title and brief overview of your case</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('case-creation.step_1.title', "Let's start with the basics")}</h2>
+                <p className="text-gray-600">{t('case-creation.step_1.subtitle', 'Provide a clear title and brief overview of your case')}</p>
               </div>
 
               <div className="space-y-6">
                 <div className="relative">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Case Title <span className="text-red-500">*</span>
-                    <span className="text-gray-500 font-normal ml-2">(minimum 5 characters)</span>
+                    {t('case-creation.step_1.case_title_label', 'Case Title')} <span className="text-red-500">*</span>
+                    <span className="text-gray-500 font-normal ml-2">{t('case-creation.step_1.minimum_chars', '(minimum 5 characters)')}</span>
                   </label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={handleInputChange('title')}
-                    placeholder="Brief descriptive title for this case"
+                    placeholder={t('case-creation.step_1.title_placeholder', 'Brief descriptive title for this case')}
                     className={`
                       w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200
                       ${errors.title
@@ -487,15 +489,15 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
 
                 <div className="relative">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Brief Description (Optional)
+                    {t('case-creation.step_1.description_label', 'Brief Description (Optional)')}
                     <span className="text-gray-500 font-normal ml-2">
-                      ({formData.description.length} characters)
+                      ({formData.description.length} {t('case-creation.step_1.characters', 'characters')})
                     </span>
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={handleInputChange('description')}
-                    placeholder="Provide a comprehensive overview of the case including: chief complaint, relevant history, examination findings, initial impression, key questions for discussion, and what specific guidance you're seeking..."
+                    placeholder={t('case-creation.step_1.description_placeholder', 'Provide a comprehensive overview of the case including: chief complaint, relevant history, examination findings, initial impression, key questions for discussion, and what specific guidance you\'re seeking...')}
                     rows={8}
                     className={`
                       w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200 resize-y min-h-[200px]
@@ -519,16 +521,16 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                     <div className="flex items-start space-x-3">
                       <Info className="w-5 h-5 text-[#2b6cb0] mt-0.5 flex-shrink-0" />
                       <div className="flex-1">
-                        <h4 className="font-medium text-[#1a365d] mb-2">Make your case description more effective:</h4>
+                        <h4 className="font-medium text-[#1a365d] mb-2">{t('case-creation.step_1.tips_title', 'Make your case description more effective:')}</h4>
                         <ul className="text-sm text-[#2b6cb0] space-y-1">
-                          <li>• Include chief complaint and presenting symptoms</li>
-                          <li>• Mention relevant medical history and medications</li>
-                          <li>• Describe key examination or diagnostic findings</li>
-                          <li>• State your working diagnosis or differential</li>
-                          <li>• Specify what guidance or discussion you're seeking</li>
+                          <li>• {t('case-creation.step_1.tip_1', 'Include chief complaint and presenting symptoms')}</li>
+                          <li>• {t('case-creation.step_1.tip_2', 'Mention relevant medical history and medications')}</li>
+                          <li>• {t('case-creation.step_1.tip_3', 'Describe key examination or diagnostic findings')}</li>
+                          <li>• {t('case-creation.step_1.tip_4', 'State your working diagnosis or differential')}</li>
+                          <li>• {t('case-creation.step_1.tip_5', 'Specify what guidance or discussion you\'re seeking')}</li>
                         </ul>
                         <div className="mt-2 text-xs text-[#2b6cb0]">
-                          {formData.description.length} characters
+                          {formData.description.length} {t('case-creation.step_1.characters', 'characters')}
                         </div>
                       </div>
                     </div>
@@ -543,8 +545,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
                 <Shield className="w-16 h-16 mx-auto text-[#2b6cb0] mb-4" />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Patient Information</h2>
-                <p className="text-gray-600">Provide anonymized patient details for case discussion</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('case-creation.step_2.title', 'Patient Information')}</h2>
+                <p className="text-gray-600">{t('case-creation.step_2.subtitle', 'Provide anonymized patient details for case discussion')}</p>
               </div>
 
               {/* Privacy Notice */}
@@ -554,14 +556,14 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                     <AlertTriangle className="w-6 h-6 text-amber-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-amber-800 mb-2">Privacy Protection Required</h3>
+                    <h3 className="font-bold text-amber-800 mb-2">{t('case-creation.step_2.privacy_title', 'Privacy Protection Required')}</h3>
                     <p className="text-amber-700 mb-3">
-                      Please ensure all patient information is completely anonymized.
+                      {t('case-creation.step_2.privacy_message', 'Please ensure all patient information is completely anonymized.')}
                     </p>
                     <div className="text-sm text-amber-600">
-                      <p className="mb-1">• Remove all names, dates, and specific locations</p>
-                      <p className="mb-1">• Use general terms (e.g., "50-year-old female")</p>
-                      <p>• Remove any identifying numbers or codes</p>
+                      <p className="mb-1">• {t('case-creation.step_2.privacy_tip_1', 'Remove all names, dates, and specific locations')}</p>
+                      <p className="mb-1">• {t('case-creation.step_2.privacy_tip_2', 'Use general terms (e.g., "50-year-old female")')}</p>
+                      <p>• {t('case-creation.step_2.privacy_tip_3', 'Remove any identifying numbers or codes')}</p>
                     </div>
                   </div>
                 </div>
@@ -569,15 +571,15 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
 
               <div className="relative">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Anonymized Patient Information
+                  {t('case-creation.step_2.patient_info_label', 'Anonymized Patient Information')}
                   <span className="text-gray-500 font-normal ml-2">
-                    ({formData.anonymizedInfo.length} characters)
+                    ({formData.anonymizedInfo.length} {t('case-creation.step_1.characters', 'characters')})
                   </span>
                 </label>
                 <textarea
                   value={formData.anonymizedInfo}
                   onChange={handleInputChange('anonymizedInfo')}
-                  placeholder="Patient age, gender, presenting symptoms, medical history, test results, etc. (completely anonymized)"
+                  placeholder={t('case-creation.step_2.patient_info_placeholder', 'Patient age, gender, presenting symptoms, medical history, test results, etc. (completely anonymized)')}
                   rows={8}
                   className={`
                     w-full px-6 py-4 rounded-2xl border-2 transition-all duration-200 resize-none
@@ -599,10 +601,10 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                 {/* Character count indicator */}
                 <div className="flex justify-between items-center mt-2">
                   <div className="text-sm text-gray-500">
-                    Patient information is optional
+                    {t('case-creation.step_2.optional_message', 'Patient information is optional')}
                   </div>
                   <div className="text-sm text-gray-500">
-                    {formData.anonymizedInfo.length} characters
+                    {formData.anonymizedInfo.length} {t('case-creation.step_1.characters', 'characters')}
                   </div>
                 </div>
               </div>
@@ -614,8 +616,8 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
                 <Paperclip className="w-16 h-16 mx-auto text-[#2b6cb0] mb-4" />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Medical Documents</h2>
-                <p className="text-gray-600">Attach relevant medical files, images, and reports</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('case-creation.step_3.title', 'Medical Documents')}</h2>
+                <p className="text-gray-600">{t('case-creation.step_3.subtitle', 'Attach relevant medical files, images, and reports')}</p>
               </div>
 
               <CaseFileUpload
@@ -632,11 +634,11 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   <div className="flex items-center space-x-2">
                     <CheckCircle className="w-5 h-5 text-[#2b6cb0]" />
                     <p className="text-sm font-medium text-[#1a365d]">
-                      {attachments.length} file{attachments.length > 1 ? 's' : ''} attached
+                      {attachments.length} {t('case-creation.step_3.files_attached', attachments.length > 1 ? 'files attached' : 'file attached')}
                     </p>
                   </div>
                   <p className="text-xs text-[#2b6cb0] mt-1">
-                    These files will be analyzed to provide better context for your case discussion
+                    {t('case-creation.step_3.files_message', 'These files will be analyzed to provide better context for your case discussion')}
                   </p>
                 </div>
               )}
@@ -648,14 +650,14 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
               <div className="text-center mb-8">
                 <Brain className="w-16 h-16 mx-auto text-[#2b6cb0] mb-4" />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Case Classification</h2>
-                <p className="text-gray-600">Help organize and prioritize your case</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('case-creation.step_4.title', 'Case Classification')}</h2>
+                <p className="text-gray-600">{t('case-creation.step_4.subtitle', 'Help organize and prioritize your case')}</p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Category
+                    {t('case-creation.step_4.category_label', 'Category')}
                   </label>
                   <div className="space-y-2">
                     {specialtyConfig.categories.map((category) => (
@@ -676,13 +678,13 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Complexity Level
+                    {t('case-creation.step_4.complexity_label', 'Complexity Level')}
                   </label>
                   <div className="space-y-2">
                     {[
-                      { value: 'low', label: 'Low Complexity', description: 'Routine case, clear presentation', color: 'green' },
-                      { value: 'medium', label: 'Medium Complexity', description: 'Some complexity, multiple factors', color: 'yellow' },
-                      { value: 'high', label: 'High Complexity', description: 'Complex case, multiple specialties', color: 'red' }
+                      { value: 'low', label: t('case-creation.step_4.complexity_low', 'Low Complexity'), description: t('case-creation.step_4.complexity_low_desc', 'Routine case, clear presentation'), color: 'green' },
+                      { value: 'medium', label: t('case-creation.step_4.complexity_medium', 'Medium Complexity'), description: t('case-creation.step_4.complexity_medium_desc', 'Some complexity, multiple factors'), color: 'yellow' },
+                      { value: 'high', label: t('case-creation.step_4.complexity_high', 'High Complexity'), description: t('case-creation.step_4.complexity_high_desc', 'Complex case, multiple specialties'), color: 'red' }
                     ].map((complexity) => (
                       <label key={complexity.value} className={`
                         flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 bg-white/50 backdrop-blur-sm
@@ -717,16 +719,16 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Tags (Optional)
+                  {t('case-creation.step_4.tags_label', 'Tags (Optional)')}
                 </label>
                 <input
                   type="text"
                   value={formData.tags}
                   onChange={handleInputChange('tags')}
-                  placeholder="hypertension, diabetes, emergency (comma-separated)"
+                  placeholder={t('case-creation.step_4.tags_placeholder', 'hypertension, diabetes, emergency (comma-separated)')}
                   className="w-full px-6 py-4 rounded-2xl border-2 border-gray-200 focus:border-[#63b3ed] focus:outline-none focus:ring-4 focus:ring-[#90cdf4]/30 text-lg bg-white/50 backdrop-blur-sm transition-all duration-200"
                 />
-                <p className="text-sm text-gray-500 mt-2">Add relevant keywords to help organize and find this case later</p>
+                <p className="text-sm text-gray-500 mt-2">{t('case-creation.step_4.tags_help', 'Add relevant keywords to help organize and find this case later')}</p>
               </div>
             </div>
           )}
@@ -743,7 +745,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   className="px-6 py-3 rounded-xl border-2 hover:bg-gray-50 transition-all duration-200 text-gray-900"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  Previous
+                  {t('case-creation.buttons.previous', 'Previous')}
                 </Button>
               )}
             </div>
@@ -754,7 +756,7 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   onClick={handleNext}
                   className={`px-8 py-3 rounded-xl bg-gradient-to-r ${specialtyConfig.gradient} text-white hover:shadow-lg transform hover:scale-105 transition-all duration-200 [&]:text-white [&]:hover:text-white`}
                 >
-                  Next
+                  {t('case-creation.buttons.next', 'Next')}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               ) : (
@@ -768,12 +770,12 @@ export const CaseCreationModal: React.FC<CaseCreationModalProps> = ({
                   {isSubmitting ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-{editingCase ? 'Updating Case...' : 'Creating Case...'}
+{editingCase ? t('case-creation.buttons.updating', 'Updating Case...') : t('case-creation.buttons.creating', 'Creating Case...')}
                     </>
                   ) : (
                     <>
                       <Save className="w-4 h-4 mr-2" />
-                      {editingCase ? 'Update Case' : 'Create Case'}
+                      {editingCase ? t('case-creation.buttons.update', 'Update Case') : t('case-creation.buttons.create', 'Create Case')}
                     </>
                   )}
                 </Button>

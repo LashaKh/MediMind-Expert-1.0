@@ -24,6 +24,7 @@ export const common = {
   info: 'Информация',
   yes: 'Да',
   no: 'Нет',
+  or: 'или',
   ok: 'ОК',
   confirm: 'Подтвердить',
   next: 'Далее',
@@ -298,6 +299,13 @@ export const common = {
   results: 'Результаты',
   clinical_purpose: 'Клиническое назначение',
   about_calculator: 'О калькуляторе',
+
+  // Additional common translations
+  evidenceBased: 'Основанный на доказательствах',
+  clinicallyValidated: 'Клинически проверенный',
+  hipaaCompliant: 'Соответствует HIPAA',
+  signedIn: 'Вход выполнен',
+  unsavedChanges: 'Несохраненные изменения',
   
   // Filters
   filters: {

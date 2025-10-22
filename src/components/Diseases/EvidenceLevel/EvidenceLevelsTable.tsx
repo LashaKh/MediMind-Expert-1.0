@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { 
-  Award, 
-  CheckCircle, 
-  AlertTriangle, 
+import { useTranslation } from 'react-i18next';
+import {
+  Award,
+  CheckCircle,
+  AlertTriangle,
   Minus,
   BookOpen,
   FileText,
@@ -149,31 +150,142 @@ const oxfordLevelsData = [
  * Professional medical-grade component for displaying evidence quality standards
  */
 const EvidenceLevelsTable: React.FC = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Define slide data
+  // Define slide data with translations
   const slides = [
     {
       id: 'overview',
-      title: 'Evidence Levels Overview',
-      subtitle: 'Quality Grades & Clinical Applications',
+      title: t('diseases.evidenceLevels.slides.overview.title'),
+      subtitle: t('diseases.evidenceLevels.slides.overview.subtitle'),
       icon: GraduationCap,
       color: 'from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]'
     },
     {
       id: 'oxford',
-      title: 'Oxford CEBM Levels',
-      subtitle: 'Therapy, Prognosis & Diagnosis',
+      title: t('diseases.evidenceLevels.slides.oxford.title'),
+      subtitle: t('diseases.evidenceLevels.slides.oxford.subtitle'),
       icon: Users,
       color: 'from-[#1a365d] to-[#2b6cb0]'
     },
     {
       id: 'notes',
-      title: 'Clinical Application',
-      subtitle: 'Usage Notes & Abbreviations',
+      title: t('diseases.evidenceLevels.slides.notes.title'),
+      subtitle: t('diseases.evidenceLevels.slides.notes.subtitle'),
       icon: FileText,
       color: 'from-[#2b6cb0] to-[#63b3ed]'
+    }
+  ];
+
+  // Evidence levels data with translations
+  const evidenceLevelsData: EvidenceLevelData[] = [
+    {
+      level: 'A',
+      grade: t('diseases.evidenceLevels.levels.levelA.grade'),
+      quality: t('diseases.evidenceLevels.levels.levelA.quality'),
+      description: t('diseases.evidenceLevels.levels.levelA.description'),
+      studyTypes: t('diseases.evidenceLevels.levels.levelA.studyTypes'),
+      clinicalApplication: t('diseases.evidenceLevels.levels.levelA.clinicalApplication'),
+      color: 'text-emerald-800',
+      bgColor: 'from-emerald-50 to-green-50',
+      borderColor: 'border-emerald-300',
+      icon: Award
+    },
+    {
+      level: 'B',
+      grade: t('diseases.evidenceLevels.levels.levelB.grade'),
+      quality: t('diseases.evidenceLevels.levels.levelB.quality'),
+      description: t('diseases.evidenceLevels.levels.levelB.description'),
+      studyTypes: t('diseases.evidenceLevels.levels.levelB.studyTypes'),
+      clinicalApplication: t('diseases.evidenceLevels.levels.levelB.clinicalApplication'),
+      color: 'text-[#1a365d]',
+      bgColor: 'from-[#90cdf4]/20 to-[#63b3ed]/10',
+      borderColor: 'border-[#2b6cb0]/30',
+      icon: CheckCircle
+    },
+    {
+      level: 'C',
+      grade: t('diseases.evidenceLevels.levels.levelC.grade'),
+      quality: t('diseases.evidenceLevels.levels.levelC.quality'),
+      description: t('diseases.evidenceLevels.levels.levelC.description'),
+      studyTypes: t('diseases.evidenceLevels.levels.levelC.studyTypes'),
+      clinicalApplication: t('diseases.evidenceLevels.levels.levelC.clinicalApplication'),
+      color: 'text-amber-800',
+      bgColor: 'from-amber-50 to-yellow-50',
+      borderColor: 'border-amber-300',
+      icon: AlertTriangle
+    },
+    {
+      level: 'D',
+      grade: t('diseases.evidenceLevels.levels.levelD.grade'),
+      quality: t('diseases.evidenceLevels.levels.levelD.quality'),
+      description: t('diseases.evidenceLevels.levels.levelD.description'),
+      studyTypes: t('diseases.evidenceLevels.levels.levelD.studyTypes'),
+      clinicalApplication: t('diseases.evidenceLevels.levels.levelD.clinicalApplication'),
+      color: 'text-[#2b6cb0]',
+      bgColor: 'from-[#63b3ed]/10 to-[#90cdf4]/10',
+      borderColor: 'border-[#63b3ed]/30',
+      icon: Minus
+    },
+    {
+      level: 'E',
+      grade: t('diseases.evidenceLevels.levels.levelE.grade'),
+      quality: t('diseases.evidenceLevels.levels.levelE.quality'),
+      description: t('diseases.evidenceLevels.levels.levelE.description'),
+      studyTypes: t('diseases.evidenceLevels.levels.levelE.studyTypes'),
+      clinicalApplication: t('diseases.evidenceLevels.levels.levelE.clinicalApplication'),
+      color: 'text-slate-800',
+      bgColor: 'from-slate-50 to-gray-50',
+      borderColor: 'border-slate-300',
+      icon: Lightbulb
+    },
+    {
+      level: 'I',
+      grade: t('diseases.evidenceLevels.levels.levelI.grade'),
+      quality: t('diseases.evidenceLevels.levels.levelI.quality'),
+      description: t('diseases.evidenceLevels.levels.levelI.description'),
+      studyTypes: t('diseases.evidenceLevels.levels.levelI.studyTypes'),
+      clinicalApplication: t('diseases.evidenceLevels.levels.levelI.clinicalApplication'),
+      color: 'text-red-800',
+      bgColor: 'from-red-50 to-pink-50',
+      borderColor: 'border-red-300',
+      icon: XCircle
+    }
+  ];
+
+  // Oxford levels data with translations
+  const oxfordLevelsData = [
+    {
+      level: '1A',
+      therapy: t('diseases.evidenceLevels.oxford.levels.level1A.therapy'),
+      prognosis: t('diseases.evidenceLevels.oxford.levels.level1A.prognosis'),
+      diagnosis: t('diseases.evidenceLevels.oxford.levels.level1A.diagnosis')
+    },
+    {
+      level: '1B',
+      therapy: t('diseases.evidenceLevels.oxford.levels.level1B.therapy'),
+      prognosis: t('diseases.evidenceLevels.oxford.levels.level1B.prognosis'),
+      diagnosis: t('diseases.evidenceLevels.oxford.levels.level1B.diagnosis')
+    },
+    {
+      level: '1C',
+      therapy: t('diseases.evidenceLevels.oxford.levels.level1C.therapy'),
+      prognosis: t('diseases.evidenceLevels.oxford.levels.level1C.prognosis'),
+      diagnosis: t('diseases.evidenceLevels.oxford.levels.level1C.diagnosis')
+    },
+    {
+      level: '2A',
+      therapy: t('diseases.evidenceLevels.oxford.levels.level2A.therapy'),
+      prognosis: t('diseases.evidenceLevels.oxford.levels.level2A.prognosis'),
+      diagnosis: t('diseases.evidenceLevels.oxford.levels.level2A.diagnosis')
+    },
+    {
+      level: '2B',
+      therapy: t('diseases.evidenceLevels.oxford.levels.level2B.therapy'),
+      prognosis: t('diseases.evidenceLevels.oxford.levels.level2B.prognosis'),
+      diagnosis: t('diseases.evidenceLevels.oxford.levels.level2B.diagnosis')
     }
   ];
 
@@ -205,21 +317,21 @@ const EvidenceLevelsTable: React.FC = () => {
             </div>
             <div className="text-left">
               <h2 className="text-xl font-bold">
-                {isOpen ? slides[currentSlide].title : 'Evidence-Based Medicine Reference'}
+                {isOpen ? slides[currentSlide].title : t('diseases.evidenceLevels.header.title')}
               </h2>
               <p className="text-white/80 text-sm">
-                {isOpen 
-                  ? `${slides[currentSlide].subtitle} - Click to hide` 
-                  : 'Click to view evidence levels, Oxford CEBM standards & clinical guidelines'
+                {isOpen
+                  ? t('diseases.evidenceLevels.header.subtitleExpanded')
+                  : t('diseases.evidenceLevels.header.subtitle')
                 }
               </p>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <div className="text-right text-xs text-white/70">
-              <div>6 Evidence Levels</div>
-              <div>3 Reference Tables</div>
+              <div>{t('diseases.evidenceLevels.header.stats.levels')}</div>
+              <div>{t('diseases.evidenceLevels.header.stats.tables')}</div>
             </div>
             <div className="p-2 bg-white/20 rounded-lg">
               {isOpen ? (
@@ -310,16 +422,16 @@ const EvidenceLevelsTable: React.FC = () => {
                   <thead>
                     <tr className="bg-gradient-to-r from-gray-800 to-slate-700 text-white">
                       <th className="px-4 py-3 text-left font-bold text-sm uppercase tracking-wider">
-                        Evidence Level
+                        {t('diseases.evidenceLevels.table.headers.evidenceLevel')}
                       </th>
                       <th className="px-4 py-3 text-left font-bold text-sm uppercase tracking-wider">
-                        Quality Grade
+                        {t('diseases.evidenceLevels.table.headers.qualityGrade')}
                       </th>
                       <th className="px-4 py-3 text-left font-bold text-sm uppercase tracking-wider">
-                        Study Types
+                        {t('diseases.evidenceLevels.table.headers.studyTypes')}
                       </th>
                       <th className="px-4 py-3 text-left font-bold text-sm uppercase tracking-wider">
-                        Clinical Application
+                        {t('diseases.evidenceLevels.table.headers.clinicalApplication')}
                       </th>
                     </tr>
                   </thead>
@@ -388,10 +500,10 @@ const EvidenceLevelsTable: React.FC = () => {
                     <table className="w-full">
                       <thead>
                         <tr className="bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] text-white">
-                          <th className="px-4 py-3 text-left font-bold text-sm">Level</th>
-                          <th className="px-4 py-3 text-left font-bold text-sm">Therapy/Prevention</th>
-                          <th className="px-4 py-3 text-left font-bold text-sm">Prognosis</th>
-                          <th className="px-4 py-3 text-left font-bold text-sm">Diagnosis</th>
+                          <th className="px-4 py-3 text-left font-bold text-sm">{t('diseases.evidenceLevels.oxford.table.headers.level')}</th>
+                          <th className="px-4 py-3 text-left font-bold text-sm">{t('diseases.evidenceLevels.oxford.table.headers.therapy')}</th>
+                          <th className="px-4 py-3 text-left font-bold text-sm">{t('diseases.evidenceLevels.oxford.table.headers.prognosis')}</th>
+                          <th className="px-4 py-3 text-left font-bold text-sm">{t('diseases.evidenceLevels.oxford.table.headers.diagnosis')}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -433,11 +545,10 @@ const EvidenceLevelsTable: React.FC = () => {
                       <div className="p-2 bg-[#1a365d] rounded-lg">
                         <BookOpen className="w-6 h-6 text-white" />
                       </div>
-                      <h3 className="text-xl font-bold text-[#1a365d]">Clinical Significance</h3>
+                      <h3 className="text-xl font-bold text-[#1a365d]">{t('diseases.evidenceLevels.clinicalApplication.significance.title')}</h3>
                     </div>
                     <p className="text-gray-700 leading-relaxed">
-                      Levels of evidence help target your search at the type of evidence most likely to provide a reliable answer. 
-                      Designed as a shortcut for busy clinicians, researchers, and patients to find the likely best evidence.
+                      {t('diseases.evidenceLevels.clinicalApplication.significance.description')}
                     </p>
                   </div>
 
@@ -447,19 +558,19 @@ const EvidenceLevelsTable: React.FC = () => {
                       <div className="p-2 bg-[#2b6cb0] rounded-lg">
                         <FileText className="w-6 h-6 text-white" />
                       </div>
-                      <h3 className="text-xl font-bold text-gray-900">Key Abbreviations</h3>
+                      <h3 className="text-xl font-bold text-gray-900">{t('diseases.evidenceLevels.clinicalApplication.abbreviations.title')}</h3>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <p className="text-gray-700"><strong>SR:</strong> Systematic Review</p>
-                        <p className="text-gray-700"><strong>RCT:</strong> Randomised Controlled Trial</p>
-                        <p className="text-gray-700"><strong>CDR:</strong> Clinical Decision Rule</p>
-                        <p className="text-gray-700"><strong>CI:</strong> Confidence Interval</p>
+                        <p className="text-gray-700">{t('diseases.evidenceLevels.clinicalApplication.abbreviations.items.sr')}</p>
+                        <p className="text-gray-700">{t('diseases.evidenceLevels.clinicalApplication.abbreviations.items.rct')}</p>
+                        <p className="text-gray-700">{t('diseases.evidenceLevels.clinicalApplication.abbreviations.items.cdr')}</p>
+                        <p className="text-gray-700">{t('diseases.evidenceLevels.clinicalApplication.abbreviations.items.ci')}</p>
                       </div>
                       <div className="space-y-2">
-                        <p className="text-gray-700"><strong>SpPin:</strong> Specific test rules in</p>
-                        <p className="text-gray-700"><strong>SnNout:</strong> Sensitive test rules out</p>
-                        <p className="text-gray-700"><strong>CEBM:</strong> Centre for Evidence-based Medicine</p>
+                        <p className="text-gray-700">{t('diseases.evidenceLevels.clinicalApplication.abbreviations.items.sppin')}</p>
+                        <p className="text-gray-700">{t('diseases.evidenceLevels.clinicalApplication.abbreviations.items.snnout')}</p>
+                        <p className="text-gray-700">{t('diseases.evidenceLevels.clinicalApplication.abbreviations.items.cebm')}</p>
                       </div>
                     </div>
                   </div>
@@ -470,15 +581,13 @@ const EvidenceLevelsTable: React.FC = () => {
                       <div className="p-2 bg-[#63b3ed] rounded-lg">
                         <Activity className="w-6 h-6 text-white" />
                       </div>
-                      <h3 className="text-xl font-bold text-amber-900">Clinical Application</h3>
+                      <h3 className="text-xl font-bold text-amber-900">{t('diseases.evidenceLevels.clinicalApplication.usage.title')}</h3>
                     </div>
                     <blockquote className="text-gray-700 italic leading-relaxed border-l-4 border-amber-400 pl-4">
-                      "What are we to do when the irresistible force of the need to offer clinical advice meets 
-                      the immovable object of flawed evidence? All we can do is our best: give the advice, but alert 
-                      the advisees to the flaws in the evidence on which it is based."
+                      {t('diseases.evidenceLevels.clinicalApplication.usage.quote')}
                     </blockquote>
                     <p className="text-sm text-amber-700 mt-3 font-medium">
-                      — Adapted from Sackett, Straus and Richardson (2000)
+                      {t('diseases.evidenceLevels.clinicalApplication.usage.attribution')}
                     </p>
                   </div>
                 </div>

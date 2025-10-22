@@ -71,10 +71,10 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
   const knowledgeBaseOptions = [
     {
       type: 'curated' as KnowledgeBaseType,
-      label: t('knowledgeBase.curatedKnowledge'),
-      description: t('knowledgeBase.curatedKnowledgeDesc'),
-      tooltipTitle: t('knowledgeBase.curatedTooltipTitle', 'Medical Knowledge Base'),
-      tooltipDesc: t('knowledgeBase.curatedTooltipDesc', 'AI will answer using established cardiology knowledge from medical experts and trusted sources.'),
+      label: t('knowledge-base.curatedKnowledge'),
+      description: t('knowledge-base.curatedKnowledgeDesc'),
+      tooltipTitle: t('knowledge-base.curatedTooltipTitle', 'Medical Knowledge Base'),
+      tooltipDesc: t('knowledge-base.curatedTooltipDesc', 'AI will answer using established cardiology knowledge from medical experts and trusted sources.'),
       icon: Globe,
       color: {
         gradient: 'from-[#1a365d] to-[#2b6cb0]',
@@ -83,15 +83,15 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
         text: 'text-[#1a365d]',
         hover: 'hover:from-[#1a365d]/20 hover:to-[#2b6cb0]/20'
       },
-      badge: t('knowledgeBase.badgeVerified'),
-      count: t('knowledgeBase.sourcesCount')
+      badge: t('knowledge-base.badgeVerified'),
+      count: t('knowledge-base.sourcesCount')
     },
     {
       type: 'personal' as KnowledgeBaseType,
-      label: t('knowledgeBase.personalLibrary'),
-      description: t('knowledgeBase.personalLibraryDesc'),
-      tooltipTitle: t('knowledgeBase.personalTooltipTitle', 'Your Documents'),
-      tooltipDesc: t('knowledgeBase.personalTooltipDesc', 'AI will answer using information from your uploaded documents and personal files.'),
+      label: t('knowledge-base.personalLibrary'),
+      description: t('knowledge-base.personalLibraryDesc'),
+      tooltipTitle: t('knowledge-base.personalTooltipTitle', 'Your Documents'),
+      tooltipDesc: t('knowledge-base.personalTooltipDesc', 'AI will answer using information from your uploaded documents and personal files.'),
       icon: User,
       color: {
         gradient: 'from-[#2b6cb0] to-[#63b3ed]',
@@ -100,8 +100,8 @@ export const KnowledgeBaseSelector: React.FC<KnowledgeBaseSelectorProps> = ({
         text: 'text-[#2b6cb0]',
         hover: 'hover:from-[#2b6cb0]/20 hover:to-[#63b3ed]/20'
       },
-      badge: personalDocumentCount > 0 ? t('knowledgeBase.badgeReady') : t('knowledgeBase.badgeEmpty'),
-      count: t('knowledgeBase.personalCount', { count: personalDocumentCount || 0 })
+      badge: personalDocumentCount > 0 ? t('knowledge-base.badgeReady') : t('knowledge-base.badgeEmpty'),
+      count: t('knowledge-base.personalCount', { count: personalDocumentCount || 0 })
     }
   ];
 

@@ -162,11 +162,11 @@ export const UploadStep: React.FC<UploadStepProps> = ({
         <div className="flex flex-col sm:flex-row gap-3 mb-2.5">
           <NewCaseButton onClick={onCaseCreateOpen} />
           <Button variant="outline" onClick={onCaseListOpen} className="w-full sm:w-auto">
-            {t('case.selectExistingCase', 'Select Existing Case')}
+            {t('case-creation.selectExistingCase', 'Select Existing Case')}
           </Button>
           {activeCase && (
             <div className="text-sm text-slate-600 self-center">
-              {t('case.activeCase', 'Active Case')}: <span className="font-medium">{activeCase.title}</span>
+              {t('case-creation.activeCase', 'Active Case')}: <span className="font-medium">{activeCase.title}</span>
             </div>
           )}
         </div>

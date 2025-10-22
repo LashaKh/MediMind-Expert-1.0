@@ -98,7 +98,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
   return (
     <MedicalFormSection
       title={t('profile.changePassword')}
-      subtitle="Keep your account secure with strong authentication"
+      subtitle={t('profile.keepAccountSecure')}
       icon={<Lock className="w-6 h-6" />}
       delay={0}
     >
@@ -178,4 +178,4 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
       </form>
     </MedicalFormSection>
   );
-}; 
+};

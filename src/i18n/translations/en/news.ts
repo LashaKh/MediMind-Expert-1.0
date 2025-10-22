@@ -18,10 +18,10 @@ export const news = {
     suggestions: {
       title: 'Search Tips',
       items: [
-        'Try broader search terms',
-        'Remove some filters',
-        'Check different time periods',
-        'Browse by specialty'
+        'Try different medical specialties',
+        'Adjust date range filters',
+        'Remove category restrictions',
+        'Check back for breaking news'
       ]
     }
   },
