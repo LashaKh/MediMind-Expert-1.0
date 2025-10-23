@@ -18,7 +18,6 @@ export const caseLibrary = {
   newestFirst: 'Сначала новые',
   oldestFirst: 'Сначала старые',
   alphabetical: 'По алфавиту',
-  byComplexity: 'По сложности',
   byStatus: 'По статусу',
 
   // View Modes (tooltips)
@@ -42,11 +41,6 @@ export const caseLibrary = {
   statusActive: 'Активный',
   statusArchived: 'Архивный',
   statusInReview: 'На рассмотрении',
-
-  // Complexity Levels
-  low: 'НИЗКАЯ',
-  medium: 'СРЕДНЯЯ',
-  high: 'ВЫСОКАЯ',
 
   // Conversation History
   conversationHistory: 'История разговоров',

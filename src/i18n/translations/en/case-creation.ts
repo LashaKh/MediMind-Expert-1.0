@@ -5,7 +5,6 @@ export default {
     description_required: 'Brief description is required',
     anonymizedInfo_required: 'Patient information is required',
     anonymizedInfo_min_length: 'Please provide more detailed information (minimum 50 characters)',
-    complexity_required: 'Please select complexity level',
   },
   specialty: {
     cardiology_case: 'Cardiology Case',
@@ -66,10 +65,6 @@ export default {
     attachments: {
       title: 'Attachments',
       description: 'Medical files and images',
-    },
-    classification: {
-      title: 'Classification',
-      description: 'Category and complexity',
     },
   },
   header: {
@@ -134,24 +129,9 @@ export default {
   step_3: {
     title: 'Medical Documents',
     subtitle: 'Attach relevant medical files, images, and reports',
-    files_attached: '{count} file{plural} attached',
+    files_attached: '{{count}} file{{plural}} attached',
     files_message: 'These files will be analyzed to provide better context for your case discussion',
     files_analysis_hint: 'These files will be analyzed to provide better context for your case discussion',
-  },
-  step_4: {
-    title: 'Case Classification',
-    subtitle: 'Help organize and prioritize your case',
-    category_label: 'Category',
-    complexity_label: 'Complexity Level *',
-    complexity_low: 'Low Complexity',
-    complexity_low_desc: 'Routine case, clear presentation',
-    complexity_medium: 'Medium Complexity',
-    complexity_medium_desc: 'Some complexity, multiple factors',
-    complexity_high: 'High Complexity',
-    complexity_high_desc: 'Complex case, multiple specialties',
-    tags_label: 'Tags (Optional)',
-    tags_placeholder: 'hypertension, diabetes, emergency (comma-separated)',
-    tags_hint: 'Add relevant keywords to help organize and find this case later',
   },
   case_list: {
     title: 'Case Study Library',
@@ -166,7 +146,6 @@ export default {
     sort_newest_first: 'Newest First',
     sort_oldest_first: 'Oldest First',
     sort_alphabetical: 'Alphabetical',
-    sort_by_complexity: 'By Complexity',
     sort_by_status: 'By Status',
     no_cases_found: 'No Cases Found',
     no_cases_yet: 'No Cases Yet',

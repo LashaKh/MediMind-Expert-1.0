@@ -113,6 +113,7 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   const [showCaseModal, setShowCaseModal] = useState(false);
   const [showCaseListModal, setShowCaseListModal] = useState(false);
   const [editingCase, setEditingCase] = useState<PatientCase | null>(null);
+  const [caseListKey, setCaseListKey] = useState(0); // Force re-render of case list
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isPulsing, setIsPulsing] = useState(false);
   
@@ -627,22 +628,35 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   // Handle case creation
   const handleCaseCreate = async (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>): Promise<PatientCase> => {
     try {
+      console.log('[CaseCreation] Starting case creation...', { caseData });
       const newCase = await createCase(caseData);
-      
+      console.log('[CaseCreation] Case created in database:', { caseId: newCase.id, title: newCase.title });
+
+      // CRITICAL FIX: Explicitly set as active case BEFORE loading cases
+      // This ensures the case context is available for the first message
+      setActiveCase(newCase);
+      console.log('[CaseCreation] Active case set:', { caseId: newCase.id });
+
       // Reload cases to ensure the list is up-to-date
       await loadCases();
-      
+      console.log('[CaseCreation] Cases reloaded from database');
+
+      // Force re-render of case list modal to show new case
+      setCaseListKey(prev => prev + 1);
+      console.log('[CaseCreation] Case list refresh triggered');
+
       // Create a new conversation for this case with proper type
       const newConversationId = createNewConversation(
-        `Case: ${newCase.title}`, 
+        `Case: ${newCase.title}`,
         profile?.medical_specialty as 'cardiology' | 'obgyn',
         newCase.id,
         'case-study'
       );
-      
+      console.log('[CaseCreation] New conversation created:', { conversationId: newConversationId });
+
       // Set the new conversation as active
       setActiveConversation(newConversationId);
-      
+
       // Add an initial AI message with case context
       const caseIntroMessage: Message = {
         id: uuidv4(),
@@ -651,11 +665,13 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
         timestamp: new Date(),
         sources: [], // Explicitly set empty sources to avoid inheriting from previous messages
       };
-      
+
       addMessage(caseIntroMessage);
-      
+      console.log('[CaseCreation] Case creation complete - ready for first message');
+
       return newCase;
     } catch (error) {
+      console.error('[CaseCreation] Case creation failed:', error);
       setChatError(t('chat.caseCreateFailed', 'Failed to create case. Please try again.'));
       throw error; // Re-throw so the modal can handle it
     }
@@ -1469,7 +1485,7 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
       />
 
       <CaseListModal
-        key={`cases-modal-${showCaseListModal ? Date.now() : 'closed'}`}
+        key={`cases-modal-${caseListKey}-${showCaseListModal ? Date.now() : 'closed'}`}
         isOpen={showCaseListModal}
         onClose={() => setShowCaseListModal(false)}
         cases={caseHistory}

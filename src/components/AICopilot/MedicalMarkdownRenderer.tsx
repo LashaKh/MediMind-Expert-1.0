@@ -287,41 +287,90 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
       
       // If we're in sources section, extract sources
       if (inSourcesSection) {
-        // Extract source information from markdown list items
-        const sourceMatch = line.match(/^\s*[-•*]\s*(.+)$/);
+        // Extract source information from markdown list items (numbered or bulleted)
+        const sourceMatch = line.match(/^\s*(?:\d+\.\s*|[-•*]\s*)(.+)$/);
         if (sourceMatch) {
-          const sourceText = sourceMatch[1];
-          
+          let sourceText = sourceMatch[1].trim();
+
           // Skip internal system references
           if (/^(Internal KB|PerplexityMD)/i.test(sourceText)) {
             continue;
           }
-          
-          // Extract URL if present
-          const urlMatch = sourceText.match(/\[.*?\]\((https?:\/\/[^\)]+)\)/);
-          const url = urlMatch ? urlMatch[1] : undefined;
-          
-          // Clean title by removing markdown links
-          const title = sourceText.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').trim();
-          
-          // Determine source type based on content
+
+          // Extract source type from bold markers (**Guideline:**, **TextBook:**, etc.)
           let type: 'guideline' | 'research' | 'document' | 'textbook' | 'personal' = 'research';
-          if (/guideline|ACCF|AHA|ESC/i.test(title)) {
-            type = 'guideline';
-          } else if (/textbook|book/i.test(title)) {
-            type = 'textbook';
-          } else if (/PerplexityMD/i.test(title)) {
-            type = 'document';
+          let title = sourceText;
+
+          // Check for **Type:** pattern and extract it
+          const typeMatch = sourceText.match(/^\*\*([^:*]+):\*\*\s*(.+)$/i);
+          if (typeMatch) {
+            const detectedType = typeMatch[1].toLowerCase().trim();
+            title = typeMatch[2].trim();
+
+            // Map detected type to our type system
+            if (detectedType.includes('guideline')) {
+              type = 'guideline';
+            } else if (detectedType.includes('textbook') || detectedType.includes('book')) {
+              type = 'textbook';
+            } else if (detectedType.includes('research') || detectedType.includes('article')) {
+              type = 'research';
+            } else if (detectedType.includes('document')) {
+              type = 'document';
+            }
+          } else {
+            // Fallback: Determine type from content
+            if (/guideline|ACCF|AHA|ESC/i.test(title)) {
+              type = 'guideline';
+            } else if (/textbook|book/i.test(title)) {
+              type = 'textbook';
+            } else if (/PerplexityMD/i.test(title)) {
+              type = 'document';
+            }
           }
-          
+
+          // Extract URL if present in markdown link format BEFORE cleaning markdown
+          const urlMatch = title.match(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/);
+          let url: string | undefined = undefined;
+          if (urlMatch) {
+            title = urlMatch[1]; // Use link text as title
+            url = urlMatch[2];
+          }
+
+          // Clean up ALL markdown formatting from title
+          // Remove bold markers (**text** -> text)
+          title = title.replace(/\*\*([^*]+)\*\*/g, '$1');
+          // Remove italic markers (*text* -> text)
+          title = title.replace(/\*([^*]+)\*/g, '$1');
+          // Remove any remaining asterisks
+          title = title.replace(/\*/g, '');
+          // Remove underscores used for bold/italic
+          title = title.replace(/__([^_]+)__/g, '$1');
+          title = title.replace(/_([^_]+)_/g, '$1');
+          // Trim whitespace
+          title = title.trim();
+
+          // Clean excerpt text the same way as title to remove all markdown
+          let cleanExcerpt = sourceText;
+          // Remove bold markers
+          cleanExcerpt = cleanExcerpt.replace(/\*\*([^*]+)\*\*/g, '$1');
+          // Remove italic markers
+          cleanExcerpt = cleanExcerpt.replace(/\*([^*]+)\*/g, '$1');
+          // Remove any remaining asterisks
+          cleanExcerpt = cleanExcerpt.replace(/\*/g, '');
+          // Remove underscores
+          cleanExcerpt = cleanExcerpt.replace(/__([^_]+)__/g, '$1');
+          cleanExcerpt = cleanExcerpt.replace(/_([^_]+)_/g, '$1');
+          // Trim whitespace
+          cleanExcerpt = cleanExcerpt.trim();
+
           sources.push({
             id: `extracted-source-${sourceCounter}`,
             title: title,
             url: url,
             type: type,
-            excerpt: sourceText.length > 200 ? sourceText.substring(0, 200) + '...' : sourceText
+            excerpt: cleanExcerpt.length > 200 ? cleanExcerpt.substring(0, 200) + '...' : cleanExcerpt
           });
-          
+
           sourceCounter++;
         }
         continue;
@@ -344,11 +393,23 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
 
   // Notify parent component about extracted sources if there's a callback
   React.useEffect(() => {
-    if (extractedSources.length > 0 && typeof window !== 'undefined') {
-      // Store extracted sources globally so MessageItem can access them
-      (window as any).extractedSources = extractedSources;
+    if (typeof window !== 'undefined') {
+      // Clear any previous sources first
+      (window as any).extractedSources = null;
+
+      // Only set new sources if we actually found some
+      if (extractedSources.length > 0) {
+        (window as any).extractedSources = extractedSources;
+      }
     }
-  }, [extractedSources]);
+
+    // Cleanup: clear sources when component unmounts
+    return () => {
+      if (typeof window !== 'undefined') {
+        (window as any).extractedSources = null;
+      }
+    };
+  }, [extractedSources, content]);
 
   return (
     <div 

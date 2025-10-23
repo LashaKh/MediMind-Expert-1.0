@@ -13,8 +13,6 @@ export const caseManagement = {
   patientDetailsDesc: 'ანონიმური პაციენტის მონაცემები',
   attachments: 'დანართები',
   attachmentsDesc: 'სამედიცინო ფაილები და სურათები',
-  classification: 'კლასიფიკაცია',
-  classificationDesc: 'კატეგორია და სირთულე',
 
   // Step 1: Case Overview
   letsStartBasics: 'დავიწყოთ საფუძვლებით',
@@ -55,21 +53,6 @@ export const caseManagement = {
   fileAttached: '{count} ფაილი დამატებულია',
   filesWillBeAnalyzed: 'ეს ფაილები გაანალიზდება თქვენი შემთხვევის უკეთესი კონტექსტის უზრუნველსაყოფად',
 
-  // Step 4: Classification
-  caseClassification: 'შემთხვევის კლასიფიკაცია',
-  helpOrganize: 'დაეხმარეთ თქვენი შემთხვევის ორგანიზებასა და პრიორიტეტიზაციას',
-  category: 'კატეგორია',
-  complexityLevel: 'სირთულის დონე',
-  complexityLevelRequired: 'სირთულის დონე *',
-
-  // Complexity Levels
-  lowComplexity: 'დაბალი სირთულე',
-  lowComplexityDesc: 'რუტინული შემთხვევა, მკაფიო წარმოდგენა',
-  mediumComplexity: 'საშუალო სირთულე',
-  mediumComplexityDesc: 'გარკვეული სირთულე, მრავალი ფაქტორი',
-  highComplexity: 'მაღალი სირთულე',
-  highComplexityDesc: 'რთული შემთხვევა, მრავალი სპეციალობა',
-
   // Tags
   tags: 'თეგები',
   tagsOptional: 'თეგები (არასავალდებულო)',
@@ -109,8 +92,7 @@ export const caseManagement = {
   caseTitleRequired: 'შემთხვევის სათაური აუცილებელია',
   briefDescriptionRequired: 'მოკლე აღწერა აუცილებელია',
   patientInfoRequired: 'პაციენტის ინფორმაცია აუცილებელია',
-  provideDetailedInfo: 'გთხოვთ მიუთითოთ უფრო დეტალური ინფორმაცია (მინიმუმ 50 სიმბოლო)',
-  selectComplexity: 'გთხოვთ აირჩიოთ სირთულის დონე'
+  provideDetailedInfo: 'გთხოვთ მიუთითოთ უფრო დეტალური ინფორმაცია (მინიმუმ 50 სიმბოლო)'
 };
 
 export default caseManagement;

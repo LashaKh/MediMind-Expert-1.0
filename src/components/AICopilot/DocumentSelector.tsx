@@ -107,39 +107,39 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
 
   const getFileTypeStyles = (fileType: string) => {
     if (fileType.includes('pdf')) return {
-      bg: 'from-red-500 to-rose-600',
-      text: 'text-red-600',
-      lightBg: 'bg-red-50',
-      border: 'border-red-200',
-      glow: 'shadow-red-500/20'
+      bg: 'from-[#2b6cb0] to-[#63b3ed]',
+      text: 'text-[#2b6cb0]',
+      lightBg: 'bg-[#63b3ed]/10',
+      border: 'border-[#63b3ed]/30',
+      glow: 'shadow-[#2b6cb0]/20'
     };
     if (fileType.includes('image')) return {
-      bg: 'from-purple-500 to-pink-600',
-      text: 'text-purple-600',
-      lightBg: 'bg-purple-50',
-      border: 'border-purple-200',
-      glow: 'shadow-purple-500/20'
+      bg: 'from-[#63b3ed] to-[#90cdf4]',
+      text: 'text-[#63b3ed]',
+      lightBg: 'bg-[#90cdf4]/10',
+      border: 'border-[#90cdf4]/30',
+      glow: 'shadow-[#63b3ed]/20'
     };
     if (fileType.includes('word') || fileType.includes('doc')) return {
-      bg: 'from-blue-500 to-indigo-600',
-      text: 'text-blue-600',
-      lightBg: 'bg-blue-50',
-      border: 'border-blue-200',
-      glow: 'shadow-blue-500/20'
+      bg: 'from-[#1a365d] to-[#2b6cb0]',
+      text: 'text-[#1a365d]',
+      lightBg: 'bg-[#2b6cb0]/10',
+      border: 'border-[#2b6cb0]/30',
+      glow: 'shadow-[#1a365d]/20'
     };
     if (fileType.includes('excel') || fileType.includes('sheet')) return {
-      bg: 'from-green-500 to-emerald-600',
-      text: 'text-green-600',
-      lightBg: 'bg-green-50',
-      border: 'border-green-200',
-      glow: 'shadow-green-500/20'
+      bg: 'from-[#2b6cb0] to-[#63b3ed]',
+      text: 'text-[#2b6cb0]',
+      lightBg: 'bg-[#63b3ed]/10',
+      border: 'border-[#63b3ed]/30',
+      glow: 'shadow-[#2b6cb0]/20'
     };
     return {
-      bg: 'from-gray-500 to-slate-600',
-      text: 'text-gray-600',
-      lightBg: 'bg-gray-50',
-      border: 'border-gray-200',
-      glow: 'shadow-gray-500/20'
+      bg: 'from-[#2b6cb0] to-[#63b3ed]',
+      text: 'text-[#2b6cb0]',
+      lightBg: 'bg-[#63b3ed]/10',
+      border: 'border-[#63b3ed]/30',
+      glow: 'shadow-[#2b6cb0]/20'
     };
   };
 
@@ -166,10 +166,10 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
         onClick={onClose}
       >
         {/* Modal Container - World-Class Design */}
-        <div 
-          className="relative w-full max-w-4xl max-h-[85vh] min-h-[600px] overflow-hidden
+        <div
+          className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden
                      transform transition-all duration-500 ease-out
-                     rounded-3xl shadow-2xl"
+                     rounded-3xl shadow-2xl flex flex-col"
           style={{
             background: `
               linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(249, 250, 251, 0.98) 100%),
@@ -188,15 +188,15 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           {/* Premium Header with Glass Effect */}
-          <div className="relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10" />
+          <div className="relative overflow-hidden flex-shrink-0">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/10 via-[#2b6cb0]/10 to-[#63b3ed]/10" />
             <div className="relative px-8 py-6 border-b border-white/20">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   {/* Animated Icon Container */}
                   <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl blur-xl opacity-50 animate-pulse" />
-                    <div className="relative p-3 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl text-white shadow-lg">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] rounded-2xl blur-xl opacity-50 animate-pulse" />
+                    <div className="relative p-3 bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] rounded-2xl text-white shadow-lg">
                       <Files className="w-6 h-6" />
                     </div>
                   </div>
@@ -237,13 +237,13 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
           </div>
 
           {/* Search & Filter Section - Premium Design */}
-          <div className="px-8 py-6 bg-gradient-to-b from-gray-50/50 to-white/50 border-b border-gray-200/20">
+          <div className="px-8 py-6 bg-gradient-to-b from-gray-50/50 to-white/50 border-b border-gray-200/20 flex-shrink-0">
             {/* Search Bar */}
             <div className="relative mb-4">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <div className="relative">
                   <Search className="w-5 h-5 text-gray-400" />
-                  <div className="absolute inset-0 w-5 h-5 bg-blue-500/20 blur-xl" />
+                  <div className="absolute inset-0 w-5 h-5 bg-[#2b6cb0]/20 blur-xl" />
                 </div>
               </div>
               <input
@@ -252,8 +252,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                 placeholder="Search by name, type, or content..."
                 value={searchTerm}
                 onChange={(E) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 text-base border-2 border-gray-200/50 rounded-2xl 
-                         focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-300
+                className="w-full pl-12 pr-4 py-3.5 text-base border-2 border-gray-200/50 rounded-2xl
+                         focus:ring-4 focus:ring-[#63b3ed]/20 focus:border-[#2b6cb0]/50 transition-all duration-300
                          bg-white/80 backdrop-blur-sm hover:border-gray-300/50 hover:shadow-lg
                          placeholder-gray-400 font-medium"
               />
@@ -274,16 +274,16 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
               <div className="flex items-center gap-3">
                 <button
                   onClick={onSelectAll}
-                  className="group relative px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white 
-                           rounded-xl font-medium text-sm shadow-lg shadow-blue-500/25
-                           hover:shadow-xl hover:shadow-blue-500/30 hover:scale-105
+                  className="group relative px-4 py-2.5 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white
+                           rounded-xl font-medium text-sm shadow-lg shadow-[#2b6cb0]/25
+                           hover:shadow-xl hover:shadow-[#2b6cb0]/30 hover:scale-105
                            transition-all duration-300 ease-out overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4" />
                     Select All
                   </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </button>
                 
                 {selectedDocuments.length > 0 && (
@@ -324,8 +324,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                 <div className="flex items-center bg-white/80 backdrop-blur-sm border-2 border-gray-200/50 rounded-xl p-1">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'grid' 
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25' 
+                    className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'grid'
+                      ? 'bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white shadow-lg shadow-[#2b6cb0]/25'
                       : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
                     }`}
                   >
@@ -333,8 +333,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'list' 
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25' 
+                    className={`p-2 rounded-lg transition-all duration-300 ${viewMode === 'list'
+                      ? 'bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white shadow-lg shadow-[#2b6cb0]/25'
                       : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
                     }`}
                   >
@@ -347,7 +347,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
             {/* Document Stats */}
             <div className="mt-4 flex items-center justify-center gap-6">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-pulse" />
                 <span className="text-sm font-medium text-gray-600">
                   {filteredDocuments.length} documents found
                 </span>
@@ -364,9 +364,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
           </div>
 
           {/* Documents Grid/List - Premium Scrollable Area */}
-          <div className="flex-1 overflow-y-auto px-8 py-6 custom-scrollbar" 
-               style={{ 
-                 maxHeight: 'calc(85vh - 320px)',
+          <div className="flex-1 overflow-y-auto px-8 py-6 custom-scrollbar min-h-0"
+               style={{
                  scrollbarWidth: 'thin',
                  scrollbarColor: 'rgba(156, 163, 175, 0.3) transparent'
                }}
@@ -389,18 +388,18 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                     >
                       {/* Card Container */}
                       <div className={`relative h-full p-6 rounded-2xl border-2 overflow-hidden
-                                      ${isSelected 
-                                        ? 'border-blue-500/50 bg-gradient-to-br from-blue-50 to-indigo-50' 
+                                      ${isSelected
+                                        ? 'border-[#2b6cb0]/50 bg-gradient-to-br from-[#63b3ed]/10 to-[#90cdf4]/10'
                                         : 'border-gray-200/50 bg-white hover:border-gray-300/50'
                                       }
                                       shadow-lg hover:shadow-2xl transition-all duration-500`}
                       >
                         {/* Selection Checkmark */}
-                        <div className={`absolute top-4 right-4 w-6 h-6 rounded-full border-2 
+                        <div className={`absolute top-4 right-4 w-6 h-6 rounded-full border-2
                                        flex items-center justify-center transition-all duration-300
-                                       ${isSelected 
-                                         ? 'border-blue-500 bg-blue-500 scale-110' 
-                                         : 'border-gray-300 bg-white group-hover:border-blue-400'
+                                       ${isSelected
+                                         ? 'border-[#2b6cb0] bg-[#2b6cb0] scale-110'
+                                         : 'border-gray-300 bg-white group-hover:border-[#63b3ed]'
                                        }`}>
                           {isSelected && (
                             <Check className="w-3 h-3 text-white animate-checkIn" />
@@ -474,8 +473,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                       }}
                     >
                       <div className={`relative flex items-center gap-4 p-5 rounded-2xl border-2
-                                      ${isSelected 
-                                        ? 'border-blue-500/50 bg-gradient-to-r from-blue-50 to-indigo-50' 
+                                      ${isSelected
+                                        ? 'border-[#2b6cb0]/50 bg-gradient-to-r from-[#63b3ed]/10 to-[#90cdf4]/10'
                                         : 'border-gray-200/50 bg-white hover:border-gray-300/50'
                                       }
                                       shadow-md hover:shadow-xl transition-all duration-300`}
@@ -520,9 +519,9 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                             {/* Selection Checkbox */}
                             <div className={`w-6 h-6 rounded-full border-2 flex-shrink-0
                                            flex items-center justify-center transition-all duration-300
-                                           ${isSelected 
-                                             ? 'border-blue-500 bg-blue-500 scale-110' 
-                                             : 'border-gray-300 bg-white group-hover:border-blue-400'
+                                           ${isSelected
+                                             ? 'border-[#2b6cb0] bg-[#2b6cb0] scale-110'
+                                             : 'border-gray-300 bg-white group-hover:border-[#63b3ed]'
                                            }`}>
                               {isSelected && (
                                 <Check className="w-3 h-3 text-white animate-checkIn" />
@@ -546,7 +545,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
           </div>
 
           {/* Premium Footer with Actions */}
-          <div className="relative overflow-hidden">
+          <div className="relative overflow-hidden flex-shrink-0">
             <div className="absolute inset-0 bg-gradient-to-t from-gray-50/80 to-white/50" />
             <div className="relative px-8 py-6 border-t border-gray-200/20">
               <div className="flex items-center justify-between gap-6">
@@ -554,8 +553,8 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <div className="relative">
-                      <Activity className="w-5 h-5 text-blue-600" />
-                      <div className="absolute inset-0 w-5 h-5 bg-blue-600/20 blur-lg" />
+                      <Activity className="w-5 h-5 text-[#2b6cb0]" />
+                      <div className="absolute inset-0 w-5 h-5 bg-[#2b6cb0]/20 blur-lg" />
                     </div>
                     <span className="text-base font-semibold text-gray-800">
                       {selectedDocuments.length} document{selectedDocuments.length !== 1 ? 's' : ''} selected
@@ -610,9 +609,9 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                   <button
                     onClick={onClose}
                     disabled={selectedDocuments.length === 0}
-                    className="group relative px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 
+                    className="group relative px-8 py-3 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed]
                              text-white rounded-2xl font-semibold text-sm shadow-lg
-                             shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30
+                             shadow-[#2b6cb0]/25 hover:shadow-xl hover:shadow-[#2b6cb0]/30
                              hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed
                              disabled:hover:scale-100 disabled:hover:shadow-lg
                              transition-all duration-300 ease-out overflow-hidden"
@@ -626,7 +625,7 @@ export const DocumentSelector: React.FC<DocumentSelectorProps> = ({
                         </span>
                       )}
                     </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d] to-[#2b6cb0]
                                    opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </button>
                 </div>

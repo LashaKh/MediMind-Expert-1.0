@@ -26,7 +26,7 @@ interface CaseListModalProps {
 }
 
 type ViewMode = 'grid' | 'list';
-type SortOption = 'newest' | 'oldest' | 'title' | 'complexity' | 'status';
+type SortOption = 'newest' | 'oldest' | 'title' | 'status';
 type FilterStatus = 'all' | 'active' | 'archived' | 'review';
 
 export const CaseListModal: React.FC<CaseListModalProps> = ({
@@ -134,11 +134,6 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
           return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
         case 'title':
           return a.title.localeCompare(b.title);
-        case 'complexity':
-          const complexityOrder = { 'low': 1, 'medium': 2, 'high': 3 };
-          const aComplexity = a.metadata?.complexity || 'medium';
-          const bComplexity = b.metadata?.complexity || 'medium';
-          return (complexityOrder[bComplexity] || 2) - (complexityOrder[aComplexity] || 2);
         case 'status':
           return a.status.localeCompare(b.status);
         default:
@@ -273,43 +268,6 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
     } catch (error) {
       console.error('Error in handleDeleteConversation:', error);
       throw error;
-    }
-  };
-
-  const getComplexityConfig = (complexity: 'low' | 'medium' | 'high') => {
-    switch (complexity) {
-      case 'low':
-        return {
-          color: 'emerald',
-          bg: 'bg-emerald-50 border-emerald-200',
-          text: 'text-emerald-700',
-          icon: CheckCircle,
-          gradient: 'from-emerald-400 to-green-500'
-        };
-      case 'medium':
-        return {
-          color: 'amber',
-          bg: 'bg-amber-50 border-amber-200',
-          text: 'text-amber-700',
-          icon: Clock4,
-          gradient: 'from-amber-400 to-orange-500'
-        };
-      case 'high':
-        return {
-          color: 'red',
-          bg: 'bg-red-50 border-red-200',
-          text: 'text-red-700',
-          icon: AlertTriangle,
-          gradient: 'from-red-400 to-rose-500'
-        };
-      default:
-        return {
-          color: 'gray',
-          bg: 'bg-gray-50 border-gray-200',
-          text: 'text-gray-700',
-          icon: Clock4,
-          gradient: 'from-gray-400 to-slate-500'
-        };
     }
   };
 
@@ -477,7 +435,6 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                       <option value="newest">{t('caseLibrary.newestFirst')}</option>
                       <option value="oldest">{t('caseLibrary.oldestFirst')}</option>
                       <option value="title">{t('caseLibrary.alphabetical')}</option>
-                      <option value="complexity">{t('caseLibrary.byComplexity')}</option>
                       <option value="status">{t('caseLibrary.byStatus')}</option>
                     </select>
                     <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
@@ -545,7 +502,6 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                 }
               `}>
                                  {filteredAndSortedCases.map((caseItem) => {
-                   const complexityConfig = getComplexityConfig(caseItem.metadata?.complexity || 'medium');
                    const statusConfig = getStatusConfig(caseItem.status);
                    const isActive = activeCase?.id === caseItem.id;
                    const isHovered = hoveredCase === caseItem.id;
@@ -558,7 +514,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                       onMouseLeave={() => setHoveredCase(null)}
                       className={`
                         group relative cursor-pointer transition-all duration-500 ease-out
-                        ${viewMode === 'grid' ? 'aspect-[4/3]' : 'h-auto'}
+                        ${viewMode === 'grid' ? 'min-h-[280px]' : 'h-auto min-h-[220px]'}
                         ${expandedCaseId === caseItem.id
                           ? 'z-50'
                           : isActive
@@ -579,7 +535,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                     >
                       {/* Premium Card Container */}
                       <div className={`
-                        relative h-full p-6 rounded-3xl
+                        relative h-full p-4 rounded-2xl flex flex-col
                         transition-all duration-500 ease-out
                         ${expandedCaseId === caseItem.id ? 'overflow-visible' : 'overflow-hidden'}
                         ${isActive
@@ -590,7 +546,7 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                       style={{
                         background: `
                           linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%),
-                          radial-gradient(circle at top right, rgba(${complexityConfig.color === 'emerald' ? '16, 185, 129' : complexityConfig.color === 'amber' ? '245, 158, 11' : '239, 68, 68'}, 0.05), transparent 50%)
+                          radial-gradient(circle at top right, rgba(43, 108, 176, 0.05), transparent 50%)
                         `,
                         border: `1px solid rgba(255, 255, 255, ${isActive ? '0.8' : '0.4'})`,
                         boxShadow: isActive 
@@ -598,27 +554,19 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                           : `0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.8)`
                       }}>
                         {/* Gradient Orbs */}
-                        <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${complexityConfig.gradient} opacity-10 rounded-full blur-2xl`} />
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#2b6cb0] to-[#63b3ed] opacity-10 rounded-full blur-2xl" />
                         <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#2b6cb0] to-[#63b3ed] opacity-5 rounded-full blur-xl" />
                         
                         {/* Card Header */}
-                        <div className="relative z-10 flex items-start justify-between mb-4">
-                          <div className="flex items-center space-x-3">
-                            <div className={`p-2 rounded-xl bg-gradient-to-br ${complexityConfig.gradient} shadow-lg`}>
-                              <complexityConfig.icon className="w-4 h-4 text-white" />
-                            </div>
-                                                         <div className={`px-3 py-1 rounded-full text-xs font-semibold ${complexityConfig.bg} ${complexityConfig.text} border`}>
-                               {t(`caseLibrary.${caseItem.metadata?.complexity || 'medium'}`)}
-                             </div>
-                          </div>
+                        <div className="relative z-10 flex items-start justify-between mb-3">
                           
                           <div className="flex items-center justify-between w-full">
                             {/* Primary Action - Start Chat Button */}
                             <Button
                               onClick={(e) => handleSelectClick(e, caseItem)}
-                              className="px-4 py-2 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white hover:from-[#1a365d] hover:to-[#2b6cb0] transition-all duration-200 rounded-lg shadow-md hover:shadow-lg font-medium text-sm"
+                              className="px-3 py-1.5 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white hover:from-[#1a365d] hover:to-[#2b6cb0] transition-all duration-200 rounded-lg shadow-md hover:shadow-lg font-medium text-sm"
                             >
-                              <MessageSquare className="w-4 h-4 mr-2" />
+                              <MessageSquare className="w-4 h-4 mr-1.5" />
                               {t('caseLibrary.startChat')}
                             </Button>
                             
@@ -649,10 +597,10 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         </div>
 
                         {/* Case Content */}
-                        <div className="relative z-10 space-y-4">
+                        <div className="relative z-10 space-y-2 flex-1 flex flex-col">
                           <div>
-                            <div className="flex items-start justify-between mb-2">
-                              <h3 className="text-xl font-bold text-gray-900 line-clamp-2 leading-tight flex-1">
+                            <div className="flex items-start justify-between">
+                              <h3 className="text-lg font-bold text-gray-900 line-clamp-2 leading-tight flex-1">
                                 {caseItem.title}
                               </h3>
                               {/* Attachment Count Badge */}
@@ -663,39 +611,38 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                                 </div>
                               )}
                             </div>
-                            <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
-                              {caseItem.description}
-                            </p>
                           </div>
 
-                                                     {/* Case Info */}
-                           {caseItem.metadata?.category && (
-                             <div className="flex items-center space-x-2 p-3 bg-[#90cdf4]/20 rounded-xl border border-[#63b3ed]/30">
-                               <Activity className="w-4 h-4 text-[#2b6cb0]" />
-                               <span className="text-sm font-medium text-[#1a365d] capitalize">
-                                 {caseItem.metadata.category}
-                               </span>
-                             </div>
-                           )}
+                          {/* Case Info and Tags - Combined in one line */}
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {caseItem.metadata?.category && (
+                              <div className="flex items-center space-x-1 px-2 py-1 bg-[#90cdf4]/20 rounded-lg border border-[#63b3ed]/30">
+                                <Activity className="w-3 h-3 text-[#2b6cb0]" />
+                                <span className="text-xs font-medium text-[#1a365d] capitalize">
+                                  {caseItem.metadata.category}
+                                </span>
+                              </div>
+                            )}
 
-                          {/* Tags */}
-                          {caseItem.metadata?.tags && caseItem.metadata.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-2">
-                              {caseItem.metadata.tags.slice(0, 3).map((tag, index) => (
-                                <span
-                                  key={index}
-                                  className="px-3 py-1 text-xs font-medium bg-white/80 text-gray-700 rounded-full border border-gray-200 backdrop-blur-sm"
-                                >
-                                  #{tag}
-                                </span>
-                              ))}
-                              {caseItem.metadata.tags.length > 3 && (
-                                <span className="px-3 py-1 text-xs font-medium bg-gray-100 text-gray-500 rounded-full">
-                                  +{caseItem.metadata.tags.length - 3} {t('caseLibrary.more')}
-                                </span>
-                              )}
-                            </div>
-                          )}
+                            {/* Tags */}
+                            {caseItem.metadata?.tags && caseItem.metadata.tags.length > 0 && (
+                              <>
+                                {caseItem.metadata.tags.slice(0, 2).map((tag, index) => (
+                                  <span
+                                    key={index}
+                                    className="px-2 py-1 text-xs font-medium bg-white/80 text-gray-700 rounded-lg border border-gray-200"
+                                  >
+                                    #{tag}
+                                  </span>
+                                ))}
+                                {caseItem.metadata.tags.length > 2 && (
+                                  <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-500 rounded-lg">
+                                    +{caseItem.metadata.tags.length - 2}
+                                  </span>
+                                )}
+                              </>
+                            )}
+                          </div>
 
                           {/* Conversation History Section */}
                           <ConversationHistorySection
@@ -711,8 +658,8 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
                         </div>
 
                         {/* Card Footer */}
-                        <div className="relative z-10 mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
+                        <div className="relative z-10 mt-auto pt-2 border-t border-gray-100 flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
                             <div className={`flex items-center space-x-1 text-xs font-medium text-${statusConfig.color}-600`}>
                               <statusConfig.icon className="w-3 h-3" />
                               <span>{statusConfig.labelKey ? t(`caseLibrary.${statusConfig.labelKey}`) : caseItem.status}</span>
@@ -728,8 +675,8 @@ export const CaseListModal: React.FC<CaseListModalProps> = ({
 
                         {/* Active Case Indicator */}
                         {isActive && (
-                          <div className="absolute top-4 left-4 flex items-center space-x-2 px-3 py-1 bg-[#2b6cb0] text-white text-xs font-semibold rounded-full shadow-lg">
-                            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                          <div className="absolute top-3 left-3 flex items-center space-x-1.5 px-2 py-1 bg-[#2b6cb0] text-white text-xs font-semibold rounded-full shadow-lg">
+                            <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                             <span>{t('caseLibrary.active')}</span>
                           </div>
                         )}

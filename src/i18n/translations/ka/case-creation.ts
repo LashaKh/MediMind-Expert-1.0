@@ -5,7 +5,6 @@ export default {
     description_required: 'მოკლე აღწერა სავალდებულოა',
     anonymizedInfo_required: 'პაციენტის ინფორმაცია სავალდებულოა',
     anonymizedInfo_min_length: 'გთხოვთ, მოგვაწოდოთ უფრო დეტალური ინფორმაცია (მინიმუმ 50 სიმბოლო)',
-    complexity_required: 'გთხოვთ, აირჩიოთ სირთულის დონე',
   },
   specialty: {
     cardiology_case: 'კარდიოლოგიური შემთხვევა',
@@ -66,10 +65,6 @@ export default {
     attachments: {
       title: 'დანართები',
       description: 'სამედიცინო ფაილები და სურათები',
-    },
-    classification: {
-      title: 'კლასიფიკაცია',
-      description: 'კატეგორია და სირთულე',
     },
   },
   header: {
@@ -138,21 +133,6 @@ export default {
     files_message: 'ეს ფაილები გაანალიზდება თქვენი საქმის განხილვისთვის უკეთესი კონტექსტის უზრუნველსაყოფად',
     files_analysis_hint: 'ეს ფაილები გაანალიზდება თქვენი საქმის განხილვისთვის უკეთესი კონტექსტის უზრუნველსაყოფად',
   },
-  step_4: {
-    title: 'საქმის კლასიფიკაცია',
-    subtitle: 'დაგვეხმარეთ თქვენი საქმის ორგანიზებასა და პრიორიტეტების მინიჭებაში',
-    category_label: 'კატეგორია',
-    complexity_label: 'სირთულის დონე *',
-    complexity_low: 'დაბალი სირთულე',
-    complexity_low_desc: 'რუტინული შემთხვევა, მკაფიო წარმოდგენით',
-    complexity_medium: 'საშუალო სირთულე',
-    complexity_medium_desc: 'გარკვეული სირთულე, მრავალი ფაქტორი',
-    complexity_high: 'მაღალი სირთულე',
-    complexity_high_desc: 'რთული შემთხვევა, მრავალი სპეციალობა',
-    tags_label: 'თეგები (არასავალდებულო)',
-    tags_placeholder: 'ჰიპერტენზია, დიაბეტი, გადაუდებელი (მძიმით გამოყოფილი)',
-    tags_hint: 'დაამატეთ რელევანტური საკვანძო სიტყვები, რათა მოგვიანებით ამ საქმის ორგანიზება და პოვნა გაგიადვილდეთ',
-  },
 
   selectExistingCase: 'არსებული შემთხვევის არჩევა',
 
@@ -169,7 +149,6 @@ export default {
     sort_newest_first: 'პირველი',
     sort_oldest_first: 'ბოლო',
     sort_alphabetical: 'ანბანის მიხედვით',
-    sort_by_complexity: 'სირთულის მიხედვით',
     sort_by_status: 'სტატუსის მიხედვით',
     no_cases_found: 'შემთხვევები არ მოიძებნა',
     no_cases_yet: 'შემთხვევები ჯერ არ არის',

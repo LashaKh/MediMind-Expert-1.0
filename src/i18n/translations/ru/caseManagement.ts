@@ -13,8 +13,6 @@ export const caseManagement = {
   patientDetailsDesc: 'Анонимные данные пациента',
   attachments: 'Вложения',
   attachmentsDesc: 'Медицинские файлы и изображения',
-  classification: 'Классификация',
-  classificationDesc: 'Категория и сложность',
 
   // Step 1: Case Overview
   letsStartBasics: 'Начнем с основ',
@@ -55,21 +53,6 @@ export const caseManagement = {
   fileAttached: '{count} файл прикреплен',
   filesWillBeAnalyzed: 'Эти файлы будут проанализированы для обеспечения лучшего контекста вашего случая',
 
-  // Step 4: Classification
-  caseClassification: 'Классификация случая',
-  helpOrganize: 'Помогите организовать и расставить приоритеты вашего случая',
-  category: 'Категория',
-  complexityLevel: 'Уровень сложности',
-  complexityLevelRequired: 'Уровень сложности *',
-
-  // Complexity Levels
-  lowComplexity: 'Низкая сложность',
-  lowComplexityDesc: 'Рутинный случай, четкая презентация',
-  mediumComplexity: 'Средняя сложность',
-  mediumComplexityDesc: 'Некоторая сложность, несколько факторов',
-  highComplexity: 'Высокая сложность',
-  highComplexityDesc: 'Сложный случай, несколько специальностей',
-
   // Tags
   tags: 'Теги',
   tagsOptional: 'Теги (необязательно)',
@@ -109,8 +92,7 @@ export const caseManagement = {
   caseTitleRequired: 'Заголовок случая обязателен',
   briefDescriptionRequired: 'Краткое описание обязательно',
   patientInfoRequired: 'Информация о пациенте обязательна',
-  provideDetailedInfo: 'Пожалуйста, предоставьте более подробную информацию (минимум 50 символов)',
-  selectComplexity: 'Пожалуйста, выберите уровень сложности'
+  provideDetailedInfo: 'Пожалуйста, предоставьте более подробную информацию (минимум 50 символов)'
 };
 
 export default caseManagement;

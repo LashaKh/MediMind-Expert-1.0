@@ -5,7 +5,6 @@ export default {
     description_required: 'Требуется краткое описание',
     anonymizedInfo_required: 'Требуется информация о пациенте',
     anonymizedInfo_min_length: 'Пожалуйста, предоставьте более подробную информацию (минимум 50 символов)',
-    complexity_required: 'Пожалуйста, выберите уровень сложности',
   },
   specialty: {
     cardiology_case: 'Кардиологическое дело',
@@ -66,10 +65,6 @@ export default {
     attachments: {
       title: 'Вложения',
       description: 'Медицинские файлы и изображения',
-    },
-    classification: {
-      title: 'Классификация',
-      description: 'Категория и сложность',
     },
   },
   header: {
@@ -138,21 +133,6 @@ export default {
     files_message: 'Эти файлы будут проанализированы для предоставления лучшего контекста для обсуждения вашего дела',
     files_analysis_hint: 'Эти файлы будут проанализированы для предоставления лучшего контекста для обсуждения вашего дела',
   },
-  step_4: {
-    title: 'Классификация дела',
-    subtitle: 'Помогите упорядочить и приоритизировать ваше дело',
-    category_label: 'Категория',
-    complexity_label: 'Уровень сложности *',
-    complexity_low: 'Низкая сложность',
-    complexity_low_desc: 'Обычное дело, ясное представление',
-    complexity_medium: 'Средняя сложность',
-    complexity_medium_desc: 'Некоторая сложность, несколько факторов',
-    complexity_high: 'Высокая сложность',
-    complexity_high_desc: 'Сложное дело, несколько специальностей',
-    tags_label: 'Теги (необязательно)',
-    tags_placeholder: 'гипертония, диабет, неотложная помощь (через запятую)',
-    tags_hint: 'Добавьте соответствующие ключевые слова, чтобы помочь упорядочить и найти это дело позже',
-  },
 
   selectExistingCase: 'Выбрать существующий случай',
 
@@ -169,7 +149,6 @@ export default {
     sort_newest_first: 'Сначала новые',
     sort_oldest_first: 'Сначала старые',
     sort_alphabetical: 'По алфавиту',
-    sort_by_complexity: 'По сложности',
     sort_by_status: 'По статусу',
     no_cases_found: 'Случаи не найдены',
     no_cases_yet: 'Случаев пока нет',

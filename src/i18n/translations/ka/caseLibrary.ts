@@ -18,7 +18,6 @@ export const caseLibrary = {
   newestFirst: 'უახლესი პირველი',
   oldestFirst: 'უძველესი პირველი',
   alphabetical: 'ანბანის მიხედვით',
-  byComplexity: 'სირთულის მიხედვით',
   byStatus: 'სტატუსის მიხედვით',
 
   // View Modes (tooltips)
@@ -42,11 +41,6 @@ export const caseLibrary = {
   statusActive: 'აქტიური',
   statusArchived: 'დაარქივებული',
   statusInReview: 'განხილვაში',
-
-  // Complexity Levels
-  low: 'დაბალი',
-  medium: 'საშუალო',
-  high: 'მაღალი',
 
   // Conversation History
   conversationHistory: 'საუბრების ისტორია',

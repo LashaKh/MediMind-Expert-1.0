@@ -19,7 +19,6 @@ interface FormData {
   anonymizedInfo: string;
   category: string;
   tags: string;
-  complexity: 'low' | 'medium' | 'high';
 }
 
 export const CaseForm: React.FC<CaseFormProps> = ({
@@ -36,8 +35,7 @@ export const CaseForm: React.FC<CaseFormProps> = ({
     description: initialData?.description || '',
     anonymizedInfo: initialData?.anonymizedInfo || '',
     category: initialData?.metadata?.category || '',
-    tags: initialData?.metadata?.tags?.join(', ') || '',
-    complexity: initialData?.metadata?.complexity || 'medium'
+    tags: initialData?.metadata?.tags?.join(', ') || ''
   });
 
   const [errors, setErrors] = useState<Partial<FormData>>({});
@@ -93,8 +91,7 @@ export const CaseForm: React.FC<CaseFormProps> = ({
       status: 'active',
       metadata: {
         category: formData.category.trim() || undefined,
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
-        complexity: formData.complexity
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean)
       }
     };
 
@@ -148,11 +145,6 @@ export const CaseForm: React.FC<CaseFormProps> = ({
     return baseOptions;
   }, [specialty, t]);
 
-  const complexityOptions = [
-    { value: 'low', label: t('case.lowComplexity') },
-    { value: 'medium', label: t('case.mediumComplexity') },
-    { value: 'high', label: t('case.highComplexity') },
-  ];
 
   return (
     <div className="mobile:p-4 p-6">
@@ -221,17 +213,6 @@ export const CaseForm: React.FC<CaseFormProps> = ({
             options={getCategoryOptions()}
             disabled={isSubmitting}
             hint={t('case.categoryHint')}
-          />
-
-          {/* Complexity */}
-          <MobileSelect
-            id="complexity"
-            label={t('case.complexityLevel')}
-            value={formData.complexity}
-            onChange={handleInputChange('complexity')}
-            options={complexityOptions}
-            disabled={isSubmitting}
-            required
           />
         </div>
 

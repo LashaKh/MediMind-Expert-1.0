@@ -1,7 +1,7 @@
 export const caseLibrary = {
   // Modal Header
   title: 'Case Study Library',
-  subtitle: '{filteredCount} of {totalCount} cases',
+  subtitle: '{{filteredCount}} of {{totalCount}} cases',
   realTimeSync: 'Real-time sync',
   helpText: '💡 Click card to edit • Use "Start Chat" to discuss with AI',
 
@@ -18,7 +18,6 @@ export const caseLibrary = {
   newestFirst: 'Newest First',
   oldestFirst: 'Oldest First',
   alphabetical: 'Alphabetical',
-  byComplexity: 'By Complexity',
   byStatus: 'By Status',
 
   // View Modes (tooltips)
@@ -42,11 +41,6 @@ export const caseLibrary = {
   statusActive: 'Active',
   statusArchived: 'Archived',
   statusInReview: 'In Review',
-
-  // Complexity Levels
-  low: 'LOW',
-  medium: 'MEDIUM',
-  high: 'HIGH',
 
   // Conversation History
   conversationHistory: 'Conversation History',

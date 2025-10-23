@@ -13,8 +13,6 @@ export const caseManagement = {
   patientDetailsDesc: 'Anonymized patient data',
   attachments: 'Attachments',
   attachmentsDesc: 'Medical files and images',
-  classification: 'Classification',
-  classificationDesc: 'Category and complexity',
 
   // Step 1: Case Overview
   letsStartBasics: 'Let\'s Start with the Basics',
@@ -55,21 +53,6 @@ export const caseManagement = {
   fileAttached: '{count} file attached',
   filesWillBeAnalyzed: 'These files will be analyzed to provide better context for your case',
 
-  // Step 4: Classification
-  caseClassification: 'Case Classification',
-  helpOrganize: 'Help organize and prioritize your case',
-  category: 'Category',
-  complexityLevel: 'Complexity Level',
-  complexityLevelRequired: 'Complexity Level *',
-
-  // Complexity Levels
-  lowComplexity: 'Low Complexity',
-  lowComplexityDesc: 'Routine case, clear presentation',
-  mediumComplexity: 'Medium Complexity',
-  mediumComplexityDesc: 'Some complexity, multiple factors',
-  highComplexity: 'High Complexity',
-  highComplexityDesc: 'Complex case, multiple specialties',
-
   // Tags
   tags: 'Tags',
   tagsOptional: 'Tags (Optional)',
@@ -109,8 +92,7 @@ export const caseManagement = {
   caseTitleRequired: 'Case title is required',
   briefDescriptionRequired: 'Brief description is required',
   patientInfoRequired: 'Patient information is required',
-  provideDetailedInfo: 'Please provide more detailed information (minimum 50 characters)',
-  selectComplexity: 'Please select a complexity level'
+  provideDetailedInfo: 'Please provide more detailed information (minimum 50 characters)'
 };
 
 export default caseManagement;

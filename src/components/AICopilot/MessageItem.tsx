@@ -93,6 +93,9 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
 
   // Check for extracted sources from MedicalMarkdownRenderer
   React.useEffect(() => {
+    // Clear previous sources first when message content changes
+    setExtractedSources([]);
+
     const checkExtractedSources = () => {
       if (typeof window !== 'undefined' && (window as any).extractedSources) {
         setExtractedSources((window as any).extractedSources);
@@ -104,9 +107,13 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
     // Check immediately and after a small delay to ensure MedicalMarkdownRenderer has run
     checkExtractedSources();
     const timeout = setTimeout(checkExtractedSources, 100);
-    
-    return () => clearTimeout(timeout);
-  }, [message.content]);
+
+    return () => {
+      clearTimeout(timeout);
+      // Clear extracted sources when component unmounts or message changes
+      setExtractedSources([]);
+    };
+  }, [message.content, message.id]);
 
   return (
     <div className={`flex justify-start group ${className}`}>
