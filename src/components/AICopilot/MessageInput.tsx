@@ -38,7 +38,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   onSendMessage,
   disabled = false,
   placeholder,
-  maxLength = 2000,
+  maxLength = 100000,
   allowAttachments = false,
   maxFileSize = 10, // 10MB default
   maxFiles = 5,
