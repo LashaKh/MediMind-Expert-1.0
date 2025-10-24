@@ -126,29 +126,42 @@ export async function generateDiagnosisReport(
     const data: DiagnosisFlowiseResponse = await response.json();
     console.log('📥 API Response received:', {
       hasText: !!data.text,
-      textLength: data.text?.length || 0,
+      hasResponse: !!data.response,
+      hasAnswer: !!data.answer,
       responseKeys: Object.keys(data)
     });
 
+    // COMPREHENSIVE RESPONSE PARSING: Check all possible fields from Flowise
+    // This matches the robust parsing in form100Service.ts (lines 285-292)
+    let generatedReport = data.text ||
+                         data.response ||
+                         data.answer ||
+                         data.output ||
+                         data.result ||
+                         data.data?.text ||
+                         data.data?.response ||
+                         '';
+
     // Debug: Check the actual response content
     console.log('🔍 DEBUG - API Response Content Analysis:', {
-      contentPreview: data.text?.substring(0, 300) + '...',
-      hasGeorgianChars: /[\u10A0-\u10FF]/.test(data.text || ''),
-      contentLanguage: /[\u10A0-\u10FF]/.test(data.text || '') ? 'Georgian detected' : 'No Georgian detected'
+      contentPreview: generatedReport?.substring(0, 300) + '...',
+      contentLength: generatedReport?.length || 0,
+      hasGeorgianChars: /[\u10A0-\u10FF]/.test(generatedReport || ''),
+      contentLanguage: /[\u10A0-\u10FF]/.test(generatedReport || '') ? 'Georgian detected' : 'No Georgian detected'
     });
 
-    if (!data.text) {
-      console.error('❌ Invalid response format from diagnosis API:', data);
+    if (!generatedReport || generatedReport.trim().length === 0) {
+      console.error('❌ Empty response from diagnosis API. Full response:', data);
       return {
         success: false,
-        error: 'Invalid response format from diagnosis API'
+        error: 'Flowise returned empty response. Please check Flowise service status and try again.'
       };
     }
 
     console.log('✅ Diagnosis report generated successfully');
     return {
       success: true,
-      report: data.text
+      report: generatedReport
     };
 
   } catch (error) {
@@ -377,17 +390,27 @@ INSTRUCTIONS: Generate a medical report following the TEMPLATE STRUCTURE above, 
 
     const data: DiagnosisFlowiseResponse = await response.json();
 
-    if (!data.text) {
-      console.error('Invalid response format from template API');
+    // COMPREHENSIVE RESPONSE PARSING: Check all possible fields
+    let generatedReport = data.text ||
+                         data.response ||
+                         data.answer ||
+                         data.output ||
+                         data.result ||
+                         data.data?.text ||
+                         data.data?.response ||
+                         '';
+
+    if (!generatedReport || generatedReport.trim().length === 0) {
+      console.error('Invalid response format from template API. Full response:', data);
       return {
         success: false,
-        error: 'Invalid response format from template API'
+        error: 'Flowise returned empty response for template generation'
       };
     }
 
     return {
       success: true,
-      report: data.text
+      report: generatedReport
     };
 
   } catch (error) {
