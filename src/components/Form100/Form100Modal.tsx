@@ -202,8 +202,14 @@ const Form100Modal: React.FC<Form100ModalProps> = ({
             hasDualTranscripts: combinedTranscript.includes('--- Alternative Transcription ---')
           });
 
-          // Replace UI display text with combined dual transcripts
-          formDataForGeneration.voiceTranscript = combinedTranscript;
+          // FIX: Only replace with combined transcript if it has actual content
+          // This preserves manually typed transcript when no recording exists
+          if (combinedTranscript && combinedTranscript.trim().length > 0) {
+            formDataForGeneration.voiceTranscript = combinedTranscript;
+            console.log('✅ Using combined transcript (dual transcripts available)');
+          } else {
+            console.log('📝 Using typed transcript (no recording available):', formData.voiceTranscript?.length || 0, 'chars');
+          }
         }
 
         const generatedContent = await onGenerate(formDataForGeneration);

@@ -5,7 +5,7 @@ export default {
   header: {
     title: 'Меди-Скрайб',
     subtitle: 'AI медицинская транскрипция',
-    openSessions: 'Открыть сессии ({sessionsCount})',
+    openSessions: 'Открыть сессии ({{sessionsCount}})',
     navigateToHome: 'Перейти на главную',
     newSessionDisabledRecording: 'Невозможно создать новую сессию во время записи',
     newSessionDisabledProcessing: 'Пожалуйста, дождитесь завершения текущего процесса',
@@ -61,7 +61,7 @@ export default {
     description: 'Ваш браузер не поддерживает запись аудио. Пожалуйста, используйте современный браузер, такой как Chrome, Firefox или Safari.',
   },
 
-  emptyFields: 'У вас {count} пустых полей',
+  emptyFields: 'У вас {{count}} пустых полей',
 
   transcriptPlaceholder: {
     default: 'Ваша транскрипция появится здесь...',
@@ -94,11 +94,11 @@ export default {
 
   session: {
     liveRecording: 'Прямая запись',
-    fileSessionTitle: 'Файл: {fileName}',
+    fileSessionTitle: 'Файл: {{fileName}}',
     manualEntry: 'Ручной ввод',
     newRecording: 'Новая запись',
     aiAnalysis: 'Сессия анализа ИИ',
-    deleteConfirmation: 'Вы уверены, что хотите удалить "{sessionTitle}"?',
+    deleteConfirmation: 'Вы уверены, что хотите удалить "{{sessionTitle}}"?',
   },
 
   security: {
@@ -119,13 +119,13 @@ export default {
 
   form: {
     requiredField: 'Обязательное поле',
-    charCounter: '{length}/100',
+    charCounter: '{{length}}/100',
   },
 
   attachedFiles: {
     title: {
-      mobile: 'Прикрепленные файлы ({count})',
-      desktop: 'Прикрепленные файлы ({count})',
+      mobile: 'Прикрепленные файлы ({{count}})',
+      desktop: 'Прикрепленные файлы ({{count}})',
     },
     readyForAnalysis: 'Готово к анализу',
   },
@@ -142,7 +142,7 @@ export default {
     title: 'Шаблоны',
     generatedReports: 'Созданные отчеты',
     myTemplates: 'Мои шаблоны',
-    customTemplates: '{count} пользовательских шаблонов',
+    customTemplates: '{{count}} пользовательских шаблонов',
     customTemplate: '1 пользовательский шаблон',
     addTemplate: 'Добавить шаблон',
     createFirstTemplate: 'Создайте свой первый шаблон',
@@ -152,7 +152,7 @@ export default {
     aiDiagnosis: 'ИИ ДИАГНОЗ',
     needsContent: 'Требуется содержимое',
     initiating: 'Инициализация...',
-    templateCount: '{count} шаблонов',
+    templateCount: '{{count}} шаблонов',
     templateCount_one: '1 шаблон',
     loading: 'Загрузка шаблонов...',
     loadError: 'Не удалось загрузить шаблоны. Пожалуйста, попробуйте снова.',
@@ -184,7 +184,7 @@ export default {
       preview: 'Предпросмотр',
       templateName: 'Название шаблона *',
       templateNamePlaceholder: 'например, Оценка неотложной кардиологии',
-      charCounter: '{current}/{max}',
+      charCounter: '{{current}}/{{max}}',
       templateStructure: 'Структура шаблона *',
       structurePlaceholder: '# Шаблон медицинского отчета\\n\\n## Информация о пациенте\\n- Имя: [Имя пациента]\\n- Дата: [Текущая дата]\\n- Дата рождения: [Дата рождения]\\n\\n## Основная жалоба\\n[Основная причина визита]\\n\\n## История настоящего заболевания\\n[Подробное описание текущих симптомов]\\n\\n## Физикальное обследование\\n[Результаты обследования]\\n\\n## Оценка\\n[Клинические находки и впечатления]\\n\\n## План\\n[План лечения и последующее наблюдение]\\n\\n## Примечания\\n[Дополнительные примечания или инструкции]\\n\\n---\\n*Создайте структуру вашего пользовательского медицинского шаблона здесь*',
       customStructureHint: '*Создайте структуру вашего пользовательского медицинского шаблона здесь*',
@@ -222,7 +222,7 @@ export default {
       aiToneLabel: 'Тон ИИ',
       professional: 'профессиональный',
       structureLengthLabel: 'Длина структуры',
-      characters: '{count} символов',
+      characters: '{{count}} символов',
       additionalNotesLabel: 'Дополнительные примечания',
       none: 'Нет',
       featuresLabel: 'Функции',
@@ -234,7 +234,7 @@ export default {
 
   sessionHistory: {
     history: 'История',
-    recordings: '{count} записей',
+    recordings: '{{count}} записей',
     new: 'Новая',
     all: 'все',
     transcribed: 'транскрибировано',
@@ -250,18 +250,18 @@ export default {
     older: 'Старше',
     words: 'слова',
     justNow: 'Только что',
-    minutesAgo: '{count}мин назад',
-    hoursAgo: '{count}ч назад',
+    minutesAgo: '{{count}}мин назад',
+    hoursAgo: '{{count}}ч назад',
     noContentYet: 'Пока нет содержимого',
     ellipsis: '...',
     badgeTranscribed: 'Транскрибировано',
-    badgeAI: 'ИИ: {count}',
-    badgeForm100: 'Форма 100: {count}',
+    badgeAI: 'ИИ: {{count}}',
+    badgeForm100: 'Форма 100: {{count}}',
     expandSessions: 'Развернуть сессии',
     collapseSessions: 'Свернуть сессии',
     searchPlaceholder: 'Поиск сессий...',
     createFirstSession: 'Создайте свою первую сессию',
-    sessionsCount: '{count} сессий • ',
+    sessionsCount: '{{count}} сессий • ',
     secure: 'Защищено',
     duplicate: 'Дублировать',
     delete: 'Удалить',

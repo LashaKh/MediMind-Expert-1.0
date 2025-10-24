@@ -5,7 +5,7 @@ export default {
   header: {
     title: 'მედი-სკრაიბი',
     subtitle: 'AI სამედიცინო ტრანსკრიფცია',
-    openSessions: 'სესიების გახსნა ({sessionsCount})',
+    openSessions: 'სესიების გახსნა ({{sessionsCount}})',
     navigateToHome: 'მთავარ გვერდზე გადასვლა',
     newSessionDisabledRecording: 'ჩაწერის დროს ახალი სესიის შექმნა შეუძლებელია',
     newSessionDisabledProcessing: 'გთხოვთ დაელოდოთ მიმდინარე პროცესის დასრულებას',
@@ -61,7 +61,7 @@ export default {
     description: 'თქვენი ბრაუზერი არ უჭერს მხარს აუდიო ჩაწერას. გთხოვთ გამოიყენოთ თანამედროვე ბრაუზერი როგორიცაა Chrome, Firefox ან Safari.',
   },
 
-  emptyFields: 'თქვენ გაქვთ {count} ცარიელი ველი',
+  emptyFields: 'თქვენ გაქვთ {{count}} ცარიელი ველი',
 
   transcriptPlaceholder: {
     default: 'თქვენი ტრანსკრიპტი აქ გამოჩნდება...',
@@ -94,11 +94,11 @@ export default {
 
   session: {
     liveRecording: 'ცოცხალი ჩაწერა',
-    fileSessionTitle: 'ფაილი: {fileName}',
+    fileSessionTitle: 'ფაილი: {{fileName}}',
     manualEntry: 'ხელით შეყვანა',
     newRecording: 'ახალი ჩაწერა',
     aiAnalysis: 'AI ანალიზის სესია',
-    deleteConfirmation: 'დარწმუნებული ხართ რომ გსურთ "{sessionTitle}"-ის წაშლა?',
+    deleteConfirmation: 'დარწმუნებული ხართ რომ გსურთ "{{sessionTitle}}"-ის წაშლა?',
   },
 
   security: {
@@ -119,13 +119,13 @@ export default {
 
   form: {
     requiredField: 'აუცილებელი ველი',
-    charCounter: '{length}/100',
+    charCounter: '{{length}}/100',
   },
 
   attachedFiles: {
     title: {
-      mobile: 'მიმაგრებული ფაილები ({count})',
-      desktop: 'მიმაგრებული ფაილები ({count})',
+      mobile: 'მიმაგრებული ფაილები ({{count}})',
+      desktop: 'მიმაგრებული ფაილები ({{count}})',
     },
     readyForAnalysis: 'მზადაა ანალიზისთვის',
   },
@@ -142,7 +142,7 @@ export default {
     title: 'შაბლონები',
     generatedReports: 'გენერირებული ანგარიშები',
     myTemplates: 'ჩემი შაბლონები',
-    customTemplates: '{count} მორგებული შაბლონი',
+    customTemplates: '{{count}} მორგებული შაბლონი',
     customTemplate: '1 მორგებული შაბლონი',
     addTemplate: 'შაბლონის დამატება',
     createFirstTemplate: 'შექმენით თქვენი პირველი შაბლონი',
@@ -152,7 +152,7 @@ export default {
     aiDiagnosis: 'AI დიაგნოზი',
     needsContent: 'საჭიროებს შინაარსს',
     initiating: 'ინიციირება...',
-    templateCount: '{count} შაბლონი',
+    templateCount: '{{count}} შაბლონი',
     templateCount_one: '1 შაბლონი',
     loading: 'შაბლონების ჩატვირთვა...',
     loadError: 'შაბლონების ჩატვირთვა ვერ მოხერხდა. გთხოვთ სცადოთ ხელახლა.',
@@ -184,7 +184,7 @@ export default {
       preview: 'გადახედვა',
       templateName: 'შაბლონის სახელი *',
       templateNamePlaceholder: 'მაგ., საგანგებო კარდიოლოგიური შეფასება',
-      charCounter: '{current}/{max}',
+      charCounter: '{{current}}/{{max}}',
       templateStructure: 'შაბლონის სტრუქტურა *',
       structurePlaceholder: '# სამედიცინო ანგარიშის შაბლონი\\n\\n## პაციენტის ინფორმაცია\\n- სახელი: [პაციენტის სახელი]\\n- თარიღი: [მიმდინარე თარიღი]\\n- დაბადების თარიღი: [დაბადების თარიღი]\\n\\n## მთავარი საჩივარი\\n[ვიზიტის მთავარი მიზეზი]\\n\\n## ამჟამინდელი დაავადების ისტორია\\n[ამჟამინდელი სიმპტომების დეტალური აღწერა]\\n\\n## ფიზიკური გამოკვლევა\\n[გამოკვლევის შედეგები]\\n\\n## შეფასება\\n[კლინიკური დასკვნები და შთაბეჭდილებები]\\n\\n## გეგმა\\n[მკურნალობის გეგმა და შემდგომი მეთვალყურეობა]\\n\\n## შენიშვნები\\n[დამატებითი შენიშვნები ან ინსტრუქციები]\\n\\n---\\n*შექმენით თქვენი მორგებული სამედიცინო შაბლონის სტრუქტურა აქ*',
       customStructureHint: '*შექმენით თქვენი მორგებული სამედიცინო შაბლონის სტრუქტურა აქ*',
@@ -222,7 +222,7 @@ export default {
       aiToneLabel: 'AI ტონი',
       professional: 'პროფესიონალური',
       structureLengthLabel: 'სტრუქტურის სიგრძე',
-      characters: '{count} სიმბოლო',
+      characters: '{{count}} სიმბოლო',
       additionalNotesLabel: 'დამატებითი შენიშვნები',
       none: 'არცერთი',
       featuresLabel: 'ფუნქციები',
@@ -234,7 +234,7 @@ export default {
 
   sessionHistory: {
     history: 'ისტორია',
-    recordings: '{count} ჩაწერა',
+    recordings: '{{count}} ჩაწერა',
     new: 'ახალი',
     all: 'ყველა',
     transcribed: 'ტრანსკრიბირებული',
@@ -250,18 +250,18 @@ export default {
     older: 'უფრო ძველი',
     words: 'სიტყვები',
     justNow: 'ახლახან',
-    minutesAgo: '{count}წთ წინ',
-    hoursAgo: '{count}სთ წინ',
+    minutesAgo: '{{count}}წთ წინ',
+    hoursAgo: '{{count}}სთ წინ',
     noContentYet: 'ჯერ არ არის შინაარსი',
     ellipsis: '...',
     badgeTranscribed: 'ტრანსკრიბირებული',
-    badgeAI: 'AI: {count}',
-    badgeForm100: 'ფორმა 100: {count}',
+    badgeAI: 'AI: {{count}}',
+    badgeForm100: 'ფორმა 100: {{count}}',
     expandSessions: 'სესიების გაფართოება',
     collapseSessions: 'სესიების ჩაკეცვა',
     searchPlaceholder: 'სესიების ძიება...',
     createFirstSession: 'შექმენით თქვენი პირველი სესია',
-    sessionsCount: '{count} სესია • ',
+    sessionsCount: '{{count}} სესია • ',
     secure: 'დაცული',
     duplicate: 'დუბლირება',
     delete: 'წაშლა',
