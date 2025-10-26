@@ -122,26 +122,29 @@ async function fetchAIResponseDirect(
       // Check if this is a marker-only case (subsequent message in case discussion)
       if ((caseContext as any).markerOnly === true) {
         // Subsequent message: Only include marker for Flowise routing
-        caseString = `**ACTIVE CASE CONTEXT:**
+        caseString = `<<CASE_DISCUSSION>>
 [Context previously provided in this conversation - continuing case discussion]
 
-**USER QUESTION:**`;
+User Question:`;
       } else if ((caseContext as any).enhancedContext) {
         // First message: Include full enhanced context
-        caseString = `**ACTIVE CASE CONTEXT:**
+        caseString = `<<CASE_DISCUSSION>>
 ${(caseContext as any).enhancedContext}
 
-**USER QUESTION:**`;
+User Question:`;
       } else {
         // First message: Generate and include full enhanced context
         const enhancedContext = buildEnhancedCaseContext(caseContext);
-        caseString = `**ACTIVE CASE CONTEXT:**
+        caseString = `<<CASE_DISCUSSION>>
 ${enhancedContext}
 
-**USER QUESTION:**`;
+User Question:`;
       }
 
       requestPayload.question = `${caseString}\n${message}`;
+    } else {
+      // Regular query without case context - add CHAT_QUERY label
+      requestPayload.question = `<<CHAT_QUERY>>\n${message}`;
     }
 
     logger.debug('Making direct Flowise request...', undefined, { component: 'chat-api', action: 'directFlowiseCall' });
@@ -266,32 +269,32 @@ export async function fetchAIResponse(
       // Check if this is a marker-only case (subsequent message in case discussion)
       if ((caseContext as any).markerOnly === true) {
         // Subsequent message: Only include marker for Flowise routing, no full context
-        caseContextText = `
-**ACTIVE CASE CONTEXT:**
+        caseContextText = `<<CASE_DISCUSSION>>
 [Context previously provided in this conversation - continuing case discussion]
 
-**USER QUESTION:**
+User Question:
 ${messageText}`;
       } else if ((caseContext as any).enhancedContext) {
         // First message: Include full enhanced context with marker
-        caseContextText = `
-**ACTIVE CASE CONTEXT:**
+        caseContextText = `<<CASE_DISCUSSION>>
 ${(caseContext as any).enhancedContext}
 
-**USER QUESTION:**
+User Question:
 ${messageText}`;
       } else {
         // First message: Generate and include full enhanced context
         const enhancedContext = buildEnhancedCaseContext(caseContext);
-        caseContextText = `
-**ACTIVE CASE CONTEXT:**
+        caseContextText = `<<CASE_DISCUSSION>>
 ${enhancedContext}
 
-**USER QUESTION:**
+User Question:
 ${messageText}`;
       }
 
       messageText = caseContextText;
+    } else {
+      // Regular query without case context - add CHAT_QUERY label
+      messageText = `<<CHAT_QUERY>>\n${messageText}`;
     }
 
     // Note: Enhanced attachments with extracted text are already processed by MessageInput

@@ -59,21 +59,6 @@ export const ClinicalDashboard: React.FC<ClinicalDashboardProps> = ({
       }
     ];
 
-    if (profile?.medical_specialty === 'cardiology') {
-      return [
-        ...baseActions,
-        {
-          title: t('chat.dashboard.bgConsult', 'BG Analysis'),
-          description: t('chat.dashboard.bgConsultDesc', 'Upload and analyze blood gas'),
-          icon: FileText,
-          action: () => {
-            navigate('/abg-analysis');
-          },
-          primary: false
-        }
-      ];
-    }
-
     return baseActions;
   };
 
@@ -143,7 +128,7 @@ export const ClinicalDashboard: React.FC<ClinicalDashboardProps> = ({
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 max-w-3xl mx-auto">
         {quickActions.map((action, index) => {
           const ActionIcon = action.icon;
           return (

@@ -151,29 +151,14 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
   };
 
   const getDangerConfig = () => {
-    switch (dangerLevel) {
-      case 'high':
-        return {
-          bgColor: 'from-red-50 to-rose-50',
-          borderColor: 'border-red-200',
-          iconColor: 'text-red-600',
-          buttonColor: 'bg-red-600 hover:bg-red-700'
-        };
-      case 'low':
-        return {
-          bgColor: 'from-amber-50 to-yellow-50',
-          borderColor: 'border-amber-200',
-          iconColor: 'text-amber-600',
-          buttonColor: 'bg-amber-600 hover:bg-amber-700'
-        };
-      default:
-        return {
-          bgColor: 'from-orange-50 to-red-50',
-          borderColor: 'border-orange-200',
-          iconColor: 'text-orange-600',
-          buttonColor: 'bg-orange-600 hover:bg-orange-700'
-        };
-    }
+    // Light, clean appearance with excellent contrast
+    return {
+      bgColor: 'from-white to-slate-50',
+      borderColor: 'border-[#e2e8f0]',
+      iconColor: 'text-[#1a365d]',
+      buttonColor: 'bg-gradient-to-r from-[#1a365d] to-[#2b6cb0] hover:from-[#2b6cb0] hover:to-[#1a365d]',
+      iconBg: 'bg-[#f8f9fa]'
+    };
   };
 
   const config = getDangerConfig();
@@ -202,16 +187,16 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
           {/* Header */}
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center gap-4">
-              <div className={cn("p-3 rounded-full bg-white/80", config.iconColor)}>
-                <AlertTriangle className="h-6 w-6" />
+              <div className={cn("p-3 rounded-xl border-2 border-[#e2e8f0]", config.iconBg)}>
+                <AlertTriangle className={cn("h-6 w-6", config.iconColor)} />
               </div>
               <div>
-                <h2 id="deletion-dialog-title" className="text-xl font-bold text-gray-900">
-                  {title || (resultIds.length > 1 
+                <h2 id="deletion-dialog-title" className="text-xl font-bold text-slate-900">
+                  {title || (resultIds.length > 1
                     ? t('abg.delete.titleMany', 'Delete {{count}} ABG Results?', { count: resultIds.length })
                     : t('abg.delete.titleOne', 'Delete ABG Result?'))}
                 </h2>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-slate-600 mt-1">
                   {t('abg.delete.cannotUndo', 'This action cannot be undone')}
                 </p>
               </div>
@@ -231,20 +216,20 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
           {showProgress && (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-semibold text-[#1a365d]">
                   {deletionResult?.success ? t('abg.delete.complete', 'Deletion Complete') : t('abg.delete.deleting', 'Deleting...')}
                 </span>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm font-mono text-[#2b6cb0]">
                   {Math.round(progress)}%
                 </span>
               </div>
-              <div className="h-2 bg-white/60 rounded-full overflow-hidden">
-                <div 
+              <div className="h-2 bg-[#e2e8f0] rounded-full overflow-hidden">
+                <div
                   className={cn(
                     "h-full transition-all duration-500 ease-out rounded-full",
-                    deletionResult?.success 
-                      ? "bg-green-500" 
-                      : "bg-gradient-to-r from-blue-500 to-indigo-500"
+                    deletionResult?.success
+                      ? "bg-gradient-to-r from-green-500 to-emerald-500"
+                      : "bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed]"
                   )}
                   style={{ width: `${progress}%` }}
                 />
@@ -291,96 +276,48 @@ export const DeletionConfirmDialog: React.FC<DeletionConfirmDialogProps> = ({
             </div>
           )}
 
-          {/* Safety Warnings */}
-          {safetyCheck && (safetyCheck.warnings.length > 0 || safetyCheck.blockers.length > 0) && (
-            <div className="mb-6 space-y-3">
-              {safetyCheck.blockers.length > 0 && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Shield className="h-4 w-4 text-red-600" />
-                    <span className="font-medium text-red-800">{t('abg.delete.cannotDelete', 'Cannot Delete')}</span>
-                  </div>
-                  <ul className="text-sm text-red-700 space-y-1">
-                    {safetyCheck.blockers.map((blocker: string, index: number) => (
-                      <li key={index}>• {blocker}</li>
-                    ))}
-                  </ul>
+          {/* Safety Blockers Only (Critical Issues) */}
+          {safetyCheck && safetyCheck.blockers.length > 0 && (
+            <div className="mb-6">
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Shield className="h-4 w-4 text-red-600" />
+                  <span className="font-medium text-red-800">{t('abg.delete.cannotDelete', 'Cannot Delete')}</span>
                 </div>
-              )}
-              
-              {safetyCheck.warnings.length > 0 && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <AlertTriangle className="h-4 w-4 text-amber-600" />
-                    <span className="font-medium text-amber-800">{t('abg.delete.pleaseNote', 'Please Note')}</span>
-                  </div>
-                  <ul className="text-sm text-amber-700 space-y-1">
-                    {safetyCheck.warnings.map((warning: string, index: number) => (
-                      <li key={index}>• {warning}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                <ul className="text-sm text-red-700 space-y-1">
+                  {safetyCheck.blockers.map((blocker: string, index: number) => (
+                    <li key={index}>• {blocker}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
 
-          {/* Deletion Preview */}
-          {deletionPreview && (
-            <div className="mb-6 bg-white/60 rounded-xl p-4 border border-white/80">
-              <h3 className="font-medium text-gray-900 mb-3">{t('abg.delete.previewTitle', 'What will be deleted:')}</h3>
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">{deletionPreview.results.length}</div>
-                  <div className="text-xs text-gray-600">{t('abg.delete.preview.results', 'Results')}</div>
-                </div>
-                
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">
-                    {Math.round(deletionPreview.totalSize / 1024)}KB
-                  </div>
-                  <div className="text-xs text-gray-600">{t('abg.delete.preview.dataSize', 'Data Size')}</div>
-                </div>
-                
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">
-                    {deletionPreview.results.filter((r: ABGResult) => r.image_url).length}
-                  </div>
-                  <div className="text-xs text-gray-600">{t('abg.delete.preview.images', 'Images')}</div>
-                </div>
-                
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">
-                    {Math.round((new Date(deletionPreview.newestDate).getTime() - new Date(deletionPreview.oldestDate).getTime()) / (1000 * 60 * 60 * 24))}
-                  </div>
-                  <div className="text-xs text-gray-600">{t('abg.delete.preview.daySpan', 'Day Span')}</div>
-                </div>
-              </div>
-              
-              {deletionPreview.results.length <= 5 && (
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-700">{t('abg.delete.preview.listTitle', 'Results to be deleted:')}</h4>
-                  {deletionPreview.results.map((result: ABGResult) => (
-                    <div key={result.id} className="flex items-center gap-3 p-2 bg-white/40 rounded-lg">
-                      <FileText className="h-4 w-4 text-gray-500" />
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-gray-900 truncate">
-                          {result.type || 'ABG Analysis'}
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          {new Date(result.created_at).toLocaleDateString()}
-                        </div>
+          {/* Simple Result List (if 5 or fewer) */}
+          {deletionPreview && deletionPreview.results.length <= 5 && (
+            <div className="mb-6 bg-slate-50 rounded-xl p-4 border-2 border-slate-200">
+              <h4 className="text-sm font-semibold text-slate-900 mb-3">{t('abg.delete.preview.listTitle', 'Results to be deleted:')}</h4>
+              <div className="space-y-2">
+                {deletionPreview.results.map((result: ABGResult) => (
+                  <div key={result.id} className="flex items-center gap-3 p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
+                    <FileText className="h-4 w-4 text-[#2b6cb0]" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-slate-900 truncate">
+                        {result.type || 'Arterial Blood Gas'}
                       </div>
-                      {result.image_url && (
-                        <Badge variant="secondary" className="bg-blue-100 text-blue-700">
-                          <Image className="h-3 w-3 mr-1" />
-                          {t('abg.delete.preview.imageTag', 'Image')}
-                        </Badge>
-                      )}
+                      <div className="text-xs text-slate-600">
+                        {new Date(result.created_at).toLocaleDateString()}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              )}
+                    {result.image_url && (
+                      <Badge variant="secondary" className="bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white border-none">
+                        <Image className="h-3 w-3 mr-1" />
+                        {t('abg.delete.preview.imageTag', 'Image')}
+                      </Badge>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

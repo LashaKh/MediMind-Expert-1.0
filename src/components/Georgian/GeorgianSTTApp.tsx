@@ -143,20 +143,47 @@ export const GeorgianSTTApp: React.FC = () => {
     cleanupEmptyTemporarySessions
   } = useSessionManagement();
   
-  // Handle title change for both new and existing sessions
-  const handleTitleChange = useCallback(async (title: string) => {
+  // Handle title change for both new and existing sessions (LOCAL STATE ONLY - no database updates)
+  const handleTitleChange = useCallback((title: string) => {
     // Clear error when user starts typing
     if (showTitleError) setShowTitleError(false);
 
+    // ALWAYS use local state for immediate UI updates (no database calls, no trimming)
+    // This ensures smooth typing experience with spaces and fast typing
     if (currentSession) {
-      // Update existing session title
-      await updateSession(currentSession.id, { title: title.trim() });
+      // For existing session, update local pending title temporarily
+      setPendingSessionTitle(title);
     } else {
-      // Update pending title for new session
+      // For new session, update pending title
       setPendingSessionTitle(title);
     }
-  }, [currentSession, updateSession, showTitleError]);
-  
+  }, [showTitleError]);
+
+  // Save title to database (called on blur, Enter key, or before recording)
+  const handleTitleSave = useCallback(async (title: string) => {
+    const trimmedTitle = title.trim();
+
+    // Only save if title is not empty
+    if (!trimmedTitle) return;
+
+    if (currentSession) {
+      // Update existing session title in database
+      await updateSession(currentSession.id, { title: trimmedTitle });
+    }
+    // For new sessions, title will be saved when session is created during recording
+  }, [currentSession, updateSession]);
+
+  // Sync pendingSessionTitle with current session title when session changes
+  useEffect(() => {
+    if (currentSession) {
+      // Load current session's title into pending title for editing
+      setPendingSessionTitle(currentSession.title);
+    } else {
+      // Clear pending title when no session is selected
+      setPendingSessionTitle('');
+    }
+  }, [currentSession?.id, currentSession?.title]);
+
   // Session-aware transcript updates - prevents cross-session contamination
   const lastProcessedContentRef = useRef<string>('');
   const lastProcessedTimeRef = useRef<number>(0);
@@ -312,6 +339,7 @@ export const GeorgianSTTApp: React.FC = () => {
     processingHistory,
     processText,
     clearError: clearAIError,
+    setError: setAIError,
     clearHistory,
     addToHistory,
     deleteFromHistory,
@@ -540,7 +568,7 @@ export const GeorgianSTTApp: React.FC = () => {
             reportLength: diagnosisResult.success ? diagnosisResult.report?.length : 0
           });
 
-          if (diagnosisResult.success && currentSession) {
+          if (diagnosisResult.success) {
             // Save diagnosis result to session with special metadata
             const processingResultData = {
               userInstruction: instruction,
@@ -549,58 +577,33 @@ export const GeorgianSTTApp: React.FC = () => {
               tokensUsed: Math.floor(diagnosisResult.report.length / 4), // Estimate tokens
               processingTime
             };
-            
-            const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
-            console.log('💾 Session save result:', { saveSuccess, sessionId: currentSession.id });
-            
-            if (saveSuccess) {
-              // Also add to the AI processing history for immediate UI update
-              console.log('📈 Adding diagnosis to UI history...');
-              addToHistory(
-                processingResultData.userInstruction,
-                processingResultData.aiResponse,
-                processingResultData.model,
-                processingResultData.tokensUsed,
-                processingResultData.processingTime
-              );
-              console.log('✅ Diagnosis added to UI history');
+
+            // CRITICAL: Add to history IMMEDIATELY to show Georgian output
+            console.log('📈 Adding diagnosis to UI history (Georgian)...');
+            addToHistory(
+              processingResultData.userInstruction,
+              processingResultData.aiResponse,
+              processingResultData.model,
+              processingResultData.tokensUsed,
+              processingResultData.processingTime
+            );
+            console.log('✅ Diagnosis added to UI history');
+
+            // THEN try to save to session (non-blocking)
+            if (currentSession) {
+              const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
+              console.log('💾 Session save result:', { saveSuccess, sessionId: currentSession.id });
             } else {
-              console.error('❌ Failed to save diagnosis to session - not adding to UI history');
-              // Still add to UI history even if session save failed
-              console.log('📈 Adding diagnosis to UI history anyway...');
-              addToHistory(
-                processingResultData.userInstruction,
-                processingResultData.aiResponse,
-                processingResultData.model,
-                processingResultData.tokensUsed,
-                processingResultData.processingTime
-              );
+              console.warn('⚠️ No current session - diagnosis shown in UI but not saved to database');
             }
           } else {
+            // Diagnosis generation failed - show error to user
+            console.error('❌ Diagnosis generation failed - NO FALLBACK');
+            console.error('Diagnosis result:', diagnosisResult);
+            console.error('Error:', diagnosisResult.error);
 
-            // Fall back to regular processing if diagnosis service fails
-            const result = await processText(transcript, instruction);
-            if (result && currentSession) {
-              const processingResultData = {
-                userInstruction: instruction,
-                aiResponse: result.result,
-                model: result.model,
-                tokensUsed: result.tokensUsed,
-                processingTime: result.processingTime
-              };
-              
-              const saveSuccess = await addProcessingResult(currentSession.id, processingResultData);
-              if (saveSuccess) {
-                // Add to local history for immediate UI update  
-                addToHistory(
-                  processingResultData.userInstruction,
-                  processingResultData.aiResponse,
-                  processingResultData.model,
-                  processingResultData.tokensUsed,
-                  processingResultData.processingTime
-                );
-              }
-            }
+            // Set error message for user
+            setAIError(`Failed to generate diagnosis report: ${diagnosisResult.error || 'Unknown error'}`);
           }
         } catch (error) {
           console.error('🚨 Diagnosis processing failed:', error);
@@ -1337,6 +1340,7 @@ export const GeorgianSTTApp: React.FC = () => {
                 // Session title props
                 pendingSessionTitle={pendingSessionTitle}
                 onPendingTitleChange={handleTitleChange}
+                onTitleSave={handleTitleSave}
                 titleInputRef={titleInputRef}
                 showTitleError={showTitleError}
                 onTitleErrorTrigger={() => setShowTitleError(true)}
@@ -1398,6 +1402,7 @@ export const GeorgianSTTApp: React.FC = () => {
               // Session title props
               pendingSessionTitle={pendingSessionTitle}
               onPendingTitleChange={handleTitleChange}
+              onTitleSave={handleTitleSave}
               titleInputRef={titleInputRef}
               onExpandChat={handleSetExpandChatFunction}
               // Template selection props

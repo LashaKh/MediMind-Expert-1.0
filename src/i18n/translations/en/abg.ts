@@ -167,6 +167,7 @@ const abg = {
   results: {
     title: 'ABG Results',
     export: 'Export',
+    advancedSearch: 'Advanced Search',
     searchPlaceholder: 'Search results...',
     sort: {
       newestfirst: 'Newest First',
@@ -241,7 +242,8 @@ const abg = {
   analysis: {
     loading: {
       title: 'AI Analysis in Progress',
-      subtitle: 'Our advanced AI is analyzing your blood gas report using state-of-the-art vision technology.'
+      subtitle: 'Our advanced AI is analyzing your blood gas report using state-of-the-art vision technology.',
+      processing: 'Processing...'
     },
     error: {
       title: 'Analysis Failed'
@@ -366,7 +368,13 @@ const abg = {
     progress: 'Progress',
     overallProgress: 'Overall Progress',
     clinicalGoals: 'Clinical Goals',
-    clinicalGoalsSubtitle: 'Target outcomes and treatment objectives'
+    clinicalGoalsSubtitle: 'Target outcomes and treatment objectives',
+    clinicalActionPlans: 'Clinical Action Plans',
+    evidenceBasedStrategies: 'evidence-based management strategies',
+    evidenceBasedStrategy: 'evidence-based management strategy',
+    generatingPlan: 'Generating evidence-based action plan...',
+    copyPlan: 'Copy Action Plan',
+    copied: 'Copied!'
   }
   ,
   selector: {
@@ -402,6 +410,8 @@ const abg = {
     medicalGradeAI: 'Medical‑grade AI',
     viewHistoryAria: 'View analysis history',
     viewHistory: 'View History',
+    newSessionAria: 'Start new analysis session',
+    newSession: 'New Session',
     title: 'Blood Gas Analysis',
     subtitle: 'Upload a blood gas report for instant AI vision, verified interpretation, and a clinician‑ready action plan.'
   },
@@ -459,6 +469,48 @@ const abg = {
     completeActionPlanConsultation: 'COMPLETE ACTION PLAN CONSULTATION - All action plan content included',
     completeAnalysisConsultation: 'COMPLETE ANALYSIS CONSULTATION - All available information included',
     consultationType: 'CONSULTATION TYPE:',
+  },
+  consultation: {
+    title: 'AI Clinical Consultation',
+    expertInterpretation: 'Expert interpretation powered by advanced medical AI',
+    strategicConsultation: 'Strategic consultation for {{count}} selected intervention{{plural}}',
+    strategicConsultationAll: 'Comprehensive action plan consultation',
+    comprehensiveConsultation: 'Comprehensive consultation with expert medical insights',
+    description: {
+      interpretation: 'Connect with our AI clinical expert to discuss your ABG interpretation. Get evidence-based insights, differential diagnoses, and clinical reasoning from our curated medical knowledge base.',
+      actionPlan: 'Discuss your treatment strategy with our AI clinical expert. Get personalized recommendations, implementation guidance, and evidence-based treatment protocols.',
+      complete: 'Launch an in-depth consultation with our AI clinical expert about your complete ABG analysis. Discuss interpretation, treatment plans, and get personalized medical insights.'
+    },
+    contextInfo: {
+      interpretation: 'Your ABG values and interpretation will be shared with our AI specialist for comprehensive discussion.',
+      actionPlan: 'Selected interventions: {{items}} will be discussed in detail.',
+      actionPlanAll: 'Your complete action plan will be reviewed with clinical recommendations.',
+      complete: 'Your complete ABG analysis including values, interpretation, and action plan will be available for comprehensive discussion.'
+    },
+    whatToExpect: 'What to expect:',
+    features: {
+      expertReview: 'Expert interpretation review',
+      evidenceBased: 'Evidence-based insights',
+      clinicalReasoning: 'Clinical reasoning',
+      differentialDiagnosis: 'Differential diagnosis',
+      strategicGuidance: 'Strategic guidance',
+      implementation: 'Implementation protocols',
+      recommendations: 'Expert recommendations',
+      riskAssessment: 'Risk assessment',
+      completeReview: 'Complete case review',
+      clinicalExpertise: 'Clinical expertise',
+      personalizedInsights: 'Personalized insights',
+      treatmentOptimization: 'Treatment optimization'
+    },
+    trust: {
+      medicalGrade: 'Medical Grade AI',
+      expertCurated: 'Expert Curated',
+      evidenceBased: 'Evidence Based'
+    },
+    actions: {
+      startConsultation: 'Start Clinical Consultation',
+      launch: 'Launch'
+    }
   },
   vision: {
     unsupportedFormat: 'Please upload a JPEG, PNG, or WEBP image file',

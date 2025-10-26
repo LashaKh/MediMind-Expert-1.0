@@ -102,6 +102,7 @@ interface TranscriptPanelProps {
   // Session title props
   pendingSessionTitle?: string;
   onPendingTitleChange?: (title: string) => void;
+  onTitleSave?: (title: string) => void;
   titleInputRef?: React.RefObject<HTMLInputElement>;
   showTitleError?: boolean;
   onTitleErrorTrigger?: () => void;
@@ -146,6 +147,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   // Session title props
   pendingSessionTitle = '',
   onPendingTitleChange,
+  onTitleSave,
   titleInputRef,
   showTitleError = false,
   onTitleErrorTrigger,
@@ -339,6 +341,12 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
         // Recording just stopped - prioritize localTranscript over editableTranscript
         transcript = localTranscript || '';
         console.log(`⏸️  Recording stopped ${timeSinceRecordingStop}ms ago - using localTranscript (${localLength} chars)`);
+      } else if (localLength > currentEditableLength && localLength > 0) {
+        // CRITICAL FIX: Local has MORE content than editable - this catches final segments after recording
+        // This happens when the final segment was processed and added to localTranscript
+        // but editableTranscript hasn't been updated yet
+        transcript = localTranscript || '';
+        console.log(`🆕 Using localTranscript (has more content): local=${localLength}, editable=${currentEditableLength}`);
       } else if (userHasEdits || userDeletedText) {
         // User has made manual edits (including deletions) - ALWAYS preserve them
         transcript = editableTranscript;
@@ -743,6 +751,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             canStop={canStop}
             pendingSessionTitle={pendingSessionTitle}
             onPendingTitleChange={onPendingTitleChange}
+            onTitleSave={onTitleSave}
             titleInputRef={titleInputRef}
             showTitleError={showTitleError}
             onTitleErrorTrigger={onTitleErrorTrigger}

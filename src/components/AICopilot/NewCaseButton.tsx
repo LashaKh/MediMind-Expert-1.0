@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Plus, Stethoscope } from 'lucide-react';
+import { Plus, Stethoscope, FilePlus2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { EnhancedTooltip } from '../ui/EnhancedTooltip';
 import { useTranslation } from 'react-i18next';
@@ -35,15 +35,25 @@ export const NewCaseButton: React.FC<NewCaseButtonProps> = ({
         disabled={disabled}
         variant={variant}
         size={size}
-        className={`flex items-center space-x-2 transition-all duration-200 hover:shadow-md ${className}`}
+        className={className}
         aria-label={t('case-creation.createNewCase', 'Create New Case')}
         title={t('case-creation.createNewCase', 'Create New Case')}
       >
+        {/* Icon container with glow effect */}
         <div className="relative">
-          <FileText className="w-4 h-4" />
-          <Plus className="w-2.5 h-2.5 absolute -bottom-0.5 -right-0.5 bg-[#2b6cb0] text-white rounded-full p-0.5" />
+          {/* Show FilePlus2 on mobile, Plus on desktop */}
+          <FilePlus2 className="w-4 h-4 sm:hidden relative z-10 group-hover:scale-110 transition-transform duration-500 ease-out drop-shadow-sm" />
+          <Plus className="w-4 h-4 hidden sm:block sm:mr-2 relative z-10 group-hover:rotate-90 transition-transform duration-500 ease-out drop-shadow-sm" />
+          {/* Icon glow on hover */}
+          <div className="absolute inset-0 blur-md opacity-0 group-hover:opacity-100 bg-gradient-to-r from-slate-400 to-slate-500 transition-opacity duration-300" />
         </div>
-        <span className="font-semibold text-sm whitespace-nowrap">{t('case-creation.createNewCase', 'Create New Case')}</span>
+        <span className="hidden sm:inline relative z-10 tracking-wide">{t('case-creation.newCase', 'New Case')}</span>
+
+        {/* Premium shine effect */}
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        {/* Subtle inner glow */}
+        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 bg-gradient-to-br from-slate-100/30 via-transparent to-blue-50/20 transition-opacity duration-300" />
       </Button>
     </EnhancedTooltip>
   );

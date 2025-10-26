@@ -11,6 +11,7 @@ export interface ABGResult {
   raw_analysis: string;
   interpretation?: string;
   action_plan?: string;
+  identified_issues?: string; // JSON stringified FlowiseIdentifiedIssue[]
   image_url?: string;
   type: ABGType;
   processing_time_ms?: number;
@@ -87,6 +88,21 @@ export interface PatientContext {
   clinicalContext?: string;
 }
 
+// Flowise Identified Issues (from structured BG analysis response)
+export interface FlowiseIdentifiedIssue {
+  issue: string;           // Issue title (e.g., "Critically Severe Hyperglycemia")
+  description: string;     // Clinical description with context
+  question: string;        // Specific clinical question for action plan generation
+}
+
+// Action Plan Result for parallel generation
+export interface ActionPlanResult {
+  issue: string;           // Issue title
+  plan: string;            // Generated action plan text
+  status: 'pending' | 'loading' | 'success' | 'error';  // Processing status
+  error?: string;          // Error message if status is 'error'
+}
+
 // Workflow and Processing
 export interface ABGWorkflowState {
   currentStep: WorkflowStep;
@@ -95,12 +111,13 @@ export interface ABGWorkflowState {
   canProceed: boolean;
   error?: string;
   sessionId?: string; // For workflow persistence
-  
+
   // Step-specific data
   uploadedFile?: File;
   analysisResult?: ABGAnalysisResult;
   interpretationResult?: LocalABGResponse;
   actionPlanResult?: LocalABGResponse;
+  identifiedIssues?: FlowiseIdentifiedIssue[]; // Issues extracted from Flowise response
 }
 
 export interface ABGProcessingProgress {

@@ -25,6 +25,8 @@ export default {
   attachFile: 'Attach file',
   removeAttachment: 'Remove attachment',
   sendMessage: 'Send message',
+  startRecording: 'Start voice input',
+  stopRecording: 'Stop recording',
   maxFilesError: 'Maximum {maxFiles} files allowed',
   personalDocsAvailable: '{count} personal documents available',
   noPersonalDocs: 'No personal documents uploaded',

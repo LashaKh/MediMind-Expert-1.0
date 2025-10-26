@@ -1,4 +1,6 @@
 export default {
+  newCase: 'Новое дело',
+  activeCase: 'Активное дело',
   validation: {
     title_required: 'Требуется название дела',
     title_length: 'Название должно содержать не менее 5 символов',

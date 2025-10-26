@@ -14,6 +14,8 @@ export const common = {
   submit: 'გაგზავნა',
   reset: 'გაუქმება',
   clear: 'გასუფთავება',
+  clearAll: 'ფილტრების გასუფთავება',
+  refresh: 'განახლება',
   search: 'ძიება',
   filter: 'ფილტრი',
   sort: 'დალაგება',

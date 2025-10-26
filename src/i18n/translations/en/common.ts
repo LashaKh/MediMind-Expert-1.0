@@ -14,6 +14,8 @@ export const common = {
   submit: 'Submit',
   reset: 'Reset',
   clear: 'Clear',
+  clearAll: 'Clear Filters',
+  refresh: 'Refresh',
   search: 'Search',
   filter: 'Filter',
   sort: 'Sort',

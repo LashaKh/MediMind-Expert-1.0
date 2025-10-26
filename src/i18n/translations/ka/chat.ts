@@ -15,6 +15,7 @@ export const chat = {
   attachFile: 'ფაილის მიმაგრება',
   uploadImage: 'სურათის ატვირთვა',
   recordAudio: 'აუდიოს ჩაწერა',
+  startRecording: 'ხმოვანი შეყვანის დაწყება',
   stopRecording: 'ჩაწერის შეწყვეტა',
   playAudio: 'აუდიოს დაკვრა',
   pauseAudio: 'აუდიოს პაუზა',
@@ -317,7 +318,11 @@ export const chat = {
     createNewCaseTitle: 'ახალი შემთხვევის შექმნა',
     createNewCaseDescription: 'შექმენით კლინიკური შემთხვევები, რომლებიც შეიძლება დაერთოს ჩატს AI შემთხვევის განხილვისა და კოლაბორაციული ანალიზისთვის.',
     aiDiscussion: 'AI განხილვა'
-  }
+  },
+
+  // Voice recording
+  startRecording: 'ხმოვანი შეყვანის დაწყება',
+  stopRecording: 'ჩაწერის შეჩერება'
 };
 
 export default chat;

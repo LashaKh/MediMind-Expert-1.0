@@ -1,4 +1,5 @@
 export default {
+  newCase: 'New Case',
   validation: {
     title_required: 'Case title is required',
     title_length: 'Title must be at least 5 characters long',

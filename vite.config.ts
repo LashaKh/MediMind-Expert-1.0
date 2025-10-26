@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => {
       ]
     },
     server: {
+      port: 8888,
       // Enable HTTPS only when explicitly requested via environment variable
       https: process.env.HTTPS === 'true' ? true : false,
       hmr: {

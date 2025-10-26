@@ -9,6 +9,7 @@ import { processFileForChatUpload, processFilesForChatUploadParallel, EnhancedAt
 import type { ProgressInfo } from '../../utils/pdfTextExtractor';
 import { DocumentSelector } from './DocumentSelector';
 import { SelectedDocumentsIndicator } from './SelectedDocumentsIndicator';
+import { VoiceInputButton } from './VoiceInputButton';
 
 interface MessageInputProps {
   onSendMessage: (message: string, attachments?: Attachment[], enhancedMessage?: string) => Promise<void>;
@@ -172,7 +173,26 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       setMessage(value);
       adjustTextAreaHeight();
     }
-  }, [maxLength]);
+  }, [maxLength, adjustTextAreaHeight]);
+
+  // Handle voice transcript received
+  const handleTranscriptReceived = useCallback((transcript: string) => {
+    if (!transcript.trim()) return;
+
+    // Append transcript to existing message with a space separator if message exists
+    setMessage(prev => {
+      const separator = prev.trim() ? ' ' : '';
+      const newMessage = prev + separator + transcript;
+
+      // Trim to maxLength if needed
+      return newMessage.length <= maxLength ? newMessage : newMessage.substring(0, maxLength);
+    });
+
+    // Auto-resize textarea after adding transcript
+    setTimeout(() => {
+      adjustTextAreaHeight();
+    }, 0);
+  }, [maxLength, adjustTextAreaHeight]);
 
   // Handle file selection
   const handleFileSelect = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -698,6 +718,14 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               rows={isMobile ? 2 : 1}
             />
           </div>
+        </div>
+
+        {/* Mobile-Optimized Voice Input Button */}
+        <div className="flex-shrink-0">
+          <VoiceInputButton
+            onTranscriptReceived={handleTranscriptReceived}
+            disabled={disabled}
+          />
         </div>
 
         {/* Mobile-Optimized Send Button */}

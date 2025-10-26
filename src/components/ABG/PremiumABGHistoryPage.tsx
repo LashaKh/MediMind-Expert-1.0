@@ -302,7 +302,7 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
               )}
               
               <Button
-                onClick={() => navigate('/abg-analysis')}
+                onClick={() => navigate('/abg-analysis', { state: { newSession: true } })}
                 className={cn(
                   "group relative overflow-hidden bg-gradient-to-r from-[#2b6cb0] to-[#1a365d]",
                   "hover:from-[#1a365d] hover:to-[#2b6cb0] transition-all duration-300",
@@ -552,7 +552,7 @@ export const PremiumABGHistoryPage: React.FC<PremiumABGHistoryPageProps> = ({
             onResultToggle={toggleResultSelection}
             onSingleDelete={handleSingleDelete}
             onExportRequest={() => setShowExportDialog(true)}
-            onNewAnalysis={() => navigate('/abg-analysis')}
+            onNewAnalysis={() => navigate('/abg-analysis', { state: { newSession: true } })}
             onRetry={handleRefresh}
           />
         </main>

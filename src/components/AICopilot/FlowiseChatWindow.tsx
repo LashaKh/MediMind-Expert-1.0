@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { History, Plus, FileText, Sparkles, Stethoscope, Heart, AlertCircle, X, Calculator, TestTube2 } from 'lucide-react';
+import { History, Plus, FileText, Sparkles, Stethoscope, Heart, AlertCircle, X, Calculator, TestTube2, MessageSquarePlus, FilePlus2, Home } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useAuth } from '../../stores/useAppStore';
 import { useChat as useChatContext } from '../../contexts/ChatContext';
@@ -933,170 +933,156 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/40 to-transparent" />
         </div>
 
-      {/* Mobile-Optimized Premium Header */}
+      {/* Clean Premium Header */}
       <div className="relative z-20" data-tour="chat-window">
-        {/* Mobile-first glass morphism header container */}
-        <div className={`relative chat-header-area ${animationClasses.backdropBlur} bg-gradient-to-r from-white/95 via-white/98 to-white/95 border-b border-gradient-to-r from-white/20 via-white/40 to-white/20 shadow-2xl shadow-slate-900/8`}>
-          {/* Simplified animated background for mobile performance */}
-          <div className="absolute inset-0 overflow-hidden">
+        {/* Minimalist glass morphism header container with refined borders */}
+        <div className={`relative chat-header-area ${animationClasses.backdropBlur} bg-white/98 border-b-2 border-slate-100/80 shadow-sm`}>
+          {/* Subtle gradient overlay for depth */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-50/30 via-transparent to-transparent" />
             {!shouldOptimize && (
               <>
-                <div className={`absolute -top-16 -left-16 w-32 h-32 bg-gradient-radial from-[#63b3ed]/8 via-[#63b3ed]/4 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-60`} />
-                <div 
-                  className={`absolute -top-12 -right-12 w-28 h-28 bg-gradient-radial from-[#2b6cb0]/6 via-[#90cdf4]/3 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-40`}
+                <div className={`absolute -top-20 -left-20 w-40 h-40 bg-gradient-radial from-blue-50 via-blue-50/20 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-40`} />
+                <div
+                  className={`absolute -top-16 -right-16 w-32 h-32 bg-gradient-radial from-indigo-50 via-indigo-50/10 to-transparent rounded-full ${animationClasses.blur} ${animationClasses.animations} opacity-30`}
                   style={getOptimizedDelay('-4s', shouldOptimize)}
                 />
               </>
             )}
-            {/* Subtle mesh overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
           </div>
 
           {/* Mobile-optimized header content */}
             <div className="relative px-3 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4" data-tour="ai-copilot">
-            {/* Main header row - Redesigned for better UX distribution */}
-            <div className="flex items-center justify-between gap-4">
-              
-              {/* Left: Brand Identity */}
-              <div className="flex items-center space-x-2 sm:space-x-4 min-w-0">
-                {/* Mobile-optimized AI avatar with 44px touch target */}
-                <div 
-                  className="relative group cursor-pointer flex-shrink-0"
-                  onClick={() => navigate('/')}
-                  role="button"
-                  aria-label="Navigate to home"
-                >
-                  <div className={`
-                    relative p-2 sm:p-3 lg:p-4 rounded-xl sm:rounded-2xl
-                    min-w-[44px] min-h-[44px] flex items-center justify-center
-                    bg-gradient-to-br ${specialtyConfig.gradient}
-                    shadow-lg sm:shadow-xl shadow-${specialtyConfig.glowColor}/20
-                    transform transition-all duration-500 hover:scale-105 active:scale-95
-                    border border-white/30 ${optimizeClasses('backdrop-blur-xl', 'backdrop-blur-sm', shouldOptimize)}
-                    ${isPulsing ? 'animate-pulse' : ''}
-                  `}>
-                    {React.cloneElement(specialtyConfig.icon, { 
-                      className: "w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white relative z-10 transition-transform duration-300 group-hover:scale-110" 
-                    })}
-                    
-                    {/* Mobile-optimized shine effect */}
-                    <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-white/25 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
-                    {/* Performance-optimized ambient glow */}
-                    <div className={`absolute -inset-1 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] opacity-15 group-hover:opacity-25 transition-opacity duration-500 blur-lg`} />
-                  </div>
-                  
-                  {/* Mobile-optimized status indicator */}
-                  <div className="absolute -bottom-0.5 -right-0.5">
-                    <div className={`
-                      w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4 rounded-full border-2 border-white shadow-md
-                      ${isConnected ? 'bg-emerald-500' : 'bg-rose-500'}
-                      transition-all duration-300
-                    `}>
-                      <div className={`
-                        absolute inset-0 rounded-full
-                        ${isConnected ? 'bg-emerald-400 animate-ping opacity-20' : 'bg-rose-400 animate-pulse opacity-40'}
-                      `} />
-                    </div>
-                  </div>
-                </div>
+            {/* Main header row - Optimized for user-centric UI/UX */}
+            <div className="flex items-center lg:justify-between gap-3 sm:gap-4 lg:gap-8 w-full">
 
-                {/* Mobile-first responsive typography */}
-                <div className="flex-1 min-w-0 space-y-1">
-                  <h1 className={`
-                    text-base sm:text-xl lg:text-2xl font-black tracking-tight
-                    bg-gradient-to-r ${specialtyConfig.gradient} bg-clip-text text-transparent
-                    drop-shadow-sm truncate
-                  `}>
-                    {t('chat.title', 'MediMind AI')}
-                  </h1>
-                  <div className="flex items-center space-x-1.5 sm:space-x-3">
-                    <span className={`
-                      px-1.5 sm:px-2.5 py-0.5 rounded text-xs font-bold uppercase tracking-wider
-                      bg-gradient-to-r from-[#90cdf4]/90 to-[#63b3ed]/90
-                      text-[#1a365d] border border-[#63b3ed]/40
-                      ${optimizeClasses('backdrop-blur-sm', '', shouldOptimize)} shadow-sm whitespace-nowrap truncate max-w-[120px] sm:max-w-none
-                    `}>
-                      {profile?.medical_specialty === 'cardiology' ? t('specialties.cardiology', 'Cardiology') : 
-                       profile?.medical_specialty === 'obgyn' ? t('specialties.obgyn', 'OB/GYN') : t('chat.medicalAI', 'Medical AI')}
-                    </span>
-                    <div className="flex items-center space-x-1 hidden sm:flex">
-                      <div className={`
-                        w-1.5 h-1.5 rounded-full
-                        ${isConnected ? 'bg-emerald-500 shadow-emerald-500/40' : 'bg-rose-500 shadow-rose-500/40'}
-                        ${isConnected ? 'animate-pulse shadow-sm' : 'animate-bounce shadow-sm'}
-                      `} />
-                      <span className="text-xs font-medium text-slate-600">
-                        {isConnected ? t('chat.online', 'Online') : t('chat.offline', 'Offline')}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Center: Knowledge Base Selector - Better UX positioning */}
-              <div className="hidden lg:flex flex-1 justify-center max-w-md mx-4" data-tour="knowledge-base">
+              {/* Left: Knowledge Base Selector - User-friendly positioning */}
+              <div className="hidden lg:flex flex-shrink-0" data-tour="knowledge-base">
                 <KnowledgeBaseSelector
                   selectedKnowledgeBase={knowledgeBase}
                   onKnowledgeBaseChange={handleKnowledgeBaseChange}
                   personalDocumentCount={personalDocumentCount}
                   disabled={isLoading}
-                  className={`w-full bg-white/95 ${animationClasses.backdropBlur} border-white/60 shadow-lg rounded-xl`}
+                  className={`w-auto bg-white ${animationClasses.backdropBlur} border border-slate-200/80 shadow-sm rounded-xl hover:shadow-md transition-shadow duration-200`}
                 />
               </div>
 
-              {/* Right: Action Buttons Group */}
-              <div className="flex items-center space-x-2 flex-shrink-0">
-                {/* Mobile knowledge base - compact version */}
-                <div className="lg:hidden" data-tour="knowledge-base">
-                  <KnowledgeBaseSelector
-                    selectedKnowledgeBase={knowledgeBase}
-                    onKnowledgeBaseChange={handleKnowledgeBaseChange}
-                    personalDocumentCount={personalDocumentCount}
-                    disabled={isLoading}
-                    className="w-auto"
-                  />
-                </div>
+              {/* Mobile: Full-width distributed layout */}
+              <div className="flex lg:hidden items-center justify-between gap-2 sm:gap-3 w-full">
+                {/* Left Group: Home + KB Selector */}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {/* Mobile home button */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigate('/')}
+                    className="min-h-[44px] min-w-[44px] p-2 rounded-xl bg-white/80 hover:bg-white border border-slate-200/60 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-200 active:scale-95"
+                    title={t('navigation.home', 'Home')}
+                    aria-label="Navigate to home"
+                  >
+                    <Home className="w-5 h-5 text-slate-700" />
+                  </Button>
 
-                {/* Case management section - Mobile optimized */}
-                {activeCase && (
-                  <div className="hidden sm:block">
-                    <HeaderCaseIndicator
-                      activeCase={activeCase}
-                      onViewCase={handleViewCase}
-                      onEditCase={handleEditCase}
-                      onResetCase={handleResetCase}
+                  {/* Mobile knowledge base */}
+                  <div data-tour="knowledge-base">
+                    <KnowledgeBaseSelector
+                      selectedKnowledgeBase={knowledgeBase}
+                      onKnowledgeBaseChange={handleKnowledgeBaseChange}
+                      personalDocumentCount={personalDocumentCount}
+                      disabled={isLoading}
+                      className="w-auto"
                     />
                   </div>
-                )}
-                
-                
-                {!activeCase && (
+                </div>
+
+                {/* Right Group: Action buttons */}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {/* Case management section - Mobile optimized */}
+                  {activeCase && (
+                    <div className="hidden sm:block">
+                      <HeaderCaseIndicator
+                        activeCase={activeCase}
+                        onViewCase={handleViewCase}
+                        onEditCase={handleEditCase}
+                        onResetCase={handleResetCase}
+                      />
+                    </div>
+                  )}
+
+                  {!activeCase && (
                   <>
-                    {/* Primary Chat Actions Group */}
-                    <div className="flex items-center space-x-1 bg-white/40 backdrop-blur-sm rounded-xl p-1 border border-white/60 shadow-sm">
-                      
-                      {/* Mobile-optimized New chat button */}
+                    {/* Group 1: Creation Actions - Premium Design */}
+                    <div className="flex items-center gap-1.5 sm:gap-2 bg-gradient-to-br from-slate-50/80 via-white to-slate-50/50 backdrop-blur-xl rounded-2xl p-1.5 border border-slate-200/60 shadow-lg shadow-slate-200/50 ring-1 ring-slate-100/50">
+
+                      {/* Premium New Chat Button */}
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={handleNewConversation}
                         disabled={isDisabled || !isConnected}
                         className={`
-                          group relative min-h-[44px] min-w-[44px] sm:px-4 p-0 sm:p-2 rounded-lg font-medium text-sm
-                          bg-white/80 hover:bg-white/90 text-slate-700
-                          border border-transparent hover:border-slate-200/60
-                          hover:shadow-md hover:scale-105 active:scale-95
+                          group relative min-h-[44px] min-w-[44px] sm:px-5 px-3 py-2.5 rounded-xl font-semibold text-sm
+                          bg-gradient-to-br from-white via-white to-slate-50/30
+                          text-slate-700 hover:text-slate-900
+                          border border-slate-200/80 hover:border-slate-300/90
+                          shadow-md shadow-slate-200/60 hover:shadow-lg hover:shadow-slate-300/70
+                          ring-1 ring-white/60 hover:ring-white
+                          hover:scale-[1.03] active:scale-[0.98]
                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                          transition-all duration-200
+                          transition-all duration-300 ease-out
+                          backdrop-blur-sm
                         `}
                         title={t('chat.newChat')}
                       >
-                        <Plus className="w-4 h-4 sm:mr-1.5 group-hover:rotate-90 transition-transform duration-300" />
-                        <span className="hidden sm:inline">{t('chat.newChat')}</span>
+                        {/* Icon container with glow effect */}
+                        <div className="relative">
+                          {/* Show MessageSquarePlus on mobile, Plus on desktop */}
+                          <MessageSquarePlus className="w-4 h-4 sm:hidden relative z-10 group-hover:scale-110 transition-transform duration-500 ease-out drop-shadow-sm" />
+                          <Plus className="w-4 h-4 hidden sm:block sm:mr-2 relative z-10 group-hover:rotate-90 transition-transform duration-500 ease-out drop-shadow-sm" />
+                          {/* Icon glow on hover */}
+                          <div className="absolute inset-0 blur-md opacity-0 group-hover:opacity-100 bg-gradient-to-r from-slate-400 to-slate-500 transition-opacity duration-300" />
+                        </div>
+                        <span className="hidden sm:inline relative z-10 tracking-wide">{t('chat.newChat')}</span>
+
+                        {/* Premium shine effect */}
+                        <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        {/* Subtle inner glow */}
+                        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 bg-gradient-to-br from-slate-100/30 via-transparent to-blue-50/20 transition-opacity duration-300" />
                       </Button>
 
-                      {/* Mobile-optimized History button */}
+                      {/* Premium New Case Button */}
+                      <NewCaseButton
+                        onClick={() => setShowCaseModal(true)}
+                        disabled={isDisabled || !isConnected}
+                        variant="ghost"
+                        size="sm"
+                        className={`
+                          group relative min-h-[44px] min-w-[44px] sm:px-5 px-3 py-2.5 rounded-xl font-semibold text-sm
+                          bg-gradient-to-br from-white via-white to-slate-50/30
+                          text-slate-700 hover:text-slate-900
+                          border border-slate-200/80 hover:border-slate-300/90
+                          shadow-md shadow-slate-200/60 hover:shadow-lg hover:shadow-slate-300/70
+                          ring-1 ring-white/60 hover:ring-white
+                          hover:scale-[1.03] active:scale-[0.98]
+                          disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                          transition-all duration-300 ease-out
+                          backdrop-blur-sm
+                        `}
+                      />
+
+                    </div>
+
+                    {/* Premium Separator with gradient */}
+                    <div className="relative h-10 w-[2px] mx-2 hidden sm:block">
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-300/80 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-200/40 to-transparent blur-[1px]" />
+                    </div>
+
+                    {/* Group 2: Library/Browse Actions - Premium Blue Theme */}
+                    <div className="flex items-center gap-1.5 sm:gap-2 bg-gradient-to-br from-blue-50/80 via-white to-blue-50/50 backdrop-blur-xl rounded-2xl p-1.5 border border-blue-200/70 shadow-lg shadow-blue-200/50 ring-1 ring-blue-100/60">
+
+                      {/* Premium History Button */}
                       <EnhancedTooltip
                         title={t('chat.tooltip.chatHistoryTitle', 'Chat History')}
                         description={t('chat.tooltip.chatHistoryDescription', 'View and manage all your previous AI conversations.')}
@@ -1109,24 +1095,35 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
                           size="sm"
                           onClick={() => setShowConversationList(true)}
                           className={`
-                            group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
-                            bg-white/80 hover:bg-white/90
-                            border border-transparent hover:border-slate-200/60
-                            hover:shadow-md hover:scale-105 active:scale-95
-                            transition-all duration-200
+                            group relative min-h-[44px] min-w-[44px] sm:px-5 px-3 py-2.5 rounded-xl font-semibold text-sm
+                            bg-gradient-to-br from-white via-blue-50/50 to-blue-50/30
+                            text-blue-600 hover:text-blue-700
+                            border border-blue-200/80 hover:border-blue-400/90
+                            shadow-md shadow-blue-200/60 hover:shadow-lg hover:shadow-blue-300/70
+                            ring-1 ring-blue-100/60 hover:ring-blue-200/80
+                            hover:scale-[1.03] active:scale-[0.98]
+                            transition-all duration-300 ease-out
+                            backdrop-blur-sm
                           `}
                           title={t('chat.conversationHistory', 'Conversation History')}
                         >
-                          <History className="w-4 h-4 text-slate-600 group-hover:text-slate-800 transition-colors duration-200" />
-                          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-slate-500/0 to-slate-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          {/* Icon container with glow effect */}
+                          <div className="relative">
+                            <History className="w-4 h-4 sm:mr-2 relative z-10 group-hover:rotate-[-5deg] transition-transform duration-500 ease-out drop-shadow-sm" />
+                            {/* Icon glow on hover */}
+                            <div className="absolute inset-0 blur-md opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-400 to-blue-500 transition-opacity duration-300" />
+                          </div>
+                          <span className="hidden sm:inline relative z-10 tracking-wide">History</span>
+
+                          {/* Premium shine effect */}
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-blue-50/0 via-white/50 to-blue-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                          {/* Subtle inner glow */}
+                          <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 bg-gradient-to-br from-blue-100/40 via-transparent to-indigo-50/30 transition-opacity duration-300" />
                         </Button>
                       </EnhancedTooltip>
 
-                    </div>
-
-                    {/* Case Management Actions Group */}
-                    <div className="flex items-center space-x-1 bg-[#90cdf4]/20 backdrop-blur-sm rounded-xl p-1 border border-[#63b3ed]/60 shadow-sm">
-                      {/* Mobile-optimized Cases button with badge */}
+                      {/* Premium Cases Button with Badge */}
                       <EnhancedTooltip
                         title={t('chat.tooltip.myCasesTitle', 'My Cases')}
                         description={t('chat.tooltip.myCasesDescription', 'View and switch between your saved clinical cases.')}
@@ -1142,38 +1139,204 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
                             setShowCaseListModal(true);
                           }}
                           className={`
-                            group relative min-h-[44px] min-w-[44px] p-0 rounded-lg
-                            bg-white/80 hover:bg-[#90cdf4]/20
-                            border border-transparent hover:border-[#63b3ed]/60
-                            hover:shadow-md hover:scale-105 active:scale-95
-                            transition-all duration-200
+                            group relative min-h-[44px] min-w-[44px] sm:px-5 px-3 py-2.5 rounded-xl font-semibold text-sm
+                            bg-gradient-to-br from-white via-blue-50/50 to-blue-50/30
+                            text-blue-600 hover:text-blue-700
+                            border border-blue-200/80 hover:border-blue-400/90
+                            shadow-md shadow-blue-200/60 hover:shadow-lg hover:shadow-blue-300/70
+                            ring-1 ring-blue-100/60 hover:ring-blue-200/80
+                            hover:scale-[1.03] active:scale-[0.98]
+                            transition-all duration-300 ease-out
+                            backdrop-blur-sm
                           `}
                           title={`${t('chat.patientCases', 'Patient Cases')}: ${caseHistory.length}`}
                         >
-                          <FileText className="w-4 h-4 text-[#2b6cb0] group-hover:text-[#1a365d] transition-colors duration-200" />
+                          {/* Icon container with glow effect */}
+                          <div className="relative">
+                            <FileText className="w-4 h-4 sm:mr-2 relative z-10 group-hover:scale-110 transition-transform duration-500 ease-out drop-shadow-sm" />
+                            {/* Icon glow on hover */}
+                            <div className="absolute inset-0 blur-md opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-400 to-blue-500 transition-opacity duration-300" />
+                          </div>
+                          <span className="hidden sm:inline relative z-10 tracking-wide">Cases</span>
+
+                          {/* Premium Badge */}
                           {caseHistory.length > 0 && (
-                            <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] text-white text-xs font-bold flex items-center justify-center shadow-md shadow-[#63b3ed]/30">
-                              {caseHistory.length > 9 ? '9+' : caseHistory.length}
+                            <div className="absolute -top-2 -right-2 min-w-[22px] h-[22px] px-1.5 rounded-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white text-[11px] font-bold flex items-center justify-center shadow-xl shadow-blue-500/60 border-2 border-white ring-2 ring-blue-100/50 animate-pulse">
+                              <span className="relative z-10">{caseHistory.length > 9 ? '9+' : caseHistory.length}</span>
+                              {/* Badge glow */}
+                              <div className="absolute inset-0 rounded-full bg-blue-400 blur-sm opacity-50" />
                             </div>
                           )}
+
+                          {/* Premium shine effect */}
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-blue-50/0 via-white/50 to-blue-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                          {/* Subtle inner glow */}
+                          <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 bg-gradient-to-br from-blue-100/40 via-transparent to-indigo-50/30 transition-opacity duration-300" />
                         </Button>
                       </EnhancedTooltip>
 
-                      {/* Mobile-optimized New case button - Now visible on all screen sizes */}
+                    </div>
+                  </>
+                  )}
+                </div>
+              </div>
+
+              {/* Desktop: Action Buttons Group - Right positioned */}
+              <div className="hidden lg:flex items-center gap-3 lg:gap-4 flex-shrink-0">
+                {/* Case management section - Desktop */}
+                {activeCase && (
+                  <HeaderCaseIndicator
+                    activeCase={activeCase}
+                    onViewCase={handleViewCase}
+                    onEditCase={handleEditCase}
+                    onResetCase={handleResetCase}
+                  />
+                )}
+
+                {!activeCase && (
+                  <>
+                    {/* Group 1: Creation Actions - Premium Design */}
+                    <div className="flex items-center gap-2 bg-gradient-to-br from-slate-50/80 via-white to-slate-50/50 backdrop-blur-xl rounded-2xl p-1.5 border border-slate-200/60 shadow-lg shadow-slate-200/50 ring-1 ring-slate-100/50">
+                      {/* Premium New Chat Button */}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleNewConversation}
+                        disabled={isDisabled || !isConnected}
+                        className={`
+                          group relative min-h-[44px] min-w-[44px] px-5 py-2.5 rounded-xl font-semibold text-sm
+                          bg-gradient-to-br from-white via-white to-slate-50/30
+                          text-slate-700 hover:text-slate-900
+                          border border-slate-200/80 hover:border-slate-300/90
+                          shadow-md shadow-slate-200/60 hover:shadow-lg hover:shadow-slate-300/70
+                          ring-1 ring-white/60 hover:ring-white
+                          hover:scale-[1.03] active:scale-[0.98]
+                          disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                          transition-all duration-300 ease-out
+                          backdrop-blur-sm
+                        `}
+                        title={t('chat.newChat')}
+                      >
+                        <div className="relative">
+                          <Plus className="w-4 h-4 mr-2 relative z-10 group-hover:rotate-90 transition-transform duration-500 ease-out drop-shadow-sm" />
+                          <div className="absolute inset-0 blur-md opacity-0 group-hover:opacity-100 bg-gradient-to-r from-slate-400 to-slate-500 transition-opacity duration-300" />
+                        </div>
+                        <span className="relative z-10 tracking-wide">{t('chat.newChat')}</span>
+                        <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 bg-gradient-to-br from-slate-100/30 via-transparent to-blue-50/20 transition-opacity duration-300" />
+                      </Button>
+
+                      {/* Premium New Case Button */}
                       <NewCaseButton
                         onClick={() => setShowCaseModal(true)}
                         disabled={isDisabled || !isConnected}
                         variant="ghost"
                         size="sm"
                         className={`
-                          group relative min-h-[44px] px-2 sm:px-4 rounded-lg font-medium text-sm
-                          bg-white/80 hover:bg-[#90cdf4]/20 text-[#2b6cb0]
-                          border border-transparent hover:border-[#63b3ed]/60
-                          hover:shadow-md hover:scale-105 active:scale-95
+                          group relative min-h-[44px] min-w-[44px] px-5 py-2.5 rounded-xl font-semibold text-sm
+                          bg-gradient-to-br from-white via-white to-slate-50/30
+                          text-slate-700 hover:text-slate-900
+                          border border-slate-200/80 hover:border-slate-300/90
+                          shadow-md shadow-slate-200/60 hover:shadow-lg hover:shadow-slate-300/70
+                          ring-1 ring-white/60 hover:ring-white
+                          hover:scale-[1.03] active:scale-[0.98]
                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                          transition-all duration-200
+                          transition-all duration-300 ease-out
+                          backdrop-blur-sm
                         `}
                       />
+                    </div>
+
+                    {/* Premium Separator with gradient */}
+                    <div className="relative h-10 w-[2px] mx-2">
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-300/80 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-200/40 to-transparent blur-[1px]" />
+                    </div>
+
+                    {/* Group 2: Library/Browse Actions - Premium Blue Theme */}
+                    <div className="flex items-center gap-2 bg-gradient-to-br from-blue-50/80 via-white to-blue-50/50 backdrop-blur-xl rounded-2xl p-1.5 border border-blue-200/70 shadow-lg shadow-blue-200/50 ring-1 ring-blue-100/60">
+                      {/* Premium History Button */}
+                      <EnhancedTooltip
+                        title={t('chat.tooltip.chatHistoryTitle', 'Chat History')}
+                        description={t('chat.tooltip.chatHistoryDescription', 'View and manage all your previous AI conversations.')}
+                        icon={History}
+                        gradient="from-[#1a365d] to-[#2b6cb0]"
+                        badge={t('chat.tooltip.browse', 'Browse')}
+                      >
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowConversationList(true)}
+                          className={`
+                            group relative min-h-[44px] min-w-[44px] px-5 py-2.5 rounded-xl font-semibold text-sm
+                            bg-gradient-to-br from-white via-blue-50/50 to-blue-50/30
+                            text-blue-600 hover:text-blue-700
+                            border border-blue-200/80 hover:border-blue-400/90
+                            shadow-md shadow-blue-200/60 hover:shadow-lg hover:shadow-blue-300/70
+                            ring-1 ring-blue-100/60 hover:ring-blue-200/80
+                            hover:scale-[1.03] active:scale-[0.98]
+                            transition-all duration-300 ease-out
+                            backdrop-blur-sm
+                          `}
+                          title={t('chat.conversationHistory', 'Conversation History')}
+                        >
+                          <div className="relative">
+                            <History className="w-4 h-4 mr-2 relative z-10 group-hover:rotate-[-5deg] transition-transform duration-500 ease-out drop-shadow-sm" />
+                            <div className="absolute inset-0 blur-md opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-400 to-blue-500 transition-opacity duration-300" />
+                          </div>
+                          <span className="relative z-10 tracking-wide">History</span>
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-blue-50/0 via-white/50 to-blue-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                          <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 bg-gradient-to-br from-blue-100/40 via-transparent to-indigo-50/30 transition-opacity duration-300" />
+                        </Button>
+                      </EnhancedTooltip>
+
+                      {/* Premium Cases Button with Badge */}
+                      <EnhancedTooltip
+                        title={t('chat.tooltip.myCasesTitle', 'My Cases')}
+                        description={t('chat.tooltip.myCasesDescription', 'View and switch between your saved clinical cases.')}
+                        icon={FileText}
+                        gradient="from-[#2b6cb0] to-[#63b3ed]"
+                        badge={t('chat.tooltip.switchCases', 'Switch Cases')}
+                      >
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={async () => {
+                            await loadCases();
+                            setShowCaseListModal(true);
+                          }}
+                          className={`
+                            group relative min-h-[44px] min-w-[44px] px-5 py-2.5 rounded-xl font-semibold text-sm
+                            bg-gradient-to-br from-white via-blue-50/50 to-blue-50/30
+                            text-blue-600 hover:text-blue-700
+                            border border-blue-200/80 hover:border-blue-400/90
+                            shadow-md shadow-blue-200/60 hover:shadow-lg hover:shadow-blue-300/70
+                            ring-1 ring-blue-100/60 hover:ring-blue-200/80
+                            hover:scale-[1.03] active:scale-[0.98]
+                            transition-all duration-300 ease-out
+                            backdrop-blur-sm
+                          `}
+                          title={`${t('chat.patientCases', 'Patient Cases')}: ${caseHistory.length}`}
+                        >
+                          <div className="relative">
+                            <FileText className="w-4 h-4 mr-2 relative z-10 group-hover:scale-110 transition-transform duration-500 ease-out drop-shadow-sm" />
+                            <div className="absolute inset-0 blur-md opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-400 to-blue-500 transition-opacity duration-300" />
+                          </div>
+                          <span className="relative z-10 tracking-wide">Cases</span>
+
+                          {/* Premium Badge */}
+                          {caseHistory.length > 0 && (
+                            <div className="absolute -top-2 -right-2 min-w-[22px] h-[22px] px-1.5 rounded-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white text-[11px] font-bold flex items-center justify-center shadow-xl shadow-blue-500/60 border-2 border-white ring-2 ring-blue-100/50 animate-pulse">
+                              <span className="relative z-10">{caseHistory.length > 9 ? '9+' : caseHistory.length}</span>
+                              <div className="absolute inset-0 rounded-full bg-blue-400 blur-sm opacity-50" />
+                            </div>
+                          )}
+
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-blue-50/0 via-white/50 to-blue-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                          <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 bg-gradient-to-br from-blue-100/40 via-transparent to-indigo-50/30 transition-opacity duration-300" />
+                        </Button>
+                      </EnhancedTooltip>
                     </div>
                   </>
                 )}
@@ -1193,22 +1356,19 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
             )}
           </div>
 
-          {/* Refined progress indicator */}
+          {/* Clean progress indicator */}
           {(isLoading || isAnalyzing) && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white/60 to-transparent overflow-hidden">
-              <div 
-                className={`h-full bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] shadow-sm`}
-                style={{ 
-                  width: '35%',
-                  animation: 'elegantSlide 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite',
-                  filter: `drop-shadow(0 0 6px rgb(99 179 237 / 0.4))`
-                }} 
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-100/50 overflow-hidden">
+              <div
+                className={`h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500`}
+                style={{
+                  width: '40%',
+                  animation: 'elegantSlide 2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+                  boxShadow: '0 0 12px rgba(59, 130, 246, 0.5)'
+                }}
               />
             </div>
           )}
-
-          {/* Subtle bottom glow */}
-          <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-1/2 h-3 bg-gradient-to-r from-transparent via-slate-200/20 to-transparent blur-lg rounded-full" />
         </div>
       </div>
 

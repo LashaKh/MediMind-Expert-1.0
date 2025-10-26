@@ -26,9 +26,9 @@ interface ActionPlanProcessingResponse {
   issue: string;
 }
 
-// Flowise configuration - use action plan endpoint for ABG action plan generation
+// Flowise configuration - use SAME endpoint as BG Analysis
 const FLOWISE_CONFIG = {
-  endpoint: Deno.env.get('FLOWISE_ACTION_PLAN_URL') || 'https://flowise-2-0.onrender.com/api/v1/prediction/39372de9-d479-464c-859c-4439475d4fa7',
+  endpoint: Deno.env.get('FLOWISE_ACTION_PLAN_URL') || 'https://flowise-2-0.onrender.com/api/v1/prediction/bff0fbe6-1a17-4c9b-a3fd-6ba4202cd150',
   timeout: 120000 // 120 seconds (2 minutes)
 };
 
@@ -155,45 +155,21 @@ serve(async (req) => {
 
     // Updated prompt structure to include optional case context
     const caseContextSection = request.caseContext && request.caseContext.trim().length > 0
-      ? `\n\nPatient Case Context (use to tailor plan):\n${request.caseContext}`
+      ? `\n\nPatient Case Context:\n${request.caseContext}`
       : '';
 
-    const structuredPrompt = `Answer this :
-${request.issue}
-${request.description}
-${request.question}${caseContextSection}
+    // Simplified format matching BG Analysis format
+    const actionPlanPrompt = `BG_ACTION_PLAN
 
-You must Always follow this structure while generating the content: 
+Issue: ${request.issue}
 
-# [Title of the Condition/Topic]
+Description: ${request.description}
 
-## 1. Introduction (Optional)
+Clinical Question: ${request.question}${caseContextSection}`;
 
-## 2. Immediate Action Plan
-### Key Interventions
-#### [Intervention 1]
-#### [Intervention 2]
-#### [Intervention 3]
-#### [Intervention 4]
-
-## 3. Monitoring & Adjustments
-### [Parameter 1]
-### [Parameter 2]
-### [Parameter 3]
-### [Parameter 4]
-
-## 4. Rationale
-
-## 5. Additional Considerations
-### [Scenario 1]
-### [Scenario 2]
-
-## 6. Summary
-`;
-
-    // Create JSON payload for Flowise (matching Make.com format)
+    // Create JSON payload for Flowise (same format as BG Analysis)
     const flowisePayload = {
-      question: structuredPrompt
+      question: actionPlanPrompt
     };
 
     // Make request to Flowise with extended timeout for reliable responses

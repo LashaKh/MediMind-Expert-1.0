@@ -24,6 +24,7 @@ export default {
   accountPreferences: 'Account preferences',
   toggleMenu: 'Toggle menu',
   menu: 'Menu',
+  home: 'Home',
   bloodGasAnalysis: 'Blood Gas Analysis',
   abgInterpretation: 'ABG interpretation & analysis',
   diseaseLibrary: 'Disease Library',

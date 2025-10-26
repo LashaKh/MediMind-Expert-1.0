@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Sparkles, 
-  Brain, 
-  Stethoscope, 
-  Activity, 
-  Target, 
-  Zap, 
+import { useTranslation } from 'react-i18next';
+import {
+  Sparkles,
+  Brain,
+  Stethoscope,
+  Activity,
+  Target,
+  Zap,
   ArrowUpRight,
   ChevronRight,
   Loader2,
@@ -51,6 +52,7 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
   disabled = false,
   size = 'default'
 }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
@@ -99,47 +101,62 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
     switch (mode) {
       case 'interpretation':
         return {
-          title: '🧠 AI Clinical Consultation',
-          subtitle: 'Expert interpretation powered by advanced medical AI',
-          description: 'Connect with our AI clinical expert to discuss your ABG interpretation. Get evidence-based insights, differential diagnoses, and clinical reasoning from our curated medical knowledge base.',
-          contextInfo: 'Your ABG values and interpretation will be shared with our AI specialist for comprehensive discussion.',
+          title: `🧠 ${t('abg.consultation.title', 'AI Clinical Consultation')}`,
+          subtitle: t('abg.consultation.expertInterpretation', 'Expert interpretation powered by advanced medical AI'),
+          description: t('abg.consultation.description.interpretation', 'Connect with our AI clinical expert to discuss your ABG interpretation. Get evidence-based insights, differential diagnoses, and clinical reasoning from our curated medical knowledge base.'),
+          contextInfo: t('abg.consultation.contextInfo.interpretation', 'Your ABG values and interpretation will be shared with our AI specialist for comprehensive discussion.'),
           icon: Brain,
           accentIcon: Lightbulb,
           gradient: 'from-[#2b6cb0] via-[#1a365d] to-[#63b3ed]',
           glowGradient: 'from-[#63b3ed] via-[#2b6cb0] to-[#90cdf4]',
           accentColor: 'from-[#63b3ed] to-[#90cdf4]',
-          features: ['Expert interpretation review', 'Evidence-based insights', 'Clinical reasoning', 'Differential diagnosis']
+          features: [
+            t('abg.consultation.features.expertReview', 'Expert interpretation review'),
+            t('abg.consultation.features.evidenceBased', 'Evidence-based insights'),
+            t('abg.consultation.features.clinicalReasoning', 'Clinical reasoning'),
+            t('abg.consultation.features.differentialDiagnosis', 'Differential diagnosis')
+          ]
         };
       case 'action-plan':
         return {
-          title: '🎯 AI Clinical Consultation',
-          subtitle: actionPlanItems.length > 0 
-            ? `Strategic consultation for ${actionPlanItems.length} selected intervention${actionPlanItems.length > 1 ? 's' : ''}` 
-            : 'Comprehensive action plan consultation',
-          description: 'Discuss your treatment strategy with our AI clinical expert. Get personalized recommendations, implementation guidance, and evidence-based treatment protocols.',
-          contextInfo: actionPlanItems.length > 0 
-            ? `Selected interventions: ${actionPlanItems.join(', ')} will be discussed in detail.`
-            : 'Your complete action plan will be reviewed with clinical recommendations.',
+          title: `🎯 ${t('abg.consultation.title', 'AI Clinical Consultation')}`,
+          subtitle: actionPlanItems.length > 0
+            ? t('abg.consultation.strategicConsultation', 'Strategic consultation for {{count}} selected intervention{{plural}}', { count: actionPlanItems.length, plural: actionPlanItems.length > 1 ? 's' : '' })
+            : t('abg.consultation.strategicConsultationAll', 'Comprehensive action plan consultation'),
+          description: t('abg.consultation.description.actionPlan', 'Discuss your treatment strategy with our AI clinical expert. Get personalized recommendations, implementation guidance, and evidence-based treatment protocols.'),
+          contextInfo: actionPlanItems.length > 0
+            ? t('abg.consultation.contextInfo.actionPlan', 'Selected interventions: {{items}} will be discussed in detail.', { items: actionPlanItems.join(', ') })
+            : t('abg.consultation.contextInfo.actionPlanAll', 'Your complete action plan will be reviewed with clinical recommendations.'),
           icon: Target,
           accentIcon: TrendingUp,
           gradient: 'from-[#2b6cb0] via-[#1a365d] to-[#63b3ed]',
           glowGradient: 'from-[#63b3ed] via-[#2b6cb0] to-[#90cdf4]',
           accentColor: 'from-[#63b3ed] to-[#90cdf4]',
-          features: ['Strategic guidance', 'Implementation protocols', 'Expert recommendations', 'Risk assessment']
+          features: [
+            t('abg.consultation.features.strategicGuidance', 'Strategic guidance'),
+            t('abg.consultation.features.implementation', 'Implementation protocols'),
+            t('abg.consultation.features.recommendations', 'Expert recommendations'),
+            t('abg.consultation.features.riskAssessment', 'Risk assessment')
+          ]
         };
       case 'complete':
       default:
         return {
-          title: '💡 AI Clinical Consultation',
-          subtitle: 'Comprehensive consultation with expert medical insights',
-          description: 'Launch an in-depth consultation with our AI clinical expert about your complete ABG analysis. Discuss interpretation, treatment plans, and get personalized medical insights.',
-          contextInfo: 'Your complete ABG analysis including values, interpretation, and action plan will be available for comprehensive discussion.',
+          title: `💡 ${t('abg.consultation.title', 'AI Clinical Consultation')}`,
+          subtitle: t('abg.consultation.comprehensiveConsultation', 'Comprehensive consultation with expert medical insights'),
+          description: t('abg.consultation.description.complete', 'Launch an in-depth consultation with our AI clinical expert about your complete ABG analysis. Discuss interpretation, treatment plans, and get personalized medical insights.'),
+          contextInfo: t('abg.consultation.contextInfo.complete', 'Your complete ABG analysis including values, interpretation, and action plan will be available for comprehensive discussion.'),
           icon: Stethoscope,
           accentIcon: Atom,
           gradient: 'from-[#2b6cb0] via-[#1a365d] to-[#63b3ed]',
           glowGradient: 'from-[#63b3ed] via-[#2b6cb0] to-[#90cdf4]',
           accentColor: 'from-[#63b3ed] to-[#90cdf4]',
-          features: ['Complete case review', 'Clinical expertise', 'Personalized insights', 'Treatment optimization']
+          features: [
+            t('abg.consultation.features.completeReview', 'Complete case review'),
+            t('abg.consultation.features.clinicalExpertise', 'Clinical expertise'),
+            t('abg.consultation.features.personalizedInsights', 'Personalized insights'),
+            t('abg.consultation.features.treatmentOptimization', 'Treatment optimization')
+          ]
         };
     }
   };
@@ -290,7 +307,7 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
                         <Heart className="h-2.5 w-2.5 text-white" />
                       </div>
                       <div>
-                        <p className="text-white/90 text-sm font-medium mb-1">What to expect:</p>
+                        <p className="text-white/90 text-sm font-medium mb-1">{t('abg.consultation.whatToExpect', 'What to expect:')}</p>
                         <p className="text-white/75 text-xs leading-relaxed">
                           {content.contextInfo}
                         </p>
@@ -305,7 +322,7 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
                   isHovered && "text-white transform translate-x-1 -translate-y-1"
                 )}>
                   <ArrowUpRight className="h-8 w-8" />
-                  <span className="text-xs font-medium">Launch</span>
+                  <span className="text-xs font-medium">{t('abg.consultation.actions.launch', 'Launch')}</span>
                 </div>
               </div>
             </div>
@@ -336,15 +353,15 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2 text-white/80 text-sm">
                   <Shield className="h-4 w-4 text-[#90cdf4]" />
-                  <span className="font-medium">Medical Grade AI</span>
+                  <span className="font-medium">{t('abg.consultation.trust.medicalGrade', 'Medical Grade AI')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/80 text-sm">
                   <Users className="h-4 w-4 text-[#63b3ed]" />
-                  <span className="font-medium">Expert Curated</span>
+                  <span className="font-medium">{t('abg.consultation.trust.expertCurated', 'Expert Curated')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/80 text-sm">
                   <Microscope className="h-4 w-4 text-[#2b6cb0]" />
-                  <span className="font-medium">Evidence Based</span>
+                  <span className="font-medium">{t('abg.consultation.trust.evidenceBased', 'Evidence Based')}</span>
                 </div>
               </div>
               
@@ -357,7 +374,7 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
                 isHovered && "bg-white/25 border-white/40 transform scale-110 shadow-2xl"
               )}>
                 <MessageSquare className="h-5 w-5" />
-                <span>Start Clinical Consultation</span>
+                <span>{t('abg.consultation.actions.startConsultation', 'Start Clinical Consultation')}</span>
                 <ChevronRight className={cn(
                   "h-5 w-5 transition-transform duration-500",
                   isHovered && "translate-x-2"
@@ -465,7 +482,7 @@ export const PremiumAIClinicalConsultationButton: React.FC<PremiumAIClinicalCons
               isHovered && "bg-white/25 border-white/30 scale-105 shadow-lg"
             )}>
               <MessageSquare className="h-4 w-4" />
-              <span className="hidden sm:inline text-sm font-medium">Launch</span>
+              <span className="hidden sm:inline text-sm font-medium">{t('abg.consultation.actions.launch', 'Launch')}</span>
             </div>
             <ArrowUpRight className={cn(
               "h-5 w-5 transition-all duration-500 opacity-70",

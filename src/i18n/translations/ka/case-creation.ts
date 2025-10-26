@@ -1,4 +1,6 @@
 export default {
+  newCase: 'ახალი შემთხვევა',
+  activeCase: 'აქტიური შემთხვევა',
   validation: {
     title_required: 'საქმის სათაური სავალდებულოა',
     title_length: 'სათაური უნდა იყოს მინიმუმ 5 სიმბოლო',

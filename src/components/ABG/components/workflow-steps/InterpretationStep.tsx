@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { 
+import {
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
@@ -13,35 +13,38 @@ import {
   Target,
   Bell
 } from 'lucide-react';
-import { ABGType, WorkflowStep } from '../../../../types/abg';
+import { ABGType, WorkflowStep, FlowiseIdentifiedIssue, ActionPlanResult } from '../../../../types/abg';
 import { PremiumAnalysisResults } from '../PremiumAnalysisResults';
 import { PremiumInterpretationResults } from '../PremiumInterpretationResults';
 import { PremiumAIClinicalConsultationButton } from '../PremiumAIClinicalConsultationButton';
+import { PremiumActionPlansDisplay } from '../PremiumActionPlansDisplay';
 import { Button } from '../../../ui/button';
 
 interface InterpretationStepProps {
   // Results data
   extractedText: string;
   interpretation: string;
+  identifiedIssues: FlowiseIdentifiedIssue[];
+  actionPlans: ActionPlanResult[];
   showResults: boolean;
   abgType: ABGType;
   completedResult?: any;
-  
+
   // Workflow state
   workflow?: any;
-  
+
   // UI state
   isExtractedTextCollapsed: boolean;
   isClinicalInterpretationCollapsed: boolean;
   onToggleExtractedText: () => void;
   onToggleClinicalInterpretation: () => void;
-  
+
   // Processing state
   isProcessing: boolean;
   unifiedProgress?: {
     phase: string;
   } | null;
-  
+
   // Actions
   onTextReAnalysis: (text: string) => Promise<void>;
   onProcessActionPlan: () => void;
@@ -52,6 +55,8 @@ interface InterpretationStepProps {
 export const InterpretationStep: React.FC<InterpretationStepProps> = ({
   extractedText,
   interpretation,
+  identifiedIssues,
+  actionPlans,
   showResults,
   abgType,
   completedResult,
@@ -113,11 +118,16 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
         <div className="space-y-6">
           {/* Extracted Text Panel - Collapsible */}
           <div className="abg-card abg-glass p-5" data-testid="extracted-text-section">
-            <div 
-              className="flex items-center justify-between mb-4 cursor-pointer"
-              onClick={() => onToggleExtractedText(!isExtractedTextCollapsed)}
+            <div
+              className="flex items-center justify-between cursor-pointer hover:bg-slate-50 rounded-lg p-2 -m-2 transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Raw Analysis toggle clicked! Current state:', isExtractedTextCollapsed);
+                onToggleExtractedText(!isExtractedTextCollapsed);
+              }}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 pointer-events-none">
                 <div className="w-9 h-9 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-lg flex items-center justify-center">
                   <FileText className="h-4 w-4 text-white" />
                 </div>
@@ -126,53 +136,45 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                   <p className="text-xs text-slate-600">{t('abg.analysis.raw.reviewHint', 'Review and edit if needed')}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 pointer-events-none">
                 <span className="text-xs text-slate-500">
                   {isExtractedTextCollapsed ? t('abg.common.show', 'Show') : t('abg.common.hide', 'Hide')}
                 </span>
-                {isExtractedTextCollapsed ? 
-                  <ChevronDown className="h-4 w-4 text-slate-400" /> : 
+                {isExtractedTextCollapsed ?
+                  <ChevronDown className="h-4 w-4 text-slate-400" /> :
                   <ChevronUp className="h-4 w-4 text-slate-400" />
                 }
               </div>
             </div>
-            
-            {!isExtractedTextCollapsed ? (
-              <PremiumAnalysisResults
-                result={{
-                  raw_analysis: extractedText,
-                  processing_time_ms: workflow?.progress || 0
-                }}
-                editable={true}
-                onEdit={onTextReAnalysis}
-                isProcessingReanalysis={isProcessing && unifiedProgress?.phase === 'interpretation'}
-                showPreview={true}
-              />
-            ) : (
-              <div className="bg-slate-50 rounded-lg p-4">
-                <div className="text-sm text-slate-600 leading-relaxed">
-                  {renderExtractedTextPreview()}
-                </div>
-                <div className="mt-3 text-xs text-slate-400 flex items-center justify-between">
-                  <span>
-                    {extractedText.length > 0 
-                      ? t('abg.analysis.linesTotal', '{{count}} lines total', { count: extractedText.split('\n').filter(line => line.trim()).length })
-                      : t('abg.analysis.waitingData', 'Waiting for data')
-                    }
-                  </span>
-                  <span className="text-[#2b6cb0] font-medium">{t('abg.common.clickToExpand', 'Click to expand')}</span>
-                </div>
+
+            {!isExtractedTextCollapsed && (
+              <div className="mt-4">
+                <PremiumAnalysisResults
+                  result={{
+                    raw_analysis: extractedText,
+                    processing_time_ms: workflow?.progress || 0
+                  }}
+                  editable={true}
+                  onEdit={onTextReAnalysis}
+                  isProcessingReanalysis={isProcessing && unifiedProgress?.phase === 'interpretation'}
+                  showPreview={true}
+                />
               </div>
             )}
           </div>
 
           {/* Clinical Interpretation Panel - Collapsible */}
           <div className="abg-card abg-glass p-5">
-            <div 
-              className="flex items-center justify-between mb-4 cursor-pointer"
-              onClick={() => onToggleClinicalInterpretation(!isClinicalInterpretationCollapsed)}
+            <div
+              className="flex items-center justify-between mb-4 cursor-pointer hover:bg-slate-50 rounded-lg p-2 -m-2 transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Toggle clicked! Current state:', isClinicalInterpretationCollapsed);
+                onToggleClinicalInterpretation(!isClinicalInterpretationCollapsed);
+              }}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 pointer-events-none">
                 <div className="w-9 h-9 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-lg flex items-center justify-center">
                   <CheckCircle2 className="h-4 w-4 text-white" />
                 </div>
@@ -181,30 +183,40 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                   <p className="text-xs text-slate-600">{t('abg.interpretation.subtitle', 'AI-generated clinical analysis')}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 pointer-events-none">
                 <span className="text-xs text-slate-500">
                   {isClinicalInterpretationCollapsed ? t('abg.common.show', 'Show') : t('abg.common.hide', 'Hide')}
                 </span>
-                {isClinicalInterpretationCollapsed ? 
-                  <ChevronDown className="h-4 w-4 text-slate-400" /> : 
+                {isClinicalInterpretationCollapsed ?
+                  <ChevronDown className="h-4 w-4 text-slate-400" /> :
                   <ChevronUp className="h-4 w-4 text-slate-400" />
                 }
               </div>
             </div>
-            
+
             {!isClinicalInterpretationCollapsed ? (
               <PremiumInterpretationResults
                 interpretation={interpretation}
                 isLoading={false}
               />
             ) : (
-              <div className="bg-slate-50 rounded-lg p-4">
-                <div className="text-sm text-slate-600 leading-relaxed">
+              <div
+                className="bg-slate-50 rounded-lg p-4 cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('Collapsed preview clicked!');
+                  onToggleClinicalInterpretation(!isClinicalInterpretationCollapsed);
+                }}
+              >
+                <div className="text-sm text-slate-600 leading-relaxed pointer-events-none">
                   {interpretation ? (
                     <div>
                       <div className="font-medium text-slate-700 mb-2">{t('abg.interpretation.summary', 'Clinical Summary:')}</div>
                       <p className="line-clamp-3">
                         {interpretation
+                          // Remove HTML tags completely for preview
+                          .replace(/<[^>]+>/g, '')
                           // Clean markdown formatting for preview
                           .replace(/\*\*(.*?)\*\*/g, '$1')
                           .replace(/•?\s*\[RED\]\s*([^:]+):/gi, '🔴 $1:')
@@ -235,13 +247,22 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                     <span>{t('abg.interpretation.waiting', 'Clinical interpretation will appear here after analysis...')}</span>
                   )}
                 </div>
-                <div className="mt-3 text-xs text-slate-400 flex items-center justify-between">
+                <div className="mt-3 text-xs text-slate-400 flex items-center justify-between pointer-events-none">
                   <span>{t('abg.interpretation.subtitle', 'AI-generated clinical analysis')}</span>
                   <span className="text-[#2b6cb0] font-medium">{t('abg.common.clickToExpand', 'Click to expand')}</span>
                 </div>
               </div>
             )}
           </div>
+
+          {/* Identified Issues Panel - HIDDEN per user request */}
+          {/* {identifiedIssues && identifiedIssues.length > 0 && onGenerateActionPlansForIssues && (
+            <IdentifiedIssuesPanel
+              issues={identifiedIssues}
+              onGenerateActionPlans={onGenerateActionPlansForIssues}
+              isGenerating={isProcessing}
+            />
+          )} */}
         </div>
       )}
 
@@ -404,10 +425,10 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                     <div className="relative w-full bg-gradient-to-br from-[#90cdf4]/20 via-[#63b3ed]/20 to-[#2b6cb0]/20 rounded-2xl border border-[#63b3ed]/40 shadow-lg shadow-[#63b3ed]/20 hover:shadow-xl hover:shadow-[#2b6cb0]/30 transition-all duration-500 group-hover:border-[#2b6cb0]/60">
                       {/* Animated background */}
                       <div className="absolute inset-0 bg-gradient-to-br from-[#63b3ed]/30 via-[#90cdf4]/30 to-[#2b6cb0]/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      
+
                       {/* Shine effect */}
                       <div className="abg-action-card-shine"></div>
-                      
+
                       {/* Content */}
                       <div className="relative p-4 text-center">
                         <div className="abg-action-card-icon w-10 h-10 mx-auto mb-3 bg-gradient-to-br from-[#90cdf4]/40 to-[#63b3ed]/60 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg">
@@ -420,7 +441,7 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                         <h5 className="font-bold text-[#1a365d] mb-1 group-hover:text-[#2b6cb0] transition-colors duration-300 text-sm">
                           {isProcessing ? t('common.processing', 'Processing...') : t('abg.workflow.steps.actionPlan.label', 'Get Action Plan')}
                         </h5>
-                        
+
                         {/* Subtle accent line */}
                         <div className="abg-action-card-accent-line text-[#63b3ed]"></div>
                       </div>
@@ -428,6 +449,16 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
                   </Button>
                 </div>
               </div>
+
+              {/* Display Generated Action Plans - Full Width */}
+              {actionPlans && actionPlans.length > 0 && (
+                <div className="mt-8">
+                  <PremiumActionPlansDisplay
+                    actionPlans={actionPlans}
+                    className="animate-fade-in"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

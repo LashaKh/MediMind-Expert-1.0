@@ -63,6 +63,7 @@ interface TranscriptContentProps {
   // Session title props
   pendingSessionTitle?: string;
   onPendingTitleChange?: (title: string) => void;
+  onTitleSave?: (title: string) => void;
   currentSession?: any;
   titleInputRef?: React.RefObject<HTMLInputElement>;
   showTitleError?: boolean;
@@ -128,6 +129,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
   canStop = true,
   pendingSessionTitle = '',
   onPendingTitleChange,
+  onTitleSave,
   currentSession,
   titleInputRef,
   showTitleError = false,
@@ -260,7 +262,7 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                         ref={titleInputRef}
                         type="text"
                         placeholder={currentSession ? t('mediscribe.sessionTitle.editPlaceholder', 'Edit session title...') : t('mediscribe.sessionTitle.newPlaceholder', 'Enter a descriptive title for this medical session...')}
-                        value={currentSession ? currentSession.title : pendingSessionTitle}
+                        value={pendingSessionTitle}
                         onChange={(e) => {
                           // Mark as touched when user types
                           if (!titleTouched) setTitleTouched(true);
@@ -268,12 +270,19 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                           if (titleError) setTitleError(false);
                           if (titleHighlight) setTitleHighlight(false);
 
-                          if (currentSession) {
-                            // Update existing session title immediately
+                          // ALWAYS update local state immediately (no database calls, no trimming)
+                          // This ensures smooth typing with spaces and fast input
+                          if (onPendingTitleChange) {
                             onPendingTitleChange(e.target.value);
-                          } else {
-                            // Update pending title for new session
-                            onPendingTitleChange(e.target.value);
+                          }
+                        }}
+                        onKeyDown={(e) => {
+                          // Save to database when user presses Enter
+                          if (e.key === 'Enter' && onTitleSave) {
+                            e.preventDefault();
+                            onTitleSave(pendingSessionTitle);
+                            // Blur to remove focus after saving
+                            e.currentTarget.blur();
                           }
                         }}
                         onBlur={() => {
@@ -282,6 +291,10 @@ export const TranscriptContent: React.FC<TranscriptContentProps> = ({
                           // Show error on blur if title is empty for new session
                           if (isTitleEmpty) {
                             setTitleError(true);
+                          }
+                          // Save to database when user clicks away (if title is not empty)
+                          if (pendingSessionTitle.trim() && onTitleSave) {
+                            onTitleSave(pendingSessionTitle);
                           }
                         }}
                         onFocus={() => {

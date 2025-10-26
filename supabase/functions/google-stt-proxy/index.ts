@@ -146,7 +146,7 @@ async function ensureRecognizer(accessToken: string): Promise<void> {
 
   const recognizerConfig = {
     model: 'chirp',
-    languageCodes: ['ka-GE'],
+    languageCodes: ['en-US', 'ka-GE', 'ru-RU'], // Multi-language support for MediMind AI
     defaultRecognitionConfig: {
       features: {
         enableAutomaticPunctuation: true
@@ -239,9 +239,13 @@ serve(async (req) => {
     const recognizerPath = `projects/${PROJECT_ID}/locations/${LOCATION}/recognizers/${RECOGNIZER_NAME}`
     const endpoint = `https://${LOCATION}-speech.googleapis.com/v2/${recognizerPath}:recognize`
 
+    // Ensure language code is valid (default to en-US if not provided)
+    const languageCode = body.Language || 'en-US'
+
     const requestBody = {
       config: {
         auto_decoding_config: {}, // Required: tells API to auto-detect audio format
+        languageCodes: [languageCode], // CRITICAL: Specify which language to recognize
         features: {
           enableAutomaticPunctuation: body.Punctuation !== false
         }
@@ -251,6 +255,7 @@ serve(async (req) => {
 
     console.log('🚀 Sending to Google Speech-to-Text V2 API (Chirp model)...', {
       recognizer: recognizerPath,
+      languageCode: languageCode,
       enableAutomaticPunctuation: body.Punctuation !== false,
       audioDataLength: body.theAudioDataAsBase64.length
     })

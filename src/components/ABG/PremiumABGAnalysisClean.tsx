@@ -48,11 +48,15 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
   // Store actions
   const { startWorkflow, updateWorkflowStep } = useABGActions();
 
-  // Workflow hook
-  const workflowHook = useABGWorkflow({ onComplete, initialType });
-  
-  // Case management hook  
+  // Case management hook (needs to be before workflow hook)
   const caseManagement = useCaseManagement();
+
+  // Workflow hook (pass activeCase for BG analysis context)
+  const workflowHook = useABGWorkflow({
+    onComplete,
+    initialType,
+    activeCase: caseManagement.activeCase
+  });
   
   // UI actions hook
   const uiActions = useABGUIActions({
@@ -79,12 +83,23 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
     }
   }, [workflow, startWorkflow]);
 
-  // Handle navigation from history - load existing result
+  // Handle navigation from history - load existing result OR reset for new session
   useEffect(() => {
-    const locationState = location.state as { resultId?: string; viewMode?: string } | null;
+    const locationState = location.state as { resultId?: string; viewMode?: string; newSession?: boolean } | null;
 
+    // Handle new session request - reset everything
+    if (locationState?.newSession) {
+      console.log('🔄 Starting new session - resetting workflow');
+      workflowHook.restartWorkflow();
+
+      // Clear the location state to prevent re-triggering
+      navigate(location.pathname, { replace: true, state: undefined });
+      return;
+    }
+
+    // Handle loading existing result from history
     if (locationState?.resultId && locationState?.viewMode === 'history') {
-
+      console.log('📂 Loading existing result:', locationState.resultId);
       workflowHook.loadExistingResult(locationState.resultId);
 
       // Clear the location state to prevent re-loading
@@ -218,6 +233,8 @@ export const PremiumABGAnalysisClean: React.FC<PremiumABGAnalysisCleanProps> = (
             unifiedProgress={workflowHook.unifiedProgress}
             extractedText={workflowHook.extractedText}
             interpretation={workflowHook.interpretation}
+            identifiedIssues={workflowHook.identifiedIssues}
+            actionPlans={workflowHook.actionPlans}
             showResults={workflowHook.showResults}
             completedResult={workflowHook.completedResult}
             isExtractedTextCollapsed={workflowHook.isExtractedTextCollapsed}

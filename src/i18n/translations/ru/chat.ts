@@ -15,6 +15,7 @@ export const chat = {
   attachFile: 'Прикрепить файл',
   uploadImage: 'Загрузить изображение',
   recordAudio: 'Записать аудио',
+  startRecording: 'Начать голосовой ввод',
   stopRecording: 'Остановить запись',
   playAudio: 'Воспроизвести аудио',
   pauseAudio: 'Приостановить аудио',
@@ -276,7 +277,11 @@ export const chat = {
     createNewCaseTitle: 'Создать новый кейс',
     createNewCaseDescription: 'Создавайте клинические кейсы, которые можно прикрепить к чату для обсуждения с ИИ и совместного анализа.',
     aiDiscussion: 'Обсуждение с ИИ'
-  }
+  },
+
+  // Voice recording
+  startRecording: 'Начать голосовой ввод',
+  stopRecording: 'Остановить запись'
 };
 
 export default chat;

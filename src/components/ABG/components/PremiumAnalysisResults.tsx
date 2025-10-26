@@ -251,35 +251,65 @@ export const PremiumAnalysisResults: React.FC<PremiumAnalysisResultsProps> = ({
   // Format processing time
   // const formatProcessingTime = (ms: number): string => (ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`);
 
-  // Loading State
+  // Loading State - Beautiful Theme-Styled Progress Indicator
   if (isLoading) {
     return (
       <div className={cn("abg-premium", className)}>
-        <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-emerald-50 rounded-2xl border border-white/20 shadow-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-emerald-400/10 animate-pulse" />
-          
-          <div className="relative p-6">
-            <div className="flex items-center justify-center mb-5">
+        <div className="relative overflow-hidden bg-gradient-to-br from-white via-[#90cdf4]/5 to-[#63b3ed]/10 rounded-2xl border-2 border-[#63b3ed]/30 shadow-2xl">
+          {/* Animated gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/5 via-[#2b6cb0]/5 to-[#63b3ed]/5 animate-pulse" />
+
+          {/* Subtle pattern background */}
+          <div className="absolute inset-0 opacity-5" style={{
+            backgroundImage: 'radial-gradient(circle at 2px 2px, #2b6cb0 1px, transparent 0)',
+            backgroundSize: '24px 24px'
+          }} />
+
+          <div className="relative p-8 sm:p-10">
+            {/* Icon Section */}
+            <div className="flex items-center justify-center mb-6">
               <div className="relative">
-                <Brain className="h-14 w-14 text-blue-500 animate-pulse" />
-                <div className="absolute inset-0 bg-blue-500 opacity-20 rounded-full animate-ping" />
-                <Sparkles className="absolute -top-2 -right-2 h-5 w-5 text-purple-500 animate-pulse" />
+                {/* Main brain icon with theme gradient */}
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] flex items-center justify-center shadow-2xl shadow-[#2b6cb0]/20">
+                  <Brain className="h-10 w-10 text-white animate-pulse" />
+                </div>
+
+                {/* Pulsing ring effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#63b3ed]/30 to-[#2b6cb0]/30 rounded-2xl animate-ping" />
+
+                {/* Sparkles accent */}
+                <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-[#63b3ed] to-[#90cdf4] rounded-full flex items-center justify-center shadow-lg">
+                  <Sparkles className="h-4 w-4 text-white animate-pulse" />
+                </div>
               </div>
             </div>
-            
-            <div className="text-center space-y-3.5">
-                <h3 className="text-xl font-bold text-slate-800">
-                  {t('abg.analysis.loading.title', 'AI Analysis in Progress')}
-                </h3>
-              <p className="text-slate-600 max-w-md mx-auto text-sm">
-                {t('abg.analysis.loading.subtitle', 'Our advanced AI is analyzing your blood gas report using state-of-the-art vision technology.')}
+
+            {/* Content Section */}
+            <div className="text-center space-y-4 max-w-lg mx-auto">
+              {/* Title with theme gradient */}
+              <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] bg-clip-text text-transparent">
+                {t('abg.analysis.loading.title', 'AI Analysis in Progress')}
+              </h3>
+
+              {/* Subtitle with better typography */}
+              <p className="text-[#6c757d] text-base sm:text-lg leading-relaxed">
+                {t('abg.analysis.loading.subtitle', 'Advanced AI vision technology is analyzing your blood gas report with precision.')}
               </p>
-              
-              <div className="flex justify-center">
-                <div className="flex space-x-2">
-                  <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-2.5 h-2.5 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+
+              {/* Animated dots with theme colors */}
+              <div className="flex justify-center pt-2">
+                <div className="flex space-x-3">
+                  <div className="w-3 h-3 bg-gradient-to-br from-[#1a365d] to-[#2b6cb0] rounded-full animate-bounce shadow-lg shadow-[#1a365d]/30" style={{ animationDelay: '0ms' }} />
+                  <div className="w-3 h-3 bg-gradient-to-br from-[#2b6cb0] to-[#63b3ed] rounded-full animate-bounce shadow-lg shadow-[#2b6cb0]/30" style={{ animationDelay: '150ms' }} />
+                  <div className="w-3 h-3 bg-gradient-to-br from-[#63b3ed] to-[#90cdf4] rounded-full animate-bounce shadow-lg shadow-[#63b3ed]/30" style={{ animationDelay: '300ms' }} />
+                </div>
+              </div>
+
+              {/* Status text */}
+              <div className="pt-2">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 border border-[#63b3ed]/30 rounded-full">
+                  <div className="w-2 h-2 bg-[#2b6cb0] rounded-full animate-pulse" />
+                  <span className="text-sm font-medium text-[#1a365d]">{t('abg.analysis.loading.processing', 'Processing...')}</span>
                 </div>
               </div>
             </div>

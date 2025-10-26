@@ -88,7 +88,8 @@ export const createABGResult = async (result: CreateABGResult): Promise<string> 
       throw new ABGServiceError('VALIDATION_ERROR', i18next.t('common.serviceErrors.rawAnalysisRequired'));
     }
 
-    const validTypes = [i18next.t('common.serviceErrors.arterialBloodGas'), i18next.t('common.serviceErrors.venousBloodGas')];
+    // Validate type - use hardcoded English values as defined in TypeScript ABGType
+    const validTypes = ['Arterial Blood Gas', 'Venous Blood Gas'];
     if (!result.type || !validTypes.includes(result.type)) {
       throw new ABGServiceError('VALIDATION_ERROR', i18next.t('common.serviceErrors.validABGTypeRequired'));
     }
@@ -114,6 +115,16 @@ export const createABGResult = async (result: CreateABGResult): Promise<string> 
     }
 
     // Insert ABG result
+    console.log('📝 Attempting to insert ABG result:', {
+      user_id: user.id,
+      patient_id: result.patient_id,
+      type: result.type,
+      raw_analysis_length: result.raw_analysis?.length,
+      has_interpretation: !!result.interpretation,
+      has_action_plan: !!result.action_plan,
+      gemini_confidence: result.gemini_confidence
+    });
+
     const { data, error } = await supabase
       .from('abg_results')
       .insert([
@@ -126,7 +137,13 @@ export const createABGResult = async (result: CreateABGResult): Promise<string> 
       .single();
 
     if (error) {
-
+      console.error('❌ Supabase insert error for abg_results:', {
+        errorCode: error.code,
+        errorMessage: error.message,
+        errorDetails: error.details,
+        errorHint: error.hint,
+        fullError: error
+      });
       throw new ABGServiceError('DATABASE_ERROR', i18next.t('common.serviceErrors.failedToCreateABGResult'), error.message);
     }
 
@@ -167,9 +184,9 @@ export const updateABGResult = async (id: string, updates: UpdateABGResult): Pro
       throw new ABGServiceError('VALIDATION_ERROR', i18next.t('common.serviceErrors.geminiConfidenceRange'));
     }
 
-    // Validate type if provided
+    // Validate type if provided - use hardcoded English values as defined in TypeScript ABGType
     if (updates.type) {
-      const validTypes = [i18next.t('common.serviceErrors.arterialBloodGas'), i18next.t('common.serviceErrors.venousBloodGas')];
+      const validTypes = ['Arterial Blood Gas', 'Venous Blood Gas'];
       if (!validTypes.includes(updates.type)) {
         throw new ABGServiceError('VALIDATION_ERROR', i18next.t('common.serviceErrors.validABGTypeRequired'));
       }

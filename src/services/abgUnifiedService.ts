@@ -1,6 +1,6 @@
 import { extractTextFromImageWithGemini, GeminiProgressInfo } from '../utils/geminiVisionExtractor';
 import { extractABGTextWithFreeOCR, ABGOcrProgressInfo } from './abgFreeOcrService';
-import { ABGType, ProcessingStatus } from '../types/abg';
+import { ABGType, ProcessingStatus, FlowiseIdentifiedIssue } from '../types/abg';
 
 // Retry utility for API calls
 async function retryApiCall<T>(
@@ -22,6 +22,22 @@ async function retryApiCall<T>(
   }
 }
 
+// Extract JSON from markdown code blocks
+function extractJsonFromMarkdown(text: string): any[] {
+  try {
+    // Match ```json...``` blocks
+    const match = text.match(/```json\n([\s\S]*?)\n```/);
+    if (match && match[1]) {
+      const parsed = JSON.parse(match[1]);
+      return Array.isArray(parsed) ? parsed : [];
+    }
+    return [];
+  } catch (error) {
+    console.error('Failed to extract JSON from markdown:', error);
+    return [];
+  }
+}
+
 // Extended progress info for unified workflow
 export interface UnifiedProgressInfo extends GeminiProgressInfo {
   phase: 'extraction' | 'interpretation' | 'complete';
@@ -31,21 +47,23 @@ export interface UnifiedProgressInfo extends GeminiProgressInfo {
   extractionMethod?: 'free-ocr' | 'gemini';
 }
 
-// Unified analysis result (only text extraction + interpretation, no action plan)
+// Unified analysis result (text extraction + interpretation + identified issues)
 export interface UnifiedAnalysisResult {
   success: boolean;
   extractedText: string;
   interpretation: string;
+  identifiedIssues: FlowiseIdentifiedIssue[];
   processingTimeMs: number;
   confidence: number;
   error?: string;
   requestId: string;
 }
 
-// Re-analysis result for edited text (only interpretation, no action plan)
+// Re-analysis result for edited text (interpretation + identified issues)
 export interface ReAnalysisResult {
   success: boolean;
   interpretation: string;
+  identifiedIssues: FlowiseIdentifiedIssue[];
   processingTimeMs: number;
   error?: string;
   requestId: string;
@@ -60,10 +78,17 @@ export async function processImageWithUnifiedAnalysis(
   onProgress?: (progress: UnifiedProgressInfo) => void,
   options?: { caseContext?: string }
 ): Promise<UnifiedAnalysisResult> {
+  console.log('🔍 processImageWithUnifiedAnalysis started', {
+    fileName: file.name,
+    fileSize: file.size,
+    abgType
+  });
+
   const startTime = performance.now();
   const requestId = crypto.randomUUID();
 
   try {
+    console.log('✅ Variables initialized successfully', { requestId, startTime });
     // Phase 1: Text Extraction - Try Free OCR First
     onProgress?.({
       phase: 'extraction',
@@ -230,12 +255,16 @@ export async function processImageWithUnifiedAnalysis(
       success: true,
       extractedText,
       interpretation: interpretationResult.interpretation,
+      identifiedIssues: interpretationResult.identifiedIssues,
       processingTimeMs: totalTime,
       confidence,
       requestId
     };
 
   } catch (error) {
+    console.error('❌ processImageWithUnifiedAnalysis caught error:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack');
+
     const totalTime = Math.round(performance.now() - startTime);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error during unified analysis';
 
@@ -254,6 +283,7 @@ export async function processImageWithUnifiedAnalysis(
       success: false,
       extractedText: '',
       interpretation: '',
+      identifiedIssues: [],
       processingTimeMs: totalTime,
       confidence: 0,
       error: errorMessage,
@@ -290,6 +320,7 @@ export async function reAnalyzeWithEditedText(
     return {
       success: result.success,
       interpretation: result.interpretation,
+      identifiedIssues: result.identifiedIssues,
       processingTimeMs: totalTime,
       error: result.error,
       requestId
@@ -302,6 +333,7 @@ export async function reAnalyzeWithEditedText(
     return {
       success: false,
       interpretation: '',
+      identifiedIssues: [],
       processingTimeMs: totalTime,
       error: errorMessage,
       requestId
@@ -310,65 +342,139 @@ export async function reAnalyzeWithEditedText(
 }
 
 /**
- * Generate clinical interpretation using the interpretation service
+ * Generate clinical interpretation using Flowise AI endpoint
  */
 async function generateInterpretation(
   analysisText: string,
   abgType: ABGType,
   onProgress?: (progress: number) => void,
   caseContext?: string
-): Promise<{success: boolean; interpretation: string; actionPlan?: string; error?: string}> {
+): Promise<{success: boolean; interpretation: string; identifiedIssues: FlowiseIdentifiedIssue[]; actionPlan?: string; error?: string}> {
   try {
     onProgress?.(10);
 
-    // Call the Supabase Edge Function for interpretation
-    const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/abg-interpretation`, {
+    // Flowise endpoint for BG analysis
+    const FLOWISE_BG_ENDPOINT = 'https://flowise-2-0.onrender.com/api/v1/prediction/bff0fbe6-1a17-4c9b-a3fd-6ba4202cd150';
+
+    // Format the question with unified label prefix
+    // Include case context if provided (following chat.ts pattern for case discussions)
+    let questionText = `<<BG_INTERPRETATION>>\n\n${analysisText}`;
+
+    if (caseContext && caseContext.trim()) {
+      questionText += `\n\n=== PATIENT CASE CONTEXT ===\n${caseContext}`;
+    }
+
+    const flowisePayload = {
+      question: questionText
+    };
+
+    // Add timeout handling (120 seconds like action-plan-processor)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000);
+
+    onProgress?.(30);
+
+    console.log('Calling Flowise for BG analysis', {
+      endpoint: FLOWISE_BG_ENDPOINT,
+      textLength: analysisText.length
+    });
+
+    // Call Flowise API directly
+    const response = await fetch(FLOWISE_BG_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+        'Accept': 'application/json'
       },
-      body: JSON.stringify({
-        analysis: analysisText,
-        type: abgType,
-        // Pass optional case context so backend can enhance interpretation
-        caseContext,
-        requestId: crypto.randomUUID(),
-        timestamp: new Date().toISOString()
-      })
+      body: JSON.stringify(flowisePayload),
+      signal: controller.signal
     });
 
-    onProgress?.(50);
+    clearTimeout(timeoutId);
+    onProgress?.(60);
 
     if (!response.ok) {
-      throw new Error(`Interpretation service error: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`Flowise API Error: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
-    const result = await response.json();
-    
+    const flowiseResult = await response.json();
+
+    onProgress?.(70);
+
+    // Extract interpretation text with robust parsing (same logic as action plans)
+    let interpretation = '';
+
+    // Try to extract the actual text content from various response structures
+    if (typeof flowiseResult === 'string') {
+      interpretation = flowiseResult;
+    } else if (flowiseResult.text && typeof flowiseResult.text === 'string' && flowiseResult.text.trim()) {
+      interpretation = flowiseResult.text;
+    } else if (flowiseResult.output && typeof flowiseResult.output === 'string') {
+      interpretation = flowiseResult.output;
+    } else if (flowiseResult.data) {
+      if (typeof flowiseResult.data === 'string') {
+        interpretation = flowiseResult.data;
+      } else if (flowiseResult.data.text && typeof flowiseResult.data.text === 'string') {
+        interpretation = flowiseResult.data.text;
+      }
+    } else if (flowiseResult.message && typeof flowiseResult.message === 'string') {
+      interpretation = flowiseResult.message;
+    } else if (flowiseResult.response && typeof flowiseResult.response === 'string') {
+      interpretation = flowiseResult.response;
+    } else if (flowiseResult.result && typeof flowiseResult.result === 'string') {
+      interpretation = flowiseResult.result;
+    }
+
+    // Last resort: stringify but log warning
+    if (!interpretation || interpretation.trim() === '') {
+      console.warn('⚠️ Could not extract clean text from Flowise interpretation response, using fallback', flowiseResult);
+      interpretation = JSON.stringify(flowiseResult);
+    }
+
+    onProgress?.(80);
+
+    // Ensure we got a valid interpretation
+    if (!interpretation || interpretation.trim().length === 0) {
+      throw new Error('Flowise returned an empty or invalid interpretation');
+    }
+
     onProgress?.(90);
 
-    if (!result.success) {
-      throw new Error(result.error || 'Interpretation service returned unsuccessful result');
-    }
+    // Extract identified issues JSON from markdown code block
+    const identifiedIssues = extractJsonFromMarkdown(interpretation);
 
-    onProgress?.(100);
+    console.log('Extracted identified issues:', {
+      count: identifiedIssues.length,
+      issues: identifiedIssues.map((issue: any) => issue.issue)
+    });
 
-    // Handle the nested response structure from Supabase Edge Function
-    // Edge Function returns: { success: true, data: { success: true, data: "interpretation text", ... }, message: "..." }
-    const interpretationData = result.data?.data || result.data || '';
-    let interpretation = typeof interpretationData === 'string' ? interpretationData : '';
-    
-    // Clean up any file paths that may have been included by the AI
+    // Remove the JSON code block from the interpretation text
+    interpretation = interpretation.replace(/```json\n[\s\S]*?\n```/g, '').trim();
+
+    // Clean up metadata patterns and file paths
     interpretation = interpretation
+      // Remove JSON metadata patterns
+      .replace(/^\{"text":"","question":"[^"]*","chatId":"[^"]*"[^}]*\}/g, '')
+      .replace(/\{"nodeId":"[^"]*","nodeLabel":"[^"]*"[^}]*\}/g, '')
+      .replace(/\{"agentFlowExecutedData":\[.*?\]\}/g, '')
+      // Remove Flowise metadata fields
+      .replace(/<<".*?">>/g, '')
+      .replace(/\[chatflow\]/gi, '')
+      .replace(/\{"executionId":"[^"]*"\}/g, '')
+      // Clean up file paths
       .replace(/\/var\/folders\/[^\s]+/g, '')
       .replace(/\/tmp\/[^\s]+/g, '')
       .replace(/\/Users\/[^\/]+\/[^\s]*TemporaryItems[^\s]*/g, '')
       .replace(/\/[A-Za-z0-9_\-]+\/TemporaryItems\/[^\s]+/g, '')
       .replace(/^[^\n]*\/[A-Za-z0-9_\-]+\/[A-Za-z0-9_\-]+\/[A-Za-z0-9_\-\.\/]+\.png[^\n]*$/gm, '')
       .replace(/\/[A-Za-z0-9_\-\.\/]*[Tt]emporary[A-Za-z0-9_\-\.\/]*/g, '')
+      // Clean up escape sequences
+      .replace(/\\n\\n/g, '\n\n')
+      .replace(/\\n/g, '\n')
+      .replace(/\\"/g, '"')
       .trim();
-    
+
     let actionPlan: string | undefined;
 
     // Look for action plan sections in the interpretation
@@ -380,14 +486,16 @@ async function generateInterpretation(
     return {
       success: true,
       interpretation,
+      identifiedIssues,
       actionPlan
     };
 
   } catch (error) {
     onProgress?.(100);
-    
+
     return {
       success: false,
+      identifiedIssues: [],
       interpretation: '',
       error: error instanceof Error ? error.message : 'Failed to generate interpretation'
     };

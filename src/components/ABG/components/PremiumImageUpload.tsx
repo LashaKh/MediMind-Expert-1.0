@@ -78,6 +78,12 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
 
   // Validate file
   const validateFile = useCallback((file: File): string | null => {
+    // Safety check: ensure t function is available
+    if (!t || typeof t !== 'function') {
+      console.error('Translation function (t) is not available in validateFile');
+      return 'Translation service not initialized. Please refresh the page.';
+    }
+
     // Check file type
     const acceptedTypes = accept.split(',').map(type => type.trim());
     const isValidType = acceptedTypes.some(type => {
@@ -98,7 +104,7 @@ export const PremiumImageUpload: React.FC<PremiumImageUploadProps> = ({
     }
 
     return null;
-  }, [accept, maxSizeMB]);
+  }, [accept, maxSizeMB, t]);
 
   // Handle file selection
   const handleFileSelect = useCallback((file: File) => {

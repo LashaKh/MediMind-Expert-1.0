@@ -1,19 +1,23 @@
 import { useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { 
-  WorkflowStep, 
-  ProcessingStatus, 
+import {
+  WorkflowStep,
+  ProcessingStatus,
   ABGType,
   ABGAnalysisError,
-  LocalABGResponse
+  LocalABGResponse,
+  FlowiseIdentifiedIssue,
+  ActionPlanResult
 } from '../../../types/abg';
 import { useABGStore, useABGActions } from '../../../stores/useABGStore';
 import { processImageWithUnifiedAnalysis, reAnalyzeWithEditedText, UnifiedProgressInfo } from '../../../services/abgUnifiedService';
-import { getABGResult } from '../../../services/abgService';
+import { getABGResult, updateABGResult } from '../../../services/abgService';
+import { buildEnhancedCaseContext } from '../../../utils/caseAttachmentIntegration';
 
 interface UseABGWorkflowProps {
   onComplete?: (resultId: string) => void;
   initialType?: ABGType;
+  activeCase?: any;
 }
 
 interface UseABGWorkflowReturn {
@@ -28,6 +32,8 @@ interface UseABGWorkflowReturn {
   unifiedProgress: UnifiedProgressInfo | null;
   extractedText: string;
   interpretation: string;
+  identifiedIssues: FlowiseIdentifiedIssue[];
+  actionPlans: ActionPlanResult[];
   showResults: boolean;
   isExtractedTextCollapsed: boolean;
   isClinicalInterpretationCollapsed: boolean;
@@ -57,7 +63,8 @@ interface UseABGWorkflowReturn {
 
 export const useABGWorkflow = ({
   onComplete,
-  initialType = 'Arterial Blood Gas'
+  initialType = 'Arterial Blood Gas',
+  activeCase
 }: UseABGWorkflowProps): UseABGWorkflowReturn => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -87,6 +94,8 @@ export const useABGWorkflow = ({
   const [unifiedProgress, setUnifiedProgress] = useState<UnifiedProgressInfo | null>(null);
   const [extractedText, setExtractedText] = useState<string>('');
   const [interpretation, setInterpretation] = useState<string>('');
+  const [identifiedIssues, setIdentifiedIssues] = useState<FlowiseIdentifiedIssue[]>([]);
+  const [actionPlans, setActionPlans] = useState<ActionPlanResult[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [isExtractedTextCollapsed, setIsExtractedTextCollapsed] = useState(true);
   const [isClinicalInterpretationCollapsed, setIsClinicalInterpretationCollapsed] = useState(true);
@@ -97,18 +106,71 @@ export const useABGWorkflow = ({
     try {
 
       const result = await getABGResult(resultId);
-      
-      // Set the completed result and workflow to completion step
+
+      // Set the completed result and ABG type
       setCompletedResult(result);
       setAbgType(result.type);
-      
-      // Update workflow to show the completed result
+
+      // Populate local state variables from database result
+      if (result.raw_analysis) {
+        setExtractedText(result.raw_analysis);
+      }
+
+      if (result.interpretation) {
+        setInterpretation(result.interpretation);
+      }
+
+      // Parse action plans from database if available
+      if (result.action_plan) {
+        // Parse the action_plan text back into ActionPlanResult array
+        const planSections = result.action_plan.split('\n\n---\n\n');
+        const parsedPlans: ActionPlanResult[] = planSections.map((section) => {
+          // Extract issue title from "## Action Plan N: Issue Title"
+          const issueMatch = section.match(/^## Action Plan \d+: (.+)$/m);
+          const issue = issueMatch ? issueMatch[1].trim() : 'Action Plan';
+
+          // Remove the header line to get just the plan content
+          const plan = section.replace(/^## Action Plan \d+: .+\n\n/m, '').trim();
+
+          return {
+            issue,
+            plan,
+            status: 'success' as const
+          };
+        });
+
+        setActionPlans(parsedPlans);
+      } else {
+        setActionPlans([]);
+      }
+
+      // Enable results display
+      setShowResults(true);
+
+      // Note: identifiedIssues are generated during live analysis and not stored in DB
+      // Action plans are now loaded from the database action_plan field
+
+      // Update workflow to INTERPRETATION step (not COMPLETED)
+      // This ensures the InterpretationStep component renders with all data
       startWorkflow({
-        currentStep: WorkflowStep.COMPLETED,
+        currentStep: WorkflowStep.INTERPRETATION,
         processingStatus: ProcessingStatus.COMPLETED,
         progress: 100,
         canProceed: true,
         hasAnalysisResult: true,
+        analysisResult: {
+          success: true,
+          extractedText: result.raw_analysis,
+          processingTimeMs: result.processing_time_ms || 0,
+          confidence: result.gemini_confidence || 0.9,
+          requestId: result.id
+        },
+        interpretationResult: {
+          success: true,
+          data: result.interpretation || '',
+          processingTimeMs: result.processing_time_ms || 0,
+          requestId: result.id
+        },
         result: result
       });
 
@@ -155,15 +217,25 @@ export const useABGWorkflow = ({
     setInterpretation('');
 
     try {
-      
-      // Start unified analysis with real-time progress
+
+      // Build case context if active case exists (following chat.ts pattern)
+      let caseContextString: string | undefined;
+      if (activeCase) {
+        console.log('Building enhanced case context for BG analysis:', {
+          caseId: activeCase.id,
+          caseTitle: activeCase.title
+        });
+        caseContextString = buildEnhancedCaseContext(activeCase);
+      }
+
+      // Start unified analysis with real-time progress and case context
       const result = await processImageWithUnifiedAnalysis(
         selectedFile,
         abgType,
         (progress) => {
           setUnifiedProgress(progress);
           setCurrentProcessingStatus(progress.currentTask || 'Processing...');
-          
+
           // Update workflow step based on progress phase
           if (progress.phase === 'extraction') {
             updateWorkflowStep(WorkflowStep.ANALYSIS, {
@@ -176,7 +248,8 @@ export const useABGWorkflow = ({
               progress: progress.overallProgress
             });
           }
-        }
+        },
+        { caseContext: caseContextString }
       );
 
       if (!result.success) {
@@ -186,7 +259,13 @@ export const useABGWorkflow = ({
       // Set results for immediate display
       setExtractedText(result.extractedText);
       setInterpretation(result.interpretation);
+      setIdentifiedIssues(result.identifiedIssues);
       setShowResults(true);
+
+      console.log('Analysis complete with identified issues:', {
+        issueCount: result.identifiedIssues.length,
+        issues: result.identifiedIssues.map(issue => issue.issue)
+      });
 
       // Update workflow state to INTERPRETATION step only
 
@@ -211,6 +290,16 @@ export const useABGWorkflow = ({
       });
 
       // Save to database (without action plan yet)
+      console.log('🔵 About to call createResult with data:', {
+        patient_id: null,
+        raw_analysis_length: result.extractedText?.length,
+        interpretation_length: result.interpretation?.length,
+        type: abgType,
+        type_typeof: typeof abgType,
+        processing_time_ms: result.processingTimeMs,
+        gemini_confidence: result.confidence
+      });
+
       const resultId = await createResult({
         patient_id: null,
         raw_analysis: result.extractedText,
@@ -238,7 +327,14 @@ export const useABGWorkflow = ({
       setCurrentProcessingStatus('Interpretation completed - Ready for action plan');
 
     } catch (err) {
-      
+      console.error('❌ processAnalysis error caught:', err);
+      console.error('Error details:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : 'No stack trace',
+        type: typeof err,
+        error: err
+      });
+
       let errorMessage = 'An unexpected error occurred during analysis';
       if (err instanceof Error) {
         // Enhanced error messages for specific API issues
@@ -254,7 +350,7 @@ export const useABGWorkflow = ({
           errorMessage = err.message;
         }
       }
-      
+
       setError(errorMessage);
       updateWorkflowStep(WorkflowStep.UPLOAD, {
         processingStatus: ProcessingStatus.ERROR,
@@ -266,9 +362,10 @@ export const useABGWorkflow = ({
       setIsProcessing(false);
     }
   }, [
-    selectedFile, 
-    abgType, 
-    updateWorkflowStep, 
+    selectedFile,
+    abgType,
+    activeCase,
+    updateWorkflowStep,
     setProcessingStatus,
     createResult,
     setError,
@@ -287,7 +384,17 @@ export const useABGWorkflow = ({
     clearError();
 
     try {
-      
+
+      // Build case context if active case exists (following chat.ts pattern)
+      let caseContextString: string | undefined;
+      if (activeCase) {
+        console.log('Building enhanced case context for BG re-analysis:', {
+          caseId: activeCase.id,
+          caseTitle: activeCase.title
+        });
+        caseContextString = buildEnhancedCaseContext(activeCase);
+      }
+
       const result = await reAnalyzeWithEditedText(editedText, abgType, (progress) => {
         setUnifiedProgress({
           phase: 'interpretation',
@@ -300,15 +407,21 @@ export const useABGWorkflow = ({
           currentTask: 'Processing edited text'
         });
         setCurrentProcessingStatus('Re-analyzing with edited text...');
-      });
+      }, caseContextString);
 
       if (!result.success) {
         throw new Error(result.error || 'Re-analysis failed');
       }
 
-      // Update the interpretation
+      // Update the interpretation and identified issues
       setInterpretation(result.interpretation);
+      setIdentifiedIssues(result.identifiedIssues);
       setExtractedText(editedText);
+
+      console.log('Re-analysis complete with identified issues:', {
+        issueCount: result.identifiedIssues.length,
+        issues: result.identifiedIssues.map(issue => issue.issue)
+      });
 
       // Update workflow state
       updateWorkflowStep(WorkflowStep.INTERPRETATION, {
@@ -332,7 +445,7 @@ export const useABGWorkflow = ({
     } finally {
       setIsProcessing(false);
     }
-  }, [abgType, updateWorkflowStep, setError, clearError]);
+  }, [abgType, activeCase, updateWorkflowStep, setError, clearError]);
 
   // Process the interpretation using local OpenAI function
   const processInterpretation = useCallback(async () => {
@@ -423,12 +536,11 @@ export const useABGWorkflow = ({
     setCurrentProcessingStatus
   ]);
 
-  // Process the action plan using local functions
+  // Process action plans for all identified issues (parallel generation)
   const processActionPlan = useCallback(async () => {
-
-    if (!workflow?.interpretationResult) {
-
-      setError('No interpretation available. Please get clinical interpretation first.');
+    // Check if we have identified issues to process
+    if (!identifiedIssues || identifiedIssues.length === 0) {
+      setError('No identified issues found. Please complete the clinical interpretation first.');
       return;
     }
 
@@ -436,177 +548,224 @@ export const useABGWorkflow = ({
     clearError();
 
     try {
-      // Import the issue parser and test
-      const { parseABGInterpretation, generateIssueActionPlanRequest } = await import('../../../utils/abgIssueParser');
-      
-      // Step 1: Parse interpretation to identify individual issues
-      setCurrentProcessingStatus('Identifying clinical issues...');
-      updateWorkflowStep(WorkflowStep.ACTION_PLAN, {
-        processingStatus: ProcessingStatus.GENERATING_PLAN,
-        progress: 75
-      });
+      const startTime = performance.now();
+      const FLOWISE_ENDPOINT = 'https://flowise-2-0.onrender.com/api/v1/prediction/bff0fbe6-1a17-4c9b-a3fd-6ba4202cd150';
 
-      const parsingResult = parseABGInterpretation(workflow.interpretationResult.data);
+      console.log(`Starting parallel action plan generation for ${identifiedIssues.length} issues`);
 
-      if (parsingResult.totalIssuesFound === 0) {
-        // Fallback to single comprehensive action plan
+      // Initialize action plans with 'pending' status
+      const initialActionPlans: ActionPlanResult[] = identifiedIssues.map(issue => ({
+        issue: issue.issue,
+        plan: '',
+        status: 'pending' as const
+      }));
+      setActionPlans(initialActionPlans);
 
-        setCurrentProcessingStatus('Generating comprehensive action plan...');
-        
-        const requestId = crypto.randomUUID();
-        const actionPlanResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/abg-action-plan-processor`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify({
-            issue: 'Blood Gas Analysis - Comprehensive Action Plan',
-            description: workflow.interpretationResult.data,
-            question: `Please provide a comprehensive action plan for this ${abgType} analysis`,
-            requestId,
-            timestamp: new Date().toISOString()
-          })
-        });
+      setCurrentProcessingStatus(`Generating action plans... (0 of ${identifiedIssues.length})`);
+      // Stay on INTERPRETATION step - don't advance to ACTION_PLAN
+      // Action plans are displayed within InterpretationStep
+      setProcessingStatus(ProcessingStatus.GENERATING_PLAN, 'Generating action plans...');
 
-        if (!actionPlanResponse.ok) {
-          throw new Error(`Action plan service error: ${actionPlanResponse.status}`);
-        }
+      // Create parallel requests for each issue
+      const actionPlanPromises = identifiedIssues.map(async (issue, index) => {
+        // Update status to 'loading' for this issue
+        setActionPlans(prev =>
+          prev.map((plan, i) =>
+            i === index ? { ...plan, status: 'loading' as const } : plan
+          )
+        );
 
-        const actionPlanData = await actionPlanResponse.json();
-        const nestedData = actionPlanData.data || actionPlanData;
-        const actionPlanText = nestedData.data || nestedData.message || '';
-
-        const actionPlanResult = {
-          success: true,
-          data: actionPlanText,
-          processingTimeMs: nestedData.processingTimeMs || 0,
-          requestId: nestedData.requestId || requestId,
-          issues: []
-        };
-
-        updateWorkflowStep(WorkflowStep.ACTION_PLAN, {
-          actionPlanResult,
-          processingStatus: ProcessingStatus.COMPLETED,
-          progress: 90,
-          canProceed: true
-        });
-
-        setCurrentProcessingStatus('Action plan completed!');
-        return;
-      }
-
-      // Generate action plans for each identified issue - PARALLEL REQUESTS
-      setCurrentProcessingStatus(`Generating action plans for ${parsingResult.totalIssuesFound} issues simultaneously...`);
-      
-      const baseRequestId = crypto.randomUUID();
-      const actionPlanPromises = parsingResult.issues.map(async (issue, index) => {
-        const issueRequest = generateIssueActionPlanRequest(issue, abgType);
-        const requestId = `${baseRequestId}-issue-${index + 1}`;
-        
         try {
-          const actionPlanResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/abg-action-plan-processor`, {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minutes per request
+
+          const response = await fetch(FLOWISE_ENDPOINT, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+              'Accept': 'application/json'
             },
             body: JSON.stringify({
-              ...issueRequest,
-              requestId,
-              timestamp: new Date().toISOString()
-            })
+              question: `<<BG_ACTION_PLAN>>\n\nIssue: ${issue.issue}\n\nDescription: ${issue.description}\n\nQuestion: ${issue.question}`
+            }),
+            signal: controller.signal
           });
 
-          if (!actionPlanResponse.ok) {
-            const errorText = await actionPlanResponse.text();
-            return {
-              issue: issue,
-              success: false,
-              data: `Action plan generation failed for ${issue.title}. Status: ${actionPlanResponse.status} - ${errorText}`,
-              error: `HTTP ${actionPlanResponse.status}: ${errorText}`,
-              requestId
-            };
+          clearTimeout(timeoutId);
+
+          if (!response.ok) {
+            throw new Error(`Flowise API Error: ${response.status} ${response.statusText}`);
           }
 
-          const actionPlanData = await actionPlanResponse.json();
-          const actionPlanText = actionPlanData.data || actionPlanData.message || '';
-          
-          return {
-            issue: issue,
-            success: true,
-            data: actionPlanText,
-            processingTimeMs: actionPlanData.processingTimeMs || 0,
-            requestId: actionPlanData.requestId || requestId
-          };
-          
-        } catch (issueError) {
+          const flowiseResult = await response.json();
 
+          // Extract action plan text with robust parsing
+          let actionPlanText = '';
+
+          // Try to extract the actual text content from various response structures
+          if (typeof flowiseResult === 'string') {
+            actionPlanText = flowiseResult;
+          } else if (flowiseResult.text && typeof flowiseResult.text === 'string' && flowiseResult.text.trim()) {
+            actionPlanText = flowiseResult.text;
+          } else if (flowiseResult.output && typeof flowiseResult.output === 'string') {
+            actionPlanText = flowiseResult.output;
+          } else if (flowiseResult.data) {
+            if (typeof flowiseResult.data === 'string') {
+              actionPlanText = flowiseResult.data;
+            } else if (flowiseResult.data.text && typeof flowiseResult.data.text === 'string') {
+              actionPlanText = flowiseResult.data.text;
+            }
+          } else if (flowiseResult.message && typeof flowiseResult.message === 'string') {
+            actionPlanText = flowiseResult.message;
+          } else if (flowiseResult.response && typeof flowiseResult.response === 'string') {
+            actionPlanText = flowiseResult.response;
+          } else if (flowiseResult.result && typeof flowiseResult.result === 'string') {
+            actionPlanText = flowiseResult.result;
+          }
+
+          // If still empty, try to find text in nested structures
+          if (!actionPlanText || actionPlanText.trim() === '') {
+            // Check if there's a question field that contains the actual content
+            if (flowiseResult.question && typeof flowiseResult.question === 'string') {
+              // Extract content after <<BG_ACTION_PLAN>> marker if present
+              const markerIndex = flowiseResult.question.indexOf('<<BG_ACTION_PLAN>>');
+              if (markerIndex !== -1) {
+                actionPlanText = flowiseResult.question.substring(markerIndex + '<<BG_ACTION_PLAN>>'.length).trim();
+              } else {
+                actionPlanText = flowiseResult.question;
+              }
+            }
+          }
+
+          // Last resort: stringify but log warning
+          if (!actionPlanText || actionPlanText.trim() === '') {
+            console.warn('⚠️ Could not extract clean text from Flowise response, using fallback', flowiseResult);
+            actionPlanText = JSON.stringify(flowiseResult);
+          }
+
+          // Clean up metadata patterns that sometimes leak through
+          actionPlanText = actionPlanText
+            // Remove JSON metadata patterns
+            .replace(/^\{"text":"","question":"[^"]*","chatId":"[^"]*"[^}]*\}/g, '')
+            .replace(/\{"nodeId":"[^"]*","nodeLabel":"[^"]*"[^}]*\}/g, '')
+            .replace(/\{"agentFlowExecutedData":\[.*?\]\}/g, '')
+            // Remove Flowise metadata fields
+            .replace(/<<".*?">>/g, '')
+            .replace(/\[chatflow\]/gi, '')
+            .replace(/\{"executionId":"[^"]*"\}/g, '')
+            // Clean up file paths
+            .replace(/\/var\/folders\/[^\s]+/g, '')
+            .replace(/\/tmp\/[^\s]+/g, '')
+            .replace(/\/Users\/[^\/]+\/[^\s]*TemporaryItems[^\s]*/g, '')
+            .replace(/\/[A-Za-z0-9_\-]+\/TemporaryItems\/[^\s]+/g, '')
+            // Clean up escape sequences
+            .replace(/\\n\\n/g, '\n\n')
+            .replace(/\\n/g, '\n')
+            .replace(/\\"/g, '"')
+            .trim();
+
+          return { index, success: true, plan: actionPlanText };
+
+        } catch (error) {
+          console.error(`Error generating action plan for issue "${issue.issue}":`, error);
           return {
-            issue: issue,
+            index,
             success: false,
-            data: `Failed to generate action plan for ${issue.title}: ${issueError instanceof Error ? issueError.message : 'Unknown error'}`,
-            error: issueError instanceof Error ? issueError.message : 'Unknown error',
-            requestId
+            error: error instanceof Error ? error.message : 'Failed to generate action plan'
           };
         }
       });
 
-      // Wait for all requests to complete
+      // Wait for all requests to complete (with partial failures allowed)
+      const results = await Promise.allSettled(actionPlanPromises);
 
-      setCurrentProcessingStatus('Waiting for all action plans to complete...');
-      
-      const actionPlans = await Promise.all(actionPlanPromises);
+      // Process results and update action plans
+      const finalActionPlans: ActionPlanResult[] = identifiedIssues.map((issue, index) => {
+        const result = results[index];
 
-      // Create combined action plan result
-      const { createCombinedActionPlan } = await import('../utils/actionPlanUtils');
-      const combinedActionPlan = {
-        success: true,
-        data: createCombinedActionPlan(parsingResult.issues, actionPlans),
-        processingTimeMs: actionPlans.reduce((total, plan) => total + (plan.processingTimeMs || 0), 0),
-        requestId: baseRequestId,
-        issues: parsingResult.issues,
-        actionPlans: actionPlans,
-        totalIssues: parsingResult.totalIssuesFound,
-        successfulPlans: actionPlans.filter(plan => plan.success).length,
-        failedPlans: actionPlans.filter(plan => !plan.success).length
-      };
-
-      updateWorkflowStep(WorkflowStep.ACTION_PLAN, {
-        actionPlanResult: combinedActionPlan,
-        processingStatus: ProcessingStatus.COMPLETED,
-        progress: 90,
-        canProceed: true
+        if (result.status === 'fulfilled' && result.value.success) {
+          return {
+            issue: issue.issue,
+            plan: result.value.plan,
+            status: 'success' as const
+          };
+        } else {
+          const errorMsg = result.status === 'fulfilled'
+            ? result.value.error
+            : 'Request failed';
+          return {
+            issue: issue.issue,
+            plan: '',
+            status: 'error' as const,
+            error: errorMsg
+          };
+        }
       });
 
-      setCurrentProcessingStatus(`Action plans completed! Generated ${combinedActionPlan.successfulPlans} action plans for identified issues.`);
+      setActionPlans(finalActionPlans);
 
-    } catch (err) {
+      // Count successful and failed plans
+      const successCount = finalActionPlans.filter(p => p.status === 'success').length;
+      const failedCount = finalActionPlans.filter(p => p.status === 'error').length;
 
-      let errorMessage = 'An unexpected error occurred during action plan generation';
-      
-      if (err && typeof err === 'object') {
-        if ('code' in err) {
-          const error = err as ABGAnalysisError;
-          errorMessage = error.message;
-        } else if (err instanceof Error) {
-          errorMessage = err.message;
+      const processingTime = Math.round(performance.now() - startTime);
+
+      console.log(`✅ Action plan generation complete: ${successCount} successful, ${failedCount} failed in ${processingTime}ms`);
+
+      // Auto-save action plans to database if we have a result ID
+      if (successCount > 0 && completedResult?.id) {
+        try {
+          // Convert action plans to formatted text for database storage
+          const successfulPlans = finalActionPlans.filter(ap => ap.status === 'success');
+          const actionPlanText = successfulPlans
+            .map((ap, index) => `## Action Plan ${index + 1}: ${ap.issue}\n\n${ap.plan}`)
+            .join('\n\n---\n\n');
+
+          // Update the existing database record with action plans
+          await updateABGResult(completedResult.id, {
+            action_plan: actionPlanText
+          });
+
+          console.log(`✅ Action plans auto-saved to database for result ${completedResult.id}`);
+
+          // Update completedResult with the action plans
+          setCompletedResult({
+            ...completedResult,
+            action_plan: actionPlanText
+          });
+        } catch (error) {
+          console.error('Failed to auto-save action plans:', error);
+          // Don't show error to user - action plans are still in memory
         }
       }
-      
+
+      // Stay on INTERPRETATION step - action plans display there
+      // Just update processing status, don't advance workflow
+      if (successCount === identifiedIssues.length) {
+        setCurrentProcessingStatus(`All ${successCount} action plans generated successfully!`);
+        setProcessingStatus(ProcessingStatus.COMPLETED, 'Action plans generated');
+      } else if (successCount > 0) {
+        setCurrentProcessingStatus(`${successCount} of ${identifiedIssues.length} action plans generated (${failedCount} failed)`);
+        setProcessingStatus(ProcessingStatus.COMPLETED, 'Partial success');
+      } else {
+        setError(`Failed to generate action plans for all ${identifiedIssues.length} issues`);
+        setCurrentProcessingStatus('Action plan generation failed');
+        setProcessingStatus(ProcessingStatus.ERROR, 'Generation failed');
+      }
+
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred during action plan generation';
+      console.error('Action plan generation error:', err);
       setError(errorMessage);
-      updateWorkflowStep(WorkflowStep.ACTION_PLAN, {
-        processingStatus: ProcessingStatus.ERROR,
-        error: errorMessage
-      });
+      setProcessingStatus(ProcessingStatus.ERROR, errorMessage);
+      setCurrentProcessingStatus('Action plan generation failed');
     } finally {
       setIsProcessing(false);
     }
   }, [
-    workflow,
-    abgType, 
-    updateWorkflowStep, 
-    setProcessingStatus,
+    identifiedIssues,
+    completedResult,
+    updateWorkflowStep,
     clearError,
     setError,
     setCurrentProcessingStatus
@@ -639,11 +798,23 @@ export const useABGWorkflow = ({
     try {
       // Save complete results to database
       setCurrentProcessingStatus('Saving complete analysis...');
+
+      // Convert actionPlans array to formatted string for database storage
+      let actionPlanText: string | undefined = undefined;
+      if (actionPlans && actionPlans.length > 0) {
+        const successfulPlans = actionPlans.filter(ap => ap.status === 'success');
+        if (successfulPlans.length > 0) {
+          actionPlanText = successfulPlans
+            .map((ap, index) => `## Action Plan ${index + 1}: ${ap.issue}\n\n${ap.plan}`)
+            .join('\n\n---\n\n');
+        }
+      }
+
       const resultId = await createResult({
         patient_id: null,
         raw_analysis: rawAnalysisText,
         interpretation: workflow.interpretationResult.data,
-        action_plan: workflow.actionPlanResult?.data || undefined,
+        action_plan: actionPlanText,
         type: abgType,
         processing_time_ms: workflow.analysisResult?.processingTimeMs || 0,
         gemini_confidence: workflow.analysisResult?.confidence || 0.8
@@ -654,7 +825,7 @@ export const useABGWorkflow = ({
         id: resultId,
         raw_analysis: rawAnalysisText,
         interpretation: workflow.interpretationResult.data,
-        action_plan: workflow.actionPlanResult?.data || undefined,
+        action_plan: actionPlanText,
         type: abgType,
         processing_time_ms: workflow.analysisResult?.processingTimeMs || 0,
         gemini_confidence: workflow.analysisResult?.confidence || 0.8,
@@ -698,8 +869,9 @@ export const useABGWorkflow = ({
   }, [
     workflow,
     extractedText,
-    abgType, 
-    updateWorkflowStep, 
+    abgType,
+    actionPlans,
+    updateWorkflowStep,
     createResult,
     clearError,
     setError,
@@ -707,11 +879,34 @@ export const useABGWorkflow = ({
     setCurrentProcessingStatus
   ]);
 
-  // Restart workflow
+  // Restart workflow - Reset ALL state variables for fresh session
   const restartWorkflow = useCallback(() => {
+    // Reset file selection
     setSelectedFile(null);
     setAbgType('Arterial Blood Gas');
+
+    // Reset processing state
+    setIsProcessing(false);
     setCurrentProcessingStatus('');
+    setUnifiedProgress(null);
+
+    // Reset analysis results
+    setExtractedText('');
+    setInterpretation('');
+    setIdentifiedIssues([]);
+    setActionPlans([]);
+    setCompletedResult(null);
+    setShowResults(false);
+
+    // Reset collapsed states to initial values
+    setIsExtractedTextCollapsed(true);
+    setIsClinicalInterpretationCollapsed(true);
+    setIsAnalysisCompleteCollapsed(false);
+
+    // Clear camera state
+    setShowCamera(false);
+
+    // Clear errors and reset store workflow
     clearError();
     startWorkflow({
       currentStep: WorkflowStep.UPLOAD,
@@ -733,6 +928,8 @@ export const useABGWorkflow = ({
     unifiedProgress,
     extractedText,
     interpretation,
+    identifiedIssues,
+    actionPlans,
     showResults,
     isExtractedTextCollapsed,
     isClinicalInterpretationCollapsed,

@@ -1,12 +1,12 @@
 import React from 'react';
-import { WorkflowStep, ProcessingStatus } from '../../../types/abg';
+import { WorkflowStep, ProcessingStatus, FlowiseIdentifiedIssue, ActionPlanResult } from '../../../types/abg';
 import { UnifiedProgressInfo } from '../../../services/abgUnifiedService';
-import { 
-  UploadStep, 
-  AnalysisStep, 
-  InterpretationStep, 
-  ActionPlanStep, 
-  CompletedStep 
+import {
+  UploadStep,
+  AnalysisStep,
+  InterpretationStep,
+  ActionPlanStep,
+  CompletedStep
 } from './workflow-steps';
 
 interface StepRendererProps {
@@ -30,9 +30,11 @@ interface StepRendererProps {
   unifiedProgress: UnifiedProgressInfo | null;
   extractedText: string;
   interpretation: string;
+  identifiedIssues: FlowiseIdentifiedIssue[];
+  actionPlans: ActionPlanResult[];
   showResults: boolean;
   completedResult: any;
-  
+
   // UI state
   isExtractedTextCollapsed: boolean;
   isClinicalInterpretationCollapsed: boolean;
@@ -40,7 +42,7 @@ interface StepRendererProps {
 
   // Case management
   activeCase?: any;
-  
+
   // Actions
   onAbgTypeChange: (type: any) => void;
   onFileSelect: (file: File) => void;
@@ -56,7 +58,7 @@ interface StepRendererProps {
   onTextReAnalysis: (text: string) => void;
   onCaseCreateOpen: () => void;
   onCaseListOpen: () => void;
-  
+
   // UI state setters
   onExtractedTextCollapsedChange: (collapsed: boolean) => void;
   onClinicalInterpretationCollapsedChange: (collapsed: boolean) => void;
@@ -72,6 +74,8 @@ export const StepRenderer: React.FC<StepRendererProps> = ({
   unifiedProgress,
   extractedText,
   interpretation,
+  identifiedIssues,
+  actionPlans,
   showResults,
   completedResult,
   isExtractedTextCollapsed,
@@ -149,6 +153,8 @@ export const StepRenderer: React.FC<StepRendererProps> = ({
           {...commonProps}
           extractedText={extractedText}
           interpretation={interpretation || workflow?.interpretationResult?.data}
+          identifiedIssues={identifiedIssues}
+          actionPlans={actionPlans}
           showResults={showResults}
           abgType={workflow.type || 'Arterial Blood Gas'}
           isExtractedTextCollapsed={isExtractedTextCollapsed}

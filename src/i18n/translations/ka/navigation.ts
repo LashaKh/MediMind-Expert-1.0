@@ -15,6 +15,7 @@ export default {
   profile: 'პროფილი და პარამეტრები',
   toggleMenu: 'მენიუს გადართვა',
   menu: 'მენიუ',
+  home: 'მთავარი',
   bloodGasAnalysis: 'სისხლის აირების ანალიზი',
   diseaseLibrary: 'დაავადებების ბიბლიოთეკა',
   diseaseLibrarySubtitle: 'დაავადებების სრული მონაცემთა ბაზა',

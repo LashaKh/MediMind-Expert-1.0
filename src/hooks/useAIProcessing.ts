@@ -23,10 +23,11 @@ interface UseAIProcessingReturn {
   error: string | null;
   lastResult: ProcessingResult | null;
   processingHistory: ProcessingHistory[];
-  
+
   // Processing operations
   processText: (transcript: string, userInstruction: string, model?: string) => Promise<ProcessingResult | null>;
   clearError: () => void;
+  setError: (error: string | null) => void; // Add manual error control
   clearHistory: () => void;
   addToHistory: (instruction: string, response: string, model: string, tokensUsed?: number, processingTime?: number) => void;
   setProcessingHistory: (history: ProcessingHistory[]) => void;
@@ -170,9 +171,10 @@ export const useAIProcessing = (options?: UseAIProcessingOptions): UseAIProcessi
     error,
     lastResult,
     processingHistory,
-    
+
     processText,
     clearError,
+    setError,
     clearHistory,
     addToHistory,
     setProcessingHistory,

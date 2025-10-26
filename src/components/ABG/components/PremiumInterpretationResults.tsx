@@ -93,7 +93,18 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
       if (typeof interpretation === 'string') {
         // Expand all sections to show complete interpretation immediately
         const sectionCount = interpretation.split(/^#{2,3}\s+/gm).filter(section => section.trim()).length;
-        const allSections = Array.from({ length: sectionCount }, (_, i) => `section-${i}`);
+        const dynamicSections = Array.from({ length: sectionCount }, (_, i) => `section-${i}`);
+
+        // Include both dynamic sections and fixed section names
+        const allSections = [
+          ...dynamicSections,
+          'primary',
+          'systems',
+          'findings',
+          'recommendations'
+        ];
+
+        console.log('🔓 Expanding all sections:', allSections);
         setExpandedSections(new Set(allSections));
       }
     }
@@ -308,50 +319,58 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
 
           {/* Analysis Metrics Section */}
           {analysisMetrics && (
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                  <TrendingUp className="h-6 w-6 text-[#2b6cb0]" />
+            <div className="relative bg-white rounded-xl border border-slate-200/60 shadow-lg overflow-hidden">
+              {/* Subtle gradient background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/5 via-white to-[#2b6cb0]/5 pointer-events-none" />
+
+              <div className="relative p-6">
+                <h3 className="text-lg font-bold text-[#1a365d] mb-5 flex items-center gap-2.5">
+                  <div className="w-9 h-9 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-lg flex items-center justify-center shadow-md">
+                    <TrendingUp className="h-4 w-4 text-white" />
+                  </div>
                   {t('abg.interpretation.metrics', 'Analysis Metrics')}
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Confidence Score */}
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-[#90cdf4]/20 to-[#63b3ed]/30 rounded-xl border border-[#63b3ed]/40">
-                    <div className={`w-12 h-12 bg-gradient-to-br ${getConfidenceLevel(analysisMetrics.confidence).gradient} rounded-xl flex items-center justify-center`}>
-                      <TrendingUp className="h-6 w-6 text-white" />
+                  <div className="group relative flex items-center gap-3.5 p-4 bg-gradient-to-br from-white to-slate-50/30 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className={`relative w-11 h-11 bg-gradient-to-br ${getConfidenceLevel(analysisMetrics.confidence).gradient} rounded-lg flex items-center justify-center shadow-md`}>
+                      <TrendingUp className="h-5 w-5 text-white" />
                     </div>
-                    <div>
-                      <p className="text-slate-600 text-sm font-medium">{t('abg.interpretation.confidence', 'Confidence')}</p>
-                      <p className="text-2xl font-bold text-slate-800">
+                    <div className="relative">
+                      <p className="text-slate-600 text-xs font-semibold uppercase tracking-wide mb-1">{t('abg.interpretation.confidence', 'Confidence')}</p>
+                      <p className="text-2xl font-bold text-[#1a365d]">
                         {analysisMetrics.confidence ? `${Math.round(analysisMetrics.confidence * 100)}%` : 'N/A'}
                       </p>
-                      <p className="text-slate-500 text-xs">{getConfidenceLevel(analysisMetrics.confidence).level}</p>
+                      <p className="text-slate-500 text-xs font-medium mt-0.5">{getConfidenceLevel(analysisMetrics.confidence).level}</p>
                     </div>
                   </div>
 
                   {/* Processing Time */}
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-[#2b6cb0]/20 to-[#1a365d]/30 rounded-xl border border-[#2b6cb0]/40">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-xl flex items-center justify-center">
-                      <Activity className="h-6 w-6 text-white" />
+                  <div className="group relative flex items-center gap-3.5 p-4 bg-gradient-to-br from-white to-slate-50/30 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#2b6cb0]/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative w-11 h-11 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-lg flex items-center justify-center shadow-md">
+                      <Activity className="h-5 w-5 text-white" />
                     </div>
-                    <div>
-                      <p className="text-slate-600 text-sm font-medium">{t('abg.interpretation.processingTime', 'Processing Time')}</p>
-                      <p className="text-2xl font-bold text-slate-800">
+                    <div className="relative">
+                      <p className="text-slate-600 text-xs font-semibold uppercase tracking-wide mb-1">{t('abg.interpretation.processingTime', 'Processing Time')}</p>
+                      <p className="text-2xl font-bold text-[#1a365d]">
                         {analysisMetrics.processingTimeMs ? formatProcessingTime(analysisMetrics.processingTimeMs) : 'N/A'}
                       </p>
-                      <p className="text-slate-500 text-xs">{t('abg.interpretation.lightningFast', 'Lightning fast')}</p>
+                      <p className="text-slate-500 text-xs font-medium mt-0.5">{t('abg.interpretation.lightningFast', 'Lightning fast')}</p>
                     </div>
                   </div>
 
                   {/* Analysis Quality */}
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-br from-[#63b3ed]/20 to-[#90cdf4]/30 rounded-xl border border-[#63b3ed]/40">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#63b3ed] to-[#90cdf4] rounded-xl flex items-center justify-center">
-                      <Zap className="h-6 w-6 text-white" />
+                  <div className="group relative flex items-center gap-3.5 p-4 bg-gradient-to-br from-white to-slate-50/30 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#63b3ed]/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative w-11 h-11 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-lg flex items-center justify-center shadow-md">
+                      <Zap className="h-5 w-5 text-white" />
                     </div>
-                    <div>
-                      <p className="text-slate-600 text-sm font-medium">{t('abg.interpretation.quality', 'Quality')}</p>
-                      <p className="text-2xl font-bold text-slate-800">{analysisMetrics.quality || 'Premium'}</p>
-                      <p className="text-slate-500 text-xs">{t('abg.search.aiPowered', 'AI-Powered')}</p>
+                    <div className="relative">
+                      <p className="text-slate-600 text-xs font-semibold uppercase tracking-wide mb-1">{t('abg.interpretation.quality', 'Quality')}</p>
+                      <p className="text-2xl font-bold text-[#1a365d]">{analysisMetrics.quality || 'Premium'}</p>
+                      <p className="text-slate-500 text-xs font-medium mt-0.5">{t('abg.search.aiPowered', 'AI-Powered')}</p>
                     </div>
                   </div>
                 </div>
@@ -364,18 +383,25 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
             {interpretation.split(/^#{2,3}\s+/gm).filter(section => section.trim()).map((section, index) => {
               const lines = section.trim().split('\n');
               let title = lines[0];
-              
-              // Clean up the title - remove any remaining markdown
-              title = title.replace(/\*\*.*$/, '').replace(/^#+\s*/, '').trim();
-              
-              // Skip the main header - check for # Blood Gas Analysis Report 
+
+              // Clean up the title - remove markdown formatting but keep the text
+              // Remove ** markers (not the text between them)
+              title = title.replace(/\*\*/g, '').replace(/^#+\s*/, '').trim();
+
+              // Skip the main header - check for # Blood Gas Analysis Report
               if (title.includes('Blood Gas Analysis Report') || title.includes('Blood Gas Interpretation') || title === 'Arterial Blood Gas Interpretation') {
+                console.log(`⏭️  Skipping header section: ${title}`);
                 return null;
               }
-              
+
               const content = lines.slice(1).join('\n').trim();
-              
-              if (!title || !content) return null;
+
+              console.log(`📄 Section ${index}:`, { title, hasContent: !!content, contentLength: content.length });
+
+              if (!title || !content) {
+                console.log(`❌ Skipping section ${index} - no title or content`);
+                return null;
+              }
 
               // Determine section type and styling
               let sectionConfig = {
@@ -397,72 +423,113 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
 
               const IconComponent = sectionConfig.icon;
 
+              console.log(`✅ Rendering section ${index}: ${title}, expanded: ${expandedSections.has(`section-${index}`)}`);
+
               return (
-                <div key={index} className="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
-                  <div className="p-6 cursor-pointer hover:bg-slate-50 transition-colors"
+                <div key={index} className="group relative bg-white rounded-xl border border-slate-200/60 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                  {/* Subtle gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#90cdf4]/5 via-transparent to-[#2b6cb0]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                  <div className="relative p-5 cursor-pointer hover:bg-slate-50/50 transition-colors"
                        onClick={() => toggleSection(`section-${index}`)}>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 bg-gradient-to-br ${sectionConfig.gradient} rounded-xl flex items-center justify-center`}>
-                          <IconComponent className="h-6 w-6 text-white" />
+                      <div className="flex items-center gap-3">
+                        <div className={`w-11 h-11 bg-gradient-to-br ${sectionConfig.gradient} rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow`}>
+                          <IconComponent className="h-5 w-5 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-xl font-bold text-slate-800">{title}</h3>
-                          <p className="text-slate-600">Clinical findings and analysis</p>
+                          <h3 className="text-lg font-bold text-[#1a365d] group-hover:text-[#2b6cb0] transition-colors">{title}</h3>
+                          <p className="text-xs text-slate-500 font-medium">Clinical findings and analysis</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         {!showHeaderActions && (
                           <>
                             <Button
-                              variant="outline"
+                              variant="ghost"
                               size="sm"
                               onClick={(e) => { e.stopPropagation(); handleCopy(); }}
-                              className="border-slate-300 hover:bg-slate-50"
+                              className="h-8 px-3 text-[#2b6cb0] hover:text-[#1a365d] hover:bg-[#90cdf4]/10 border border-transparent hover:border-[#63b3ed]/30 transition-all"
                             >
                               {copySuccess ? (
-                                <CheckCircle2 className="h-4 w-4 mr-2" />
+                                <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" />
                               ) : (
-                                <Copy className="h-4 w-4 mr-2" />
+                                <Copy className="h-3.5 w-3.5 mr-1.5" />
                               )}
-                              {copySuccess ? 'Copied!' : 'Copy'}
+                              <span className="text-xs font-medium">{copySuccess ? 'Copied!' : 'Copy'}</span>
                             </Button>
-                            
+
                             {editable && (
                               <Button
-                                variant="outline"
+                                variant="ghost"
                                 size="sm"
                                 onClick={(e) => { e.stopPropagation(); handleStartEdit(); }}
-                                className="border-slate-300 hover:bg-slate-50"
+                                className="h-8 px-3 text-[#2b6cb0] hover:text-[#1a365d] hover:bg-[#90cdf4]/10 border border-transparent hover:border-[#63b3ed]/30 transition-all"
                               >
-                                <Edit2 className="h-4 w-4 mr-2" />
-                                Edit
+                                <Edit2 className="h-3.5 w-3.5 mr-1.5" />
+                                <span className="text-xs font-medium">Edit</span>
                               </Button>
                             )}
-                            
+
                             <Button
-                              variant="outline"
+                              variant="ghost"
                               size="sm"
                               onClick={(e) => { e.stopPropagation(); handleShare(); }}
-                              className="border-slate-300 hover:bg-slate-50"
+                              className="h-8 px-3 text-[#2b6cb0] hover:text-[#1a365d] hover:bg-[#90cdf4]/10 border border-transparent hover:border-[#63b3ed]/30 transition-all"
                             >
-                              <Share2 className="h-4 w-4 mr-2" />
-                              Share
+                              <Share2 className="h-3.5 w-3.5 mr-1.5" />
+                              <span className="text-xs font-medium">Share</span>
                             </Button>
                           </>
                         )}
-                        <ArrowRight className={cn(
-                          "h-5 w-5 text-slate-400 transition-transform",
-                          expandedSections.has(`section-${index}`) && "rotate-90"
-                        )} />
+                        <div className={cn(
+                          "ml-1 w-7 h-7 rounded-md flex items-center justify-center bg-slate-100 group-hover:bg-[#63b3ed]/20 transition-all",
+                          expandedSections.has(`section-${index}`) && "bg-[#63b3ed]/20"
+                        )}>
+                          <ArrowRight className={cn(
+                            "h-4 w-4 text-slate-400 group-hover:text-[#2b6cb0] transition-all duration-300",
+                            expandedSections.has(`section-${index}`) && "rotate-90 text-[#2b6cb0]"
+                          )} />
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   {expandedSections.has(`section-${index}`) && (
-                    <div className="px-6 pb-6 animate-in slide-in-from-top-2">
-                      <div className={cn("p-6 rounded-xl border", sectionConfig.bgColor, sectionConfig.borderColor)}>
-                        <div 
+                    <div className="px-5 pb-5 animate-in slide-in-from-top-2">
+                      <div className="relative bg-gradient-to-br from-white to-slate-50/30 rounded-xl border border-slate-200/60 shadow-inner p-6 backdrop-blur-sm">
+                        {/* Decorative corner accent */}
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#63b3ed]/10 to-transparent rounded-bl-full opacity-50" />
+
+                        <style dangerouslySetInnerHTML={{
+                          __html: `
+                            .prose span[style*="color:red"],
+                            .prose span[style*="color: red"] {
+                              color: #dc2626 !important;
+                              font-weight: 700;
+                              background: #fee2e2;
+                              padding: 2px 6px;
+                              border-radius: 4px;
+                            }
+                            .prose span[style*="color:yellow"],
+                            .prose span[style*="color: yellow"] {
+                              color: #ca8a04 !important;
+                              font-weight: 600;
+                              background: #fef3c7;
+                              padding: 2px 6px;
+                              border-radius: 4px;
+                            }
+                            .prose span[style*="color:green"],
+                            .prose span[style*="color: green"] {
+                              color: #059669 !important;
+                              font-weight: 600;
+                              background: #d1fae5;
+                              padding: 2px 6px;
+                              border-radius: 4px;
+                            }
+                          `
+                        }} />
+                        <div
                           className="prose max-w-none"
                           dangerouslySetInnerHTML={{
                             __html: content
@@ -473,57 +540,57 @@ export const PremiumInterpretationResults: React.FC<PremiumInterpretationResults
                               .replace(/\/[A-Za-z0-9_\-]+\/TemporaryItems\/[^\s]+/g, '')
                               // Remove any standalone file path patterns
                               .replace(/^[^\n]*\/[A-Za-z0-9_\-]+\/[A-Za-z0-9_\-]+\/[A-Za-z0-9_\-\.\/]+\.png[^\n]*$/gm, '')
-                              // Format priority alerts - handle multiple AI output formats
+                              // Format priority alerts - handle multiple AI output formats with theme colors
                               // Format 1: [RED] Urgent Concern:
-                              .replace(/•?\s*\[RED\]\s*([^:]+):/gi, 
-                                '<div class="flex items-center gap-3 mb-3 p-3 rounded-lg border bg-red-100 text-red-800 border-red-200"><div class="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0"><span class="text-xs font-bold text-white">!</span></div><strong class="font-semibold text-red-800">$1:</strong></div>')
-                              .replace(/•?\s*\[YELLOW\]\s*([^:]+):/gi, 
-                                '<div class="flex items-center gap-3 mb-3 p-3 rounded-lg border bg-yellow-100 text-yellow-800 border-yellow-200"><div class="w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center flex-shrink-0"><span class="text-xs font-bold text-white">!</span></div><strong class="font-semibold text-yellow-800">$1:</strong></div>')
-                              .replace(/•?\s*\[GREEN\]\s*([^:]+):/gi, 
-                                '<div class="flex items-center gap-3 mb-3 p-3 rounded-lg border bg-emerald-100 text-emerald-800 border-emerald-200"><div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0"><span class="text-xs font-bold text-white">✓</span></div><strong class="font-semibold text-emerald-800">$1:</strong></div>')
+                              .replace(/•?\s*\[RED\]\s*([^:]+):/gi,
+                                '<div class="relative flex items-center gap-3 mb-4 p-4 rounded-xl border-l-4 border-red-500 bg-gradient-to-r from-red-50 to-red-50/30 shadow-sm"><div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-red-500/5 to-transparent pointer-events-none rounded-xl"></div><div class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center flex-shrink-0 shadow-md"><span class="text-sm font-bold text-white">!</span></div><strong class="relative font-bold text-red-900">$1:</strong></div>')
+                              .replace(/•?\s*\[YELLOW\]\s*([^:]+):/gi,
+                                '<div class="relative flex items-center gap-3 mb-4 p-4 rounded-xl border-l-4 border-amber-500 bg-gradient-to-r from-amber-50 to-amber-50/30 shadow-sm"><div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-amber-500/5 to-transparent pointer-events-none rounded-xl"></div><div class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center flex-shrink-0 shadow-md"><span class="text-sm font-bold text-white">!</span></div><strong class="relative font-bold text-amber-900">$1:</strong></div>')
+                              .replace(/•?\s*\[GREEN\]\s*([^:]+):/gi,
+                                '<div class="relative flex items-center gap-3 mb-4 p-4 rounded-xl border-l-4 border-emerald-500 bg-gradient-to-r from-emerald-50 to-emerald-50/30 shadow-sm"><div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-emerald-500/5 to-transparent pointer-events-none rounded-xl"></div><div class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-md"><span class="text-sm font-bold text-white">✓</span></div><strong class="relative font-bold text-emerald-900">$1:</strong></div>')
                               // Format 2: Red (Urgent Concern):
-                              .replace(/•?\s*Red\s*\(([^)]+)\):/gi, 
-                                '<div class="flex items-center gap-3 mb-3 p-3 rounded-lg border bg-red-100 text-red-800 border-red-200"><div class="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0"><span class="text-xs font-bold text-white">!</span></div><strong class="font-semibold text-red-800">$1:</strong></div>')
-                              .replace(/•?\s*Yellow\s*\(([^)]+)\):/gi, 
-                                '<div class="flex items-center gap-3 mb-3 p-3 rounded-lg border bg-yellow-100 text-yellow-800 border-yellow-200"><div class="w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center flex-shrink-0"><span class="text-xs font-bold text-white">!</span></div><strong class="font-semibold text-yellow-800">$1:</strong></div>')
-                              .replace(/•?\s*Green\s*\(([^)]+)\):/gi, 
-                                '<div class="flex items-center gap-3 mb-3 p-3 rounded-lg border bg-emerald-100 text-emerald-800 border-emerald-200"><div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0"><span class="text-xs font-bold text-white">✓</span></div><strong class="font-semibold text-emerald-800">$1:</strong></div>')
+                              .replace(/•?\s*Red\s*\(([^)]+)\):/gi,
+                                '<div class="relative flex items-center gap-3 mb-4 p-4 rounded-xl border-l-4 border-red-500 bg-gradient-to-r from-red-50 to-red-50/30 shadow-sm"><div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-red-500/5 to-transparent pointer-events-none rounded-xl"></div><div class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center flex-shrink-0 shadow-md"><span class="text-sm font-bold text-white">!</span></div><strong class="relative font-bold text-red-900">$1:</strong></div>')
+                              .replace(/•?\s*Yellow\s*\(([^)]+)\):/gi,
+                                '<div class="relative flex items-center gap-3 mb-4 p-4 rounded-xl border-l-4 border-amber-500 bg-gradient-to-r from-amber-50 to-amber-50/30 shadow-sm"><div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-amber-500/5 to-transparent pointer-events-none rounded-xl"></div><div class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center flex-shrink-0 shadow-md"><span class="text-sm font-bold text-white">!</span></div><strong class="relative font-bold text-amber-900">$1:</strong></div>')
+                              .replace(/•?\s*Green\s*\(([^)]+)\):/gi,
+                                '<div class="relative flex items-center gap-3 mb-4 p-4 rounded-xl border-l-4 border-emerald-500 bg-gradient-to-r from-emerald-50 to-emerald-50/30 shadow-sm"><div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-emerald-500/5 to-transparent pointer-events-none rounded-xl"></div><div class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-md"><span class="text-sm font-bold text-white">✓</span></div><strong class="relative font-bold text-emerald-900">$1:</strong></div>')
                               // Format 3: **[Red] Urgent Concern:**
-                              .replace(/•?\s*\*\*\[Red\]\s*([^*]+)\*\*:/gi, 
-                                '<div class="flex items-center gap-3 mb-3 p-3 rounded-lg border bg-red-100 text-red-800 border-red-200"><div class="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0"><span class="text-xs font-bold text-white">!</span></div><strong class="font-semibold text-red-800">$1:</strong></div>')
-                              .replace(/•?\s*\*\*\[Yellow\]\s*([^*]+)\*\*:/gi, 
-                                '<div class="flex items-center gap-3 mb-3 p-3 rounded-lg border bg-yellow-100 text-yellow-800 border-yellow-200"><div class="w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center flex-shrink-0"><span class="text-xs font-bold text-white">!</span></div><strong class="font-semibold text-yellow-800">$1:</strong></div>')
-                              .replace(/•?\s*\*\*\[Green\]\s*([^*]+)\*\*:/gi, 
-                                '<div class="flex items-center gap-3 mb-3 p-3 rounded-lg border bg-emerald-100 text-emerald-800 border-emerald-200"><div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0"><span class="text-xs font-bold text-white">✓</span></div><strong class="font-semibold text-emerald-800">$1:</strong></div>')
-                              // Format medical values with units and ions
-                              .replace(/\*\*([0-9\.]+\s*(?:mmHg|mmol\/L|g\/dL|kPa|%))\*\*/g, 
-                                '<span class="inline-flex items-center gap-2 px-2 py-1 bg-slate-100 rounded-md font-mono text-sm font-semibold text-slate-800">$1</span>')
+                              .replace(/•?\s*\*\*\[Red\]\s*([^*]+)\*\*:/gi,
+                                '<div class="relative flex items-center gap-3 mb-4 p-4 rounded-xl border-l-4 border-red-500 bg-gradient-to-r from-red-50 to-red-50/30 shadow-sm"><div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-red-500/5 to-transparent pointer-events-none rounded-xl"></div><div class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center flex-shrink-0 shadow-md"><span class="text-sm font-bold text-white">!</span></div><strong class="relative font-bold text-red-900">$1:</strong></div>')
+                              .replace(/•?\s*\*\*\[Yellow\]\s*([^*]+)\*\*:/gi,
+                                '<div class="relative flex items-center gap-3 mb-4 p-4 rounded-xl border-l-4 border-amber-500 bg-gradient-to-r from-amber-50 to-amber-50/30 shadow-sm"><div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-amber-500/5 to-transparent pointer-events-none rounded-xl"></div><div class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center flex-shrink-0 shadow-md"><span class="text-sm font-bold text-white">!</span></div><strong class="relative font-bold text-amber-900">$1:</strong></div>')
+                              .replace(/•?\s*\*\*\[Green\]\s*([^*]+)\*\*:/gi,
+                                '<div class="relative flex items-center gap-3 mb-4 p-4 rounded-xl border-l-4 border-emerald-500 bg-gradient-to-r from-emerald-50 to-emerald-50/30 shadow-sm"><div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-emerald-500/5 to-transparent pointer-events-none rounded-xl"></div><div class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-md"><span class="text-sm font-bold text-white">✓</span></div><strong class="relative font-bold text-emerald-900">$1:</strong></div>')
+                              // Format medical values with units and ions using theme colors
+                              .replace(/\*\*([0-9\.]+\s*(?:mmHg|mmol\/L|g\/dL|kPa|%))\*\*/g,
+                                '<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 border border-[#63b3ed]/30 rounded-lg font-mono text-sm font-bold text-[#1a365d] shadow-sm">$1</span>')
                               // Format ion values like Na⁺: 124 mmol/L, Ca²⁺: 1.06 mmol/L
-                              .replace(/([A-Za-z]+[⁺²⁻]+):\s*([0-9\.]+\s*mmol\/L)/g, 
-                                '<span class="inline-flex items-center gap-2 px-2 py-1 bg-blue-100 rounded-md font-mono text-sm font-semibold text-blue-800">$1: $2</span>')
+                              .replace(/([A-Za-z]+[⁺²⁻]+):\s*([0-9\.]+\s*mmol\/L)/g,
+                                '<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#2b6cb0]/10 to-[#1a365d]/10 border border-[#2b6cb0]/30 rounded-lg font-mono text-sm font-bold text-[#1a365d] shadow-sm">$1: $2</span>')
                               // Format regular medical values without asterisks
-                              .replace(/\b([0-9\.]+\s*(?:mmHg|mmol\/L|g\/dL|kPa|%))\b/g, 
-                                '<span class="inline-flex items-center gap-1 px-2 py-1 bg-slate-50 rounded text-sm font-mono text-slate-700">$1</span>')
+                              .replace(/\b([0-9\.]+\s*(?:mmHg|mmol\/L|g\/dL|kPa|%))\b/g,
+                                '<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100/80 border border-slate-200 rounded-md text-xs font-mono text-slate-700 shadow-sm">$1</span>')
                               // Format other bold text
-                              .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-900">$1</strong>')
-                              // Format bullet points with bold headers
-                              .replace(/^-\s+\*\*(.*?)\*\*:\s*(.*?)$/gm, 
-                                '<div class="flex items-start gap-3 mb-3 p-3 bg-white rounded-lg border border-slate-200"><div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div><div><strong class="font-semibold text-slate-900">$1:</strong> <span class="text-slate-700">$2</span></div></div>')
+                              .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-[#1a365d]">$1</strong>')
+                              // Format bullet points with bold headers using theme colors
+                              .replace(/^-\s+\*\*(.*?)\*\*:\s*(.*?)$/gm,
+                                '<div class="flex items-start gap-3 mb-3 p-3.5 bg-gradient-to-r from-white to-slate-50/50 rounded-lg border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow"><div class="w-2 h-2 bg-gradient-to-br from-[#2b6cb0] to-[#1a365d] rounded-full mt-2 flex-shrink-0 shadow-sm"></div><div><strong class="font-bold text-[#1a365d]">$1:</strong> <span class="text-slate-700">$2</span></div></div>')
                               // Remove standalone bullet points that were processed as priority badges
                               .replace(/^\s*•\s*$/gm, '')
-                              // Format regular bullet points (but skip ones that are now badges)
-                              .replace(/^-\s+(.*?)$/gm, 
-                                '<div class="flex items-start gap-3 mb-2"><div class="w-2 h-2 bg-slate-400 rounded-full mt-2 flex-shrink-0"></div><span class="text-slate-700">$1</span></div>')
-                              // Handle any remaining ### headers that might be within content
-                              .replace(/^###\s+(.*?)$/gm, '<h4 class="text-lg font-bold text-slate-800 mb-3 mt-6">$1</h4>')
-                              // Format paragraphs properly
-                              .replace(/\n\n+/g, '</p><p class="mb-4 text-slate-700 leading-relaxed">')
-                              .replace(/^/, '<p class="mb-4 text-slate-700 leading-relaxed">')
+                              // Format regular bullet points using theme colors
+                              .replace(/^-\s+(.*?)$/gm,
+                                '<div class="flex items-start gap-3 mb-2.5"><div class="w-2 h-2 bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] rounded-full mt-2 flex-shrink-0 shadow-sm"></div><span class="text-slate-700 leading-relaxed">$1</span></div>')
+                              // Handle any remaining ### headers that might be within content - use theme colors
+                              .replace(/^###\s+(.*?)$/gm, '<h4 class="text-lg font-bold text-[#1a365d] mb-3 mt-6 pb-2 border-b-2 border-[#63b3ed]/20">$1</h4>')
+                              // Format paragraphs properly with better spacing
+                              .replace(/\n\n+/g, '</p><p class="mb-3 text-slate-700 leading-relaxed">')
+                              .replace(/^/, '<p class="mb-3 text-slate-700 leading-relaxed">')
                               .replace(/$/, '</p>')
                               // Clean up empty paragraphs
-                              .replace(/<p class="mb-4 text-slate-700 leading-relaxed"><\/p>/g, '')
+                              .replace(/<p class="mb-3 text-slate-700 leading-relaxed"><\/p>/g, '')
                               // Clean up paragraphs that only contain div elements
-                              .replace(/<p class="mb-4 text-slate-700 leading-relaxed">(<div.*?<\/div>)<\/p>/g, '$1')
+                              .replace(/<p class="mb-3 text-slate-700 leading-relaxed">(<div.*?<\/div>)<\/p>/g, '$1')
                               // Final cleanup: remove any remaining unwanted file paths
                               .replace(/\/[A-Za-z0-9_\-\.\/]*[Tt]emporary[A-Za-z0-9_\-\.\/]*/g, '')
                           }}
