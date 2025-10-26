@@ -47,19 +47,26 @@ const getSourceIcon = (type: SourceReference['type']) => {
 };
 
 const getSourceTypeColor = (type: SourceReference['type']) => {
+  // Using theme colors with distinct shades for guidelines and textbooks
+  // #1a365d (deep navy), #2b6cb0 (vibrant blue), #63b3ed (light blue), #90cdf4 (lighter blue)
   switch (type) {
     case 'guideline':
-      return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      // Guidelines - Darker blue for authority (deep navy with light blue background)
+      return 'bg-[#1a365d]/10 text-[#1a365d] dark:bg-[#1a365d]/30 dark:text-[#90cdf4]';
     case 'research':
-      return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+      // Research - Mid-tone blue
+      return 'bg-[#63b3ed]/15 text-[#2b6cb0] dark:bg-[#2b6cb0]/25 dark:text-[#63b3ed]';
     case 'document':
-      return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      // Document - Standard blue
+      return 'bg-[#90cdf4]/15 text-[#2b6cb0] dark:bg-[#63b3ed]/25 dark:text-[#90cdf4]';
     case 'textbook':
-      return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
+      // Textbooks - Lighter blue for educational content
+      return 'bg-[#90cdf4]/20 text-[#2b6cb0] dark:bg-[#90cdf4]/20 dark:text-[#90cdf4]';
     case 'personal':
-      return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200';
+      // Personal - Vibrant blue for user content
+      return 'bg-[#2b6cb0]/15 text-[#1a365d] dark:bg-[#2b6cb0]/30 dark:text-[#63b3ed]';
     default:
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+      return 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200';
   }
 };
 
@@ -140,16 +147,16 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
     <>
       <div className={`mt-4 w-full ${className}`}>
         {/* Sources header with gradient background - Clickable to expand/collapse */}
-        <div 
-          className={`bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 px-4 py-3 border border-gray-200 dark:border-gray-600 cursor-pointer hover:from-blue-100 hover:via-indigo-100 hover:to-purple-100 dark:hover:from-gray-700 dark:hover:via-gray-600 dark:hover:to-gray-700 transition-all duration-200 ${
+        <div
+          className={`bg-gradient-to-r from-[#90cdf4]/10 via-[#63b3ed]/10 to-[#90cdf4]/10 dark:from-[#1a365d]/30 dark:via-[#2b6cb0]/30 dark:to-[#1a365d]/30 px-4 py-3 border border-[#63b3ed]/20 dark:border-[#2b6cb0]/40 cursor-pointer hover:from-[#90cdf4]/15 hover:via-[#63b3ed]/15 hover:to-[#90cdf4]/15 dark:hover:from-[#1a365d]/40 dark:hover:via-[#2b6cb0]/40 dark:hover:to-[#1a365d]/40 transition-all duration-200 ${
             isSectionOpen ? 'rounded-t-xl' : 'rounded-xl'
           }`}
           onClick={() => setIsSectionOpen(!isSectionOpen)}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="p-1.5 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                <Link className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <div className="p-1.5 bg-[#63b3ed]/20 dark:bg-[#2b6cb0]/30 rounded-lg">
+                <Link className="w-4 h-4 text-[#2b6cb0] dark:text-[#63b3ed]" />
               </div>
               <div>
                 <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
@@ -183,9 +190,9 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
               return (
                 <div
                   key={source.id}
-                  className={`relative group transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 w-full block ${
-                    isHighlighted 
-                      ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500 dark:border-l-blue-400' 
+                  className={`relative group transition-all duration-300 hover:bg-[#90cdf4]/5 dark:hover:bg-[#2b6cb0]/10 w-full block ${
+                    isHighlighted
+                      ? 'bg-[#63b3ed]/10 dark:bg-[#2b6cb0]/20 border-l-4 border-l-[#2b6cb0] dark:border-l-[#63b3ed]'
                       : ''
                   } ${index === 0 ? 'rounded-t-none' : ''} ${index === visibleSources.length - 1 && !hasMoreSources ? 'rounded-b-xl' : ''}`}
                   onMouseEnter={() => setHoveredSource(source.id)}
@@ -196,7 +203,7 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
                     <div className="flex items-start space-x-3">
                       {/* Enhanced source number badge */}
                       <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${getSourceTypeColor(source.type)} ${
-                        isHighlighted ? 'ring-2 ring-blue-400 dark:ring-blue-500 ring-offset-2 dark:ring-offset-gray-900' : 'shadow-sm'
+                        isHighlighted ? 'ring-2 ring-[#2b6cb0] dark:ring-[#63b3ed] ring-offset-2 dark:ring-offset-gray-900' : 'shadow-sm'
                       } transition-all duration-200`}>
                         {getSourceIcon(source.type)}
                       </div>
@@ -211,7 +218,7 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 font-medium text-sm flex items-center space-x-1 group flex-1 min-w-0 transition-colors duration-200"
+                                className="text-gray-900 dark:text-gray-100 hover:text-[#2b6cb0] dark:hover:text-[#63b3ed] font-medium text-sm flex items-center space-x-1 group flex-1 min-w-0 transition-colors duration-200"
                               >
                                 <span className="break-words">{source.title || 'Medical Source'}</span>
                                 <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
@@ -231,7 +238,7 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
                                 e.stopPropagation();
                                 setSelectedSource(source);
                               }}
-                              className="p-2 text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 hover:shadow-sm"
+                              className="p-2 text-[#2b6cb0] hover:text-[#1a365d] dark:text-[#63b3ed] dark:hover:text-[#90cdf4] hover:bg-[#63b3ed]/10 dark:hover:bg-[#2b6cb0]/20 rounded-lg transition-all duration-200 hover:shadow-sm"
                               title="View full text content"
                             >
                               <Eye className="w-4 h-4" />
@@ -253,9 +260,9 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
                           </div>
                           
                           {source.confidenceScore && (
-                            <div className="flex items-center space-x-1 px-2 py-1 bg-green-50 dark:bg-green-900/20 rounded-full">
-                              <TrendingUp className="w-3 h-3 text-green-600 dark:text-green-400" />
-                              <span className="text-xs font-semibold text-green-700 dark:text-green-300">
+                            <div className="flex items-center space-x-1 px-2 py-1 bg-[#63b3ed]/20 dark:bg-[#2b6cb0]/30 rounded-full">
+                              <TrendingUp className="w-3 h-3 text-[#2b6cb0] dark:text-[#63b3ed]" />
+                              <span className="text-xs font-semibold text-[#1a365d] dark:text-[#90cdf4]">
                                 {formatConfidenceScore(source.confidenceScore)}
                               </span>
                             </div>
@@ -365,7 +372,7 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
                                   e.stopPropagation();
                                   setSelectedSource(source);
                                 }}
-                                className="mt-2 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 font-medium transition-colors duration-200"
+                                className="mt-2 text-xs text-[#2b6cb0] dark:text-[#63b3ed] hover:text-[#1a365d] dark:hover:text-[#90cdf4] font-medium transition-colors duration-200"
                               >
                                 Read full content →
                               </button>
@@ -405,7 +412,7 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
         >
           <div className="bg-white dark:bg-gray-900 rounded-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-700 animate-in slide-in-from-bottom-4 duration-300 my-auto">
             {/* Enhanced Modal Header */}
-            <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-6">
+            <div className="relative bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] text-white p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -416,11 +423,11 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
                       {selectedSource.title || 'Medical Source'}
                     </h3>
                     <div className="flex items-center space-x-3 mt-1">
-                      <span className="text-blue-100 text-sm font-medium px-2 py-0.5 bg-white/20 rounded-full">
+                      <span className="text-[#90cdf4] text-sm font-medium px-2 py-0.5 bg-white/20 rounded-full">
                         {selectedSource.type}
                       </span>
                       {selectedSource.confidenceScore && (
-                        <div className="flex items-center space-x-1 text-green-200">
+                        <div className="flex items-center space-x-1 text-[#90cdf4]">
                           <TrendingUp className="w-3 h-3" />
                           <span className="text-sm font-semibold">
                             {Math.round(selectedSource.confidenceScore * 100)}% confidence
@@ -494,12 +501,12 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
               
               {/* Footer Actions */}
               {selectedSource.url && (
-                <div className="p-6 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+                <div className="p-6 bg-gradient-to-r from-[#90cdf4]/5 to-[#63b3ed]/5 dark:bg-gradient-to-r dark:from-[#1a365d]/20 dark:to-[#2b6cb0]/20 border-t border-[#63b3ed]/20 dark:border-[#2b6cb0]/40">
                   <a
                     href={selectedSource.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg"
+                    className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] hover:from-[#1a365d] hover:to-[#2b6cb0] text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg"
                   >
                     <ExternalLink className="w-4 h-4" />
                     <span>View Original Source</span>

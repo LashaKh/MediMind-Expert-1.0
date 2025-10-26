@@ -27,9 +27,9 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
   // Medical table header renderer
   const TableHeaderRenderer = ({ children, ...props }: any) => (
     <thead {...props}>
-      {React.Children.map(children, (child, index) => 
+      {React.Children.map(children, (child, index) =>
         React.cloneElement(child, {
-          className: "bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+          className: "bg-gradient-to-r from-[#1a365d] via-[#2b6cb0] to-[#63b3ed] text-white"
         })
       )}
     </thead>
@@ -37,8 +37,8 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
 
   // Medical table header cell renderer
   const TableHeaderCellRenderer = ({ children, ...props }: any) => (
-    <th 
-      className="px-4 py-3 text-left font-semibold text-sm uppercase tracking-wide border-b border-blue-500"
+    <th
+      className="px-4 py-3 text-left font-semibold text-sm uppercase tracking-wide border-b border-[#63b3ed]"
       {...props}
     >
       {children}
@@ -48,12 +48,12 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
   // Medical table body renderer
   const TableBodyRenderer = ({ children, ...props }: any) => (
     <tbody {...props}>
-      {React.Children.map(children, (child, rowIndex) => 
+      {React.Children.map(children, (child, rowIndex) =>
         React.cloneElement(child, {
           className: `transition-colors duration-200 ${
-            rowIndex % 2 === 0 
-              ? 'bg-gray-50 dark:bg-gray-700/50 hover:bg-blue-50 dark:hover:bg-blue-900/20' 
-              : 'bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+            rowIndex % 2 === 0
+              ? 'bg-gray-50 dark:bg-gray-700/50 hover:bg-[#90cdf4]/10 dark:hover:bg-[#2b6cb0]/20'
+              : 'bg-white dark:bg-gray-800 hover:bg-[#90cdf4]/10 dark:hover:bg-[#2b6cb0]/20'
           }`
         })
       )}
@@ -74,9 +74,9 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
   const HeadingRenderer = ({ level, children, ...props }: any) => {
     const baseClasses = "font-semibold text-gray-900 dark:text-white border-b-2 pb-2 mb-4";
     const levelClasses = {
-      1: "text-3xl mt-8 mb-6 border-blue-500 text-blue-900 dark:text-blue-100",
-      2: "text-2xl mt-6 mb-4 border-blue-400 text-blue-800 dark:text-blue-200", 
-      3: "text-xl mt-5 mb-3 border-blue-300 text-blue-700 dark:text-blue-300",
+      1: "text-3xl mt-8 mb-6 border-[#2b6cb0] text-[#1a365d] dark:text-[#90cdf4]",
+      2: "text-2xl mt-6 mb-4 border-[#63b3ed] text-[#2b6cb0] dark:text-[#63b3ed]",
+      3: "text-xl mt-5 mb-3 border-[#90cdf4] text-[#2b6cb0] dark:text-[#63b3ed]",
       4: "text-lg mt-4 mb-2 border-gray-300 text-gray-800 dark:text-gray-200",
       5: "text-base mt-3 mb-2 border-gray-200 text-gray-700 dark:text-gray-300",
       6: "text-sm mt-2 mb-1 border-gray-100 text-gray-600 dark:text-gray-400"
@@ -209,8 +209,8 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
 
   // Enhanced strong text renderer for medical terms
   const StrongRenderer = ({ children, ...props }: any) => (
-    <strong 
-      className="font-semibold text-gray-900 dark:text-white bg-yellow-100 dark:bg-yellow-900/30 px-1 py-0.5 rounded"
+    <strong
+      className="font-semibold text-[#1a365d] dark:text-[#90cdf4] bg-[#90cdf4]/20 dark:bg-[#2b6cb0]/30 px-1 py-0.5 rounded"
       {...props}
     >
       {children}
@@ -275,14 +275,26 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
     const sources = [];
     let inSourcesSection = false;
     let sourceCounter = 1;
-    
+
     for (let i = 0; i < lines.length; i++) {
       let line = lines[i];
-      
-      // Check if this line starts a sources section
-      if (/^#{1,6}\s*Sources?\s*$/i.test(line.trim()) || /^Sources?\s*$/i.test(line.trim())) {
+
+      // Check if this line starts a sources section (English "Sources" or Georgian "წყაროები")
+      // Support various formats: ### Sources, Sources:, ### წყაროები, წყაროები:, ### **წყაროები:**, etc.
+      // Remove ALL markdown formatting (###, **, _, etc.) first, then check
+      const cleanLine = line.trim().replace(/^#{1,6}\s*/, '').replace(/\*\*/g, '').replace(/[_]/g, '').trim();
+      if (/^(?:Sources?|წყაროები)[:\s]*$/i.test(cleanLine)) {
         inSourcesSection = true;
         continue; // Skip this line
+      }
+
+      // Also check if we hit a horizontal rule (---) followed by sources header on next line
+      if (line.trim() === '---' && i + 1 < lines.length) {
+        const nextLine = lines[i + 1].trim().replace(/^#{1,6}\s*/, '').replace(/\*\*/g, '').replace(/[_]/g, '').trim();
+        if (/^(?:Sources?|წყაროები)[:\s]*$/i.test(nextLine)) {
+          // Skip the horizontal rule
+          continue;
+        }
       }
       
       // If we're in sources section, extract sources

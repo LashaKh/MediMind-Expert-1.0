@@ -4,27 +4,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-MediMind Expert is a comprehensive medical AI co-pilot platform for healthcare professionals, providing specialty-specific workspaces (Cardiology, OB/GYN) with AI chat, medical calculators, medical news aggregation, knowledge management, and case studies. Built with React 18.3.1, TypeScript, Supabase, and deployed on Netlify with advanced serverless functions.
+MediMind Expert is a comprehensive medical AI co-pilot platform for healthcare professionals, providing specialty-specific workspaces (Cardiology, OB/GYN) with AI chat, medical calculators, medical news aggregation, knowledge management, and case studies. Built with React 18.3.1, TypeScript, Supabase, with streaming AI responses, voice input integration, and deployed on Netlify with Supabase Edge Functions.
 
 ## Current Branch & Progress
 
-**Branch**: `004-form-100-generation` 
-**Recent Progress** (Updated: 2025-09-29):
-- ✅ Implemented Georgian medical transcription system (MediScribe)
-- ✅ Optimized recording start performance (<200ms with microphone pre-initialization)
-- ✅ Added real-time session management with cross-session isolation
-- ✅ Enhanced UI with medical iconography and responsive design
-- ✅ Completed performance optimizations for instant recording/transcription
-- ✅ Fixed React warnings and optimized component architecture
-- ✅ Added comprehensive Claude Code command automation system
-- ✅ Implemented advanced MCP server configuration with multiple providers
-- ✅ Complete mobile responsiveness audit and optimization for MediScribe
-- ✅ Added unified blue theme across entire application interface
-- ✅ **NEW**: Implemented Form 100 Emergency Report Generation System
-- ✅ **NEW**: Added AI-powered medical document generation with Flowise integration
-- ✅ **NEW**: Created mobile-optimized medical form wizard with 44px touch targets
-- ✅ **NEW**: Integrated voice transcription with Form 100 generation workflow
-- ✅ **NEW**: Implemented ICD-10 compliant diagnosis selection system
+**Branch**: `main`
+**Recent Progress** (Updated: 2025-10-27):
+- ✅ **ABG System Refactoring**: Major architectural overhaul with streaming support, new component structure (IdentifiedIssuesPanel, PremiumActionPlanResults), and comprehensive documentation cleanup
+- ✅ **Voice Input Integration**: Direct voice recording button integrated into AI Copilot chat interface with seamless Georgian transcription workflow
+- ✅ **Streaming AI Responses**: Implemented real-time streaming for AI chat, ABG analysis, and medical interpretations
+- ✅ **Georgian Language Support**: Enhanced MedicalMarkdownRenderer with Georgian source detection ("წყაროები") and improved markdown formatting
+- ✅ **Dual STT Model Support**: Added Fast + GoogleChirp models with localStorage persistence and model selection in Georgian transcription
+- ✅ **Enhanced Message Input**: Increased AI Copilot character limit from 2,000 to 100,000 for complex medical queries
+- ✅ **Form 100 System Maturation**: Session recovery with localStorage persistence, neural-gradient UI refinements
+- ✅ **Safe Async Pattern**: Standardized error handling pattern across all services for robust medical data processing
+- ✅ **Documentation Updates**: Comprehensive ABG system documentation (BGsystem.md), streaming implementation guides
+- ✅ **Performance Optimizations**: Maintained <200ms recording start, <5 second form generation, streaming response handling
 
 ## MCP Server Configuration
 
@@ -252,13 +247,18 @@ src/components/Calculators/
 #### 4. AI Integration Architecture
 ```
 Frontend: FlowiseChatWindow → useFlowiseChat → API
-Backend: functions/flowise-proxy.js → Specialty Flowise Endpoints  
-State: ChatContext → React reducers → Real-time UI
+Backend: Supabase Edge Functions → Specialty Flowise Endpoints
+State: ChatContext → React reducers → Streaming UI Updates
+Voice: VoiceInputButton → Georgian TTS → Chat Integration
 ```
-- Specialty-aware routing (Cardiology vs OB/GYN chatbots)
-- File attachment support for medical image analysis
-- Case management integration with privacy protection
-- Calculator suggestions and result sharing
+- **Streaming Support**: Real-time streaming responses for AI chat, ABG analysis, and medical interpretations
+- **Voice Input Integration**: Direct voice recording button in chat interface with Georgian transcription workflow
+- **Specialty-aware Routing**: Cardiology vs OB/GYN chatbot endpoints
+- **File Attachment Support**: Medical image analysis with multimodal AI processing
+- **Safe Async Pattern**: Robust error handling across all AI operations
+- **Case Management Integration**: Privacy protection with automatic anonymization
+- **Calculator Integration**: AI-powered calculator suggestions and result sharing
+- **Georgian Language Support**: Enhanced markdown rendering with source detection ("წყაროები")
 
 #### 5. Georgian Medical Transcription System (MediScribe)
 ```
@@ -276,10 +276,14 @@ src/components/Georgian/
     └── TranscriptContent.tsx
 ```
 - **Performance**: <200ms recording start (microphone pre-initialization)
-- **Real-time**: Live transcription with smart 23-second auto-segmentation  
+- **Dual STT Models**: Fast model + GoogleChirp model with user-selectable switching
+- **Model Persistence**: STT model selection saved to localStorage for session continuity
+- **Streaming Support**: Streaming vs single-shot transcription mode selection
+- **Real-time**: Live transcription with smart 23-second auto-segmentation
 - **Session Management**: Cross-session isolation with unique session IDs
 - **Edge Functions**: Supabase integration for Georgian speech processing
 - **Mobile Optimized**: Touch-friendly recording controls for medical consultations
+- **Dual Transcript Support**: Parallel transcription from Google and Enagram models
 
 #### 6. Form 100 Generation System (Emergency Reports)
 ```
@@ -307,7 +311,28 @@ src/components/Form100/
 - **Performance**: <5 second form generation, <200ms voice recording integration
 - **Medical Templates**: Pre-configured angiography and clinical report templates
 
-#### 7. Mobile-First Responsive Design
+#### 7. ABG Analysis System (Recent Major Refactoring)
+```
+src/components/ABG/
+├── PremiumABGAnalysis.tsx         # Main ABG analysis interface
+├── IdentifiedIssuesPanel.tsx      # Core issues extraction (NEW)
+├── PremiumActionPlanResults.tsx   # AI-generated action plans (NEW)
+├── PremiumABGHeader.tsx           # Enhanced header with streaming status
+├── DeletionConfirmDialog.tsx      # Improved deletion workflow
+├── hooks/
+│   ├── useABGAnalysis.ts         # Core ABG logic
+│   └── useStreamingResults.ts    # Streaming response handling (NEW)
+└── services/abgService.ts        # Unified ABG processing
+```
+- **Streaming Architecture**: Real-time ABG interpretation results with progressive UI updates
+- **Voice Input Integration**: Direct voice recording in ABG workflow for clinical notes
+- **Unified Processing**: Free OCR integration with consolidated ABG analysis service
+- **Component Refactoring**: New IdentifiedIssuesPanel and PremiumActionPlanResults for better separation of concerns
+- **Enhanced Documentation**: Comprehensive BGsystem.md (1,381 lines) with streaming implementation guides
+- **Error Handling**: Safe Async patterns for robust medical data processing
+- **Mobile Optimization**: Touch-friendly ABG parameter inputs with medical-grade validation
+
+#### 8. Mobile-First Responsive Design
 ```
 src/styles/responsive.css         # CSS custom properties system
 src/components/ui/mobile-form.tsx # Mobile form component library
@@ -320,12 +345,15 @@ src/components/Layout/BottomNavigation.tsx # Mobile navigation
 ### Key Services & APIs
 
 #### Medical Data Processing
-- **Georgian Transcription**: `src/hooks/useGeorgianTTS.ts` - Real-time medical transcription with performance optimizations
-- **Speech Processing**: `src/lib/speech/georgianTTSService.ts` - Supabase Edge Function integration
-- **Form 100 Generation**: `src/services/form100Service.ts` - Emergency consultation report generation with AI assistance
-- **Flowise Integration**: `src/services/flowiseIntegration.ts` - AI-powered medical document generation
-- **ABG Analysis**: `src/services/abgService.ts` - Blood gas analysis with OCR
-- **Medical Calculators**: Validated algorithms with population-specific calibration
+- **Georgian Transcription**: `src/hooks/useGeorgianTTS.ts` - Real-time medical transcription with dual STT model support (Fast + GoogleChirp)
+- **Speech Processing**: `src/lib/speech/georgianTTSService.ts` - Supabase Edge Function integration with streaming support
+- **Form 100 Generation**: `src/services/form100Service.ts` - Emergency consultation report generation with unified Flowise endpoint and retry mechanism (3 attempts, exponential backoff)
+- **Flowise Integration**: `src/services/flowiseIntegration.ts` - AI-powered medical document generation with streaming responses and Safe Async error handling
+- **ABG Analysis**: `src/services/abgService.ts` - Unified blood gas analysis with free OCR, streaming interpretations, and voice input integration
+- **Diagnosis Service**: `src/services/diagnosisFlowiseService.ts` - Specialty-specific diagnosis routing with updated implementation
+- **Safe Async Pattern**: Standardized error handling wrapper used across all services for robust medical data processing
+- **Streaming Architecture**: Real-time AI response streaming for chat, ABG analysis, and medical interpretations
+- **Medical Calculators**: Validated algorithms with population-specific calibration and AI integration
 - **Medical News**: Specialty-filtered news aggregation and engagement tracking
 
 #### Document & Knowledge Management
@@ -374,18 +402,25 @@ liked_search_results, clinical_trials_monitoring
 5. **Mobile Optimization**: Touch-friendly with responsive validation
 
 ### Georgian Transcription Development
-1. **Performance Optimization**: Maintain <200ms recording start time with pre-initialization
-2. **Session Isolation**: Use unique session IDs to prevent transcript contamination
-3. **Real-time Processing**: Implement smart 23-second auto-segmentation for continuous recording
-4. **Error Handling**: Use `safeAsync` patterns for robust microphone and API handling
-5. **Mobile-First**: Touch-friendly controls optimized for bedside medical consultations
+1. **Performance Optimization**: Maintain <200ms recording start time with microphone pre-initialization
+2. **Dual STT Model Support**: Implement Fast model + GoogleChirp model with user-selectable switching
+3. **Model Persistence**: Save STT model selection to localStorage for session continuity
+4. **Session Isolation**: Use unique session IDs to prevent transcript contamination
+5. **Real-time Processing**: Implement smart 23-second auto-segmentation for continuous recording
+6. **Streaming Mode Selection**: Support both streaming and single-shot transcription modes
+7. **Error Handling**: Use `safeAsync` patterns for robust microphone and API handling
+8. **Mobile-First**: Touch-friendly controls optimized for bedside medical consultations
 
 ### AI Integration Patterns
-1. **Specialty Awareness**: Always route to appropriate medical chatbot
-2. **Context Enhancement**: Include relevant case/document context
-3. **File Processing**: Support medical image attachments
-4. **Privacy First**: Automatic anonymization of patient data
-5. **Calculator Integration**: Suggest relevant calculators in chat
+1. **Streaming First**: Implement real-time streaming for all AI responses with progressive rendering
+2. **Specialty Awareness**: Always route to appropriate medical chatbot (Cardiology vs OB/GYN)
+3. **Voice Input Integration**: Support voice recording with Georgian transcription workflow
+4. **Safe Async Error Handling**: Use standardized error handling wrapper for all AI operations
+5. **Context Enhancement**: Include relevant case/document context in AI queries
+6. **File Processing**: Support medical image attachments with multimodal AI processing
+7. **Privacy First**: Automatic anonymization of patient data in case management
+8. **Calculator Integration**: Suggest relevant calculators in chat with AI-powered recommendations
+9. **Georgian Language Support**: Handle Georgian source detection and markdown formatting
 
 ### Testing Strategy
 1. **Standard Testing**: Use Vitest, npm test commands, and code analysis for primary testing
@@ -419,44 +454,95 @@ liked_search_results, clinical_trials_monitoring
 - Mobile-first CSS with Tailwind utilities
 - Comprehensive error handling with `safeAsync` patterns
 
-## Recent Updates (Updated: 2025-09-21)
+## Recent Updates (Updated: 2025-10-27)
 
-### Major Infrastructure Changes
-- **Claude Code Command System**: Added comprehensive automation with 7 custom commands for project management, planning, and development workflows
-- **Advanced MCP Configuration**: Multiple MCP server configurations for different development scenarios (all-three, context7-only, supabase-only)
-- **Project Constitution Framework**: Implemented governance and principle management system with automated template synchronization
+### ABG System Refactoring (October 26, 2025)
+- **Component Architecture Overhaul**: Major restructuring with new `IdentifiedIssuesPanel.tsx` and `PremiumActionPlanResults.tsx` for improved separation of concerns
+- **Streaming Integration**: Real-time streaming ABG interpretation results with progressive UI updates
+- **Voice Input Integration**: Direct voice recording button integrated into ABG workflow for clinical notes
+- **Unified Service Processing**: Consolidated ABG analysis service with free OCR integration
+- **Documentation Cleanup**: Removed 10+ obsolete documentation files and added comprehensive `docs/BGsystem.md` (1,381 lines)
+- **Enhanced Header**: Updated `PremiumABGHeader.tsx` with streaming status indicators
+- **Improved Workflows**: New `DeletionConfirmDialog.tsx` for better user confirmation patterns
 
-### UI/UX Improvements
-- **Unified Blue Theme**: Applied comprehensive blue theme integration across all application interfaces including:
-  - AI Copilot chat interface with modern blue styling
-  - Medical calculators with blue-themed components
-  - Georgian transcription interface with medical blue accents
-  - Profile, knowledge base, and authentication pages
-- **Mobile Optimization Completion**: Finalized mobile responsiveness audit with viewport testing at 320px, 375px, and 414px breakpoints
-- **MediScribe Mobile Enhancements**: Fixed textarea keyboard interactions, button positioning, and layout stability
+### AI Copilot Enhancements
+- **Voice Input Integration**: Added `VoiceInputButton.tsx` directly in chat interface for seamless Georgian transcription workflow
+- **Streaming Response Handling**: Implemented real-time streaming for all AI chat responses with progressive rendering
+- **Georgian Language Support**: Enhanced `MedicalMarkdownRenderer.tsx` with Georgian source detection ("წყაროები") and improved markdown formatting
+- **Message Input Expansion**: Increased character limit from 2,000 to 100,000 for complex medical queries and case documentation
+- **Safe Async Pattern**: Standardized error handling across all AI operations for robust medical data processing
 
-### Development Workflow Enhancements
-- **Command Templates**: Added structured templates for plans, specifications, and task management
-- **Automation Scripts**: Bash scripts for prerequisite checking, feature creation, and agent context updates
-- **Mobile Testing Framework**: Comprehensive mobile testing with standard development tools (use Playwright only when explicitly requested)
+### Georgian Transcription System Improvements
+- **Dual STT Model Support**: Added Fast model + GoogleChirp model with user-selectable switching in UI
+- **Model Persistence**: STT model selection automatically saved to localStorage for session continuity
+- **Streaming Mode Selection**: User can toggle between streaming and single-shot transcription modes
+- **Dual Transcript Support**: Parallel transcription from Google and Enagram models for accuracy comparison
+- **Enhanced Session Management**: Improved cross-session isolation with unique session IDs
 
-### Technical Debt Resolution
-- **Mobile Layout Issues**: Resolved keyboard interaction problems in Georgian transcription
-- **Component Architecture**: Optimized React component structure for better maintainability
-- **CSS Organization**: Unified styling approach with theme-consistent component libraries
+### Form 100 System Maturation
+- **Session Recovery**: Implemented localStorage persistence for form state recovery after browser refresh
+- **Neural-Gradient UI**: Refined premium UI with glassmorphism effects and medical-grade animations
+- **Translation Updates**: Enhanced Georgian, English, and Russian translations for medical terminology
+- **Unified Endpoint**: Consolidated Flowise integration with single endpoint and retry mechanism (3 attempts, exponential backoff)
+
+### Development Infrastructure
+- **Safe Async Pattern**: Standardized error handling wrapper implemented across all services (form100Service, flowiseIntegration, abgService)
+- **Streaming Architecture**: Consistent streaming implementation across ChatContext, ABG components, and AI integrations
+- **STT Language Mapper**: New utility for language code mapping in speech processing
+- **Edge Function Updates**: Enhanced Supabase Edge Functions for action plan processing and streaming support
+- **Comprehensive Documentation**: Added streaming implementation guides and architectural documentation
 
 ## Critical Architecture Patterns
+
+### Safe Async Pattern
+Standardized error handling wrapper used across all medical services for robust data processing:
+```typescript
+const safeAsync = async <T>(
+  operation: () => Promise<T>,
+  errorCode: string
+): Promise<ServiceResponse<T>> => {
+  try {
+    return { success: true, data: await operation() };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        code: errorCode,
+        message: error.message,
+        timestamp: new Date().toISOString()
+      }
+    };
+  }
+};
+```
+- **Implementation**: Used in form100Service, flowiseIntegration, abgService, and all Edge Function integrations
+- **Error Codes**: Standardized taxonomy (VALIDATION_FAILED, FLOWISE_TIMEOUT, NETWORK_ERROR, etc.)
+- **Type Safety**: Full TypeScript support with generic return types
+- **Medical Safety**: Ensures all medical data operations have consistent error recovery patterns
+
+### Streaming Response Pattern
+Progressive rendering of AI responses for real-time user feedback:
+- **ChatContext Integration**: React reducers manage streaming state with UPDATE_STREAMING_MESSAGE actions
+- **ABG Analysis**: Real-time interpretation results with progressive UI updates in IdentifiedIssuesPanel
+- **Voice Input**: Streaming transcription updates with onLiveTranscriptUpdate callbacks
+- **Error Recovery**: Graceful handling of streaming interruptions with retry logic
+- **Performance**: Non-blocking rendering maintains responsive UI during long AI responses
 
 ### Georgian Transcription Performance Optimizations
 - **Microphone Pre-initialization**: `preInitializeMicrophone()` in `useGeorgianTTS.ts` eliminates 2-3 second recording delays
 - **Smart Segmentation**: Automatic 23-second chunks with seamless continuation for long recordings
 - **Session Isolation**: Unique session IDs prevent transcript contamination across recordings
 - **Background Processing**: Non-blocking audio processing maintains responsive UI
+- **Dual STT Models**: Fast model + GoogleChirp model with user-selectable switching and localStorage persistence
 
 ### Component State Management
 - **Local Transcript State**: GeorgianSTTApp maintains local transcript state separate from session management
 - **Real-time Updates**: `onLiveTranscriptUpdate` callback provides session-aware updates
+- **Streaming State Handling**: ChatContext and ABG components manage progressive streaming updates with React reducers
+- **Voice Input State**: Integrated voice recording state across AI Copilot and ABG workflows
+- **STT Model Persistence**: localStorage integration for user-selected STT model preferences (Fast vs GoogleChirp)
 - **Cross-Component Communication**: Props drilling with TypeScript interfaces for type safety
+- **Async Operation State**: Safe Async pattern ensures consistent error handling across all medical data operations
 
 ### Edge Function Integration
 - **Supabase Edge Functions**: `georgian-tts-proxy` handles speech processing with authentication
