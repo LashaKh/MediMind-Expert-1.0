@@ -35,7 +35,11 @@ type ChatAction =
   | { type: 'SET_SELECTED_DOCUMENTS'; payload: string[] }
   | { type: 'ADD_SELECTED_DOCUMENT'; payload: string }
   | { type: 'REMOVE_SELECTED_DOCUMENT'; payload: string }
-  | { type: 'CLEAR_SELECTED_DOCUMENTS' };
+  | { type: 'CLEAR_SELECTED_DOCUMENTS' }
+  | { type: 'START_STREAMING_MESSAGE'; payload: { id: string; content: string } }
+  | { type: 'UPDATE_STREAMING_MESSAGE'; payload: { id: string; token: string } }
+  | { type: 'COMPLETE_STREAMING_MESSAGE'; payload: { id: string; sources?: any[] } }
+  | { type: 'ERROR_STREAMING_MESSAGE'; payload: { id: string; error: string } };
 
 // Storage interfaces for type safety
 interface StoredConversation {
@@ -327,7 +331,88 @@ const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
           selectedDocuments: []
         }
       };
-    
+
+    case 'START_STREAMING_MESSAGE':
+      // Create a new streaming message
+      const streamingMessage: Message = {
+        id: action.payload.id,
+        content: action.payload.content,
+        type: 'ai',
+        timestamp: new Date(),
+        isStreaming: true
+      };
+
+      return {
+        ...state,
+        messages: [...state.messages, streamingMessage],
+        streamingState: {
+          isActive: true,
+          messageId: action.payload.id,
+          content: action.payload.content,
+          tokensReceived: 0,
+          startTime: Date.now()
+        }
+      };
+
+    case 'UPDATE_STREAMING_MESSAGE':
+      return {
+        ...state,
+        messages: state.messages.map(msg =>
+          msg.id === action.payload.id
+            ? { ...msg, content: msg.content + action.payload.token }
+            : msg
+        ),
+        streamingState: {
+          ...state.streamingState,
+          content: state.streamingState.content + action.payload.token,
+          tokensReceived: state.streamingState.tokensReceived + 1
+        }
+      };
+
+    case 'COMPLETE_STREAMING_MESSAGE':
+      return {
+        ...state,
+        messages: state.messages.map(msg =>
+          msg.id === action.payload.id
+            ? {
+                ...msg,
+                isStreaming: false,
+                sources: action.payload.sources || msg.sources
+              }
+            : msg
+        ),
+        streamingState: {
+          isActive: false,
+          messageId: null,
+          content: '',
+          tokensReceived: 0,
+          startTime: null
+        }
+      };
+
+    case 'ERROR_STREAMING_MESSAGE':
+      return {
+        ...state,
+        messages: state.messages.map(msg =>
+          msg.id === action.payload.id
+            ? {
+                ...msg,
+                isStreaming: false,
+                status: 'error',
+                content: msg.content || action.payload.error
+              }
+            : msg
+        ),
+        streamingState: {
+          isActive: false,
+          messageId: null,
+          content: '',
+          tokensReceived: 0,
+          startTime: null
+        },
+        error: action.payload.error
+      };
+
     default:
       return state;
   }
@@ -386,6 +471,11 @@ interface ChatContextType {
   // Flowise conversation metadata methods
   saveFlowiseConversationMetadata: (sessionId: string, messageText: string, knowledgeBaseType?: KnowledgeBaseType, specialty?: string, caseId?: string, conversationType?: 'general' | 'case-study') => Promise<void>;
   incrementFlowiseMessageCount: (sessionId: string) => Promise<void>;
+  // Streaming methods
+  startStreamingMessage: (content?: string) => string;
+  updateStreamingMessage: (id: string, token: string) => void;
+  completeStreamingMessage: (id: string, sources?: any[]) => void;
+  errorStreamingMessage: (id: string, error: string) => void;
 }
 
 // Create Context
@@ -410,7 +500,14 @@ const initialState: ChatState = {
   selectedKnowledgeBase: 'curated',
   personalDocumentCount: 0,
   vectorStoreInfo: { vectorStoreId: null, documentCount: 0 },
-  vectorStoreStats: { documentCount: 0, totalSize: 0 }
+  vectorStoreStats: { documentCount: 0, totalSize: 0 },
+  streamingState: {
+    isActive: false,
+    messageId: null,
+    content: '',
+    tokensReceived: 0,
+    startTime: null
+  }
 };
 
 // Provider Component
@@ -1307,31 +1404,65 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
       // Clear conversation localStorage
       localStorage.removeItem('medimind_conversation');
       localStorage.removeItem('medimind_conversation_metadata');
-      
+
       // Clear any other PPH calculator related cache
       const keysToRemove = [];
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key && (
-          key.includes('pph') || 
-          key.includes('calculator') || 
+          key.includes('pph') ||
+          key.includes('calculator') ||
           key.includes('obgyn') ||
           key.includes('medimind_')
         )) {
           keysToRemove.push(key);
         }
       }
-      
+
       keysToRemove.forEach(key => localStorage.removeItem(key));
-      
+
       // Reset chat state
       dispatch({ type: 'CLEAR_MESSAGES' });
-      
+
       return true;
     } catch (error) {
       logger.error('Error clearing cached data', error, { component: 'ChatContext', action: 'clearCachedData' });
       return false;
     }
+  }, []);
+
+  // Streaming methods for real-time AI response rendering
+  const startStreamingMessage = useCallback((content: string = ''): string => {
+    const messageId = uuidv4();
+    dispatch({
+      type: 'START_STREAMING_MESSAGE',
+      payload: { id: messageId, content }
+    });
+    logger.debug('Started streaming message', { messageId });
+    return messageId;
+  }, []);
+
+  const updateStreamingMessage = useCallback((id: string, token: string) => {
+    dispatch({
+      type: 'UPDATE_STREAMING_MESSAGE',
+      payload: { id, token }
+    });
+  }, []);
+
+  const completeStreamingMessage = useCallback((id: string, sources?: any[]) => {
+    dispatch({
+      type: 'COMPLETE_STREAMING_MESSAGE',
+      payload: { id, sources }
+    });
+    logger.debug('Completed streaming message', { messageId: id, sourceCount: sources?.length || 0 });
+  }, []);
+
+  const errorStreamingMessage = useCallback((id: string, error: string) => {
+    dispatch({
+      type: 'ERROR_STREAMING_MESSAGE',
+      payload: { id, error }
+    });
+    logger.error('Streaming message error', { messageId: id, error });
   }, []);
 
   // Memoize the context value to prevent unnecessary re-renders
@@ -1389,6 +1520,11 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
         dispatch({ type: 'SET_SELECTED_DOCUMENTS', payload: allDocumentIds });
       }
     },
+    // Streaming methods
+    startStreamingMessage,
+    updateStreamingMessage,
+    completeStreamingMessage,
+    errorStreamingMessage
   }), [
     state,
     addMessage,
@@ -1415,7 +1551,11 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
     loadCases,
     clearCachedData,
     saveFlowiseConversationMetadata,
-    incrementFlowiseMessageCount
+    incrementFlowiseMessageCount,
+    startStreamingMessage,
+    updateStreamingMessage,
+    completeStreamingMessage,
+    errorStreamingMessage
   ]);
 
   return (

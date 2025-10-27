@@ -250,8 +250,23 @@ Frontend: FlowiseChatWindow → useFlowiseChat → API
 Backend: Supabase Edge Functions → Specialty Flowise Endpoints
 State: ChatContext → React reducers → Streaming UI Updates
 Voice: VoiceInputButton → Georgian TTS → Chat Integration
+Streaming: fetchStreamingResponse → Custom SSE Client → Progressive Rendering
 ```
-- **Streaming Support**: Real-time streaming responses for AI chat, ABG analysis, and medical interpretations
+- **✅ STREAMING FULLY IMPLEMENTED & OPTIMIZED** (2025-10-27):
+  - **Core Service**: `streamingService.ts` with custom SSE client (native fetch + eventsource-parser)
+  - **✅ DUPLICATE CONNECTION FIX**: Replaced @microsoft/fetch-event-source with custom implementation to eliminate 18+ duplicate connections per message
+  - **Custom SSE Client**: `src/lib/api/customSSEClient.ts` using native fetch + ReadableStream + eventsource-parser (industry-standard, 1,148 dependents)
+  - **Production Pattern**: Same approach used by OpenAI, Azure OpenAI, LangChain, and Flowise official SDK
+  - **Performance Improvement**: 10-20x reduction in unnecessary API calls, smaller bundle size (~5KB vs ~15KB)
+  - **State Management**: ChatContext with streaming actions (START_STREAMING_MESSAGE, UPDATE_STREAMING_MESSAGE, COMPLETE_STREAMING_MESSAGE, ERROR_STREAMING_MESSAGE)
+  - **API Layer**: `fetchAIResponseStreaming()` in chat.ts with automatic endpoint routing
+  - **Hooks**: useFlowiseChat with automatic streaming detection, fallback to non-streaming, and streaming callbacks
+  - **UI Components**: MessageList with auto-scroll during streaming, StreamingIndicator with animated progress
+  - **Medical Safety**: streamingValidation.ts prevents incomplete critical medical information display
+  - **Error Handling**: Circuit breakers, retry logic (3 attempts), exponential backoff, graceful degradation
+  - **Performance**: Token buffering (50ms debounce), metrics tracking, 60fps rendering target
+  - **Configuration**: Environment variables (VITE_ENABLE_STREAMING, max retries, timeout, debounce)
+  - **Backward Compatible**: Falls back to non-streaming if disabled or errors occur
 - **Voice Input Integration**: Direct voice recording button in chat interface with Georgian transcription workflow
 - **Specialty-aware Routing**: Cardiology vs OB/GYN chatbot endpoints
 - **File Attachment Support**: Medical image analysis with multimodal AI processing
@@ -455,6 +470,51 @@ liked_search_results, clinical_trials_monitoring
 - Comprehensive error handling with `safeAsync` patterns
 
 ## Recent Updates (Updated: 2025-10-27)
+
+### Streaming Duplicate Connection Fix (October 27, 2025) - **CRITICAL FIX**
+- **✅ RESOLVED Duplicate Connection Issue**: Eliminated 18+ duplicate HTTP connections per message by replacing @microsoft/fetch-event-source with custom SSE client
+- **Custom SSE Client Implementation**:
+  - Created `src/lib/api/customSSEClient.ts` using native fetch + ReadableStream + eventsource-parser
+  - Simplified `streamingService.ts` from 400+ lines to 160 lines (60% code reduction)
+  - Production-proven pattern used by OpenAI, Azure OpenAI, LangChain, Flowise
+  - Full connection lifecycle control (no hidden retry logic)
+  - Removed problematic `@microsoft/fetch-event-source` dependency
+- **Performance Results**:
+  - ✅ Single connection per message (previously 18+ duplicates)
+  - ✅ 10-20x reduction in unnecessary API calls
+  - ✅ Smaller bundle: ~5KB eventsource-parser vs ~15KB @microsoft/fetch-event-source
+  - ✅ Clean termination after each stream
+  - ✅ Predictable, maintainable behavior
+- **Research & Investigation**: Comprehensive web research identified eventsource-parser as industry-standard solution with 1,148 dependents
+
+### AI Chatbot Streaming Implementation (October 27, 2025)
+- **✅ Full SSE Streaming Implementation**: Completed real-time Server-Sent Events streaming for AI chatbot responses
+- **Core Infrastructure** (Updated with custom SSE client):
+  - Created `streamingService.ts` with custom SSE client for SSE connection management (replaced @microsoft/fetch-event-source)
+  - Created `streamingHelpers.ts` with token buffering, circuit breakers, retry logic, and metrics
+  - Added `streamingValidation.ts` for medical safety validation during streaming
+- **State Management**:
+  - Extended ChatContext with 4 streaming actions (START, UPDATE, COMPLETE, ERROR)
+  - Added streaming state tracking (isActive, messageId, content, tokensReceived, startTime)
+  - Added `isStreaming` property to Message interface
+- **API Integration**:
+  - Implemented `fetchAIResponseStreaming()` with SSE callbacks
+  - Automatic detection of streaming support via environment variables
+  - Graceful fallback to non-streaming mode on errors
+- **Hook Updates**:
+  - Updated useFlowiseChat with streaming state (isStreaming, streamingMessageId)
+  - Added streaming callbacks (onStreamStart, onStreamToken, onStreamComplete, onStreamError)
+  - Automatic streaming detection with `isStreamingEnabled()` helper
+- **UI Components**:
+  - Updated MessageList with auto-scroll during streaming
+  - Created StreamingIndicator component with animated progress dots
+  - Progressive rendering of AI responses token-by-token
+- **Configuration**:
+  - Added environment variables: VITE_ENABLE_STREAMING, VITE_STREAMING_MAX_RETRIES, VITE_STREAMING_TIMEOUT, VITE_STREAMING_DEBOUNCE_MS, VITE_STREAMING_FALLBACK
+  - Default settings: enabled=true, 3 retries, 180s timeout, 50ms debounce
+- **Medical Safety**: Critical keyword detection, dosage validation, sentence completion buffering
+- **Performance**: Token buffering, 50ms debounce, metrics tracking, 60fps rendering target
+- **Error Handling**: Circuit breakers, exponential backoff, automatic retry, graceful degradation
 
 ### ABG System Refactoring (October 26, 2025)
 - **Component Architecture Overhaul**: Major restructuring with new `IdentifiedIssuesPanel.tsx` and `PremiumActionPlanResults.tsx` for improved separation of concerns

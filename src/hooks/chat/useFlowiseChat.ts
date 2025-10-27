@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
-import { fetchAIResponse } from '../../lib/api/chat';
+import { fetchAIResponse, fetchAIResponseStreaming } from '../../lib/api/chat';
+import { isStreamingEnabled } from '../../lib/api/streamingService';
 import { APIError } from '../../lib/api/errors';
 import { Message, SourceReference, PatientCase, Attachment, KnowledgeBaseType } from '../../types/chat';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,15 +14,23 @@ interface UseFlowiseChatOptions {
   caseContext?: PatientCase | null;
   knowledgeBaseType?: KnowledgeBaseType;
   personalDocumentIds?: string[];
+  // Streaming options
+  enableStreaming?: boolean;
+  onStreamStart?: (messageId: string) => void;
+  onStreamToken?: (messageId: string, token: string) => void;
+  onStreamComplete?: (messageId: string, sources?: SourceReference[]) => void;
+  onStreamError?: (messageId: string, error: string) => void;
 }
 
 interface UseFlowiseChatReturn {
   sendMessage: (content: string, attachments?: Attachment[], caseContext?: PatientCase | null, knowledgeBaseType?: KnowledgeBaseType, personalDocumentIds?: string[], enhancedMessage?: string) => Promise<void>;
   isLoading: boolean;
+  isStreaming: boolean;
   error: string | null;
   sessionId: string;
   isRateLimited: boolean;
   clearRateLimit: () => void;
+  streamingMessageId: string | null;
 }
 
 export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseChatReturn => {
@@ -33,10 +42,17 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
     sessionId: providedSessionId,
     caseContext: defaultCaseContext,
     knowledgeBaseType,
-    personalDocumentIds
+    personalDocumentIds,
+    enableStreaming,
+    onStreamStart,
+    onStreamToken,
+    onStreamComplete,
+    onStreamError
   } = options;
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRateLimited, setIsRateLimited] = useState(false);
 
@@ -45,6 +61,11 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
   const sessionId = useMemo(() => {
     return providedSessionId || uuidv4();
   }, [providedSessionId]);
+
+  // Determine if streaming should be used
+  const useStreaming = useMemo(() => {
+    return (enableStreaming !== false) && isStreamingEnabled();
+  }, [enableStreaming]);
 
   const sendMessage = useCallback(async (content: string, attachments?: Attachment[], caseContext?: PatientCase | null, knowledgeBaseType?: KnowledgeBaseType, personalDocumentIds?: string[], enhancedMessage?: string) => {
     if (!content.trim() && (!attachments || attachments.length === 0)) return;
@@ -57,6 +78,124 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
     const activeCaseContext = caseContext !== undefined ? caseContext : defaultCaseContext;
 
     try {
+      // STREAMING PATH
+      if (useStreaming) {
+        const messageId = uuidv4();
+        setStreamingMessageId(messageId);
+        setIsStreaming(true);
+        onStreamStart?.(messageId);
+
+        // Format message for API
+        let messageInput: string | { text: string; imageUrl?: string } = content;
+
+        // Legacy image handling
+        if (attachments && attachments.length > 0) {
+          const imageAttachment = attachments.find(att => att.type?.startsWith('image/') && att.preview && !att.base64Data);
+          if (imageAttachment) {
+            messageInput = {
+              text: content,
+              imageUrl: imageAttachment.url || imageAttachment.preview
+            };
+          }
+        }
+
+        const finalMessage = enhancedMessage || messageInput;
+        const finalAttachments = enhancedMessage ? undefined : attachments;
+
+        let accumulatedContent = '';
+        let sources: any[] = [];
+
+        await fetchAIResponseStreaming(
+          finalMessage,
+          sessionId,
+          {
+            onToken: (token: string) => {
+              accumulatedContent += token;
+              onStreamToken?.(messageId, token);
+            },
+            onSource: (receivedSources: any[]) => {
+              sources = receivedSources;
+            },
+            onComplete: () => {
+              // Process sources for streaming completion
+              const processedSources = sources.map((source: any) => {
+                const checkAndExtract = (value: any) => {
+                  if (!value) return '';
+                  const str = String(value);
+                  if (
+                    str === 'undefined...' ||
+                    str === 'undefined' ||
+                    str === 'null' ||
+                    str.startsWith('undefined') ||
+                    str.includes('undefined') ||
+                    str.trim() === '' ||
+                    str === '[object Object]' ||
+                    str.length < 3
+                  ) {
+                    return '';
+                  }
+                  return str.trim();
+                };
+
+                let extractedText = '';
+                extractedText = checkAndExtract(source.pageContent) ||
+                               checkAndExtract(source.metadata?.pageContent) ||
+                               checkAndExtract(source.content) ||
+                               checkAndExtract(source.text) ||
+                               checkAndExtract(source.excerpt) ||
+                               checkAndExtract(source.metadata?.text) ||
+                               checkAndExtract(source.metadata?.content) ||
+                               (typeof source === 'string' ? checkAndExtract(source) : '');
+
+                if (extractedText && extractedText.length > 5000) {
+                  extractedText = extractedText.substring(0, 5000) + '...';
+                }
+
+                const finalExcerpt = extractedText && extractedText !== 'undefined...' && extractedText !== 'undefined'
+                  ? extractedText
+                  : 'No text content available';
+
+                return {
+                  id: uuidv4(),
+                  title: source.title || source.name || source.metadata?.title || source.metadata?.source || 'Medical Source',
+                  url: source.url || source.metadata?.url,
+                  type: source.type || source.metadata?.type || 'document',
+                  excerpt: finalExcerpt
+                } as SourceReference;
+              });
+
+              // Pass sources to streaming completion (NO duplicate message creation!)
+              onStreamComplete?.(messageId, processedSources);
+              setIsStreaming(false);
+              setStreamingMessageId(null);
+              setIsLoading(false); // Clear loading state (finally block won't run due to early return)
+              // Note: Typing indicator cleared in handleStreamStart, not here
+              console.log('✅ Streaming complete');
+            },
+            onError: (error: Error) => {
+              const errorMessage = error.message || 'Streaming failed';
+              // Update the existing streaming message with error (no duplicate!)
+              onStreamError?.(messageId, errorMessage);
+              setError(errorMessage);
+              onError?.(errorMessage);
+              setIsStreaming(false);
+              setStreamingMessageId(null);
+              setIsLoading(false); // Clear loading state (finally block won't run due to early return)
+              // Note: Typing indicator cleared in handleStreamStart, not here
+              // NOTE: Don't call onMessageReceived - error already set on streaming message
+            }
+          },
+          activeCaseContext || undefined,
+          finalAttachments,
+          knowledgeBaseType || 'curated',
+          personalDocumentIds
+        );
+
+        return; // Exit after streaming completes
+      }
+
+      // NON-STREAMING PATH (fallback)
+      try {
       // Format message for API - with new attachment support, we primarily use string
       let messageInput: string | { text: string; imageUrl?: string } = content;
       
@@ -189,12 +328,12 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
       };
 
       onMessageReceived?.(errorAIMessage);
-      
+    }
     } finally {
       setIsLoading(false);
       onTypingEnd?.();
     }
-  }, [sessionId, onMessageReceived, onError, onTypingStart, onTypingEnd, defaultCaseContext, knowledgeBaseType, personalDocumentIds]);
+  }, [sessionId, onMessageReceived, onError, onTypingStart, onTypingEnd, defaultCaseContext, knowledgeBaseType, personalDocumentIds, useStreaming, onStreamStart, onStreamToken, onStreamComplete, onStreamError]);
 
   const clearRateLimit = useCallback(() => {
     setIsRateLimited(false);
@@ -203,9 +342,11 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
   return {
     sendMessage,
     isLoading,
+    isStreaming,
     error,
     sessionId,
     isRateLimited,
-    clearRateLimit
+    clearRateLimit,
+    streamingMessageId
   };
 }; 

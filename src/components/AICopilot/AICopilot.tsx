@@ -13,6 +13,23 @@ export const AICopilot = React.memo<AICopilotProps>(({ className = '' }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [openCaseModal, setOpenCaseModal] = useState(false);
 
+  // Hide body and html overflow to prevent page-level scrollbar
+  useEffect(() => {
+    // Store original overflow values
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+
+    // Hide overflow on both body and html elements
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    // Restore scrollbar on unmount (use 'auto' if original was empty)
+    return () => {
+      document.body.style.overflow = originalBodyOverflow || 'auto';
+      document.documentElement.style.overflow = originalHtmlOverflow || 'auto';
+    };
+  }, []);
+
   useEffect(() => {
     // Check if we should open the case creation modal
     if (searchParams.get('createCase') === 'true') {

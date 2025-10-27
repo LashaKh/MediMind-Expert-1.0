@@ -9,6 +9,7 @@ import { buildAttachmentTextContext, convertEnhancedAttachmentsToUploads } from 
 import { buildEnhancedCaseContext } from '../../utils/caseAttachmentIntegration';
 import { logger } from '../logger';
 import { sessionManager } from '../auth/sessionManager';
+import { fetchStreamingResponse, isStreamingEnabled, StreamingCallbacks } from './streamingService';
 
 // Retry utility for handling rate limiting and transient errors
 async function retryWithBackoff<T>(
@@ -223,6 +224,94 @@ User Question:`;
     logger.error('Direct Flowise call failed:', error);
     throw error instanceof APIError ? error : new APIError(
       error instanceof Error ? error.message : 'Direct Flowise call failed', 
+      500
+    );
+  }
+}
+
+// Streaming version of AI response - uses SSE for real-time token streaming
+export async function fetchAIResponseStreaming(
+  message: string | { text: string; imageUrl?: string },
+  sessionId: string,
+  callbacks: StreamingCallbacks,
+  caseContext?: PatientCase,
+  attachments?: Attachment[],
+  knowledgeBaseType?: KnowledgeBaseType,
+  personalDocumentIds?: string[]
+): Promise<void> {
+  try {
+    let messageText = typeof message === 'string' ? message : message.text;
+
+    // Handle case context
+    if (caseContext) {
+      let caseContextText: string;
+
+      if ((caseContext as any).markerOnly === true) {
+        caseContextText = `<<CASE_DISCUSSION>>
+[Context previously provided in this conversation - continuing case discussion]
+
+User Question:
+${messageText}`;
+      } else if ((caseContext as any).enhancedContext) {
+        caseContextText = `<<CASE_DISCUSSION>>
+${(caseContext as any).enhancedContext}
+
+User Question:
+${messageText}`;
+      } else {
+        const enhancedContext = buildEnhancedCaseContext(caseContext);
+        caseContextText = `<<CASE_DISCUSSION>>
+${enhancedContext}
+
+User Question:
+${messageText}`;
+      }
+
+      messageText = caseContextText;
+    } else {
+      messageText = `<<CHAT_QUERY>>\n${messageText}`;
+    }
+
+    // Get authentication
+    const session = await sessionManager.getValidSession();
+    if (!session) {
+      throw new APIError('Authentication required', 401);
+    }
+
+    // Determine API endpoint based on knowledge base type
+    const finalKnowledgeBaseType = knowledgeBaseType || 'curated';
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+
+    let apiEndpoint: string;
+    let requestBody: any = {
+      message: messageText,
+      conversationId: sessionId,
+      caseContext: caseContext || null
+    };
+
+    if (finalKnowledgeBaseType === 'personal') {
+      apiEndpoint = `${supabaseUrl}/functions/v1/openai-assistant`;
+      logger.debug('🤖 Streaming to OpenAI Assistants (personal KB)');
+    } else {
+      apiEndpoint = `${supabaseUrl}/functions/v1/flowise-chat`;
+      logger.debug('🌊 Streaming to Flowise (curated KB)');
+    }
+
+    // Add attachments if provided
+    if (attachments && attachments.length > 0) {
+      const uploads = convertAttachmentsToUploads(attachments);
+      if (uploads.length > 0) {
+        requestBody.uploads = uploads;
+      }
+    }
+
+    // Use streaming service
+    await fetchStreamingResponse(apiEndpoint, requestBody, callbacks);
+
+  } catch (error) {
+    logger.error('Streaming AI response failed:', error);
+    throw error instanceof APIError ? error : new APIError(
+      error instanceof Error ? error.message : 'Streaming failed',
       500
     );
   }

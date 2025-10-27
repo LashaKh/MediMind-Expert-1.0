@@ -143,7 +143,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           }}
         >
           {/* Complete gap elimination - zero margin/padding wrapper */}
-          <div className="h-full w-full m-0 p-0 border-0 bg-transparent overflow-auto">
+          <div className={`h-full w-full m-0 p-0 border-0 bg-transparent ${isAICopilotPage ? 'overflow-hidden' : 'overflow-auto'}`}>
             {children}
           </div>
         </main>

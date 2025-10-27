@@ -4,6 +4,7 @@ export interface Message {
   type: 'user' | 'ai';
   timestamp: Date;
   status?: 'sending' | 'sent' | 'error';
+  isStreaming?: boolean; // For progressive rendering during streaming
   sources?: SourceReference[];
   attachments?: Attachment[];
   metadata?: {
@@ -153,6 +154,14 @@ export interface ChatState {
   vectorStoreStats: {
     documentCount: number;
     totalSize: number;
+  };
+  // Streaming state for real-time response rendering
+  streamingState: {
+    isActive: boolean;
+    messageId: string | null;
+    content: string;
+    tokensReceived: number;
+    startTime: number | null;
   };
 }
 

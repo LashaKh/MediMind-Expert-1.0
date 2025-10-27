@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { History, Plus, FileText, Sparkles, Stethoscope, Heart, AlertCircle, X, Calculator, TestTube2, MessageSquarePlus, FilePlus2, Home } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -105,8 +105,25 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
     resetCaseContextTracking
   } = useAppStore();
 
-  // Get Flowise metadata functions and case management from ChatContext
-  const { saveFlowiseConversationMetadata, incrementFlowiseMessageCount, loadCases, createCase, updateCase } = useChatContext();
+  // Get Flowise metadata functions, case management, and messages from ChatContext
+  const {
+    state: chatContextState,
+    addMessage: addMessageToContext,
+    clearMessages: clearMessagesFromContext,
+    saveFlowiseConversationMetadata,
+    incrementFlowiseMessageCount,
+    loadCases,
+    createCase,
+    updateCase,
+    // Streaming methods for progressive UI updates
+    startStreamingMessage,
+    updateStreamingMessage,
+    completeStreamingMessage,
+    errorStreamingMessage
+  } = useChatContext();
+
+  // Use messages from ChatContext for streaming support (not useAppStore)
+  const messagesFromContext = chatContextState.messages;
 
   const navigate = useNavigate();
   const [showConversationList, setShowConversationList] = useState(false);
@@ -116,9 +133,35 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   const [caseListKey, setCaseListKey] = useState(0); // Force re-render of case list
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isPulsing, setIsPulsing] = useState(false);
-  
+
   // Track context loading state (no auto-send, just passive context loading)
   const [isContextLoading, setIsContextLoading] = useState(false);
+
+  // Prevent duplicate streaming requests
+  const isRequestInFlight = useRef(false);
+  const requestStartTime = useRef<number | null>(null);
+
+  // Track streaming message ID for progressive updates
+  const streamingMessageIdRef = useRef<string | null>(null);
+
+  // Track if we've received first token (to clear typing indicator at right time)
+  const hasReceivedFirstToken = useRef(false);
+
+  // Safety: Auto-reset stuck in-flight flag after 3 minutes
+  useEffect(() => {
+    const checkInterval = setInterval(() => {
+      if (isRequestInFlight.current && requestStartTime.current) {
+        const elapsed = Date.now() - requestStartTime.current;
+        if (elapsed > 180000) { // 3 minutes
+          console.warn('⚠️ Auto-resetting stuck in-flight flag after 3 minutes');
+          isRequestInFlight.current = false;
+          requestStartTime.current = null;
+        }
+      }
+    }, 10000); // Check every 10 seconds
+
+    return () => clearInterval(checkInterval);
+  }, []);
 
   // Handle ABG context from navigation - Passive loading only
   useEffect(() => {
@@ -181,6 +224,10 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
         activeConversationId !== prevConversationIdRef.current) {
       console.log('🔄 Switching conversations - regenerating sessionId');
       setSessionId(uuidv4());
+
+      // Reset request in-flight flag when switching conversations
+      // This prevents stuck state from blocking new messages
+      isRequestInFlight.current = false;
     }
 
     // Always update the ref to track the current conversation
@@ -197,7 +244,7 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   // Handle knowledge base changes with automatic new chat
   const handleKnowledgeBaseChange = useCallback((newKnowledgeBase: 'personal' | 'curated') => {
     // Only start new chat if there are existing messages and KB is actually changing
-    if (messages.length > 0 && newKnowledgeBase !== knowledgeBase) {
+    if (messagesFromContext.length > 0 && newKnowledgeBase !== knowledgeBase) {
       // Start a new conversation to avoid mixing contexts
       const newConversationId = createNewConversation(
         t('chat.defaultChatTitle', 'Chat'), 
@@ -214,7 +261,7 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
     
     // Update the knowledge base
     setKnowledgeBase(newKnowledgeBase);
-  }, [knowledgeBase, messages.length, createNewConversation, setActiveConversation, profile, clearMessages, setKnowledgeBase]);
+  }, [knowledgeBase, messagesFromContext.length, createNewConversation, setActiveConversation, profile, clearMessages, setKnowledgeBase]);
 
   // Check if we need to create a conversation when user sends first message
   const ensureConversationExists = useCallback(() => {
@@ -321,6 +368,94 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   // Personal KB guidance and placeholder
   const personalKBPlaceholder = usePersonalKBPlaceholder(knowledgeBase === 'personal');
 
+  // Memoize callbacks to prevent infinite re-render loop and duplicate streaming requests
+  const handleMessageReceived = useCallback((message: Message) => {
+    // Add to ChatContext (for UI display) - ChatContext automatically generates id/timestamp
+    const { id, timestamp, ...messageWithoutIdTimestamp } = message;
+    addMessageToContext(messageWithoutIdTimestamp);
+
+    // Also add to useAppStore for persistence
+    addMessage(message);
+
+    // Save Flowise message to database for persistence
+    if (sessionId && knowledgeBase === 'curated') {
+      saveFlowiseMessage(sessionId, message);
+    }
+    // Clear request in flight flag when message is fully received
+    isRequestInFlight.current = false;
+    requestStartTime.current = null;
+  }, [addMessageToContext, addMessage, sessionId, knowledgeBase, saveFlowiseMessage]);
+
+  const handleError = useCallback((error: string) => {
+    setChatError(error);
+    // Clear request in flight flag on error
+    isRequestInFlight.current = false;
+    requestStartTime.current = null;
+  }, [setChatError]);
+
+  const handleTypingStart = useCallback(() => {
+    console.log('🟢 handleTypingStart called - setting isTyping to TRUE');
+    setTyping(true);
+  }, [setTyping]);
+
+  const handleTypingEnd = useCallback(() => {
+    console.log('🔴 handleTypingEnd called - setting isTyping to FALSE');
+    setTyping(false);
+  }, [setTyping]);
+
+  // Streaming callbacks for better state management
+  const handleStreamStart = useCallback((messageId: string) => {
+    console.log('🌊 Stream started:', messageId);
+    isRequestInFlight.current = true;
+    hasReceivedFirstToken.current = false; // Reset flag for new stream
+
+    // Create streaming message in UI
+    const streamingMsgId = startStreamingMessage('');
+    streamingMessageIdRef.current = streamingMsgId;
+  }, [startStreamingMessage]);
+
+  const handleStreamToken = useCallback((messageId: string, token: string) => {
+    // Clear typing indicator on FIRST token ONLY (when content starts appearing)
+    // This ensures dots show while "thinking" but disappear as soon as text appears
+    if (!hasReceivedFirstToken.current) {
+      console.log('🎯 First token received - clearing typing indicator');
+      setTyping(false);
+      hasReceivedFirstToken.current = true;
+    }
+
+    // Update streaming message with new token for progressive rendering
+    if (streamingMessageIdRef.current) {
+      updateStreamingMessage(streamingMessageIdRef.current, token);
+    }
+  }, [updateStreamingMessage, setTyping]);
+
+  const handleStreamComplete = useCallback((messageId: string, sources?: any[]) => {
+    console.log('✅ Stream completed:', messageId, sources ? `with ${sources.length} sources` : 'no sources');
+
+    // Finalize streaming message with sources
+    if (streamingMessageIdRef.current) {
+      completeStreamingMessage(streamingMessageIdRef.current, sources);
+      streamingMessageIdRef.current = null;
+    }
+
+    // Always clear the in-flight flag when stream completes
+    isRequestInFlight.current = false;
+    requestStartTime.current = null;
+  }, [completeStreamingMessage]);
+
+  const handleStreamError = useCallback((messageId: string, error: string) => {
+    console.error('❌ Stream error:', messageId, error);
+
+    // Handle streaming error
+    if (streamingMessageIdRef.current) {
+      errorStreamingMessage(streamingMessageIdRef.current, error);
+      streamingMessageIdRef.current = null;
+    }
+
+    isRequestInFlight.current = false;
+    requestStartTime.current = null;
+  }, [errorStreamingMessage]);
+
   // Initialize Flowise chat with context integration - will be enhanced with CaseContextProvider
   const {
     sendMessage: sendToFlowise,
@@ -328,27 +463,21 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
     error: flowiseError
   } = useFlowiseChat({
     sessionId, // Pass the sessionId to maintain consistency
-    onMessageReceived: (message: Message) => {
-      addMessage(message);
-      // Save Flowise message to database for persistence
-      if (sessionId && knowledgeBase === 'curated') {
-        saveFlowiseMessage(sessionId, message);
-      }
-    },
-    onError: (error: string) => {
-      setChatError(error);
-    },
-    onTypingStart: () => {
-      setTyping(true);
-    },
-    onTypingEnd: () => {
-      setTyping(false);
-    },
+    onMessageReceived: handleMessageReceived,
+    onError: handleError,
+    onTypingStart: handleTypingStart,
+    onTypingEnd: handleTypingEnd,
     caseContext: activeCase,
     knowledgeBaseType: knowledgeBase,
     // For personal knowledge base, the backend automatically finds user's Vector Store
     // No need to pass document IDs - OpenAI Vector Store handles document retrieval
-    personalDocumentIds: undefined
+    personalDocumentIds: undefined,
+    // Streaming callbacks for better state management
+    enableStreaming: true,
+    onStreamStart: handleStreamStart,
+    onStreamToken: handleStreamToken,
+    onStreamComplete: handleStreamComplete,
+    onStreamError: handleStreamError
   });
 
   // Update loading state based on Flowise status
@@ -375,12 +504,22 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
 
   // Handle sending a message
   const handleSendMessage = useCallback(async (
-    content: string, 
+    content: string,
     attachments?: Attachment[],
     enhancedContent?: string
   ) => {
+    // Prevent duplicate requests if one is already in flight
+    if (isRequestInFlight.current) {
+      console.warn('⚠️ Request already in flight, ignoring duplicate send');
+      return;
+    }
+
     ensureConversationExists();
-    
+
+    // Mark request as in flight IMMEDIATELY before any async operations
+    isRequestInFlight.current = true;
+    requestStartTime.current = Date.now();
+
     // Enhance content with ABG context if available - prioritize ABG context over other enhancements
     let finalEnhancedContent = enhancedContent;
 
@@ -415,8 +554,22 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
       }
     };
 
+    // Add to ChatContext (for UI display) - ChatContext automatically generates id/timestamp
+    addMessageToContext({
+      content,
+      type: 'user',
+      attachments,
+      metadata: {
+        sessionId: sessionId,
+        knowledgeBase: knowledgeBase,
+        caseId: activeCase?.id,
+        abgContext: abgContext ? { id: abgContext.id, type: abgContext.type } : undefined
+      }
+    });
+
+    // Also add to useAppStore for persistence
     addMessage(userMessage);
-    
+
     // Save user message to database for Flowise conversations
     if (sessionId && knowledgeBase === 'curated') {
       saveFlowiseMessage(sessionId, userMessage);
@@ -469,10 +622,13 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
 
     if (error) {
       setChatError(t('chat.messageSendFailed'));
+      // Clear request in flight flag on error
+      isRequestInFlight.current = false;
+      requestStartTime.current = null;
     }
-    
+
     setChatLoading(false);
-  }, [addMessage, sendToFlowise, activeConversationId, knowledgeBase, activeCase, setChatLoading, setChatError, ensureConversationExists, abgContext]);
+  }, [addMessageToContext, addMessage, sendToFlowise, activeConversationId, knowledgeBase, activeCase, setChatLoading, setChatError, ensureConversationExists, abgContext]);
 
   // Context is now loaded passively - no auto-send functionality
   // Users must type their own questions to engage AI with the loaded context
@@ -485,7 +641,17 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
     caseAttachmentUploads?: any[],
     enhancedMessage?: string
   ) => {
+    // Prevent duplicate requests if one is already in flight
+    if (isRequestInFlight.current) {
+      console.warn('⚠️ Request already in flight, ignoring duplicate send (enhanced context)');
+      return;
+    }
+
     const conversationId = ensureConversationExists();
+
+    // Mark request as in flight
+    isRequestInFlight.current = true;
+    requestStartTime.current = Date.now();
 
     // Check if case context has already been sent for this conversation
     const shouldSendCaseContext = activeCase && !hasCaseContextBeenSent(conversationId);
@@ -503,6 +669,19 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
       }
     };
 
+    // Add to ChatContext (for UI display) - ChatContext automatically generates id/timestamp
+    addMessageToContext({
+      content,
+      type: 'user',
+      attachments: messageAttachments,
+      metadata: {
+        sessionId: sessionId,
+        knowledgeBase: knowledgeBase,
+        caseId: activeCase?.id
+      }
+    });
+
+    // Also add to useAppStore for persistence
     addMessage(userMessage);
 
     // Save user message to database for Flowise conversations
@@ -620,10 +799,13 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
 
     if (error) {
       setChatError(t('chat.messageSendFailed', 'Failed to send message. Please try again.'));
+      // Clear request in flight flag on error
+      isRequestInFlight.current = false;
+      requestStartTime.current = null;
     }
 
     setChatLoading(false);
-  }, [addMessage, sendToFlowise, activeConversationId, knowledgeBase, activeCase, setChatLoading, setChatError, ensureConversationExists, abgContext, hasCaseContextBeenSent, markCaseContextSent, sessionId, saveFlowiseMessage, saveFlowiseConversationMetadata, incrementFlowiseMessageCount, t]);
+  }, [addMessageToContext, addMessage, sendToFlowise, activeConversationId, knowledgeBase, activeCase, setChatLoading, setChatError, ensureConversationExists, abgContext, hasCaseContextBeenSent, markCaseContextSent, sessionId, saveFlowiseMessage, saveFlowiseConversationMetadata, incrementFlowiseMessageCount, t]);
 
   // Handle case creation
   const handleCaseCreate = async (caseData: Omit<PatientCase, 'id' | 'createdAt' | 'updatedAt'>): Promise<PatientCase> => {
@@ -828,8 +1010,9 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
 
   // Handle new conversation - Enhanced
   const handleNewConversation = () => {
-    // Clear current messages
-    clearMessages();
+    // Clear current messages from both ChatContext and useAppStore
+    clearMessagesFromContext(); // Clear ChatContext messages (used for UI display)
+    clearMessages(); // Clear useAppStore messages (used for persistence)
 
     // Reset any active case context
     resetCaseContext();
@@ -1420,7 +1603,7 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
       <div className="flex-1 flex flex-col min-h-0 relative z-10">
         {/* Mobile-Enhanced Messages Display */}
         <div className="flex-1 flex flex-col min-h-0 relative">
-          {messages.length === 0 ? (
+          {messagesFromContext.length === 0 ? (
             // Clinical Dashboard - Professional medical workflow interface
             <div className="flex-1 overflow-y-auto">
               <ClinicalDashboard 
@@ -1433,8 +1616,8 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
           ) : (
             // Mobile-enhanced Messages with optimized styling
             <div className="flex-1 flex flex-col min-h-0 relative chat-messages-area">
-              <MessageList 
-                messages={messages} 
+              <MessageList
+                messages={messagesFromContext}
                 isTyping={isTyping}
                 className="flex-1 bg-gradient-to-b from-transparent via-white/20 to-transparent"
               />

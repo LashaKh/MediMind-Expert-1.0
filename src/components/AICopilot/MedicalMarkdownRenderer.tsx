@@ -424,7 +424,7 @@ export const MedicalMarkdownRenderer: React.FC<MedicalMarkdownRendererProps> = (
   }, [extractedSources, content]);
 
   return (
-    <div 
+    <div
       className={`medical-markdown-content prose prose-sm dark:prose-invert max-w-none ${className}`}
       onClick={handleClick}
     >

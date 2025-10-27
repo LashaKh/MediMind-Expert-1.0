@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { Message } from '../../types/chat';
-import { useScrollToBottom } from '../../hooks/chat/useScrollToBottom';
+import { ChatScrollAnchor } from './ChatScrollAnchor';
 import { MessageItem } from './MessageItem';
 import { TypingIndicator } from './TypingIndicator';
 import { ArrowDown } from 'lucide-react';
@@ -21,18 +21,38 @@ const MessageListComponent: React.FC<MessageListProps> = ({
   typingMessage
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const messagesEndRef = useScrollToBottom(messages);
-  const [isAtBottom, setIsAtBottom] = React.useState(true);
   const [showScrollButton, setShowScrollButton] = React.useState(false);
 
-  // Handle scroll events to detect if user is at bottom
+  // Filter out streaming messages that have no content yet (prevent empty bubble)
+  const visibleMessages = React.useMemo(() => {
+    return messages.filter(msg => {
+      // Hide streaming messages that have no content yet
+      if (msg.isStreaming && (!msg.content || msg.content.trim() === '')) {
+        return false;
+      }
+      return true;
+    });
+  }, [messages]);
+
+  // Check if any message is currently streaming
+  const hasStreamingMessage = React.useMemo(() => {
+    return messages.some(msg => msg.isStreaming);
+  }, [messages]);
+
+  // Debug: Log isTyping and hasStreamingMessage states
+  React.useEffect(() => {
+    console.log('📊 MessageList state:', { isTyping, hasStreamingMessage, messageCount: messages.length });
+  }, [isTyping, hasStreamingMessage, messages.length]);
+
+  // Handle scroll events - simplified to only manage scroll button visibility
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
 
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-    const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
 
-    setIsAtBottom(isNearBottom);
+    // Show scroll button when user is >100px from bottom
+    const isNearBottom = distanceFromBottom < 100;
     setShowScrollButton(!isNearBottom && messages.length > 0);
 
     // Check if user scrolled to top for loading more messages
@@ -41,32 +61,23 @@ const MessageListComponent: React.FC<MessageListProps> = ({
     }
   }, [messages.length, onScrollToTop]);
 
-  // Auto-scroll to bottom when new messages arrive (only if user was already at bottom)
-  useEffect(() => {
-    if (isAtBottom && messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages, isAtBottom, messagesEndRef]);
-
-  // Scroll to bottom when typing indicator appears
-  useEffect(() => {
-    if (isTyping && isAtBottom && messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [isTyping, isAtBottom, messagesEndRef]);
 
   const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    setIsAtBottom(true);
+    if (!containerRef.current) return;
+
+    containerRef.current.scrollTo({
+      top: containerRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
     setShowScrollButton(false);
-  }, [messagesEndRef]);
+  }, []);
 
   return (
     <div className={`relative flex-1 flex flex-col min-h-0 ${className}`}>
       {/* Messages container with modern scroll styling */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto px-6 py-6 space-y-6 scroll-smooth scrollbar-thin scrollbar-thumb-gray-300/50 dark:scrollbar-thumb-gray-600/50 scrollbar-track-transparent hover:scrollbar-thumb-gray-400/60 dark:hover:scrollbar-thumb-gray-500/60"
+        className="flex-1 overflow-y-scroll px-6 py-6 space-y-6 scrollbar-thin scrollbar-thumb-gray-300/50 dark:scrollbar-thumb-gray-600/50 scrollbar-track-transparent hover:scrollbar-thumb-gray-400/60 dark:hover:scrollbar-thumb-gray-500/60"
         onScroll={handleScroll}
         role="log"
         aria-live="polite"
@@ -75,32 +86,39 @@ const MessageListComponent: React.FC<MessageListProps> = ({
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
           touchAction: 'pan-y',
-          scrollBehavior: 'smooth',
           willChange: 'scroll-position',
-          transform: 'translateZ(0)'
+          transform: 'translateZ(0)',
+          scrollbarGutter: 'stable',
+          overflowAnchor: 'none' // Prevent browser from auto-scrolling on content growth
         }}
       >
         {/* Render messages with modern spacing */}
-        {messages.map((message, index) => (
-          <MessageItem 
-            key={message.id} 
+        {visibleMessages.map((message, index) => (
+          <MessageItem
+            key={message.id}
             message={message}
             className="animate-in slide-in-from-bottom-2 duration-500 ease-out"
           />
         ))}
 
-        {/* Typing indicator with modern styling */}
+        {/* Typing indicator with modern styling - show only when explicitly typing (not during streaming) */}
         {isTyping && (
           <div className="animate-in fade-in duration-300">
-            <TypingIndicator 
+            <TypingIndicator
               message={typingMessage}
               className="mb-2"
             />
           </div>
         )}
 
-        {/* Scroll anchor with extra spacing for mobile input area overlay */}
-        <div ref={messagesEndRef} className="h-48 sm:h-24" />
+        {/* Extra spacing for mobile input area overlay */}
+        <div className="h-48 sm:h-24" />
+
+        {/* Smart auto-scroll anchor - uses Intersection Observer to track bottom visibility */}
+        <ChatScrollAnchor
+          trackVisibility={hasStreamingMessage || isTyping}
+          scrollAreaRef={containerRef}
+        />
       </div>
 
     </div>
