@@ -1,12 +1,14 @@
 /**
  * Markdown Formatter Utility
- * 
+ *
  * Formats markdown text into clean, readable JSX for medical reports.
  * Handles headings, lists, bold text, and paragraphs without showing raw markdown.
  * Also detects and highlights empty fields marked with 'Value_to_be_filled'.
+ * Supports inline editing of empty fields.
  */
 
 import React from 'react';
+import { InlineEditableField } from '../components/Form100/InlineEditableField';
 
 interface FormattedTextProps {
   children: React.ReactNode;
@@ -90,30 +92,61 @@ const FormattedListItem: React.FC<FormattedTextProps> = ({ children, className =
 
 /**
  * Component for highlighting empty fields that need to be filled
+ * Supports inline editing when onFieldEdit callback is provided
  */
-const EmptyFieldIndicator: React.FC<{ fieldName?: string }> = ({ fieldName }) => (
-  <span
-    className="empty-field-indicator inline-flex items-center space-x-1 bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 text-amber-800 dark:text-amber-200 px-3 py-1 rounded-md border border-amber-300 dark:border-amber-600 font-semibold text-sm cursor-help transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/25 animate-pulse"
-    data-field={fieldName}
-    title={`This field needs to be filled: ${fieldName || 'Unknown field'}`}
-  >
-    <span className="empty-field-text">Value_to_be_filled</span>
-    <span className="empty-field-icon text-amber-600 dark:text-amber-400" role="img" aria-label="Warning">
-      ⚠️
+const EmptyFieldIndicator: React.FC<{
+  fieldName?: string;
+  fieldId?: string;
+  onFieldEdit?: (fieldId: string, value: string) => void;
+}> = ({ fieldName, fieldId, onFieldEdit }) => {
+  // If inline editing is enabled, use InlineEditableField
+  if (onFieldEdit && fieldId) {
+    console.log('EmptyFieldIndicator rendering InlineEditableField:', { fieldName, fieldId, hasCallback: !!onFieldEdit });
+    return (
+      <InlineEditableField
+        fieldName={fieldName}
+        fieldId={fieldId}
+        onSave={onFieldEdit}
+      />
+    );
+  }
+
+  console.log('EmptyFieldIndicator rendering static indicator:', { fieldName, hasCallback: !!onFieldEdit });
+
+  // Otherwise, show static warning indicator (for non-editable contexts)
+  return (
+    <span
+      className="empty-field-indicator inline-flex items-center space-x-1 bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 text-amber-800 dark:text-amber-200 px-3 py-1 rounded-md border border-amber-300 dark:border-amber-600 font-semibold text-sm cursor-help transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/25 animate-pulse"
+      data-field={fieldName}
+      title={`This field needs to be filled: ${fieldName || 'Unknown field'}`}
+    >
+      <span className="empty-field-text">Value_to_be_filled</span>
+      <span className="empty-field-icon text-amber-600 dark:text-amber-400" role="img" aria-label="Warning">
+        ⚠️
+      </span>
     </span>
-  </span>
-);
+  );
+};
+
+/**
+ * Options for markdown formatting
+ */
+interface FormatMarkdownOptions {
+  onFieldEdit?: (fieldId: string, value: string) => void;
+}
 
 /**
  * Parse markdown text into formatted React components
+ * Supports inline editing of Value_to_be_filled fields
  */
-export function formatMarkdown(text: string): JSX.Element {
+export function formatMarkdown(text: string, options?: FormatMarkdownOptions): JSX.Element {
   if (!text) return <></>;
 
   const lines = text.split('\n');
   const elements: JSX.Element[] = [];
   let currentList: { type: 'ul' | 'ol'; items: string[] } | null = null;
   let key = 0;
+  const fieldCounterRef = { current: 0 }; // Ref object for generating unique field IDs
 
   const flushList = () => {
     if (currentList) {
@@ -137,12 +170,12 @@ export function formatMarkdown(text: string): JSX.Element {
                     boxSizing: 'border-box'
                   }}
                 >
-                  {formatInlineText(mainContent)}
+                  {formatInlineText(mainContent, options, fieldCounterRef)}
                   {subItems.length > 0 && (
                     <ul className="list-disc ml-6 mt-1 space-y-1">
                       {subItems.map((subItem, subIdx) => (
                         <li key={`sub-${subIdx}`} className="text-slate-800 dark:text-slate-200">
-                          {formatInlineText(subItem)}
+                          {formatInlineText(subItem, options, fieldCounterRef)}
                         </li>
                       ))}
                     </ul>
@@ -153,7 +186,7 @@ export function formatMarkdown(text: string): JSX.Element {
 
             return (
               <FormattedListItem key={`item-${idx}`}>
-                {formatInlineText(item)}
+                {formatInlineText(item, options, fieldCounterRef)}
               </FormattedListItem>
             );
           })}
@@ -184,7 +217,7 @@ export function formatMarkdown(text: string): JSX.Element {
       const content = trimmedLine.replace(/^#+\s*/, '');
       elements.push(
         <FormattedHeading key={`heading-${key++}`} level={level}>
-          {formatInlineText(content)}
+          {formatInlineText(content, options, fieldCounterRef)}
         </FormattedHeading>
       );
       return;
@@ -231,7 +264,7 @@ export function formatMarkdown(text: string): JSX.Element {
       flushList();
       elements.push(
         <FormattedParagraph key={`para-${key++}`}>
-          {formatInlineText(trimmedLine)}
+          {formatInlineText(trimmedLine, options, fieldCounterRef)}
         </FormattedParagraph>
       );
     }
@@ -258,37 +291,52 @@ export function formatMarkdown(text: string): JSX.Element {
 
 /**
  * Format inline text elements (bold, italic, empty fields, etc.)
+ * Supports inline editing when options.onFieldEdit is provided
  */
-function formatInlineText(text: string): React.ReactNode {
+function formatInlineText(
+  text: string,
+  options?: FormatMarkdownOptions,
+  fieldCounterRef?: { current: number }
+): React.ReactNode {
   if (!text) return text;
 
   // First, handle empty fields before other formatting
   const emptyFieldRegex = /Value_to_be_filled/g;
   const hasEmptyFields = emptyFieldRegex.test(text);
-  
+
   if (hasEmptyFields) {
     const parts = text.split(/(Value_to_be_filled)/g);
     const formattedParts: React.ReactNode[] = [];
-    
+
     parts.forEach((part, index) => {
       if (part === 'Value_to_be_filled') {
         // Try to extract context from surrounding text to identify the field
         const beforeText = parts[index - 1] || '';
         const fieldMatch = beforeText.match(/([\w\s]+):\s*$/i);
         const fieldName = fieldMatch ? fieldMatch[1].trim() : 'Unknown field';
-        
+
+        // Generate unique field ID
+        const fieldId = fieldCounterRef
+          ? `field-${fieldCounterRef.current++}`
+          : `field-${index}`;
+
         formattedParts.push(
-          <EmptyFieldIndicator key={`empty-field-${index}`} fieldName={fieldName} />
+          <EmptyFieldIndicator
+            key={`empty-field-${index}`}
+            fieldName={fieldName}
+            fieldId={fieldId}
+            onFieldEdit={options?.onFieldEdit}
+          />
         );
       } else if (part) {
         // Apply other formatting to non-empty-field parts
         formattedParts.push(formatOtherInlineText(part, index));
       }
     });
-    
+
     return formattedParts;
   }
-  
+
   // If no empty fields, apply regular formatting
   return formatOtherInlineText(text, 0);
 }

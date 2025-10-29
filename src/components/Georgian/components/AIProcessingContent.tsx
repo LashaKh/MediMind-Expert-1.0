@@ -21,6 +21,9 @@ import { useTranslation } from '../../../hooks/useTranslation';
 // Import new components
 import { MedicalAnalysisCard } from './MedicalAnalysisCard';
 import { PremiumTemplatesSection } from './PremiumTemplatesSection';
+import Form100Modal from '../../Form100/Form100Modal';
+import { Form100Service } from '../../../services/form100Service';
+import type { Form100Request } from '../../../types/form100';
 
 interface ProcessingHistory {
   userInstruction: string;
@@ -54,6 +57,7 @@ interface AIProcessingContentProps {
   // Session info for report cards
   sessionTitle?: string;
   sessionId?: string;
+  userId?: string; // NEW: User ID for Form 100 generation
 }
 
 type ViewMode = 'templates' | 'history';
@@ -76,7 +80,8 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   onTemplateSelect,
   availableTemplates = [],
   sessionTitle = '',
-  sessionId
+  sessionId,
+  userId
 }) => {
   const { t } = useTranslation();
   const [viewMode, setViewMode] = useState<ViewMode>('templates');
@@ -84,6 +89,10 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
   const [isChatExpanded, setIsChatExpanded] = useState(false);
   const switchToHistoryRef = useRef<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Form100 modal state
+  const [isForm100ModalOpen, setIsForm100ModalOpen] = useState(false);
+  const [isForm100Generating, setIsForm100Generating] = useState(false);
 
   // Debug logging (disabled in production)
   // + '...',
@@ -200,6 +209,63 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
     }
   };
 
+  // Form100 Modal Handlers
+  const handleOpenForm100Modal = useCallback(() => {
+    console.log('📋 Opening Form100Modal with raw transcript');
+    setIsForm100ModalOpen(true);
+  }, []);
+
+  const handleCloseForm100Modal = useCallback(() => {
+    console.log('📋 Closing Form100Modal');
+    setIsForm100ModalOpen(false);
+  }, []);
+
+  const handleForm100Generate = useCallback(async (formData: Form100Request) => {
+    console.log('🚀 Generating Form 100 directly from raw transcript');
+    setIsForm100Generating(true);
+
+    try {
+      const result = await Form100Service.generateForm100(formData);
+
+      console.log('📊 Form 100 service result:', result);
+
+      if (result.success && result.data?.generatedForm) {
+        console.log('✅ Form 100 generation successful');
+
+        // Add to history with form100-direct model to display as standalone Form 100 card
+        if (onAddToHistory) {
+          onAddToHistory(
+            `Form 100 - ${formData.primaryDiagnosis?.name || 'Emergency Consultation'}`,
+            result.data.generatedForm,
+            'form100-direct',
+            undefined,
+            result.data.processingTime
+          );
+        }
+
+        // Switch to history view to show result
+        setViewMode('history');
+
+        // Close modal
+        setIsForm100ModalOpen(false);
+
+        return result.data.generatedForm;
+      } else {
+        // Extract error message properly from error object
+        const errorMessage = result.error?.message ||
+                            (typeof result.error === 'string' ? result.error : 'Form 100 generation failed');
+        console.error('❌ Form 100 generation failed with error:', result.error);
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('❌ Form 100 generation failed:', errorMessage, error);
+      throw error;
+    } finally {
+      setIsForm100Generating(false);
+    }
+  }, [onAddToHistory]);
+
   // Sort history by newest first (simplified)
   const filteredHistory = processingHistory.sort((a, b) => b.timestamp - a.timestamp);
 
@@ -293,6 +359,7 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
                 onAddToHistory={onAddToHistory}
                 onSwitchToHistory={() => setViewMode('history')}
                 onTemplateSelect={onTemplateSelect}
+                onOpenForm100Modal={handleOpenForm100Modal}
               />
             </div>
           )}
@@ -533,6 +600,22 @@ export const AIProcessingContent: React.FC<AIProcessingContentProps> = ({
             </div>
           </div> */}
         </>
+      )}
+
+      {/* Form100 Modal Integration */}
+      {isForm100ModalOpen && (
+        <Form100Modal
+          isOpen={isForm100ModalOpen}
+          onClose={handleCloseForm100Modal}
+          sessionId={sessionId}
+          initialData={{
+            voiceTranscript: transcript, // Raw transcript from initial window
+            sessionId: sessionId,
+            userId: userId // FIXED: Add user ID from props
+          }}
+          onGenerate={handleForm100Generate}
+          reportType="emergency-consultation"
+        />
       )}
     </>
   );

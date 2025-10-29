@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { MyTemplatesSection } from './MyTemplatesSection';
+import { Form100DirectSection } from './Form100DirectSection';
 
 // Import template data from existing component
 // import { QuickActionTemplates } from './QuickActionTemplates';
@@ -40,6 +41,7 @@ interface PremiumTemplatesSectionProps {
   onAddToHistory?: (instruction: string, response: string, model: string, tokensUsed?: number, processingTime?: number) => void;
   onSwitchToHistory?: () => void;
   onTemplateSelect?: (template: any) => void;
+  onOpenForm100Modal?: () => void; // NEW: Handler to open Form100Modal directly
 }
 
 // Enhanced template data with featured flag - Cardiology Consults Only
@@ -145,7 +147,8 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
   transcript,
   onAddToHistory,
   onSwitchToHistory,
-  onTemplateSelect
+  onTemplateSelect,
+  onOpenForm100Modal
 }) => {
   const { t } = useTranslation();
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
@@ -425,6 +428,14 @@ export const PremiumTemplatesSection: React.FC<PremiumTemplatesSectionProps> = (
           );
         })}
       </div>
+
+      {/* Form 100 Direct Generation Section - NEW */}
+      {hasTranscript && onOpenForm100Modal && (
+        <Form100DirectSection
+          onOpenForm100Modal={onOpenForm100Modal}
+          disabled={disabled}
+        />
+      )}
 
     </div>
   );

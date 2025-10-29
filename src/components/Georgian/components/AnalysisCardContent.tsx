@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Brain,
   HeartHandshake,
@@ -7,6 +7,8 @@ import {
   User
 } from 'lucide-react';
 import { formatMarkdown, extractCleanText, hasMarkdownFormatting } from '../../../utils/markdownFormatter';
+import { applyMultipleEdits } from '../../../utils/inlineEditReplacer';
+import { supabase } from '../../../lib/supabase';
 
 interface ProcessingHistory {
   userInstruction: string;
@@ -31,14 +33,132 @@ interface AnalysisCardContentProps {
   analysisType: AnalysisType;
   editedContent: string | null;
   isExpanded: boolean;
+  onContentEdit?: (updatedContent: string) => void;
+  sessionId?: string; // For saving to database
+  onReloadSession?: () => Promise<void>; // Callback to reload session after save
 }
 
 export const AnalysisCardContent: React.FC<AnalysisCardContentProps> = ({
   analysis,
   analysisType,
   editedContent,
-  isExpanded
+  isExpanded,
+  onContentEdit,
+  sessionId
 }) => {
+  // State for tracking inline edits - MUST be called before any early returns
+  const [inlineEdits, setInlineEdits] = useState<Record<string, string>>({});
+
+  // Save inline edit to Supabase database
+  const saveInlineEditToDatabase = useCallback(async (updatedContent: string) => {
+    if (!sessionId) {
+      console.warn('No sessionId provided, skipping database save');
+      return;
+    }
+
+    try {
+      console.log('💾 Saving inline edit to database:', { sessionId, timestamp: analysis.timestamp });
+
+      // Fetch current session data
+      const { data: sessionData, error: fetchError } = await supabase
+        .from('georgian_sessions')
+        .select('processing_results')
+        .eq('id', sessionId)
+        .single();
+
+      if (fetchError) {
+        console.error('Error fetching session:', fetchError);
+        return;
+      }
+
+      // Update the specific analysis in processing_results array
+      const processingResults = sessionData?.processing_results || [];
+      const updatedResults = processingResults.map((item: ProcessingHistory) => {
+        if (item.timestamp === analysis.timestamp) {
+          return {
+            ...item,
+            aiResponse: updatedContent
+          };
+        }
+        return item;
+      });
+
+      // Save back to database
+      const { error: updateError } = await supabase
+        .from('georgian_sessions')
+        .update({
+          processing_results: updatedResults,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', sessionId);
+
+      if (updateError) {
+        console.error('Error updating session:', updateError);
+      } else {
+        console.log('✅ Successfully saved inline edit to database');
+      }
+    } catch (error) {
+      console.error('Error in saveInlineEditToDatabase:', error);
+    }
+  }, [sessionId, analysis.timestamp]);
+
+  // Handler for inline field edits - MUST be called before any early returns
+  const handleInlineEdit = useCallback((fieldId: string, value: string) => {
+    console.log('AnalysisCardContent handleInlineEdit called:', { fieldId, value });
+
+    // Update inline edits state
+    const newEdits = {
+      ...inlineEdits,
+      [fieldId]: value
+    };
+    setInlineEdits(newEdits);
+
+    // CRITICAL: Always apply ALL edits to the ORIGINAL content, not to already-edited content
+    // This prevents index shifting when multiple fields are edited
+    const originalContent = analysis.aiResponse;
+    const updatedContent = applyMultipleEdits(originalContent, newEdits);
+
+    console.log('Applied edits:', {
+      originalLength: originalContent.length,
+      updatedLength: updatedContent.length,
+      totalEdits: Object.keys(newEdits).length
+    });
+
+    // Notify parent component of the edit
+    if (onContentEdit) {
+      onContentEdit(updatedContent);
+    }
+
+    // Save to database
+    saveInlineEditToDatabase(updatedContent);
+  }, [inlineEdits, analysis.aiResponse, onContentEdit, saveInlineEditToDatabase]);
+
+  // Get the display content with inline edits applied
+  const getDisplayContent = (): string => {
+    // CRITICAL: Always apply edits to ORIGINAL content to maintain correct indices
+    const originalContent = analysis.aiResponse;
+
+    // If there are inline edits, apply them to original content
+    if (Object.keys(inlineEdits).length > 0) {
+      const result = applyMultipleEdits(originalContent, inlineEdits);
+      console.log('📊 getDisplayContent with inline edits:', {
+        editsCount: Object.keys(inlineEdits).length,
+        edits: inlineEdits,
+        hasValueToFill: result.includes('Value_to_be_filled')
+      });
+      return result;
+    }
+
+    // Otherwise, use editedContent (from full Edit mode) or original
+    console.log('📊 getDisplayContent fallback:', {
+      hasEditedContent: !!editedContent,
+      editedContentHasValueToFill: editedContent?.includes('Value_to_be_filled'),
+      originalHasValueToFill: originalContent.includes('Value_to_be_filled')
+    });
+    return editedContent || originalContent;
+  };
+
+  // Early return AFTER all hooks
   if (!isExpanded) {
     return null;
   }
@@ -132,10 +252,10 @@ export const AnalysisCardContent: React.FC<AnalysisCardContentProps> = ({
                 <div className="absolute inset-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-inner" />
                 <div className="relative px-4 py-2 sm:p-6 w-full" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: '16px', boxSizing: 'border-box' }}>
                   {(() => {
-                    const displayContent = editedContent || analysis.aiResponse;
+                    const displayContent = getDisplayContent();
                     return hasMarkdownFormatting(displayContent) ? (
                       <div className="w-full markdown-content text-slate-800 dark:text-slate-200" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>
-                        {formatMarkdown(displayContent)}
+                        {formatMarkdown(displayContent, { onFieldEdit: handleInlineEdit })}
                       </div>
                     ) : (
                       <div className="w-full text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap font-medium" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>

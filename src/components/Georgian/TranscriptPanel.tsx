@@ -115,6 +115,9 @@ interface TranscriptPanelProps {
   // ADDED: Combined transcript function for AI processing
   getCombinedTranscriptForSubmission?: () => string;
 
+  // User ID for Form 100 generation
+  userId?: string;
+
   // STT Model selection props removed - now using automatic parallel processing
 }
 
@@ -164,6 +167,8 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
   isKeyboardAdjusted,
   // ADDED: Combined transcript function for AI processing
   getCombinedTranscriptForSubmission,
+  // User ID for Form 100 generation
+  userId,
   // STT Model selection props removed - now using automatic parallel processing
 }) => {
   // File attachment state - using simple attachment type like case studies
@@ -858,6 +863,7 @@ export const TranscriptPanel: React.FC<TranscriptPanelProps> = ({
             availableTemplates={availableTemplates}
             sessionTitle={currentSession?.title || ''}
             sessionId={currentSession?.id}
+            userId={userId}
           />
         );
       

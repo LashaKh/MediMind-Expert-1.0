@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   ClipboardList,
   ChevronDown,
@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { MedicalButton } from '../../ui/MedicalDesignSystem';
 import { formatMarkdown, hasMarkdownFormatting } from '../../../utils/markdownFormatter';
+import { replaceFieldValue, applyMultipleEdits } from '../../../utils/inlineEditReplacer';
 import ReportEditCard from '../../ReportEditing/ReportEditCard';
 
 interface ProcessingHistory {
@@ -68,6 +69,9 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
   onForm100Delete,
   onForm100Copy
 }) => {
+  // State for tracking inline edits
+  const [inlineEdits, setInlineEdits] = useState<Record<string, string>>({});
+
   if (!generatedForm100Content) {
     return null;
   }
@@ -80,6 +84,52 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
   };
 
   const icdCode = extractICDCode(analysisType.type);
+
+  // Handler for inline field edits
+  const handleInlineEdit = useCallback((fieldId: string, value: string) => {
+    console.log('Form100DisplayCard handleInlineEdit called:', { fieldId, value });
+
+    // Update inline edits state
+    const newEdits = {
+      ...inlineEdits,
+      [fieldId]: value
+    };
+    setInlineEdits(newEdits);
+
+    // CRITICAL: Always apply ALL edits to the ORIGINAL content, not to already-edited content
+    // This prevents index shifting when multiple fields are edited
+    const originalContent = generatedForm100Content || '';
+    const updatedContent = applyMultipleEdits(originalContent, newEdits);
+
+    console.log('Applied edits:', {
+      originalLength: originalContent.length,
+      updatedLength: updatedContent.length,
+      totalEdits: Object.keys(newEdits).length
+    });
+
+    // Notify parent component of the edit
+    if (onForm100EditComplete) {
+      onForm100EditComplete({
+        success: true,
+        editedContent: updatedContent,
+        timestamp: new Date()
+      });
+    }
+  }, [inlineEdits, generatedForm100Content, onForm100EditComplete]);
+
+  // Get the display content with inline edits applied
+  const getDisplayContent = (): string => {
+    // CRITICAL: Always apply edits to ORIGINAL content to maintain correct indices
+    const originalContent = generatedForm100Content || '';
+
+    // If there are inline edits, apply them to original content
+    if (Object.keys(inlineEdits).length > 0) {
+      return applyMultipleEdits(originalContent, inlineEdits);
+    }
+
+    // Otherwise, use editedForm100Content (from full Edit mode) or original
+    return editedForm100Content || originalContent;
+  };
 
   return (
     <>
@@ -224,10 +274,10 @@ export const Form100DisplayCard: React.FC<Form100DisplayCardProps> = ({
                 <div className="absolute inset-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-slate-700/50 shadow-inner" />
                 <div className="relative px-4 py-2 sm:p-6 w-full" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: '16px', boxSizing: 'border-box' }}>
                   {(() => {
-                    const displayContent = editedForm100Content || generatedForm100Content;
+                    const displayContent = getDisplayContent();
                     return hasMarkdownFormatting(displayContent) ? (
                       <div className="w-full markdown-content text-slate-800 dark:text-slate-200" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>
-                        {formatMarkdown(displayContent)}
+                        {formatMarkdown(displayContent, { onFieldEdit: handleInlineEdit })}
                       </div>
                     ) : (
                       <div className="w-full text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap font-medium" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>

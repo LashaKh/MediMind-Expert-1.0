@@ -556,6 +556,8 @@ Medical AI Processing System`;
             analysisType={analysisType}
             editedContent={editedContent}
             isExpanded={isExpanded}
+            onContentEdit={setEditedContent}
+            sessionId={sessionId}
           />
 
           {/* Footer Section */}

@@ -57,7 +57,7 @@ interface ProcessingHistory {
 }
 
 export const GeorgianSTTApp: React.FC = () => {
-  useAuth(); // Authentication hook
+  const { user } = useAuth(); // Authentication hook - get user for Form 100
   useViewportHeight(); // Mobile viewport height management
   
   // Mobile-first optimization hooks
@@ -341,12 +341,45 @@ export const GeorgianSTTApp: React.FC = () => {
     clearError: clearAIError,
     setError: setAIError,
     clearHistory,
-    addToHistory,
+    addToHistory: addToHistoryLocal,
     deleteFromHistory,
     setProcessing
   } = useAIProcessing({
     sessionProcessingResults: currentSession?.processingResults
   });
+
+  // Wrapper function to add to history AND save to database
+  const addToHistory = useCallback(async (
+    instruction: string,
+    response: string,
+    model: string,
+    tokensUsed?: number,
+    processingTime?: number
+  ) => {
+    console.log('📝 Adding to history and saving to database:', { model, sessionId: currentSession?.id });
+
+    // Add to local state immediately (for instant UI update)
+    addToHistoryLocal(instruction, response, model, tokensUsed, processingTime);
+
+    // Save to database in background (for persistence)
+    if (currentSession?.id) {
+      try {
+        const saveSuccess = await addProcessingResult(currentSession.id, {
+          userInstruction: instruction,
+          aiResponse: response,
+          model,
+          tokensUsed,
+          processingTime: processingTime || 0
+        });
+        console.log('💾 Processing result saved to database:', { saveSuccess, sessionId: currentSession.id });
+      } catch (error) {
+        console.error('❌ Failed to save processing result to database:', error);
+        // Don't throw - local state is already updated
+      }
+    } else {
+      console.warn('⚠️ No current session - result shown in UI but not saved to database');
+    }
+  }, [currentSession?.id, addToHistoryLocal, addProcessingResult]);
   
   // Debug processing history updates (disabled in production)
   // + '...',
@@ -1356,6 +1389,8 @@ export const GeorgianSTTApp: React.FC = () => {
                 // STT Model selection props
                 selectedSTTModel={selectedSTTModel}
                 onModelChange={updateSelectedSTTModel}
+                // User ID for Form 100 generation
+                userId={user?.id}
               />
             </div>
           </div>
@@ -1414,6 +1449,8 @@ export const GeorgianSTTApp: React.FC = () => {
               // STT Model selection props
               selectedSTTModel={selectedSTTModel}
               onModelChange={updateSelectedSTTModel}
+              // User ID for Form 100 generation
+              userId={user?.id}
             />
           </div>
         </div>
