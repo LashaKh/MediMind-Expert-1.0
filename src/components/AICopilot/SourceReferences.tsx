@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { 
-  ChevronDown, 
-  ChevronUp, 
-  ExternalLink, 
-  FileText, 
-  Link, 
-  BookOpen, 
+import {
+  ChevronDown,
+  ChevronUp,
+  ExternalLink,
+  FileText,
+  Link,
+  BookOpen,
   Database,
   Copy,
   Calendar,
@@ -14,11 +14,14 @@ import {
   TrendingUp,
   User,
   Eye,
-  X
+  X,
+  ShieldCheck,
+  Loader
 } from 'lucide-react';
 import { safeAsync, ErrorSeverity } from '../../lib/utils/errorHandling';
-import { SourceReference } from '../../types/chat';
+import { SourceReference, FactCheckResult as FactCheckResultType } from '../../types/chat';
 import { useTranslation } from '../../hooks/useTranslation';
+import { FactCheckResult } from './FactCheckResult';
 
 interface SourceReferencesProps {
   sources: SourceReference[];
@@ -27,6 +30,11 @@ interface SourceReferencesProps {
   showExcerpts?: boolean;
   highlightedSourceNumber?: number | null;
   onSourceHighlight?: (sourceNumber: number | null) => void;
+  // Fact-check props
+  factCheckResult?: FactCheckResultType;
+  isFactChecking?: boolean;
+  isMessageStreaming?: boolean; // Disable fact-check while message is still streaming
+  onFactCheck?: () => void;
 }
 
 const getSourceIcon = (type: SourceReference['type']) => {
@@ -101,7 +109,11 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
   maxInitialDisplay = 3,
   showExcerpts = true,
   highlightedSourceNumber,
-  onSourceHighlight
+  onSourceHighlight,
+  factCheckResult,
+  isFactChecking = false,
+  isMessageStreaming = false,
+  onFactCheck
 }) => {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -169,8 +181,6 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
             </div>
             
             <div className="flex items-center space-x-2">
-              {/* Show More/Less button removed - all sources shown by default */}
-              
               {/* Main expand/collapse indicator */}
               <div className="p-1 rounded-full hover:bg-white/50 dark:hover:bg-gray-700/50 transition-colors duration-200">
                 {isSectionOpen ? <ChevronUp className="w-4 h-4 text-gray-600 dark:text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-400" />}
@@ -399,6 +409,45 @@ export const SourceReferences: React.FC<SourceReferencesProps> = ({
               </div>
             )}
             </div>
+
+          </div>
+        )}
+
+        {/* Fact-Check Button - shown below sources section (visible both when collapsed and expanded) */}
+        {onFactCheck && !factCheckResult && (
+          <div className={`bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/5 dark:from-[#2b6cb0]/10 dark:to-[#1a365d]/5 px-4 py-3 ${
+            isSectionOpen ? 'border-x border-b border-gray-200 dark:border-gray-600 rounded-b-xl' : 'border border-[#63b3ed]/20 dark:border-[#2b6cb0]/40 rounded-xl mt-2'
+          }`}>
+            <button
+              onClick={onFactCheck}
+              disabled={isFactChecking || isMessageStreaming}
+              className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-[#2b6cb0] to-[#63b3ed] hover:from-[#1a365d] hover:to-[#2b6cb0] disabled:from-[#90cdf4] disabled:to-[#63b3ed] text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+              title={isMessageStreaming ? "Wait for the AI response to complete before fact-checking" : "Verify this answer with medical knowledge base"}
+            >
+              {isFactChecking ? (
+                <>
+                  <Loader className="w-4 h-4 animate-spin" />
+                  <span>Verifying Answer...</span>
+                </>
+              ) : isMessageStreaming ? (
+                <>
+                  <Loader className="w-4 h-4 animate-spin" />
+                  <span>AI Response Generating...</span>
+                </>
+              ) : (
+                <>
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Fact-Check Answer</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* Fact-Check Result Display - shown below fact-check button with distinct styling */}
+        {factCheckResult && (
+          <div className="px-4 pb-4 bg-white dark:bg-gray-900 border-x border-b border-gray-200 dark:border-gray-600 rounded-b-xl">
+            <FactCheckResult result={factCheckResult} />
           </div>
         )}
       </div>

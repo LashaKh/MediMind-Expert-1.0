@@ -109,6 +109,7 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   const {
     state: chatContextState,
     addMessage: addMessageToContext,
+    updateMessage: updateMessageInContext,
     clearMessages: clearMessagesFromContext,
     saveFlowiseConversationMetadata,
     incrementFlowiseMessageCount,
@@ -144,8 +145,17 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
   // Track streaming message ID for progressive updates
   const streamingMessageIdRef = useRef<string | null>(null);
 
+  // Track streaming message content as it accumulates (for database save)
+  const streamingMessageContentRef = useRef<string>('');
+
   // Track if we've received first token (to clear typing indicator at right time)
   const hasReceivedFirstToken = useRef(false);
+
+  // Track fact-check verification answer as it accumulates during streaming
+  const factCheckVerificationRef = useRef<string>('');
+  const factCheckingMessageIdRef = useRef<string | null>(null);
+  const factCheckOriginalQuestionRef = useRef<string>('');
+  const factCheckOriginalAnswerRef = useRef<string>('');
 
   // Safety: Auto-reset stuck in-flight flag after 3 minutes
   useEffect(() => {
@@ -409,10 +419,20 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
     isRequestInFlight.current = true;
     hasReceivedFirstToken.current = false; // Reset flag for new stream
 
-    // Create streaming message in UI
-    const streamingMsgId = startStreamingMessage('');
+    // Create streaming message in UI with sessionId and knowledgeBase metadata
+    const streamingMsgId = startStreamingMessage('', sessionId, knowledgeBase);
     streamingMessageIdRef.current = streamingMsgId;
-  }, [startStreamingMessage]);
+
+    // Reset content accumulator for new stream
+    streamingMessageContentRef.current = '';
+
+    console.log('🔍 DEBUG - handleStreamStart:', {
+      messageId,
+      streamingMsgId,
+      sessionId,
+      knowledgeBase
+    });
+  }, [startStreamingMessage, sessionId, knowledgeBase]);
 
   const handleStreamToken = useCallback((messageId: string, token: string) => {
     // Clear typing indicator on FIRST token ONLY (when content starts appearing)
@@ -422,6 +442,9 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
       setTyping(false);
       hasReceivedFirstToken.current = true;
     }
+
+    // Accumulate content in ref for database save
+    streamingMessageContentRef.current += token;
 
     // Update streaming message with new token for progressive rendering
     if (streamingMessageIdRef.current) {
@@ -434,14 +457,61 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
 
     // Finalize streaming message with sources
     if (streamingMessageIdRef.current) {
-      completeStreamingMessage(streamingMessageIdRef.current, sources);
+      const streamingMsgId = streamingMessageIdRef.current;
+      const finalContent = streamingMessageContentRef.current;
+
+      console.log('🔍 DEBUG - handleStreamComplete:', {
+        streamingMsgId,
+        contentLength: finalContent.length,
+        contentPreview: finalContent.substring(0, 50),
+        sessionId,
+        knowledgeBase,
+        sourcesCount: sources?.length || 0
+      });
+
+      // Complete the streaming message with sources
+      completeStreamingMessage(streamingMsgId, sources);
+
+      // Save the completed AI message to database for persistence
+      if (sessionId && knowledgeBase === 'curated' && finalContent) {
+        console.log('💾 Saving streaming AI message to database:', streamingMsgId);
+
+        // Create the complete message object for database save
+        const messageToSave: Message = {
+          id: streamingMsgId,
+          content: finalContent,
+          type: 'ai',
+          timestamp: new Date(),
+          sources: sources || [],
+          isStreaming: false,
+          metadata: {
+            sessionId: sessionId, // Store sessionId so fact-check can find the right session
+            knowledgeBase: knowledgeBase
+          }
+        };
+
+        saveFlowiseMessage(sessionId, messageToSave);
+      } else {
+        console.warn('⚠️ NOT saving message:', {
+          hasSessionId: !!sessionId,
+          knowledgeBase,
+          isCurated: knowledgeBase === 'curated',
+          hasContent: !!finalContent,
+          contentLength: finalContent.length
+        });
+      }
+
+      // Reset refs for next stream
       streamingMessageIdRef.current = null;
+      streamingMessageContentRef.current = '';
+    } else {
+      console.warn('⚠️ No streamingMessageIdRef.current in handleStreamComplete');
     }
 
     // Always clear the in-flight flag when stream completes
     isRequestInFlight.current = false;
     requestStartTime.current = null;
-  }, [completeStreamingMessage]);
+  }, [completeStreamingMessage, sessionId, knowledgeBase, saveFlowiseMessage]);
 
   const handleStreamError = useCallback((messageId: string, error: string) => {
     console.error('❌ Stream error:', messageId, error);
@@ -456,10 +526,83 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
     requestStartTime.current = null;
   }, [errorStreamingMessage]);
 
+  // Fact-check callbacks
+  const handleFactCheckComplete = useCallback((messageId: string, result: import('../../types/chat').FactCheckResult) => {
+    console.log('✅ Fact-check completed - handleFactCheckComplete called:', {
+      messageId,
+      verificationLength: result.verificationAnswer.length,
+      status: result.status,
+      sourceCount: result.sources?.length || 0,
+      timestamp: result.timestamp
+    });
+
+    console.log('📋 Full fact-check result:', result);
+
+    // Update the message with the fact-check result
+    // ChatContext will auto-persist to database when status is 'success'
+    console.log('🔄 Calling updateMessageInContext with fact-check result');
+    updateMessageInContext(messageId, { factCheckResult: result });
+
+    console.log('✅ updateMessageInContext called successfully');
+
+    // Reset fact-check refs
+    factCheckVerificationRef.current = '';
+    factCheckingMessageIdRef.current = null;
+    factCheckOriginalQuestionRef.current = '';
+    factCheckOriginalAnswerRef.current = '';
+  }, [updateMessageInContext]);
+
+  const handleFactCheckError = useCallback((messageId: string, error: string) => {
+    console.error('❌ Fact-check error:', messageId, error);
+
+    // Update the message with error state
+    updateMessageInContext(messageId, {
+      factCheckResult: {
+        originalQuestion: factCheckOriginalQuestionRef.current,
+        originalAnswer: factCheckOriginalAnswerRef.current,
+        verificationAnswer: '',
+        timestamp: new Date(),
+        status: 'error',
+        error
+      }
+    });
+
+    // Reset fact-check refs
+    factCheckVerificationRef.current = '';
+    factCheckingMessageIdRef.current = null;
+    factCheckOriginalQuestionRef.current = '';
+    factCheckOriginalAnswerRef.current = '';
+  }, [updateMessageInContext]);
+
+  // Handle progressive fact-check token updates for streaming
+  const handleFactCheckToken = useCallback((messageId: string, token: string) => {
+    // Accumulate verification answer in ref (avoid stale state reads)
+    factCheckVerificationRef.current += token;
+
+    console.log('🔍 Fact-check token received:', {
+      messageId,
+      tokenLength: token.length,
+      accumulatedLength: factCheckVerificationRef.current.length
+    });
+
+    // Update the message with accumulated verification answer
+    updateMessageInContext(messageId, {
+      factCheckResult: {
+        originalQuestion: factCheckOriginalQuestionRef.current,
+        originalAnswer: factCheckOriginalAnswerRef.current,
+        verificationAnswer: factCheckVerificationRef.current,
+        timestamp: new Date(),
+        status: 'loading' // Keep loading status during streaming
+      }
+    });
+  }, [updateMessageInContext]);
+
   // Initialize Flowise chat with context integration - will be enhanced with CaseContextProvider
   const {
     sendMessage: sendToFlowise,
+    factCheckMessage,
     isLoading: flowiseLoading,
+    isFactChecking,
     error: flowiseError
   } = useFlowiseChat({
     sessionId, // Pass the sessionId to maintain consistency
@@ -477,8 +620,57 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
     onStreamStart: handleStreamStart,
     onStreamToken: handleStreamToken,
     onStreamComplete: handleStreamComplete,
-    onStreamError: handleStreamError
+    onStreamError: handleStreamError,
+    // Fact-check callbacks
+    onFactCheckComplete: handleFactCheckComplete,
+    onFactCheckError: handleFactCheckError,
+    onFactCheckToken: handleFactCheckToken
   });
+
+  // Handle fact-check request from UI - defined after useFlowiseChat to access factCheckMessage
+  const handleFactCheck = useCallback((messageId: string) => {
+    // Find the message and the previous user message
+    const messageIndex = messagesFromContext.findIndex(m => m.id === messageId);
+    if (messageIndex === -1) return;
+
+    const aiMessage = messagesFromContext[messageIndex];
+
+    // Find the most recent user message before this AI message
+    let userQuestion = '';
+    for (let i = messageIndex - 1; i >= 0; i--) {
+      if (messagesFromContext[i].type === 'user') {
+        userQuestion = messagesFromContext[i].content;
+        break;
+      }
+    }
+
+    if (!userQuestion || !aiMessage.content) {
+      console.error('Cannot fact-check: missing question or answer');
+      return;
+    }
+
+    // Reset fact-check accumulation refs for new streaming session
+    factCheckVerificationRef.current = '';
+    factCheckingMessageIdRef.current = messageId;
+    factCheckOriginalQuestionRef.current = userQuestion;
+    factCheckOriginalAnswerRef.current = aiMessage.content;
+
+    console.log('🔍 Starting fact-check streaming for message:', messageId);
+
+    // Set loading state
+    updateMessageInContext(messageId, {
+      factCheckResult: {
+        originalQuestion: userQuestion,
+        originalAnswer: aiMessage.content,
+        verificationAnswer: '',
+        timestamp: new Date(),
+        status: 'loading'
+      }
+    });
+
+    // Trigger fact-check (will use streaming if enabled)
+    factCheckMessage(messageId, userQuestion, aiMessage.content);
+  }, [messagesFromContext, updateMessageInContext, factCheckMessage]);
 
   // Update loading state based on Flowise status
   useEffect(() => {
@@ -1620,6 +1812,8 @@ const FlowiseChatWindowComponent: React.FC<FlowiseChatWindowProps> = ({
                 messages={messagesFromContext}
                 isTyping={isTyping}
                 className="flex-1 bg-gradient-to-b from-transparent via-white/20 to-transparent"
+                onFactCheck={handleFactCheck}
+                isFactChecking={isFactChecking}
               />
             </div>
           )}

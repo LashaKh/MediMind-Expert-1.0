@@ -11,6 +11,9 @@ interface MessageListProps {
   className?: string;
   onScrollToTop?: () => void;
   typingMessage?: string;
+  // Fact-check props
+  onFactCheck?: (messageId: string) => void;
+  isFactChecking?: boolean;
 }
 
 const MessageListComponent: React.FC<MessageListProps> = ({
@@ -18,7 +21,9 @@ const MessageListComponent: React.FC<MessageListProps> = ({
   isTyping = false,
   className = '',
   onScrollToTop,
-  typingMessage
+  typingMessage,
+  onFactCheck,
+  isFactChecking = false
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showScrollButton, setShowScrollButton] = React.useState(false);
@@ -98,6 +103,8 @@ const MessageListComponent: React.FC<MessageListProps> = ({
             key={message.id}
             message={message}
             className="animate-in slide-in-from-bottom-2 duration-500 ease-out"
+            onFactCheck={onFactCheck}
+            isFactChecking={isFactChecking}
           />
         ))}
 

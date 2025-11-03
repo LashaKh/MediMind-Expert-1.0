@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useChat } from '../../stores/useAppStore';
+import { useAppStore } from '../../stores/useAppStore';
+import { useChat as useChatContext } from '../../contexts/ChatContext';
 import { formatTimestampDetailed } from '../../utils/chat/messageUtils';
 import { ConversationSummary, ConversationType } from '../../types/chat';
 import { Button } from '../ui/button';
 import { useTranslation } from '../../hooks/useTranslation';
-import { 
-  MessageCircle, 
-  Plus, 
-  Search, 
+import {
+  MessageCircle,
+  Plus,
+  Search,
   Edit,
   Trash2,
   Heart,
@@ -19,7 +21,8 @@ import {
   Hash,
   Calendar,
   Users,
-  Stethoscope
+  Stethoscope,
+  Loader2
 } from 'lucide-react';
 
 interface ConversationListProps {
@@ -45,6 +48,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     loadMessagesForConversation
   } = useChat();
 
+  // Get ChatContext methods to sync state
+  const chatContext = useChatContext();
+  const setMessagesInContext = chatContext.setMessages;
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState<'all' | 'cardiology' | 'obgyn'>('all');
   const [selectedType, setSelectedType] = useState<'all' | ConversationType>('all');
@@ -52,6 +59,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [loadingConversationId, setLoadingConversationId] = useState<string | null>(null);
+
+  // Track prefetched conversations for instant loading
+  const [prefetchedConversations, setPrefetchedConversations] = useState<Set<string>>(new Set());
 
   // Load conversations from database when component mounts
   useEffect(() => {
@@ -113,15 +124,74 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     onClose();
   };
 
+  // Prefetch messages on hover for instant loading
+  const handleHoverConversation = async (conversationId: string) => {
+    // Skip if already prefetched or currently loading
+    if (prefetchedConversations.has(conversationId) || loadingConversationId === conversationId) {
+      return;
+    }
+
+    // Mark as prefetched
+    setPrefetchedConversations(prev => new Set(prev).add(conversationId));
+
+    // Prefetch messages in background
+    try {
+      await loadMessagesForConversation(conversationId);
+    } catch (error) {
+      console.error('Prefetch failed:', error);
+    }
+  };
+
   const handleSelectConversation = async (conversationId: string) => {
+    try {
+      // Set active conversation in both stores
+      setActiveConversation(conversationId);
+      chatContext.setActiveConversation(conversationId);
 
-    setActiveConversation(conversationId);
-    
-    // Load messages for this conversation
+      // Get cached messages from current conversation state
+      const cachedConversation = conversations.find(conv => conv.id === conversationId);
 
-    await loadMessagesForConversation(conversationId);
-    
-    onClose();
+      // INSTANT: Show cached messages immediately (if available)
+      if (cachedConversation && cachedConversation.messages && cachedConversation.messages.length > 0) {
+        console.log(`⚡ Instant display: ${cachedConversation.messages.length} cached messages`);
+        setMessagesInContext(cachedConversation.messages);
+
+        // Close modal immediately for instant feel
+        onClose();
+
+        // BACKGROUND: Load fresh messages from database
+        loadMessagesForConversation(conversationId).then(() => {
+          const freshState = useAppStore.getState();
+          const refreshedConversation = freshState.conversations.find(conv => conv.id === conversationId);
+
+          if (refreshedConversation && refreshedConversation.messages) {
+            console.log(`🔄 Background refresh: ${refreshedConversation.messages.length} messages`);
+            setMessagesInContext(refreshedConversation.messages);
+          }
+        }).catch(error => {
+          console.error('Background refresh failed:', error);
+        });
+      } else {
+        // No cached messages - show loading and wait for database
+        setLoadingConversationId(conversationId);
+
+        await loadMessagesForConversation(conversationId);
+
+        const freshState = useAppStore.getState();
+        const loadedConversation = freshState.conversations.find(conv => conv.id === conversationId);
+
+        if (loadedConversation && loadedConversation.messages) {
+          console.log(`📨 Loaded ${loadedConversation.messages.length} messages from DB`);
+          setMessagesInContext(loadedConversation.messages);
+        }
+
+        setLoadingConversationId(null);
+        onClose();
+      }
+    } catch (error) {
+      console.error('Failed to load conversation:', error);
+      setLoadingConversationId(null);
+    }
   };
 
   const handleStartEdit = (conv: ConversationSummary) => {
@@ -449,7 +519,11 @@ export const ConversationList: React.FC<ConversationListProps> = ({
               {filteredConversations.map((conv, index) => (
                 <div
                   key={`${conv.id}-${index}`}
-                  className={`group relative rounded-xl md:rounded-2xl cursor-pointer transition-all duration-200 ${
+                  className={`group relative rounded-xl md:rounded-2xl transition-all duration-200 ${
+                    loadingConversationId === conv.id
+                      ? 'cursor-wait opacity-60'
+                      : 'cursor-pointer'
+                  } ${
                     activeConversationId === conv.id
                       ? conv.type === 'case-study'
                         ? 'bg-gradient-to-r from-[#90cdf4]/20 to-[#63b3ed]/20 border-2 border-[#63b3ed]/60 shadow-lg shadow-[#2b6cb0]/10'
@@ -458,7 +532,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                         ? 'bg-gradient-to-r from-[#90cdf4]/10 to-[#63b3ed]/10 border-2 border-[#63b3ed]/30 hover:border-[#63b3ed]/60 hover:shadow-lg hover:shadow-[#2b6cb0]/10 active:scale-[0.98]'
                         : 'bg-gradient-to-r from-white/90 to-slate-50/90 border-2 border-slate-200/40 hover:border-[#63b3ed]/40 hover:shadow-lg hover:shadow-[#2b6cb0]/5 active:scale-[0.98]'
                   }`}
-                  onClick={() => editingId !== conv.id && handleSelectConversation(conv.id)}
+                  onClick={() => editingId !== conv.id && loadingConversationId !== conv.id && handleSelectConversation(conv.id)}
+                  onMouseEnter={() => handleHoverConversation(conv.id)}
                 >
                   {/* Mobile-Optimized Card Content */}
                   <div className="p-4 md:p-5">
@@ -653,9 +728,19 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   {activeConversationId === conv.id && (
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#2b6cb0]/5 to-[#63b3ed]/5 pointer-events-none" />
                   )}
-                  
+
                   {/* Hover gradient overlay */}
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#90cdf4]/5 to-[#63b3ed]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                  {/* Loading overlay */}
+                  {loadingConversationId === conv.id && (
+                    <div className="absolute inset-0 rounded-2xl bg-white/80 backdrop-blur-sm flex items-center justify-center z-10">
+                      <div className="flex flex-col items-center space-y-2">
+                        <Loader2 className="w-8 h-8 text-[#2b6cb0] animate-spin" />
+                        <p className="text-sm font-semibold text-[#2b6cb0]">Loading messages...</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

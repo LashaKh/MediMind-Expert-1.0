@@ -811,7 +811,8 @@ export const useAppStore = create<AppStore>()(
                 metadata: {
                   sources: message.sources || [],
                   attachments: message.attachments || [],
-                  metadata: message.metadata || {}
+                  metadata: message.metadata || {},
+                  factCheckResult: message.factCheckResult || null
                 }
               });
 
@@ -845,21 +846,134 @@ export const useAppStore = create<AppStore>()(
               return [];
             }
 
-            const messages: Message[] = (data || []).map((row: any) => ({
-              id: row.message_id,
-              content: row.content,
-              type: row.message_type,
-              timestamp: new Date(row.timestamp),
-              sources: row.metadata?.sources || [],
-              attachments: row.metadata?.attachments || [],
-              metadata: row.metadata?.metadata || {}
-            }));
+            const messages: Message[] = (data || []).map((row: any) => {
+              const message: any = {
+                id: row.message_id,
+                content: row.content,
+                type: row.message_type,
+                timestamp: new Date(row.timestamp),
+                sources: row.metadata?.sources || [],
+                attachments: row.metadata?.attachments || [],
+                metadata: row.metadata?.metadata || {}
+              };
+
+              // Restore factCheckResult if it exists, converting timestamp string back to Date
+              if (row.metadata?.factCheckResult) {
+                message.factCheckResult = {
+                  ...row.metadata.factCheckResult,
+                  timestamp: new Date(row.metadata.factCheckResult.timestamp)
+                };
+              }
+
+              return message;
+            });
 
             return messages;
 
           } catch (error) {
 
             return [];
+          }
+        },
+
+        updateFlowiseMessage: async (sessionId: string, messageId: string, updates: Partial<Message>): Promise<void> => {
+          try {
+            const { user } = get();
+            if (!user) {
+              console.error('❌ updateFlowiseMessage: No user found');
+              return;
+            }
+
+            console.log('📝 updateFlowiseMessage called:', {
+              sessionId,
+              messageId,
+              hasFactCheckResult: !!updates.factCheckResult,
+              factCheckResultSources: updates.factCheckResult?.sources?.length || 0
+            });
+
+            // First, get the current message to merge metadata
+            const { data: existingData, error: fetchError } = await supabase
+              .from('flowise_messages')
+              .select('*')
+              .eq('user_id', user.id)
+              .eq('session_id', sessionId)
+              .eq('message_id', messageId)
+              .maybeSingle();
+
+            if (fetchError) {
+              console.error('❌ Error fetching existing message:', fetchError);
+              return;
+            }
+
+            if (!existingData) {
+              console.warn('⚠️ No existing message found - creating it first:', { sessionId, messageId });
+
+              // Message doesn't exist - need to create it first
+              // This can happen if user was in personal KB mode when message was created
+              const { error: insertError } = await supabase
+                .from('flowise_messages')
+                .insert({
+                  user_id: user.id,
+                  session_id: sessionId,
+                  message_id: messageId,
+                  content: updates.content || '',
+                  message_type: 'ai', // Fact-check only happens on AI messages
+                  timestamp: new Date().toISOString(),
+                  metadata: {
+                    sources: updates.sources || [],
+                    attachments: updates.attachments || [],
+                    metadata: updates.metadata || {},
+                    factCheckResult: updates.factCheckResult || null
+                  }
+                });
+
+              if (insertError) {
+                console.error('❌ Error creating message:', insertError);
+              } else {
+                console.log('✅ Message created successfully with fact-check result');
+              }
+              return;
+            }
+
+            console.log('📄 Existing message found:', {
+              hasExistingMetadata: !!existingData.metadata,
+              hasExistingFactCheck: !!existingData.metadata?.factCheckResult
+            });
+
+            // Merge existing metadata with new updates
+            const existingMetadata = existingData?.metadata || {};
+            const updatedMetadata = {
+              ...existingMetadata,
+              sources: updates.sources !== undefined ? updates.sources : existingMetadata.sources,
+              attachments: updates.attachments !== undefined ? updates.attachments : existingMetadata.attachments,
+              metadata: updates.metadata !== undefined ? updates.metadata : existingMetadata.metadata,
+              factCheckResult: updates.factCheckResult !== undefined ? updates.factCheckResult : existingMetadata.factCheckResult
+            };
+
+            console.log('📦 Updated metadata:', {
+              hasFactCheckResult: !!updatedMetadata.factCheckResult,
+              factCheckSources: updatedMetadata.factCheckResult?.sources?.length || 0,
+              factCheckStatus: updatedMetadata.factCheckResult?.status
+            });
+
+            // Update the message in the database
+            const { error } = await supabase
+              .from('flowise_messages')
+              .update({
+                content: updates.content !== undefined ? updates.content : undefined,
+                metadata: updatedMetadata
+              })
+              .eq('user_id', user.id)
+              .eq('session_id', sessionId)
+              .eq('message_id', messageId);
+
+            if (error) {
+              console.error('❌ Error updating message in database:', error);
+            } else {
+              console.log('✅ Message updated successfully in database');
+            }
+          } catch (error) {
+            console.error('❌ Error in updateFlowiseMessage:', error);
           }
         },
 

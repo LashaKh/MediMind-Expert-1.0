@@ -7,6 +7,7 @@ export interface Message {
   isStreaming?: boolean; // For progressive rendering during streaming
   sources?: SourceReference[];
   attachments?: Attachment[];
+  factCheckResult?: FactCheckResult; // Fact-check verification result
   metadata?: {
     sessionId?: string;
     knowledgeBase?: KnowledgeBaseType;
@@ -40,6 +41,16 @@ export interface SourceReference {
     retrievalMethod?: 'semantic' | 'keyword' | 'hybrid';
     queryContext?: string;
   };
+}
+
+export interface FactCheckResult {
+  originalQuestion: string;
+  originalAnswer: string;
+  verificationAnswer: string;
+  sources?: SourceReference[];
+  timestamp: Date;
+  status: 'loading' | 'success' | 'error';
+  error?: string;
 }
 
 export interface Attachment {

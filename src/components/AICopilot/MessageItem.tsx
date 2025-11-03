@@ -8,6 +8,9 @@ import { MedicalMarkdownRenderer } from './MedicalMarkdownRenderer';
 interface MessageItemProps {
   message: Message;
   className?: string;
+  // Fact-check props for AI messages
+  onFactCheck?: (messageId: string) => void;
+  isFactChecking?: boolean;
 }
 
 export const UserMessageItem: React.FC<MessageItemProps> = ({ message, className = '' }) => {
@@ -61,7 +64,7 @@ export const UserMessageItem: React.FC<MessageItemProps> = ({ message, className
   );
 };
 
-export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className = '' }) => {
+export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className = '', onFactCheck, isFactChecking = false }) => {
   const [highlightedSource, setHighlightedSource] = useState<number | null>(null);
   const [extractedSources, setExtractedSources] = useState<any[]>([]);
   const [copied, setCopied] = useState(false);
@@ -134,19 +137,25 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
             />
             
             {/* Source references - merge vector store sources with extracted markdown sources */}
+            {/* Always show SourceReferences for AI messages to enable fact-checking even without sources */}
             {(() => {
               const vectorSources = message.sources || [];
               const markdownSources = extractedSources || [];
               const allSources = [...vectorSources, ...markdownSources];
-              
-              return allSources.length > 0 && (
-                <div className="mt-4 pt-3 border-t border-gray-200/50">
-                  <SourceReferences 
+
+              // Always render for AI messages (to show fact-check button), but only add border if sources exist
+              return (
+                <div className={allSources.length > 0 ? "mt-4 pt-3 border-t border-gray-200/50" : "mt-4"}>
+                  <SourceReferences
                     sources={allSources}
                     maxInitialDisplay={3}
                     showExcerpts={true}
                     highlightedSourceNumber={highlightedSource}
                     onSourceHighlight={setHighlightedSource}
+                    factCheckResult={message.factCheckResult}
+                    isFactChecking={isFactChecking}
+                    isMessageStreaming={message.isStreaming}
+                    onFactCheck={onFactCheck ? () => onFactCheck(message.id) : undefined}
                   />
                 </div>
               );
@@ -201,11 +210,11 @@ export const AIMessageItem: React.FC<MessageItemProps> = ({ message, className =
 };
 
 // Generic MessageItem component that renders the appropriate type
-export const MessageItem: React.FC<MessageItemProps> = ({ message, className = '' }) => {
+export const MessageItem: React.FC<MessageItemProps> = ({ message, className = '', onFactCheck, isFactChecking }) => {
   if (message.type === 'user') {
     return <UserMessageItem message={message} className={className} />;
   } else {
-    return <AIMessageItem message={message} className={className} />;
+    return <AIMessageItem message={message} className={className} onFactCheck={onFactCheck} isFactChecking={isFactChecking} />;
   }
 };
 

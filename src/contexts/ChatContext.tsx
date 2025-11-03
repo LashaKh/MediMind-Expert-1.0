@@ -36,7 +36,7 @@ type ChatAction =
   | { type: 'ADD_SELECTED_DOCUMENT'; payload: string }
   | { type: 'REMOVE_SELECTED_DOCUMENT'; payload: string }
   | { type: 'CLEAR_SELECTED_DOCUMENTS' }
-  | { type: 'START_STREAMING_MESSAGE'; payload: { id: string; content: string } }
+  | { type: 'START_STREAMING_MESSAGE'; payload: { id: string; content: string; sessionId?: string; knowledgeBase?: KnowledgeBaseType } }
   | { type: 'UPDATE_STREAMING_MESSAGE'; payload: { id: string; token: string } }
   | { type: 'COMPLETE_STREAMING_MESSAGE'; payload: { id: string; sources?: any[] } }
   | { type: 'ERROR_STREAMING_MESSAGE'; payload: { id: string; error: string } };
@@ -109,6 +109,63 @@ const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
       };
     
     case 'UPDATE_MESSAGE':
+      console.log('📬 UPDATE_MESSAGE reducer triggered:', {
+        messageId: action.payload.id,
+        hasFactCheckResult: !!action.payload.updates.factCheckResult,
+        factCheckStatus: action.payload.updates.factCheckResult?.status
+      });
+
+      // Persist fact-check results to Supabase ONLY when complete (not during streaming)
+      const updatedMsg = state.messages.find(m => m.id === action.payload.id);
+      if (updatedMsg && action.payload.updates.factCheckResult) {
+        const factCheckResult = action.payload.updates.factCheckResult;
+
+        // Only persist when fact-check is complete (success or error), not during streaming (loading)
+        if (factCheckResult.status === 'success' || factCheckResult.status === 'error') {
+          // Get the sessionId from the message metadata (where it was stored when created)
+          // This ensures we save to the SAME session as the original message
+          const messageSessionId = updatedMsg.metadata?.sessionId || state.currentSessionId;
+
+          console.log('💾 Persisting fact-check result to database:', {
+            messageId: action.payload.id,
+            sessionId: messageSessionId,
+            currentSessionId: state.currentSessionId,
+            sessionIdMatch: messageSessionId === state.currentSessionId,
+            status: factCheckResult.status,
+            hasSourcesInFactCheckResult: !!factCheckResult.sources,
+            sourceCount: factCheckResult.sources?.length || 0
+          });
+
+          // Call updateFlowiseMessage asynchronously (fire and forget)
+          import('../stores/useAppStore').then(({ useAppStore }) => {
+            const { updateFlowiseMessage } = useAppStore.getState();
+            if (updateFlowiseMessage && messageSessionId) {
+              console.log('✅ Calling updateFlowiseMessage with:', {
+                sessionId: messageSessionId,
+                messageId: action.payload.id,
+                hasFactCheckResult: !!action.payload.updates.factCheckResult
+              });
+
+              // Pass the complete message data including content
+              // This allows updateFlowiseMessage to create the message if it doesn't exist
+              const completeUpdates = {
+                ...action.payload.updates,
+                content: updatedMsg.content, // Include original message content
+                sources: updatedMsg.sources, // Include original sources
+                attachments: updatedMsg.attachments, // Include original attachments
+                metadata: updatedMsg.metadata // Include original metadata
+              };
+
+              updateFlowiseMessage(messageSessionId, action.payload.id, completeUpdates);
+            } else {
+              console.error('❌ Cannot persist fact-check: missing updateFlowiseMessage or sessionId');
+            }
+          }).catch(error => {
+            console.error('❌ Error importing useAppStore:', error);
+          });
+        }
+      }
+
       return {
         ...state,
         messages: state.messages.map(msg =>
@@ -189,13 +246,15 @@ const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
       const activeConv = action.payload
         ? state.conversations.find(conv => conv.id === action.payload)
         : null;
-      
+
       const activeSessionId = uuidv4();
-      
+
       return {
         ...state,
         activeConversationId: action.payload,
-        messages: activeConv ? activeConv.messages : [],
+        // Don't clear messages here - let loadMessagesForConversation handle it
+        // This prevents the blank screen issue when switching conversations
+        messages: action.payload ? state.messages : [],
         currentSessionId: activeSessionId // Always generate a new session ID for fresh chat session
       };
 
@@ -333,13 +392,17 @@ const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
       };
 
     case 'START_STREAMING_MESSAGE':
-      // Create a new streaming message
+      // Create a new streaming message with metadata
       const streamingMessage: Message = {
         id: action.payload.id,
         content: action.payload.content,
         type: 'ai',
         timestamp: new Date(),
-        isStreaming: true
+        isStreaming: true,
+        metadata: {
+          sessionId: action.payload.sessionId || state.currentSessionId,
+          knowledgeBase: action.payload.knowledgeBase
+        }
       };
 
       return {
@@ -472,7 +535,7 @@ interface ChatContextType {
   saveFlowiseConversationMetadata: (sessionId: string, messageText: string, knowledgeBaseType?: KnowledgeBaseType, specialty?: string, caseId?: string, conversationType?: 'general' | 'case-study') => Promise<void>;
   incrementFlowiseMessageCount: (sessionId: string) => Promise<void>;
   // Streaming methods
-  startStreamingMessage: (content?: string) => string;
+  startStreamingMessage: (content?: string, sessionId?: string, knowledgeBase?: KnowledgeBaseType) => string;
   updateStreamingMessage: (id: string, token: string) => void;
   completeStreamingMessage: (id: string, sources?: any[]) => void;
   errorStreamingMessage: (id: string, error: string) => void;
@@ -1432,13 +1495,13 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
   }, []);
 
   // Streaming methods for real-time AI response rendering
-  const startStreamingMessage = useCallback((content: string = ''): string => {
+  const startStreamingMessage = useCallback((content: string = '', sessionId?: string, knowledgeBase?: KnowledgeBaseType): string => {
     const messageId = uuidv4();
     dispatch({
       type: 'START_STREAMING_MESSAGE',
-      payload: { id: messageId, content }
+      payload: { id: messageId, content, sessionId, knowledgeBase }
     });
-    logger.debug('Started streaming message', { messageId });
+    logger.debug('Started streaming message', { messageId, sessionId, knowledgeBase });
     return messageId;
   }, []);
 

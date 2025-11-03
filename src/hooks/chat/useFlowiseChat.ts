@@ -1,8 +1,8 @@
 import { useState, useCallback, useMemo } from 'react';
-import { fetchAIResponse, fetchAIResponseStreaming } from '../../lib/api/chat';
+import { fetchAIResponse, fetchAIResponseStreaming, fetchFactCheckResponse, fetchFactCheckStreaming } from '../../lib/api/chat';
 import { isStreamingEnabled } from '../../lib/api/streamingService';
 import { APIError } from '../../lib/api/errors';
-import { Message, SourceReference, PatientCase, Attachment, KnowledgeBaseType } from '../../types/chat';
+import { Message, SourceReference, PatientCase, Attachment, KnowledgeBaseType, FactCheckResult } from '../../types/chat';
 import { v4 as uuidv4 } from 'uuid';
 
 interface UseFlowiseChatOptions {
@@ -20,12 +20,18 @@ interface UseFlowiseChatOptions {
   onStreamToken?: (messageId: string, token: string) => void;
   onStreamComplete?: (messageId: string, sources?: SourceReference[]) => void;
   onStreamError?: (messageId: string, error: string) => void;
+  // Fact-check options
+  onFactCheckComplete?: (messageId: string, result: FactCheckResult) => void;
+  onFactCheckError?: (messageId: string, error: string) => void;
+  onFactCheckToken?: (messageId: string, token: string) => void;
 }
 
 interface UseFlowiseChatReturn {
   sendMessage: (content: string, attachments?: Attachment[], caseContext?: PatientCase | null, knowledgeBaseType?: KnowledgeBaseType, personalDocumentIds?: string[], enhancedMessage?: string) => Promise<void>;
+  factCheckMessage: (messageId: string, originalQuestion: string, originalAnswer: string) => Promise<void>;
   isLoading: boolean;
   isStreaming: boolean;
+  isFactChecking: boolean;
   error: string | null;
   sessionId: string;
   isRateLimited: boolean;
@@ -47,11 +53,15 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
     onStreamStart,
     onStreamToken,
     onStreamComplete,
-    onStreamError
+    onStreamError,
+    onFactCheckComplete,
+    onFactCheckError,
+    onFactCheckToken
   } = options;
 
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [isFactChecking, setIsFactChecking] = useState(false);
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRateLimited, setIsRateLimited] = useState(false);
@@ -339,10 +349,215 @@ export const useFlowiseChat = (options: UseFlowiseChatOptions = {}): UseFlowiseC
     setIsRateLimited(false);
   }, []);
 
+  /**
+   * Fact-check an AI message by sending the original question and answer back to Flowise
+   * Uses streaming for real-time progressive rendering
+   */
+  const factCheckMessage = useCallback(async (
+    messageId: string,
+    originalQuestion: string,
+    originalAnswer: string
+  ) => {
+    setIsFactChecking(true);
+    setError(null);
+
+    // Set loading state immediately
+    onFactCheckComplete?.(messageId, {
+      originalQuestion,
+      originalAnswer,
+      verificationAnswer: '',
+      timestamp: new Date(),
+      status: 'loading'
+    });
+
+    try {
+      // Use streaming if enabled, otherwise fallback to non-streaming
+      if (useStreaming) {
+        let accumulatedVerification = '';
+        let factCheckSources: any[] = [];
+
+        await fetchFactCheckStreaming(
+          originalQuestion,
+          originalAnswer,
+          sessionId,
+          {
+            onToken: (token: string) => {
+              accumulatedVerification += token;
+              // Progressive update via token callback
+              onFactCheckToken?.(messageId, token);
+            },
+            onSource: (receivedSources: any[]) => {
+              // Capture sources for fact-check result
+              factCheckSources = receivedSources;
+            },
+            onComplete: () => {
+              console.log('🎉 Fact-check streaming onComplete triggered');
+              console.log('📝 Accumulated verification length:', accumulatedVerification.length);
+
+              // Parse sources from markdown text (same logic as original answer)
+              let processedSources: SourceReference[] = [];
+
+              // Look for sources section in the markdown text
+              // Try multiple patterns to match different formats
+              let sourcesMatch = accumulatedVerification.match(/###\s*\*?\*?Sources\*?\*?\s*\n([\s\S]*?)(?=\n###|$)/i);
+
+              // Also try format with separator before sources
+              if (!sourcesMatch) {
+                sourcesMatch = accumulatedVerification.match(/---\s*\n+###\s*\*?\*?Sources\*?\*?\s*\n([\s\S]*?)$/i);
+              }
+
+              // Try simpler pattern
+              if (!sourcesMatch) {
+                sourcesMatch = accumulatedVerification.match(/Sources:?\s*\n([\s\S]*?)$/i);
+              }
+
+              if (sourcesMatch) {
+                console.log('✅ Found sources section in markdown');
+                const sourcesText = sourcesMatch[1];
+                // Extract bullet points (lines starting with * or -)
+                const sourceLines = sourcesText.split('\n').filter(line => {
+                  const trimmed = line.trim();
+                  return trimmed.startsWith('*') || trimmed.startsWith('-');
+                });
+
+                console.log('📚 Extracted source lines:', sourceLines.length);
+
+                processedSources = sourceLines.map((line, index) => {
+                  // Remove bullet point and clean the text
+                  const cleanedTitle = line.replace(/^\s*[\*\-]\s*\*?\*?/, '').replace(/\*?\*?\s*$/, '').trim();
+
+                  return {
+                    id: uuidv4(),
+                    title: cleanedTitle || `Medical Source ${index + 1}`,
+                    type: 'document' as const,
+                    excerpt: cleanedTitle // Use the full title as excerpt for fact-check sources
+                  };
+                }).filter(source => source.title.length > 0);
+
+                console.log('✅ Processed sources:', processedSources.length);
+              } else {
+                console.warn('⚠️ No sources section found in markdown');
+              }
+
+              // Finalize fact-check result with parsed sources
+              const factCheckResult: FactCheckResult = {
+                originalQuestion,
+                originalAnswer,
+                verificationAnswer: accumulatedVerification,
+                sources: processedSources,
+                timestamp: new Date(),
+                status: 'success'
+              };
+
+              console.log('🚀 Calling onFactCheckComplete with result:', {
+                messageId,
+                status: factCheckResult.status,
+                verificationLength: factCheckResult.verificationAnswer.length,
+                sourceCount: factCheckResult.sources?.length || 0
+              });
+
+              onFactCheckComplete?.(messageId, factCheckResult);
+              setIsFactChecking(false);
+
+              console.log('✅ Fact-check complete callback finished');
+            },
+            onError: (error: Error) => {
+              const errorMessage = error.message || 'Streaming fact-check failed';
+              onFactCheckError?.(messageId, errorMessage);
+              setError(errorMessage);
+              setIsFactChecking(false);
+            }
+          }
+        );
+      } else {
+        // Fallback to non-streaming
+        const response = await fetchFactCheckResponse(
+          originalQuestion,
+          originalAnswer,
+          sessionId
+        );
+
+        // Parse sources from markdown text (same logic as streaming)
+        let processedSources: SourceReference[] = [];
+
+        // Look for sources section in the markdown text
+        // Try multiple patterns to match different formats
+        let sourcesMatch = response.text.match(/###\s*\*?\*?Sources\*?\*?\s*\n([\s\S]*?)(?=\n###|$)/i);
+
+        // Also try format with separator before sources
+        if (!sourcesMatch) {
+          sourcesMatch = response.text.match(/---\s*\n+###\s*\*?\*?Sources\*?\*?\s*\n([\s\S]*?)$/i);
+        }
+
+        // Try simpler pattern
+        if (!sourcesMatch) {
+          sourcesMatch = response.text.match(/Sources:?\s*\n([\s\S]*?)$/i);
+        }
+
+        if (sourcesMatch) {
+          const sourcesText = sourcesMatch[1];
+          // Extract bullet points (lines starting with * or -)
+          const sourceLines = sourcesText.split('\n').filter(line => {
+            const trimmed = line.trim();
+            return trimmed.startsWith('*') || trimmed.startsWith('-');
+          });
+
+          processedSources = sourceLines.map((line, index) => {
+            // Remove bullet point and clean the text
+            const cleanedTitle = line.replace(/^\s*[\*\-]\s*\*?\*?/, '').replace(/\*?\*?\s*$/, '').trim();
+
+            return {
+              id: uuidv4(),
+              title: cleanedTitle || `Medical Source ${index + 1}`,
+              type: 'document' as const,
+              excerpt: cleanedTitle // Use the full title as excerpt for fact-check sources
+            };
+          }).filter(source => source.title.length > 0);
+        }
+
+        // Create fact-check result with processed sources
+        const factCheckResult: FactCheckResult = {
+          originalQuestion,
+          originalAnswer,
+          verificationAnswer: response.text,
+          sources: processedSources,
+          timestamp: new Date(),
+          status: 'success'
+        };
+
+        // Notify parent component via callback
+        onFactCheckComplete?.(messageId, factCheckResult);
+        setIsFactChecking(false);
+      }
+
+    } catch (err) {
+      let errorMessage = 'Failed to fact-check message. Please try again.';
+
+      if (err instanceof APIError) {
+        if (err.status === 429) {
+          errorMessage = 'Rate limit exceeded. Please wait a few minutes before trying again.';
+          setIsRateLimited(true);
+        } else if (err.status === 401) {
+          errorMessage = 'Your session has expired. Please refresh the page or sign in again.';
+        } else {
+          errorMessage = err.message;
+        }
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+
+      setError(errorMessage);
+      onFactCheckError?.(messageId, errorMessage);
+      setIsFactChecking(false);
+    }
+  }, [sessionId, useStreaming, onFactCheckComplete, onFactCheckError, onFactCheckToken]);
+
   return {
     sendMessage,
+    factCheckMessage,
     isLoading,
     isStreaming,
+    isFactChecking,
     error,
     sessionId,
     isRateLimited,

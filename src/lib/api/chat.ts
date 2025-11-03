@@ -550,3 +550,172 @@ ${messageText}`;
     );
   }
 }
+
+/**
+ * Fact-check an AI response by sending the original question and answer back to Flowise
+ * with the ANSWER_CONFIRMATION marker for proper routing
+ */
+export async function fetchFactCheckResponse(
+  originalQuestion: string,
+  originalAnswer: string,
+  sessionId: string
+): Promise<APIResponse> {
+  try {
+    // Format the message with hierarchical structure for fact-checking
+    const messageText = `<<ANSWER_CONFIRMATION>>
+Original Question: ${originalQuestion}
+
+Generated Answer: ${originalAnswer}`;
+
+    // Get the current user session for authentication
+    const session = await sessionManager.getValidSession();
+
+    if (!session) {
+      throw new APIError('Authentication required', 401);
+    }
+
+    logger.debug('🔍 Sending fact-check request', {
+      questionLength: originalQuestion.length,
+      answerLength: originalAnswer.length,
+      sessionId
+    });
+
+    // Use Supabase Edge Function for Flowise (curated knowledge base)
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const apiEndpoint = `${supabaseUrl}/functions/v1/flowise-chat`;
+
+    // Prepare request body
+    const requestBody = {
+      message: messageText,
+      conversationId: sessionId,
+      caseContext: null
+    };
+
+    logger.debug('📡 Sending fact-check request to Flowise');
+
+    // Make the API request with retry logic
+    const response = await retryWithBackoff(async () => {
+      // Create AbortController for timeout handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        logger.warn('Fact-check request timeout - aborting fetch request');
+        controller.abort();
+      }, 180000); // 3 minutes timeout
+
+      try {
+        logger.debug('🚀 Starting fact-check fetch request');
+        const fetchResponse = await fetch(apiEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`
+          },
+          body: JSON.stringify(requestBody),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+        logger.debug('✅ Fact-check request completed', { status: fetchResponse.status });
+        return fetchResponse;
+
+      } catch (error) {
+        clearTimeout(timeoutId);
+        if ((error as Error).name === 'AbortError') {
+          logger.error('❌ Fact-check request was aborted due to timeout');
+          throw new APIError('Request timeout after 3 minutes. The verification may be too complex.', 408);
+        }
+        logger.error('❌ Fact-check fetch error:', error);
+        throw error;
+      }
+    }, 2, 1000); // Max 2 retries with 1 second base delay
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+
+      // Handle specific error cases
+      if (response.status === 409) {
+        throw new APIError('Resource conflict - retrying...', 409);
+      }
+
+      throw new APIError(
+        errorData?.error || `HTTP error! status: ${response.status}`,
+        response.status
+      );
+    }
+
+    const data = await response.json();
+
+    // Extract the response data from our standardized API response
+    const responseData = data.data || data;
+
+    logger.debug('✅ Fact-check verification received', {
+      messageLength: responseData.message?.length || 0,
+      sourcesCount: responseData.sources?.length || 0
+    });
+
+    return {
+      text: responseData.message || '',
+      sources: responseData.sources || [],
+      imageAnalysis: undefined
+    };
+  } catch (error) {
+    logger.error('Failed to fetch fact-check response:', error);
+    throw new APIError(
+      error instanceof Error ? error.message : 'Failed to fetch fact-check response'
+    );
+  }
+}
+
+/**
+ * Streaming version of fact-check - uses SSE for real-time token streaming
+ * Provides progressive rendering of verification answer
+ */
+export async function fetchFactCheckStreaming(
+  originalQuestion: string,
+  originalAnswer: string,
+  sessionId: string,
+  callbacks: StreamingCallbacks
+): Promise<void> {
+  try {
+    // Format the message with hierarchical structure for fact-checking
+    const messageText = `<<ANSWER_CONFIRMATION>>
+Original Question: ${originalQuestion}
+
+Generated Answer: ${originalAnswer}`;
+
+    // Get authentication
+    const session = await sessionManager.getValidSession();
+    if (!session) {
+      throw new APIError('Authentication required', 401);
+    }
+
+    logger.debug('🔍 Sending streaming fact-check request', {
+      questionLength: originalQuestion.length,
+      answerLength: originalAnswer.length,
+      sessionId
+    });
+
+    // Use Supabase Edge Function for Flowise (fact-check always uses curated KB)
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const apiEndpoint = `${supabaseUrl}/functions/v1/flowise-chat`;
+
+    // Prepare request body
+    const requestBody = {
+      message: messageText,
+      conversationId: sessionId,
+      caseContext: null
+    };
+
+    logger.debug('🌊 Starting streaming fact-check to Flowise');
+
+    // Use streaming service
+    await fetchStreamingResponse(apiEndpoint, requestBody, callbacks);
+
+  } catch (error) {
+    logger.error('Streaming fact-check failed:', error);
+    throw error instanceof APIError ? error : new APIError(
+      error instanceof Error ? error.message : 'Streaming fact-check failed',
+      500
+    );
+  }
+}
