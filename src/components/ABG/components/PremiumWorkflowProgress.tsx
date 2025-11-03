@@ -224,97 +224,189 @@ export const PremiumWorkflowProgress: React.FC<PremiumWorkflowProgressProps> = (
           </div>
         </div>
 
-        {/* Steps Container */}
-        <div className="relative flex justify-between items-start px-6">
-          {steps.map((step, index) => {
-            const status = getStepStatus(index);
-            const isVisible = visibleSteps[index];
-            
-            return (
-              <div 
-                key={step.step}
-                className={cn(
-                  "flex flex-col items-center transition-all duration-500 transform",
-                  isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
-                  status === 'current' && "scale-105"
-                )}
-                style={{ transitionDelay: `${index * 150}ms` }}
-                onMouseEnter={() => setIsHovering(index)}
-                onMouseLeave={() => setIsHovering(null)}
-              >
-                {/* Step Circle */}
-                <div className={cn(
-                  "relative z-10 w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-xl",
-                  "border-2 backdrop-blur supports-[backdrop-filter]:bg-white/40 bg-white/70",
-                  status === 'completed' && "bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] border-[#90cdf4] shadow-[#90cdf4]/30",
-                  status === 'current' && `${step.gradient} border-white shadow-2xl`,
-                  status === 'upcoming' && "border-slate-300 shadow-slate-200",
-                  status === 'error' && "bg-gradient-to-br from-red-500 to-red-600 border-red-300 shadow-red-200",
-                  status === 'current' && "animate-pulse"
-                )}>
-                  <span className="absolute -top-2 -left-2 px-1.5 py-0.5 rounded-md text-[10px] font-semibold text-white shadow-md bg-slate-900/70">{index + 1}</span>
-                  {renderStepIcon(step, status)}
-                  
-                  {/* Glow Effect for Current Step */}
-                  {status === 'current' && (
+        {/* Steps Container - Mobile horizontal scroll, Desktop normal */}
+        <div className="relative">
+          {/* Mobile: Horizontal scroll container with snap points */}
+          <div className="md:hidden overflow-x-auto scrollbar-hide px-6 pb-2 -mx-6" style={{ scrollSnapType: 'x mandatory' }}>
+            <div className="flex gap-6 min-w-max">
+              {steps.map((step, index) => {
+                const status = getStepStatus(index);
+                const isVisible = visibleSteps[index];
+
+                return (
+                  <div
+                    key={step.step}
+                    className={cn(
+                      "flex flex-col items-center transition-all duration-500 transform flex-shrink-0",
+                      isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+                      status === 'current' && "scale-105"
+                    )}
+                    style={{
+                      transitionDelay: `${index * 150}ms`,
+                      scrollSnapAlign: 'start',
+                      width: '100px'
+                    }}
+                    onMouseEnter={() => setIsHovering(index)}
+                    onMouseLeave={() => setIsHovering(null)}
+                  >
+                    {/* Step Circle */}
                     <div className={cn(
-                      "absolute inset-0 rounded-2xl opacity-30 animate-pulse",
-                      step.gradient
+                      "relative z-10 w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-xl",
+                      "border-2 backdrop-blur supports-[backdrop-filter]:bg-white/40 bg-white/70",
+                      status === 'completed' && "bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] border-[#90cdf4] shadow-[#90cdf4]/30",
+                      status === 'current' && `${step.gradient} border-white shadow-2xl`,
+                      status === 'upcoming' && "border-slate-300 shadow-slate-200",
+                      status === 'error' && "bg-gradient-to-br from-red-500 to-red-600 border-red-300 shadow-red-200",
+                      status === 'current' && "animate-pulse"
+                    )}>
+                      <span className="absolute -top-2 -left-2 px-1.5 py-0.5 rounded-md text-[10px] font-semibold text-white shadow-md bg-slate-900/70">{index + 1}</span>
+                      {renderStepIcon(step, status)}
+
+                      {/* Glow Effect for Current Step */}
+                      {status === 'current' && (
+                        <div className={cn(
+                          "absolute inset-0 rounded-2xl opacity-30 animate-pulse",
+                          step.gradient
+                        )} />
+                      )}
+
+                      {/* Hover highlight */}
+                      {isHovering === index && status === 'upcoming' && (
+                        <div className="absolute inset-0 rounded-2xl ring-2 ring-slate-300/70" />
+                      )}
+                    </div>
+
+                    {/* Step Content */}
+                    <div className="mt-3 text-center w-[100px]">
+                      <h4 className={cn(
+                        "text-[12px] font-semibold transition-colors duration-300 mb-1",
+                        status === 'completed' && "text-[#2b6cb0]",
+                        status === 'current' && "text-slate-900",
+                        status === 'upcoming' && "text-slate-500",
+                        status === 'error' && "text-red-700"
+                      )}>
+                        {getStepText(step.step).label}
+                      </h4>
+                      <p className={cn(
+                        "text-[10px] transition-colors duration-300 leading-relaxed",
+                        status === 'completed' && "text-[#63b3ed]",
+                        status === 'current' && "text-slate-600",
+                        status === 'upcoming' && "text-slate-400",
+                        status === 'error' && "text-red-600"
+                      )}>
+                        {getStepText(step.step).description}
+                      </p>
+                    </div>
+
+                    {/* Status Indicator */}
+                    {status === 'current' && processingStatus && (
+                      <div className="mt-2 px-2 py-1 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full">
+                        <div className="flex items-center gap-1">
+                          <Activity className="h-2.5 w-2.5 text-[#2b6cb0] animate-pulse" />
+                          <span className="text-[10px] font-medium text-slate-700">
+                            {processingStatus}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Desktop: Original layout with connector lines */}
+          <div className="hidden md:flex relative justify-between items-start px-6">
+            {steps.map((step, index) => {
+              const status = getStepStatus(index);
+              const isVisible = visibleSteps[index];
+
+              return (
+                <div
+                  key={step.step}
+                  className={cn(
+                    "flex flex-col items-center transition-all duration-500 transform",
+                    isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+                    status === 'current' && "scale-105"
+                  )}
+                  style={{ transitionDelay: `${index * 150}ms` }}
+                  onMouseEnter={() => setIsHovering(index)}
+                  onMouseLeave={() => setIsHovering(null)}
+                >
+                  {/* Step Circle */}
+                  <div className={cn(
+                    "relative z-10 w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-xl",
+                    "border-2 backdrop-blur supports-[backdrop-filter]:bg-white/40 bg-white/70",
+                    status === 'completed' && "bg-gradient-to-br from-[#63b3ed] to-[#2b6cb0] border-[#90cdf4] shadow-[#90cdf4]/30",
+                    status === 'current' && `${step.gradient} border-white shadow-2xl`,
+                    status === 'upcoming' && "border-slate-300 shadow-slate-200",
+                    status === 'error' && "bg-gradient-to-br from-red-500 to-red-600 border-red-300 shadow-red-200",
+                    status === 'current' && "animate-pulse"
+                  )}>
+                    <span className="absolute -top-2 -left-2 px-1.5 py-0.5 rounded-md text-[10px] font-semibold text-white shadow-md bg-slate-900/70">{index + 1}</span>
+                    {renderStepIcon(step, status)}
+
+                    {/* Glow Effect for Current Step */}
+                    {status === 'current' && (
+                      <div className={cn(
+                        "absolute inset-0 rounded-2xl opacity-30 animate-pulse",
+                        step.gradient
+                      )} />
+                    )}
+
+                    {/* Hover highlight */}
+                    {isHovering === index && status === 'upcoming' && (
+                      <div className="absolute inset-0 rounded-2xl ring-2 ring-slate-300/70" />
+                    )}
+                  </div>
+
+                  {/* Connector Line */}
+                  {index < steps.length - 1 && (
+                    <div className={cn(
+                      "absolute top-8 left-16 w-full h-0.5 transition-all duration-500",
+                      getConnectorStatus(index) === 'completed' && "bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0]",
+                      getConnectorStatus(index) === 'current' && "bg-gradient-to-r from-[#2b6cb0] to-slate-300",
+                      getConnectorStatus(index) === 'upcoming' && "bg-slate-300"
                     )} />
                   )}
 
-                  {/* Hover highlight */}
-                  {isHovering === index && status === 'upcoming' && (
-                    <div className="absolute inset-0 rounded-2xl ring-2 ring-slate-300/70" />
+                  {/* Step Content */}
+                  <div className="mt-3 text-center max-w-[130px]">
+                    <h4 className={cn(
+                      "text-[13px] font-semibold transition-colors duration-300 mb-1",
+                      status === 'completed' && "text-[#2b6cb0]",
+                      status === 'current' && "text-slate-900",
+                      status === 'upcoming' && "text-slate-500",
+                      status === 'error' && "text-red-700"
+                    )}>
+                      {getStepText(step.step).label}
+                    </h4>
+                    <p className={cn(
+                      "text-[11px] transition-colors duration-300 leading-relaxed",
+                      status === 'completed' && "text-[#63b3ed]",
+                      status === 'current' && "text-slate-600",
+                      status === 'upcoming' && "text-slate-400",
+                      status === 'error' && "text-red-600"
+                    )}>
+                      {getStepText(step.step).description}
+                    </p>
+                  </div>
+
+                  {/* Status Indicator */}
+                  {status === 'current' && processingStatus && (
+                    <div className="mt-2 px-3 py-1 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full">
+                      <div className="flex items-center gap-2">
+                        <Activity className="h-3 w-3 text-[#2b6cb0] animate-pulse" />
+                        <span className="text-xs font-medium text-slate-700">
+                          {processingStatus}
+                        </span>
+                      </div>
+                    </div>
                   )}
                 </div>
-
-                {/* Connector Line */}
-                {index < steps.length - 1 && (
-                  <div className={cn(
-                    "absolute top-8 left-16 w-full h-0.5 transition-all duration-500",
-                    getConnectorStatus(index) === 'completed' && "bg-gradient-to-r from-[#63b3ed] to-[#2b6cb0]",
-                    getConnectorStatus(index) === 'current' && "bg-gradient-to-r from-[#2b6cb0] to-slate-300",
-                    getConnectorStatus(index) === 'upcoming' && "bg-slate-300"
-                  )} />
-                )}
-
-                {/* Step Content */}
-                <div className="mt-3 text-center max-w-[130px]">
-                  <h4 className={cn(
-                    "text-[13px] font-semibold transition-colors duration-300 mb-1",
-                    status === 'completed' && "text-[#2b6cb0]",
-                    status === 'current' && "text-slate-900",
-                    status === 'upcoming' && "text-slate-500",
-                    status === 'error' && "text-red-700"
-                  )}>
-                    {getStepText(step.step).label}
-                  </h4>
-                  <p className={cn(
-                    "text-[11px] transition-colors duration-300 leading-relaxed",
-                    status === 'completed' && "text-[#63b3ed]",
-                    status === 'current' && "text-slate-600",
-                    status === 'upcoming' && "text-slate-400",
-                    status === 'error' && "text-red-600"
-                  )}>
-                    {getStepText(step.step).description}
-                  </p>
-                </div>
-
-                {/* Status Indicator */}
-                {status === 'current' && processingStatus && (
-                  <div className="mt-2 px-3 py-1 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full">
-                    <div className="flex items-center gap-2">
-                      <Activity className="h-3 w-3 text-[#2b6cb0] animate-pulse" />
-                      <span className="text-xs font-medium text-slate-700">
-                        {processingStatus}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
         {/* Completion State */}

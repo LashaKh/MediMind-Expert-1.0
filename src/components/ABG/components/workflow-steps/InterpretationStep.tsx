@@ -318,9 +318,9 @@ export const InterpretationStep: React.FC<InterpretationStepProps> = ({
           <div className="abg-next-steps-container relative">
             {/* Background gradient with glass morphism */}
             <div className="abg-next-steps-bg"></div>
-            
-            {/* Main content */}
-            <div className="relative p-4">
+
+            {/* Main content with responsive padding and safe area support */}
+            <div className="relative p-4 sm:p-6 md:p-8 pb-safe">
               {/* Header with icon and subtitle */}
               <div className="flex items-center gap-3 mb-4">
                 <div className="relative">

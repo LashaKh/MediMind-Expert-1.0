@@ -475,6 +475,35 @@
     min-height: 7rem;
   }
 
+  /* Hide scrollbar for horizontal scroll progress indicators */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Next Steps Container - Mobile Optimizations */
+  .abg-next-steps-container {
+    margin: 0 -0.5rem;
+  }
+
+  .abg-next-steps-bg {
+    backdrop-filter: blur(10px); /* Reduced from 20px for mobile performance */
+    box-shadow:
+      0 15px 30px -8px rgba(0, 0, 0, 0.08),
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  /* Add safe area padding for iOS devices */
+  .abg-next-steps-container .relative {
+    padding: 1.5rem 1rem;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
   /* Ensure action buttons are always visible on mobile */
   .abg-mobile-action-buttons {
     position: sticky;
@@ -492,6 +521,16 @@
   /* Add padding to prevent content overlap with sticky buttons */
   .abg-upload-step-mobile {
     padding-bottom: 5rem;
+  }
+
+  /* Action cards - Better spacing on mobile */
+  .abg-action-card {
+    min-height: 110px;
+  }
+
+  /* Reduce animation intensity on mobile for better performance */
+  .abg-action-card:hover {
+    transform: translateY(-4px) scale(1.01);
   }
 }
 
